@@ -22,6 +22,7 @@ import { PageStatisticsComponent } from 'src/app/shared/components/page-statisti
 import { TranslateModule } from '@ngx-translate/core';
 import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     PageStatisticsComponent,
     TranslateModule,
     GridViewComponent,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTableModule
   ]
 })
 export class StudentRegistrationModule {

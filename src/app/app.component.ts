@@ -11,7 +11,7 @@ import { WebStorageService } from './core/services/web-storage.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'zilla Parishad Osmanabad';
+  title = 'zilla Parishad Satara';
   langTypeName: any;
   classname: any;
   constructor(private router: Router,

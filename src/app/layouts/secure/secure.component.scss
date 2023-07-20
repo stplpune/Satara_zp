@@ -1,0 +1,33 @@
+.wrapper {
+  padding-left: 60px;
+}
+
+.main-content {
+  padding: 15px 15px 0 15px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+
+@media only screen and (max-width: 478px) {
+  app-header {
+    position: sticky;
+    top: 0px;
+    z-index: 2;
+  }
+
+  .main-content {
+    padding: 15px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .wrapper {
+    padding: inherit;
+  }
+
+  .main-content {
+    padding: 10px 8px 10px 10px;
+  }
+}

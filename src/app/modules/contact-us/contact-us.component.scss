@@ -1,0 +1,65 @@
+.contact-us {
+    padding-top: 113px;
+    background-image: url(../../../assets/images/home-page/AboutUs-Background-image.png);
+    height: 300px;
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+.contact-us .contact-us-heading {
+    margin-top: 50px;
+}
+
+.contact-us .contact-us-heading h1 {
+    font-size: 2.7rem;
+    font-weight: 600;
+    color: #ffff;
+}
+
+.ministers {
+    margin-top: 20px;
+}
+.ministers a {
+    text-decoration: none;
+    color: #000;
+}
+.ministers a:hover{
+    text-decoration: none;
+    color: #2051f3;
+}
+.ministers p{
+    color:#3f4949;
+    font-size: 0.95rem;
+}
+.ministers h1 ,
+.ministers h6 {
+    font-weight: 600;
+}
+// .material-symbols-outlined{
+//     background-color: green;
+//     opacity: 25%;
+//     color: white;
+//     padding: 5px;
+//     border-radius: 8px;
+//     align-items: center;
+//     text-align: center;
+//     width: 33px;
+//     height: 34px;
+// }
+@media only screen and (max-width: 480px) {
+    .contact-us {
+        padding-top: 70px;
+        background-image: url(../../../assets/images/home-page/AboutUs-Background-image.png);
+        height: 245px;
+        background-repeat: no-repeat;
+        background-size: auto;
+    }
+    .contact-us .contact-us-heading {
+        margin-top: 77px;
+    }
+    .ministers a {
+        text-decoration: none;
+        color: #000;
+        font-size: 0.77rem;
+    }
+}

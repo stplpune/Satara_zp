@@ -1,0 +1,239 @@
+<mat-card class="plain-card border">
+    <mat-card-header class="card-header">
+        <div class="d-flex justify-content-end w-100">
+            <button mat-flat-button class="bg-main-light text-main me-2" title="Back"
+                [routerLink]="['../dashboard-student-details']"> Back
+            </button>
+            <button mat-flat-button class="btn-main" title="Print" (click)="onPrint()"> Print
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="card-body" #myDiv id="myDiv">
+        <table style="width:100%; " class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td style="width:100px; padding: 20px;" rowspan="9"><img [src]="studentDetailsData?.headerImage" alt="student-image"
+                            height="100px"></td>
+                    <td colspan="4">
+                        <h5 class="mb-0 fw-bold">{{ studentDetailsData?.header || '-' }}</h5>
+                        <p class="text-muted mb-0">{{ studentDetailsData?.subheader || '-' }}</p>
+                    </td>
+                </tr>
+                <tr *ngFor="let head of studentDetailsData?.labelHeader; let j=index"
+                    [class]="(studentDetailsData?.labelKey[j]==(languageFlag == 'English'?'schoolName':'m_SchoolName'))? 'col-sm-8': 'col-sm-4'">
+                    <td>{{head}} :</td>
+                    <td>{{ studentDetailsData?.Obj[studentDetailsData?.labelKey[j]]
+                        || '-'}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div class="row">
+            <div class="student-details">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            
+                        </div>
+                        
+                        <div class="data-container">
+                            <div class="row mb-2 gy-2">
+                                <div *ngFor="let head of studentDetailsData?.labelHeader; let j=index"
+                                    [class]="(studentDetailsData?.labelKey[j]==(languageFlag == 'English'?'schoolName':'m_SchoolName'))? 'col-sm-8': 'col-sm-4'">
+                                    <span class="data-label">{{head}} :</span>
+                                    <div class="data-text">{{ studentDetailsData?.Obj[studentDetailsData?.labelKey[j]]
+                                        || '-'}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="row" *ngIf="this.dashboardObj?.asessmwntLavel == '0'">
+            <div class="col-sm-6" *ngFor="let c of chartArray">
+                <apx-chart [series]="c.series" [chart]="c.chart" [xaxis]="c.xaxis" [dataLabels]="c.dataLabels"
+                    [grid]="c.grid" [stroke]="c.stroke" [title]="c.title" [tooltip]="c.tooltip" [yaxis]="c.yaxis"
+                    [legend]="c.legend" [colors]="c.colors"></apx-chart>
+            </div>
+            <div class="col-sm-6" *ngFor="let b of barArray">
+                <apx-chart [series]="b.series" [chart]="b.chart" [dataLabels]="b.dataLabels"
+                    [plotOptions]="b.plotOptions" [yaxis]="b.yaxis" [title]="b.title" [legend]="b.legend"
+                    [fill]="b.fill" [stroke]="b.stroke" [tooltip]="b.tooltip" [xaxis]="b.xaxis" [grid]="b.grid"
+                    [colors]="b.colors"></apx-chart>
+                <p *ngIf="b?.series.length" class="text-center">0 - {{webStorage.languageFlag == 'EN'?"Didn't
+                    Try":"प्रयत्न केला नाही"}} | 1 - {{webStorage.languageFlag == 'EN'?"Need Help":"मदतीची गरज आहे"}} |
+                    2 - {{webStorage.languageFlag =='EN'?"Correct Answer":"बरोबर उत्तर"}}</p>
+            </div>
+
+            <div *ngIf="false" class="col-sm-6 mt-4" >
+                <h6 class="text-main fw-bold mt-3 mb-2" data-html2canvas-ignore="true">
+                    {{this.webStorage.baseInfectctId=='0'?(webStorage.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webStorage.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
+                </h6>
+                <!-- base wise data -->               
+                <div class="table-responsive">
+                    <table class="table dashboard-table ">
+                        <thead class="bg-main-light">
+                                <tr>
+                                    <th *ngFor="let header of displayedheadersClassAsseTakenBy">
+                                        {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                                    </th>                               
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let item of tableDataAssimentBaseWise; let i=index">
+                                <tr>
+                                    <td>{{i+1}}</td>
+                                    <td>{{webStorage.languageFlag == 'EN'? item.name : item.m_Name }}</td>
+                                    <td>{{webStorage.languageFlag == 'EN'? item.designationType : item.m_DesignationType}}</td>
+                                    <td>{{item.assessmentDate}}</td>
+                                </tr>                                                       
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="tableDataAssimentBaseWise?.length == 0">
+                    <div class="alert alert-danger text-center py-2 ">
+                        {{'Labels.dataNotFound' | translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        <!-- classwise table show here  -->
+
+
+        <div *ngIf="classAsseResp && this.dashboardObj.asessmwntLavel == '1'">
+            <!-- table start here   -->
+            <div class="row overflow-auto">
+                <div class="col-sm-6" *ngIf="langSubList && langSubList.length > 0">
+                    <div>
+                        <div class="w-100">
+                            <h6 class="my-2 px-1 fw-bold text-main">{{webStorage .languageFlag == 'EN'?
+                                ('Language'):('भाषा ')}} </h6>
+                            <!-- <h6 class="my-2 px-1 fw-bold text-main">{{webStorage .languageFlag == 'EN'? ('Expected level in subject ' +
+                                                            subjectNameClassWise + ' : '):(subjectNameClassWise+' विषयात अपेक्षित असलेला स्तर : ')}} </h6> -->
+
+                        </div>
+                        <div class="table-responsive">
+                        <table class="table dashboard-table">
+                            <thead class="bg-main-light">
+                                <tr>
+                                    <th *ngFor="let header of displayedheadersClass">
+                                        {{webStorage .languageFlag == 'EN'?header.label :header.m_label }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of langSubList; let i=index">
+                                    <tr>
+                                        <td style="width:50px">{{i+1}}</td>
+                                        <td style="width: 140px;">{{webStorage .languageFlag == 'EN'? item.question : item.m_Question}}</td>
+                                        <td style="width: 130px;">{{webStorage .languageFlag == 'EN'? item.optionName : item.m_OptionName}}
+                                        </td>
+                                        <td style="width: 100px;">{{webStorage .languageFlag == 'EN'? item.level : item.m_Level}}</td>
+                                        <td style="width: 100px;">{{webStorage.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
+                                        <td style="width:130px">{{webStorage.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
+                                        <td style="width:50px; text-align:center">{{webStorage .languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-6" *ngIf="mathSubList && mathSubList.length > 0">
+                    <div>
+                        <h6 class="my-2 px-1 fw-bold text-main">{{webStorage .languageFlag == 'EN'? ('
+                            Mathematics'):('गणित')}} </h6>
+                        <div class="table-responsive scrollbar mb-2 table-height-sm">
+                        <table class="table dashboard-table">
+                            <thead class="bg-main-light">
+                                <tr>
+                                    <th *ngFor="let header of displayedheadersClass">
+                                        {{webStorage .languageFlag == 'EN'?header.label :header.m_label }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of mathSubList; let i=index">
+                                    <tr>
+                                        <td style="width:50px">{{i+1}}</td>
+                                        <td style="width:130px">{{webStorage.languageFlag == 'EN'? item.question : item.m_Question}}</td>
+                                        <td>{{webStorage.languageFlag == 'EN'? item.optionName : item.m_OptionName}}</td>
+                                        <td>{{webStorage .languageFlag == 'EN'? item.level : item.m_Level}}</td>
+                                        <td>{{webStorage.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
+                                        <td style="width:130px">{{webStorage.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
+                                        <td style="width:50px; text-align:center">{{webStorage .languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="fw-bold">
+                               <span > Percentage:</span> {{totalMarksInSub?.percentage}}
+                            </div>
+                            <div class="fw-bold me-3">
+                                Total: {{totalMarksInSub?.actualMarks}} / {{totalMarksInSub?.totalMarks}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                   <!-- table for assemment classwise -->
+                <!-- <h4>Assessment by Teacher</h4> -->
+                <h6  *ngIf="false"  class="text-main fw-bold mt-3 mb-2" data-html2canvas-ignore="true">
+                    {{this.webStorage.inspectionByValue =='0'?(webStorage.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webStorage.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
+                </h6>
+        
+
+               
+                <div *ngIf="false" class="col-sm-6">
+                    <div class="table-height-sm scrollbar">
+                        <table class="table dashboard-table ">
+                            <thead class="bg-main-light">
+                                    <tr>
+                                        <th *ngFor="let header of displayedheadersClassAsseTakenBy">
+                                            {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                                        </th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of tableDataAssimentClassWise; let i=index">
+                                    <tr>
+                                        <td>{{i+1}}</td>
+                                        <td>{{webStorage.languageFlag == 'EN'? item.name : item.m_Name }}</td>
+                                        <td>{{webStorage.languageFlag == 'EN'? item.designationType : item.m_DesignationType}}</td>
+                                        <td>{{item.assessmentDate}}</td>
+                                    </tr>                                                       
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="tableDataAssimentClassWise?.length == 0">
+                        <div class="alert alert-danger text-center py-2 ">
+                            {{'Labels.dataNotFound' | translate}}
+                        </div>
+                    </div>
+                </div>
+            <!-- end here table  -->
+
+
+
+
+
+
+        </div>
+        <div>
+
+        </div>
+    </mat-card-content>
+
+</mat-card>

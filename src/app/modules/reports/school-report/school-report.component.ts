@@ -1,0 +1,354 @@
+import { DatePipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
+import { ApiService } from 'src/app/core/services/api.service';
+import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
+import { ErrorsService } from 'src/app/core/services/errors.service';
+import { MasterService } from 'src/app/core/services/master.service';
+import { WebStorageService } from 'src/app/core/services/web-storage.service';
+
+@Component({
+  selector: 'app-school-report',
+  templateUrl: './school-report.component.html',
+  styleUrls: ['./school-report.component.scss']
+})
+export class SchoolReportComponent { 
+  schoolReportForm!: FormGroup;
+  $districts?: Observable<any>;
+  talukaArr = new Array();
+  centerArr = new Array();
+  schoolArr = new Array();
+  standardArr = new Array();
+  academicYearsArr = new Array();
+  examTypeArr = new Array();
+  // AssessmentTypeArr = new Array();
+  allStdClassWise = new Array();
+  languageFlag: any;
+  pageNumber: number = 1;
+  tableDataArray = new Array();
+  tableDatasize!: Number;
+  tableData: any;
+  totalCount: number = 0;
+  displayedheaders = ['Sr.No.','Taluka', 'Center', 'School Name', 'Standard', 'Assessed BaseLevel Student Count','Assessed ClassWise Student Count', 'Total Student Count'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'तालुका', 'केंद्र', 'शाळेचे नाव', 'इयत्ता','मूल्यांकन बेस लेव्हल विद्यार्थी संख्या', 'मूल्यांकन वर्गनिहाय विद्यार्थी संख्या','एकूण विद्यार्थी संख्या' ];
+  displayedColumns = new Array();
+  highLightFlag: boolean =true;
+  resultDownloadArr = new Array();
+  dashBordObj:any;
+  dashBordFilterFlag!:boolean;
+
+  maxDate = new Date();
+  constructor(private fb: FormBuilder,
+    private masterService: MasterService,
+    private errors: ErrorsService,
+    private commonMethods: CommonMethodsService,
+    public  webService: WebStorageService,
+    private apiService: ApiService,
+    public datepipe: DatePipe,
+    private downloadFileService: DownloadPdfExcelService,
+    private activatedRoute :ActivatedRoute,
+   private encDec: AesencryptDecryptService){
+    let studentObj: any;
+    let decryptData:any
+    this.activatedRoute.queryParams.subscribe((queryParams: any) => { studentObj = queryParams['id'] });
+    decryptData = this.encDec.decrypt(`${decodeURIComponent(studentObj)}`);
+    this.dashBordObj = decryptData.split('.');
+    this.dashBordObj.length > 1 ?this.dashBordFilterFlag = true:this.dashBordFilterFlag = false; 
+    }
+
+  ngOnInit(){
+    this.webService.langNameOnChange.subscribe(lang => {
+      this.languageFlag = lang;
+      this.getTableTranslatedData();
+    });
+    this.schoofilterData();
+    this.getDistrict();
+    this.getExamType();
+    // this.geAssessmentType();
+    this.getAcademicYears();
+    this.searchAssessMent();
+  }
+
+  schoofilterData(){
+    this.schoolReportForm = this.fb.group({
+      educationYearId: [this.dashBordFilterFlag ? Number(this.dashBordObj[0]) : 0],
+      districtId: [],
+      talukaId: [this.dashBordFilterFlag ? Number(this.dashBordObj[3]):0],
+      centerId: [this.dashBordFilterFlag ? Number(this.dashBordObj[1]):0],
+      // AssessmentTypeId: [2],
+      schoolId: [this.dashBordFilterFlag ? Number(this.dashBordObj[2]):0],
+      fromDate: [(new Date(new Date().setDate(new Date().getDate() - 30)))],
+      toDate: [new Date()],
+      standardId: [0],
+      examTypeId: [0],
+      IsInspection: ['']
+    });
+
+  }
+
+  getDistrict(){
+    this.$districts = this.masterService.getAlllDistrict();
+    this.schoolReportForm.controls['districtId'].setValue(1);
+    this.getTaluka();
+
+  }
+
+  getTaluka(){
+    this.talukaArr = [];
+    this.masterService.getAllTaluka('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);
+          // this.schoolReportForm.controls['talukaId'].setValue(0);
+          let talukaObj = this.talukaArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[3]) });         
+          this.dashBordFilterFlag ? (this.schoolReportForm.controls['talukaId'].setValue(talukaObj[0].id),this.getAllCenter()):this.schoolReportForm.controls['talukaId'].setValue(0);
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.talukaArr = [];
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+
+  }
+
+  getAllCenter() {
+    this.centerArr = [];
+    let id = this.schoolReportForm.value.talukaId;
+    if (id != 0) {
+      this.masterService.getAllCenter('', id).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);
+            // this.schoolReportForm.controls['centerId'].setValue(0);
+            let centerObj = this.centerArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[1]) }); 
+            this.dashBordFilterFlag ? (this.schoolReportForm.controls['centerId'].setValue(centerObj[0].id),this.getAllSchoolsByCenterId()):this.schoolReportForm.controls['centerId'].setValue(0);
+          } else {
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.centerArr = [];
+          }
+        },
+        error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      });
+    }
+  }
+
+  getAllSchoolsByCenterId() {
+    this.schoolArr = [];
+    let Tid = this.schoolReportForm.value.talukaId
+    let Cid = this.schoolReportForm.value.centerId || 0;
+    let Vid = 0;
+    this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);
+          // this.schoolReportForm.controls['schoolId'].setValue(0);
+          let schoolObj = this.schoolArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[2]) });
+          this.dashBordFilterFlag ? this.schoolReportForm.controls['schoolId'].setValue(schoolObj[0].id):this.schoolReportForm.controls['schoolId'].setValue(0);
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.schoolArr = [];
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
+  getStandard() {
+    this.standardArr = [];
+    let schId = this.schoolReportForm.value.schoolId;
+    this.masterService.GetStandardBySchool(schId, '').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.standardArr.push({ "id": 0, "standard": "All standard", "m_Standard": "सर्व इयत्ता" }, ...res.responseData);
+          this.schoolReportForm.controls['standardId'].setValue(0);
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.standardArr = [];
+        }
+      },
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
+  getAcademicYears() {
+    this.academicYearsArr = [];
+    this.masterService.getAcademicYears('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          // this.academicYearsArr = res.responseData;
+          this.academicYearsArr.push({"id": 0,
+          "educationYearId": 0,
+          "eductionYear": "All Year",
+          "eductionYear_M": "सर्व वर्ष",
+          "startDate": "2022-07-01T00:00:00",
+          "endDate": "2023-03-31T00:00:00",
+          "isCurrent": true,
+          "isDeleted": false,
+          "timestamp": "0001-01-01T00:00:00"}, ...res.responseData)
+          let academicYearObj = this.academicYearsArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[0]) });
+            this.dashBordFilterFlag ? this.schoolReportForm.controls['educationYearId'].setValue(academicYearObj[0].id):this.schoolReportForm.controls['educationYearId'].setValue(0); 
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.academicYearsArr = [];
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
+  getExamType() {
+    this.examTypeArr = [];
+    this.masterService.getExamType('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.examTypeArr = res.responseData;
+          this.examTypeArr = [{ "id": 0, "examType": "All", "m_ExamType": "सर्व" }].concat(res.responseData);
+          this.examTypeArr.sort((a, b) => a.id - b.id);
+
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.examTypeArr = [];
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
+  // geAssessmentType() {
+  //   this.AssessmentTypeArr = [];
+  //   this.masterService.getAssementType('').subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == 200) {
+  //         this.AssessmentTypeArr = res.responseData;
+  //       } else {
+  //         this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+  //         this.AssessmentTypeArr = [];
+  //       }
+  //     },
+  //     error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+  //   });
+  // }
+
+
+
+
+
+
+
+
+
+
+  clearDropdown(flag?: string){
+    if (flag == 'talukaId'){
+      this.schoolReportForm.controls['centerId'].setValue(0);
+      this.schoolReportForm.controls['schoolId'].setValue(0);
+      this.schoolReportForm.controls['standardId'].setValue(0);
+      this.schoolArr = [];
+      this.standardArr = [];
+
+    } else if (flag == 'centerId'){
+      this.schoolReportForm.controls['schoolId'].setValue(0);
+      this.standardArr = [];
+    } else if (flag == 'schoolId') {
+      this.schoolReportForm.controls['standardId'].setValue(0);
+    }    
+   
+  }
+
+  searchAssessMent(flag? : any){
+    let formData = this.schoolReportForm.value;
+    let fromDate = this.datepipe.transform(formData.fromDate, 'yyyy-MM-dd')
+    let toDate = this.datepipe.transform(formData.toDate, 'yyyy-MM-dd')
+    let reportStr = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${1}&RowCount=0`;
+    this.pageNumber =   flag == 'filter'? 1 :this.pageNumber;
+    let str = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${this.pageNumber}&RowCount=10`;
+    this.apiService.setHttp('GET', 'zp-osmanabad/assessment-report/Download_AssessmentReport_SchoolWise?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          this.tableDatasize = res.responseData.responseData2[0].totalCount;
+          console.log("tableDatasize", this.tableDatasize);
+          
+          this.totalCount = res.responseData.responseData2.totalCount;
+          this.resultDownloadArr = [];
+          let data: [] = res.responseData.responseData1;
+          flag == 'pdfFlag' ? this.downloadPdf(data) : '';
+        } else {
+          this.tableDataArray = [];
+          this.tableDatasize = 0;
+          this.tableDatasize == 0 && flag == 'pdfFlag' ? this.commonMethods.showPopup('No Record Found', 1) : '';
+        }
+        this.getTableTranslatedData();
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
+
+  
+  
+  }
+
+  getTableTranslatedData(){
+    this.highLightFlag=true;
+    this.displayedColumns = ['srNo', 'taluka' ,'center','schoolName','standard','assBaseLevelStudentCount','assClassWiseStudentCount','totalStudentCount'];
+    // this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'taluka' : 'm_Taluka', this.languageFlag == 'English' ?'center':'m_Center', this.languageFlag == 'English' ?'schoolName':'m_SchoolName',this.languageFlag == 'English' ?'standard':'m_Standard','assBaseLevelStudentCount','assClassWiseStudentCount','totalStudentCount'];
+      this.tableData = {
+        pageNumber: this.pageNumber,
+        img: '', blink: '', badge: '', isBlock: '', pagintion: true,
+        displayedColumns: this.displayedColumns, 
+        tableData: this.tableDataArray,
+        tableSize: this.tableDatasize,
+        tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.displayedheadersMarathi,
+      };
+      this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
+    this.apiService.tableData.next(this.tableData);
+  }
+
+  clearForm(){
+    this.schoofilterData();
+    this.schoolReportForm.controls['districtId'].setValue(1);
+    this.searchAssessMent();
+
+  }
+
+  childCompInfo(obj: any) {    
+        this.pageNumber = obj.pageIndex + 1;
+    this.searchAssessMent();
+
+    // switch (obj.label) {
+    //   case 'Pagination':
+    //     this.pageNumber = obj.pageNumber;       
+    //     this.searchAssessMent();
+    //     break;
+    
+
+}
+
+downloadPdf(data?: any){
+  console.log("centerId",data);
+  
+  let talukaEng = this.schoolReportForm.value.talukaId > 0 ? data[0].taluka : 'All Taluka'
+  let talukaMar = this.schoolReportForm.value.talukaId > 0 ? data[0].m_Taluka : 'सर्व तालुके'
+  let kendraEng = this.schoolReportForm.value.centerId > 0 ? data[0].center : 'All Center'
+  let kendraMar = this.schoolReportForm.value.centerId > 0 ? data[0].m_Center : 'सर्व केंद्र'
+
+let nameArr = [{
+  sheet_name: this.languageFlag == 'English'? 'Schoolwise Report' : 'शाळानिहाय अहवाल',
+    'excel_name': this.languageFlag == 'English'? 'Schoolwise Report' : 'शाळानिहाय अहवाल',
+    'title': this.languageFlag == 'English'? 'Schoolwise Report' : 'शाळानिहाय अहवाल',
+    'taluka' : this.languageFlag == 'English' ? talukaEng : talukaMar,
+    'center' : this.languageFlag == 'English' ? kendraEng : kendraMar,
+    languageFlag : this.languageFlag
+}]
+  this.downloadFileService.generateExcelSchool((this.languageFlag == 'English' ? this.displayedheaders : this.displayedheadersMarathi), this.displayedColumns, data, nameArr);
+
+}
+}
+
+
+

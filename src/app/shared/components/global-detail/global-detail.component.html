@@ -1,0 +1,128 @@
+<mat-card class="plain-card">
+    <mat-card-header class="card-header">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <h6 class="mb-0 text-main fw-bold">{{'Labels.profile'| translate}}</h6>
+            <button type="button" mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeDialog()">
+                <mat-icon class="fs-6 pt-1"> close </mat-icon>
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="card-body card-height-full scrollbar">
+        <div class="row mb-3">
+            <div class="col-sm-12">
+                <div class="student-details">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0" *ngIf="showImg">
+                            <img [src]="data?.headerImage ? data?.headerImage : 'assets/images/user.png'"
+                                alt="student-image">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-1 fw-bold text-break">{{ data?.header }}</h5>
+                            <p class="text-muted mb-0" style="height:32px;">({{ data?.subheader || data?.Obj.village }})
+                            </p>
+
+                            <div class="data-container">
+                                <div class="row g-2">
+                                    <div class="col-sm-6" *ngFor="let head of data.labelHeader; let j=index">
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break"
+                                                    *ngIf="data?.checkbox != head">{{head}}</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break" *ngIf="data?.checkbox != head">
+                                                    : {{data?.Obj[data?.labelKey[j]] || '-'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div *ngIf="data?.schoolName" class="row">
+                                           <div class="col-sm-5 col-6">
+                                            <span class="data-label">{{'Labels.school'| translate}} </span>
+                                           </div>
+                                        <div class="data-text p-0 col-6 col-sm-7 d-flex flex-wrap">
+                                            : {{webStorage.languageFlag == 'EN' ? data?.Obj?.teacherDetails.schoolName :
+                                                data?.Obj?.teacherDetails.m_SchoolName || '-'}}
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class = "col-sm-2 col-6">
+                                                <span class="data-label"
+                                                *ngIf="data?.checkbox == 'Subject' || data?.checkbox == 'विषय'">{{'Labels.Subject'|
+                                                translate}} </span>
+                                            </div>
+                                            <!-- <div class="data-text p-0 col-6 col-sm-7 d-flex flex-wrap">
+                                                <div *ngFor="let assign of data?.Obj?.assignSubject" class="lang-badge">
+                                                    {{webStorage.languageFlag == 'EN' ? assign.subjectName :assign.m_SubjectName || '-'}}
+                                                </div>
+                                            </div> -->
+                                            <div class=" col-6 col-sm-10 ">
+                                                <div class="data-text ms-4  d-flex flex-wrap">
+                                                <div *ngFor="let assign of data?.Obj?.assignSubject" class="lang-badge">
+                                                    {{webStorage.languageFlag == 'EN' ? assign.subjectName :assign.m_SubjectName || '-'}}
+                                                </div>
+
+                                                <!-- <div *ngFor="let assign of data?.Obj?.assignSubject" class="lang-badge">
+                                                    {{webStorage.languageFlag == 'EN' ? assign.subjectName :assign.m_SubjectName || '-'}}
+                                                </div> -->
+
+                                            </div>
+                                        </div>
+                                        </div>
+                                        
+                                        <!-- <div class="data-text d-flex flex-wrap">
+                                            <div *ngFor="let assign of data?.Obj?.assignSubject" class="lang-badge">
+                                                {{webStorage.languageFlag == 'EN' ? assign.subjectName :assign.m_SubjectName || '-'}}
+                                            </div>
+                                        </div> -->
+                                    </div>
+
+                                    <!-- show kendra Array for office registration -->
+                                    <div class="col-sm-12" *ngIf="data?.Obj?.officeCenterSchoolResponseModel?.length">
+                                        <div class="row">
+                                            <div class = "col-sm-2 col-6">
+                                                <span class="data-label"
+                                                *ngIf="data?.checkbox == 'Center' || data?.checkbox == 'केंद्र'">{{data?.checkbox}} </span>
+                                            </div>
+                                        
+                                            <div class=" col-6 col-sm-10 ">
+                                                <div class="data-text ms-4  d-flex flex-wrap">
+                                                <div *ngFor="let assign of data?.Obj?.officeCenterSchoolResponseModel" class="lang-badge">
+                                                    {{webStorage.languageFlag == 'EN' ? assign.center :assign.m_Center || '-'}}
+                                                </div>
+
+                                       
+
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <mat-card class="plain-card border" *ngIf="data?.chart">
+                                <mat-card-content class="card-body">
+                                    <progressChartLine></progressChartLine>
+                                </mat-card-content>
+                            </mat-card> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3" *ngIf="data?.multipleImage == true && items.length > 0">
+            <mat-label>{{'Labels.SchoolPhotos'| translate}} : </mat-label>
+            <div class="col-3 col-sm-3" *ngFor="let item of items; index as i">
+                <img [lightbox]="i" [src]="item.data.src" class="gallery-img">
+            </div>
+        </div>
+        <div *ngIf="data?.chart && data.Obj.isAssessment">
+            <progressChartLine></progressChartLine>
+        </div>
+    </mat-card-content>
+</mat-card>

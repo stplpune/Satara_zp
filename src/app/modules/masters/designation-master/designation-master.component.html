@@ -1,0 +1,71 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.registerDesignation' | translate}}</li>
+    </ol>
+</nav>
+<app-page-statistics></app-page-statistics>
+<mat-card class="plain-card">
+    <mat-card-header class="card-header">
+        <div class="d-flex fw-bold justify-content-between align-items-center w-100 flex-wrap">
+            <span class="text-main mb-0">{{'Labels.DesignationLists' | translate}}</span>
+            <div class="d-flex gap-2">
+                <!-- <button mat-flat-button class="btn-main btn-icon" [matMenuTriggerFor]="menu">
+                    <mat-icon>
+                        download
+                    </mat-icon>
+                </button>
+                <mat-menu #menu="matMenu" xPosition="before">
+                    <button mat-menu-item (click)="downloadPdf()">
+                        <div class="d-flex align-items-center justify-content-between w-100">
+                            <span>PDF</span>
+                            <i class='bx bxs-file-pdf text-danger'></i>
+                        </div>
+                    </button>
+                </mat-menu> -->
+                <button mat-flat-button class="bg-danger btn-icon text-white"
+                    matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
+                    <mat-icon>description </mat-icon>
+                </button>
+                <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateAgency()">
+                    <mat-icon>
+                        add
+                    </mat-icon>
+                    {{'Labels.AddDesignation'| translate}}
+                </button>
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+        <div class="row gx-2 w-100">
+            <div class="col-sm-3">
+                <!-- <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{'Labels.SelectDesignation'| translate}}</mat-label>
+                <mat-select [formControl]="searchContent">
+                    <mat-option *ngFor="let designation of DesiganationTypeArray" [value]="designation.id">
+                        {{webStorage.getLangauge() == 'EN' ? designation.designationType : designation.m_DesignationType}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> -->
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label> {{'Labels.Designation' | translate}}</mat-label>
+                    <input matInput [formControl]="searchContent" (keyup.enter)="getTableData()">
+                </mat-form-field>
+            </div>
+            <div class="col-sm-auto mb-lg-0 mb-2">
+                <button (click)="getTableData('filter')" mat-flat-button class="btn-main">{{'Labels.filter' |
+                    translate}}</button>
+                <button mat-flat-button class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear' |
+                    translate}}</button>
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="card-body pt-0">
+        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+    </mat-card-content>
+</mat-card>

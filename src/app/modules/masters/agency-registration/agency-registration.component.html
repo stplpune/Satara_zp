@@ -1,0 +1,90 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb align-items-center">
+    <li aria-current="page">
+      <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+        <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+    </li>
+    <li class="breadcrumb-item" aria-current="page">Masters</li>
+    <li class="breadcrumb-item active" aria-current="page">{{'Labels.agencyRegistration' | translate}}</li>
+  </ol>
+</nav>
+<app-page-statistics></app-page-statistics>
+
+<mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
+  <mat-card-header class="card-header">
+    <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
+      <div class="text-main fw-bold mb-2 mb-lg-0">
+        {{'Labels.AgencyList' | translate}}
+      </div>
+      <div class="d-flex flex-wrap justify-content-start lign-items-center justify-content-lg-end gap-2">
+        <button mat-flat-button class="btn-main btn-icon"
+          [ngClass]="{'btn-main':!this.cardViewFlag, 'btn-second':this.cardViewFlag}" (click)="selectGrid('Table')"
+          matTooltip="{{'Labels.taleview' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip">
+          <mat-icon>
+            table_view
+          </mat-icon>
+        </button>
+
+        <button mat-flat-button class="btn-second btn-icon" matTooltip="{{'Labels.GridView' | translate}}"
+          matTooltipPosition="below" matTooltipClass="tooltip"
+          [ngClass]="{'btn-main':this.cardViewFlag, 'btn-second':!this.cardViewFlag}" (click)="selectGrid('Card')">
+          <mat-icon>
+            grid_view
+          </mat-icon>
+        </button>
+
+        <button mat-flat-button class="bg-danger btn-icon text-white" matTooltip="{{'Labels.DownloadPdf' | translate}}"
+          matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
+          <mat-icon>
+            description
+          </mat-icon>
+        </button>
+        <!-- <button mat-flat-button class="btn-main btn-icon" [matMenuTriggerFor]="menu">
+          <mat-icon>
+            download
+          </mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="before">
+          <button type="button" mat-menu-item (click)="downloadPdf()">
+            <div class="d-flex align-items-center justify-content-between w-100">
+              <span>PDF</span>
+              <i class='bx bxs-file-pdf text-danger'></i>
+            </div>
+          </button>
+        </mat-menu> -->
+        <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateAgency()">
+          <mat-icon>
+            add
+          </mat-icon>
+          {{'Labels.addAgency' | translate}}
+        </button>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+    <div class="row gx-2 w-100">
+      <div class="col-sm-3">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>{{'Labels.searchbyNameContactEmail' | translate}}</mat-label>
+          <input matInput [formControl]="searchText" (keypress)="validation.noFirstSpaceAllow($event)"
+            (keyup.enter)="getTableData('filter')" maxlength="50">
+        </mat-form-field>
+      </div>
+      <div class="col-sm-auto mb-lg-0 mb-2">
+        <button type="button" mat-flat-button (click)="getTableData('filter')" class="btn-main">{{'Labels.filter' |
+          translate}}</button>
+        <button type="button" mat-flat-button class="btn-second ms-2" (click)="onClear()">{{'Labels.clear' |
+          translate}}</button>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="card-body pt-0">
+    <ng-container *ngIf="!cardViewFlag">
+      <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+    </ng-container>
+
+    <ng-container *ngIf="cardViewFlag">
+      <app-grid-view (gridToChild)="childGridCompInfo($event)"></app-grid-view>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

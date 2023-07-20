@@ -1,0 +1,62 @@
+.teacherForm {
+    padding-top: 7px;
+    cursor: pointer;
+    display: contents;
+}
+
+.teacherForm>label,
+.teacherForm>span {
+    position: relative;
+    top: 0;
+    left: 0;
+    color: #2c2c2c;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin-right: 7px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: rgba(230, 69, 69, 0);
+    transition: background-color 0.5s, top 0.1s;
+    cursor: pointer;
+}
+
+.teacherForm>input[type=checkbox] {
+    height: 0px;
+    width: 0px;
+    display: none;
+}
+
+.teacherForm>input[type=checkbox]:checked+label,
+.teacherForm>input[type=checkbox]:checked+span {
+    background-color: var(--main-dark-color);
+    color: #ccc;
+}
+
+.teacherForm>label:hover {
+    top: -3px;
+}
+
+.card-height-full .Current-Address {
+    margin-top: -22px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.Current-Address #check1 {
+    height: 13px;
+    width: 13px;
+    accent-color: #039286;
+}
+
+.age-show {
+    height: 37px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #9e9e9e;
+    border-radius: 5px;
+    padding: 4px 4px;
+}

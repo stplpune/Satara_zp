@@ -1,0 +1,90 @@
+<div class="table-responsive scrollbar">
+    <table mat-table [dataSource]="tableRecords" class="dashboard-table" matSort>
+        <ng-container *ngFor="let columns of displayedColumns; let j=index" matColumnDef="{{columns}}">
+            <ng-container *ngIf="columns !='action'">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header
+                    [disabled]="('srNo' == columns || tableHeaders[j] == '') ? true : false">
+                    {{tableHeaders[j]}}
+                </th>
+                <td mat-cell *matCellDef="let element let i=index">
+                    <div (click)="action(element, 'View', i)">
+                        <ng-container *ngIf="'srNo' == columns">{{((pageNumber + 1) * 10 + i + 1)-20 |
+                            numberTranformPipe}}</ng-container>
+                        <ng-container 
+                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns">{{ element[columns] | dash }}
+                        </ng-container>
+                        <ng-container *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]"
+                                src="{{element[columns] ? element[columns] : defaultImage}}"></ng-container>
+                        <!-- <ng-container  *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]" src="{{element[columns]}}"></ng-container> -->
+                        <ng-container *ngIf="tableInfo?.blink == columns"><span> </span> {{element[columns] }}</ng-container>
+
+                        <!-- <ng-container *ngIf="tableInfo?.desig == columns">{{(element?.designationLevelId == 7?'Other':element[columns])}}</ng-container> -->
+
+                        <ng-container *ngIf="tableInfo?.badge == columns">{{element[columns] }}</ng-container>
+                        <ng-container *ngIf="tableInfo?.checkBox == columns">
+                            <mat-checkbox [disabled]="tableInfo?.isWriteRight == false" id="checkbox2"
+                                [checked]="tableInfo.tableData[i]?.writeRight"
+                                (change)="action(element, 'checkBox', $event, 'writeCheck')"></mat-checkbox>
+                            <label for="checkbox2" class="pb-0">W</label>
+                            <mat-checkbox [disabled]="tableInfo?.isWriteRight == false" id="checkbox1"
+                                [checked]="tableInfo.tableData[i]?.readRight"
+                                (change)="action(element, 'checkBox', $event, 'readCheck')"></mat-checkbox>
+                            <label for="checkbox1" class="pb-0">R</label>
+                        </ng-container>
+                    </div>
+                    <ng-container *ngIf="tableInfo?.isBlock == columns">
+                        <mat-slide-toggle [checked]="tableInfo.tableData[i]?.isBlock"
+                            (change)="action(element, 'Block',i)">
+                        </mat-slide-toggle>
+                    </ng-container>
+                    <ng-container *ngIf="tableInfo?.status == columns">
+                        <div
+                            [class]="element[columns] == 5 ? 'status green' : element[columns] == 4 ? 'status orange' : element[columns] == 3 ? 'status dark-orange' : element[columns] == 2 ? 'status light-red' : 'status red' ">
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="tableInfo?.email == columns">
+                        <span [ngClass]="{'text-primary':element[columns]}">{{element[columns] | dash}}</span>
+                    </ng-container>
+                </td>
+            </ng-container>
+            <ng-container *ngIf="columns =='action'">
+                <th mat-header-cell *matHeaderCellDef class="action">
+                    {{tableHeaders[j] | titlecase}}
+                </th>
+                <td mat-cell *matCellDef="let element let i=index">
+                    <button [disabled]="tableInfo.tableData[i]?.isBlock == true" mat-icon-button id="tooltip"
+                        matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right" matTooltipClass="tooltip"
+                        (click)="action(element, 'Edit', i)">
+                        <mat-icon class="text-main">edit</mat-icon>
+                    </button>
+                    <!-- <button mat-icon-button (click)="action(element, 'Delete')">
+                                <mat-icon class="text-danger">
+                                    delete
+                                </mat-icon>
+                            </button> -->
+
+                    <!-- <button mat-icon-button (click)="action(element, 'Block')">
+                                <mat-slide-toggle class="text-danger">      
+                                </mat-slide-toggle>
+                            </button> -->
+                </td>
+            </ng-container>
+
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; let i=index"
+            [ngClass]="{'highlightedRow ':highlightedRow == i && tableInfo?.highlightedrow==true}"
+            (click)="$event.stopPropagation();tableInfo?.pageName=='Profile'?action(row, 'Row',i):''"></tr>
+        <tr class="mat-row p-2 w-100" *matNoDataRow col>
+        </tr>
+    </table>
+</div>
+<!-- <mat-paginator *ngIf="tableInfo?.tableData?.length!=0 && tableInfo?.pagintion" showFirstLastButtons [length]="tableSize" -->
+<mat-paginator *ngIf="tableInfo?.tableSize > 10 && tableInfo?.pagintion" showFirstLastButtons [length]="tableSize"
+    (page)="action($event, 'Pagination')" [pageSizeOptions]="[10]" aria-label="Select page" class="m-0">
+</mat-paginator>
+<div *ngIf="tableInfo?.tableData?.length ==0">
+    <div class="alert alert-danger text-center me-2  mt-1 py-2 ">
+        <span *ngIf="webStorageService.languageFlag =='EN'">Data not available</span>
+        <span *ngIf="webStorageService.languageFlag =='mr-IN'">डेटा उपलब्ध नाही</span>
+    </div>

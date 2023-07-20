@@ -1,0 +1,35 @@
+<!-- <div class="curtain" *ngIf="router.url == '/home'" [class.d-none]="router.url == '/home' && !curtainFlag">
+    <div class="curtain__wrapper">
+        <input type="checkbox" checked (change)="selCheckBox($event)">
+        <label for="Ford" class="rope"></label>
+        <div class="curtain__panel curtain__panel--left">
+            <h1>Click to &nbsp;</h1>
+        </div>
+        <div class="curtain__content">
+            <img src="assets/images/logo.svg" style="width:450px">
+        </div>
+
+        <div class="curtain__panel curtain__panel--right">
+            <h1>Inaugurate...</h1>
+        </div>
+    </div>
+</div>
+
+<div appTheme [class.d-none]="router.url == '/home' && curtainFlag">
+    <app-web-header></app-web-header>
+    <router-outlet></router-outlet>
+    <app-web-footer></app-web-footer>
+    <button *ngIf="isShow" (click)="gotoTop()">
+        <span class="material-symbols-outlined">
+            north
+        </span>
+    </button>
+</div> -->
+<app-web-header></app-web-header>
+<router-outlet></router-outlet>
+<app-web-footer></app-web-footer>
+<button *ngIf="isShow" (click)="gotoTop()">
+    <span class="material-symbols-outlined">
+        north
+    </span>
+</button>

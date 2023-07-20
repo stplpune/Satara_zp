@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="164.172" height="164.172" viewBox="0 0 164.172 164.172">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="path3183" d="M0-682.665H164.172v164.172H0Z" transform="translate(0 682.665)"/>
+    </clipPath>
+  </defs>
+  <g id="infinite_colors" data-name="infinite colors" transform="translate(0 682.665)">
+    <g id="g3179" transform="translate(0 -682.665)">
+      <g id="g3181" clip-path="url(#clip-path)">
+        <g id="g3187" transform="translate(62.847 58.963)">
+          <path id="path3189" d="M-304.817-152.408a48.258,48.258,0,0,1-48.258,48.258,48.258,48.258,0,0,1-48.258-48.258,48.258,48.258,0,0,1,48.258-48.258A48.258,48.258,0,0,1-304.817-152.408Z" transform="translate(401.332 200.666)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"/>
+        </g>
+        <g id="g3191" transform="translate(4.81 58.963)">
+          <path id="path3193" d="M-304.817-152.408a48.258,48.258,0,0,1-48.258,48.258,48.258,48.258,0,0,1-48.258-48.258,48.258,48.258,0,0,1,48.258-48.258A48.258,48.258,0,0,1-304.817-152.408Z" transform="translate(401.332 200.666)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"/>
+        </g>
+        <g id="g3195" transform="translate(33.828 8.694)">
+          <path id="path3197" d="M-304.817-152.408a48.258,48.258,0,0,1-48.258,48.258,48.258,48.258,0,0,1-48.258-48.258,48.258,48.258,0,0,1,48.258-48.258A48.258,48.258,0,0,1-304.817-152.408Z" transform="translate(401.332 200.666)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="5"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

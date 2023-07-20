@@ -1,0 +1,238 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center ms-">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon " routerLink="/dashboard">
+                <mat-icon> home</mat-icon>
+            </button>
+        </li>
+        <li class="breadcrumb-item ms-2" aria-current="page">{{'Labels.reports' | translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{('Labels.schoolReport'| translate )}}</li>
+    </ol>
+</nav>
+<mat-card class="plain-card">
+    <mat-card-header class="card-header pb-0">
+        <form [formGroup]="schoolReportForm" (ngSubmit)="searchAssessMent('filter')">
+            <div class="row gx-2">
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.district'| translate}}</mat-label>
+                        <mat-select formControlName="districtId" [disabled]="schoolReportForm.value.districtId == 1" [disabled]="true">
+                            <mat-option *ngFor="let dist of $districts | async" [value]="dist.id">{{languageFlag ==
+                                'English' ?
+                                dist.district : dist.m_District}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="clearDropdown('talukaId');getAllCenter();">
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
+                                tal.taluka:tal.m_Taluka }}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['talukaId'].hasError('required')"> {{'Labels.pleaseSelectTaluka'| translate }} </mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+                        <mat-select formControlName="centerId"
+                            (selectionChange)="clearDropdown('centerId');getAllSchoolsByCenterId()">
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
+                                ?cen.center:cen.m_Center}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId" (selectionChange)="clearDropdown('schoolId');getStandard()">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
+                                sch.schoolName:sch.m_SchoolName}}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['schoolId'].hasError('required')">  {{'Labels.pleaseSelectSchool'| translate }} </mat-error> -->
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                    <!----show stand dropdown if base-->
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.standard'| translate}}</mat-label>
+                        <mat-select formControlName="standardId">
+                            <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{languageFlag == 'English'
+                                ?stan.standard:stan.m_Standard}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <!-- <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.AssessmentType' | translate}}</mat-label>
+                        <mat-select formControlName="AssessmentTypeId">
+                            <mat-option *ngFor="let access of AssessmentTypeArr" [value]="access.id">{{languageFlag ==
+                                'English' ?
+                                access.assessmentType:access. m_AssessmentType}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div> -->
+
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.assessedBy' | translate}}</mat-label>
+                        <mat-select formControlName="IsInspection">
+                            <mat-option [value]="0">Officer</mat-option>
+                            <mat-option [value]="1">Teacher</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+
+
+                <div class="col-sm-3">
+                    <div class="d-flex">
+                        <mat-form-field appearance="outline" class="">
+                            <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
+                            <mat-select formControlName="examTypeId">
+                                <mat-option *ngFor="let exam of examTypeArr" [value]="exam.id">{{languageFlag ==
+                                    'English' ?
+                                    exam.examType:exam. m_ExamType}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" class="ms-2">
+                            <mat-label>{{'Labels.acYear'| translate}}</mat-label>
+                            <mat-select formControlName="educationYearId">
+                                <mat-option *ngFor="let academic of academicYearsArr"
+                                    [value]="academic.id">{{languageFlag
+                                    == 'English' ?
+                                    academic.eductionYear:academic. eductionYear_M}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <!-- <mat-label>{{'Labels.birthDate'| translate}}</mat-label> -->
+                        <mat-label>From</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="fromDate" (click)="picker.open()"
+                            readonly [max]="maxDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>To</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="toDate" (click)="picker1.open()"
+                            readonly [max]="maxDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button mat-flat-button class="btn-second" (click)="clearForm()">{{'Labels.clear'|
+                            translate}}</button>
+                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.ViewReport' |
+                            translate}}</button>
+
+                        <button mat-flat-button class="bg-danger btn-icon text-white" type="button"
+                            matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                            matTooltipClass="tooltip" (click)="searchAssessMent('pdfFlag')"> <mat-icon>description
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-header>
+    <mat-card-content class="card-body pt-0">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="tableData?.tableData" class="dashboard-table">
+
+                <ng-container matColumnDef="srNo">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Sr. No.</th>
+                    <td mat-cell *matCellDef="let element;let i=index"> {{element.srNo}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="No">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ? 'Sr. No.' : 'अ.क्र.'}}</th>
+                </ng-container>
+                
+                <ng-container matColumnDef="taluka">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> taluka </th>
+                    <td mat-cell *matCellDef="let element;"> {{this.languageFlag == 'English' ? element.taluka: element.m_Taluka}} </td>
+                </ng-container>
+                <ng-container matColumnDef="taluka1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ? 'Taluka': 'तालुका'}}</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="center">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> center </th>
+                    <td mat-cell *matCellDef="let element;"> {{this.languageFlag == 'English' ? element.center: element.m_Center}} </td>
+                </ng-container>
+                <ng-container matColumnDef="center1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ? 'Center' : 'केंद्र'}}</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="schoolName">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> schoolName </th>
+                    <td mat-cell *matCellDef="let element;"> {{this.languageFlag == 'English' ? element.schoolName: element.m_SchoolName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="schoolName1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ? 'School Name' : 'शाळेचे नाव'}}</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="standard">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> {{this.languageFlag == 'English' ? 'standard' : 'इयत्ता'}} </th>
+                    <td mat-cell *matCellDef="let element;"> {{this.languageFlag == 'English' ? element.standard: element.m_Standard}} </td>
+                </ng-container>
+                <ng-container matColumnDef="standard1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ? 'Standard' : 'इयत्ता'}}</th>
+                </ng-container>
+                
+                <ng-container matColumnDef="assBaseLevelStudentCount">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> {{this.languageFlag == 'English' ? 'Base Level' : '
+                        पायाभूत स्तर'}}  </th>
+                    <td mat-cell *matCellDef="let element"> {{element.assBaseLevelStudentCount}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="assClassWiseStudentCount">
+                    <th mat-header-cell *matHeaderCellDef class="text-center"> {{this.languageFlag == 'English' ? 'Class Level' : 'इयत्ता निहाय'}}  </th>
+                    <td mat-cell *matCellDef="let element"> {{element.assClassWiseStudentCount}} </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="header-row-second-group">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center"> {{this.languageFlag == 'English' ? 'Assessed Student Count' : 'मुल्यांकित विद्यार्थी संख्या'}}</th>
+                </ng-container>
+    
+                <ng-container matColumnDef="totalStudentCount">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> totalStudentCount </th>
+                    <td mat-cell *matCellDef="let element;"> {{element.totalStudentCount}} </td>
+                </ng-container>
+                <ng-container matColumnDef="totalStudentCount1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ? 'Total Student Count' : 'एकूण विद्यार्थी संख्या'}}</th>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="['No','taluka1','center1','schoolName1','standard1','header-row-second-group','totalStudentCount1',]"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <mat-paginator *ngIf="tableData?.tableSize > 10 && tableData?.pagintion" showFirstLastButtons [length]="tableData?.tableSize"
+            (page)="childCompInfo($event)" [pageSizeOptions]="[10]" aria-label="Select page" class="m-0">
+        </mat-paginator>
+        <div *ngIf="tableData?.tableData?.length == 0">
+            <div class="alert alert-danger text-center py-2 ">
+                <span *ngIf="languageFlag =='English'">Data not available</span>
+                <span *ngIf="languageFlag =='Marathi'">डेटा उपलब्ध नाही</span>
+            </div>
+        </div>
+        
+        <!-- <app-table (recObjToChild)="childCompInfo($event)"></app-table> -->
+    </mat-card-content>
+</mat-card>

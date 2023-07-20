@@ -1,0 +1,40 @@
+#app-help img {
+    height: 400px;
+}
+
+#app-help ol li {
+    font-size: 1.1rem;
+}
+
+#app-help h6 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+.contact-us {
+    padding-top: 113px;
+    background-image: url(../../../assets/images/home-page/AboutUs-Background-image.png);
+    height: 300px;
+    background-repeat: no-repeat;
+    background-size: auto;
+}
+
+.contact-us h1{
+    font-size: 2.7rem;
+    font-weight: 600;
+    color: white;
+    padding-top: 50px;
+}
+
+@media only screen and (max-width: 478px) {
+    #app-help ol li {
+        font-size: 0.9rem;
+    }
+    #app-help h6 {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    #app-help img {
+        height: 270px;
+    }
+  }
+  

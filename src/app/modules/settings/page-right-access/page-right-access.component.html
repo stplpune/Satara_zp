@@ -1,0 +1,61 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.setting' | translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.pagerightaccess' | translate}}</li>
+    </ol>
+</nav>
+<mat-card class="plain-card">
+    <mat-card-header class="card-header">
+        <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
+            <div class="text-main fw-bold">
+                {{'Labels.pagerightaccess' | translate}}
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-header class="card-header pb-0 border-bottom-0">
+        <form [formGroup]="userRightFrm" (ngSubmit)="onSubmit()" class="w-100">
+            <div class="row w-100 gx-2">
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.DesignationLevel' | translate}}</mat-label>
+                        <mat-select formControlName="userType"
+                            (selectionChange)="getDesignation(userRightFrm.value.userType); this.initialLoadFlag = false;">
+                            <mat-option *ngFor="let u of DesignationLevelArr" [value]="u.id">{{ langTypeName=='English'
+                                ? u.designationLevel : u.m_DesignationLevel}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.Designation' | translate}}</mat-label>
+                        <mat-select formControlName="subUserType">
+                            <mat-option *ngFor="let u of DesignationArr" [value]="u.id">{{langTypeName=='English' ?
+                                u.designationType :
+                                u.m_DesignationType}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.searchPage' | translate}}</mat-label>
+                        <input matInput formControlName="Textsearch" (keypress)="validation.noSpacesAtStart($event)"
+                            maxlength="100">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-auto mb-lg-0 mb-2">
+                    <button mat-stroked-button class="btn-main">{{'Labels.filter' |
+                        translate}}</button>
+                    <button type="button" mat-stroked-button class="btn-second ms-2"
+                        (click)="resetFilter()">{{'Labels.clear' | translate}}</button>
+                </div>
+            </div>
+        </form>
+    </mat-card-header>
+    <mat-card-content class="card-body pt-0">
+        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+    </mat-card-content>
+</mat-card>

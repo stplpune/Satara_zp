@@ -1,0 +1,324 @@
+.navbar {
+    background-color: #fff;
+    position: fixed;
+    width: 100%;
+    z-index: 999999 !important;
+    top: 0;
+    border-bottom: 2px solid #ddd;
+}
+
+.navbar li a {
+    font-size: 0.85rem;
+}
+
+.navbar .navbar-nav .nav-link {
+    margin-inline: 15px;
+    color: #707070;
+    border-bottom: solid 2px transparent;
+}
+
+.navbar .navbar-nav .nav-link:hover,
+nav .navbar-nav .nav-link.active {
+    margin-inline: 15px;
+    color: var(--main-color);
+    border-bottom: solid 2px var(--main-color);
+}
+
+.navbar nav .logo {
+    width: 160px;
+    height: 53px;
+}
+
+.azadi-logo {
+    width: 80px;
+}
+
+.swachh-bhara-logo {
+    width: 100px;
+}
+
+.btn-login {
+    background-color: var(--main-color);
+    border-radius: 30px;
+    padding: 10px 36px !important;
+    color: #fff;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.right-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.header {
+    padding-top: 120px;
+}
+
+.header .header-discription {
+    font-size: 0.85rem;
+}
+
+.header .text-other {
+    color: var(--main-color);
+}
+
+.ministers .card {
+    border: none;
+    background: rgb(245, 166, 58);
+    background: linear-gradient(180deg, rgba(245, 166, 58, 1) 45%, rgba(255, 255, 255, 1) 45%);
+}
+
+.ministers .card-body {
+    text-align: center;
+    padding: 4rem 2rem 2rem 2rem;
+}
+
+.ministers .left {
+    border-radius: 8px 35px;
+}
+
+.ministers .right {
+    border-radius: 35px 8px;
+}
+
+.ministers .minister-img {
+    height: 120px;
+    margin-bottom: 15px;
+}
+
+.ministers h6 {
+    font-weight: 700;
+}
+
+.ministers p {
+    color: #757575;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.about-section,
+.testimonials-section {
+    margin-top: 100px;
+    margin-inline: 50px;
+}
+
+.about-section ol li {
+    font-size: 0.85rem;
+    justify-content: right;
+}
+
+.about-section ol {
+    padding-left: 25px;
+}
+
+.about-section h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.about-section .about-student-img {
+    height: 450px;
+}
+
+.about-btn-login {
+    background-color: #02CCC0;
+    border-radius: 30px;
+    padding: 10px 23px !important;
+    color: #fff;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.about-btn-login,
+.btn-login a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.app-section {
+    background-image: linear-gradient(to right, #039286, #32BBAF);
+    padding: 40px;
+    color: #fff;
+    margin-top: 80px;
+}
+
+.app-section h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.app-section p {
+    font-size: 0.85rem;
+
+}
+
+.app-section .app-features {
+    margin-bottom: 2.5rem;
+}
+
+.app-features .material-symbols-outlined {
+    background-color: #01645B;
+    color: #fff;
+    padding: 6px;
+    opacity: 0.8;
+    border-radius: 7px;
+    font-size: 2rem;
+}
+
+.app-features p {
+    font-size: .80rem;
+}
+
+footer {
+    background-color: #191E24;
+    color: #fff;
+    padding-block: 3rem;
+}
+
+footer img {
+    width: 200px;
+}
+
+footer p {
+    margin-block: 1.5rem;
+    font-size: 0.85rem;
+    color: #ddd;
+}
+
+footer h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+footer ul li {
+    margin-bottom: 15px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #aaa;
+}
+
+footer ul li a:hover {
+    color: #fff;
+}
+
+footer .contact {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+footer .input-group {
+    border: none;
+    background-color: #fff;
+    padding: 3px;
+    border-radius: 30px;
+}
+
+footer .input-group .form-control {
+    border: none;
+    border-radius: 30px;
+    box-shadow: none;
+    font-size: 0.85rem;
+    margin-right: 5px;
+    padding-inline: 20px;
+}
+
+footer .input-group button {
+    border-radius: 50% !important;
+    border: none;
+    background-color: var(--main-color);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    line-height: 45px;
+    font-size: 1.4rem;
+}
+
+@media screen and (max-width: 480px) {
+    .navbar-toggler {
+        font-size: 0.85rem;
+        box-shadow: none;
+    }
+
+    .header {
+        padding-top: 60px;
+    }
+
+    .header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .header img {
+        height: 200px;
+    }
+
+    .header .header-discription {
+        font-size: 0.75rem;
+    }
+
+    .about-section .testimonials-section {
+        margin-top: 40px;
+    }
+
+    .about-section h1 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .about-section .about-student-img {
+        height: 200px;
+    }
+
+    .ministers {
+        margin-top: 0px;
+    }
+
+    .ministers .right-two-card .orange {
+        background-color: #F5A63A;
+        height: 58px;
+        border-radius: 40px 10px 0px 0px;
+    }
+
+    .ministers .left-two-card .orange {
+        background-color: #F5A63A;
+        height: 58px;
+        border-radius: 10px 40px 0px 0px;
+    }
+
+    .ministers .minister-img {
+        height: 48px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 32px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .offcanvas-body {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .right-logo {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+}

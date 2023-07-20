@@ -1,0 +1,85 @@
+<nav class="navbar bg-white">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <div class="name">
+                <img src="assets/images/shiksha_darpan_text.svg" alt="">
+            </div>
+            <div class="d-flex gap-2 align-items-center justify-content-between">
+                <button class="btn d-lg-none d-block" (click)="onClickMenu()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <!-- <div class="dropdown">
+                    <button class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                        <mat-icon>{{webStorage.selectedTheme == 'light' ? 'light_mode' : 'nights_stay'}}</mat-icon>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <button [class]="webStorage.selectedTheme == 'light' ? 'dropdown-item active' : 'dropdown-item'" (click)="changeTheme('light')">
+                            <div class="d-flex align-items-center">
+                                <mat-icon>light_mode</mat-icon>
+                                <span>{{'Labels.LightMode' | translate}}</span>
+                            </div>
+                        </button>
+                        <button [class]="webStorage.selectedTheme != 'light' ? 'dropdown-item active' : 'dropdown-item'" (click)="changeTheme('dark')">
+                            <div class="d-flex align-items-center">
+                                <mat-icon>nights_stay</mat-icon>
+                                <span>{{'Labels.DarkMode' | translate}}</span>
+                            </div>
+                        </button>
+                    </div>
+                </div> -->
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <!-- <mat-icon>translate</mat-icon> -->
+                        <img
+                            [src]="webStorage.languageFlag == 'EN' ? 'assets/images/english.svg' : 'assets/images/marathi.svg'">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <button [class]="webStorage.languageFlag == 'EN' ? 'dropdown-item active' : 'dropdown-item'"
+                            (click)="translateLanguage('English', 'btnClick')">
+                            <div class="d-flex align-items-start">
+                                <img src="assets/images/english.svg">
+                                <span>{{'Labels.HeaderEnglish'| translate}}</span>
+                            </div>
+                        </button>
+                        <button [class]="webStorage.languageFlag != 'EN' ? 'dropdown-item active' : 'dropdown-item'"
+                            (click)="translateLanguage('Marathi', 'btnClick')">
+                            <div class="d-flex align-items-start">
+                                <img src="assets/images/marathi.svg">
+                                <span>{{'Labels.HeaderMarathi'| translate}}</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <img src="assets/images/user.png" class="avatar dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Dropdown button
+                    </button> -->
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <div class="dropdown-header">
+                                <p class="mb-0 text-main fw-bold">{{this.UserData?.name}}</p>
+                                <small class="text-mutedd">({{this.UserData?.userType}})</small>
+                            </div>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider my-1">
+                        </li>
+                        <li><a class="dropdown-item" (click)="openMyProfileDialog()"
+                                style="cursor: pointer">{{'Labels.profile' | translate}}</a></li>
+                        <li><a class="dropdown-item" (click)="openChangePasswordDialog()"
+                                style="cursor: pointer">{{'Labels.changePwd' | translate}}</a></li>
+                        <li>
+                            <hr class="dropdown-divider my-1">
+                        </li>
+                        <li><a class="dropdown-item" (click)="logOut()" style="cursor: pointer">{{'Labels.logout' |
+                                translate}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

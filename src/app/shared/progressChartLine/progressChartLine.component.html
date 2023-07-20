@@ -1,0 +1,117 @@
+<mat-card class="plain-card border">
+    
+    <mat-card-header class="card-header pb-0 border-bottom-0">
+        <div class="w-100">
+            <div class="row w-100">
+                <div class="col-sm-7">
+                    <mat-radio-group aria-label="Select an option" [formControl]="inspectionBy"
+                        (change)="getLineChartDetails()">
+                        <mat-radio-button value="0">{{webStorage.languageFlag == 'EN'?
+                            'Teacher':'शिक्षक'}}</mat-radio-button>
+                        <mat-radio-button value="1">{{webStorage.languageFlag == 'EN'? 'Officer':'
+                            अधिकारी'}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="col-sm-5">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.Subject'| translate}} </mat-label>
+                        <mat-select [formControl]="subjectControl" (selectionChange)="constuctLineChart()">
+                            <mat-option *ngFor="let sub of subjectArray" [value]="sub">{{sub}}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['standard'].hasError('required')"> {{'Labels.pleaseSelectStandard'| translate}} </mat-error> -->
+                    </mat-form-field>
+                </div>
+            </div>
+            <h6 class="my-2 px-1 fw-bold text-main">{{labelAfterthirdStd}}</h6>
+        </div>
+    </mat-card-header>
+
+    <mat-card-content class="card-body pt-0">
+        <div class="row">
+            <div [class]="(lineChartshow && barChartshow) ? 'col-sm-6' : 'col-sm-12'" *ngIf="lineChartshow">
+                <h6 class="my-2 px-1 fw-bold text-main">{{webStorage.languageFlag == 'EN'? ('Expected level in subject ' +
+                    subjectControl.value + ' :  ' +expectedLevelBase):(subjectControl.value+' विषयात अपेक्षित असलेला स्तर : ' +expectedLevelBase)}} </h6>
+                <apx-chart [series]="lineChartOptions.series" [chart]="lineChartOptions.chart"
+                    [xaxis]="lineChartOptions.xaxis" [dataLabels]="lineChartOptions.dataLabels"
+                    [grid]="lineChartOptions.grid" [stroke]="lineChartOptions.stroke" [title]="lineChartOptions.title"
+                    [tooltip]="lineChartOptions.tooltip" [yaxis]="lineChartOptions.yaxis"
+                    [legend]="lineChartOptions.legend" [colors]="lineChartOptions.colors"></apx-chart>
+            </div>
+            <div [class]="(lineChartshow && barChartshow) ? 'col-sm-6' : 'col-sm-12'" *ngIf="barChartshow">
+                <h6 class="my-2 px-1 fw-bold text-main">{{webStorage.languageFlag == 'EN'? ('Expected level in subject ' +
+                    subjectControl.value + ' :  ' +higherGradeBar):(subjectControl.value+' विषयात अपेक्षित असलेला स्तर : ' +higherGradeBar)}} </h6>
+                <apx-chart *ngIf="barChartOptions?.series.length" [series]="barChartOptions.series"
+                    [chart]="barChartOptions.chart" [dataLabels]="barChartOptions.dataLabels"
+                    [plotOptions]="barChartOptions.plotOptions" [yaxis]="barChartOptions.yaxis"
+                    [legend]="barChartOptions.legend" [fill]="barChartOptions.fill" [stroke]="barChartOptions.stroke"
+                    [tooltip]="barChartOptions.tooltip" [xaxis]="barChartOptions.xaxis" [grid]="barChartOptions.grid"
+                    [colors]="barChartOptions.colors"></apx-chart>
+                <p class="text-center">0 - {{webStorage.languageFlag == 'EN'?"Didn't Try":"प्रयत्न केला नाही"}} | 1 -
+                    {{webStorage.languageFlag == 'EN'?"Need Help":"मदतीची गरज आहे"}} | 2 - {{webStorage.languageFlag ==
+                    'EN'?"Correct Answer":"बरोबर उत्तर"}}</p>
+            </div>
+        </div>
+        <h6 class="text-main fw-bold mt-3 mb-2" data-html2canvas-ignore="true">
+            {{inspectionBy.value=='0'?(webStorage.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webStorage.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
+        </h6>
+        <div class="table-responsive scrollbar table-height-xs" data-html2canvas-ignore="true">
+            <table class="table dashboard-table">
+                <thead class="bg-main-light">
+                    <tr>
+                        <th *ngFor="let header of displayedheaders"
+                            [class]="header.label=='Assessment Date'?'text-end':''">
+                            {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                        </th>
+                    </tr>
+                    <!-- {'label':"Assessment Date","m_label":"मूल्यांकन तारीख"} -->
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let item of tableArrayBySubject; let j=index">
+                        <tr (click)="getAssessmentDetails(item, j)">
+                            <td style="width:70px">{{j+1}}</td>
+                            <td>{{webStorage.languageFlag == 'EN' ? item['name'] : item['m_Name']}}
+                            </td>
+                            <td>{{webStorage.languageFlag == 'EN' ? item['designationType'] : item['m_DesignationType']}}
+                            </td>
+                            <td>{{webStorage.languageFlag == 'EN' ? item.examType : item.m_ExamType}}</td>
+                            <td class="text-end" style="width:170px">{{item['assessmentDate']}}</td>
+                        </tr>
+                        <tr *ngIf="item.isExpand">
+                            <td></td>
+                            <td>
+                                <table class="table table-sm" *ngIf="assessmentDetailsArray.length > 0">
+                                    <thead>
+                                        <th>{{webStorage.languageFlag == 'EN' ? 'Subject': 'विषय'}}</th>
+                                        <th>{{webStorage.languageFlag == 'EN' ? 'Question': 'प्रश्न'}}</th>
+                                        <th>{{webStorage.languageFlag == 'EN' ? 'Grade': 'वर्ग'}}</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let element of assessmentDetailsArray ">
+                                            <td>{{webStorage.languageFlag == 'EN' ? element.subjectName:
+                                                element.m_SubjectName}}</td>
+                                            <td>{{webStorage.languageFlag == 'EN' ? element.question:
+                                                element.m_Question}}</td>
+                                            <td>{{element.grade}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div *ngIf="assessmentDetailsArray?.length ==0">
+                                    <div class="alert alert-danger text-center py-2 ">
+                                        {{'Labels.dataNotFound' | translate}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="tableArrayBySubject?.length ==0">
+            <div class="alert alert-danger text-center py-2">
+                {{'Labels.dataNotFound' | translate}}
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

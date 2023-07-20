@@ -1,0 +1,107 @@
+button {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--main-color);
+    border: 1px solid var(--main-color);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+}
+
+button .material-symbols-outlined {
+    font-size: 18px;
+}
+
+// .curtain {
+//     margin: 0 auto;
+//     width: 100%;
+//     height: 100vh;
+//     overflow: hidden;
+// }
+
+// .curtain__wrapper {
+//     width: 100%;
+//     height: 100%;
+// }
+
+// .curtain__wrapper input[type=checkbox] {
+//     position: absolute;
+//     cursor: pointer;
+//     width: 32%;
+//     height: 100%;
+//     z-index: 100;
+//     opacity: 0;
+//     top: 10%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//     z-index: 9999;
+// }
+
+// .curtain__wrapper input[type=checkbox]+label {
+//     position: absolute;
+//     left: 50%;
+//     width: 142px;
+//     height: 100%;
+//     z-index: 999;
+//     transform: translate(-50%, -50%);
+//     background-size: contain;
+// }
+
+// .curtain__wrapper input[type=checkbox]:checked+label~div.curtain__panel--left {
+//     transform: translateX(0);
+// }
+
+// .curtain__wrapper input[type=checkbox]:checked+label~div.curtain__panel--right {
+//     transform: translateX(0);
+// }
+
+// .curtain__panel {
+//     display: flex;
+//     align-items: center;
+//     background: orange;
+//     color: #fff;
+//     float: left;
+//     position: relative;
+//     width: 50%;
+//     height: 100vh;
+//     transition: all 10s ease-out;
+//     z-index: 2;
+//     background-image: url('https://media.istockphoto.com/id/172517528/photo/red-curtain.jpg?b=1&s=170667a&w=0&k=20&c=h4KDCZTMYjq7_6n61pfQ6SyYkXfwmwq_IoCE7IG4CJ4=');
+//     background-repeat: no-repeat;
+//     background-size: cover;
+// }
+
+// .curtain__panel--left {
+//     justify-content: flex-end;
+//     transform: translateX(-100%);
+// }
+
+// .curtain__panel--right {
+//     justify-content: flex-start;
+//     transform: translateX(100%);
+// }
+
+// .curtain__content {
+//     align-items: center;
+//     background: #333;
+//     color: #fff;
+//     display: flex;
+//     flex-direction: column;
+//     height: 100vh;
+//     justify-content: center;
+//     padding: 1rem 0;
+//     position: absolute;
+//     text-align: center;
+//     z-index: 1;
+//     width: 100%;
+// }
+
+// .curtain__content img {
+//     width: 20%;
+// }

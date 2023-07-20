@@ -1,0 +1,915 @@
+<mat-drawer-container class="example-container" hasBackdrop="false">
+    <mat-drawer #drawer mode="over" position="end">
+        <mat-card class="plain-card">
+            <mat-card-header class="card-header pb-0">
+
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <h6 class="text-main mb-0 fw-bold">{{'Labels.filterclick' | translate}}</h6>
+                    <button mat-icon-button class="btn-modal-close" mat-dialog-close
+                        (click)="this.drawer.close(); resetFlag? initialApiCall('form'):'';resetFlag=false">
+                        <mat-icon>
+                            close
+                        </mat-icon>
+                    </button>
+                </div>
+            </mat-card-header>
+            <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
+                <form [formGroup]="filterForm"
+                    (ngSubmit)="initialApiCall('form');this.drawer.close(); clickOnSvgMap('select')">
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
+                            <mat-select formControlName="acYearId">
+                                <mat-option *ngFor="let year of acYear" [value]="year.educationYearId">
+                                    {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
+                            <mat-select formControlName="talukaId" (selectionChange)="getCenters()">
+                                <mat-option *ngFor="let taluka of talukaData" [value]="taluka.id">
+                                    {{webStorage.languageFlag == 'EN' ? taluka.taluka:taluka.m_Taluka}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
+                            <mat-select formControlName="centerId" [placeholder]="'All'"
+                                (selectionChange)="getschools()">
+                                <mat-option *ngFor="let center of centerData" [value]="center.id">
+                                    {{webStorage.languageFlag == 'EN'?center.center:center.m_Center}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectSchool' | translate}}</mat-label>
+                            <mat-select formControlName="schoolId" placeholder="All"
+                                (selectionChange)="selectedSchool()">
+                                <mat-option *ngFor="let school of schoolData" [value]="school.id">
+                                    {{webStorage.languageFlag == 'EN'?school.schoolName :school.m_SchoolName }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0" *ngIf="asessmwntLavel.value=='1'">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
+                            <mat-select formControlName="examTypeId" placeholder="All"
+                                (selectionChange)="selectedExamType()">
+                                <mat-option *ngFor="let examType of ExamTypeArray" [value]="examType.id">
+                                    {{webStorage.languageFlag == 'EN'?examType.examType : examType.m_ExamType }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
+                            (click)="clearForm(); f['talukaId'].patchValue(0); clickOnSvgMap('select');resetFlag=true">{{'Labels.reset'
+                            | translate}}</button>
+                        <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' |
+                            translate}}</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+    </mat-drawer>
+    <mat-drawer-content>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item w-100 d-flex justify-content-between" aria-current="page">
+                    <button mat-stroked-button class="btn-main btn-icon"
+                        (click)="clearForm();initialApiCall('form'); clickOnSvgMap('select')">
+                        <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
+                    <div class="d-flex justify-content-between  w-100">
+                        <!-- {{'Labels.dashboard' | translate}}  -->
+                        <span class="mt-2">
+                            {{(webStorage.languageFlag == 'EN'?'Dashboard':'डॅशबोर्ड')}} {{filterForm.value.talukaId ?
+                            (' / '+ (webStorage.languageFlag == 'EN'?'Osmanabad':'उस्मानाबाद')) : ''}}
+                            {{(f['talukaId'].value? (' > '+(webStorage.languageFlag ==
+                            'EN'?selectedTaluka?.taluka:selectedTaluka?.m_Taluka)):'') +
+                            (f['centerId'].value? (' > '+(webStorage.languageFlag ==
+                            'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') + (f['schoolId'].value? (' >
+                            '+(webStorage.languageFlag ==
+                            'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + (f['examTypeId'].value?
+                            (' > '+(webStorage.languageFlag ==
+                            'EN'?selectedexamType?.examType:selectedexamType?.m_ExamType)): '')}}</span>
+                        <div class="d-flex gap-2">
+                            <!-- academicYear year dropdown -->
+                            <div class="row justify-content-between align-items-center">
+                                <div class="col-sm-6" type="button" (click)="navigateToReport()">
+                                    <!-- <div class="mt-1">
+                                        {{(webStorage.languageFlag == 'EN'?
+                                        'Total schools assessed' : 'मुल्यांकन झाल्येल्या एकुण शाळा')+' :
+                                        '+
+                                        dashboardCountData[0]?.assessmentSchoolsCount+'/'+dashboardCountData[0]?.schoolCount}}
+                                    </div> -->
+                                    <span  >
+                                        {{webStorage.languageFlag == 'EN'?'Total schools assessed:' :
+                                        'मुल्यांकन झाल्येल्या एकुण शाळा:' }}
+                                    </span>
+                                    <span class="fw-bold">
+                                        {{dashboardCountData[0]?.assessmentSchoolsCount+'/'+dashboardCountData[0]?.schoolCount}}
+                                    </span>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>Select</mat-label>
+                                        <mat-select [formControl]="searchAcadamicYear"
+                                            (selectionChange)="initialApiCall('sigleField')">
+                                            <mat-option *ngFor="let year of acYear" [value]="year.educationYearId">
+                                                {{webStorage.languageFlag ==
+                                                'EN'?year.eductionYear:year.eductionYear_M}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-stroked-button class="btn-main btn-icon" (click)="drawer.toggle()">
+                                <mat-icon>filter_alt</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+
+        <div class="row mb-3 g-2" id="dash-stats">
+            <div class="col-sm-3">
+                <div class="card card-body bg-blue" routerLink="../school-registration">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/School-white.svg" class="bg-image">
+                            <p>{{'Labels.SchoolName' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.schoolCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/School.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-cyan">
+                    <div class="d-flex justify-content-between align-items-center" routerLink="../teacher-registration">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/Teacher-white.svg" class="bg-image">
+                            <p>{{'Labels.teachers' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.teacherCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/Teacher.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-voilet">
+                    <div class="d-flex justify-content-between align-items-center" routerLink="../student-registration">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/Student-white.svg" class="bg-image">
+                            <p>{{'Labels.students' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.studentCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/Student.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-magenta">
+                    <div class="d-flex justify-content-between align-items-center"
+                        routerLink="../office-user-registration">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/ZP-Officer-white.svg" class="bg-image">
+                            <p>{{'Labels.zpOfficer' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.zpOfficerCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/ZP-Officer.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-2 g-2">
+            <div class="col-sm-3">
+                <div class="d-flex align-content-around flex-wrap">
+                    <mat-card class="plain-card mb-2 w-100">
+                        <mat-card-header class="card-header">
+                            <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                        </mat-card-header>
+                        <mat-card-content class="card-body">
+                            <div id="mapsvg"></div>
+                        </mat-card-content>
+                    </mat-card>
+
+                    <mat-card class="plain-card w-100 h-auto">
+                        <mat-card-header class="card-header">
+                            <h6 class="mb-0 fw-bold">{{'Labels.managementwiseSchools' | translate}}</h6>
+                        </mat-card-header>
+                        <mat-card-content class="card-body">
+                            <div
+                                *ngIf="this.piechartOptions.series[0] == 0 && this.piechartOptions.series[1] == 0 && this.piechartOptions.series[2] == 0 ">
+                                <div class="alert alert-danger text-center py-2 ">
+                                    {{'Labels.dataNotFound' | translate}}
+                                </div>
+                            </div>
+                            <div id="chart">
+                                <apx-chart [series]="piechartOptions.series" [plotOptions]="piechartOptions.plotOptions"
+                                    [legend]="piechartOptions.legend" [chart]="piechartOptions.chart"
+                                    [theme]="piechartOptions.theme" [fill]="piechartOptions.fill"
+                                    [tooltip]="piechartOptions.tooltip" [labels]="piechartOptions.labels"
+                                    [responsive]="piechartOptions.responsive" [colors]="piechartOptions.colors"
+                                    [dataLabels]="piechartOptions.dataLabels">
+                                </apx-chart>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <mat-card class="plain-card h-100">
+                    <mat-card-header class="card-header">
+                        <div class="w-100">
+                            <div class="row justify-content-between align-items-start gap-2" id="student-survey">
+                                <div class="col-sm-auto">
+                                    <div class="small mt-2 fw-bold">{{'Labels.surveyStudent' | translate}}</div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <mat-radio-group aria-label="Select an option" [formControl]="asessmwntLavel"
+                                        (change)="setAssessment()">
+                                        <mat-radio-button value="0">
+                                            {{webStorage.languageFlag == 'EN'? 'Base Level':
+                                            'पायाभूत स्तर'}}</mat-radio-button>
+                                        <mat-radio-button value="1">
+                                            {{webStorage.languageFlag == 'EN'? 'Class Wise':
+                                            ' इयत्ता निहाय'}}</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                <div class="col-sm-2" *ngIf="asessmwntLavel.value=='1'">
+                                    <mat-form-field appearance="outline" class="w-100 mb-0">
+                                        <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
+                                        <mat-select [formControl]="subjectforBarByCLass"
+                                            (selectionChange)="chnageClasswiseSubjectDrp()">
+                                            <mat-option *ngFor="let sub of subjectArrayByClass" [value]="sub.id">
+                                                {{webStorage.languageFlag == 'EN'?sub.subjectName:
+                                                sub.m_SubjectName}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <div class="small mt-2">{{'Labels.selectedCount' | translate}} : <span
+                                            class="fw-bold">{{this.selectedSurveyData}}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div class="row gx-2" *ngIf="asessmwntLavel.value=='0'">
+                            <div class="col-sm-12">
+                                <div class="table-responsive scrollbar">
+                                    <table class="table inner-table mb-3 table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th *ngFor="let header of totalStudentSurveyData">
+                                                    <div class="row align-items-start">
+                                                        <div class="col-sm-auto" *ngIf="header.ischeckboxShow==false">
+                                                            {{webStorage.languageFlag == 'EN'?
+                                                            header?.groupClass:header?.m_GroupClass }}
+                                                        </div>
+                                                        <div class="col-sm">
+                                                            <div class="d-flex align-items-center justify-content-center"
+                                                                *ngIf="header.ischeckboxShow==true">
+                                                                <div class="form-check">
+                                                                    <!-- [disabled]="header.status==true" -->
+                                                                    <input class="form-check-input" type="radio"
+                                                                        id="header.label" name="std"
+                                                                        value="header.status"
+                                                                        (click)="checkData(header, 'radio');clearDropLowHighFilter('groupradio'); standardShowFlag=true"
+                                                                        [checked]="header.status">
+                                                                    <label class="form-check-label"
+                                                                        for="flexCheckDefault">
+                                                                        {{webStorage.languageFlag == 'EN'?
+                                                                        header?.groupClass:header?.m_GroupClass }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row"
+                                                                *ngIf="header.status==true &&  standardShowFlag">
+                                                                <div class="col-sm"
+                                                                    *ngFor="let std of header.standardDetails">
+                                                                    <div
+                                                                        class="d-flex align-items-center justify-content-center">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" [(ngModel)]="std.status"
+                                                                                (click)="checkData(header, 'checkbox')">
+                                                                            <label class="form-check-label"
+                                                                                for="flexCheckDefault">
+                                                                                {{webStorage.languageFlag == 'EN'?
+                                                                                std?.standard:std?.m_Standard }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div *ngIf="header.status==false">
+                                                        &nbsp;
+                                                    </div> -->
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td *ngFor="let item of totalStudentSurveyData">
+                                                    <div *ngIf="item.status!=true">
+                                                        {{item?.assessmentCount+"/"+item?.studentCount}}</div>
+                                                    <div class="row" *ngIf="item.status==true &&  standardShowFlag">
+                                                        <div class="col-sm" *ngFor="let std of item.standardDetails">
+                                                            {{(std?.assessmentCount+'/'+std?.studentCount)}}
+                                                        </div>
+                                                    </div>
+                                                    <div *ngIf="item.status==true &&  !standardShowFlag">
+                                                        {{item?.assessmentCount+"/"+item?.studentCount}}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="row w-100 border-right"
+                                    *ngIf="showBarChartF &&  (barChartData.length !=0 && stackbarChartData.length !=0 )">
+                                    <div class="col-sm-3 text-start"
+                                        *ngFor="let bar of stackbarchartOptions.series[0]; let i=index">
+                                        <p class="fw-bold mb-4">{{graphSubjectData[i]}}</p>
+                                        <apx-chart [series]="bar" class="w-100" [chart]="stackbarchartOptions.chart"
+                                            (mouseover)="selectedBar(graphSubjectData[i])"
+                                            [dataLabels]="stackbarchartOptions.dataLabels"
+                                            [plotOptions]="stackbarchartOptions.plotOptions"
+                                            [dataLabels]="stackbarchartOptions.dataLabels"
+                                            [responsive]="stackbarchartOptions.responsive"
+                                            [xaxis]="stackbarchartOptions.xaxis" [grid]="stackbarchartOptions.grid"
+                                            [yaxis]="stackbarchartOptions.yaxis" [legend]="stackbarchartOptions.legend"
+                                            [fill]="stackbarchartOptions.fill"
+                                            [tooltip]="stackbarchartOptions.tooltip"></apx-chart>
+                                        <div *ngIf="isStackbarEmpty">
+                                            <div class="alert alert-danger text-center py-2 ">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 border-start border-3">
+                                        <div class="row justify-content-between align-items-center"
+                                            *ngIf="BarChartSubjectArray.length>1">
+                                            <div class="col-sm-4">
+                                                <p class="fw-bold">{{subjectforBar.value}}</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
+                                                    <mat-select [formControl]="subjectforBar"
+                                                        (selectionChange)="constructBarChart()">
+                                                        <mat-option *ngFor="let sub of BarChartSubjectArray"
+                                                            [value]="sub">
+                                                            {{sub}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-start" *ngIf="BarChartSubjectArray.length<2">
+                                            <div class="fw-bold text-start mb-0"> {{BarChartSubjectArray[0]}}</div>
+                                        </div>
+                                        <apx-chart [series]="barchartOptions.series" [chart]="barchartOptions.chart"
+                                            [dataLabels]="barchartOptions.dataLabels"
+                                            [plotOptions]="barchartOptions.plotOptions" [yaxis]="barchartOptions?.yaxis"
+                                            [xaxis]="barchartOptions?.xaxis" [fill]="barchartOptions?.fill"
+                                            [grid]="stackbarchartOptions.grid" [legend]="barchartOptions.legend"
+                                            [colors]="barchartOptions.colors" [title]="barchartOptions.title"
+                                            [tooltip]="barchartOptions.tooltip"
+                                            [stroke]="barchartOptions.stroke"></apx-chart>
+
+                                        <div *ngIf="isBarChartEmty">
+                                            <div class="alert alert-danger text-center py-2 ">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="barChartData.length == 0 && stackbarChartData.length ==0 ">
+                                    <div class="alert alert-danger text-center py-2 ">
+                                        {{'Labels.dataNotFound' | translate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gx-2" *ngIf="asessmwntLavel.value=='1'">
+                            <div class="col-sm-12">
+                                <div class="table-responsive scrollbar">
+                                    <table class="table inner-table mb-3 table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th *ngFor="let header of totalStudentSurveyDataByCLass; let i=index">
+                                                    <div class="row align-items-start">
+                                                        <div class="col-sm-auto" *ngIf="header.ischeckboxShow==false">
+                                                            {{webStorage.languageFlag == 'EN'?
+                                                            header?.groupClass:header?.m_GroupClass }}
+                                                        </div>
+                                                        <div class="col-sm">
+                                                            <div class="d-flex align-items-center justify-content-center"
+                                                                *ngIf="header.ischeckboxShow==true">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        id="header.label" name="std"
+                                                                        value="header.status"
+                                                                        (change)="checkDataByClass(i, header )"
+                                                                        [checked]="header.status">
+                                                                    <label class="form-check-label"
+                                                                        for="flexCheckDefault">
+                                                                        {{webStorage.languageFlag == 'EN'?
+                                                                        header?.groupClass:header?.m_GroupClass }}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td *ngFor="let item of totalStudentSurveyDataByCLass">
+                                                    <div> {{item?.assessmentCount+"/"+item?.studentCount}}</div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- starting stack bar here  -->
+                            <div class="col-sm-12">
+                                <div class="d-flex w-100" [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass.series.length >3}"  >
+                                    <div class="text-start mx-2" 
+                                        *ngFor="let bar of stackbarchartOptionsByClass?.series; let i=index">
+                                        <p class="fw-bold  mb-4">{{graphSubjectDataByClass[i]}}</p>
+                                        <apx-chart [series]="bar"  [chart]="stackbarchartOptionsByClass.chart"
+                                            (mouseover)="selectedBar(graphSubjectDataByClass[i],i)"
+                                            [dataLabels]="stackbarchartOptionsByClass.dataLabels"
+                                            [plotOptions]="stackbarchartOptionsByClass.plotOptions"
+                                            [dataLabels]="stackbarchartOptionsByClass.dataLabels"
+                                            [responsive]="stackbarchartOptionsByClass.responsive"
+                                            [xaxis]="stackbarchartOptionsByClass.xaxis"
+                                            [grid]="stackbarchartOptionsByClass.grid"
+                                            [yaxis]="stackbarchartOptionsByClass.yaxis"
+                                            [legend]="stackbarchartOptionsByClass.legend"
+                                            [fill]="stackbarchartOptionsByClass.fill"
+                                            [tooltip]="stackbarchartOptionsByClass.tooltip"></apx-chart>
+
+                                        <div *ngIf="isStackbarEmpty">
+                                            <div class="alert alert-danger text-center py-2 ">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 border-start border-3"
+                                        *ngIf="barChartDataByClass.length && subjectforBarByCLass.value==1">
+                                        <!-- <div class="row justify-content-between align-items-center"
+                                            *ngIf="BarChartSubjectArray.length>1">
+                                            <div class="col-sm-4">
+                                                <p class="fw-bold">{{subjectforBar.value}}</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
+                                                    <mat-select [formControl]="subjectforBar"
+                                                        (selectionChange)="constructBarChart()">
+                                                        <mat-option *ngFor="let sub of BarChartSubjectArray"
+                                                            [value]="sub">
+                                                            {{sub}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div> -->
+                                        <div class="d-flex justify-content-start">
+                                            <div class="fw-bold text-start mb-0 mx-3"> {{this.webStorage.languageFlag ==
+                                                'EN'?this.subjectObjforClass.question :
+                                                this.subjectObjforClass.m_Question}}</div>
+                                        </div>
+
+                                        <p class="fw-bold">&nbsp;</p>
+                                        <apx-chart [series]="barchartOptionsByClass.series"
+                                            [chart]="barchartOptionsByClass.chart"
+                                            [dataLabels]="barchartOptionsByClass.dataLabels"
+                                            [plotOptions]="barchartOptionsByClass.plotOptions"
+                                            [yaxis]="barchartOptionsByClass?.yaxis"
+                                            [xaxis]="barchartOptionsByClass?.xaxis"
+                                            [fill]="barchartOptionsByClass?.fill" [grid]="barchartOptionsByClass.grid"
+                                            [legend]="barchartOptionsByClass.legend"
+                                            [colors]="barchartOptionsByClass.colors"
+                                            [title]="barchartOptionsByClass.title"
+                                            [tooltip]="barchartOptionsByClass.tooltip">
+                                        </apx-chart>
+                                        <div *ngIf="isBarChartEmty">
+                                            <div class="alert alert-danger text-center py-2 "
+                                                style="margin-top: -13px;">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="barChartData.length ==0 && stackbarChartData.length == 0 ">
+                                    <div class="alert alert-danger text-center py-2 ">
+                                        {{'Labels.dataNotFound' | translate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-2">
+            <div class="col-sm-12">
+                <mat-card class="plain-card h-100"
+                    *ngIf="asessmwntLavel.value=='1' && subjectforBarByCLass.value==3 && this.barChartDataByClass.length">
+                    <mat-card-content class="card-body">
+                        <apx-chart [series]="barchartOptionsByClass.series" [chart]="barchartOptionsByClass.chart"
+                            [dataLabels]="barchartOptionsByClass.dataLabels"
+                            [plotOptions]="barchartOptionsByClass.plotOptions" [yaxis]="barchartOptionsByClass?.yaxis"
+                            [xaxis]="barchartOptionsByClass?.xaxis" [fill]="barchartOptionsByClass?.fill"
+                            [grid]="barchartOptionsByClass.grid" [legend]="barchartOptionsByClass.legend"
+                            [colors]="barchartOptionsByClass.colors" [title]="barchartOptionsByClass.title"
+                            [tooltip]="barchartOptionsByClass.tooltip"></apx-chart>
+                    </mat-card-content>
+
+                </mat-card>
+            </div>
+        </div>
+
+
+        <mat-card class="plain-card h-100">
+            <mat-card-header class="card-header border-bottom-0 pb-0">
+                <div class="row align-items-center justify-content-between w-100 g-0">
+                    <!-- <div class="col-sm-6">
+                        <h6 class="mb-3 fw-bold text-main">{{'Labels.talukawiseAssessment' | translate}}</h6>
+                    </div> -->
+                    <div class="col-sm-12" *ngIf="asessmwntLavel.value=='0'">
+
+                        <!-- filter form for highlow school count  -->
+
+                        <form [formGroup]="filterFormForBarGraph" class="w-100">
+                            <div class="row w-100 gx-2  justify-content-start">
+
+                                <div class="col-sm-3 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
+                                        <mat-select formControlName="examId" placeholder="All"
+                                            (selectionChange)="selectedExamType();getTabledataByTaluka();">
+                                            <mat-option *ngFor="let examType of ExamTypeArray" [value]="examType.id">
+                                                {{webStorage.languageFlag == 'EN'?examType.examType :
+                                                examType.m_ExamType }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100 ">
+                                        <mat-label>{{'Labels.setNumber' | translate}}</mat-label>
+                                        <input matInput formControlName="filterSetNumber"
+                                            (keypress)="validation.onlyDigits($event)" (input)="getTabledataByTaluka()">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                                        <mat-select formControlName="subjectId"
+                                            (selectionChange)="clearDropLowHighFilter('subjectFilter')"
+                                            (selectionChange)="getTabledataByTaluka();getOptionBySubjects()">
+                                            <mat-option *ngFor="let subject of subjectdataFilter" [value]="subject.id">
+                                                {{ webStorage.languageFlag ==
+                                                'EN' ? subject.subjectName : subject.m_SubjectName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>Options</mat-label>
+                                        <mat-select formControlName="optionId"
+                                            (selectionChange)="getTabledataByTaluka();">
+                                            <mat-option *ngFor="let option of optionNameArr" [value]="option.optionId">
+                                                {{webStorage.languageFlag ==
+                                                'EN' ? option.optionName : option.m_OptionName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
+                                        <mat-select formControlName="filtersubjectId"
+                                            (selectionChange)="this.getbarChartByTaluka()">
+                                            <mat-option *ngFor="let subject of subjectData" [value]="subject.id ">
+                                                {{webStorage.languageFlag == 'EN'?subject.subjectName
+                                                :subject.m_SubjectName }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div> -->
+                            </div>
+                        </form>
+                        <!-- <form [formGroup]="filterFormForBarGraph" class="w-100">
+                            <div class="row w-100 gx-2  justify-content-start">
+                                <div class="col-sm-6" *ngIf="!f['talukaId'].value">
+                                    <mat-form-field appearance="outline" class=" mt-2 w-100">
+                                        <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
+                                        <mat-select formControlName="filtertalukaId"
+                                            (selectionChange)="this.getbarChartByTaluka()">
+                                            <mat-option *ngFor="let taluka of talukaData" [value]="taluka.id">
+                                                {{webStorage.languageFlag ==
+                                                'EN'?taluka.taluka:taluka.m_Taluka}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6"
+                                    *ngIf="f['talukaId'].value || (f['talukaId'].value && !fBgraph['filtertalukaId'].value)">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
+                                        <mat-select formControlName="filtercenterId"
+                                            (selectionChange)="this.getbarChartByTaluka()">
+                                            <mat-option *ngFor="let center of centerData" [value]="center.id">
+                                                {{webStorage.languageFlag ==
+                                                'EN'?center.center:center.m_Center}}
+                                            </mat-option>
+
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form> -->
+                    </div>
+                </div>
+            </mat-card-header>
+            <mat-card-content class="card-body">
+                <div class="row g-2">
+                    <!-- <div class="col-sm-6">
+
+                        <mat-card-content class="card-body">
+                            <div class="row mb-3" *ngIf="barChartByTalukaData.length && showBarChartS">
+                                <div class="col-sm-12 no-axis">
+                                    <apx-chart [series]="stackbarchartOptions1.series[0]"
+                                        [chart]="stackbarchartOptions1.chart" [theme]="stackbarchartOptions1.theme"
+                                        [dataLabels]="stackbarchartOptions1.dataLabels"
+                                        [plotOptions]="stackbarchartOptions1.plotOptions"
+                                        [tooltip]="stackbarchartOptions1.tooltip"
+                                        [responsive]="stackbarchartOptions1.responsive"
+                                        [xaxis]="stackbarchartOptions1.xaxis" [legend]="stackbarchartOptions1.legend"
+                                        [fill]="stackbarchartOptions1.fill"></apx-chart>
+                                </div>
+                            </div>
+                            <div *ngIf="barChartByTalukaData.length ==0">
+                                <div class="alert alert-danger text-center py-2 ">
+                                    {{'Labels.dataNotFound' | translate}}
+                                </div>
+                            </div>
+
+                        </mat-card-content>
+                    </div> -->
+                    <!-- <div class="col-sm-6">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold text-main mt-3">{{performanceTableLabel.value}}</h6>
+                            <mat-form-field appearance="outline" class="w-50 float-right">
+                                <mat-label>select</mat-label>
+                                <mat-select [formControl]="performanceTableLabel" (selectionChange)="selectTable()">
+                                    <mat-option *ngFor="let data of tableHeadingArray" [value]="data">
+                                        {{webStorage.languageFlag == 'EN'?data:data}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="table-responsive scrollbar table-height-sm">
+                            <table class="table dashboard-table mb-0">
+                                <thead class="bg-main-light">
+                                    <tr>
+                                        <th *ngFor="let header of displayedheaders">
+                                            {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of tableDataTopPerformance; let j=index">
+                                        <td><img class="table-img"
+                                                src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
+                                        </td>
+                                        <td>{{webStorage.languageFlag == 'EN' ? item['schoolName'] :
+                                            item['m_SchoolName']}}
+                                        </td>
+                                        <td>{{item['totalStudent']}}</td>
+                                        <td>
+                                            <span class="badge p-2" style="width: 50px;"
+                                                [class]="item['passpercentage'] <= 50 ? 'table-cell bg-red' : (item['passpercentage'] > 50 && item['passpercentage'] <= 60) ? 'table-cell bg-orange' : (item['passpercentage'] > 60 && item['passpercentage'] <= 80) ? 'table-cell bg-dark-orange' :'table-cell bg-green'">{{item['passpercentage']}}%</span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="dataSource?.length ==0">
+                                        <td colspan="4">
+                                            <div class="alert alert-danger text-center py-2 mb-0">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div> -->
+
+                    <!-- top low performance table -->
+                    <!--   <div class="col-sm-6 border-right" *ngFor="let table of tableDataTopPerformance; let i=index">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold text-main mt-3">{{tableHeadingArray[i]}}</h6> -->
+                    <!-- <mat-form-field appearance="outline" class="w-50 float-right">
+                                <mat-label>select</mat-label>
+                                <mat-select [formControl]="performanceTableLabel" (selectionChange)="selectTable()">
+                                    <mat-option *ngFor="let data of tableHeadingArray" [value]="data">
+                                        {{webStorage.languageFlag == 'EN'?data:data}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                    <!-- </div>
+                        <div class="table-responsive scrollbar table-height-sm">
+                            <table class="table dashboard-table mb-0">
+                                <thead class="bg-main-light">
+                                    <tr>
+                                        <th *ngFor="let header of displayedheaders">
+                                            {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of table; let j=index">
+                                        <td><img class="table-img"
+                                                src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
+                                        </td> -->
+                    <!-- <td>{{item['srNo']}}</td> -->
+                    <!-- <td>{{webStorage.languageFlag == 'EN' ? item['schoolName'] :
+                                            item['m_SchoolName']}}
+                                        </td>
+                                        <td style="width:120px">{{item['totalStudent']}}</td>
+                                        <td>
+                                            <span class="badge p-2" style="width: 80px;"
+                                                [class]="item['passpercentage'] <= 50 ? 'table-cell bg-red' : (item['passpercentage'] > 50 && item['passpercentage'] <= 60) ? 'table-cell bg-orange' : (item['passpercentage'] > 60 && item['passpercentage'] <= 80) ? 'table-cell bg-dark-orange' :'table-cell bg-green'">{{item['passpercentage']}}%</span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="table?.length ==0">
+                                        <td colspan="12">
+                                            <div class="alert alert-danger text-center py-2 mb-0 mt-1">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table> -->
+
+                    <!-- </div> -->
+                    <!-- </div> -->
+
+
+
+
+                    <div class="col-sm-6 border-right">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold text-main mt-3">{{tableHeadingArrayTop}}</h6>
+                            <!-- <mat-form-field appearance="outline" class="w-50 float-right">
+                                <mat-label>select</mat-label>
+                                <mat-select [formControl]="performanceTableLabel" (selectionChange)="selectTable()">
+                                    <mat-option *ngFor="let data of tableHeadingArray" [value]="data">
+                                        {{webStorage.languageFlag == 'EN'?data:data}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                        </div>
+                        <div class="table-responsive scrollbar table-height-sm">
+                            <table class="table dashboard-table mb-0">
+                                <thead class="bg-main-light">
+                                    <tr>
+                                        <th *ngFor="let header of displayedheaders">
+                                            {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of tableDataTopPerformance; let j=index"
+                                        (click)="onStudentDetails(j, 'topPerformance')">
+                                        <td><img class="table-img"
+                                                src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
+                                        </td>
+                                        <!-- <td>{{item['srNo']}}</td> -->
+                                        <td>{{webStorage.languageFlag == 'EN' ? item['schoolName'] :
+                                            item['m_SchoolName']}}
+                                        </td>
+                                        <td style="width:120px">{{item['totalStudent']}}</td>
+                                        <td>
+                                            <span class="badge p-2" style="width: 80px;"
+                                                [class]="item['passpercentage'] <= 50 ? 'table-cell bg-red' : (item['passpercentage'] > 50 && item['passpercentage'] <= 60) ? 'table-cell bg-orange' : (item['passpercentage'] > 60 && item['passpercentage'] <= 80) ? 'table-cell bg-dark-orange' :'table-cell bg-green'">{{item['passpercentage']}}%</span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="tableDataTopPerformance?.length ==0">
+                                        <td colspan="12">
+                                            <div class="alert alert-danger text-center py-2 mb-0 mt-1">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6 border-right">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-bold text-main mt-3">{{tableHeadingArrayLow}}</h6>
+                            <!-- <mat-form-field appearance="outline" class="w-50 float-right">
+                                <mat-label>select</mat-label>
+                                <mat-select [formControl]="performanceTableLabel" (selectionChange)="selectTable()">
+                                    <mat-option *ngFor="let data of tableHeadingArray" [value]="data">
+                                        {{webStorage.languageFlag == 'EN'?data:data}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                        </div>
+                        <div class="table-responsive scrollbar table-height-sm">
+                            <table class="table dashboard-table mb-0">
+                                <thead class="bg-main-light">
+                                    <tr>
+                                        <th *ngFor="let header of displayedheaders">
+                                            {{webStorage.languageFlag == 'EN'?header.label :header.m_label }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of tableDataLowPerformance; let j=index"
+                                        (click)="onStudentDetails(j, 'lowPerformance')">
+                                        <td><img class="table-img"
+                                                src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
+                                        </td>
+                                        <!-- <td>{{item['srNo']}}</td> -->
+                                        <td>{{webStorage.languageFlag == 'EN' ? item['schoolName'] :
+                                            item['m_SchoolName']}}
+                                        </td>
+                                        <td style="width:120px">{{item['totalStudent']}}</td>
+                                        <td>
+                                            <span class="badge p-2" style="width: 80px;"
+                                                [class]="item['passpercentage'] <= 50 ? 'table-cell bg-red' : (item['passpercentage'] > 50 && item['passpercentage'] <= 60) ? 'table-cell bg-orange' : (item['passpercentage'] > 60 && item['passpercentage'] <= 80) ? 'table-cell bg-dark-orange' :'table-cell bg-green'">{{item['passpercentage']}}%</span>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="tableDataLowPerformance?.length ==0">
+                                        <td colspan="12">
+                                            <div class="alert alert-danger text-center py-2 mb-0 mt-1">
+                                                {{'Labels.dataNotFound' | translate}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,0 +1,18 @@
+.plain-card img{
+    border-radius: 8px;
+}
+#web-help ol li{
+    font-size: 0.90rem;
+}
+.forgot-pass-img{
+    height: 300px;
+}
+@media only screen and (max-width: 478px) {
+    #web-help ol li{
+        font-size: 0.80rem;
+    }
+    .forgot-pass-img{
+        height: 150px;
+    }
+  }
+  

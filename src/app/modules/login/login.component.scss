@@ -1,0 +1,75 @@
+.login-wrapper{
+    height: 100vh;
+    display: flex;
+}
+.login-wrapper .login-left{
+    background: transparent linear-gradient(180deg, #039286 0%, #014642 100%) 0% 0% no-repeat;
+    height: 100%;
+    width: auto;
+}
+.login-wrapper .login-right{
+    height: auto;
+    width: 100%;
+    background-image: url('https://img.freepik.com/free-photo/blue-abstract-gradient-wave-wallpaper_53876-108364.jpg?w=1060&t=st=1672926101~exp=1672926701~hmac=4aaeb6e760640496244c70faefbef63dbd42df6815228709890b8390f185c6a4');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 75% 50%;
+
+}
+.logo img{
+    width: 300px;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+}
+a{
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+@media only screen and (max-width: 768px){
+    .login-wrapper .login-left{
+        display:none
+    }
+    .login-wrapper .login-right{
+        height: 100%;
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 420px) {
+    .login-wrapper .login-left{
+        display:none
+    }
+    .login-wrapper .login-right{
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center right -5.6rem;
+    }
+}
+
+
+.PasswordEyeView{
+    font-size: 21px !important;
+}
+
+input::-ms-reveal { display: none; }
+
+#enNLM3bjHim1{
+    height: 100vh;
+}
+#login-box{
+    height: calc(90vh - 44px);
+    align-items: center;
+}
+#login{
+    padding:2rem 3rem 3rem 3rem;
+    // border: 1px solid #bbb;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.37);
+    // background: rgba( 255, 255, 255, 0.25 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 6.5px );
+-webkit-backdrop-filter: blur( 6.5px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+}

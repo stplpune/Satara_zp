@@ -1,0 +1,54 @@
+.card-view{
+    box-shadow: none;
+    border-radius:10px;
+    // border: solid 1px #ddd;
+}
+.card-view .material-icons{
+    font-size: 18px !important;
+}
+.card-view .user-img{
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+}
+.btn-main-outline{
+    border: 1px solid var(--main-color) !important;
+    padding-inline: 30px;
+    padding-block: 18px;
+    border-radius: 20px;
+    color: var(--main-color);
+}
+.btn-main-outline:hover{
+    background-color: var(--main-color);
+    border: 1px solid var(--main-color) !important;
+    padding-inline: 30px;
+    padding-block: 18px;
+    border-radius: 20px;
+    color: white;
+    transition: 0.2s;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+    width: 30px !important;
+    height: 29px !important;
+    padding: 4px 3px !important;
+}
+.btn-icon {
+    width: 34px !important;
+    min-width: 30px !important;
+}
+.btn-main-outline {
+    border: 1px solid var(--main-color) !important;
+    padding-inline: 15px;
+    padding-block: 8px 5px;
+    border-radius: 20px;
+    color: var(--main-color);
+}
+.btn-main-outline:hover {
+    padding-inline: 15px;
+    padding-block: 8px 5px;
+}
+.mat-mdc-button.mat-mdc-button-base, .mat-mdc-raised-button.mat-mdc-button-base, .mat-mdc-unelevated-button.mat-mdc-button-base, .mat-mdc-outlined-button.mat-mdc-button-base {
+    height: 30px;
+}
+

@@ -1,0 +1,8 @@
+.mat-mdc-radio-button ~ .mat-mdc-radio-button {
+    margin-left: 16px;
+  }
+  @media screen and (max-width: 480px) {
+    .mat-mdc-radio-button ~ .mat-mdc-radio-button {
+      margin-left: 0px;
+    }
+  }

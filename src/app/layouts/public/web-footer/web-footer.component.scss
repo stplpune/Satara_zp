@@ -1,0 +1,156 @@
+footer {
+    background-color: #191E24;
+    color: #fff;
+    font-size: .85rem;
+    // padding-block: .7rem;
+}
+
+.privacy-policy a {
+    text-decoration: none;
+    color: #fff;
+    margin-inline: 10px;
+}
+
+.privacy-policy a:hover {
+    color: var(--main-color);
+}
+
+footer .shikshan-darpan-logo {
+    width: 135px;
+}
+
+footer .stpl-logo {
+    width: 105px;
+}
+footer .footer-stpl-logo:hover{
+    text-decoration: underline;
+    color: #fff;
+}
+footer span,
+footer p {
+    margin-block: 1rem;
+    font-size: 0.75rem;
+    color: #ddd;
+}
+
+footer h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+footer ul li {
+    margin-bottom: 15px;
+}
+
+footer ul li a {
+    text-decoration: none;
+    color: #aaa;
+}
+
+footer ul li a:hover {
+    color: #fff;
+}
+
+footer .contact {
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+footer .input-group {
+    border: none;
+    background-color: #fff;
+    padding: 3px;
+    border-radius: 30px;
+}
+
+footer .input-group .form-control {
+    border: none;
+    border-radius: 30px;
+    box-shadow: none;
+    font-size: 0.85rem;
+    margin-right: 5px;
+    padding-inline: 20px;
+}
+
+footer .input-group button {
+    border-radius: 50% !important;
+    border: none;
+    background-color: var(--main-color);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    line-height: 45px;
+    font-size: 1.4rem;
+}
+
+@media screen and (max-width: 480px) {
+    .header {
+        padding-top: 60px;
+    }
+
+    .header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    .header img {
+        height: 200px;
+    }
+
+    .header .header-discription {
+        font-size: 0.75rem;
+    }
+
+    .about-section .testimonials-section {
+        margin-top: 40px;
+    }
+
+    .about-section h1 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .about-section .about-student-img {
+        height: 200px;
+    }
+
+    .ministers {
+        margin-top: 0px;
+    }
+
+    .ministers .right-two-card .orange {
+        background-color: #F5A63A;
+        height: 58px;
+        border-radius: 40px 10px 0px 0px;
+    }
+
+    .ministers .left-two-card .orange {
+        background-color: #F5A63A;
+        height: 58px;
+        border-radius: 10px 40px 0px 0px;
+    }
+
+    .ministers .minister-img {
+        height: 48px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 32px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .offcanvas-body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: unset;
+    }
+}

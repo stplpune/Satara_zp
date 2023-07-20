@@ -1,0 +1,223 @@
+<!-- <div class="sidebar bg-main">
+  <div class="logo-details">
+    <img src="assets/images/logo-white.svg" alt="Logo">
+  </div>
+  <ul class="nav-links">
+    <ng-container *ngFor="let pages of loginPages let i = index">
+      <ng-container *ngIf="pages.pageURL.length <= 1">
+        <li routerLinkActive="active">
+          <div class="iocn-link">
+            <a>
+              <img src="{{pages.menuIcon}}">
+            </a>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name">{{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
+                pages.m_PageNameView}}</a></li>
+            <li><a routerLinkActive="active" routerLink="/{{pages.pageURL}}">{{WebStorageService.languageFlag == 'EN' ?
+                pages.pageName : pages.m_PageName}}</a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="pages.pageURL.length > 1">
+        <li routerLinkActive="active">
+          <div class="iocn-link">
+            <a>
+              <img src="{{pages.menuIcon}}">
+            </a>
+          </div>
+          <ul class="sub-menu">
+            <li><a class="link_name">{{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
+                pages.m_PageNameView}}</a></li>
+            <li *ngFor="let page of pages?.pageURL; let pageUrlIndex = index">
+              <a routerLinkActive="active" routerLink="/{{page}}">
+                <ng-container
+                  *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? pages.pageName : pages.m_PageName; let pageNameIndex = index">
+                  <ng-container *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</ng-container>
+                </ng-container>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</div> -->
+
+
+
+<div class="sidebar" [ngClass]="{'open' : getSideBarState()}">
+  <div class="sidebar-header">
+    <div class="d-flex align-items-center">
+      <div class="logo">
+        <img src="assets/images/logo-white.svg">
+      </div>
+      <img src="assets/images/shiksha_darpan_text.svg" class="text">
+    </div>
+    <button (click)="closeSidebar()" class="btn btn-sidebar-close">
+      <mat-icon class="material-symbols-rounded">
+        close
+      </mat-icon>
+    </button>
+  </div>
+  <div class="sidebar-body">
+    <ul class="main-menu">
+    <ng-container *ngFor="let pages of loginPages; let i = index">
+            <!-- FOR OLY ONE MENU  -->
+      <ng-container *ngIf="pages.pageURL.length <= 1">
+        <li routerLinkActive="active">
+          <a routerLink="/{{pages.pageURL}}" routerLinkActive="active" (click)="closeSidebar();sidebarMenuClick(pages.pageId, pages.isCollapsed)">
+            <div class="d-flex align-items-center">
+              <div class="icon"><img src="{{pages.menuIcon}}"></div>
+              <span>
+                {{WebStorageService.languageFlag == 'EN' ? pages.pageName :
+              pages.m_PageName}}
+               </span>
+            </div>
+          </a>
+        </li>
+      </ng-container>
+<!--eND FOR OLY ONE MENU  -->
+
+      <ng-container *ngIf="pages.pageURL.length > 1">
+        <li>
+          <a data-bs-toggle="collapse" href="#collapseMaster{{i}}" role="button"  
+          [attr.aria-expanded]="pages.isCollapsed ? true : false"
+          aria-controls="collapseMaster"
+          (click)="pages.isCollapsed = !pages?.isCollapsed; sidebarMenuClick(pages.pageId, pages.isCollapsed)"
+          [attr.aria-controls]="'collapseMaster' + i" routerLinkActive="active"
+                            [class]="pages.isCollapsed ? 'collapsed active' : ''"
+          >
+          <div class="d-flex align-items-center">
+            <div class="icon">
+              <img src="{{pages.menuIcon}}">
+            </div>
+            <span> {{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
+              pages.m_PageNameView}}
+             </span>
+          </div>
+          <span class="dropdown-toggle"></span>
+        </a>
+        <div [class]="pages.isCollapsed ? 'show collapse' : 'collapse'" id="collapsemaster{{i}}">
+          <div class="card card-body">
+            <ul class="submenu">
+              <!-- <li>
+                <a>
+                  {{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
+                pages.m_PageNameView}}
+                </a>
+              </li> -->
+              <li *ngFor="let page of pages?.pageURL; let pageUrlIndex = index">
+                <a routerLinkActive="active" routerLink="/{{page}}" (click)="closeSidebar()">
+                  <ng-container
+                    *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? pages.pageName : pages.m_PageName; let pageNameIndex = index">
+                    <ng-container *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</ng-container>
+                  </ng-container>
+                </a>
+              </li>             
+            </ul>
+          </div>
+        </div>
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</div>
+</div>
+
+
+
+
+
+<!-- <div class="sidebar" [ngClass]="{'open' : getSideBarState()}">
+  <div class="sidebar-header">
+    <div class="d-flex align-items-center">
+      <div class="logo">
+        <img src="assets/images/logo-white.svg">
+      </div>
+      <img src="assets/images/shiksha_darpan_text.svg" class="text">
+    </div>
+    <button (click)="closeSidebar()" class="btn btn-sidebar-close">
+      <mat-icon class="material-symbols-rounded">
+        close
+      </mat-icon>
+    </button>
+  </div>
+  <div class="sidebar-body">
+    <ul class="main-menu">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" (click)="closeSidebar()">
+          <div class="d-flex align-items-center">
+            <div class="icon"><img src="assets/images/menu-icons/dashboard-grey.svg"></div>
+            <span>Dashboard</span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a data-bs-toggle="collapse" href="#collapseMaster" role="button" aria-expanded="false"
+          aria-controls="collapseMaster">
+          <div class="d-flex align-items-center">
+            <div class="icon">
+              <img src="assets/images/menu-icons/Masters-grey.svg">
+            </div>
+            <span>Master</span>
+          </div>
+          <span class="dropdown-toggle"></span>
+        </a>
+        <div class="collapse" id="collapseMaster">
+          <div class="card card-body">
+            <ul class="submenu">
+              <li><a routerLink="/designation-registration" routerLinkActive="active" (click)="closeSidebar()">Designation Registration</a></li>
+              <li><a routerLink="/school-registration" routerLinkActive="active" (click)="closeSidebar()">School Registration</a></li>
+              <li><a routerLink="/teacher-registration" routerLinkActive="active" (click)="closeSidebar()">Teacher Registration</a></li>
+              <li><a routerLink="/student-registration" routerLinkActive="active" (click)="closeSidebar()">Student Registration</a></li>
+              <li><a routerLink="/office-user-registration" routerLinkActive="active" (click)="closeSidebar()">Office User Registration</a></li>
+              <li><a routerLink="/other-registration" routerLinkActive="active" (click)="closeSidebar()">Other Registration</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li>
+        <a data-bs-toggle="collapse" href="#collapseReport" role="button" aria-expanded="false"
+          aria-controls="collapseReport">
+          <div class="d-flex align-items-center">
+            <div class="icon">
+              <img src="assets/images/menu-icons/report.svg">
+            </div>
+            <span>Report</span>
+          </div>
+          <span class="dropdown-toggle"></span>
+        </a>
+        <div class="collapse" id="collapseReport">
+          <div class="card card-body">
+            <ul class="submenu">
+              <li><a routerLink="/student-report" routerLinkActive="active" (click)="closeSidebar()">Student Report</a></li>
+              <li><a routerLink="/officer-report" routerLinkActive="active" (click)="closeSidebar()">Officer Report</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li>
+        <a data-bs-toggle="collapse" href="#collapseSettings" role="button" aria-expanded="false"
+          aria-controls="collapseSettings">
+          <div class="d-flex align-items-center">
+            <div class="icon">
+              <img src="assets/images/menu-icons/settings-grey.svg">
+            </div>
+            <span>Settings</span>
+          </div>
+          <span class="dropdown-toggle"></span>
+        </a>
+        <div class="collapse" id="collapseSettings">
+          <div class="card card-body">
+            <ul class="submenu">
+              <li><a routerLink="/page-right-access" routerLinkActive="active" (click)="closeSidebar()">Page Right Access</a></li>
+              <li><a routerLink="/help-access" routerLinkActive="active" (click)="closeSidebar()">Help</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div> -->

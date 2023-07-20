@@ -1,0 +1,64 @@
+<div class="row ">
+  <div class="col-sm-3 mb-4" *ngFor="let tData of tableInfo?.tableData; let j=index">
+    <mat-card class="card shadow-sm card-view h-100">
+      <mat-card-header class="card-header bg-transparent border-bottom-0 pb-0">
+        <div class="d-flex justify-content-end align-items-center w-100 gap-2">
+          <div class="text-end">
+            <!-- <button mat-flat-button class="btn-main btn-icon btn-sm" matTooltip="{{'Labels.profileView' | translate}}"
+              matTooltipPosition="right" matTooltipClass="tooltip" (click)="action(tData, 'View')">
+              <mat-icon>
+                visibility
+              </mat-icon>
+            </button> -->
+          </div>
+          <div class="d-flex align-items-center">
+            <mat-slide-toggle [checked]="tData['isBlock']" (change)="action(tData, 'Block')" *ngIf="showIsBlck">
+            </mat-slide-toggle>
+            <button [disabled]="tData['isBlock'] == true" mat-icon-button (click)="action(tData, 'Edit')" class="btn-second border-0 btn-icon btn-sm"
+              matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip">
+              <mat-icon>
+                edit
+              </mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </mat-card-header>
+      <mat-card-content class="card-body form-container">
+        <div class="text-center mb-3" *ngIf="showImg">
+          <img src="{{tData['docPath'] || tData['uploadImage'] || 'assets/images/user.png'}}" alt="user"
+            class="user-img">
+        </div>
+
+        <div class="row " *ngFor="let columns of displayedColumns; let j=index">
+          <div class="col-4 col-sm-4 form-label text-start"
+            *ngIf=" '#' != columns && 'srNo' != columns && 'docPath' != columns && 'uploadImage' != columns && 'action' != columns && 'isBlock' != columns">
+            {{tableHeaders[j]}}
+          </div>
+          <div class="col-8 col-sm-8 form-data text-start"
+            *ngIf="'srNo' != columns && 'docPath' != columns && 'uploadImage' != columns && 'action' != columns && 'isBlock' != columns">
+            <!-- <span class="text-emphasis-oneline">: {{tData[columns]}}</span> -->
+            : {{tData[columns]}}
+          </div>
+        </div>
+       <div class="text-center mt-2">
+        <button mat-flat-button class=" btn btn-main-outline" matTooltip="{{'Labels.profileView' | translate}}"
+        matTooltipPosition="right" matTooltipClass="tooltip" (click)="action(tData, 'View')">
+        Read More
+      </button>
+       </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-paginator  *ngIf="tableInfo?.tableSize > 10 && tableInfo?.pagintion" showFirstLastButtons [length]="tableSize"
+    (page)="action($event, 'Pagination')" [pageSizeOptions]="[10]" aria-label="Select page" class="m-0">
+  </mat-paginator>
+
+  <div *ngIf="tableInfo?.tableSize == 0">
+    <div class="alert alert-danger text-center py-2 ">
+      <span *ngIf="webStorageService.languageFlag =='EN'">Data not available</span>
+      <span *ngIf="webStorageService.languageFlag =='mr-IN'">डेटा उपलब्ध नाही</span>
+      <!-- {{'Labels.dataNotAvailable' | translate}} -->
+    </div>
+  </div>
+</div>

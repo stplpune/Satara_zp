@@ -61,7 +61,7 @@ export class MyProfileComponent {
   get fc() { return this.userProfile.controls }
 
   getUserById() {
-    this.api.setHttp('get', `zp_osmanabad/app-login/GetTeacherProfile?TeacherId=${this.webStorage.getLoggedInLocalstorageData().refId}`, false, false, false, 'baseUrl');
+    this.api.setHttp('get', `zp-satara/app-login/GetTeacherProfile?TeacherId=${this.webStorage.getLoggedInLocalstorageData().refId}`, false, false, false, 'baseUrl');
     this.api.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == 200 ? this.defaultForm(res.responseData) : '';
@@ -73,7 +73,7 @@ export class MyProfileComponent {
   }
 
   getUserByAdmin() {
-    this.api.setHttp('get', `zp_osmanabad/user-registration/GetAdminProfile?Id=${this.webStorage.getUserId()}`, false, false, false, 'baseUrl');
+    this.api.setHttp('get', `zp-satara/user-registration/GetAdminProfile?Id=${this.webStorage.getUserId()}`, false, false, false, 'baseUrl');
     this.api.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == 200 ? this.defaultForm(res.responseData) : '';
@@ -86,7 +86,7 @@ export class MyProfileComponent {
   }
 
   getUserByOffice() {
-    this.api.setHttp('get', `zp_osmanabad/user-registration/GetOfficeProfileById?Id=${this.webStorage.getUserId()}`, false, false, false, 'baseUrl');
+    this.api.setHttp('get', `zp-satara/user-registration/GetOfficeProfileById?Id=${this.webStorage.getUserId()}`, false, false, false, 'baseUrl');
     this.api.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == 200 ? (this.defaultForm(res.responseData), this.editObj = res.responseData, this.getDesignation()) : '';
@@ -193,7 +193,7 @@ export class MyProfileComponent {
     if (this.userProfile.valid) {
       let headmasterStr = 'app-login/UpdateProfile'
       let officerStr = 'user-registration/UpdateOfficerProfile'
-      this.api.setHttp('put', 'zp_osmanabad/' + (data.userTypeId == '4' ? headmasterStr : officerStr), false, data.userTypeId == '4' ? uploadData : obj1, false, 'baseUrl');
+      this.api.setHttp('put', 'zp-satara/' + (data.userTypeId == '4' ? headmasterStr : officerStr), false, data.userTypeId == '4' ? uploadData : obj1, false, 'baseUrl');
       this.api.getHttp().subscribe({
         next: (res: any) => {
           res.statusCode == 200 ? (this.commonMethods.snackBar(res.statusMessage, 0), this.dialogRef.close()) : this.commonMethods.snackBar(res.statusMessage, 1);

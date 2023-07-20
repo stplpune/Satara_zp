@@ -71,7 +71,7 @@ export class AddUpdateAgencyRegistrationComponent {
     let obj = this.agencyRegisterForm.value;
     obj.districtId = 1;
     if (this.agencyRegisterForm.valid && obj.emailId != obj.agency_EmailId && obj.contact_No != obj.agency_MobileNo) {
-      this.api.setHttp(this.data ? 'put' : 'post', 'zp-osmanabad/Agency/' + (this.data ? 'Update' : 'Add'), false, obj, false, 'baseUrl');
+      this.api.setHttp(this.data ? 'put' : 'post', 'zp-satara/Agency/' + (this.data ? 'Update' : 'Add'), false, obj, false, 'baseUrl');
       this.api.getHttp().subscribe({
         next: (res: any) => {
           this.api.staticData.next('getRefreshStaticdata');

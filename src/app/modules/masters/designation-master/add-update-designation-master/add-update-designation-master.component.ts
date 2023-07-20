@@ -122,7 +122,7 @@ export class AddUpdateDesignationMasterComponent {
       }
       this.ngxSpinner.show();
       let url;
-      this.editFlag ? url = 'zp_osmanabad/register-designation/UpdateRecord' : url = 'zp_osmanabad/register-designation/AddDesignation'
+      this.editFlag ? url = 'zp-satara/register-designation/UpdateRecord' : url = 'zp-satara/register-designation/AddDesignation'
       this.service.setHttp(this.editFlag ? 'put' : 'post', url, false, postObj, false, 'baseUrl');
       this.service.getHttp().subscribe({     
         next: (res: any) => {

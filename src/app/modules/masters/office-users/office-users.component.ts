@@ -74,7 +74,7 @@ export class OfficeUsersComponent implements OnInit {
 
     let reportStr = `?textSearch=${this.searchContent.value}&pageno=${1}&pagesize=${(this.totalCount * 10)}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
     let str = `?textSearch=${this.searchContent.value}&pageno=${this.pageNumber}&pagesize=10&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
-    this.apiService.setHttp('GET', 'zp_osmanabad/Office/GetAllOffice' + (flag == 'reportFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Office/GetAllOffice' + (flag == 'reportFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -222,7 +222,7 @@ export class OfficeUsersComponent implements OnInit {
       "subUserTypeId": obj.designationId
     }
 
-    this.apiService.setHttp('put', 'zp_osmanabad/user-registration/BlockUnblockUser', false, blockObj, false, 'baseUrl');
+    this.apiService.setHttp('put', 'zp-satara/user-registration/BlockUnblockUser', false, blockObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.commonService.showPopup(res.statusMessage, 0), this.getTableData()) : this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.snackBar(res.statusMessage, 1);
@@ -262,7 +262,7 @@ export class OfficeUsersComponent implements OnInit {
       "modifiedDate": webStorageMethod.modifiedDate,
       "lan": this.webStorageService.languageFlag
     }]
-    this.apiService.setHttp('DELETE', 'zp_osmanabad/Office/DeleteOffice', false, deleteObj, false, 'baseUrl');
+    this.apiService.setHttp('DELETE', 'zp-satara/Office/DeleteOffice', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (resp: any) => {
         resp.statusCode == "200" ? (this.commonService.snackBar(resp.statusMessage, 0), this.getTableData()) : this.commonService.checkEmptyData(resp.statusMessage) == false ? this.errors.handelError(resp.statusCode) : this.commonService.snackBar(resp.statusMessage, 1);

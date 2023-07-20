@@ -92,7 +92,7 @@ export class StudentRegistrationComponent {
     let pageNo = this.pageNumber;
     let str = `?pageno=${pageNo}&pagesize=10&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
     let reportStr =   `?pageno=1&pagesize=${this.totalCount * 10}&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
-    this.apiService.setHttp('GET', 'zp-osmanabad/Student/GetAll' + (flag == 'reportFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Student/GetAll' + (flag == 'reportFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
@@ -304,7 +304,7 @@ export class StudentRegistrationComponent {
       "modifiedDate": webStorageMethod.modifiedDate,
       "lan": this.webService.languageFlag
     }
-    this.apiService.setHttp('delete', 'zp-osmanabad/Student/DeleteStudent', false, deleteObj, false, 'baseUrl');
+    this.apiService.setHttp('delete', 'zp-satara/Student/DeleteStudent', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

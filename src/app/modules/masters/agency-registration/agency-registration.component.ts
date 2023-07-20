@@ -79,7 +79,7 @@ export class AgencyRegistrationComponent implements OnInit {
     flag == 'filter' ? this.agencyReport = [] : '';
     let str = `pageno=${pageNo || ''}&pagesize=10&&TextSearch=${this.searchText.value || ''}&lan=${this.webStroageService.languageFlag || ''}`;
     let reportStr = `pageno=${1}&pagesize=${this.totalCount * 10}&TextSearch=${this.searchText.value}&lan=${this.webStroageService.languageFlag}`
-    this.apiService.setHttp('GET', 'zp-osmanabad/Agency/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Agency/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -186,7 +186,7 @@ export class AgencyRegistrationComponent implements OnInit {
       "lan": this.webStroageService.languageFlag
     }
 
-    this.apiService.setHttp('delete', 'zp-osmanabad/Agency/Delete', false, obj, false, 'baseUrl');
+    this.apiService.setHttp('delete', 'zp-satara/Agency/Delete', false, obj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == 200 ? (this.common.snackBar(res.statusMessage, 0), this.getTableData()) : this.common.snackBar(res.statusMessage, 1);

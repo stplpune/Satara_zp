@@ -56,7 +56,7 @@ export class LoginComponent {
     if (this.adminLoginForm.invalid) {
       return
     } else {    
-      let url = 'zp_osmanabad/user-registration/' + formValue.userName + '/' + formValue.password
+      let url = 'zp-satara/user-registration/' + formValue.userName + '/' + formValue.password
       
       this.api.setHttp('get', url, false, false, false, 'baseUrl');
       this.api.getHttp().subscribe({

@@ -70,11 +70,11 @@ export class progressChartLineComponent implements OnInit {
   getLineChartDetails(){
       this.prevLang=this.languageFlag;
       // let str= 'GetDataForStudentChart';
-      // this.apiService.setHttp('GET', 'zp-osmanabad/Dashboard/' + str+ '?GroupId='+ this.groupId+'&StudentId='+this.selectedStudentObj?.objData?.studentId+'&IsInspection='+(Number(this.inspectionBy.value)||0)+'&EducationYearId='+this.EducationYearId, false, false, false, 'baseUrl');
+      // this.apiService.setHttp('GET', 'zp-satara/Dashboard/' + str+ '?GroupId='+ this.groupId+'&StudentId='+this.selectedStudentObj?.objData?.studentId+'&IsInspection='+(Number(this.inspectionBy.value)||0)+'&EducationYearId='+this.EducationYearId, false, false, false, 'baseUrl');
       let str = 'GetDataForStudentChart?GroupId='+ this.groupId+'&StudentId='+this.selectedStudentObj?.objData?.studentId+'&IsInspection='+(Number(this.inspectionBy.value)||0)+'&EducationYearId='+this.EducationYearId;
       let highLow = 'GetDataForTopLowSchoolStudentChart?GroupId='+this.groupId+'&StudentId='+this.selectedStudentObj?.objData?.studentId+'&EducationYearId='+this.EducationYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+this.dashboardObj?.ExamTypeId+'&IsInspection='+(Number(this.inspectionBy.value)||0)+'&lan='
       let apiStr = (this.dashboardObj?.label == "table") ? highLow : str;
-      this.apiService.setHttp('GET', 'zp-osmanabad/Dashboard/'+apiStr,  false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/Dashboard/'+apiStr,  false, false, false, 'baseUrl');
       // this.selectedStudentObj?.objData?.assesmentSubjectId
       this.apiService.getHttp().subscribe({
         next: (res: any) => {          
@@ -372,7 +372,7 @@ export class progressChartLineComponent implements OnInit {
     if (this.selectedIndex != index) {
       this.selectedIndex = index;
       this.tableArrayBySubject[index].isExpand=true;
-      let str = 'zp-osmanabad/Dashboard/GetAssessmentDataByAssessmentId?AssessmentId=' + obj.assessmentId + '&Teacher_OfficerId=' + obj.teacherId + '&IsTeacher=' + (Number(this.inspectionBy.value) || 0) + '&StudentId=' + obj.studentId;
+      let str = 'zp-satara/Dashboard/GetAssessmentDataByAssessmentId?AssessmentId=' + obj.assessmentId + '&Teacher_OfficerId=' + obj.teacherId + '&IsTeacher=' + (Number(this.inspectionBy.value) || 0) + '&StudentId=' + obj.studentId;
       this.apiService.setHttp('GET', str, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {

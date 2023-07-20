@@ -699,7 +699,7 @@ export class AddUpdateTeacherRegistrationComponent {
         let postObj = this.teacherRegForm.value;
         this.ngxSpinner.show();
         let url = this.editObj ? 'Update' : 'Add'
-        this.service.setHttp(this.editObj ? 'put' : 'post', 'zp_osmanabad/Teacher/' + url, false, postObj, false, 'baseUrl');
+        this.service.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Teacher/' + url, false, postObj, false, 'baseUrl');
         this.service.getHttp().subscribe({
           next: ((res: any) => {
             this.ngxSpinner.hide();

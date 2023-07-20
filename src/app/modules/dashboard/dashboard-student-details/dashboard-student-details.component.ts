@@ -174,8 +174,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     // let questionId = this.dashboardObj?.questionId ? this.dashboardObj?.questionId : 0;
 
     // let studentApi = 'GetDashboardDataStudentListForCommon'    
-    // let basicStr = 'zp-osmanabad/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined)  ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId='+AcademicYearId + '&ExamTypeId='+examTypeId+'&lan='
-    // let classStr = 'zp-osmanabad/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId='+StandardId+'&SubjectId=' + (SubjectId || 0) + '&QuestionId='+questionId+'&OptionGrade=' + ((this.dashboardObj && flag == undefined)  ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId='+examTypeId+'&AcademicYearId='+AcademicYearId+'&lan='
+    // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined)  ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId='+AcademicYearId + '&ExamTypeId='+examTypeId+'&lan='
+    // let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId='+StandardId+'&SubjectId=' + (SubjectId || 0) + '&QuestionId='+questionId+'&OptionGrade=' + ((this.dashboardObj && flag == undefined)  ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId='+examTypeId+'&AcademicYearId='+AcademicYearId+'&lan='
     
     // this.apiService.setHttp('GET', (this.assessmentLevelId == '0') ? basicStr: classStr, false, false, false, 'baseUrl');
     // this.apiService.getHttp().subscribe({
@@ -222,8 +222,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     if (this.dashboardObj?.label == "table") {
       this.getAllSchoolsByCenterId();
       let studentApi = 'GetDataForTopLowSchoolStudentList'
-      // let basicStr = 'zp-osmanabad/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId;
-      let basicStr = 'zp-osmanabad/Dashboard/' + studentApi + '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0)+'&StandardId='+(flag == 'filter' ? this.filterForm.value?.standardId : 0)+'&AssessmentTypeId='+(AssessmentTypeId == 0? 1: 2)  + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId +'&OptionId='+questionId;
+      // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId;
+      let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0)+'&StandardId='+(flag == 'filter' ? this.filterForm.value?.standardId : 0)+'&AssessmentTypeId='+(AssessmentTypeId == 0? 1: 2)  + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId +'&OptionId='+questionId;
       
       this.apiService.setHttp('GET', basicStr, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -256,8 +256,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     }
     else {
       let studentApi = 'GetDashboardDataStudentListForCommon'
-      let basicStr = 'zp-osmanabad/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId=' + AcademicYearId + '&ExamTypeId=' + examTypeId + '&lan='
-      let classStr = 'zp-osmanabad/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + questionId + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId + '&lan='
+      let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId=' + AcademicYearId + '&ExamTypeId=' + examTypeId + '&lan='
+      let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + questionId + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId + '&lan='
 
       this.apiService.setHttp('GET', (this.assessmentLevelId == '0') ? basicStr : classStr, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -296,8 +296,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     let examTypeId =  this.filterForm.value.examTypeId
     // let chartApiTopLowstu = 'GetDataForTopLowSchoolStudentChart';
     let chartAPI = 'GetDashboardDataClassWise_StudentChart';    
-    // let str = 'zp-osmanabad/Dashboard/'+(this.dashboardObj?.label == "table" ? chartApiTopLowstu : chartAPI)+'?StudentId='+this.selectedObj?.studentId+'&StandardId='+standardId+'&EducationYearId='+AcademicYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+examTypeId+'&IsInspection='+this.inspectionBy.value+'&lan='
-    let str = 'zp-osmanabad/Dashboard/'+chartAPI+'?StudentId='+this.selectedObj?.studentId+'&StandardId='+standardId+'&EducationYearId='+AcademicYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+examTypeId+'&IsInspection='+this.inspectionBy.value+'&lan='
+    // let str = 'zp-satara/Dashboard/'+(this.dashboardObj?.label == "table" ? chartApiTopLowstu : chartAPI)+'?StudentId='+this.selectedObj?.studentId+'&StandardId='+standardId+'&EducationYearId='+AcademicYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+examTypeId+'&IsInspection='+this.inspectionBy.value+'&lan='
+    let str = 'zp-satara/Dashboard/'+chartAPI+'?StudentId='+this.selectedObj?.studentId+'&StandardId='+standardId+'&EducationYearId='+AcademicYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+examTypeId+'&IsInspection='+this.inspectionBy.value+'&lan='
     this.apiService.setHttp('GET', str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any)=>{
@@ -409,7 +409,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   getGroupIdByTalukaCenterSchool() {
     this.groupByClassArray = [];
     let formData = this.filterForm.value;
-    this.apiService.setHttp('GET', 'zp-osmanabad/Dashboard/GetDashboardCount_V2?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount_V2?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

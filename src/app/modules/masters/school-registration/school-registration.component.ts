@@ -108,7 +108,7 @@ export class SchoolRegistrationComponent implements OnInit {
     let reportStr = `?pageno=1&pagesize=` + (this.totalCount * 10) + `&DistrictId=${this.districtId.value ? this.districtId.value : 0}
     &TalukaId=${this.talukaId.value ? this.talukaId.value : 0}&VillageId=${this.villageId.value ? this.villageId.value : 0}&CenterId=${this.centerId.value ? this.centerId.value : 0}&TextSearch=${this.searchContent.value ? this.searchContent.value : ''}&lan=${this.webStorageS.languageFlag}`;
 
-    this.apiService.setHttp('GET', 'ZP-Osmanabad/School/GetAll' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/School/GetAll' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {
@@ -357,7 +357,7 @@ export class SchoolRegistrationComponent implements OnInit {
       "modifiedDate": webStorageMethod.modifiedDate,
       "lan": this.webStorageS.languageFlag
     }
-    this.apiService.setHttp('delete', 'ZP-Osmanabad/School/Delete', false, deleteObj, false, 'baseUrl');
+    this.apiService.setHttp('delete', 'zp-satara/School/Delete', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

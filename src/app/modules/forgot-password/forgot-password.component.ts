@@ -149,7 +149,7 @@ export class ForgotPasswordComponent {
     let obj = this.passwordForm.value;
     if (obj.newPassword == obj.confirmPassword && this.passwordForm.valid) {
       let str = `Password=${obj.newPassword}&NewPassword=${obj.confirmPassword}&MobileNo=${this.mobileForm.value.mobileNo}`;
-      this.apiService.setHttp('put', 'zp_osmanabad/user-registration/ForgotPassword?' + str, false, obj, false, 'baseUrl');
+      this.apiService.setHttp('put', 'zp-satara/user-registration/ForgotPassword?' + str, false, obj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           res.statusCode == 200 ? (this.common.snackBar(res.statusMessage, 0), this.router.navigate(['/login'])) : this.common.snackBar(res.statusMessage, 1)

@@ -36,7 +36,7 @@ export class FileUploadService {
               formData.append('FolderName', folderName);
               formData.append('DocumentType', docExt);
               formData.append('UploadDocPath', file);
-              this.apiService.setHttp('post', 'zp_osmanabad/documents/UplodFile', false, formData, false, 'baseUrl');
+              this.apiService.setHttp('post', 'zp-satara/documents/UplodFile', false, formData, false, 'baseUrl');
               this.apiService.getHttp().subscribe({
                 next: (res: any) => {
                   this.spinner.hide();
@@ -98,7 +98,7 @@ export class FileUploadService {
       }
 
       if (docTypeCheckFlag == true) {
-        this.apiService.setHttp('post', 'zp_osmanabad/documents/upload-multiple-photos', false, formData, false, 'baseUrl');
+        this.apiService.setHttp('post', 'zp-satara/documents/upload-multiple-photos', false, formData, false, 'baseUrl');
         this.apiService.getHttp().subscribe({
           next: (res: any) => {
             if (res.statusCode == 200) {

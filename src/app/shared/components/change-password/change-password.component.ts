@@ -69,7 +69,7 @@ export class ChangePasswordComponent {
           userTypeId : this.webStorageService.getUserTypeId(),
           subUserTypeId : this.webStorageService.getUserSubTypeId()
         };
-        this.api.setHttp('post', 'zp_osmanabad/user-registration/change-password', false, changePasswordObj, false, 'baseUrl');
+        this.api.setHttp('post', 'zp-satara/user-registration/change-password', false, changePasswordObj, false, 'baseUrl');
         this.api.getHttp().subscribe({
           next: (res: any) => {
             if (res.statusCode == 200) {

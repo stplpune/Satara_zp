@@ -23,7 +23,7 @@ export class ApiService {
     switch (url) {  
       //Demo Url   
       // case 'baseUrl': return 'https://zposmservices.mahamining.com/'; break;
-      case 'baseUrl': return 'https://zposmservices.mahamining.com/'; break;
+      case 'baseUrl': return 'https://apisatara.shikshandarpan.com/'; break;
 
 
       //Live Url

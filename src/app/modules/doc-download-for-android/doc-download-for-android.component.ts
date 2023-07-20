@@ -42,8 +42,8 @@ export class DocDownloadForAndroidComponent {
       let StudentAPI = (this.data[5] <= 3) ? 'Download_AssessmentReport' : 'Download_AssReport_ClassWise_Student' //groupId <= 3 then basewisereport
       let OfficerAPI = (this.data[5] <= 3) ? 'Download_AssessmentReport_Officer' : 'Download_AssReport_ClassWise_Officer'
 
-      let StudentApiUrl = 'zp-osmanabad/assessment-report/'+ StudentAPI + reportStrStudent
-      let officerWiseApiUrl = 'zp-osmanabad/assessment-report/' + OfficerAPI + reportStrOfficer 
+      let StudentApiUrl = 'zp-satara/assessment-report/'+ StudentAPI + reportStrStudent
+      let officerWiseApiUrl = 'zp-satara/assessment-report/' + OfficerAPI + reportStrOfficer 
 
       this.apiService.setHttp('GET', this.data[11] == 1 ? officerWiseApiUrl : StudentApiUrl , false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({

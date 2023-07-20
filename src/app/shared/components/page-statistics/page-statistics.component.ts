@@ -51,7 +51,7 @@ export class PageStatisticsComponent implements OnInit {
   }
 
   getStatisticsDetails(){
-    this.apiService.setHttp('get', 'zp-osmanabad/Dashboard/GetMasterDataCount', false, false, false, 'baseUrl');
+    this.apiService.setHttp('get', 'zp-satara/Dashboard/GetMasterDataCount', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

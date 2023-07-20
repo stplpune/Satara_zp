@@ -356,7 +356,7 @@ export class AddUpdateStudentRegistrationComponent {
       //   return
       // }
       let url = this.editObj ? 'UpdateStudent' : 'AddStudent'
-      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-osmanabad/Student/' + url, false, postObj, false, 'baseUrl');
+      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Student/' + url, false, postObj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
@@ -456,7 +456,7 @@ export class AddUpdateStudentRegistrationComponent {
   searchMobileNo() {
     let mobileNo = this.stuRegistrationForm.value.mobileNo;
     if (this.stuRegistrationForm.controls['mobileNo'].valid) {
-      this.apiService.setHttp('get', 'zp-osmanabad/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan=EN', false, false, false, 'baseUrl');
+      this.apiService.setHttp('get', 'zp-satara/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan=EN', false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {

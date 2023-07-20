@@ -227,7 +227,7 @@ export class StudentReportComponent {
 
   getAllgroupClassDrop() {
     let formData = this.studentReportForm.value;
-    this.apiService.setHttp('GET', 'zp-osmanabad/Dashboard/GetDashboardCount_V2?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount_V2?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {          
@@ -387,8 +387,8 @@ export class StudentReportComponent {
     let StudentAPI = (this.studentReportForm.value.AssessmentTypeId == 1) ? 'Download_AssessmentReport' : 'Download_AssReport_ClassWise_Student'
     let OfficerAPI = (this.studentReportForm.value.AssessmentTypeId == 1) ? 'Download_AssessmentReport_Officer_V2' : 'Download_AssReport_ClassWise_Officer'
 
-    let baseWiseStudentApiUrl = 'zp-osmanabad/assessment-report/' + StudentAPI + (flag == 'pdfFlag' ? reportStrStudent : strStudent)
-    let basewiseofficerApiUrl = 'zp-osmanabad/assessment-report/' + OfficerAPI + (flag == 'pdfFlag' ? reportStrOfficer : strOfficer)
+    let baseWiseStudentApiUrl = 'zp-satara/assessment-report/' + StudentAPI + (flag == 'pdfFlag' ? reportStrStudent : strStudent)
+    let basewiseofficerApiUrl = 'zp-satara/assessment-report/' + OfficerAPI + (flag == 'pdfFlag' ? reportStrOfficer : strOfficer)
 
     this.apiService.setHttp('GET', this.pageUrl == '/officer-report' ? basewiseofficerApiUrl : baseWiseStudentApiUrl, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

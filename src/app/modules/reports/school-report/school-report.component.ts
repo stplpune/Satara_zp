@@ -267,7 +267,7 @@ export class SchoolReportComponent {
     let reportStr = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${1}&RowCount=0`;
     this.pageNumber =   flag == 'filter'? 1 :this.pageNumber;
     let str = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${this.pageNumber}&RowCount=10`;
-    this.apiService.setHttp('GET', 'zp-osmanabad/assessment-report/Download_AssessmentReport_SchoolWise?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/assessment-report/Download_AssessmentReport_SchoolWise?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

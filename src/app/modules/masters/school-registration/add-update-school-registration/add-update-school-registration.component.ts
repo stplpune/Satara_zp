@@ -304,7 +304,7 @@ export class AddUpdateSchoolRegistrationComponent {
     }
     else {
       this.ngxSpinner.show();
-      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'ZP-Osmanabad/School/' + url, false, formValue, false, 'baseUrl');
+      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/School/' + url, false, formValue, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();

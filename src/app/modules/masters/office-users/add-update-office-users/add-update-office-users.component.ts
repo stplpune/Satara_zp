@@ -187,7 +187,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   getCenterDrop(data?:any) {
     if(this.officeForm.value.talukaId && this.officeForm.value.designationLevelId == 3 && this.officeForm.value.designationId == 18){     
-      this.apiService.setHttp('GET', 'zp-osmanabad/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (resp: any) => { 
           resp.statusCode == "200" ? (this.centers = resp.responseData) : this.centers = [];
@@ -273,8 +273,8 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       this.ngxSpinner.show();
       let submitUrl = this.data ? 'UpdateOffice' : 'AddOffice'
       this.ngxSpinner.hide()
-      this.apiService.setHttp(this.data ? 'PUT' : 'POST', this.data ? 'zp_osmanabad/Office/UpdateOffice' : 'zp_osmanabad/Office/AddOffice', false, this.officeForm.value, false, 'baseUrl');
-      this.apiService.setHttp(this.data ? 'PUT' : 'POST', 'zp_osmanabad/Office/' + submitUrl, false, formData, false, 'baseUrl');
+      this.apiService.setHttp(this.data ? 'PUT' : 'POST', this.data ? 'zp-satara/Office/UpdateOffice' : 'zp-satara/Office/AddOffice', false, this.officeForm.value, false, 'baseUrl');
+      this.apiService.setHttp(this.data ? 'PUT' : 'POST', 'zp-satara/Office/' + submitUrl, false, formData, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.apiService.staticData.next('getRefreshStaticdata');

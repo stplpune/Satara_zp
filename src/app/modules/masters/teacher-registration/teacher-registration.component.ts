@@ -116,7 +116,7 @@ export class TeacherRegistrationComponent implements OnInit {
     let str = `pageno=${pageNo}&pagesize=10&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
     let reportStr = `pageno=${pageNo}&pagesize=${this.totalCount * 10}&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
 
-    this.apiService.setHttp('GET', 'zp_osmanabad/Teacher/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Teacher/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {       
@@ -271,7 +271,7 @@ export class TeacherRegistrationComponent implements OnInit {
       "userTypeId": obj.teacherDetails?.designationLevelId,
       "subUserTypeId": obj.teacherDetails?.designationId
     }
-    this.apiService.setHttp('put', 'zp_osmanabad/user-registration/BlockUnblockUser', false, blockObj, false, 'baseUrl');
+    this.apiService.setHttp('put', 'zp-satara/user-registration/BlockUnblockUser', false, blockObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.commonMethodS.showPopup(res.statusMessage, 0), this.getTableData()) : this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.snackBar(res.statusMessage, 1);
@@ -360,7 +360,7 @@ export class TeacherRegistrationComponent implements OnInit {
       "modifiedDate": webStorageMethod.modifiedDate,
       "lan": this.webStorageS.languageFlag
     }
-    this.apiService.setHttp('delete', 'zp_osmanabad/Teacher/Delete', false, deleteObj, false, 'baseUrl');
+    this.apiService.setHttp('delete', 'zp-satara/Teacher/Delete', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

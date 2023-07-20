@@ -62,7 +62,7 @@ export class HeaderComponent {
         "isDeleted": true
       }
       this.ngxSpinner.show();
-      this.apiService.setHttp('post', 'zp_osmanabad/language/AddLanguage', false, req, false, 'baseUrl');
+      this.apiService.setHttp('post', 'zp-satara/language/AddLanguage', false, req, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();

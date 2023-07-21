@@ -153,6 +153,16 @@ export class MasterService {
     });
   }
 
+  GetAllCasteCategory(religionId?:number,langFlag?: string) {
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCasteCategory?ReligionId='+religionId+'&flag_lang='+langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
   getAllSpecialization(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllSpecialization?flag_lang=' + langFlag, false, false, false, 'baseUrl');
@@ -162,10 +172,10 @@ export class MasterService {
       });
     });
   }
-
-  getAllCaste(langFlag: string, religionId: number) {
+  // http://apisatara.shikshandarpan.com/zp-satara/master/GetAllCaste?CategoryId=1&flag_lang=EN
+  getAllCaste(casteCategoryId?: number,langFlag?: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCaste?flag_lang='+langFlag+'&ReligionId='+religionId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCaste?CategoryId='+casteCategoryId+'&flag_lang='+langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }

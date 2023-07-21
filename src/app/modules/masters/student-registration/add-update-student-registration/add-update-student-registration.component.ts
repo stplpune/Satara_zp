@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -30,6 +30,7 @@ export class AddUpdateStudentRegistrationComponent {
   religionArr = new Array();
   standardArr = new Array();
   casteArr = new Array();
+  catogoryArr = new Array();
   editFlag: boolean = false
   physicallyDisabled = [
     { id: 1, eName: 'Yes', mName: 'होय' },
@@ -46,6 +47,8 @@ export class AddUpdateStudentRegistrationComponent {
   aadhaarFlag: boolean = false;
   readOnlyFlag: boolean = false;
   loginData :any;
+  relationArr=[{id:1,name:'Mother'},{id:2,name:'Father'},{id:3,name:'Brother'}]
+  gaurdianModel!:FormArray
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
@@ -61,6 +64,14 @@ export class AddUpdateStudentRegistrationComponent {
 
     }
 
+    getGardianList(): FormArray {
+      return this.stuRegistrationForm.get('gaurdianModel') as FormArray;
+    }
+
+    get formArrayControls() {
+      return (this.stuRegistrationForm.get("gaurdianModel") as FormArray).controls;
+    }
+
   ngOnInit() {
     this.languageFlag = this.webService.languageFlag;
     this.formData();
@@ -70,7 +81,8 @@ export class AddUpdateStudentRegistrationComponent {
   allDropdownMethods() {
     this.getDistrict(),
     this.getGender()
-    // this.getReligion()
+    this.getReligion();
+
   }
 
   formData() {
@@ -89,15 +101,21 @@ export class AddUpdateStudentRegistrationComponent {
       standard: ['', Validators.required],
       dob: ['', Validators.required],
       gender: ['', Validators.required],
-      // religionId: ['', Validators.required],
-      // castId: ['', Validators.required],
+      religionId: ['', Validators.required],
+      castId: ['', Validators.required],
+      casteCategoryId:['', Validators.required],
       saralId: ['', [Validators.maxLength(19), Validators.minLength(19)]],
-      mobileNo: ['', [Validators.required, Validators.pattern(this.validators.mobile_No)]],
-      fatherFullName: ['', Validators.required],
+      mobileNo: [''],
+      fatherFullName: [''],
       // m_FatherFullName: ['', Validators.required],
-      motherName: ['', Validators.required],
+      motherName: [''],
       // m_MotherName: ['', Validators.required],
       aadharNo: ['', [Validators.pattern(this.validators.aadhar_card)]],
+      gaurdianModel:this.fb.array ([
+        this.newGardianDetails()
+      ])    
+ 
+    
       // physicallyDisabled: ['', Validators.required]
     })
   }
@@ -105,6 +123,40 @@ export class AddUpdateStudentRegistrationComponent {
   get fc() { return this.stuRegistrationForm.controls }
 
   //#region ---------------------------- Dropdown start here -----------------------------------------------
+
+  newGardianDetails() { 
+   return this.fb.group({   
+        createdBy: 0,
+        modifiedBy: 0,
+        createdDate: new Date(),
+        modifiedDate: new Date(),
+        isDeleted: 0,
+        id: 0,      
+        name: ['',[Validators.required, Validators.pattern(this.validators.name)]],
+        m_Name: [''],     
+        mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
+        relationId: ['',[Validators.required]],
+        isHead: true,
+        headerId: 0,
+        timestamp: new Date(),
+        localId: 0        
+      });  
+ 
+  }
+
+  addGardian() { 
+       if(this.getGardianList().invalid){
+        this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
+      return;
+    }else{
+      this.getGardianList().push(this.newGardianDetails()); 
+    }
+     
+  }
+
+  deleteCollary(i: any) {
+    this.getGardianList().removeAt(i);
+  }
 
   getDistrict() {
     this.districtArr = [];
@@ -231,7 +283,7 @@ export class AddUpdateStudentRegistrationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.religionArr = res.responseData;
-          this.editFlag ? (this.stuRegistrationForm.controls['religionId'].setValue(this.editObj?.religionId), this.getCaste()) : '';
+          this.editFlag ? (this.stuRegistrationForm.controls['religionId'].setValue(this.editObj?.religionId), this.getCatogory()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.religionArr = [];
@@ -241,10 +293,28 @@ export class AddUpdateStudentRegistrationComponent {
     });
   }
 
+  getCatogory() {
+    this.catogoryArr = [];
+    let id = this.stuRegistrationForm.value.religionId;
+    this.masterService.GetAllCasteCategory(id,this.languageFlag).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.catogoryArr = res.responseData;
+          this.editFlag ? (this.stuRegistrationForm.controls['casteCategoryId'].setValue(this.editObj?.casteCategoryId),this.getCaste()) : '';
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.catogoryArr = [];
+        }
+      },
+      error: ((err: any) => {
+       this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
   getCaste() {
     this.casteArr = [];
-    let id = this.stuRegistrationForm.value.religionId;
-    this.masterService.getAllCaste(this.languageFlag, id).subscribe({
+    let id = this.stuRegistrationForm.value.casteCategoryId;
+    this.masterService.getAllCaste(id,this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.casteArr = res.responseData;
@@ -287,14 +357,91 @@ export class AddUpdateStudentRegistrationComponent {
     let imageObj = this.editObj?.documentResponse?.find((res: any) => res.documentId == 1);
     this.uploadAadhaar = aadharObj?.docPath;
     this.uploadImg = imageObj?.docPath;
-    this.allDropdownMethods();
+
+    this.editObj.gaurdianResponse.forEach((x: any) => {
+      this.getGardianList().push(this.fb.group({
+        createdBy: 0,
+        modifiedBy: 0,
+        createdDate: new Date(),
+        modifiedDate: new Date(),
+        isDeleted: 0,
+        id: x.id,
+        name: x.name,
+        m_Name:x.m_Name ,
+        mobileNo: x.mobileNo,
+        relationId:x.relationId ,
+        isHead: x.isHead,
+        headerId: x.headerId,
+        timestamp: new Date(),
+        localId: 0
+         
+    }))
+  
+    });
+      this.allDropdownMethods();
   }
+
+  
+ 
+  
   //#region  ----------------------------------------------- Submit logic Start here ------------------------------------------------
 
   onSubmit() {
     this.ngxSpinner.show();
+   
+    
     let obj = this.stuRegistrationForm.value;
     let dateWithTime = this.datePipe.transform(obj.dob, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
+    // let postObj = {
+    //   ... this.webService.createdByProps(),
+    //   "id": this.editObj ? this.editObj.id : 0,
+    //   "gaurdianId": this.editObj ? this.editObj.gaurdianId : 0,
+    //   "fName": obj.fName?.trim(),
+    //   "f_MName": obj.f_MName?.trim(),
+    //   "mName": obj.mName?.trim(),
+    //   "m_MName": obj.m_MName?.trim(),
+    //   "lName": obj.lName?.trim(),
+    //   "l_MName": obj.l_MName?.trim(),
+    //   "stateId": obj.stateId || 1,
+    //   "districtId": obj.districtId,
+    //   "talukaId": obj.talukaId,
+    //   "centerId": obj.centerId,
+    //   "villageId": obj.villageId,
+    //   "schoolId": obj.schoolId,
+    //   "standard": obj.standard,
+    //   "saralId": obj.saralId,
+    //   "gender": obj.gender,
+    //   "dob": dateWithTime,
+    //   "religionId": obj.religionId,
+    //   "castId": obj.castId,
+    //   "aadharNo": obj.aadharNo,
+    //   "isCastCertificate": true,
+    //   "isParentsAlive": true,
+    //   "isOnlyFatherAlive": true,
+    //   "isOnlyMotherAlive": true,
+    //   "isHandicaped": false,   //obj.physicallyDisabled == 1 ? true : false,
+    //   "isHandicapedCertificate": true,
+    //   "timestamp": new Date(),
+    //   "localId": 0,
+    //   "fatherFullName": obj.fatherFullName?.trim(),
+    //   "motherName": obj.motherName?.trim(),
+    //   "mobileNo": obj.mobileNo,
+    //   "gaurdianModel": {
+    //     ... this.webService.createdByProps(),
+    //     "id": this.editObj ? this.editObj.gaurdianId : 0,
+    //     "fatherFullName": obj.fatherFullName?.trim(),
+    //     "m_FatherFullName": '',
+    //     "motherName": obj.motherName?.trim(),
+    //     "m_MotherName": '',
+    //     "mobileNo": obj.mobileNo,
+    //     "timestamp": new Date(),
+    //     "localId": 0
+    //   },
+    //   "documentModel": this.imageArray,
+    //   "lan": this.languageFlag,
+    //   "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
+    // }
+
     let postObj = {
       ... this.webService.createdByProps(),
       "id": this.editObj ? this.editObj.id : 0,
@@ -329,21 +476,13 @@ export class AddUpdateStudentRegistrationComponent {
       "fatherFullName": obj.fatherFullName?.trim(),
       "motherName": obj.motherName?.trim(),
       "mobileNo": obj.mobileNo,
-      "gaurdianModel": {
-        ... this.webService.createdByProps(),
-        "id": this.editObj ? this.editObj.gaurdianId : 0,
-        "fatherFullName": obj.fatherFullName?.trim(),
-        "m_FatherFullName": '',
-        "motherName": obj.motherName?.trim(),
-        "m_MotherName": '',
-        "mobileNo": obj.mobileNo,
-        "timestamp": new Date(),
-        "localId": 0
-      },
+      "gaurdianModel":this.getGardianList().value,
       "documentModel": this.imageArray,
       "lan": this.languageFlag,
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
+  
+    
 
     if (this.stuRegistrationForm.invalid) {
       this.ngxSpinner.hide();

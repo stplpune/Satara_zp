@@ -939,7 +939,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         baseDefault: "#005f57",
         background: "#fff",
         selected: "#005f57",
-        hover: "#005f57",
+        hover: "#0d4487",  // hover effect
         directory: "#005f57",
         status: {}
       },
@@ -1011,7 +1011,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
   clickOnSvgMap(flag?: string) {
-    if (flag == 'select') {
+    if (flag == 'select') {      
       //this.enbTalDropFlag ? $('#mapsvg path').addClass('disabledAll'): '';
       let checkTalActiveClass = $('#mapsvg   path').hasClass("talActive");
       checkTalActiveClass ? $('#mapsvg path[id="' + this.globalTalId + '"]').removeAttr("style") : '';

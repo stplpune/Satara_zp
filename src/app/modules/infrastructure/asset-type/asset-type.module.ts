@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { AssetTypeRoutingModule } from './asset-type-routing.module';
 import { AssetTypeComponent } from './asset-type.component';
+import { AddAssetTypeComponent } from './add-asset-type/add-asset-type.component';
 
 
 @NgModule({
   declarations: [
-    AssetTypeComponent
+    AssetTypeComponent,
+    AddAssetTypeComponent
   ],
   imports: [
     CommonModule,

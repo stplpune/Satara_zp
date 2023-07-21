@@ -1,5 +1,13 @@
 .uploadView,
-.aadhar-uploadView{
+.aadhar-uploadView {
         position: absolute;
         right: 0;
+}
+
+.dashboard-table td .form-control {
+        padding: 3px 7px !important;
+}
+
+.dashboard-table td .form-control:focus {
+        box-shadow: none !important;
 }

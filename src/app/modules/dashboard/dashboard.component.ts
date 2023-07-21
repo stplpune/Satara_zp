@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.userDetails = this.webStorage.getLoggedInLocalstorageData();
     this.educationYear = this.userDetails?.educationYearId;
-    this.asessmwntLavel.patchValue('0')
+    this.asessmwntLavel.patchValue('1')
     this.initialApiCall('initial');
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
@@ -446,91 +446,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       },
     };
-    // this.stackbarchartOptions1 = {
-    //   series: [],
-    //   chart: {
-    //     type: "bar",
-    //     height: 350,
-    //     width: '100%',
-    //     columnWidth: '50%',
-    //     stacked: true,
-    //     stackType: "100%",
-    //     toolbar: {
-    //       show: false
-    //     },
-    //   },
-    //   responsive: [
-    //     {
-    //       breakpoint: 480,
-    //       options: {
-    //         legend: {
-    //           colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889','#b64343'],
-    //           position: "top",
-    //           offsetX: 0,
-    //           offsetY: 0
-    //         }
-    //       }
-    //     }
-    //   ],
-    //   xaxis: {
-    //     axisTicks: {
-    //       show: false
-    //     },
-    //     position: 'top',
-    //     labels: {
-    //       show: true,
-    //       rotate: -90,
-    //       hideOverlappingLabels: false,
-    //       style: {
-    //         fontSize: '12px',
-    //         fontFamily: 'Noto Sans Devanagari, sans-serif',
-    //         // fontWeight: 600,
-    //         cssClass: 'apexcharts-xaxis-label',
-    //       },
-    //     },
-    //     categories: [
-    //     ],
-    //     parameters:[]
-    //   },
-    //   grid: {
-    //     show: false,      // you can either change hear to disable all grids
-
-    //   },
-    //   yaxis: {
-    //     show: false,
-    //     showAlways: false,
-    //     floating: false,
-    //     axisTicks: {
-    //       show: false
-    //     },
-    //     axisBorder: {
-    //       show: false
-    //     },
-    //     labels: {
-    //       show: false
-    //     },
-    //   },
-    //   fill: {
-    //     colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889','#b64343'],
-    //     opacity: 1
-    //   },
-    //   legend: {
-    //     position: 'bottom',
-    //     fontSize: '14px',
-    //     show: true,
-    //     markers: {
-    //       width: 12,
-    //       height: 12,
-    //       strokeWidth: 0,
-    //       strokeColor: '#fff',
-    //       fillColors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#73AFFE'],
-    //     },
-    //     itemMargin: {
-    //       horizontal: 25,
-    //       vertical: 0
-    //   },
-    //   }
-    // };
   }
 
   passingParameters(data: any, examTypeId: any) {
@@ -1024,7 +939,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         baseDefault: "#005f57",
         background: "#fff",
         selected: "#005f57",
-        hover: "#005f57",
+        hover: "#0d4487",  // hover effect
         directory: "#005f57",
         status: {}
       },
@@ -1090,13 +1005,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         min: 0,
         max: false
       },
-      source: this.selectedLang == 'English' ? "assets/distSVG/Osmanabad.svg" : "assets/distSVG/Osmanabad_Marathi.svg",
-      title: "Osmanabad_Dist",
+      source: this.selectedLang == 'English' ? "assets/distSVG/3 Satara.svg" : "assets/distSVG/Osmanabad_Marathi.svg",
+      title: "Satara_Dist",
       responsive: true
     });
   }
   clickOnSvgMap(flag?: string) {
-    if (flag == 'select') {
+    if (flag == 'select') {      
       //this.enbTalDropFlag ? $('#mapsvg path').addClass('disabledAll'): '';
       let checkTalActiveClass = $('#mapsvg   path').hasClass("talActive");
       checkTalActiveClass ? $('#mapsvg path[id="' + this.globalTalId + '"]').removeAttr("style") : '';

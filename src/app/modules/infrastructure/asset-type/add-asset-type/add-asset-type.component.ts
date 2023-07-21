@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-asset-type.component.scss']
 })
 export class AddAssetTypeComponent {
+  editData:any;
+  editObj:any;
 
 }

@@ -1,5 +1,10 @@
 {
     "Labels": {
+        "Edit":"Edit",
+        "add":"Add",
+        "addguardian":"Add Guardian",
+        "Category":"Category",
+        "Relations":"relegations",
         "dashboard": "Dashboard",
         "agencyRegistration" : "Other Registration",
         "DesignationMaster": "Designation Master",

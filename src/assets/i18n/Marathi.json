@@ -1,5 +1,10 @@
 {
     "Labels": {
+        "Edit":"दुरुस्ती",
+        "add":"जोडा",
+        "addguardian":"संरक्षक जोडा",
+        "Category":"विभाग",
+        "Relations":"निर्वासन",
         "dashboard": "डॅशबोर्ड",
         "agencyRegistration" : "इतर नोंदणी",
         "DesignationMaster": "पदनाम मास्टर",

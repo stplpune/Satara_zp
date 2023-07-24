@@ -26,50 +26,17 @@
             <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.searchbyNameContactEmail' | translate}}</mat-label>
-                    <input matInput maxlength="50">
+                    <input matInput maxlength="50" [formControl]="textSearch">
                 </mat-form-field>
             </div>
             <div class="col-sm-auto mb-lg-0 mb-2">
-                <button type="button" mat-flat-button class="btn-main">{{'Labels.filter' | translate}}</button>
-                <button type="button" mat-flat-button class="btn-second ms-2">{{'Labels.clear' |translate}}</button>
+                <button type="button" mat-flat-button class="btn-main" (click)="getTableData()">{{'Labels.filter' | translate}}</button>
+                <button type="button" mat-flat-button class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear' |translate}}</button>
             </div>
         </div>
     </mat-card-header>
+   
     <mat-card-content class="card-body pt-0">
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" class="dashboard-table">
-
-                <!-- Position Column -->
-                <ng-container matColumnDef="position">
-                    <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
-                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                </ng-container>
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef> Category Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-
-                <!-- Weight Column -->
-                <ng-container matColumnDef="weight">
-                    <th mat-header-cell *matHeaderCellDef> Status </th>
-                    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                </ng-container>
-
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="symbol">
-                    <th mat-header-cell *matHeaderCellDef> Action </th>
-                    <td mat-cell *matCellDef="let element">
-                        <button mat-icon-button id="tooltip" matTooltip="{{'Labels.edit' | translate}}"
-                            matTooltipPosition="right" matTooltipClass="tooltip">
-                            <mat-icon class="text-main">edit</mat-icon>
-                        </button>
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-        </div>
+        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
     </mat-card-content>
 </mat-card>

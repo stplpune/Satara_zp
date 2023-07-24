@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { StudentRegistrationRoutingModule } from './student-registration-routing.module';
 import { AddUpdateStudentRegistrationComponent } from './add-update-student-registration/add-update-student-registration.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import { StudentRegistrationComponent } from './student-registration.component';
@@ -24,6 +23,8 @@ import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +34,6 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
   imports: [
     CommonModule,
     StudentRegistrationRoutingModule,
-    MatDialogModule,
     MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
@@ -53,7 +53,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     GridViewComponent,
     MatTooltipModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule,
+    
   ]
 })
 export class StudentRegistrationModule {

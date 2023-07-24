@@ -35,6 +35,8 @@ export class SubCategoryComponent {
     });
   }
   openDialog(data?: any) {
+    data?'':this.textSearch.setValue('');
+    this.filterFlag && data?'':(this.getTableData(),this.filterFlag=false);
     const dialogRef = this.dialog.open(AddSubCategoryComponent, {
       width: '400px',
       data: data,
@@ -74,7 +76,8 @@ export class SubCategoryComponent {
     }
   }
 
-  getTableData() {
+  getTableData(status?:any) {
+    status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.textSearch.value || ''
     this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -95,13 +98,13 @@ export class SubCategoryComponent {
   getTableTranslatedData() {
     // this.highLightFlag=true;
     let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'category', 'subCategory', 'isBlock', 'action'];
+    let displayedColumns = ['srNo', 'category', 'subCategory', 'status', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
-      isBlock: 'isBlock',
+      isBlock: 'status',
       pagintion:this.totalItem > 10 ? true : false,
       displayedColumns: displayedColumns,
       tableData: this.tableresp,
@@ -146,7 +149,7 @@ export class SubCategoryComponent {
     let webdata = this.webStorage.createdByProps();
     let obj = {
       "id": data.id,
-      "status": data.status,
+      "status": !data.status,
       "statusChangeBy": this.webStorage.getUserId(),
       "statusChangeDate": webdata.modifiedDate,
       "lan": this.webStorage.languageFlag

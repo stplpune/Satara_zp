@@ -50,6 +50,8 @@ export class AddUpdateStudentRegistrationComponent {
   relationArr=[{id:1,name:'Mother'},{id:2,name:'Father'},{id:3,name:'Brother'}]
   gaurdianModel!:FormArray
 
+  // headerFlag:boolean = false;
+
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
 
@@ -112,7 +114,7 @@ export class AddUpdateStudentRegistrationComponent {
       // m_MotherName: ['', Validators.required],
       aadharNo: ['', [Validators.pattern(this.validators.aadhar_card)]],
       gaurdianModel:this.fb.array ([
-        this.newGardianDetails()
+      //  this.newGardianDetails()
       ])    
  
     
@@ -136,7 +138,7 @@ export class AddUpdateStudentRegistrationComponent {
         m_Name: [''],     
         mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
         relationId: ['',[Validators.required]],
-        isHead: true,
+        isHead:false,
         headerId: 0,
         timestamp: new Date(),
         localId: 0        
@@ -145,16 +147,37 @@ export class AddUpdateStudentRegistrationComponent {
   }
 
   addGardian() { 
-       if(this.getGardianList().invalid){
-        this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
+    // console.log("new Gardian",this.newGardianDetails().value );
+    let gardianArr = this.getGardianList().value 
+    let gardianObj = this.newGardianDetails().value
+    // console.log("gardianArr",gardianArr);
+    // console.log("gardianObj",gardianObj);
+    
+    gardianArr.forEach((res:any)=>{
+      // console.log("res",res);
+      if(res.name == gardianObj.name){
+        console.log("enter if name block");
+        this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+        return;
+      }else if(res.mobileNo == gardianObj.mobileNo){
+        console.log("enter else if mobile block");
+        this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
+        return;
+      }
+      
+    }) 
+    
+    if (this.getGardianList().invalid) {
+      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
       return;
-    }else{
-      this.getGardianList().push(this.newGardianDetails()); 
+    } else {
+      this.getGardianList().push(this.newGardianDetails());
     }
      
   }
 
-  deleteCollary(i: any) {
+
+  deleteGardian(i: any) {
     this.getGardianList().removeAt(i);
   }
 
@@ -171,7 +194,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.districtArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -187,7 +210,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.talukaArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -204,7 +227,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.centerArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -221,7 +244,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.villageArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -240,7 +263,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.schoolArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -257,7 +280,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.standardArr = [];
         }
       },
-      error: ((err: any) => {this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => {this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -273,7 +296,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.genderArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -289,7 +312,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.religionArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -306,8 +329,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.catogoryArr = [];
         }
       },
-      error: ((err: any) => {
-       this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => {this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -324,8 +346,7 @@ export class AddUpdateStudentRegistrationComponent {
           this.casteArr = [];
         }
       },
-      error: ((err: any) => {
-       this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => {this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -333,6 +354,8 @@ export class AddUpdateStudentRegistrationComponent {
 
 
   patchValue() {
+    console.log("this.editObj",this.editObj);
+    
     this.readOnlyFlag = true;
     this.editFlag = true;
     this.stuRegistrationForm.patchValue({
@@ -387,7 +410,7 @@ export class AddUpdateStudentRegistrationComponent {
   //#region  ----------------------------------------------- Submit logic Start here ------------------------------------------------
 
   onSubmit() {
-    this.ngxSpinner.show();
+    // this.ngxSpinner.show();
    
     
     let obj = this.stuRegistrationForm.value;
@@ -482,7 +505,7 @@ export class AddUpdateStudentRegistrationComponent {
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
   
-    
+ 
 
     if (this.stuRegistrationForm.invalid) {
       this.ngxSpinner.hide();

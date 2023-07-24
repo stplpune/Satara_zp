@@ -505,9 +505,7 @@ export class AddUpdateStudentRegistrationComponent {
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
   
-    console.log("postObj",postObj);
-    
-    return
+ 
 
     if (this.stuRegistrationForm.invalid) {
       this.ngxSpinner.hide();

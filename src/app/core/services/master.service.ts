@@ -498,6 +498,37 @@ export class MasterService {
     });
   }
 
+  GetAllAssetCategory(langFlag?: string) {
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetCategory?flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
+  GetAssetSubCateByCateId(categoryId: number, langFlag: string){
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetSubCategory?CategoryId='+categoryId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
+  GetAllAssetType(subCategoryId: number, langFlag: string){
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetType?SubCategoryId='+subCategoryId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
+
 
   refreshTokenJWT(obj: any) {
     this.apiService.setHttp('POST', 'zp-satara/user-registration/refresh-token', false, obj, false, 'baseUrl');

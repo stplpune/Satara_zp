@@ -22,35 +22,37 @@
         </div>
     </mat-card-header>
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0 w-100">
+        <form [formGroup]="filterForm" (ngSubmit)="getTableData('filter')">
         <div class="row gx-2 w-100">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>select Category</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="categoryId" (selectionChange)="clearDrop('category'); getSubCategoryDrop()">
+                        <mat-option [value]="category.id" *ngFor="let category of categoryArr">{{languageFlag == 'English' ? category.category:category.m_Category }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>select Sub Category</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="subCategoryId" (selectionChange)="clearDrop('subCategory'); getAssetTypeDrop();">
+                        <mat-option [value]="sub.id" *ngFor="let sub of subCategoryArr">{{languageFlag == 'English' ? sub.subCategory:sub.m_SubCategory }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>select Type</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-label>select Asset Type</mat-label>
+                    <mat-select formControlName="assetTypeId">
+                        <mat-option [value]="type.id"  *ngFor=" let type of assetTypeArr">{{languageFlag == 'English' ?
+                            type.type:type.m_Type }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.searchbyNameContactEmail' | translate}}</mat-label>
-                    <input matInput maxlength="50">
+                    <input matInput maxlength="50" formControlName="textArea">
                 </mat-form-field>
             </div>
             <div class="col-sm-auto mb-lg-0 mb-2">
@@ -58,6 +60,7 @@
                 <button type="button" mat-flat-button class="btn-second ms-2">{{'Labels.clear' |translate}}</button>
             </div>
         </div>
+    </form>
     </mat-card-header>
     <mat-card-content class="card-body pt-0">
         <div class="table-responsive">

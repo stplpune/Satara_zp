@@ -78,8 +78,8 @@ export class CategoryComponent {
     }
   }
 
-  getTableData(status?:any) {
-    status
+  getTableData() {
+    
     let formData = this.search.value || ''
     this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

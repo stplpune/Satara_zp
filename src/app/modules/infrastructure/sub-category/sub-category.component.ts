@@ -4,6 +4,9 @@ import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.com
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { FormControl } from '@angular/forms';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { WebStorageService } from 'src/app/core/services/web-storage.service';
 
 @Component({
   selector: 'app-sub-category',
@@ -14,16 +17,24 @@ export class SubCategoryComponent {
   viewStatus = 'Table';
   totalItem: any;
   textSearch = new FormControl();
-
+  langTypeName: any;
+  pageNumber: number = 1;
   tableresp: any;
+  filterFlag: boolean = false;
   constructor(public dialog: MatDialog,
     private apiService: ApiService,
-    private errors: ErrorsService) { }
+    private errors: ErrorsService,
+    private commonService: CommonMethodsService,
+    private webStorage: WebStorageService) { }
 
   ngOnInit() {
     this.getTableData();
+    this.webStorage.langNameOnChange.subscribe(lang => {
+      this.langTypeName = lang;
+      // this.languageChange();
+    });
   }
-  openDialog(data?:any) {
+  openDialog(data?: any) {
     const dialogRef = this.dialog.open(AddSubCategoryComponent, {
       width: '400px',
       data: data,
@@ -35,10 +46,10 @@ export class SubCategoryComponent {
       console.log(`Dialog result: ${result}`);
       if (result == 'yes' && data) {
         this.getTableData();
-        // this.pageNumber = this.pageNumber;
+        this.pageNumber = this.pageNumber;
       } else if (result == 'yes') {
         this.getTableData();
-        // this.pageNumber = 1;
+        this.pageNumber = 1;
       }
     });
   }
@@ -47,14 +58,16 @@ export class SubCategoryComponent {
   childCompInfo(obj: any) {
     switch (obj.label) {
       case 'Pagination':
-
+        this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
+        this.pageNumber = obj.pageNumber;
+        this.getTableData();
         break;
       case 'Edit':
         this.openDialog(obj);
         break;
-      // case 'Block':
-      //   this.globalDialogOpen();
-      //   break;
+      case 'Block':
+        this.openBlockDialog(obj);
+        break;
       case 'Delete':
         // this.globalDialogOpen(obj);
         break;
@@ -63,7 +76,7 @@ export class SubCategoryComponent {
 
   getTableData() {
     let formData = this.textSearch.value || ''
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?TextSearch=' + formData + '&PageNo=1&PageSize=10', false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -71,6 +84,7 @@ export class SubCategoryComponent {
           this.totalItem = res.responseData.responseData2.pageCount;
         } else {
           this.tableresp = [];
+          this.totalItem=0
         }
         this.getTableTranslatedData();
       },
@@ -80,18 +94,18 @@ export class SubCategoryComponent {
 
   getTableTranslatedData() {
     // this.highLightFlag=true;
-    let displayedColumnsReadMode = ['srNo', 'Category Name', 'Action'];
-    let displayedColumns = ['srNo', 'category', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
+    let displayedColumns = ['srNo', 'category', 'subCategory', 'isBlock', 'action'];
     let tableData = {
-      // pageNumber: this.totalItem > 10 ? true : false,
+      pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
-      isBlock: '',
-      pagintion: true,
+      isBlock: 'isBlock',
+      pagintion:this.totalItem > 10 ? true : false,
       displayedColumns: displayedColumns,
       tableData: this.tableresp,
-      // tableSize: this.totalItem,
+      tableSize: this.totalItem,
       tableHeaders: displayedColumnsReadMode,
     };
     // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
@@ -100,8 +114,56 @@ export class SubCategoryComponent {
 
   clearFilterData() {
     this.textSearch.setValue('');
-    // this.pageNumber=1;
+    this.pageNumber=1;
     this.getTableData();
+  }
+
+  openBlockDialog(obj: any) {
+    let userEng = obj.isBlock == false ? 'Active' : 'Inactive';
+    let userMara = obj.isBlock == false ? 'ब्लॉक' : 'अनब्लॉक';
+    let dialoObj = {
+      header: this.langTypeName == 'English' ? userEng + ' Office User' : 'ऑफिस वापरकर्ता ' + userMara + ' करा',
+      title: this.langTypeName == 'English' ? 'Do You Want To ' + userEng + ' The Selected Sub Category?' : 'तुम्ही निवडलेल्या ऑफिस वापरकर्त्याला ' + userMara + ' करू इच्छिता?',
+      cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',
+      okButton: this.langTypeName == 'English' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      result == 'yes' ? this.getStatusData(obj) : this.getTableData();
+      // this.highLightFlag=false;
+      // this.languageChange();
+    })
+  }
+
+
+  getStatusData(data: any) {
+    console.log(data);
+    let webdata = this.webStorage.createdByProps();
+    let obj = {
+      "id": data.id,
+      "status": data.status,
+      "statusChangeBy": this.webStorage.getUserId(),
+      "statusChangeDate": webdata.modifiedDate,
+      "lan": this.webStorage.languageFlag
+    }
+    this.apiService.setHttp('put', 'zp-satara/AssetSubCategory/UpdateStatus', false, obj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        console.log(res);
+        if (res.statusCode == "200") {
+          this.commonService.snackBar(res.statusMessage, 0);
+          // this.tableresp = res.responseData.responseData1;
+        } else {
+          this.commonService.snackBar(res.statusMessage, 1);
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
   }
 
 

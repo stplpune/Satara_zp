@@ -1,8 +1,10 @@
+
+<form [formGroup]="subCategoryFrm" (ngSubmit)="onSubmit()">
 <mat-card class="plain-card">
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">
-                {{editData ? 'Updated Category':'Add Sub Category'}}
+                {{editFlag ? 'Updated Sub Category':'Add Sub Category'}}
             </h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
                 <mat-icon>close</mat-icon>
@@ -15,15 +17,16 @@
             <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Category Name</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="category">
+                        <mat-option [value]="0">Select Category</mat-option>
+                        <mat-option *ngFor="let data of categoryresp" [value]="data.id">{{data.category}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Sub Category Name</mat-label>
-                    <input matInput formControlName="fName" maxlength="20">
+                    <input matInput formControlName="subcategory" maxlength="20">
                     <mat-error></mat-error>
                 </mat-form-field>
             </div>
@@ -33,8 +36,8 @@
         <mat-card-actions align="end" class="me-3 mb-2">
             <button mat-stroked-button class="btn-second me-2" type="button" mat-dialog-close>{{'Labels.cancel'|
                 translate}}</button>
-            <button mat-stroked-button class="btn-main" type="submit">{{editObj ? ('Labels.update'|
-                translate):('Labels.submit'| translate)}}</button>
+            <button mat-stroked-button class="btn-main" type="submit">{{editFlag ? 'Update':'Submit'}}</button>
         </mat-card-actions>
     </mat-card-footer>
 </mat-card>
+</form>

@@ -170,13 +170,16 @@ export class AssetComponent {
 
   openDialog() {
     const dialogRef = this.dialog.open(AddAssetComponent,{
-      width: '500px',
+      width: '600px',
       disableClose: true,
       autoFocus: false
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      if(result == 'Yes'){
+      this.getTableData();
+      }
     });
   }
 
@@ -214,12 +217,12 @@ export class AssetComponent {
     })  
      dialogRef.afterClosed().subscribe((result: any) => {
      
-      if(result == 'yes' && obj){     
+      if(result == 'Yes' && obj){     
         // this.clearForm();
         this.getTableData();
         this.pageNumber = this.pageNumber;
       }
-      else if(result == 'yes' ){
+      else if(result == 'Yes' ){
         this.getTableData();
         // this.clearForm();
         this.pageNumber = 1 ;   

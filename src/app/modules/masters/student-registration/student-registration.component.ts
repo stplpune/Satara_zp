@@ -37,8 +37,8 @@ export class StudentRegistrationComponent {
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
   viewStatus="Table";
-  displayedColumns = [ 'srNo','docPath', 'fullName', 'standard', 'parentMobileNo', 'gender', 'action'];
-  marathiDisplayedColumns = ['srNo','docPath', 'm_FullName', 'm_Standard', 'parentMobileNo', 'm_Gender', 'action'];
+  displayedColumns = [ 'srNo','docPath', 'fullName', 'standard', 'mobileNo', 'gender', 'action'];
+  marathiDisplayedColumns = ['srNo','docPath', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender', 'action'];
   displayedheaders = ['Sr. No.','', ' Student Name', 'Standard', 'Parent Mobile No.', 'Gender', 'action'];
   marathiDisplayedheaders = ['अनुक्रमांक','', 'विद्यार्थ्याचे नाव', 'वर्ग', 'पालक मोबाईल क्र.', 'लिंग', 'कृती'];
   constructor(
@@ -99,6 +99,8 @@ export class StudentRegistrationComponent {
           this.ngxSpinner.hide();
           flag != 'reportFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           flag != 'reportFlag' ? this.tableDatasize = res.responseData.responseData2.pageCount : this.tableDatasize = this.tableDatasize;
+          console.log("this.tableDataArray",this.tableDataArray);
+          
           this.tableDataArray.map((res: any) => {
             let index = res.documentResponse.findIndex((ele: any) => ele.documentId == 1);
             res.docPath = res.documentResponse[index]?.docPath
@@ -149,8 +151,8 @@ export class StudentRegistrationComponent {
   
   setTableData(){
     this.highLightFlag =true;
-    let displayedColumns  = ['docPath', 'srNo', 'fullName', 'standard', 'parentMobileNo', 'gender']
-    let marathiDisplayedColumns = ['docPath', 'srNo', 'm_FullName', 'm_Standard', 'parentMobileNo', 'm_Gender'];
+    let displayedColumns  = ['docPath', 'srNo', 'fullName', 'standard', 'mobileNo', 'gender']
+    let marathiDisplayedColumns = ['docPath', 'srNo', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender'];
     let tableData = {
       highlightedrow:true,
       pageNumber: this.pageNumber,
@@ -254,7 +256,7 @@ export class StudentRegistrationComponent {
       header: this.webService.languageFlag == 'EN' ? obj.fullName : obj.m_FullName,
       subheader: this.webService.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
       labelHeader: this.webService.languageFlag == 'EN' ? ['Father Name', 'Mother Name', 'Parent Mobile No.', 'Aadhaar No.', 'Standard', 'School Name'] : ['वडीलांचे नावं', 'आईचे नावं', 'पालक मोबाईल क्र.', 'आधार क्र.', 'इयत्ता', 'शाळेचे नाव'],
-      labelKey: this.webService.languageFlag == 'EN' ? ['fatherFullName', 'motherName', 'parentMobileNo', 'aadharNo', 'standard', 'schoolName'] : ['m_FatherFullName', 'm_MotherName', 'parentMobileNo', 'aadharNo', 'standard', 'm_SchoolName'],
+      labelKey: this.webService.languageFlag == 'EN' ? ['fatherFullName', 'motherName', 'mobileNo', 'aadharNo', 'standard', 'schoolName'] : ['m_FatherFullName', 'm_MotherName', 'mobileNo', 'aadharNo', 'standard', 'm_SchoolName'],
       Obj: obj,
       chart: true
     }

@@ -1,7 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -49,7 +48,7 @@ export class AddUpdateStudentRegistrationComponent {
   loginData :any;
   relationArr=[{id:1,name:'Mother'},{id:2,name:'Father'},{id:3,name:'Brother'}]
   gaurdianModel!:FormArray
-
+  data: any;
   // headerFlag:boolean = false;
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
@@ -60,8 +59,8 @@ export class AddUpdateStudentRegistrationComponent {
     private fileUpl: FileUploadService, private apiService: ApiService,
     private webService: WebStorageService, private datePipe: DatePipe,
     private commonMethods: CommonMethodsService, public validators: ValidationService, private ngxSpinner: NgxSpinnerService,
-    public dialogRef: MatDialogRef<AddUpdateStudentRegistrationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { 
+    // public dialogRef: MatDialogRef<AddUpdateStudentRegistrationComponent>,
+    ) { 
      this.loginData = this.webService.getLoggedInLocalstorageData();   
 
     }
@@ -114,7 +113,7 @@ export class AddUpdateStudentRegistrationComponent {
       // m_MotherName: ['', Validators.required],
       aadharNo: ['', [Validators.pattern(this.validators.aadhar_card)]],
       gaurdianModel:this.fb.array ([
-      //  this.newGardianDetails()
+        // this.data ?'': this.newGardianDetails()
       ])    
  
     
@@ -147,25 +146,27 @@ export class AddUpdateStudentRegistrationComponent {
   }
 
   addGardian() { 
-    // console.log("new Gardian",this.newGardianDetails().value );
     let gardianArr = this.getGardianList().value 
-    let gardianObj = this.newGardianDetails().value
-    // console.log("gardianArr",gardianArr);
-    // console.log("gardianObj",gardianObj);
-    
-    gardianArr.forEach((res:any)=>{
-      // console.log("res",res);
-      if(res.name == gardianObj.name){
-        console.log("enter if name block");
-        this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
-        return;
-      }else if(res.mobileNo == gardianObj.mobileNo){
-        console.log("enter else if mobile block");
-        this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
-        return;
-      }
-      
-    }) 
+    let gardianObj = this.formArrayControls[0]?.get('name')?.value
+
+    // this.formArrayControls[0].get('name')
+    console.log('name formcontrol', gardianObj);
+    console.log("gardianArr",gardianArr.length);
+    if(gardianArr.length > 1){
+      gardianArr.forEach((res:any)=>{
+        if(res.name == this.formArrayControls[0]?.get('name')?.value){
+          console.log("enter if name block");
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }else if(res.mobileNo == gardianObj.mobileNo){
+          console.log("enter else if mobile block");
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }
+        
+      })
+    }
+   
     
     if (this.getGardianList().invalid) {
       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
@@ -504,9 +505,7 @@ export class AddUpdateStudentRegistrationComponent {
       "lan": this.languageFlag,
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
-  
  
-
     if (this.stuRegistrationForm.invalid) {
       this.ngxSpinner.hide();
       // if (!this.uploadImg) { this.imgFlag = true };
@@ -528,7 +527,7 @@ export class AddUpdateStudentRegistrationComponent {
             this.ngxSpinner.hide();
             this.apiService.staticData.next('getRefreshStaticdata');
             this.commonMethods.showPopup(res.statusMessage, 0);
-            this.dialogRef.close('yes')
+            // this.dialogRef.close('yes')
           } else {
             this.ngxSpinner.hide();
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);

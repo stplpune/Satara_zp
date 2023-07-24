@@ -26,7 +26,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="clearDropdown('talukaId');getAllCenter();getVillage()">
+                            (selectionChange)="clearDropdown('talukaId');getAllCenter()">
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'EN' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
                         </mat-select>
@@ -37,7 +37,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
-                            (selectionChange)="clearDropdown('centerId');getAllSchoolsByCenterId()">
+                            (selectionChange)="clearDropdown('centerId');getVillage()">
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'EN'
                                 ?cen.center:cen.m_Center}}</mat-option>
                         </mat-select>
@@ -47,7 +47,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
-                        <mat-select formControlName="villageId">
+                        <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag == 'EN'
                                 ?village.village:village.m_Village}}</mat-option>
                         </mat-select>
@@ -285,6 +285,7 @@
                             <thead>
                               <tr>
                                 <th scope="col"> Sr.No. </th>
+                                <th scope="col"> Check </th>
                                 <th scope="col">Name</th>
                                 <th scope="col"> Mobile No.</th>
                                 <th scope="col">Relations</th>
@@ -294,7 +295,10 @@
                             <tbody  formArrayName='gaurdianModel'>
                               <tr *ngFor="let gardian of getGardianList().controls; let i=index"
                               [formGroupName]="i">
-                                <th >{{i+1}}</th>
+                                <td >{{i+1}}</td>
+                                <td >
+                                    <input formControlName="isHead" type="checkbox" />
+                                </td>
                                 <td> 
                                     <mat-form-field appearance="outline" class="form-control">
                                     <mat-label>Name</mat-label>
@@ -303,7 +307,7 @@
                             </td>
                                 <td> <mat-form-field appearance="outline" class="form-control">
                                     <mat-label>Mobile No.</mat-label>
-                                    <input matInput formControlName="mobileNo">
+                                    <input matInput formControlName="mobileNo" maxlength="10">
                                 </mat-form-field>
                             </td>
                                 <td>
@@ -316,16 +320,16 @@
                                     </mat-select>
                                     </mat-form-field>
                                 </td>
-                                <td><button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
-                                    matTooltipPosition="right" matTooltipClass="tooltip" type="button" (click)="deleteCollary(i)">
+                                <td *ngIf="this.getGardianList().value.length > 1"><button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
+                                    matTooltipPosition="right" matTooltipClass="tooltip" type="button" (click)="deleteGardian(i)">
                                     <mat-icon class="text-danger"> delete</mat-icon>
                                 </button>
                                 </td>
-                                <td>  <button mat-icon-button matTooltip="{{'Labels.Edit' | translate}}"
+                                <!-- <td>  <button mat-icon-button matTooltip="{{'Labels.Edit' | translate}}"
                                     matTooltipPosition="right" matTooltipClass="tooltip" type="button">
                                     <mat-icon class="text-main">edit</mat-icon>
                                 </button>
-                                </td>
+                                </td> -->
                               </tr>                             
                             </tbody>
                           </table>

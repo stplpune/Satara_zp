@@ -936,11 +936,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       width: 550,
       height: 430,
       colors: {
-        baseDefault: "#005f57",
+        baseDefault: "#0d4487",
         background: "#fff",
-        selected: "#005f57",
+        selected: "#0d4487",
         hover: "#0d4487",  // hover effect
-        directory: "#005f57",
+        directory: "#0d4487",
         status: {}
       },
       regions: data,

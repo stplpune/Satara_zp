@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
+import { ApiService } from 'src/app/core/services/api.service';
+import { ErrorsService } from 'src/app/core/services/errors.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-sub-category',
@@ -8,41 +11,105 @@ import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.com
   styleUrls: ['./sub-category.component.scss']
 })
 export class SubCategoryComponent {
-  viewStatus='Table';
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-  
-  constructor(public dialog: MatDialog) {}
-  
-  openDialog() {
-    const dialogRef = this.dialog.open(AddSubCategoryComponent,{
+  viewStatus = 'Table';
+  totalItem: any;
+  textSearch = new FormControl();
+
+  tableresp: any;
+  constructor(public dialog: MatDialog,
+    private apiService: ApiService,
+    private errors: ErrorsService) { }
+
+  ngOnInit() {
+    this.getTableData();
+  }
+  openDialog(data?:any) {
+    const dialogRef = this.dialog.open(AddSubCategoryComponent, {
       width: '400px',
+      data: data,
       disableClose: true,
       autoFocus: false
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      if (result == 'yes' && data) {
+        this.getTableData();
+        // this.pageNumber = this.pageNumber;
+      } else if (result == 'yes') {
+        this.getTableData();
+        // this.pageNumber = 1;
+      }
     });
   }
+
+
+  childCompInfo(obj: any) {
+    switch (obj.label) {
+      case 'Pagination':
+
+        break;
+      case 'Edit':
+        this.openDialog(obj);
+        break;
+      // case 'Block':
+      //   this.globalDialogOpen();
+      //   break;
+      case 'Delete':
+        // this.globalDialogOpen(obj);
+        break;
+    }
+  }
+
+  getTableData() {
+    let formData = this.textSearch.value || ''
+    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?TextSearch=' + formData + '&PageNo=1&PageSize=10', false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.tableresp = res.responseData.responseData1;
+          this.totalItem = res.responseData.responseData2.pageCount;
+        } else {
+          this.tableresp = [];
+        }
+        this.getTableTranslatedData();
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
+  }
+
+  getTableTranslatedData() {
+    // this.highLightFlag=true;
+    let displayedColumnsReadMode = ['srNo', 'Category Name', 'Action'];
+    let displayedColumns = ['srNo', 'category', 'action'];
+    let tableData = {
+      // pageNumber: this.totalItem > 10 ? true : false,
+      img: '',
+      blink: '',
+      badge: '',
+      isBlock: '',
+      pagintion: true,
+      displayedColumns: displayedColumns,
+      tableData: this.tableresp,
+      // tableSize: this.totalItem,
+      tableHeaders: displayedColumnsReadMode,
+    };
+    // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
+    this.apiService.tableData.next(tableData);
+  }
+
+  clearFilterData() {
+    this.textSearch.setValue('');
+    // this.pageNumber=1;
+    this.getTableData();
+  }
+
+
+
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: any;
-  weight: any;
-  symbol: any;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+
+
+
+

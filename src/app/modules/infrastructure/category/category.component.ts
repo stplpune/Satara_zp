@@ -72,9 +72,9 @@ export class CategoryComponent {
       case 'Block':
         this.openBlockDialog(obj);
         break;
-      case 'Delete':
-        // this.globalDialogOpen(obj);
-        break;
+      // case 'Delete':
+      //   // this.globalDialogOpen(obj);
+      //   break;
     }
   }
 
@@ -84,8 +84,6 @@ export class CategoryComponent {
     this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-console.log(res);
-
         if (res.statusCode == "200") {
           this.tableresp = res.responseData.responseData1;
           this.totalItem = res.responseData.responseData2.pageCount;
@@ -121,7 +119,6 @@ console.log(res);
   }
 
   openBlockDialog(obj: any) {
-    console.log(obj);
 
     let userEng = obj.isBlock == false ?'Active' : 'Inactive';
     let userMara = obj.isBlock == false ?'ब्लॉक' : 'अनब्लॉक';
@@ -145,7 +142,6 @@ console.log(res);
   }
 
   getStatus(data: any) {
-    console.log(data);
     let webdata = this.webStorage.createdByProps();
     let obj = {
       "id": data.id,
@@ -154,12 +150,11 @@ console.log(res);
       "statusChangeDate": webdata.modifiedDate,
       "lan": this.webStorage.languageFlag
     }
-    console.log(obj);
+   
     
     this.apiService.setHttp('put', 'zp-satara/AssetCategory/UpdateStatus', false, obj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        console.log(res);
         if (res.statusCode == "200") {
           this.commonService.snackBar(res.statusMessage, 0);
           // this.tableresp = res.responseData.responseData1;

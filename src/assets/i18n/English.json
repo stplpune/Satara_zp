@@ -320,7 +320,12 @@
         "total" : "Total",
          "totalStudent" : "Total Student",
         "setNumber" : "Set Number",
-        "assessedBy": "Assessed By"
+        "assessedBy": "Assessed By",
+
+        "asset": "Asset",
+        "assetList": "Asset List",
+        "addAsset": "Add Asset",
+        "updateAsset": "Update Asset"
 
 
     }

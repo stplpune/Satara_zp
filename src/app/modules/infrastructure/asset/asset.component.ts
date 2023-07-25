@@ -122,8 +122,8 @@ export class AssetComponent {
 
   getTableData(flag?: string){
     let formData = this.filterForm.value;
-    let str = `CategoryId=${formData?.categoryId}&SubCategoryId=${formData?.subCategoryId}&TypeId=${formData?.assetTypeId}&TextSearch=${formData?.textArea}&PageNo=${this.pageNumber}&PageSize=10&lan=''`
-    let reportStr = `CategoryId=${formData?.categoryId}&SubCategoryId=${formData?.subCategoryId}&TypeId=${formData?.assetTypeId}&TextSearch=${formData?.textArea}&PageNo=${1}&RowCount=0`;
+    let str = `CategoryId=${(formData?.categoryId || 0)}&SubCategoryId=${(formData?.subCategoryId || 0)}&TypeId=${(formData?.assetTypeId || 0)}&TextSearch=${(formData?.textArea || '')}&PageNo=${this.pageNumber}&PageSize=10&lan=''`
+    let reportStr = `CategoryId=${(formData?.categoryId || 0)}&SubCategoryId=${(formData?.subCategoryId || 0)}&TypeId=${(formData?.assetTypeId || 0)}&TextSearch=${(formData?.textArea || '')}&PageNo=${1}&RowCount=0`;
     this.pageNumber =   flag == 'filter'? 1 :this.pageNumber;
     this.apiService.setHttp('GET', 'zp-satara/Asset/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -188,6 +188,7 @@ export class AssetComponent {
       case 'category':
         this.filterForm.controls['subCategoryId'].setValue('');
         this.filterForm.controls['assetTypeId'].setValue('');
+        this.assetTypeArr = [];
         break;
         case 'subCategory':
           this.filterForm.controls['assetTypeId'].setValue('')
@@ -235,6 +236,8 @@ export class AssetComponent {
   clearForm() {
     this.filterFormData();
     this.getTableData();
+    this.subCategoryArr = [];
+    this.assetTypeArr = [];
   }
 
 

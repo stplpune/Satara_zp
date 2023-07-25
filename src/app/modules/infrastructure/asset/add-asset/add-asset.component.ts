@@ -14,13 +14,14 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-asset.component.scss']
 })
 export class AddAssetComponent {
-  editData:any;
+  // editData:any;
   editObj:any;
   categoryArr = new Array();
   subCategoryArr = new Array();
   assetTypeArr = new Array();
   assetRegForm! : FormGroup;
   languageFlag!: string;
+  get f() { return this.assetRegForm.controls };
   
   constructor(private masterService: MasterService,
               private commonMethods: CommonMethodsService,
@@ -36,7 +37,9 @@ export class AddAssetComponent {
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
     });
-
+    
+    this.data ? this.onEdit() : '';
+    
     this.defaultAssetRegForm();
     this.getCategoryDrop();
   }
@@ -44,13 +47,13 @@ export class AddAssetComponent {
   defaultAssetRegForm() {
     this.assetRegForm = this.fb.group({
       ... this.webService.createdByProps(),
-      "id": [0],
+      "id": [this.editObj ? this.editObj.id : 0],
       "categoryId": ['' , [Validators.required]],
       "subCategoryId": ['', [Validators.required]],
       "typeId": ['', [Validators.required]],
-      "brand": ['', [Validators.required]],
-      "quantity": ['', [Validators.required]],
-      "description": ['', [Validators.required]],
+      "brand": [this.editObj ? this.editObj.brand : '', [Validators.required]],
+      "quantity": [this.editObj ? this.editObj.quantity : '', [Validators.required]],
+      "description": [this.editObj ? this.editObj.description : '', [Validators.required]],
       "lan": ['']
     });
   }
@@ -61,13 +64,13 @@ export class AddAssetComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.categoryArr.push(...res.responseData);
+          this.editObj ? (this.f['categoryId'].setValue(this.editObj.categoryId), this.getSubCategoryDrop()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errorService.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
         }
       }
     });
-
   }
 
   getSubCategoryDrop(){
@@ -76,13 +79,13 @@ export class AddAssetComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.subCategoryArr.push(...res.responseData);
+          this.editObj ? (this.f['subCategoryId'].setValue(this.editObj.subCategoryId), this.getAssetTypeDrop()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errorService.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.subCategoryArr = [];
         }
       }
     });
-
   }
 
   getAssetTypeDrop(){
@@ -91,13 +94,13 @@ export class AddAssetComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.assetTypeArr.push(...res.responseData);
+          this.editObj ? (this.f['typeId'].setValue(+this.editObj.typeId)) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errorService.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.assetTypeArr = [];
         }
       }
     });
-
   }
 
   submitData() {
@@ -121,20 +124,24 @@ export class AddAssetComponent {
       //   this.ngxSpinner.hide();
       //   return;
       // }
-  
     }
+  }
+
+  onEdit(){
+    this.editObj = this.data;
+    console.log("editObj : ", this.editObj);
   }
 
   clearDrop(flag?: string){
     switch(flag){
       case 'category':
-        this.assetRegForm.controls['subCategoryId'].setValue('');
-        this.assetRegForm.controls['typeId'].setValue('');
+        this.f['subCategoryId'].setValue('');
+        this.f['typeId'].setValue('');
+        this.assetTypeArr = [];
+        this.editObj = null;
         break;
         case 'subCategory':
-          this.assetRegForm.controls['typeId'].setValue('')
+          this.f['typeId'].setValue('')
     }
-
   }
-
 }

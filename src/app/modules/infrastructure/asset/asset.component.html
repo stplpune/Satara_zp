@@ -4,8 +4,8 @@
             <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
                 <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
         </li>
-        <li class="breadcrumb-item" aria-current="page">Masters</li>
-        <li class="breadcrumb-item active" aria-current="page">Asset</li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.asset' | translate}}</li>
     </ol>
 </nav>
 
@@ -14,10 +14,10 @@
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
     <mat-card-header class="card-header">
         <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
-            <div class="text-main fw-bold mb-2 mb-lg-0">Asset List</div>
+            <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.assetList' | translate}}</div>
             <button mat-flat-button class="btn-main" (click)="addUpdateAsset()">
                 <mat-icon>add</mat-icon>
-                Add Asset 
+                 {{'Labels.addAsset' | translate}}
             </button>
         </div>
     </mat-card-header>

@@ -11,6 +11,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { LightboxModule } from '@ngx-gallery/lightbox';
 import { Gallery, ImageItem, GalleryModule, } from '@ngx-gallery/core';
 import { progressChartLineComponent } from '../../progressChartLine/progressChartLine.component';
+import { MatTableModule } from '@angular/material/table';
 @Component({
   selector: 'app-global-detail',
   templateUrl: './global-detail.component.html',
@@ -27,10 +28,13 @@ import { progressChartLineComponent } from '../../progressChartLine/progressChar
     LightboxModule,
     GalleryModule,
     progressChartLineComponent,
+    MatTableModule
 
   ]
 })
 export class GlobalDetailComponent {
+  displayedColumns: string[] = ['position', 'name', 'TeacherName', 'EmailID','MobileNo','Desgination'];
+  dataSource = ELEMENT_DATA;
   items: any = [];
   dataArray = new Array();
   objData: any;
@@ -78,3 +82,21 @@ export class GlobalDetailComponent {
     this.objData.objData ? this.webService.selectedLineChartObj.next(this.objData) : '';
   }
 }
+
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  TeacherName:any;
+  EmailID:any;
+  MobileNo:any;
+  Desgination:any;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  {position: 1, name: '', TeacherName:'yuvraj sir',EmailID:'abvbsd@gmail.com',MobileNo:'258222588',Desgination:'Principle',},
+  {position: 2, name: '', TeacherName:'Patil sir',EmailID:'',MobileNo:'44455400075',Desgination:'Teacher',},
+  {position: 3, name: '', TeacherName:'dr.pradip',EmailID:'',MobileNo:'2252005',Desgination:'Student',},
+  {position: 4, name: '', TeacherName:'amol sir',EmailID:'',MobileNo:'225225252005',Desgination:'',},
+  {position: 5, name: '', TeacherName:'sachin sir',EmailID:'',MobileNo:'25255533350',Desgination:'',},
+];

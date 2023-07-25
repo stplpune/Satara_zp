@@ -15,22 +15,24 @@ import { MasterService } from 'src/app/core/services/master.service';
 })
 export class AssetComponent {
   viewStatus='Table';
-  displayedColumns: string[] = ['position', 'name', 'SubCategory','AssetType','Quantity','Description','Date','Addedby','symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns = new Array();
   languageFlag!: string;
   pageNumber: number = 1;
   tableDataArray = new Array();
   tableDatasize!: Number;
   tableData: any;
   totalCount: number = 0;
-  displayedheaders = ['Sr.No.','Taluka', 'Center', 'School Name', 'Standard', 'Assessed BaseLevel Student Count','Assessed ClassWise Student Count', 'Total Student Count'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'तालुका', 'केंद्र', 'शाळेचे नाव', 'इयत्ता','मूल्यांकन बेस लेव्हल विद्यार्थी संख्या', 'मूल्यांकन वर्गनिहाय विद्यार्थी संख्या','एकूण विद्यार्थी संख्या' ];
+  displayedheaders = ['Sr.No.','Category', 'SubCategory', 'Asset Type', 'Quantity', 'Description','Date', 'Added by', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'प्रकार', 'उपप्रकार', 'मालमत्ता प्रकार', 'प्रमाण','वर्णन', 'तारीख','तयार करणारा' , 'कृती'];
   highLightFlag: boolean =true;
   resultDownloadArr = new Array();
   filterForm!: FormGroup;
   categoryArr= new Array();
   subCategoryArr = new Array();
   assetTypeArr= new Array();
+  isWriteRight!: boolean;
+  
+
 
   constructor(public dialog: MatDialog,
               private webService: WebStorageService,
@@ -43,6 +45,7 @@ export class AssetComponent {
               ) {}
 
   ngOnInit(){
+    this.getAccessFunction();
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
       this.setTableData();
@@ -52,13 +55,20 @@ export class AssetComponent {
     this.getTableData();   
 
   }
+  getAccessFunction(){
+    let print = this.webService?.getAllPageName().find((x: any) => {
+      return x.pageURL == "designation-registration"
+     });
+     (print.writeRight === true) ?  this.isWriteRight = true : this.isWriteRight = false
+
+  }
 
   filterFormData(){
     this.filterForm = this.fb.group({
-      categoryId: [],
-      subCategoryId: [],
-      assetTypeId: [],
-      textArea: []
+      categoryId: [0],
+      subCategoryId: [0],
+      assetTypeId: [0],
+      textArea: ['']
     })
   }
 
@@ -112,18 +122,16 @@ export class AssetComponent {
 
   getTableData(flag?: string){
     let formData = this.filterForm.value;
-    let str = `zp-satara/Asset/GetAll?CategoryId=${formData?.categoryId}&SubCategoryId=${formData?.subCategoryId}&TypeId=${formData?.assetTypeId}&TextSearch=${formData?.textArea}&PageNo=${this.pageNumber}&PageSize=10&lan=''`
-    let reportStr = `zp-satara/Asset/GetAll?CategoryId=${formData?.categoryId}&SubCategoryId=${formData?.subCategoryId}&TypeId=${formData?.assetTypeId}&TextSearch=${formData?.textArea}&PageNo=${1}&RowCount=0`;
+    let str = `CategoryId=${formData?.categoryId}&SubCategoryId=${formData?.subCategoryId}&TypeId=${formData?.assetTypeId}&TextSearch=${formData?.textArea}&PageNo=${this.pageNumber}&PageSize=10&lan=''`
+    let reportStr = `CategoryId=${formData?.categoryId}&SubCategoryId=${formData?.subCategoryId}&TypeId=${formData?.assetTypeId}&TextSearch=${formData?.textArea}&PageNo=${1}&RowCount=0`;
     this.pageNumber =   flag == 'filter'? 1 :this.pageNumber;
-    this.apiService.setHttp('GET', 'zp-satara/assessment-report/Download_AssessmentReport_SchoolWise?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Asset/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-          this.tableDatasize = res.responseData.responseData2[0].totalCount;
-          console.log("tableDatasize", this.tableDatasize);
-          
-          this.totalCount = res.responseData.responseData2.totalCount;
+          this.tableDatasize = res.responseData.responseData2.pageCount;          
+          this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
           let data: [] = res.responseData.responseData1;
           flag == 'pdfFlag' ? this.downloadPdf(data) : '';
@@ -140,7 +148,19 @@ export class AssetComponent {
   }
 
   setTableData(){
-
+    this.highLightFlag=true;
+  let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ?'subCategory':'m_SubCategory', this.languageFlag == 'English' ?'type':'m_Type', 'quantity' ,'description','date','addedBy'];
+  this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ?'subCategory':'m_SubCategory', this.languageFlag == 'English' ?'type':'m_Type', 'quantity' ,'description','date','addedBy', 'action'];
+    this.tableData = {
+      pageNumber: this.pageNumber,
+      img: '', blink: '', badge: '', isBlock: '', pagintion: true,
+      displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode, 
+      tableData: this.tableDataArray,
+      tableSize: this.tableDatasize,
+      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.displayedheadersMarathi,
+    };
+    this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
+  this.apiService.tableData.next(this.tableData);
   }
 
   downloadPdf(data: any){
@@ -150,13 +170,16 @@ export class AssetComponent {
 
   openDialog() {
     const dialogRef = this.dialog.open(AddAssetComponent,{
-      width: '500px',
+      width: '600px',
       disableClose: true,
       autoFocus: false
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+      if(result == 'Yes'){
+      this.getTableData();
+      }
     });
   }
 
@@ -170,23 +193,51 @@ export class AssetComponent {
           this.filterForm.controls['assetTypeId'].setValue('')
     }
   }
+
+  childCompInfo(obj: any) {    
+    switch (obj.label) {
+      case 'Pagination':
+        this.pageNumber = obj.pageNumber;       
+        this.getTableData();
+        break;
+      case 'Edit':        
+        this.addUpdateAsset(obj);
+
+        break;
+     
+    }
+  }
+
+  addUpdateAsset(obj?:any){
+    const dialogRef = this.dialog.open(AddAssetComponent, {
+      width: '420px',
+      data: obj,
+      disableClose: true,
+      autoFocus: false
+    })  
+     dialogRef.afterClosed().subscribe((result: any) => {
+     
+      if(result == 'Yes' && obj){     
+        // this.clearForm();
+        this.getTableData();
+        this.pageNumber = this.pageNumber;
+      }
+      else if(result == 'Yes' ){
+        this.getTableData();
+        // this.clearForm();
+        this.pageNumber = 1 ;   
+      } 
+      this.highLightFlag=false; 
+      this.setTableData();  
+    });
+  }
+
+  clearForm() {
+    this.filterFormData();
+    this.getTableData();
+  }
+
+
+
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: any;
-  SubCategory:any;
-  AssetType:any;
-  Quantity:any;
-  Description:any;
-  Date:any;
-  Addedby:any;
-  symbol: any;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', SubCategory:'Table', AssetType:'Wooden',Quantity: 1.0079, Description: 'H',Date:'13/07/2023',Addedby:'Yuvraj Shinde',symbol:'',},
-  {position: 2, name: 'Hydrogen', SubCategory:'Table', AssetType:'Wooden',Quantity: 1.0079, Description: 'H',Date:'14/08/2023',Addedby:'Yuvraj Shinde',symbol:'',},
-  {position: 3, name: 'Hydrogen', SubCategory:'Table', AssetType:'Wooden',Quantity: 1.0079, Description: 'H',Date:'13/07/2023',Addedby:'Yuvraj Shinde',symbol:'',},
-  {position: 4, name: 'Hydrogen', SubCategory:'Table', AssetType:'Wooden',Quantity: 1.0079, Description: 'H',Date:'14/08/2023',Addedby:'Yuvraj Shinde',symbol:'',},
-];

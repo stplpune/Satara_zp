@@ -4,6 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
+import { MasterService } from 'src/app/core/services/master.service';
+import { WebStorageService } from 'src/app/core/services/web-storage.service';
 // import { AddUpdateDesignationMasterComponent } from 'src/app/modules/masters/designation-master/add-update-designation-master/add-update-designation-master.component';
 
 @Component({
@@ -22,7 +24,9 @@ export class AddSubCategoryComponent {
     private apiService: ApiService,
     private errors: ErrorsService,
     private commonMethod: CommonMethodsService,
+    private masterService:MasterService,
     private dialogRef: MatDialogRef<AddSubCategoryComponent>,
+    private webStorage:WebStorageService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
@@ -40,37 +44,38 @@ export class AddSubCategoryComponent {
   }
 
   getCategory() {
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?PageNo=1&PageSize=10', false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.categoryresp = res.responseData.responseData1;
+    this.categoryresp = [];
+    this.masterService.GetAllAssetCategory(this.webStorage.languageFlag).subscribe({
+      next: ((res: any) => {
+        if (res.statusCode == 200 && res.responseData.length) {
+          this.categoryresp = res.responseData;
         } else {
           this.categoryresp = [];
         }
-
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
-    });
+      }), error: (error: any) => {
+        this.errors.handelError(error.statusCode)
+      }
+    })
   }
+
 
   onSubmit() {
     if (this.subCategoryFrm.invalid) {
       return;
     }
-    
+    let data = this.webStorage.createdByProps();
     let formData = this.subCategoryFrm.value;
     let obj = {
-      "createdBy": 0,
-      "modifiedBy": 0,
-      "createdDate": new Date(),
-      "modifiedDate": new Date(),
-      "isDeleted": false,
+      "createdBy":data.createdBy,
+      "modifiedBy":data.modifiedBy,
+      "createdDate": data.createdDate,
+      "modifiedDate": data.modifiedDate,
+      "isDeleted": data.isDeleted,
       "id": this.editFlag ? this.editId : 0,
       "categoryId": formData.category,
       "subCategory": formData.subcategory,
       "m_SubCategory": "",
-      "lan": ""
+      "lan": this.webStorage.languageFlag,
     }
 
     let method = this.editFlag ? 'PUT' : 'POST';
@@ -81,10 +86,8 @@ export class AddSubCategoryComponent {
         if (res.statusCode == "200") {
           this.commonMethod.showPopup(res.statusMessage, 0);
           this.dialogRef.close('yes')
-          //  this.categoryresp =res.responseData.responseData1;
         } else {
-          this.commonMethod.showPopup(res.statusMessage, 0);
-          // this.categoryresp = [];
+          this.commonMethod.showPopup(res.statusMessage, 1);
         }
 
       },

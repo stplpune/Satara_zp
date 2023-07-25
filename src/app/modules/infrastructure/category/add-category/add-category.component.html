@@ -2,7 +2,7 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">
-                {{editData ? 'Updated Category':'Add Category'}}
+                {{editFlag ? 'Updated Category':'Add Category'}}
             </h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
                 <mat-icon>close</mat-icon>
@@ -15,7 +15,7 @@
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Category Name</mat-label>
-                    <input matInput formControlName="fName" maxlength="20">
+                    <input matInput maxlength="20" [formControl]="category">
                     <mat-error></mat-error>
                 </mat-form-field>
             </div>
@@ -23,10 +23,9 @@
     </mat-card-content>
     <mat-card-footer>
         <mat-card-actions align="end" class="me-3 mb-2">
-            <button mat-stroked-button class="btn-second me-2" type="button" mat-dialog-close>{{'Labels.cancel'|
+            <button mat-stroked-button class="btn-second me-2" type="submit" mat-dialog-close>{{'Labels.cancel'|
                 translate}}</button>
-                <button mat-stroked-button class="btn-main" type="submit">{{editObj ? ('Labels.update'|
-                    translate):('Labels.submit'| translate)}}</button>
+                <button mat-stroked-button class="btn-main" type="submit" (click)="onSubmit()">{{editFlag?'Update':'Submit'}}</button>
         </mat-card-actions>
     </mat-card-footer>
 </mat-card>

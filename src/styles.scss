@@ -36,16 +36,16 @@ body {
   background-color: #EEEEEE
 }
 
-// :root {
-//   --main-color: rgb(3, 146, 134);
-//   --main-light-color: rgb(221, 255, 252);
-//   --main-dark-color: rgb(0, 95, 87);
-// }
 :root {
-  --main-color: rgb(244 92 14);
-  --main-light-color: rgb(254 239 231);
-  --main-dark-color: rgb(227, 59, 3);
+  --main-color: rgb(3, 146, 134);
+  --main-light-color: rgb(221, 255, 252);
+  --main-dark-color: rgb(0, 95, 87);
 }
+// :root {
+//   --main-color: rgb(244 92 14);
+//   --main-light-color: rgb(254 239 231);
+//   --main-dark-color: rgb(227, 59, 3);
+// }
 
 .text-main {
   color: var(--main-color);

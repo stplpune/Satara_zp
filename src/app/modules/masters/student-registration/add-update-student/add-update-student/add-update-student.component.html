@@ -137,7 +137,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.Relations'| translate}}</mat-label>                    
-                            <mat-select formControlName="religionId" (selectionChange)="getCatogory()">
+                            <mat-select formControlName="religionId" (selectionChange)="clearDropdown('religionId');getCatogory()">
                                 <mat-option *ngFor="let religon of religionArr" [value]="religon.id">{{languageFlag == 'EN'
                                     ?religon.religion:religon.m_Religion}}</mat-option>
                             </mat-select>
@@ -148,7 +148,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>                  
-                            <mat-select formControlName="casteCategoryId" (selectionChange)="getCaste()">
+                            <mat-select formControlName="casteCategoryId" (selectionChange)="clearDropdown('casteCategoryId');getCaste()">
                                 <mat-option *ngFor="let category of catogoryArr" [value]="category.id">{{languageFlag == 'EN'
                                     ?category.category:category.m_Category}}</mat-option>
                             </mat-select>
@@ -167,7 +167,7 @@
                             </mat-select>                         
                         </mat-form-field>
                         <button mat-stroked-button class="btn-icon btn-main" type="button" (click)="openDialog()"
-                            matTooltip="{{'Labels.add' | translate}}">
+                            matTooltip="{{'Labels.add' | translate}}" [disabled]="!stuRegistrationForm.value.casteCategoryId">
                             <mat-icon>add</mat-icon>
                         </button>
                     </div>
@@ -266,12 +266,84 @@
                     <p style="font-size: 11px;" class="mb-0 pb-0">{{'Labels.NoteImagePdfFormat' | translate}}</p>
                 </div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.gardiantDetails'| translate}}</mat-card-subtitle>
-                    <button mat-stroked-button class="btn-main" type="button" (click)="addGardian()">
-                        <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
+                <form  [formGroup]="addGardianForm">
+                    <div class="row">
+                        <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.gardiantDetails'| translate}}</mat-card-subtitle>
+                        <div class="col">
+                            <!-- <input formControlName="isHead" type="checkbox"  [disabled]="checkDisable"/> -->
+                            <mat-checkbox formControlName="isHead" [disabled]="checkDisable == true"> Is
+                                Default</mat-checkbox>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="outline" class="form-control">
+                                <mat-label>Mobile No.</mat-label>
+                                <input matInput formControlName="mobileNo" maxlength="10">
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="outline" class="form-control">
+                                <mat-label>Name</mat-label>
+                                <input matInput formControlName="name">
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="outline" class="form-control">
+                                <mat-label>Relations</mat-label>                                            
+                                <mat-select formControlName="relationId">
+                                <mat-option *ngFor="let relation of relationArr"
+                                    [value]="relation.id">{{relation.name}}</mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <button mat-stroked-button class="btn-main" type="submit" (click)="addGardian()" >
+                            <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
+                    </div>
+
+                </form>
+
+                <div class="row"> 
+                    <div class="col-sm-12">
+                        <div class="table-responsive table-height-xs scrollbar">
+                            <table class="dashboard-table">
+                                <table class="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col"> Sr.No. </th>
+                                        <!-- <th scope="col"> Check </th> -->
+                                        <th scope="col">Name</th>
+                                        <th scope="col"> Mobile No.</th>
+                                        <th scope="col">Relations</th>
+                                        <th scope="col">Action</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="let gardian of gardianModelArr; let i = index">
+                                        <td>{{i+1}}</td>
+                                        <!-- <td>{{gardian.isHead}}</td> -->
+                                        <td>{{gardian.name}}</td>
+                                        <td>{{gardian.mobileNo}}</td>
+                                        <td>{{gardian.relationId}}</td>
+                                        <td>
+                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
+                                                matTooltipClass="tooltip" type="button" (click)="deleteGardian(gardian,i)">
+                                                <mat-icon class="text-danger"> delete</mat-icon>
+                                            </button>
+                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
+                                                matTooltipClass="tooltip" type="button" (click)="updateGardian(gardian,i)">
+                                                <mat-icon class="text-danger"> edit</mat-icon>
+                                            </button>
+                                        </td>
+                                      </tr>                                      
+                                    </tbody>
+                                  </table>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
+              
+                <!-- <div class="row">
                     <div class="col-sm-12">
                         <div class="table-responsive table-height-xs scrollbar">
                             <table class="dashboard-table">
@@ -305,8 +377,7 @@
                                 </td>
                                     <td>
                                         <mat-form-field appearance="outline" class="form-control">
-                                            <mat-label>Relations</mat-label>
-                                            <!-- <input matInput formControlName="relationId"> -->
+                                            <mat-label>Relations</mat-label>                                            
                                             <mat-select formControlName="relationId">
                                             <mat-option *ngFor="let relation of relationArr"
                                                 [value]="relation.id">{{relation.name}}</mat-option>
@@ -317,19 +388,14 @@
                                         matTooltipPosition="right" matTooltipClass="tooltip" type="button" (click)="deleteGardian(i)">
                                         <mat-icon class="text-danger"> delete</mat-icon>
                                     </button>
-                                    </td>
-                                    <!-- <td>  <button mat-icon-button matTooltip="{{'Labels.Edit' | translate}}"
-                                        matTooltipPosition="right" matTooltipClass="tooltip" type="button">
-                                        <mat-icon class="text-main">edit</mat-icon>
-                                    </button>
-                                    </td> -->
+                                    </td>                               
                                   </tr>                             
                                 </tbody>
                               </table>
     
                         </div>
                     </div>
-                </div>
+                </div> -->
                 </mat-card-content>
                 <mat-card-footer>
                     <mat-card-actions align="end" class="me-3 mb-2">

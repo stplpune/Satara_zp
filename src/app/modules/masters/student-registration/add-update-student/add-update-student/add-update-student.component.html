@@ -1,16 +1,28 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.master'| translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.studentRegistration'| translate}}</li>
+    </ol>
+</nav>
+
 <mat-card class="plain-card">
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">{{editFlag ? ('Labels.studentUpdate'|
                 translate):('Labels.studentRegistration'| translate)}}</h6>
-            <button mat-icon-button mat-dialog-close class="btn-modal-close">
-                <mat-icon>close</mat-icon>
-            </button>
+            <a class="text-decoration-none text-main d-flex align-items-center">
+                <mat-icon>keyboard_double_arrow_left</mat-icon>
+                <span class="text-main mt-1">Back</span>
+            </a>
         </div>
     </mat-card-header>
     <form [formGroup]="stuRegistrationForm" (ngSubmit)="onSubmit()">
-        <mat-card-content class="card-body card-height-mid scrollbar">
-            <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.studentDetails'| translate}}</mat-card-subtitle>
+        <mat-card-content class="card-body pb-0">
+            <mat-card-subtitle class="mb-3 fw-bold">{{'Labels.studentDetails'| translate}}</mat-card-subtitle>
             <div class="row">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
@@ -136,22 +148,25 @@
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.Relations'| translate}}</mat-label>                    
-                            <mat-select formControlName="religionId" (selectionChange)="clearDropdown('religionId');getCatogory()">
-                                <mat-option *ngFor="let religon of religionArr" [value]="religon.id">{{languageFlag == 'EN'
-                                    ?religon.religion:religon.m_Religion}}</mat-option>
-                            </mat-select>
+                        <mat-label>{{'Labels.Relations'| translate}}</mat-label>
+                        <mat-select formControlName="religionId"
+                            (selectionChange)="clearDropdown('religionId');getCatogory()">
+                            <mat-option *ngFor="let religon of religionArr" [value]="religon.id">{{languageFlag == 'EN'
+                                ?religon.religion:religon.m_Religion}}</mat-option>
+                        </mat-select>
                         <!-- <mat-error *ngIf="fc['lName'].hasError('pattern')">{{'Labels.InvalidstudentLastName'|
                             translate}}</mat-error> -->
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.Category'| translate}}</mat-label>                  
-                            <mat-select formControlName="casteCategoryId" (selectionChange)="clearDropdown('casteCategoryId');getCaste()">
-                                <mat-option *ngFor="let category of catogoryArr" [value]="category.id">{{languageFlag == 'EN'
-                                    ?category.category:category.m_Category}}</mat-option>
-                            </mat-select>
+                        <mat-label>{{'Labels.Category'| translate}}</mat-label>
+                        <mat-select formControlName="casteCategoryId"
+                            (selectionChange)="clearDropdown('casteCategoryId');getCaste()">
+                            <mat-option *ngFor="let category of catogoryArr" [value]="category.id">{{languageFlag ==
+                                'EN'
+                                ?category.category:category.m_Category}}</mat-option>
+                        </mat-select>
                         <!-- <mat-error *ngIf="fc['lName'].hasError('pattern')">{{'Labels.InvalidstudentLastName'|
                             translate}}</mat-error> -->
                     </mat-form-field>
@@ -164,10 +179,11 @@
                                 <mat-option *ngFor="let cast of casteArr" [value]="cast.id">
                                     {{languageFlag == 'EN'?cast.caste:cast.m_Caste}}
                                 </mat-option>
-                            </mat-select>                         
+                            </mat-select>
                         </mat-form-field>
                         <button mat-stroked-button class="btn-icon btn-main" type="button" (click)="openDialog()"
-                            matTooltip="{{'Labels.add' | translate}}" [disabled]="!stuRegistrationForm.value.casteCategoryId">
+                            matTooltip="{{'Labels.add' | translate}}"
+                            [disabled]="!stuRegistrationForm.value.casteCategoryId">
                             <mat-icon>add</mat-icon>
                         </button>
                     </div>
@@ -235,7 +251,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.aadhaarNo'| translate}}</mat-label>
                         <input matInput formControlName="aadharNo" maxlength="12" minlength="12"
-                            (keypress)="validators.onlyDigits($event)">              
+                            (keypress)="validators.onlyDigits($event)">
                         <mat-error *ngIf="fc['aadharNo'].hasError('pattern')">{{'Labels.enterValidAadharNo'|
                             translate}}</mat-error>
                     </mat-form-field>
@@ -265,85 +281,87 @@
                     </div>
                     <p style="font-size: 11px;" class="mb-0 pb-0">{{'Labels.NoteImagePdfFormat' | translate}}</p>
                 </div>
-                </div>
-                <form  [formGroup]="addGardianForm">
-                    <div class="row">
-                        <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.gardiantDetails'| translate}}</mat-card-subtitle>
-                        <div class="col">
-                            <!-- <input formControlName="isHead" type="checkbox"  [disabled]="checkDisable"/> -->
-                            <mat-checkbox formControlName="isHead" [disabled]="checkDisable == true"> Is
-                                Default</mat-checkbox>
-                        </div>
-                        <div class="col">
-                            <mat-form-field appearance="outline" class="form-control">
-                                <mat-label>Mobile No.</mat-label>
-                                <input matInput formControlName="mobileNo" maxlength="10">
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field appearance="outline" class="form-control">
-                                <mat-label>Name</mat-label>
-                                <input matInput formControlName="name">
-                            </mat-form-field>
-                        </div>
-                        <div class="col">
-                            <mat-form-field appearance="outline" class="form-control">
-                                <mat-label>Relations</mat-label>                                            
-                                <mat-select formControlName="relationId">
+            </div>
+        </mat-card-content>
+        <mat-card-content class="card-body">
+            <form [formGroup]="addGardianForm">
+                <div class="row">
+                    <mat-card-subtitle class="mb-3 fw-bold">{{'Labels.gardiantDetails'| translate}}</mat-card-subtitle>
+                    <!-- <div class="col">
+                        <!-- <input formControlName="isHead" type="checkbox"  [disabled]="checkDisable"/> --
+                        <mat-checkbox formControlName="isHead" [disabled]="checkDisable == true"> Is
+                            Default</mat-checkbox>
+                    </div> -->
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Mobile No.</mat-label>
+                            <input matInput formControlName="mobileNo" maxlength="10">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Relations</mat-label>
+                            <mat-select formControlName="relationId">
                                 <mat-option *ngFor="let relation of relationArr"
                                     [value]="relation.id">{{relation.name}}</mat-option>
                             </mat-select>
-                            </mat-form-field>
-                        </div>
+                        </mat-form-field>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <button mat-stroked-button class="btn-main" type="submit" (click)="addGardian()" >
-                            <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
-                    </div>
-
-                </form>
-
-                <div class="row"> 
-                    <div class="col-sm-12">
-                        <div class="table-responsive table-height-xs scrollbar">
-                            <table class="dashboard-table">
-                                <table class="table">
-                                    <thead>
-                                      <tr>
+                </div>
+                <div class="d-flex justify-content-end align-items-center mb-3">
+                    <button mat-stroked-button class="btn-main" type="submit" (click)="addGardian()">
+                        <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
+                </div>
+            </form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive table-height-xs scrollbar">
+                        <table class="dashboard-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
                                         <th scope="col"> Sr.No. </th>
                                         <!-- <th scope="col"> Check </th> -->
                                         <th scope="col">Name</th>
                                         <th scope="col"> Mobile No.</th>
                                         <th scope="col">Relations</th>
                                         <th scope="col">Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr *ngFor="let gardian of gardianModelArr; let i = index">
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let gardian of gardianModelArr; let i = index">
                                         <td>{{i+1}}</td>
                                         <!-- <td>{{gardian.isHead}}</td> -->
                                         <td>{{gardian.name}}</td>
                                         <td>{{gardian.mobileNo}}</td>
                                         <td>{{gardian.relationId}}</td>
                                         <td>
-                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
-                                                matTooltipClass="tooltip" type="button" (click)="deleteGardian(gardian,i)">
+                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
+                                                matTooltipPosition="right" matTooltipClass="tooltip" type="button"
+                                                (click)="deleteGardian(gardian,i)">
                                                 <mat-icon class="text-danger"> delete</mat-icon>
                                             </button>
-                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
-                                                matTooltipClass="tooltip" type="button" (click)="updateGardian(gardian,i)">
+                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
+                                                matTooltipPosition="right" matTooltipClass="tooltip" type="button"
+                                                (click)="updateGardian(gardian,i)">
                                                 <mat-icon class="text-danger"> edit</mat-icon>
                                             </button>
                                         </td>
-                                      </tr>                                      
-                                    </tbody>
-                                  </table>
+                                    </tr>
+                                </tbody>
                             </table>
-                        </div>
+                        </table>
                     </div>
                 </div>
-              
-                <!-- <div class="row">
+            </div>
+
+            <!-- <div class="row">
                     <div class="col-sm-12">
                         <div class="table-responsive table-height-xs scrollbar">
                             <table class="dashboard-table">
@@ -392,18 +410,17 @@
                                   </tr>                             
                                 </tbody>
                               </table>
-    
                         </div>
                     </div>
                 </div> -->
-                </mat-card-content>
-                <mat-card-footer>
-                    <mat-card-actions align="end" class="me-3 mb-2">
-                        <button mat-stroked-button class="btn-second me-2" type="button" mat-dialog-close>{{'Labels.cancel'|
-                            translate}}</button>
-                        <button mat-stroked-button class="btn-main" type="submit">{{editObj ? ('Labels.update'|
-                            translate):('Labels.submit'| translate)}}</button>
-                    </mat-card-actions>
-                </mat-card-footer>
-                </form>
-    </mat-card>
+        </mat-card-content>
+        <mat-card-footer>
+            <mat-card-actions align="end" class="me-3 mb-2">
+                <button mat-stroked-button class="btn-second me-2" type="button" mat-dialog-close>{{'Labels.cancel'|
+                    translate}}</button>
+                <button mat-stroked-button class="btn-main" type="submit">{{editObj ? ('Labels.update'|
+                    translate):('Labels.submit'| translate)}}</button>
+            </mat-card-actions>
+        </mat-card-footer>
+    </form>
+</mat-card>

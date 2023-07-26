@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ExpenseGuard } from 'src/app/core/guards/expense.guard';
 import { SecureComponent } from './secure.component';
 import { AddUpdateStudentComponent } from 'src/app/modules/masters/student-registration/add-update-student/add-update-student/add-update-student.component';
+import { AddSchoolProfileComponent } from 'src/app/modules/masters/school-registration/add-school-profile/add-school-profile.component';
 
 const routes: Routes = [
   { path: '', component: SecureComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'school-registration', loadChildren: () => import('../../modules/masters/school-registration/school-registration.module').then(m => m.SchoolRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'School Registration', m_title: 'शाळा नोंदणी', active: true }] } },
   { path: 'student-registration', loadChildren: () => import('../../modules/masters/student-registration/student-registration.module').then(m => m.StudentRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Student Registration',m_title: 'विद्यार्थी नोंदणी', active: true }] } },
   { path: 'add-student', component:AddUpdateStudentComponent , data: { breadcrumb: [{ title: 'Add Student',m_title: 'विद्यार्थी नोंदणी', active: true }] } },
+  { path: 'view-profile-school', component:AddSchoolProfileComponent , data: { breadcrumb: [{ title: 'view-profie',m_title: 'प्रोफाइल पहा', active: true }] } },
   // { path: 'student-details', loadChildren: () => import('../../modules/masters/student-registration/student-details/student-details.module').then(m => m.StudentDetailsModule) },
   { path: 'teacher-registration', loadChildren: () => import('../../modules/masters/teacher-registration/teacher-registration.module').then(m => m.TeacherRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Teacher Registration',m_title: 'शिक्षक नोंदणी', active: true }] } },
   { path: 'office-user-registration', loadChildren: () => import('../../modules/masters/office-users/office-users.module').then(m => m.OfficeUsersModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Office User Registration',m_title: 'ऑफिस वापरकर्ते नोंदणी', active: true }] } },

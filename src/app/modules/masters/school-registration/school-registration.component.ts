@@ -12,6 +12,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-school-registration',
@@ -53,7 +54,8 @@ export class SchoolRegistrationComponent implements OnInit {
     public webStorageS: WebStorageService,
     private downloadFileService: DownloadPdfExcelService,
     private ngxSpinner: NgxSpinnerService,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private router:Router
   ) { }
 
   ngOnInit() {
@@ -308,6 +310,8 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   openDetailsDialog(obj: any) {
+    this.router.navigate(['/view-profile-school'])
+    return;
     var data = {
       // headerImage: obj.uploadImage || "assets/images/user.png",
       headerImage: obj.uploadImage || "assets/images/School_svg.svg",

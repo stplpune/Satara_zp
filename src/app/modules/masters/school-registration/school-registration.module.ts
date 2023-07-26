@@ -22,6 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AddSchoolProfileComponent } from './add-school-profile/add-school-profile.component';
+import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [
     AddUpdateSchoolRegistrationComponent,
@@ -47,7 +48,8 @@ import { AddSchoolProfileComponent } from './add-school-profile/add-school-profi
     GlobalImgComponent,
     TranslateModule,
     GridViewComponent,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTableModule
   
 ]
 })

@@ -2,7 +2,9 @@ import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
@@ -12,7 +14,7 @@ import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
-import { AddUpdateStudentRegistrationComponent } from './add-update-student-registration/add-update-student-registration.component';
+// import { AddUpdateStudentRegistrationComponent } from './add-update-student-registration/add-update-student-registration.component';
 // import { StudentDetailsComponent } from './student-details/student-details.component';
 @Component({
   selector: 'app-student-registration',
@@ -52,7 +54,9 @@ export class StudentRegistrationComponent {
     public validators: ValidationService,
     private masterService: MasterService,
     public datepipe: DatePipe,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router : Router,
+    private encDec: AesencryptDecryptService
   ) { }
 
   ngOnInit() {
@@ -174,7 +178,7 @@ export class StudentRegistrationComponent {
         this.getTableData();
         break;
       case 'Edit':
-        this.addUpdateStudent(JSON.stringify(obj));
+        this.addUpdateStudent(obj);
         break;
       case 'Delete':
         this.deteleDialogOpen(obj);
@@ -185,25 +189,39 @@ export class StudentRegistrationComponent {
     }
   }
 
+ 
+
   addUpdateStudent(obj?: any) {
-    const dialogRef = this.dialog.open(AddUpdateStudentRegistrationComponent, {
-      width: '900px',
-      data: obj,
-      disableClose: true,
-      autoFocus: false
-    });
-    dialogRef.afterClosed().subscribe((result: any) => {
-      obj = obj ? JSON.parse(obj) : ''
-      if (result == 'yes' && obj) {
-        this.pageNumber = obj.pageNumber;
-        this.getTableData();
-      } else if (result == 'yes') {
-        this.pageNumber = 1;
-        this.getTableData();
-      }
-      this.highLightFlag =false;
-      this.setTableData();
-    });
+    console.log("obj",obj?.id);
+    if(obj){
+      let id:any = obj.id;
+      let formdata:any = this.encDec.encrypt(`${id}`);
+       this.router.navigate(['/add-student'], {
+         queryParams: { id: formdata },
+       });
+    }else{
+      this.router.navigate(['/add-student'])
+    }
+      
+
+    // const dialogRef = this.dialog.open(AddUpdateStudentRegistrationComponent, {
+    //   width: '900px',
+    //   data: obj,
+    //   disableClose: true,
+    //   autoFocus: false
+    // });
+    // dialogRef.afterClosed().subscribe((result: any) => {
+    //   obj = obj ? JSON.parse(obj) : ''
+    //   if (result == 'yes' && obj) {
+    //     this.pageNumber = obj.pageNumber;
+    //     this.getTableData();
+    //   } else if (result == 'yes') {
+    //     this.pageNumber = 1;
+    //     this.getTableData();
+    //   }
+    //   this.highLightFlag =false;
+    //   this.setTableData();
+    // });
   }
 
   childGridCompInfo(obj: any) {

@@ -1,18 +1,21 @@
-<form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()">
-    <mat-card class="plain-card">
-        <mat-card-header class="card-header">
-            <div class="d-flex align-items-center justify-content-between w-100">
-                <h6 class="text-main mb-0 fw-bold">{{editFlag ?( 'Labels.updateSchool' | translate)
-                    :('Labels.registerSchool' | translate)}}</h6>
-                <button mat-icon-button mat-dialog-close class="btn-modal-close">
-                    <mat-icon>
-                        close
-                    </mat-icon>
-                </button>
-            </div>
-        </mat-card-header>
 
-        <mat-card-content class="card-body card-height-full scrollbar">
+    <mat-card class="plain-card">
+        
+    <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()">
+        
+        <ng-container *ngIf="userId == 1">
+            <mat-card-header class="card-header">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <h6 class="text-main mb-0 fw-bold">{{editFlag ?( 'Labels.updateSchool' | translate)
+                        :('Labels.registerSchool' | translate)}}</h6>
+                    <button mat-icon-button mat-dialog-close class="btn-modal-close">
+                        <mat-icon>
+                            close
+                        </mat-icon>
+                    </button>
+                </div>
+            </mat-card-header>
+        <mat-card-content class="card-body card-height-sm scrollbar">
             <div class="row gx-2 gy-0">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
@@ -43,7 +46,6 @@
                         </mat-error> -->
                     </mat-form-field>
                 </div>
-
 
                 <!-- New Changes -->
                 <div class="col-sm-4">
@@ -285,34 +287,56 @@
                     <!-- Display Image -->
                 </div>
             </div>
+        </mat-card-content>
+        <mat-card-footer class="card-footer">
+            <div class="d-flex justify-content-end align-items-center">
+                <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' |
+                    translate}}</button>
+                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
+                    :('Labels.submit' |
+                    translate)}}</button>
+            </div>
+        </mat-card-footer>
+    </ng-container>
+    </form>
 
-            <!--------------Add-Event-------->
-
-            <ng-container>
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmitEvent()">
+        <ng-container *ngIf="userId !== 1">
+            <mat-card-header class="card-header">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <h6 class="text-main mb-0 fw-bold">Event Registration</h6>
+                    <button mat-icon-button mat-dialog-close class="btn-modal-close">
+                        <mat-icon>
+                            close
+                        </mat-icon>
+                    </button>
+                </div>
+            </mat-card-header>
+        <mat-card-content class="card-body card-height-sm scrollbar">
                 <div class="row">
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Event Name</mat-label>
-                            <input matInput>
+                            <input matInput formControlName="eventName">
                         </mat-form-field>
                     </div>
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Description</mat-label>
-                            <textarea matInput></textarea>
+                            <textarea matInput formControlName="description"></textarea>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-12">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div formArrayName="schoolDocument"
+                            <div formArrayName="eventImages"
                                 *ngFor="let img of multipleImg.controls; let i = index;">
                                 <div [formGroupName]="i" class="d-flex">
                                     <div class="upload-btn-wrapper">
                                         <button type="button" class="upload-btn"
-                                            (click)="uploadGallImage.click()">{{'Labels.UploadEventPhoto'|
+                                            (click)="uploadEventImage.click()">{{'Labels.UploadEventPhoto'|
                                             translate}}</button>
                                         <input type="file" name="myfile" formControlName="docPath" multiple
-                                            #uploadGallImage (change)="multipleImgUpload($event)"
+                                            #uploadEventImage (change)="multipleImgUpload($event)"
                                             accept=".png, .jpg, .jpeg" />
                                     </div>
                                 </div>
@@ -337,6 +361,13 @@
                         </div>
                         <!-- Display Image -->
                     </div>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' |
+                                translate}}</button>
+                            <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
+                                :('Labels.submit' |
+                                translate)}}</button>
+                        </div>
                     <div class="col-sm-12 mt-3">
                         <div class="table-responsive">
                             <table class="table dashboard-table">
@@ -348,9 +379,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>zpschool</td>
+                                    <tr *ngFor="let data of tableDataArray; let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{data?.eventName}}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <button mat-icon-button id="tooltip"
@@ -371,17 +402,9 @@
                         </div>
                     </div>
                 </div>
-            </ng-container>
-            <!--------------Add-Event-------->
         </mat-card-content>
-        <mat-card-footer class="card-footer">
-            <div class="d-flex justify-content-end align-items-center">
-                <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' |
-                    translate}}</button>
-                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
-                    :('Labels.submit' |
-                    translate)}}</button>
-            </div>
-        </mat-card-footer>
-    </mat-card>
-</form>
+        
+    </ng-container>
+    </form>
+</mat-card>
+

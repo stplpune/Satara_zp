@@ -19,7 +19,7 @@ export class AddAssetTypeComponent {
   subcategoryresp: any;
   assetTypeFrm!: FormGroup;
   editFlag: boolean = false;
-  editId:any;
+  editId: any;
   constructor(private fb: FormBuilder,
     private apiService: ApiService,
     private commonMethod: CommonMethodsService,
@@ -32,7 +32,7 @@ export class AddAssetTypeComponent {
   ngOnInit() {
     this.defaultFrom();
     this.getCategory();
-    this.data?this.editData():'';
+    this.data ? this.editData() : '';
   }
 
   defaultFrom() {
@@ -59,19 +59,32 @@ export class AddAssetTypeComponent {
     })
   }
 
+  // getSubCategory(categoryId: any) {
+  //   this.apiService.setHttp('get', 'zp-satara/master/GetAllAssetSubCategory?CategoryId=' + categoryId + '&flag_lang=m', false, false, false, 'baseUrl');
+  //   this.apiService.getHttp().subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == "200") {
+  //         this.subcategoryresp = res.responseData;
+  //       } else {
+  //         this.subcategoryresp = [];
+  //       }
+  //     },
+  //     error: ((err: any) => { this.errors.handelError(err) })
+  //   });
+
+  // }
   getSubCategory(categoryId: any) {
-    this.apiService.setHttp('get', 'zp-satara/master/GetAllAssetSubCategory?CategoryId=' + categoryId + '&flag_lang=m', false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
+    this.masterService.GetAssetSubCateByCateId(categoryId, '').subscribe({
       next: (res: any) => {
-        if (res.statusCode == "200") {
+        if (res.statusCode == '200') {
           this.subcategoryresp = res.responseData;
         } else {
           this.subcategoryresp = [];
+          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          this.subcategoryresp = [];
         }
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
-
   }
 
 
@@ -88,7 +101,7 @@ export class AddAssetTypeComponent {
       "createdDate": data.createdDate,
       "modifiedDate": data.modifiedDate,
       "isDeleted": data.isDeleted,
-      "id": this.editFlag?this.editId:0,
+      "id": this.editFlag ? this.editId : 0,
       "categoryId": formData.category,
       "subCategoryId": formData.subCategory,
       "type": formData.assetType,
@@ -98,7 +111,7 @@ export class AddAssetTypeComponent {
 
     let method = this.editFlag ? 'PUT' : 'POST';
     let url = this.editFlag ? 'UpdateType' : 'AddType';
-    this.apiService.setHttp(method, 'zp-satara/AssetType/'+url, false, obj, false, 'baseUrl');
+    this.apiService.setHttp(method, 'zp-satara/AssetType/' + url, false, obj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -115,13 +128,20 @@ export class AddAssetTypeComponent {
 
   editData() {
     this.editFlag = true;
-    this.editId=this.data.id;
+    this.editId = this.data.id;
     this.assetTypeFrm.patchValue({
-      category:this.data.categoryId,
-      subCategory:this.data.subCategoryId,
-      assetType:this.data.type,
+      category: this.data.categoryId,
+      subCategory: this.data.subCategoryId,
+      assetType: this.data.type,
     })
     this.getSubCategory(this.data.categoryId);
+  }
+
+  clearDrop(flag?: string) {
+    if (flag == 'category') {
+      this.assetTypeFrm.controls['subCategory'].setValue(0);
+    } 
+    
   }
 
 

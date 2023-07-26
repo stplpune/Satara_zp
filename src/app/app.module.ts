@@ -9,9 +9,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'; import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { AuthInterceptor } from './core/guards/auth.interceptor';
 import { ApiService } from './core/services/api.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTooltipModule } from '@angular/material/tooltip';
 export function httpTranslateLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -29,6 +34,12 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
     NgxSpinnerModule,
     ReactiveFormsModule,
     HttpClientModule,
+    MatSelectModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule, 
+    MatTooltipModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -43,7 +54,7 @@ export function httpTranslateLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true // option. This is required and tells Angular that HTTP_INTERCEPTORS is an array of values, rather than a single value.
-    }
+    },  MatDatepickerModule
   ],
   bootstrap: [AppComponent]
 })

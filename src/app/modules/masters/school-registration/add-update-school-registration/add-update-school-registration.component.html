@@ -54,7 +54,7 @@
                         <!-- <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
                             formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
                             [class.disabled]="editObj?.isKendraSchool == true || !schoolRegForm.value.talukaId" />Yes -->
-                            <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
+                        <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
                             formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
                             [class.disabled]="editObj" />Yes
                         <!-- </mat-select> -->
@@ -131,7 +131,6 @@
                 </div>
 
                 <div class="col-sm-6">
-
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.school' | translate}}</mat-label>
                         <textarea matInput formControlName="schoolName" maxlength="100"
@@ -162,8 +161,9 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.schoolCode' | translate}}</mat-label>
-                    <input matInput maxlength="15"  (keypress)="validationService.alphaNumericOnly" formControlName="schoolCode">
-                </mat-form-field>
+                        <input matInput maxlength="15" (keypress)="validationService.alphaNumericOnly"
+                            formControlName="schoolCode">
+                    </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
@@ -226,38 +226,90 @@
                         </mat-error> -->
                     </mat-form-field>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="upload-btn-wrapper">
-                                <button class="upload-btn" (click)="uploadProImage.click()"
-                                    type="button">{{'Labels.UploadProfilePhoto' | translate}}</button>
-                                <input type="file" name="myfile" formControlName="uploadImage"
-                                    (change)="imgUpload($event)" #uploadProImage accept=".png, .jpg, .jpeg">
-                            </div>
-                            <div class="action-btn" *ngIf="uploadImg">
-                                <button mat-icon-button class="btn-icon text-primary" type="button" *ngIf="uploadImg"
-                                    (click)="viewImg()" matTooltip="{{'Labels.View' | translate}}"
-                                    matTooltipPosition="below" matTooltipClass="tooltip">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                                <button mat-icon-button class="btn-icon text-danger" type="button" *ngIf="uploadImg"
-                                    (click)="clearImg()" matTooltip="{{'Labels.delete' | translate}}"
-                                    matTooltipPosition="below" matTooltipClass="tooltip">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="upload-btn-wrapper">
+                            <button class="upload-btn" (click)="uploadProImage.click()"
+                                type="button">{{'Labels.UploadProfilePhoto' | translate}}</button>
+                            <input type="file" name="myfile" formControlName="uploadImage" (change)="imgUpload($event)"
+                                #uploadProImage accept=".png, .jpg, .jpeg">
+                        </div>
+                        <div class="action-btn" *ngIf="uploadImg">
+                            <button mat-icon-button class="btn-icon text-primary" type="button" *ngIf="uploadImg"
+                                (click)="viewImg()" matTooltip="{{'Labels.View' | translate}}"
+                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button mat-icon-button class="btn-icon text-danger" type="button" *ngIf="uploadImg"
+                                (click)="clearImg()" matTooltip="{{'Labels.delete' | translate}}"
+                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div formArrayName="schoolDocument" *ngFor="let img of multipleImg.controls; let i = index;">
+                            <div [formGroupName]="i" class="d-flex">
+                                <div class="upload-btn-wrapper">
+                                    <button type="button" class="upload-btn"
+                                        (click)="uploadGallImage.click()">{{'Labels.UploadSchoolPhoto' |
+                                        translate}}</button>
+                                    <input type="file" name="myfile" formControlName="docPath" multiple #uploadGallImage
+                                        (change)="multipleImgUpload($event)" accept=".png, .jpg, .jpeg" />
+                                </div>
                             </div>
                         </div>
-                        <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                    </div>
+                    <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                    <!-- Display Image -->
+                    <div class="d-flex flex-wrap gap-4">
+                        <ng-container *ngFor="let item of imgArray; let i = index">
+                            <div class="gallery position-relative">
+                                <img [src]="item.docPath" height="130px" width="130px" class="border">
+                                <span class="position-absolute" style="top:-17px;right:-17px;">
+                                    <button type="button" mat-icon-button
+                                        class="bg-danger bg-opacity-25 text-danger material-icons"
+                                        (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
+                                        matTooltipPosition="right" matTooltipClass="tooltip">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- Display Image -->
+                </div>
+            </div>
+
+            <!--------------Add-Event-------->
+
+            <ng-container>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Event Name</mat-label>
+                            <input matInput>
+                        </mat-form-field>
                     </div>
                     <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Description</mat-label>
+                            <textarea matInput></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-12">
                         <div class="d-flex justify-content-between align-items-center">
                             <div formArrayName="schoolDocument"
                                 *ngFor="let img of multipleImg.controls; let i = index;">
                                 <div [formGroupName]="i" class="d-flex">
                                     <div class="upload-btn-wrapper">
                                         <button type="button" class="upload-btn"
-                                            (click)="uploadGallImage.click()">{{'Labels.UploadSchoolPhoto' |
+                                            (click)="uploadGallImage.click()">{{'Labels.UploadEventPhoto'|
                                             translate}}</button>
                                         <input type="file" name="myfile" formControlName="docPath" multiple
                                             #uploadGallImage (change)="multipleImgUpload($event)"
@@ -265,7 +317,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
                         <!-- Display Image -->
@@ -286,9 +337,42 @@
                         </div>
                         <!-- Display Image -->
                     </div>
+                    <div class="col-sm-12 mt-3">
+                        <div class="table-responsive">
+                            <table class="table dashboard-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Event Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>zpschool</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <button mat-icon-button id="tooltip"
+                                                    matTooltip="{{'Labels.edit' | translate}}"
+                                                    matTooltipPosition="right" matTooltipClass="tooltip">
+                                                    <mat-icon class="text-main">edit</mat-icon>
+                                                </button>
+                                                <button mat-icon-button id="tooltip"
+                                                    matTooltip="{{'Labels.edit' | translate}}"
+                                                    matTooltipPosition="right" matTooltipClass="tooltip">
+                                                    <mat-icon class="text-main">delete</mat-icon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-
-            </div>
+            </ng-container>
+            <!--------------Add-Event-------->
         </mat-card-content>
         <mat-card-footer class="card-footer">
             <div class="d-flex justify-content-end align-items-center">

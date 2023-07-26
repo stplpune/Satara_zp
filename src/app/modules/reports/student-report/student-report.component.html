@@ -39,7 +39,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="clearDropdown('talukaId');getAllCenter();getVillage()">
+                            (selectionChange)="clearDropdown('talukaId');getAllCenter();">
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
                         </mat-select>

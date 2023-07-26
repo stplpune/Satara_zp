@@ -23,7 +23,8 @@ export class AddUpdateStudentComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Action'];
  
   
-  stuRegistrationForm!: FormGroup
+  stuRegistrationForm!: FormGroup;
+  addGardianForm!: FormGroup
   districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
@@ -54,7 +55,11 @@ export class AddUpdateStudentComponent {
   gaurdianModel!:FormArray
   data: any;
   studentId!:number;
+  gardianModelArr = new Array();
   // headerFlag:boolean = false;
+  updategardianIndex !: number;
+  updategardianFlag : boolean = false
+  checkDisable:boolean = false
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
@@ -65,19 +70,14 @@ export class AddUpdateStudentComponent {
     private fileUpl: FileUploadService, private apiService: ApiService,
     private webService: WebStorageService, private datePipe: DatePipe,
     private commonMethods: CommonMethodsService, public validators: ValidationService, private ngxSpinner: NgxSpinnerService,
-    // public dialogRef: MatDialogRef<AddUpdateStudentRegistrationComponent>,
     private activatedRoute :ActivatedRoute,
     private encDec: AesencryptDecryptService,
     private router : Router
     ) { 
      this.loginData = this.webService.getLoggedInLocalstorageData();   
-     let studentObj: any;
-    //  let decryptData:any
+     let studentObj: any;    
      this.activatedRoute.queryParams.subscribe((queryParams: any) => { studentObj = queryParams['id'] });
      this.studentId = +this.encDec.decrypt(`${decodeURIComponent(studentObj)}`);
-     console.log("decryptData",this.studentId);
-     
-
     }
 
     getGardianList(): FormArray {
@@ -91,6 +91,7 @@ export class AddUpdateStudentComponent {
   ngOnInit() {
     this.languageFlag = this.webService.languageFlag;
     this.formData();
+    this.gardianFormData()
     // this.data ? (this.editObj = JSON.parse(this.data), this.patchValue()) : this.allDropdownMethods();
     this.studentId ? ( this.onEdit(this.studentId)) : this.allDropdownMethods();
   }
@@ -128,9 +129,7 @@ export class AddUpdateStudentComponent {
       motherName: [''],
       // m_MotherName: ['', Validators.required],
       aadharNo: ['', [Validators.pattern(this.validators.aadhar_card)]],
-      gaurdianModel:this.fb.array ([
-        // this.data ?'': this.newGardianDetails()
-      ])    
+      gaurdianModel:[]  
  
     
       // physicallyDisabled: ['', Validators.required]
@@ -139,64 +138,129 @@ export class AddUpdateStudentComponent {
 
   get fc() { return this.stuRegistrationForm.controls }
 
+  gardianFormData(){
+    this.addGardianForm = this.fb.group({
+      createdBy: 0,
+      modifiedBy: 0,
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      isDeleted: 0,
+      id: 0,      
+      name: ['',[Validators.required, Validators.pattern(this.validators.name)]],
+      m_Name: [''],     
+      mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
+      relationId: ['',[Validators.required]],
+      isHead:false,
+      headerId: 0,
+      timestamp: new Date(),
+      localId: 0   
+    })
+  }
+
   //#region ---------------------------- Dropdown start here -----------------------------------------------
 
-  newGardianDetails() { 
-   return this.fb.group({   
-        createdBy: 0,
-        modifiedBy: 0,
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        isDeleted: 0,
-        id: 0,      
-        name: ['',[Validators.required, Validators.pattern(this.validators.name)]],
-        m_Name: [''],     
-        mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
-        relationId: ['',[Validators.required]],
-        isHead:false,
-        headerId: 0,
-        timestamp: new Date(),
-        localId: 0        
-      });  
- 
-  }
-
-  
-  addGardian() { 
-    let gardianArr = this.getGardianList().value 
-    let gardianObj = this.formArrayControls[0]?.get('name')?.value
-
-    // this.formArrayControls[0].get('name')
-    console.log('name formcontrol', gardianObj);
-    console.log("gardianArr",gardianArr.length);
-    if(gardianArr.length > 1){
-      gardianArr.forEach((res:any)=>{
-        if(res.name == this.formArrayControls[0]?.get('name')?.value){
-          console.log("enter if name block");
+  addGardian(){
+    let formvalue = this.addGardianForm.value;
+    if(this.updategardianFlag == true){
+      this.gardianModelArr[this.updategardianIndex] = formvalue;
+      this.updategardianFlag = false;
+    }
+   else if(this.gardianModelArr.length == 0){
+      this.gardianModelArr.push(formvalue);
+    }else{
+      this.gardianModelArr.forEach((res:any)=>{
+        if(res.name == formvalue.name){
           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
           return;
-        }else if(res.mobileNo == gardianObj.mobileNo){
-          console.log("enter else if mobile block");
+        }else if(res.mobileNo == formvalue.mobileNo){
           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
           return;
+        }else{
+          this.gardianModelArr.push(formvalue);
         }
-        
       })
-    }
-   
-    
-    if (this.getGardianList().invalid) {
-      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
-      return;
-    } else {
-      this.getGardianList().push(this.newGardianDetails());
-    }
-     
+    } 
+    this.addGardianForm.reset();
+    this.gardianModelArr.forEach((res:any)=>{
+      if(res.isHead == true){ 
+        this.checkDisable = true;
+      }
+    })
+ 
+    // console.log("gardianModelArr",this.gardianModelArr);
   }
 
 
-  deleteGardian(i: any) {
-    this.getGardianList().removeAt(i);
+  // newGardianDetails() { 
+  //  return this.fb.group({   
+  //       createdBy: 0,
+  //       modifiedBy: 0,
+  //       createdDate: new Date(),
+  //       modifiedDate: new Date(),
+  //       isDeleted: 0,
+  //       id: 0,      
+  //       name: ['',[Validators.required, Validators.pattern(this.validators.name)]],
+  //       m_Name: [''],     
+  //       mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
+  //       relationId: ['',[Validators.required]],
+  //       isHead:false,
+  //       headerId: 0,
+  //       timestamp: new Date(),
+  //       localId: 0        
+  //     });  
+ 
+  // }
+
+  
+  // addGardian() { 
+  //   let gardianArr = this.getGardianList().value 
+  //   let gardianObj = this.formArrayControls[0]?.get('name')?.value
+
+  //   // this.formArrayControls[0].get('name')
+  //   console.log('name formcontrol', gardianObj);
+  //   console.log("gardianArr",gardianArr.length);
+  //   if(gardianArr.length > 1){
+  //     gardianArr.forEach((res:any)=>{
+  //       if(res.name == this.formArrayControls[0]?.get('name')?.value){
+  //         console.log("enter if name block");
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }else if(res.mobileNo == gardianObj.mobileNo){
+  //         console.log("enter else if mobile block");
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }
+        
+  //     })
+  //   }
+   
+    
+  //   if (this.getGardianList().invalid) {
+  //     this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
+  //     return;
+  //   } else {
+  //     this.getGardianList().push(this.newGardianDetails());
+  //   }
+     
+  // }
+
+
+  deleteGardian(data:any,i: any) {
+    this.gardianModelArr[i].isHead == true ? this.checkDisable = false : '';
+    // this.gardianModelArr.splice(i,1,'');
+    this.gardianModelArr = this.gardianModelArr.filter(item => item !== data);
+   
+   
+
+  }
+  updateGardian(obj:any,i:any){
+    console.log("index",i);   
+    this.updategardianIndex = i;
+    this.updategardianFlag = true;
+    this.addGardianForm.controls['name'].setValue(obj.name);
+    this.addGardianForm.controls['mobileNo'].setValue(obj.mobileNo);
+    this.addGardianForm.controls['relationId'].setValue(obj.relationId);
+    
   }
 
   getDistrict() {
@@ -415,27 +479,13 @@ export class AddUpdateStudentComponent {
     this.uploadAadhaar = aadharObj?.docPath;
     this.uploadImg = imageObj?.docPath;
 
-    this.editObj.gaurdianModel.forEach((x: any) => {
-      this.getGardianList().push(this.fb.group({
-        createdBy: 0,
-        modifiedBy: 0,
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        isDeleted: 0,
-        id: x.id,
-        name: x.name,
-        m_Name:x.m_Name ,
-        mobileNo: x.mobileNo,
-        relationId:x.relationId ,
-        isHead: x.isHead,
-        headerId: x.headerId,
-        timestamp: new Date(),
-        localId: 0
-         
-    }))
-  
-    });
-      this.allDropdownMethods();
+    this.gardianModelArr = this.editObj.gaurdianModel
+    this.gardianModelArr.forEach((res:any)=>{
+      if(res.isHead == true){ 
+        this.checkDisable = true;
+      }
+    })
+    this.allDropdownMethods();
   }
 
   
@@ -520,6 +570,7 @@ export class AddUpdateStudentComponent {
       "gender": obj.gender,
       "dob": dateWithTime,
       "religionId": obj.religionId,
+      "casteCategoryId":obj.casteCategoryId,
       "castId": obj.castId,
       "aadharNo": obj.aadharNo,
       "isCastCertificate": true,
@@ -533,7 +584,7 @@ export class AddUpdateStudentComponent {
       "fatherFullName": obj.fatherFullName?.trim(),
       "motherName": obj.motherName?.trim(),
       "mobileNo": obj.mobileNo,
-      "gaurdianModel":this.getGardianList().value,
+      "gaurdianModel":this.gardianModelArr,
       "documentModel": this.imageArray,
       "lan": this.languageFlag,
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
@@ -647,6 +698,10 @@ export class AddUpdateStudentComponent {
       this.stuRegistrationForm.controls['standard'].setValue('');
     }
      else if (name == 'religionId') {
+      this.stuRegistrationForm.controls['casteCategoryId'].setValue('');
+      this.stuRegistrationForm.controls['castId'].setValue('');     
+      this.casteArr = [];
+    }else if(name =='casteCategoryId'){
       this.stuRegistrationForm.controls['castId'].setValue('');
     }
   }
@@ -683,10 +738,8 @@ export class AddUpdateStudentComponent {
       disableClose: true,
       autoFocus: false
     });
-
     dialogRef.afterClosed().subscribe((result: any) => {
      result == 'yes' ? this.getCaste() :'';
-  
     });
   
 }

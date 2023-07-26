@@ -10,7 +10,7 @@ import { WebStorageService } from './web-storage.service';
   providedIn: 'root'
 })
 export class MasterService {
-  baseUrl =  "https://zposmservices.mahamining.com/"
+  baseUrl =  "http://apisatara.shikshandarpan.com/"
   constructor(private apiService: ApiService,
               private http: HttpClient,
               private webstorageService: WebStorageService,

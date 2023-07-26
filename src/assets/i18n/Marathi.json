@@ -1,5 +1,8 @@
 {
     "Labels": {
+        "UploadEventPhoto":"कार्यक्रमाचा फोटो अपलोड करा",
+        "schoolprofile":"शाळेचे प्रोफाईल",
+        "schoolprofileList":"शाळा प्रोफाइल यादी",
         "Edit":"दुरुस्ती",
         "add":"जोडा",
         "addguardian":"संरक्षक जोडा",

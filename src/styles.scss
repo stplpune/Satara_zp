@@ -127,7 +127,8 @@ body {
   font-family: 'Noto Sans Devanagari', sans-serif !important;
   vertical-align: middle;
   background-color: var(--main-light-color) !important;
-  padding: 0 8px !important
+  padding: 0 8px !important;
+  height: 42px !important;
 }
 
 .dashboard-table td,
@@ -136,7 +137,8 @@ body {
   font-family: 'Noto Sans Devanagari', sans-serif !important;
   vertical-align: middle !important;
   border-bottom-width: 0.01px !important;
-  padding: 0 8px !important
+  padding: 0 8px !important;
+  height: 42px !important;
 }
 
 .dashboard-table .mat-mdc-icon-button.mat-mdc-button-base {

@@ -145,7 +145,7 @@ export class StudentReportComponent {
     //   error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     // });
 
-    this.$districts = this.masterService.getAlllDistrict();
+    this.$districts = this.masterService.getAlllDistrict(this.languageFlag);
     this.studentReportForm.controls['districtId'].setValue(1);
     this.getTaluka();
   }

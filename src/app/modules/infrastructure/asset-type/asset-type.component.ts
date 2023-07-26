@@ -120,11 +120,11 @@ export class AssetTypeComponent {
   }
 
   openBlockDialog(obj: any) {
-    let userEng = obj.status == false ? 'Active' : 'Inactive';
-    let userMara = obj.status == false ? 'ब्लॉक' : 'अनब्लॉक';
+    let userEng = obj.isBlock == false ? 'Active' : 'Inactive';
+    let userMara = obj.isBlock == false ? 'सक्रिय' : 'निष्क्रिय';
     let dialoObj = {
-      header: this.langTypeName == 'English' ? userEng + ' Office User' : 'ऑफिस वापरकर्ता ' + userMara + ' करा',
-      title: this.langTypeName == 'English' ? 'Do You Want To ' + userEng + ' The Selected Sub Category?' : 'तुम्ही निवडलेल्या ऑफिस वापरकर्त्याला ' + userMara + ' करू इच्छिता?',
+      header: this.langTypeName == 'English' ? userEng + ' Asset Type' : 'ऑफिस वापरकर्ता ' + userMara + ' करा',
+      title: this.langTypeName == 'English' ? 'Do You Want To ' + userEng + ' The Selected Asset Type?' : 'तुम्ही निवडलेल्या ऑफिस वापरकर्त्याला ' + userMara + ' करू इच्छिता?',
       cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',
       okButton: this.langTypeName == 'English' ? 'Ok' : 'ओके'
     }
@@ -165,6 +165,8 @@ export class AssetTypeComponent {
       error: ((err: any) => { this.errors.handelError(err) })
     });
   }
+
+  
 
 }
 

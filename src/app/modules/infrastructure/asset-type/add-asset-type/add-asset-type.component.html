@@ -17,7 +17,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Category Name</mat-label>
                     <mat-select formControlName="category"
-                    (selectionChange)="getSubCategory(assetTypeFrm.controls['category'].value)">
+                    (selectionChange)="clearDrop('category');getSubCategory(assetTypeFrm.controls['category'].value)">
                         <mat-option [value]="0">Select Category</mat-option>
                         <mat-option *ngFor="let data of categoryresp" [value]="data.id">{{data.category}}</mat-option>
                     </mat-select>

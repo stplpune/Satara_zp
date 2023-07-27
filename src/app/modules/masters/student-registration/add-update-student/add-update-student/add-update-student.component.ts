@@ -169,7 +169,7 @@ export class AddUpdateStudentComponent {
       this.updategardianFlag = false;
     }
    else if(this.gardianModelArr.length == 0){
-      this.gardianModelArr.push(formvalue);
+        this.gardianModelArr.push(formvalue);
     }else{
       this.gardianModelArr.forEach((res:any)=>{
         if(res.name == formvalue.name){

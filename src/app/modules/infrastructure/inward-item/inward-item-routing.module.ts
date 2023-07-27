@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ParameterComponent } from './parameter.component';
+import { InwardItemComponent } from './inward-item.component';
 
-const routes: Routes = [{ path: '', component: ParameterComponent }];
+const routes: Routes = [{ path: '', component: InwardItemComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ParameterRoutingModule { }
+export class InwardItemRoutingModule { }

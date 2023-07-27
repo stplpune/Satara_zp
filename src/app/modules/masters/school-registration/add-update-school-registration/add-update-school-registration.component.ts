@@ -360,7 +360,8 @@ export class AddUpdateSchoolRegistrationComponent {
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
   onEdit() {
     this.editFlag = true;
-    
+    if(this.userId == 1){
+      
     this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage)
     // this.data.uploadImage ? this.schoolRegForm.value.uploadImage = this.data.uploadImage : '';
     this.uploadImg = this.data?.uploadImage   
@@ -379,6 +380,7 @@ export class AddUpdateSchoolRegistrationComponent {
       this.imgArray.push(schoolDocumentObj);
     })
     this.getDistrict();
+    }
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 

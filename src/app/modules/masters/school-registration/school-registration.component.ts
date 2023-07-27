@@ -13,6 +13,7 @@ import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/g
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 
 @Component({
   selector: 'app-school-registration',
@@ -56,7 +57,8 @@ export class SchoolRegistrationComponent implements OnInit {
     private downloadFileService: DownloadPdfExcelService,
     private ngxSpinner: NgxSpinnerService,
     public datepipe: DatePipe,
-    private router:Router
+    private router:Router,
+    private encryptdecrypt:AesencryptDecryptService,
   ) { }
 
   ngOnInit() {
@@ -314,7 +316,13 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   openDetailsDialog(obj: any) {
-    this.router.navigate(['/view-profile-school'])
+    console.log(obj.id);
+    let eventId: any = this.encryptdecrypt.encrypt(`${obj?.id}`);
+    this.router.navigate(['/view-profile-school'],{
+      queryParams: {
+        id:eventId
+      },
+    })
     return;
     var data = {
       // headerImage: obj.uploadImage || "assets/images/user.png",

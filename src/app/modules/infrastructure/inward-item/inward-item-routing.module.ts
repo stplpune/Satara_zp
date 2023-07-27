@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ItemTransferComponent } from './item-transfer.component';
+import { InwardItemComponent } from './inward-item.component';
 
-const routes: Routes = [{ path: '', component: ItemTransferComponent }];
+const routes: Routes = [{ path: '', component: InwardItemComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ItemTransferRoutingModule { }
+export class InwardItemRoutingModule { }

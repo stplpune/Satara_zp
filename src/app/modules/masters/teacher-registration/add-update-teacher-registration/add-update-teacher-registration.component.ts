@@ -794,11 +794,15 @@ export class AddUpdateTeacherRegistrationComponent {
     } else if (dropdown == 'talukaTeacherDetails') {
       this.td['clusterId'].setValue('');
       this.td['schoolId'].setValue('');
+      this.td['villageId'].setValue('');
       this.clusterArray = [];
       this.schoolArray = [];
+      this.teacherDetailsVillageArray =[]
     } else if (dropdown == 'cluster') {
       this.td['schoolId'].setValue('');
+      this.td['villageId'].setValue('');
       this.schoolArray = [];
+    
     }else if (dropdown == 'school') {
       this.assignClassArray = [];
     }

@@ -1,5 +1,12 @@
 {
     "Labels": {
+        "itemList":"Item List",
+        "items":"Item",
+        "addItems":"Add Item",
+        "UpdatedAdditems":"Updated Add Item",
+        "subcategoryname":"Sub Category Name",
+        "itemName":"Item Name",
+        "description":"Description",
         "UploadEventPhoto":"Upload Event Photo",
         "schoolprofile":"School Profile",
         "schoolprofileList":"School Profile List",

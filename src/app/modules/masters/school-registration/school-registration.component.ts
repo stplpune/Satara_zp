@@ -43,6 +43,7 @@ export class SchoolRegistrationComponent implements OnInit {
   tableData: any;
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
+  userId!:number;
   displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'District', 'Taluka', 'Kendra', 'Village', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'जिल्हा', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
   viewStatus='Table';
@@ -63,6 +64,9 @@ export class SchoolRegistrationComponent implements OnInit {
     this.getTableData();
     this.getDistrict();
     // this.getofficeReport();
+    this.userId = this.webStorageS.getUserTypeId();
+    console.log("userTypeId : ", this.userId);
+    
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();

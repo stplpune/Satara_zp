@@ -4,16 +4,20 @@
             <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
                 <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
         </li>
-        <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
-        <li class="breadcrumb-item active" aria-current="page">{{'Labels.schoolprofile' | translate}}</li>
+        <li class="breadcrumb-item" aria-current="page">
+            <!-- {{'Labels.master' | translate}} -->
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            <!-- {{'Labels.schoolprofile' | translate}} -->
+        </li>
     </ol>
 </nav>
-<app-page-statistics></app-page-statistics>
-<mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
+<!-- <app-page-statistics></app-page-statistics> -->
+<mat-card class="plain-card" >
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
             <div class="text-main fw-bold">
-                {{'Labels.schoolprofileList' | translate}}
+                <!-- {{'Labels.schoolprofileList' | translate}} -->
             </div>
         </div>
     </mat-card-header>
@@ -22,63 +26,146 @@
             <div class="col-sm-12">
                 <div class="student-details">
                     <div class="d-flex">
-                        <div class="flex-shrink-0" *ngIf="showImg">
-                            <img src="assets/images/user.png"
-                                alt="student-image">
+                        <div class="flex-shrink-0">
+                            <!-- <img src="schoolresp?.uploadImage" alt="student-image"> -->
+                            <img src="../../../../../assets/images/user.png">
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1 fw-bold text-break">scholl name</h5>
-                            <p class="text-muted mb-0" style="height:32px;">village name
-                            </p>
+                            <h5 class="mb-1 fw-bold text-break">{{schoolresp?.schoolName}}</h5>
+                            <!-- <p class="text-muted mb-0" style="height:32px;">village name</p> -->
 
                             <div class="data-container">
                                 <div class="row g-2">
                                     <div class="col-sm-6" >
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <!-- <span class="data-label text-break"
-                                                    *ngIf="data?.checkbox != head">{{head}}</span> -->
+                                                <span class="data-label text-break">District</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
-                                                <div class="data-text text-break" >
-                                                   
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.district}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6">
-                                        <div>
-                                            <div class="col-sm-5 col-6">
-                                                <span class="data-label">{{'Labels.school'| translate}}</span>
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Taluka</span>
                                             </div>
-                                            <div class="data-text p-0 col-6 col-sm-7 d-flex flex-wrap">
-                                                <!-- : {{webStorage.languageFlag == 'EN' ?
-                                                data?.Obj?.teacherDetails.schoolName :
-                                                data?.Obj?.teacherDetails.m_SchoolName || '-'}} -->
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-12">
-                                        <div class="row">
-                                            <div class="col-sm-2 col-6">
-                                                <!-- <span class="data-label"
-                                                    *ngIf="data?.checkbox == 'Subject' || data?.checkbox == 'विषय'">{{'Labels.Subject'|
-                                                    translate}} </span> -->
-                                            </div>
-                                            <div class=" col-6 col-sm-10 ">
-                                                <div class="data-text ms-4  d-flex flex-wrap">
-                                                    <div 
-                                                        class="lang-badge">
-                                                        <!-- {{webStorage.languageFlag == 'EN' ? assign.subjectName
-                                                        :assign.m_SubjectName || '-'}} -->
-                                                    </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.taluka}}
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Center</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.center}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Village</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.village}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Highest School Name</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.highestSchoolName}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Lowest School Name</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.lowestSchoolName}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Total Student</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.totalStudent}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Total Student Male</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.totalStudentMale}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Total Student Female</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.totalStudentFeMale}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" >
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-5">
+                                                <span class="data-label text-break">Total Teachers</span>
+                                            </div>
+                                            <div class="col-6 col-sm-7">
+                                                <div class="data-text text-break">
+                                                   : {{schoolresp?.totalTeacher}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                  
 
                                     <!-- show kendra Array for office registration -->
                                     <div class="col-sm-12" >
@@ -107,7 +194,7 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <div class="table-responsive table-height-xs scrollbar">
+                <!-- <div class="table-responsive table-height-xs scrollbar">
                     <table mat-table [dataSource]="dataSource" class="dashboard-table">
 
                         <ng-container matColumnDef="position">
@@ -145,7 +232,21 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                       </table>
+                </div> -->
+
+                <mat-card-content class="card-body pt-0">
+                    <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+                </mat-card-content>
+
+                <div class="row g-3">
+                    <mat-label>School photos : </mat-label>
+                    <div class="col-3 col-sm-3" >
+                        <img *ngFor="let item of items; index as i" 
+                        [lightbox]="i"
+                        [src]="item.data.thumb">
+                    </div>
                 </div>
+
             </div>
         </div>
     </mat-card-content>

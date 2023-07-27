@@ -43,6 +43,13 @@
                     </mat-icon>
                     <span>{{'Labels.addSchool' | translate}}</span>
                 </button>
+                <button *ngIf="userId !== 1" class="btn-main d-flex align-items-center justify-content-between"
+                mat-flat-button (click)="addUpdateSchool()">
+                <mat-icon>
+                    add
+                </mat-icon>
+                <span>Add Event</span>
+            </button>
             </div>
         </div>
     </mat-card-header>

@@ -35,6 +35,12 @@ export class AddUpdateSchoolRegistrationComponent {
   img: boolean = false;
   editObj: any;
   isKendra: any;
+  userId!: number;
+  eventForm !: FormGroup;
+  tableDataArray = new Array();
+  totalCount!: number;
+  tableDatasize!: number;
+  editEventObj : any;
   // schoolDocument!: FormArray;
 
   constructor(private masterService: MasterService,
@@ -59,6 +65,8 @@ export class AddUpdateSchoolRegistrationComponent {
       this.getSchoolType();
       this.getLowestGroupClass();
     }
+    this.userId = this.webStorageS.getUserTypeId();
+    this.userId !== 1 ? (this.getTableData(), this.eventFormFeild()) : '';
   }
 
   get f() {
@@ -109,6 +117,32 @@ export class AddUpdateSchoolRegistrationComponent {
     return this.schoolRegForm.get('schoolDocument') as FormArray;
   }
 
+  eventFormFeild(){
+    this.eventForm = this.fb.group({
+        "id": [this.editEventObj ? this.editEventObj?.id : 0],
+        "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
+        "m_EventName": [''],
+        "description": [this.editEventObj ? this.editEventObj?.description : ''],
+        "createdBy": 0,
+        "isDeleted": true,
+        "lan": [''],
+        eventImages : this.fb.array([
+          this.fb.group({
+            "id": 0,
+            "schoolId": 0,
+            "documentId": 5,
+            "eventId": 0,
+            "docPath": [''],
+            "createdBy": 0,
+            "isDeleted": true
+          })
+        ])
+    });
+  }
+
+  get multipleEventImg(): FormArray {
+    return this.eventForm.get('eventImages') as FormArray;
+  }
 
   //#region ---------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
   getDistrict() {
@@ -250,7 +284,7 @@ export class AddUpdateSchoolRegistrationComponent {
             let data = {
               "id": 0,
               "schoolId": 0,
-              "documentId": 3,
+              "documentId": this.userId !==1 ? 5 : 3,
               "docPath": imgArr[i],
               "createdBy": 0,
               "createdDate": new Date(),
@@ -260,6 +294,8 @@ export class AddUpdateSchoolRegistrationComponent {
             }
             this.imgArray.push(data)
           }
+          console.log("imgArray : ", this.imgArray);
+          
         }
         else {
           return
@@ -321,12 +357,12 @@ export class AddUpdateSchoolRegistrationComponent {
   }
   //#endregiongion ------------------------------------------ Add/Update Record end here --------------------------------------------//
 
+
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
-  onEdit() {
+  onEdit(data ?: any) {
     this.editFlag = true;
-    
-    this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage)
-    // this.data.uploadImage ? this.schoolRegForm.value.uploadImage = this.data.uploadImage : '';
+    if(this.userId == 1){
+    this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
     this.uploadImg = this.data?.uploadImage   
     this.data.schoolDocument.map((res: any) => {
       let schoolDocumentObj = {
@@ -343,6 +379,27 @@ export class AddUpdateSchoolRegistrationComponent {
       this.imgArray.push(schoolDocumentObj);
     })
     this.getDistrict();
+    }
+    else{
+      console.log("edit data : ", data);
+      this.editEventObj = data;
+      this.eventFormFeild();
+      this.editEventObj.eventImages.map((res: any) => {
+        console.log("res : ", res);
+        
+        // let eventImgObj = {
+        //     "id": res.id,
+        //     "schoolId": 0,
+        //     "documentId": 5,
+        //     "eventId": 0,
+        //     "docPath": [''],
+        //     "createdBy": 0,
+        //     "isDeleted": true
+        // }
+      })
+
+
+    }
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 
@@ -392,7 +449,6 @@ export class AddUpdateSchoolRegistrationComponent {
   }
   //#endregiongion ----------------------------------------------- Clear dropdown on change end here --------------------------------------------//
 
-
   getBitOrCenter() {
     if (this.isKendra) {
       this.getBit();
@@ -400,4 +456,64 @@ export class AddUpdateSchoolRegistrationComponent {
       this.getCenter();
     }
   }
+
+  getTableData() {
+    this.ngxSpinner.show();
+  
+    let str = `pageno=1&pagesize=10&TextSearch=&lan=EN`;
+    // let str = `pageno=1&pagesize=10&TextSearch=event&lan=EN`;
+
+    this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetAllEvent?' + str, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.ngxSpinner.hide();
+          this.tableDataArray = res.responseData.responseData1;
+          this.totalCount = res.responseData.responseData2.pageCount;
+          this.tableDatasize = res.responseData.responseData2.pageCount;        
+        }
+        else {
+          this.ngxSpinner.hide();
+          this.tableDataArray = [];
+          this.tableDatasize = 0;
+        }
+        // this.languageChange();
+      },
+      error: ((err: any) => { this.commonMethod.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusText, 1); })
+    });
+  }
+
+  onSubmitEvent(){
+    let formValue = this.eventForm.value;
+    formValue.eventImages = this.imgArray;  
+    console.log("onSubmit event : ", formValue);
+    // return
+
+    let url = this.editEventObj ? 'UpdateEvent' : 'AddEvent'
+    if (!this.eventForm.valid) {
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
+      return
+    }
+    else {
+      this.ngxSpinner.show();
+      this.apiService.setHttp(this.editEventObj ? 'put' : 'post', 'zp-satara/SchoolEvent/' + url, false, formValue, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          this.ngxSpinner.hide();
+          this.apiService.staticData.next('getRefreshStaticdata');
+          res.statusCode == 200 ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          res.statusCode == 200 ? (this.ngxSpinner.hide(), this.getTableData()) : '';
+          // this.dialogRef.close('yes')
+        },
+        error: ((err: any) => {
+          this.ngxSpinner.hide();
+          this.commonMethod.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusMessage, 1);
+        })
+      });
+  }
+}
+
+
+
 }

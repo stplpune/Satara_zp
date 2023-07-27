@@ -21,13 +21,13 @@ import { GlobalImgComponent } from 'src/app/shared/components/global-img/global-
 import { TranslateModule } from '@ngx-translate/core';
 import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AddSchoolProfileComponent } from './add-school-profile/add-school-profile.component';
+// import { AddSchoolProfileComponent } from './add-school-profile/add-school-profile.component';
 import { MatTableModule } from '@angular/material/table';
 @NgModule({
   declarations: [
     AddUpdateSchoolRegistrationComponent,
     SchoolRegistrationComponent,
-    AddSchoolProfileComponent
+    // AddSchoolProfileComponent
   ],
   imports: [
     CommonModule,

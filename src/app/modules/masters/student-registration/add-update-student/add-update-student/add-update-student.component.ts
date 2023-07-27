@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -25,6 +25,7 @@ export class AddUpdateStudentComponent {
   
   stuRegistrationForm!: FormGroup;
   addGardianForm!: FormGroup
+  isCheck = new FormControl();
   districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
@@ -51,7 +52,7 @@ export class AddUpdateStudentComponent {
   aadhaarFlag: boolean = false;
   readOnlyFlag: boolean = false;
   loginData :any;
-  relationArr=[{id:1,name:'Mother'},{id:2,name:'Father'},{id:3,name:'Brother'}]
+  relationArr= new Array();
   gaurdianModel!:FormArray
   data: any;
   studentId!:number;
@@ -60,6 +61,7 @@ export class AddUpdateStudentComponent {
   updategardianIndex !: number;
   updategardianFlag : boolean = false
   checkDisable:boolean = false
+  searchMobieNoObj:any
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
@@ -100,6 +102,7 @@ export class AddUpdateStudentComponent {
     this.getDistrict(),
     this.getGender()
     this.getReligion();
+    this.getRelation();
 
   }
 
@@ -150,7 +153,7 @@ export class AddUpdateStudentComponent {
       m_Name: [''],     
       mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
       relationId: ['',[Validators.required]],
-      isHead:false,
+      isHead: false ,
       headerId: 0,
       timestamp: new Date(),
       localId: 0   
@@ -160,7 +163,7 @@ export class AddUpdateStudentComponent {
   //#region ---------------------------- Dropdown start here -----------------------------------------------
 
   addGardian(){
-    let formvalue = this.addGardianForm.value;
+    let formvalue = this.addGardianForm.value;   
     if(this.updategardianFlag == true){
       this.gardianModelArr[this.updategardianIndex] = formvalue;
       this.updategardianFlag = false;
@@ -180,12 +183,19 @@ export class AddUpdateStudentComponent {
         }
       })
     } 
-    this.addGardianForm.reset();
-    this.gardianModelArr.forEach((res:any)=>{
-      if(res.isHead == true){ 
-        this.checkDisable = true;
-      }
-    })
+    this.addGardianForm.controls['name'].setValue('');
+    this.addGardianForm.controls['mobileNo'].setValue('');
+    this.addGardianForm.controls['relationId'].setValue('');
+    this.addGardianForm.controls['isHead'].setValue(false);
+
+    console.log("gardianModelArr",this.gardianModelArr);
+    
+ 
+    // this.gardianModelArr.forEach((res:any)=>{
+    //   if(res.isHead == true){ 
+    //     this.checkDisable = true;
+    //   }
+    // })
  
     // console.log("gardianModelArr",this.gardianModelArr);
   }
@@ -247,11 +257,7 @@ export class AddUpdateStudentComponent {
 
   deleteGardian(data:any,i: any) {
     this.gardianModelArr[i].isHead == true ? this.checkDisable = false : '';
-    // this.gardianModelArr.splice(i,1,'');
     this.gardianModelArr = this.gardianModelArr.filter(item => item !== data);
-   
-   
-
   }
   updateGardian(obj:any,i:any){
     console.log("index",i);   
@@ -260,6 +266,26 @@ export class AddUpdateStudentComponent {
     this.addGardianForm.controls['name'].setValue(obj.name);
     this.addGardianForm.controls['mobileNo'].setValue(obj.mobileNo);
     this.addGardianForm.controls['relationId'].setValue(obj.relationId);
+    
+  }
+  changeCheckBox(i:any){  
+   
+    this.gardianModelArr[i].isHead = this.isCheck.value;
+
+    this.gardianModelArr.forEach((res:any)=>{
+      if(res.isHead == true){
+        console.log("enter if loop");        
+        this.checkDisable = true;
+      }else if(res.isHead == false){
+        console.log("enter else if loop");
+        this.checkDisable = false;
+      }
+    })
+
+    let gardianObj = this.gardianModelArr.filter((res:any)=>{return res.isHead})
+    this.fc['mobileNo'].setValue(gardianObj[0].mobileNo)
+    
+    console.log("this.gardianModelArr",this.gardianModelArr);
     
   }
 
@@ -430,6 +456,26 @@ export class AddUpdateStudentComponent {
       },
       // error: ((err: any) => {this.errors.handelError(err.statusCode || err.status) })
     });
+  }
+
+
+  getRelation() {   
+    console.log("call relation Arrr");
+    
+    this.relationArr = [];
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllRelation?flag_lang='+this.languageFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.relationArr = res.responseData
+            this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue( this.searchMobieNoObj[0]?.relationId),console.log("set relation")):'';
+          } else {
+            this.relationArr=[] 
+          }
+        },
+        error: ((err: any) => { this.ngxSpinner.hide(); this.errors.handelError(err.statusCode) })
+      });
+    
   }
 
   //#endregion  ---------------------------------- Dropdown End here -----------------------------------------------
@@ -707,20 +753,17 @@ export class AddUpdateStudentComponent {
   }
 
   searchMobileNo() {
-    let mobileNo = this.stuRegistrationForm.value.mobileNo;
+    // let mobileNo = this.stuRegistrationForm.value.mobileNo;
+    let mobileNo = this.addGardianForm.value.mobileNo;
     if (this.stuRegistrationForm.controls['mobileNo'].valid) {
-      this.apiService.setHttp('get', 'zp-satara/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan=EN', false, false, false, 'baseUrl');
+      this.apiService.setHttp('get', 'zp-satara/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan='+this.languageFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
+            this.searchMobieNoObj =res.responseData
             this.readOnlyFlag = true;
-            if (this.languageFlag == 'EN') {
-              this.fc['fatherFullName'].setValue(res.responseData?.fatherFullName);
-              this.fc['motherName'].setValue(res.responseData?.motherName);
-            } else {
-              this.fc['fatherFullName'].setValue(res.responseData?.m_FatherFullName);
-              this.fc['motherName'].setValue(res.responseData?.m_MotherName)
-            }
+            this.addGardianForm.controls['name'].setValue( this.searchMobieNoObj[0]?.name);
+            this.getRelation();
           } else {
             this.readOnlyFlag = false;
             this.fc['fatherFullName'].setValue('');
@@ -733,8 +776,12 @@ export class AddUpdateStudentComponent {
   }
 
   openDialog() {
-  const dialogRef = this.dialog.open(AddCastComponent, {
+    let formValue =this.stuRegistrationForm.value;
+    let obj ={religionId: formValue.religionId,
+    casteCategoryId: formValue.casteCategoryId}
+    const dialogRef = this.dialog.open(AddCastComponent, {
       width: '400px',  
+      data : obj,
       disableClose: true,
       autoFocus: false
     });

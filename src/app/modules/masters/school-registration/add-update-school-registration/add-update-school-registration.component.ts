@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -42,6 +42,7 @@ export class AddUpdateSchoolRegistrationComponent {
   totalCount!: number;
   tableDatasize!: number;
   editEventObj: any;
+  textSearch = new FormControl('');
   // schoolDocument!: FormArray;
 
   constructor(private masterService: MasterService,
@@ -122,6 +123,7 @@ export class AddUpdateSchoolRegistrationComponent {
   eventFormFeild() {
     this.eventForm = this.fb.group({
       "id": [this.editEventObj ? this.editEventObj?.id : 0],
+      "schoolId": [this.editEventObj ? this.editEventObj?.schoolId : this.webStorageS.getLoggedInLocalstorageData()?.schoolId],
       "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
       "m_EventName": [''],
       "description": [this.editEventObj ? this.editEventObj?.description : ''],
@@ -296,8 +298,6 @@ export class AddUpdateSchoolRegistrationComponent {
             }
             this.imgArray.push(data)
           }
-          console.log("imgArray : ", this.imgArray);
-
         }
         else {
           return
@@ -366,11 +366,10 @@ export class AddUpdateSchoolRegistrationComponent {
     this.imgArray = [];
   
     if (this.userId == 4) {
-      console.log("edit : ", data);
-      
+      // console.log("edit : ", data);
       this.editEventObj = data;
       this.eventFormFeild();
-      this.editEventObj.eventImages.map((res: any) => {
+      this.editEventObj?.eventImages.map((res: any) => {
         let eventImgObj = {
           "id": res.id,
           "schoolId": res.schoolId,
@@ -461,10 +460,8 @@ export class AddUpdateSchoolRegistrationComponent {
 
   getTableData() {
     this.ngxSpinner.show();
-
-    let str = `pageno=1&pagesize=10&TextSearch=&lan=EN`;
-    // let str = `pageno=1&pagesize=10&TextSearch=event&lan=EN`;
-
+    let str = `SchoolId=${this.webStorageS.getLoggedInLocalstorageData()?.schoolId}&pageno=1&pagesize=10&TextSearch=${this.textSearch.value}&lan=${this.webStorageS.languageFlag}`;
+ 
     this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetAllEvent?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
@@ -489,8 +486,7 @@ export class AddUpdateSchoolRegistrationComponent {
   onSubmitEvent() {
     let formValue = this.eventForm.value;
     formValue.eventImages = this.imgArray;
-    console.log("onSubmit event : ", formValue);
-    // return
+    // console.log("onSubmit event : ", formValue);
 
     let url = this.editEventObj ? 'UpdateEvent' : 'AddEvent'
     if (!this.eventForm.valid) {
@@ -555,6 +551,9 @@ export class AddUpdateSchoolRegistrationComponent {
     })
   }
 
-
+  onClear(){
+    this.textSearch.setValue('');
+    this.getTableData();
+  }
 
 }

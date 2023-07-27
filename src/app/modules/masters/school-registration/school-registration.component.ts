@@ -215,9 +215,9 @@ export class SchoolRegistrationComponent implements OnInit {
 
   getVillage() {
     this.villageArr = []
-    let talukaId = this.talukaId.value;
+    let centerId = this.centerId.value;
     // let centerId = this.centerId.value;
-    this.masterService.getAllVillage('', talukaId).subscribe({
+    this.masterService.getAllVillage('', centerId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
@@ -406,6 +406,8 @@ export class SchoolRegistrationComponent implements OnInit {
       this.centerId.setValue(0);
       this.villageArr = [];
       this.centerArr = [];
+    }else if(dropdown == 'centerId'){
+      this.villageId.setValue(0);
     }
   }
 

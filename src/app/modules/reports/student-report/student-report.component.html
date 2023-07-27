@@ -50,24 +50,25 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
-                            (selectionChange)="clearDropdown('centerId');getAllSchoolsByCenterId()">
+                            (selectionChange)="clearDropdown('centerId');getVillage()">
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                                 ?cen.center:cen.m_Center}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
                     </mat-form-field>
                 </div>
-                <!-- <div class="col-sm-2">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
-                        <mat-select formControlName="villageId">
+                        <mat-select formControlName="villageId"
+                        (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId()">
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
                                 'English'
                                 ?village.village:village.m_Village}}</mat-option>
                         </mat-select>
-                        <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error>
+                        <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
                     </mat-form-field>
-                </div> -->
+                </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>

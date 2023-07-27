@@ -1,5 +1,12 @@
 {
     "Labels": {
+        "remark":"Remark",
+        "PurchasePrice":"Purchase Price",
+        "PurchaseDate":"Purchase Date",
+        "Units":"Units",
+        "InwardItmes":"Inward Itmes",
+        "addInwardItems":"Add Inward Items",
+        "InwardItmesList":"Inward Itmes List",
         "itemList":"Item List",
         "items":"Item",
         "addItems":"Add Item",

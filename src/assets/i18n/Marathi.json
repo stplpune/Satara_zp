@@ -1,5 +1,10 @@
 {
     "Labels": {
+        "addItems":"वस्तू जोडा",
+        "UpdatedAdditems":"अद्यतनित आयटम जोडा",
+        "subcategoryname":"उपवर्गाचे नाव",
+        "itemName":"वस्तूचे नाव",
+        "description":"विवरण",
         "UploadEventPhoto":"कार्यक्रमाचा फोटो अपलोड करा",
         "schoolprofile":"शाळेचे प्रोफाईल",
         "schoolprofileList":"शाळा प्रोफाइल यादी",

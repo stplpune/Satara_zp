@@ -14,7 +14,7 @@
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">{{editFlag ? ('Labels.studentUpdate'|
                 translate):('Labels.studentRegistration'| translate)}}</h6>
-            <a class="text-decoration-none text-main d-flex align-items-center">
+            <a class="text-decoration-none text-main d-flex align-items-center" routerLink="/student-registration">
                 <mat-icon>keyboard_double_arrow_left</mat-icon>
                 <span class="text-main mt-1">Back</span>
             </a>
@@ -66,7 +66,7 @@
                         <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
                     </mat-form-field>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId"
@@ -77,17 +77,15 @@
                         <!-- <mat-error *ngIf="fc['schoolId'].hasError('required')">  {{'Labels.pleaseSelectSchool'| translate }} </mat-error> -->
                     </mat-form-field>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.standard'| translate}}</mat-label>
-                            <mat-select formControlName="standard">
-                                <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{languageFlag == 'EN'
-                                    ?stan.standard:stan.m_Standard}}</mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="fc['standard'].hasError('required')"> {{'Labels.pleaseSelectStandard'| translate}} </mat-error> -->
-                        </mat-form-field>
-                    </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.standard'| translate}}</mat-label>
+                        <mat-select formControlName="standard">
+                            <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{languageFlag == 'EN'
+                                ?stan.standard:stan.m_Standard}}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['standard'].hasError('required')"> {{'Labels.pleaseSelectStandard'| translate}} </mat-error> -->
+                    </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
@@ -295,7 +293,7 @@
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Mobile No.</mat-label>
-                            <input matInput formControlName="mobileNo" maxlength="10">
+                            <input matInput formControlName="mobileNo" maxlength="10" (change)="searchMobileNo()">
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
@@ -305,18 +303,22 @@
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Relations</mat-label>
-                            <mat-select formControlName="relationId">
-                                <mat-option *ngFor="let relation of relationArr"
-                                    [value]="relation.id">{{relation.name}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                        <div class="row gx-3">
+                            <div class="col-sm-7">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Relations</mat-label>
+                                    <mat-select formControlName="relationId">
+                                        <mat-option *ngFor="let relation of relationArr"
+                                            [value]="relation.id">{{relation.relation}}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-5">
+                                <button mat-stroked-button class="btn-main" type="submit" (click)="addGardian()">
+                                    <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-end align-items-center mb-3">
-                    <button mat-stroked-button class="btn-main" type="submit" (click)="addGardian()">
-                        <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
                 </div>
             </form>
             <div class="row">
@@ -326,32 +328,36 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col"> Sr.No. </th>
-                                        <!-- <th scope="col"> Check </th> -->
+                                        <th scope="col"> Sr.No. </th>                                        
                                         <th scope="col">Name</th>
                                         <th scope="col"> Mobile No.</th>
-                                        <th scope="col">Relations</th>
+                                        <th scope="col">Relation</th>
+                                        <th scope="col"> Is Head </th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let gardian of gardianModelArr; let i = index">
-                                        <td>{{i+1}}</td>
-                                        <!-- <td>{{gardian.isHead}}</td> -->
+                                        <td>{{i+1}}</td>                                        
                                         <td>{{gardian.name}}</td>
                                         <td>{{gardian.mobileNo}}</td>
                                         <td>{{gardian.relationId}}</td>
+                                        <td>
+                                            <mat-checkbox [formControl]="isCheck"
+                                                [disabled]="this.gardianModelArr[i].isHead  == false && this.checkDisable == true"
+                                                (click)="changeCheckBox(i)"></mat-checkbox>
+                                        </td>
                                         <td>
                                             <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
                                                 matTooltipPosition="right" matTooltipClass="tooltip" type="button"
                                                 (click)="deleteGardian(gardian,i)">
                                                 <mat-icon class="text-danger"> delete</mat-icon>
                                             </button>
-                                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
+                                            <!-- <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
                                                 matTooltipPosition="right" matTooltipClass="tooltip" type="button"
                                                 (click)="updateGardian(gardian,i)">
                                                 <mat-icon class="text-danger"> edit</mat-icon>
-                                            </button>
+                                            </button> -->
                                         </td>
                                     </tr>
                                 </tbody>

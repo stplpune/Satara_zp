@@ -1,5 +1,5 @@
 <mat-card class="plain-card">
-    <div *ngIf="userId == 1">
+    <div *ngIf="userId != 4">
         <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()">
 
             <mat-card-header class="card-header">
@@ -301,11 +301,11 @@
     </div>
 
 
-    <div *ngIf="userId != 1">
+    <div *ngIf="userId == 4">
         <form [formGroup]="eventForm" (ngSubmit)="onSubmitEvent()">
             <mat-card-header class="card-header">
                 <div class="d-flex align-items-center justify-content-between w-100">
-                    <h6 class="text-main mb-0 fw-bold">Event Registration</h6>
+                    <h6 class="text-main mb-0 fw-bold">{{editFlag ? 'Update Event Details' : 'Event Registration'}}</h6>
                     <button mat-icon-button mat-dialog-close class="btn-modal-close">
                         <mat-icon>
                             close
@@ -363,7 +363,7 @@
                         <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel'
                             |
                             translate}}</button>
-                        <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
+                        <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate)
                             :('Labels.submit' |
                             translate)}}</button>
                     </div>
@@ -390,7 +390,7 @@
                                                 </button>
                                                 <button mat-icon-button id="tooltip"
                                                     matTooltip="{{'Labels.edit' | translate}}"
-                                                    matTooltipPosition="right" type="button" matTooltipClass="tooltip">
+                                                    matTooltipPosition="right" type="button" matTooltipClass="tooltip" (click)="globalDialogOpen(data.id)">
                                                     <mat-icon class="text-main">delete</mat-icon>
                                                 </button>
                                             </div>

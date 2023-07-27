@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -9,6 +9,7 @@ import { FileUploadService } from 'src/app/core/services/file-upload.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-add-update-school-registration',
@@ -40,7 +41,7 @@ export class AddUpdateSchoolRegistrationComponent {
   tableDataArray = new Array();
   totalCount!: number;
   tableDatasize!: number;
-  editEventObj : any;
+  editEventObj: any;
   // schoolDocument!: FormArray;
 
   constructor(private masterService: MasterService,
@@ -53,7 +54,8 @@ export class AddUpdateSchoolRegistrationComponent {
     public dialogRef: MatDialogRef<AddUpdateSchoolRegistrationComponent>,
     public validationService: ValidationService,
     public webStorageS: WebStorageService,
-    private ngxSpinner: NgxSpinnerService) { }
+    private ngxSpinner: NgxSpinnerService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     this.formFeild();
@@ -66,7 +68,7 @@ export class AddUpdateSchoolRegistrationComponent {
       this.getLowestGroupClass();
     }
     this.userId = this.webStorageS.getUserTypeId();
-    this.userId !== 1 ? (this.getTableData(), this.eventFormFeild()) : '';
+    this.userId == 4 ? (this.getTableData(), this.eventFormFeild()) : '';
   }
 
   get f() {
@@ -76,7 +78,7 @@ export class AddUpdateSchoolRegistrationComponent {
   formFeild() {
     this.schoolRegForm = this.fb.group({
       "id": this.data ? this.data.id : 0,
-      "schoolCode": [this.data ? this.data.schoolCode : '',[ Validators.required]],
+      "schoolCode": [this.data ? this.data.schoolCode : '', [Validators.required]],
       "schoolName": [this.data ? this.data.schoolName : '', [Validators.required, Validators.pattern('^[.,\n() a-zA-Z0-9]+$')]],
       "m_SchoolName": [this.data ? this.data.m_SchoolName : '', [Validators.required, Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
       "stateId": 0,
@@ -117,26 +119,26 @@ export class AddUpdateSchoolRegistrationComponent {
     return this.schoolRegForm.get('schoolDocument') as FormArray;
   }
 
-  eventFormFeild(){
+  eventFormFeild() {
     this.eventForm = this.fb.group({
-        "id": [this.editEventObj ? this.editEventObj?.id : 0],
-        "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
-        "m_EventName": [''],
-        "description": [this.editEventObj ? this.editEventObj?.description : ''],
-        "createdBy": 0,
-        "isDeleted": true,
-        "lan": [''],
-        eventImages : this.fb.array([
-          this.fb.group({
-            "id": 0,
-            "schoolId": 0,
-            "documentId": 5,
-            "eventId": 0,
-            "docPath": [''],
-            "createdBy": 0,
-            "isDeleted": true
-          })
-        ])
+      "id": [this.editEventObj ? this.editEventObj?.id : 0],
+      "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
+      "m_EventName": [''],
+      "description": [this.editEventObj ? this.editEventObj?.description : ''],
+      "createdBy": 0,
+      "isDeleted": true,
+      "lan": [''],
+      eventImages: this.fb.array([
+        this.fb.group({
+          "id": 0,
+          "schoolId": 0,
+          "documentId": 5,
+          "eventId": 0,
+          "docPath": [''],
+          "createdBy": 0,
+          "isDeleted": true
+        })
+      ])
     });
   }
 
@@ -261,7 +263,7 @@ export class AddUpdateSchoolRegistrationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.uploadImg = res.responseData;
-          this.schoolRegForm.value.uploadImage = this.uploadImg;      
+          this.schoolRegForm.value.uploadImage = this.uploadImg;
           this.commonMethod.showPopup(res.statusMessage, 0);
         }
         else {
@@ -276,7 +278,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.uploadMultipleImg = res.responseData;        
+          this.uploadMultipleImg = res.responseData;
           this.commonMethod.showPopup(res.statusMessage, 0);
           // multiple image 
           let imgArr = this.uploadMultipleImg.split(',')
@@ -284,7 +286,7 @@ export class AddUpdateSchoolRegistrationComponent {
             let data = {
               "id": 0,
               "schoolId": 0,
-              "documentId": this.userId !==1 ? 5 : 3,
+              "documentId": this.userId == 4 ? 3 : 5,
               "docPath": imgArr[i],
               "createdBy": 0,
               "createdDate": new Date(),
@@ -295,7 +297,7 @@ export class AddUpdateSchoolRegistrationComponent {
             this.imgArray.push(data)
           }
           console.log("imgArray : ", this.imgArray);
-          
+
         }
         else {
           return
@@ -323,7 +325,7 @@ export class AddUpdateSchoolRegistrationComponent {
     formValue.uploadImage ? formValue.uploadImage = this.uploadImg : '';
     formValue.uploadImage = this.schoolRegForm.value.uploadImage;
     // }
-    formValue.schoolDocument = this.imgArray;  
+    formValue.schoolDocument = this.imgArray;
     // return
 
     if (formValue.isKendraSchool == true) {
@@ -359,52 +361,52 @@ export class AddUpdateSchoolRegistrationComponent {
 
 
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
-  onEdit(data ?: any) {
+  onEdit(data?: any) {
     this.editFlag = true;
-    if(this.userId == 1){
-    this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
-    this.uploadImg = this.data?.uploadImage   
-    this.data.schoolDocument.map((res: any) => {
-      let schoolDocumentObj = {
-        "id": res.id,
-        "schoolId": res.schoolId,
-        "documentId": res.documentId,
-        "docPath": res.docPath,
-        "createdBy": 0,
-        "createdDate": new Date(),
-        "modifiedBy": 0,
-        "modifiedDate": new Date(),
-        "isDeleted": true
-      };
-      this.imgArray.push(schoolDocumentObj);
-    })
-    this.getDistrict();
-    }
-    else{
-      console.log("edit data : ", data);
+    this.imgArray = [];
+  
+    if (this.userId == 4) {
+      console.log("edit : ", data);
+      
       this.editEventObj = data;
       this.eventFormFeild();
       this.editEventObj.eventImages.map((res: any) => {
-        console.log("res : ", res);
-        
-        // let eventImgObj = {
-        //     "id": res.id,
-        //     "schoolId": 0,
-        //     "documentId": 5,
-        //     "eventId": 0,
-        //     "docPath": [''],
-        //     "createdBy": 0,
-        //     "isDeleted": true
-        // }
+        let eventImgObj = {
+          "id": res.id,
+          "schoolId": res.schoolId,
+          "documentId": res.documentId,
+          "eventId": res.eventId,
+          "docPath": res.docPath,
+          "createdBy": 0,
+          "isDeleted": true
+        }
+        this.imgArray.push(eventImgObj);
+      });
+    }
+    else {
+      this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
+      this.uploadImg = this.data?.uploadImage
+      this.data.schoolDocument.map((res: any) => {
+        let schoolDocumentObj = {
+          "id": res.id,
+          "schoolId": res.schoolId,
+          "documentId": res.documentId,
+          "docPath": res.docPath,
+          "createdBy": 0,
+          "createdDate": new Date(),
+          "modifiedBy": 0,
+          "modifiedDate": new Date(),
+          "isDeleted": true
+        };
+        this.imgArray.push(schoolDocumentObj);
       })
-
-
+      this.getDistrict();
     }
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 
   //#region ------------------------------------------------- Clear Img field start here --------------------------------------------//
-  clearImg() {   
+  clearImg() {
     this.uploadImg = '';
     this.schoolRegForm.value.uploadImage = '';
     this.f['uploadImage'].setValue('');
@@ -438,7 +440,7 @@ export class AddUpdateSchoolRegistrationComponent {
       this.f['centerId'].clearValidators();
       this.f['centerId'].updateValueAndValidity();
     }
-    else if (eventValue == false) {     
+    else if (eventValue == false) {
       this.f['centerId'].setValidators(Validators.required);
       this.f['centerId'].updateValueAndValidity();
 
@@ -459,7 +461,7 @@ export class AddUpdateSchoolRegistrationComponent {
 
   getTableData() {
     this.ngxSpinner.show();
-  
+
     let str = `pageno=1&pagesize=10&TextSearch=&lan=EN`;
     // let str = `pageno=1&pagesize=10&TextSearch=event&lan=EN`;
 
@@ -471,7 +473,7 @@ export class AddUpdateSchoolRegistrationComponent {
           this.ngxSpinner.hide();
           this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
-          this.tableDatasize = res.responseData.responseData2.pageCount;        
+          this.tableDatasize = res.responseData.responseData2.pageCount;
         }
         else {
           this.ngxSpinner.hide();
@@ -484,9 +486,9 @@ export class AddUpdateSchoolRegistrationComponent {
     });
   }
 
-  onSubmitEvent(){
+  onSubmitEvent() {
     let formValue = this.eventForm.value;
-    formValue.eventImages = this.imgArray;  
+    formValue.eventImages = this.imgArray;
     console.log("onSubmit event : ", formValue);
     // return
 
@@ -502,8 +504,8 @@ export class AddUpdateSchoolRegistrationComponent {
         next: (res: any) => {
           this.ngxSpinner.hide();
           this.apiService.staticData.next('getRefreshStaticdata');
-          res.statusCode == 200 ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          res.statusCode == 200 ? (this.ngxSpinner.hide(), this.getTableData()) : '';
+          res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          res.statusCode == "200" ? (this.ngxSpinner.hide(), this.getTableData()) : '';
           // this.dialogRef.close('yes')
         },
         error: ((err: any) => {
@@ -511,8 +513,47 @@ export class AddUpdateSchoolRegistrationComponent {
           this.commonMethod.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusMessage, 1);
         })
       });
+    }
   }
-}
+
+  globalDialogOpen(id: number) {
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete Event record?' : 'तुम्हाला कार्यक्रमचा रेकॉर्ड हटवायचा आहे का?',
+      cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onDeleteEvent(id);
+      }
+    })
+  }
+
+  onDeleteEvent(id: number) {
+    let deleteObj = {
+      "id": id,
+      "modifiedBy": 0,
+      "modifiedDate": new Date(),
+      "lan": ""
+    }
+
+    this.apiService.setHttp('delete', 'zp-satara/SchoolEvent/EventDelete', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        res.statusCode == "200" ? this.getTableData() : '';
+        res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1); 
+      }, error: ((err: any) => {
+        this.commonMethod.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusMessage, 1);
+      })
+    })
+  }
 
 
 

@@ -163,7 +163,7 @@ export class StudentReportComponent {
           this.talukaArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -181,17 +181,17 @@ export class StudentReportComponent {
             this.centerArr = [];
           }
         },
-        error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+        // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
       });
     }
   }
 
   getVillage() {
     this.villageArr = [];
-    let Tid = this.studentReportForm.value.talukaId;
+    let Cid = this.studentReportForm.value.centerId;
     // let Cid = 0;
-    if (Tid != 0) {
-      this.masterService.getAllVillage('', Tid).subscribe({
+    if (Cid != 0) {
+      this.masterService.getAllVillage('', Cid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All village", "m_Village": "सर्व गाव" }, ...res.responseData);
@@ -201,7 +201,7 @@ export class StudentReportComponent {
             this.villageArr = [];
           }
         },
-        error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+        // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
       });
     }
   }
@@ -221,7 +221,7 @@ export class StudentReportComponent {
           this.schoolArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -238,7 +238,7 @@ export class StudentReportComponent {
           this.groupByClassArray = [];
         }
       },
-      error: (err: any) => { this.errors.handelError(err.statusCode); }
+      // error: (err: any) => { this.errors.handelError(err.statusCode); }
     });
   }
 
@@ -257,7 +257,7 @@ export class StudentReportComponent {
           this.standardArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -274,7 +274,7 @@ export class StudentReportComponent {
           this.subjectArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -298,7 +298,7 @@ export class StudentReportComponent {
           this.academicYearsArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -316,7 +316,7 @@ export class StudentReportComponent {
           this.examTypeArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -332,7 +332,7 @@ export class StudentReportComponent {
           this.AssessmentTypeArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -347,7 +347,7 @@ export class StudentReportComponent {
           this.AssessmentTypeArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -551,8 +551,11 @@ export class StudentReportComponent {
       // this.AssessmentTypeArr = [];
     } else if (name == 'centerId'){
       this.studentReportForm.controls['schoolId'].setValue(0);
+      this.studentReportForm.controls['villageId'].setValue(0);
       // this.studentReportForm.controls['standardId'].setValue(0);
       this.standardArr = [];
+    }else if (name == 'villageId'){
+      this.studentReportForm.controls['schoolId'].setValue(0);
     } else if (name == 'schoolId') {
       this.studentReportForm.controls['groupId'].setValue(0);
       // this.studentReportForm.controls['standardId'].setValue(0);

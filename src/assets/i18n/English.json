@@ -1,11 +1,18 @@
 {
     "Labels": {
+        "Openingstock":"Opening Stock",
+        "SellPrice":"Sell Price",
+        "SellDate":"Sell Date",
+        "Outwardto":"Outward To",
+        "OutwardItmes":"Outward Itmes",
+        "OutwardItmesList":"Outward Itmes List",
         "remark":"Remark",
         "PurchasePrice":"Purchase Price",
         "PurchaseDate":"Purchase Date",
         "Units":"Units",
         "InwardItmes":"Inward Itmes",
         "addInwardItems":"Add Inward Items",
+        "addoutwardItems":"Add Outward Items",
         "InwardItmesList":"Inward Itmes List",
         "itemList":"Item List",
         "items":"Item",

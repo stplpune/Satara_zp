@@ -317,6 +317,13 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>School Name</mat-label>
+                            <input matInput formControlName="schoolId" readonly>
+                            <!-- [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" -->
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Event Name</mat-label>
                             <input matInput formControlName="eventName">
                         </mat-form-field>
@@ -369,6 +376,17 @@
                     </div>
                     <div class="col-sm-12 mt-3">
                         <div class="table-responsive">
+                            <div class="col-sm-6">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Event Name</mat-label>
+                                    <input matInput [formControl]="textSearch">
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <button mat-flat-button class="btn-main" type="button" (click)="getTableData()">Search</button>
+                                <button mat-flat-button class="btn-second me-2" type="button" (click)="onClear()">Clear</button>
+                            </div>
+
                             <table class="table dashboard-table">
                                 <thead>
                                     <tr>

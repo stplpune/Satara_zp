@@ -305,7 +305,7 @@
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.clusterName'| translate}}</mat-label>
                             <mat-select formControlName="clusterId"
-                                (selectionChange)="getAllSchool();clearDropdown('cluster')">
+                                (selectionChange)="getAllVillageTeacherDeatails();clearDropdown('cluster')">
                                 <mat-option *ngFor="let cluster of clusterArray"
                                     [value]="cluster.id">{{webStorageS.getLangauge() == 'EN' ?
                                     cluster.center : cluster.m_Center}}</mat-option>
@@ -313,6 +313,20 @@
                             <!-- <mat-error *ngIf="td['clusterId'].hasError('required')">Cluster Is Required</mat-error>                        -->
                         </mat-form-field>
                     </div>
+
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100 ">
+                            <mat-label>{{'Labels.village'| translate}}</mat-label>
+                            <mat-select formControlName="villageId"
+                                (selectionChange)="getAllSchool()">
+                                <mat-option *ngFor="let village of teacherDetailsVillageArray"
+                                    [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
+                                    village.village : village.m_Village}}</mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="td['clusterId'].hasError('required')">Cluster Is Required</mat-error>                        -->
+                        </mat-form-field>
+                    </div>
+
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.workingSchoolName'| translate}}</mat-label>

@@ -26,6 +26,7 @@ export class TeacherRegistrationComponent implements OnInit {
   searchContent = new FormControl('');
   talukaId = new FormControl('');
   clusterId = new FormControl('');
+  villageId = new FormControl('');
   tableDataArray = new Array();
   totalCount: number = 0;
   cardCurrentPage: number = 0;
@@ -44,6 +45,7 @@ export class TeacherRegistrationComponent implements OnInit {
   highLightFlag: boolean =true;
   talukaArray = new Array();
   clusterArray = new Array();
+  villageArray = new Array();
   viewStatus='Table';
   @HostBinding('class') className = '';
   constructor(private dialog: MatDialog, private overlay: OverlayContainer, private apiService: ApiService, private errors: ErrorsService,
@@ -186,6 +188,25 @@ export class TeacherRegistrationComponent implements OnInit {
         this.errors.handelError(error.statusCode)
       }
     });
+  }
+
+
+  getVillage() {
+    this.villageArray = [];
+    let centerId = this.clusterId.value;
+    this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
+      next: ((res: any) => {
+        if (res.statusCode == 200 && res.responseData.length) {
+         this.villageArray = res.responseData;
+        
+        } else {
+          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+          this.clusterArray = [];
+        }
+      }), error: (error: any) => {
+        this.errors.handelError(error.statusCode)
+      }
+    })
   }
 
   //#endregion ---------------------------------------------- PDF Download start here ----------------------------------------// 

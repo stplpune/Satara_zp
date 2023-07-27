@@ -119,12 +119,12 @@ export class AddUpdateSchoolRegistrationComponent {
 
   eventFormFeild(){
     this.eventForm = this.fb.group({
-        "id": 0,
-        "eventName": [''],
+        "id": [this.editEventObj ? this.editEventObj?.id : 0],
+        "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
         "m_EventName": [''],
-        "description": [''],
+        "description": [this.editEventObj ? this.editEventObj?.description : ''],
         "createdBy": 0,
-        "isDeleted": false,
+        "isDeleted": true,
         "lan": [''],
         eventImages : this.fb.array([
           this.fb.group({
@@ -134,7 +134,7 @@ export class AddUpdateSchoolRegistrationComponent {
             "eventId": 0,
             "docPath": [''],
             "createdBy": 0,
-            "isDeleted": false
+            "isDeleted": true
           })
         ])
     });
@@ -357,13 +357,12 @@ export class AddUpdateSchoolRegistrationComponent {
   }
   //#endregiongion ------------------------------------------ Add/Update Record end here --------------------------------------------//
 
+
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
-  onEdit() {
+  onEdit(data ?: any) {
     this.editFlag = true;
     if(this.userId == 1){
-      
-    this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage)
-    // this.data.uploadImage ? this.schoolRegForm.value.uploadImage = this.data.uploadImage : '';
+    this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
     this.uploadImg = this.data?.uploadImage   
     this.data.schoolDocument.map((res: any) => {
       let schoolDocumentObj = {
@@ -380,6 +379,26 @@ export class AddUpdateSchoolRegistrationComponent {
       this.imgArray.push(schoolDocumentObj);
     })
     this.getDistrict();
+    }
+    else{
+      console.log("edit data : ", data);
+      this.editEventObj = data;
+      this.eventFormFeild();
+      this.editEventObj.eventImages.map((res: any) => {
+        console.log("res : ", res);
+        
+        // let eventImgObj = {
+        //     "id": res.id,
+        //     "schoolId": 0,
+        //     "documentId": 5,
+        //     "eventId": 0,
+        //     "docPath": [''],
+        //     "createdBy": 0,
+        //     "isDeleted": true
+        // }
+      })
+
+
     }
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
@@ -478,7 +497,7 @@ export class AddUpdateSchoolRegistrationComponent {
     }
     else {
       this.ngxSpinner.show();
-      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/SchoolEvent/' + url, false, formValue, false, 'baseUrl');
+      this.apiService.setHttp(this.editEventObj ? 'put' : 'post', 'zp-satara/SchoolEvent/' + url, false, formValue, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();
@@ -494,5 +513,7 @@ export class AddUpdateSchoolRegistrationComponent {
       });
   }
 }
+
+
 
 }

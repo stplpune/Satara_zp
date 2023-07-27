@@ -1,7 +1,7 @@
 
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
@@ -30,9 +30,11 @@ export class AddCastComponent {
     private commonMethods: CommonMethodsService,
     private errors: ErrorsService,
     public dialogRef: MatDialogRef<AddCastComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private masterService: MasterService,
     public validators: ValidationService){
-
+      console.log("data",data);
+      
   }
   ngOnInit() {
     this.languageFlag = this.webService.languageFlag;
@@ -45,10 +47,10 @@ export class AddCastComponent {
     this.addCastForm = this.fb.group({
       ... this.webService.createdByProps(),
         id: 0,
-        religionId: ['',Validators.required],
-        casteCategoryId: ['',Validators.required],
+        religionId: [this.data.religionId],
+        casteCategoryId: [this.data.casteCategoryId],
         caste: ['',[Validators.required, Validators.pattern(this.validators.name)]],
-        m_Caste: [''],
+        m_Caste: ['',Validators.required],
         lan: ['']
       
     })

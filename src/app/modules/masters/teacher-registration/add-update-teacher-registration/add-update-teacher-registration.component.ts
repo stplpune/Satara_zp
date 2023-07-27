@@ -50,7 +50,7 @@ export class AddUpdateTeacherRegistrationComponent {
   TalukaDate = new Date()
   age!: number;
   isSubmitted: boolean = false;
-
+  teacherDetailsVillageArray = new Array()
   assignClass: boolean = false;
   casteVerification = [
     { id: 1, name: 'Yes', isCastVarificationDone: true, _name: 'होय' },
@@ -548,7 +548,7 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.clusterArray = res.responseData;
-          this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllSchool()) : '';
+          this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllVillageTeacherDeatails()) : '';
         } else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
@@ -558,11 +558,32 @@ export class AddUpdateTeacherRegistrationComponent {
       }
     })
   }
+
+  getAllVillageTeacherDeatails() {
+    this.teacherDetailsVillageArray = [];
+    let centerId = this.teacherRegForm.value.teacherDetails.clusterId;
+    this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
+      next: ((res: any) => {
+        if (res.statusCode == 200 && res.responseData.length) {
+         this.teacherDetailsVillageArray = res.responseData;
+          this.editFlag ? (this.td['villageId'].setValue(this.editObj.teacherDetails?.villageId),this.getAllSchool()) : '';
+        } else {
+          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          this.clusterArray = [];
+        }
+      }), error: (error: any) => {
+        this.errorHandler.handelError(error.statusCode)
+      }
+    })
+  }
+
+
   getAllSchool() {
     this.schoolArray = [];
     let talukaId = this.teacherRegForm.value.teacherDetails.talukaId;
     let clusterId = this.teacherRegForm.value.teacherDetails.clusterId;
-    this.masterService.getAllSchoolByCriteria(this.webStorageS.languageFlag, talukaId, 0, clusterId).subscribe({
+    let villageId = this.teacherRegForm.value.teacherDetails.villageId;
+    this.masterService.getAllSchoolByCriteria(this.webStorageS.languageFlag, talukaId, villageId, clusterId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.schoolArray = res.responseData;
@@ -721,6 +742,8 @@ export class AddUpdateTeacherRegistrationComponent {
   //#endregion -------------------------------------end submit-----------------------------------------------
   //#region ---------------------------------------- start edit ----------------------------------------------
   onEdit() {    
+    console.log("this.editObj",this.editObj);
+    
     this.editFlag = true;
     this.assignClassArray = this.editObj.assignTeacher;
     this.uploadImghtml = this.editObj.uploadImage;

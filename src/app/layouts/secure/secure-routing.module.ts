@@ -32,9 +32,9 @@ const routes: Routes = [
   { path: 'asset-type', loadChildren: () => import('../../modules/infrastructure/asset-type/asset-type.module').then(m => m.AssetTypeModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Asset Type', m_title: 'मालमत्ता प्रकार', active: true }] } },
   { path: 'asset', loadChildren: () => import('../../modules/infrastructure/asset/asset.module').then(m => m.AssetModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Asset', m_title: 'मालमत्ता', active: true }] } },
   { path: 'inward-item', loadChildren: () => import('../../modules/infrastructure/inward-item/inward-item.module').then(m => m.InwardItemModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Inward Item', m_title: 'आवक वस्तू', active: true }] } },
-  { path: 'store-master', loadChildren: () => import('../../modules/infrastructure/store-master/store-master.module').then(m => m.StoreMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Store Master', m_title: 'स्टोअर मास्टर', active: true }] } },
-  { path: 'item-registration', loadChildren: () => import('../../modules/infrastructure/item-registration/item-registration.module').then(m => m.ItemRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Item Registration', m_title: 'वस्तू नोंदणी', active: true }] } },
-  { path: 'outword-item', loadChildren: () => import('../../modules/infrastructure/outward-item/outward-item.module').then(m => m.OutwardItemModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Item Transfer', m_title: 'वस्तू ट्रान्सफर', active: true }] } },
+  { path: 'store-stock-report', loadChildren: () => import('../../modules/infrastructure/store-master/store-master.module').then(m => m.StoreMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Store Master', m_title: 'स्टोअर मास्टर', active: true }] } },
+  { path: 'item', loadChildren: () => import('../../modules/infrastructure/item-registration/item-registration.module').then(m => m.ItemRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Item Registration', m_title: 'वस्तू नोंदणी', active: true }] } },
+  { path: 'outward-item', loadChildren: () => import('../../modules/infrastructure/outward-item/outward-item.module').then(m => m.OutwardItemModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Item Transfer', m_title: 'वस्तू ट्रान्सफर', active: true }] } },
 ]
   
 

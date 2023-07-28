@@ -1,4 +1,4 @@
-<form [formGroup]="itemForm">
+<form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
     <mat-card class="plain-card">
         <mat-card-header class="card-header">
             <div class="d-flex align-items-center justify-content-between w-100">
@@ -18,43 +18,45 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="categoryId" (selectionChange)="onChangeDropD('category'); getSubCategoryDrop();">
+                            <mat-option [value]="category.id" *ngFor="let category of categoryArr">
+                                {{webStorageS.getLangauge() == 'EN' ? category.category : category.m_Category}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.subcategoryname'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="subCategoryId" (selectionChange)="onChangeDropD('subCategory'); getItemDrop();">
+                            <mat-option [value]="subCategory.id" *ngFor="let subCategory of subCategoryArr">{{webStorageS.getLangauge() == 'EN' ? subCategory.subCategory : subCategory.m_subCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="itemId">
+                            <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() == 'EN' ? item.itemName : item.m_ItemName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="quantity" (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.PurchasePrice'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="price" (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.PurchaseDate'| translate}}</mat-label>
-                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly>
+                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly formControlName="purchase_Sales_Date">
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -71,27 +73,30 @@
                                 matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhoto' |
                                 translate}}</button>
                             <input type="file" name="myfile" [disabled]="uploadImg" accept=".png, .jpg, .jpeg"
-                                 #uploadImage />
+                                 #uploadImage (change)="imgUpload($event)" />
                         </div>
                         <div class="action-btn" *ngIf="uploadImg">
                             <button mat-icon-button class="btn-icon text-primary" type="button"
                                  matTooltip="{{'Labels.View' | translate}}"
-                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                matTooltipPosition="below" matTooltipClass="tooltip" (click)="viewImg()">
                                 <mat-icon>visibility</mat-icon>
                             </button>
                             <button mat-icon-button class="btn-icon text-danger" type="button"
                                  matTooltip="{{'Labels.delete' | translate}}"
-                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                matTooltipPosition="below" matTooltipClass="tooltip" (click)="clearImg()">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>
                     </div>
+                    <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
+                        Photo Is Required
+                    </mat-error>
                 </div>
                 
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.remark'| translate}}</mat-label>
-                        <textarea matInput rows="3" cols="10"></textarea>
+                        <textarea matInput rows="3" cols="10" formControlName="remark"></textarea>
                     </mat-form-field>
                 </div>
             </div>

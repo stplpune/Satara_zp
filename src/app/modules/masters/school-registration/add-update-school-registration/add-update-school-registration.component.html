@@ -1,425 +1,435 @@
-<mat-card class="plain-card">
-    <div *ngIf="userId != 4">
-        <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()">
-
-            <mat-card-header class="card-header">
-                <div class="d-flex align-items-center justify-content-between w-100">
-                    <h6 class="text-main mb-0 fw-bold">{{editFlag ?( 'Labels.updateSchool' | translate)
-                        :('Labels.registerSchool' | translate)}}</h6>
-                    <button mat-icon-button mat-dialog-close class="btn-modal-close">
-                        <mat-icon>
-                            close
-                        </mat-icon>
-                    </button>
-                </div>
-            </mat-card-header>
-            <mat-card-content class="card-body card-height-sm scrollbar">
-                <div class="row gx-2 gy-0">
-                    <div class="col-sm-4">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.district' | translate}}</mat-label>
-                            <mat-select formControlName="districtId" [disabled]="schoolRegForm.value.districtId == 1">
-                                <mat-option *ngFor="let district of districtArr" [value]="district.id">
-                                    {{webStorageS.getLangauge() == 'EN' ?
-                                    district.district : district.m_District}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="f['districtId'].hasError('required') || f['districtId'].hasError('touched')">
+<ng-container *ngIf="userId != 4">
+    <div mat-dialog-title class="card-header">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h6 class="text-main mb-0 fw-bold">{{editFlag ?( 'Labels.updateSchool' | translate)
+                :('Labels.registerSchool' | translate)}}</h6>
+            <button mat-icon-button mat-dialog-close class="btn-modal-close">
+                <mat-icon>
+                    close
+                </mat-icon>
+            </button>
+        </div>
+    </div>
+    <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()">
+        <mat-dialog-content class="card-body card-height-sm scrollbar">
+            <div class="row gx-2 gy-0">
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.district' | translate}}</mat-label>
+                        <mat-select formControlName="districtId" [disabled]="schoolRegForm.value.districtId == 1">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                district.district : district.m_District}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="f['districtId'].hasError('required') || f['districtId'].hasError('touched')">
                                     {{'Labels.districtIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-form-field appearance="outline" class="w-100 ">
-                            <mat-label>{{'Labels.taluka' | translate}}</mat-label>
-                            <mat-select formControlName="talukaId"
-                                (selectionChange)="clearDropdown('Taluka');getVillage();getBitOrCenter()">
-                                <mat-option *ngFor="let taluka of talukaArr" [value]="taluka.id">
-                                    {{webStorageS.getLangauge() == 'EN' ?
-                                    taluka.taluka : taluka.m_Taluka}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="f['talukaId'].hasError('required') || f['talukaId'].hasError('touched')">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka' | translate}}</mat-label>
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="clearDropdown('Taluka');getVillage();getBitOrCenter()">
+                            <mat-option *ngFor="let taluka of talukaArr" [value]="taluka.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                taluka.taluka : taluka.m_Taluka}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="f['talukaId'].hasError('required') || f['talukaId'].hasError('touched')">
                                     {{'Labels.talukaIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
+                    </mat-form-field>
+                </div>
 
-                    <!-- New Changes -->
-                    <div class="col-sm-4">
-                        <div class="d-flex mt-2 gap-2">
-                            <!-- <mat-form-field appearance="outline" class="w-100"> -->
-                            <mat-label>{{'Labels.SchoolIsKendra' | translate}}</mat-label>
-                            <!-- <mat-select formControlName="isKendraSchool"> -->
-                            <!-- <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
+                <!-- New Changes -->
+                <div class="col-sm-4">
+                    <div class="d-flex mt-2 gap-2">
+                        <!-- <mat-form-field appearance="outline" class="w-100"> -->
+                        <mat-label>{{'Labels.SchoolIsKendra' | translate}}</mat-label>
+                        <!-- <mat-select formControlName="isKendraSchool"> -->
+                        <!-- <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
                                     formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
                                     [class.disabled]="editObj?.isKendraSchool == true || !schoolRegForm.value.talukaId" />Yes -->
-                            <input type="checkbox" name="check" id="check1" class="ms-2"
-                                style="accent-color: rgb(0 95 87);" formControlName="isKendraSchool"
-                                (change)="updateValidation($event);getBitOrCenter()" [class.disabled]="editObj" />Yes
-                            <!-- </mat-select> -->
-                            <!-- </mat-form-field> -->
-                        </div>
+                        <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
+                            formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
+                            [class.disabled]="editObj" />Yes
+                        <!-- </mat-select> -->
+                        <!-- </mat-form-field> -->
                     </div>
+                </div>
 
 
-                    <ng-container *ngIf="schoolRegForm.value.isKendraSchool == false">
-                        <div class="col-sm-4">
-                            <mat-form-field appearance="outline" class="w-100 ">
-                                <mat-label>{{'Labels.kendra' | translate}}</mat-label>
-                                <mat-select formControlName="centerId">
-                                    <mat-option *ngFor="let center of centerArr" [value]="center.id">
-                                        {{webStorageS.getLangauge() == 'EN' ?
-                                        center.center : center.m_Center}}
-                                    </mat-option>
-                                </mat-select>
-                                <!-- <mat-error *ngIf="f['centerId'].hasError('required') || f['centerId'].hasError('touched')">
-                                        {{'Labels.kendraIsRequired' | translate}}
-                                    </mat-error> -->
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-                    <ng-container *ngIf="schoolRegForm.value.isKendraSchool == true">
-                        <div class="col-sm-4">
-                            <mat-form-field appearance="outline" class="w-100 ">
-                                <mat-label>Bit</mat-label>
-                                <mat-select formControlName="bitId">
-                                    <mat-option *ngFor="let bit of bitArr" [value]="bit.id">
-                                        {{webStorageS.getLangauge() == 'EN' ?
-                                        bit.bitName : bit.m_BitName}}
-                                    </mat-option>
-                                </mat-select>
-                                <!-- <mat-error *ngIf="f['centerId'].hasError('required') || f['centerId'].hasError('touched')">
-                                            {{'Labels.kendraIsRequired' | translate}}
-                                        </mat-error> -->
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-
-
-                    <!-- New Changes -->
-
-
+                <ng-container *ngIf="schoolRegForm.value.isKendraSchool == false">
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
-                            <mat-label>{{'Labels.village' | translate}}</mat-label>
-                            <mat-select formControlName="villageId">
-                                <mat-option *ngFor="let village of villageArr" [value]="village.id">
+                            <mat-label>{{'Labels.kendra' | translate}}</mat-label>
+                            <mat-select formControlName="centerId">
+                                <mat-option *ngFor="let center of centerArr" [value]="center.id">
                                     {{webStorageS.getLangauge() == 'EN' ?
-                                    village.village : village.m_Village}}
+                                    center.center : center.m_Center}}
                                 </mat-option>
                             </mat-select>
-                            <!-- <mat-error *ngIf="f['villageId'].hasError('required') || f['villageId'].hasError('touched')">
+                            <!-- <mat-error *ngIf="f['centerId'].hasError('required') || f['centerId'].hasError('touched')">
+                                        {{'Labels.kendraIsRequired' | translate}}
+                                    </mat-error> -->
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="schoolRegForm.value.isKendraSchool == true">
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100 ">
+                            <mat-label>Bit</mat-label>
+                            <mat-select formControlName="bitId">
+                                <mat-option *ngFor="let bit of bitArr" [value]="bit.id">
+                                    {{webStorageS.getLangauge() == 'EN' ?
+                                    bit.bitName : bit.m_BitName}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="f['centerId'].hasError('required') || f['centerId'].hasError('touched')">
+                                            {{'Labels.kendraIsRequired' | translate}}
+                                        </mat-error> -->
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+
+
+                <!-- New Changes -->
+
+
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.village' | translate}}</mat-label>
+                        <mat-select formControlName="villageId">
+                            <mat-option *ngFor="let village of villageArr" [value]="village.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                village.village : village.m_Village}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="f['villageId'].hasError('required') || f['villageId'].hasError('touched')">
                                     {{'Labels.villageIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.schoolTypeDescription' | translate}}</mat-label>
-                            <mat-select formControlName="s_TypeId">
-                                <mat-option *ngFor="let schoolType of schoolTypeArr" [value]="schoolType.id">
-                                    {{webStorageS.getLangauge() == 'EN' ?
-                                    schoolType.schoolType : schoolType.m_SchoolType}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="f['s_TypeId'].hasError('required') || f['s_TypeId'].hasError('touched')">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.schoolTypeDescription' | translate}}</mat-label>
+                        <mat-select formControlName="s_TypeId">
+                            <mat-option *ngFor="let schoolType of schoolTypeArr" [value]="schoolType.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                schoolType.schoolType : schoolType.m_SchoolType}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="f['s_TypeId'].hasError('required') || f['s_TypeId'].hasError('touched')">
                                     {{'Labels.schoolTypeDescriptionIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
+                    </mat-form-field>
+                </div>
 
-                    <div class="col-sm-6">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.school' | translate}}</mat-label>
-                            <textarea matInput formControlName="schoolName" maxlength="100"
-                                (keypress)="validationService.noFirstSpaceAllow($event);" rows="3"></textarea>
-                            <!-- <mat-error *ngIf="f['schoolName'].hasError('required') || f['schoolName'].hasError('touched')">
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.school' | translate}}</mat-label>
+                        <textarea matInput formControlName="schoolName" maxlength="100"
+                            (keypress)="validationService.noFirstSpaceAllow($event);" rows="3"></textarea>
+                        <!-- <mat-error *ngIf="f['schoolName'].hasError('required') || f['schoolName'].hasError('touched')">
                                     {{'Labels.schoolNameIsRequired' | translate}}
                                 </mat-error> -->
-                            <mat-error *ngIf="f['schoolName'].hasError('pattern')">
-                                {{'Labels.enterValidSchoolName' | translate}}
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-6">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.school(Marathi)' | translate}}</mat-label>
-                            <textarea matInput formControlName="m_SchoolName" maxlength="100"
-                                (keypress)="validationService.noFirstSpaceAllow($event); validationService.unicodeMarathiValidation($event);"
-                                rows="3"></textarea>
-                            <!-- <mat-error
+                        <mat-error *ngIf="f['schoolName'].hasError('pattern')">
+                            {{'Labels.enterValidSchoolName' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.school(Marathi)' | translate}}</mat-label>
+                        <textarea matInput formControlName="m_SchoolName" maxlength="100"
+                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.unicodeMarathiValidation($event);"
+                            rows="3"></textarea>
+                        <!-- <mat-error
                                     *ngIf="f['m_SchoolName'].hasError('required') || f['m_SchoolName'].hasError('touched')">
                                     {{'Labels.schoolNameIsRequired' | translate}}
                                 </mat-error> -->
-                            <mat-error *ngIf="f['m_SchoolName'].hasError('pattern')">
-                                {{'Labels.schoolNameMarathiIsRequired' | translate}}
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-6">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.schoolCode' | translate}}</mat-label>
-                            <input matInput maxlength="15" (keypress)="validationService.alphaNumericOnly"
-                                formControlName="schoolCode">
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-6">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.schoolManagementDescription' | translate}}</mat-label>
-                            <mat-select formControlName="s_ManagementId">
-                                <mat-option *ngFor="let schoolMng of schoolMngArr" [value]="schoolMng.id">
-                                    {{webStorageS.getLangauge() == 'EN' ?
-                                    schoolMng.management_desc : schoolMng.m_Management_desc}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error
+                        <mat-error *ngIf="f['m_SchoolName'].hasError('pattern')">
+                            {{'Labels.schoolNameMarathiIsRequired' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.schoolCode' | translate}}</mat-label>
+                        <input matInput maxlength="15" (keypress)="validationService.alphaNumericOnly"
+                            formControlName="schoolCode">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.schoolManagementDescription' | translate}}</mat-label>
+                        <mat-select formControlName="s_ManagementId">
+                            <mat-option *ngFor="let schoolMng of schoolMngArr" [value]="schoolMng.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                schoolMng.management_desc : schoolMng.m_Management_desc}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error
                                     *ngIf="f['s_ManagementId'].hasError('required') || f['s_ManagementId'].hasError('touched')">
                                     {{'Labels.schoolManagementIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
+                    </mat-form-field>
+                </div>
 
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.LowestClass' | translate}}</mat-label>
-                            <mat-select formControlName="lowestClass"
-                                (selectionChange)="clearDropdown('LowestClass'); getHighestGroupClass();">
-                                <mat-option *ngFor="let lowestGroup of lowestGroupclassArr"
-                                    [value]="lowestGroup.lowestClass">
-                                    {{lowestGroup.value}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="f['lowestClass'].hasError('required') || f['lowestClass'].hasError('touched')">
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.LowestClass' | translate}}</mat-label>
+                        <mat-select formControlName="lowestClass"
+                            (selectionChange)="clearDropdown('LowestClass'); getHighestGroupClass();">
+                            <mat-option *ngFor="let lowestGroup of lowestGroupclassArr"
+                                [value]="lowestGroup.lowestClass">
+                                {{lowestGroup.value}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="f['lowestClass'].hasError('required') || f['lowestClass'].hasError('touched')">
                                     {{'Labels.groupClassIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
+                    </mat-form-field>
+                </div>
 
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.HighestClass' | translate}}</mat-label>
-                            <mat-select formControlName="highestClass">
-                                <mat-option *ngFor="let highestGroup of highestGroupclassArr"
-                                    [value]="highestGroup.lowestClass">
-                                    {{highestGroup.value}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="f['highestClass'].hasError('required') || f['highestClass'].hasError('touched')">
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.HighestClass' | translate}}</mat-label>
+                        <mat-select formControlName="highestClass">
+                            <mat-option *ngFor="let highestGroup of highestGroupclassArr"
+                                [value]="highestGroup.lowestClass">
+                                {{highestGroup.value}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="f['highestClass'].hasError('required') || f['highestClass'].hasError('touched')">
                                     {{'Labels.groupClassIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-6">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.schoolCategoryDescription' | translate}}</mat-label>
-                            <mat-select formControlName="s_CategoryId">
-                                <mat-option *ngFor="let category of categoryArr" [value]="category.id">
-                                    {{webStorageS.getLangauge() == 'EN' ?
-                                    category.category_desc : category.m_Category_desc}}
-                                </mat-option>
-                            </mat-select>
-                            <!-- <mat-error
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.schoolCategoryDescription' | translate}}</mat-label>
+                        <mat-select formControlName="s_CategoryId">
+                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                category.category_desc : category.m_Category_desc}}
+                            </mat-option>
+                        </mat-select>
+                        <!-- <mat-error
                                     *ngIf="f['s_CategoryId'].hasError('required') || f['s_CategoryId'].hasError('touched')">
                                     {{'Labels.schoolCategoryIsRequired' | translate}}
                                 </mat-error> -->
-                        </mat-form-field>
-                    </div>
+                    </mat-form-field>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="upload-btn-wrapper">
-                                <button class="upload-btn" (click)="uploadProImage.click()"
-                                    type="button">{{'Labels.UploadProfilePhoto' | translate}}</button>
-                                <input type="file" name="myfile" formControlName="uploadImage"
-                                    (change)="imgUpload($event)" #uploadProImage accept=".png, .jpg, .jpeg">
-                            </div>
-                            <div class="action-btn" *ngIf="uploadImg">
-                                <button mat-icon-button class="btn-icon text-primary" type="button" *ngIf="uploadImg"
-                                    (click)="viewImg()" matTooltip="{{'Labels.View' | translate}}"
-                                    matTooltipPosition="below" matTooltipClass="tooltip">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                                <button mat-icon-button class="btn-icon text-danger" type="button" *ngIf="uploadImg"
-                                    (click)="clearImg()" matTooltip="{{'Labels.delete' | translate}}"
-                                    matTooltipPosition="below" matTooltipClass="tooltip">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="upload-btn-wrapper">
+                            <button class="upload-btn" (click)="uploadProImage.click()"
+                                type="button">{{'Labels.UploadProfilePhoto' | translate}}</button>
+                            <input type="file" name="myfile" formControlName="uploadImage" (change)="imgUpload($event)"
+                                #uploadProImage accept=".png, .jpg, .jpeg">
                         </div>
-                        <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                        <div class="action-btn" *ngIf="uploadImg">
+                            <button mat-icon-button class="btn-icon text-primary" type="button" *ngIf="uploadImg"
+                                (click)="viewImg()" matTooltip="{{'Labels.View' | translate}}"
+                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button mat-icon-button class="btn-icon text-danger" type="button" *ngIf="uploadImg"
+                                (click)="clearImg()" matTooltip="{{'Labels.delete' | translate}}"
+                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div formArrayName="schoolDocument"
-                                *ngFor="let img of multipleImg.controls; let i = index;">
-                                <div [formGroupName]="i" class="d-flex">
-                                    <div class="upload-btn-wrapper">
-                                        <button type="button" class="upload-btn"
-                                            (click)="uploadGallImage.click()">{{'Labels.UploadSchoolPhoto' |
-                                            translate}}</button>
-                                        <input type="file" name="myfile" formControlName="docPath" multiple
-                                            #uploadGallImage (change)="multipleImgUpload($event)"
-                                            accept=".png, .jpg, .jpeg" />
-                                    </div>
+                    <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                </div>
+                <div class="col-sm-6">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div formArrayName="schoolDocument" *ngFor="let img of multipleImg.controls; let i = index;">
+                            <div [formGroupName]="i" class="d-flex">
+                                <div class="upload-btn-wrapper">
+                                    <button type="button" class="upload-btn"
+                                        (click)="uploadGallImage.click()">{{'Labels.UploadSchoolPhoto' |
+                                        translate}}</button>
+                                    <input type="file" name="myfile" formControlName="docPath" multiple #uploadGallImage
+                                        (change)="multipleImgUpload($event)" accept=".png, .jpg, .jpeg" />
                                 </div>
                             </div>
                         </div>
-                        <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
-                        <!-- Display Image -->
-                        <div class="d-flex flex-wrap gap-4">
-                            <ng-container *ngFor="let item of imgArray; let i = index">
-                                <div class="gallery position-relative">
-                                    <img [src]="item.docPath" height="130px" width="130px" class="border">
-                                    <span class="position-absolute" style="top:-17px;right:-17px;">
-                                        <button type="button" mat-icon-button
-                                            class="bg-danger bg-opacity-25 text-danger material-icons"
-                                            (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
-                                            matTooltipPosition="right" matTooltipClass="tooltip">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                    </span>
-                                </div>
-                            </ng-container>
-                        </div>
-                        <!-- Display Image -->
                     </div>
+                    <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                    <!-- Display Image -->
+                    <div class="d-flex flex-wrap gap-4">
+                        <ng-container *ngFor="let item of imgArray; let i = index">
+                            <div class="gallery position-relative">
+                                <img [src]="item.docPath" height="130px" width="130px" class="border">
+                                <span class="position-absolute" style="top:-17px;right:-17px;">
+                                    <button type="button" mat-icon-button
+                                        class="bg-danger bg-opacity-25 text-danger material-icons"
+                                        (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
+                                        matTooltipPosition="right" matTooltipClass="tooltip">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- Display Image -->
                 </div>
-            </mat-card-content>
-            <mat-card-footer class="card-footer">
-                <div class="d-flex justify-content-end align-items-center">
-                    <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' |
-                        translate}}</button>
-                    <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
-                        :('Labels.submit' |
-                        translate)}}</button>
-                </div>
-            </mat-card-footer>
-        </form>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end" class="card-footer">
+            <div class="d-flex w-100 justify-content-end align-items-center">
+                <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' |
+                    translate}}</button>
+                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
+                    :('Labels.submit' |
+                    translate)}}</button>
+            </div>
+        </mat-dialog-actions>
+    </form>
+</ng-container>
+
+
+<ng-container *ngIf="userId == 4">
+    <div mat-dialog-title class="card-header">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h6 class="text-main mb-0 fw-bold">{{editFlag ? 'Update Event Details' : 'Event Registration'}}</h6>
+            <button mat-icon-button mat-dialog-close class="btn-modal-close">
+                <mat-icon>
+                    close
+                </mat-icon>
+            </button>
+        </div>
     </div>
-
-
-    <div *ngIf="userId == 4">
-        <form [formGroup]="eventForm" (ngSubmit)="onSubmitEvent()">
-            <mat-card-header class="card-header">
-                <div class="d-flex align-items-center justify-content-between w-100">
-                    <h6 class="text-main mb-0 fw-bold">{{editFlag ? 'Update Event Details' : 'Event Registration'}}</h6>
-                    <button mat-icon-button mat-dialog-close class="btn-modal-close">
-                        <mat-icon>
-                            close
-                        </mat-icon>
-                    </button>
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmitEvent()">
+        <mat-dialog-content class="card-body card-height-mid scrollbar">
+            <div class="row">
+                <div class="col-sm-7  border-end">
+                    <div class="d-flex justify-content-between gap-2">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Event Name</mat-label>
+                            <input matInput [formControl]="textSearch">
+                        </mat-form-field>
+                        <div class="d-flex gap-2">
+                            <button mat-flat-button class="btn-main" type="button" (click)="getTableData()">
+                                Search
+                            </button>
+                            <button mat-flat-button class="btn-second me-2" type="button" (click)="onClear()">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive table-height-md scrollbar">
+                        <table class="table dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Event Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of tableDataArray; let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{data?.eventName}}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <button mat-icon-button id="tooltip"
+                                                matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
+                                                type="button" matTooltipClass="tooltip" (click)="onEdit(data)">
+                                                <mat-icon class="text-main">edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button id="tooltip"
+                                                matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
+                                                type="button" matTooltipClass="tooltip"
+                                                (click)="globalDialogOpen(data.id)">
+                                                <mat-icon class="text-main">delete</mat-icon>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </mat-card-header>
-            <mat-card-content class="card-body card-height-sm scrollbar">
-                <div class="row">
-                    <div class="col-sm-6">
+                <div class="col-sm-5 mb-3">
+                    <div class="">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>School Name</mat-label>
-                            <input matInput formControlName="schoolId" readonly>
-                            <!-- [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" -->
+                            <input matInput [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" readonly>
                         </mat-form-field>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Event Name</mat-label>
                             <input matInput formControlName="eventName">
                         </mat-form-field>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Event Name in marathi</mat-label>
+                            <input matInput formControlName="m_EventName"
+                                (keypress)="validationService.noFirstSpaceAllow($event);validationService.unicodeMarathiAlphanumberic($event)">
+                        </mat-form-field>
+                    </div>
+                    <div class="">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Description</mat-label>
                             <textarea matInput formControlName="description"></textarea>
                         </mat-form-field>
                     </div>
-                    <div class="col-sm-12">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div formArrayName="eventImages" *ngFor="let img of multipleImg.controls; let i = index;">
-                                <div [formGroupName]="i" class="d-flex">
-                                    <div class="upload-btn-wrapper">
-                                        <button type="button" class="upload-btn"
-                                            (click)="uploadEventImage.click()">{{'Labels.UploadEventPhoto'|
-                                            translate}}</button>
-                                        <input type="file" name="myfile" formControlName="docPath" multiple
-                                            #uploadEventImage (change)="multipleImgUpload($event)"
-                                            accept=".png, .jpg, .jpeg" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
-                        <div class="d-flex flex-wrap gap-4">
-                            <ng-container *ngFor="let item of imgArray; let i = index">
-                                <div class="gallery position-relative">
-                                    <img [src]="item.docPath" height="130px" width="130px" class="border">
-                                    <span class="position-absolute" style="top:-17px;right:-17px;">
-                                        <button type="button" mat-icon-button
-                                            class="bg-danger bg-opacity-25 text-danger material-icons"
-                                            (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
-                                            matTooltipPosition="right" matTooltipClass="tooltip">
-                                            <mat-icon>delete</mat-icon>
-                                        </button>
-                                    </span>
-                                </div>
-                            </ng-container>
-                        </div>
-                    </div>
                     <div class="d-flex justify-content-end align-items-center">
-                        <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel'
-                            |
-                            translate}}</button>
-                        <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate)
-                            :('Labels.submit' |
-                            translate)}}</button>
-                    </div>
-                    <div class="col-sm-12 mt-3">
-                        <div class="table-responsive">
-                            <div class="col-sm-6">
-                                <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>Event Name</mat-label>
-                                    <input matInput [formControl]="textSearch">
-                                </mat-form-field>
+                        <div formArrayName="eventImages" *ngFor="let img of multipleImg.controls; let i = index;">
+                            <div [formGroupName]="i" class="d-flex justify-content-end">
+                                <div class="upload-btn-wrapper">
+                                    <button type="button" class="upload-btn"
+                                        (click)="uploadEventImage.click()">{{'Labels.UploadEventPhoto'|
+                                        translate}}</button>
+                                    <input type="file" name="myfile" formControlName="docPath" multiple
+                                        #uploadEventImage (change)="multipleImgUpload($event)"
+                                        accept=".png, .jpg, .jpeg" />
+                                </div>
                             </div>
-                            <div>
-                                <button mat-flat-button class="btn-main" type="button" (click)="getTableData()">Search</button>
-                                <button mat-flat-button class="btn-second me-2" type="button" (click)="onClear()">Clear</button>
-                            </div>
-
-                            <table class="table dashboard-table">
-                                <thead>
-                                    <tr>
-                                        <th>Sr. No.</th>
-                                        <th>Event Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let data of tableDataArray; let i=index">
-                                        <td>{{i+1}}</td>
-                                        <td>{{data?.eventName}}</td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <button mat-icon-button id="tooltip"
-                                                    matTooltip="{{'Labels.edit' | translate}}"
-                                                    matTooltipPosition="right" type="button" matTooltipClass="tooltip" (click)="onEdit(data)">
-                                                    <mat-icon class="text-main">edit</mat-icon>
-                                                </button>
-                                                <button mat-icon-button id="tooltip"
-                                                    matTooltip="{{'Labels.edit' | translate}}"
-                                                    matTooltipPosition="right" type="button" matTooltipClass="tooltip" (click)="globalDialogOpen(data.id)">
-                                                    <mat-icon class="text-main">delete</mat-icon>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <p style="font-size: 11px;" class="mb-0 pt-0">{{'Labels.NoteImageFormat' | translate}}
+                            </p>
                         </div>
                     </div>
                 </div>
-            </mat-card-content>
-        </form>
-    </div>
-</mat-card>
+                <div class="col-sm-12 mt-3">
+                    <div class="d-flex flex-wrap gap-4">
+                        <ng-container *ngFor="let item of imgArray; let i = index">
+                            <div class="gallery position-relative">
+                                <img [src]="item.docPath" height="110px" width="110px" class="border">
+                                <span class="position-absolute" style="top:-17px;right:-17px;">
+                                    <button type="button" mat-icon-button
+                                        class="bg-danger bg-opacity-25 text-danger material-icons"
+                                        (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
+                                        matTooltipPosition="right" matTooltipClass="tooltip">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end" class="card-footer">
+            <div class="d-flex w-100 align-items-center justify-content-end">
+                <button mat-flat-button mat-dialog-close class="btn-second me-2" type="button">{{'Labels.cancel' |
+                    translate}}</button>
+                <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate)
+                    :('Labels.submit' |
+                    translate)}}</button>
+            </div>
+        </mat-dialog-actions>
+    </form>
+
+</ng-container>

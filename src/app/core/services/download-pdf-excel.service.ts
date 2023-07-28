@@ -51,7 +51,7 @@ export class DownloadPdfExcelService {
     doc.save(objData.topHedingName);
   }
 
-  generateExcel(keyData: any, apiKeys: any, data: any, name: any) {    
+  generateExcel(keyData: any, apiKeys: any, data: any, name: any, headerKeySize?: any) {    
     // Create workbook and worksheet
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(name[0].sheet_name);
@@ -187,10 +187,10 @@ export class DownloadPdfExcelService {
     });
 
 
-    var headerSize = [7, 15, 20, 15, 14, 60, 40, 10, 10, 15, 40, 10, 18, 10, 10, 10, 10, 15, 15, 7, 8];
+    // var headerSize = [7, 15, 20, 15, 14, 60, 40, 10, 10, 15, 40, 10, 18, 10, 10, 10, 10, 15, 15, 7, 8];
 
-    for (var i = 0; i < headerSize.length; i++) {
-      worksheet.getColumn(i + 1).width = headerSize[i];
+    for (var i = 0; i < headerKeySize.length; i++) {
+      worksheet.getColumn(i + 1).width = headerKeySize[i];
     }
 
     // Add Data
@@ -296,5 +296,76 @@ export class DownloadPdfExcelService {
 
     });
   }
+
+
+  // common excel function 
+  async allGenerateExcel(keyData: any, ValueData: any, objData: any,headerKeySize?: any) {
+    // 1:keyHeader,2:values,3:Data-heading time date ,4:column size width
+     // Create workbook and worksheet
+     const workbook = new Workbook();
+     const worksheet = workbook.addWorksheet('Sharing Data');
+ 
+     worksheet.addRow([]);
+     worksheet.getCell('C4').value = objData.topHedingName
+     worksheet.getCell('C4').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
+ 
+     if (objData?.timePeriod != null) {
+       worksheet.getCell('C5').value = objData.timePeriod
+       worksheet.getCell('C5').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
+     }
+ 
+     worksheet.getCell('E5').value = objData.createdDate
+     worksheet.getCell('E5').font = { name: 'Corbel', family: 3, size: 12, bold: true, };
+ 
+    //  const response = await fetch('../../../../assets/images/samadhanLogo.jpeg');
+    //  const buffer = await response.arrayBuffer();
+    //  const imageId1 = workbook.addImage({
+    //    buffer: buffer, extension: 'jpeg',
+    //  });
+ 
+    //  worksheet.addImage(imageId1, 'B1:B5');
+ 
+ 
+     worksheet.addRow([]);// Blank Row
+     const headerRow = worksheet.addRow(keyData); // Add Header Row
+ 
+     headerRow.eachCell((cell) => { // Cell Style : Fill and Border
+       cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
+       cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+     });
+
+     for(var i = 0; i < headerKeySize.length; i++){      
+      worksheet.getColumn(i+1).width = headerKeySize[i];
+    }
+ 
+     // Add Data and Conditional Formatting
+     ValueData.forEach((d: any) => {
+       let row = worksheet.addRow(d); row
+     });
+ 
+    //  worksheet.getColumn(2).width = 30;
+    //  worksheet.getColumn(3).width = 30;
+    //  worksheet.getColumn(4).width = 30;
+    //  worksheet.getColumn(5).width = 30;
+    //  worksheet.getColumn(6).width = 30;
+    //  worksheet.getColumn(7).width = 30;
+    //  worksheet.getColumn(8).width = 30;
+    //  worksheet.getColumn(9).width = 30;
+    //  worksheet.getColumn(10).width = 30;
+     worksheet.addRow([]);
+ 
+     // Generate Excel File with given name
+     workbook.xlsx.writeBuffer().then((data: any) => {
+       const blob = new Blob([data], {
+         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+       });
+       FileSaver.saveAs(blob, objData.topHedingName);
+     });
+  }
+
+
+
+
+
 
 }

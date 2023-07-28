@@ -15,6 +15,7 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-add-school-profile',
@@ -27,6 +28,7 @@ import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decry
     GalleryModule,
     MatIconModule,
     MatCardModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatTableModule,
     TableComponent,
@@ -118,7 +120,7 @@ export class AddSchoolProfileComponent {
 
   setTableData() {
     // this.highLightFlag=true;
-    let displayedColumnsReadMode = ['srNo', 'Teacher Name', 'Email ID', 'Mobile No.', 'Desgination'];
+    let displayedColumnsReadMode = ['Sr. No.', 'Teacher Name', 'Email ID', 'Mobile No.', 'Desgination'];
     let displayedColumns = ['srNo', 'name', 'emailId', 'mobileNo', 'designationType'];
     let tableData = {
       // pageNumber: this.pageNumber,

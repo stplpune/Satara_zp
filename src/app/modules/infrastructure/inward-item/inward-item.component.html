@@ -50,15 +50,25 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
-                        <mat-select formControlName="CategoryId">
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="categoryId" (selectionChange)="onChangeDropD('category'); getSubCategoryDrop();">
+                            <mat-option [value]="category.id" *ngFor="let category of categoryArr">
+                                {{webStorageS.getLangauge() == 'EN' ? category.category : category.m_Category}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
-                        <mat-select formControlName="SubCategoryId">
+                        <mat-select formControlName="subCategoryId" (selectionChange)="onChangeDropD('subCategory'); getItemDrop();">
+                            <mat-option [value]="subCategory.id" *ngFor="let subCategory of subCategoryArr">{{webStorageS.getLangauge() == 'EN' ? subCategory.subCategory : subCategory.m_subCategory}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.School'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
                             <mat-option>Option-1</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -66,8 +76,8 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Items'| translate}}</mat-label>
-                        <mat-select formControlName="ItemsId">
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="itemsId" (keypress)="validationService.noFirstSpaceAllow($event);">
+                            <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() == 'EN' ? item.item : item.m_Item}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -79,16 +89,16 @@
                 </div>
                 <div class="col-sm-auto">
                     <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
-                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
-                          translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second ms-2">{{'Labels.clear'|
-                          translate}}</button>
+                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+                            translate}}</button>
+                        <button mat-flat-button type="button" class="btn-second ms-2" (click)="onClear()">{{'Labels.clear'|
+                            translate}}</button>
                     </div>
                 </div>
             </div>
         </form>
     </mat-card-header>
     <mat-card-content class="card-body pt-0 mt-3">
-        <p>Table</p>
+        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
     </mat-card-content>
 </mat-card>

@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-school-profile',
@@ -32,8 +33,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatTableModule,
     TableComponent,
-    CommonModule
-
+    CommonModule,
+    MatDialogModule
   ]
 })
 export class AddSchoolProfileComponent {

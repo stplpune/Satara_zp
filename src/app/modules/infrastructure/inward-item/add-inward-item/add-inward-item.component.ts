@@ -48,7 +48,7 @@ export class AddInwardItemComponent {
   formFeild() {
     this.itemForm = this.fb.group({
       "id": [this.editObj ? this.editObj.id : 0],
-      "schoolId": [this.editObj ? this.editObj.schoolId : 0],
+      "schoolId": [this.editObj ? this.editObj.schoolId : 2104],
       "categoryId": ['', Validators.required],
       "subCategoryId": ['', Validators.required],
       "itemId": ['', Validators.required],

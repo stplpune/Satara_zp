@@ -282,7 +282,7 @@
             </div>
         </mat-card-content>
         <mat-card-content class="card-body">
-            <form [formGroup]="addGardianForm">
+            <form [formGroup]="addGardianForm" #formGroupDirective="ngForm">
                 <div class="row">
                     <mat-card-subtitle class="mb-3 fw-bold">{{'Labels.gardiantDetails'| translate}}</mat-card-subtitle>
                     <!-- <div class="col">
@@ -314,7 +314,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-5">
-                                <button mat-stroked-button class="btn-main" type="submit" (click)="addGardian()">
+                                <button mat-stroked-button class="btn-main" type="submit" (click)="addGardianList()">
                                     <mat-icon>add</mat-icon>{{('Labels.addguardian'| translate)}}</button>
                             </div>
                         </div>
@@ -342,10 +342,14 @@
                                         <td>{{gardian.name}}</td>
                                         <td>{{gardian.mobileNo}}</td>
                                         <td>{{gardian.relationName}}</td>
-                                        <td>
+                                        <!-- <td>
                                             <mat-checkbox [formControl]="isCheck"
                                                 [disabled]="this.gardianModelArr[i].isHead  == false && this.checkDisable == true"
                                                 (click)="changeCheckBox(i)"></mat-checkbox>
+                                        </td> -->
+                                        <td>
+                                            <mat-checkbox type="checkbox" (change)='changeCheckBox(i)' [(ngModel)]="gardianModelArr[i].isHead" [ngModelOptions]="{standalone: true}"
+                                            ></mat-checkbox>
                                         </td>
                                         <td>
                                             <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"

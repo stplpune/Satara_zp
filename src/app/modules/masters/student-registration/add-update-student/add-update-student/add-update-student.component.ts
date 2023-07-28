@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -65,6 +65,7 @@ export class AddUpdateStudentComponent {
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
 
   constructor(
     public dialog: MatDialog,
@@ -103,7 +104,6 @@ export class AddUpdateStudentComponent {
     this.getGender()
     this.getReligion();
     this.getRelation();
-
   }
 
   formData() {
@@ -182,6 +182,9 @@ export class AddUpdateStudentComponent {
     }
     else if(this.gardianModelArr.length == 0){
       this.gardianModelArr.push(formvalue);
+      console.log("length is 0");
+      this.formGroupDirective.resetForm();
+      
     }else{
       if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == ''){
         return
@@ -194,8 +197,6 @@ export class AddUpdateStudentComponent {
           }else if(res.mobileNo == formvalue.mobileNo){
             this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
             return;
-          }else{
-            this.gardianModelArr.push(formvalue);
           }
         })
       }
@@ -205,8 +206,6 @@ export class AddUpdateStudentComponent {
     this.f['mobileNo'].setValue('');
     this.f['relationId'].setValue('');
     this.f['isHead'].setValue(false);
-
-    this.gardianFormData();
  
     // this.gardianModelArr.forEach((res:any)=>{
     //   if(res.isHead == true){ 
@@ -271,10 +270,60 @@ export class AddUpdateStudentComponent {
      
   // }
 
+  addGardianList(){
+    this.relationArr.map((x:any)=>{
+      if(x.id == this.addGardianForm.value.relationId){
+        this.f['relationName'].setValue(x.relation);
+      }
+    });
+
+    let formvalue = this.addGardianForm.value;   
+    
+    if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == '' && this.gardianModelArr.length == 0){
+      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Required at least one Gardian Details' : 'किमान एक गार्डियन तपशील आवश्यक आहे', 1);
+      return;
+    }
+    else{
+      if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == ''){
+        return
+      }
+      else {
+//         if(!this.gardianModelArr.find((res) => res.name === formvalue.name)) {
+//           this.gardianModelArr.push(formvalue);
+//         }else{
+//           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+//           return;
+// }
+        if (this.gardianModelArr.find((res) => res.name === formvalue.name)) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+          return;
+        } else {
+          if (this.gardianModelArr.find((res) => res.mobileNo === formvalue.mobileNo)) {
+            this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian mobileNo Already Exist' : 'पालकाचे मोबाईल क्र आधीपासून अस्तित्वात आहे', 1);
+            return;
+          }
+          else {
+            this.gardianModelArr.push(formvalue);
+          }
+      }
+    } 
+    
+    } 
+    this.f['name'].setValue('');
+    this.f['mobileNo'].setValue('');
+    this.f['relationId'].setValue('');
+    this.f['isHead'].setValue(false);
+  }
+
 
   deleteGardian(data:any,i: any) {
-    this.gardianModelArr[i].isHead == true ? this.checkDisable = false : '';
-    this.gardianModelArr = this.gardianModelArr.filter(item => item !== data);
+    console.log(data,i);
+    
+    // this.gardianModelArr[i].isHead == true ? this.checkDisable = false : '';
+    // this.gardianModelArr = this.gardianModelArr.filter(item => item !== data);
+    this.gardianModelArr.splice(i, 1);
+    console.log("this.gardianModelArr", this.gardianModelArr);
+    
   }
   updateGardian(obj:any,i:any){
     console.log("index",i);   
@@ -285,25 +334,11 @@ export class AddUpdateStudentComponent {
     this.addGardianForm.controls['relationId'].setValue(obj.relationId);
     
   }
-  changeCheckBox(i:any){  
-   
-    this.gardianModelArr[i].isHead = this.isCheck.value;
-
-    this.gardianModelArr.forEach((res:any)=>{
-      if(res.isHead == true){
-        console.log("enter if loop");        
-        this.checkDisable = true;
-      }else if(res.isHead == false){
-        console.log("enter else if loop");
-        this.checkDisable = false;
-      }
-    })
-
-    let gardianObj = this.gardianModelArr.filter((res:any)=>{return res.isHead})
-    this.fc['mobileNo'].setValue(gardianObj[0].mobileNo)
-    
-    console.log("this.gardianModelArr",this.gardianModelArr);
-    
+  changeCheckBox(i: any){  
+      this.gardianModelArr.map((res: any)=>{
+        res.isHead = false
+      });
+      this.gardianModelArr[i].isHead = true;
   }
 
   getDistrict() {
@@ -483,7 +518,7 @@ export class AddUpdateStudentComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.relationArr = res.responseData;
-            this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue( this.searchMobieNoObj[0]?.relationId)):'';
+            this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue( this.searchMobieNoObj?.[0]?.relationId)):'';
           } else {
             this.relationArr=[] 
           }

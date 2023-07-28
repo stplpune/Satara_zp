@@ -5,7 +5,7 @@
                 <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
         </li>
         <li class="breadcrumb-item" aria-current="page">Masters</li>
-        <li class="breadcrumb-item active" aria-current="page">Category</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.Category' |translate}}</li>
     </ol>
 </nav>
 
@@ -14,10 +14,15 @@
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
     <mat-card-header class="card-header">
         <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
-            <div class="text-main fw-bold mb-2 mb-lg-0">Category List</div>
+            <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.categoryList' |translate}}</div>
+            <button mat-flat-button class="bg-danger btn-icon text-white"
+            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+            matTooltipClass="tooltip" (click)="getTableData('excel')">
+            <mat-icon>description </mat-icon>
+        </button>
             <button mat-flat-button class="btn-main" (click)="openDialog()">
                 <mat-icon>add</mat-icon>
-                Add Category
+                {{'Labels.addCategory' |translate}}
             </button>
         </div>
     </mat-card-header>
@@ -25,11 +30,12 @@
         <div class="row gx-2 w-100">
             <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Category Name</mat-label>
-                    <input matInput maxlength="50" [formControl]="search" (keyup.enter)="getTableData()">
+                    <mat-label>{{'Labels.Category' |translate}}</mat-label>
+                    <input matInput maxlength="50" [formControl]="search" (keyup.enter)="getTableData()"
+                    (keypress)="validation.noFirstSpaceAllow($event)">
                 </mat-form-field>
             </div>
-            <div class="col-sm-auto mb-lg-0 mb-2">
+            <div class="col-sm-auto mb-lg-0 mb-2" >
                 <button type="button" mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter'|
                     translate}}</button>
                 <button type="button" mat-flat-button class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear' |translate}}</button>

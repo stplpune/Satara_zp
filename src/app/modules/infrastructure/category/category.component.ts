@@ -4,9 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { FormControl } from '@angular/forms';
-import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+// import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
-import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+// import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { ValidationService } from 'src/app/core/services/validation.service';
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-category',
@@ -15,8 +18,11 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 })
 export class CategoryComponent {
   viewStatus = 'Table';
-  displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Inactive/Active','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
+  // displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Inactive/Active','Action'];
+  // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
+
+  displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव', 'कृती'];
   
   search = new FormControl('');
   tableresp: any;
@@ -29,14 +35,20 @@ export class CategoryComponent {
   isWriteRight!: boolean;
   displayedColumns :any;
   tableData: any;
+  resultDownloadArr = new Array();
   pageNumber: number = 1;
   constructor(public dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
     private webStorage: WebStorageService,
-    private commonService:CommonMethodsService) { }
+    public validation:ValidationService,
+    private excelpdfService:DownloadPdfExcelService,
+    public datepipe : DatePipe,
+    // private commonService:CommonMethodsService
+    ) { }
 
   ngOnInit() {
+    // this.getIsWriteFunction()
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
@@ -44,6 +56,21 @@ export class CategoryComponent {
     });
     
   }
+
+
+  // getIsWriteFunction(){
+  //   console.log(this.webStorage?.getAllPageName());
+    
+  //   let print = this.webStorage?.getAllPageName().find((x: any) => {
+  //     console.log("x",x);
+      
+  //     return x.pageURL == "category"
+  //    });
+  //    (print.writeRight === true) ?  this.isWriteRight = true : this.isWriteRight = false
+
+  //    console.log(print);
+     
+  //     }
 
   openDialog(data?: any) {
     const dialogRef = this.dialog.open(AddCategoryComponent, {
@@ -77,7 +104,7 @@ export class CategoryComponent {
         this.openDialog(obj);
         break;
       case 'Block':
-        this.openBlockDialog(obj);
+        // this.openBlockDialog(obj);
         break;
       // case 'Delete':
       //   // this.globalDialogOpen(obj);
@@ -87,15 +114,22 @@ export class CategoryComponent {
 
   getTableData(status?:any) {
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
-    let formData = this.search.value || ''
-    this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10', false, false, false, 'baseUrl');
+    let formData = this.search.value?.trim() || '';
+    let str = 'TextSearch='+formData+'&PageNo='+this.pageNumber+'&PageSize=10';
+    let excel = 'TextSearch='+formData+'&PageNo='+1+'&PageSize='+this.totalCount ;
+
+    this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         console.log(res);
         if (res.statusCode == "200") {
-          this.tableresp = res.responseData.responseData1;
+          status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          // this.tableresp = res.responseData.responseData1;
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
+          this.resultDownloadArr = [];
+          let data: [] = res.responseData.responseData1;
+          status == 'excel' ? this.pdfDownload(data) : '';
         } else {
           this.tableresp = [];
           this.totalItem=0;
@@ -110,16 +144,16 @@ export class CategoryComponent {
   getTableTranslatedData() {
     this.highLightFlag=true;
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Inactive/Active', 'Action'];
-    let displayedColumns = ['srNo', 'category', 'status', 'action'];
+    let displayedColumns = ['srNo', 'category', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
-      isBlock: 'status',
+      // isBlock: 'status',
       pagintion: this.totalItem > 10 ? true : false,
       displayedColumns: displayedColumns,
-      // displayedColumns: this.isWriteRight == true ?this.displayedColumns : displayedColumnsReadMode, 
+      // displayedColumns: this.isWriteRight === true ?displayedColumns : displayedColumnsReadMode, 
       tableData: this.tableresp,
       tableSize: this.totalItem,
       // tableHeaders: displayedColumnsReadMode,
@@ -129,51 +163,74 @@ export class CategoryComponent {
     this.apiService.tableData.next(tableData);
   }
 
-  openBlockDialog(obj: any) {
-    let userEng = obj.isBlock == false ?'Active' : 'Inactive';
-    let userMara = obj.isBlock == false ?'सक्रिय' : 'निष्क्रिय';
-    let dialoObj = {
-      header: this.langTypeName == 'English' ? userEng+' Office User' : 'ऑफिस वापरकर्ता '+userMara+' करा',
-      title: this.langTypeName == 'English' ? 'Do You Want To '+userEng+' The Selected Category?' : 'तुम्ही निवडलेल्या श्रेणीचे नाव '+userMara+' करू इच्छिता?',
-      cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',
-      okButton: this.langTypeName == 'English' ? 'Ok' : 'ओके'
-    }
-    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
-      width: '320px',
-      data: dialoObj,
-      disableClose: true,
-      autoFocus: false
-    })
-    deleteDialogRef.afterClosed().subscribe((result: any) => {
-      result == 'yes' ? this.getStatus(obj) : this.getTableData();
-      this.highLightFlag=false;
-      this.getTableTranslatedData();
-    })
+  pdfDownload(data:any) {
+    console.log(data);
+    
+    data.map((ele: any, i: any)=>{
+          let obj = {
+            "Sr.No": i+1,
+            "Category Name": ele.category,
+          }
+          this.resultDownloadArr.push(obj);
+        });
+        let keyPDFHeader = ['Sr.No.', 'Category Name'];
+              let ValueData =
+                this.resultDownloadArr.reduce(
+                  (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+                );// Value Name
+                       
+                let objData:any = {
+                  'topHedingName': 'Category List',
+                  'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+                }
+               this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
   }
 
-  getStatus(data: any) {
-    let webdata = this.webStorage.createdByProps();
-    let obj = {
-      "id": data.id,
-      "status": !data.status,
-      "statusChangeBy": this.webStorage.getUserId(),
-      "statusChangeDate": webdata.modifiedDate,
-      "lan": this.webStorage.languageFlag
-    }
+  // openBlockDialog(obj: any) {
+  //   let userEng = obj.isBlock == false ?'Active' : 'Inactive';
+  //   let userMara = obj.isBlock == false ?'सक्रिय' : 'निष्क्रिय';
+  //   let dialoObj = {
+  //     header: this.langTypeName == 'English' ? userEng+' Office User' : 'ऑफिस वापरकर्ता '+userMara+' करा',
+  //     title: this.langTypeName == 'English' ? 'Do You Want To '+userEng+' The Selected Category?' : 'तुम्ही निवडलेल्या श्रेणीचे नाव '+userMara+' करू इच्छिता?',
+  //     cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',
+  //     okButton: this.langTypeName == 'English' ? 'Ok' : 'ओके'
+  //   }
+  //   const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+  //     width: '320px',
+  //     data: dialoObj,
+  //     disableClose: true,
+  //     autoFocus: false
+  //   })
+  //   deleteDialogRef.afterClosed().subscribe((result: any) => {
+  //     result == 'yes' ? this.getStatus(obj) : this.getTableData();
+  //     this.highLightFlag=false;
+  //     this.getTableTranslatedData();
+  //   })
+  // }
+
+  // getStatus(data: any) {
+  //   let webdata = this.webStorage.createdByProps();
+  //   let obj = {
+  //     "id": data.id,
+  //     "status": !data.status,
+  //     "statusChangeBy": this.webStorage.getUserId(),
+  //     "statusChangeDate": webdata.modifiedDate,
+  //     "lan": this.webStorage.languageFlag
+  //   }
    
     
-    this.apiService.setHttp('put', 'zp-satara/AssetCategory/UpdateStatus', false, obj, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.commonService.snackBar(res.statusMessage, 0);
-        } else {
-          this.commonService.snackBar(res.statusMessage, 1);
-        }
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
-    });
-  }
+  //   this.apiService.setHttp('put', 'zp-satara/AssetCategory/UpdateStatus', false, obj, false, 'baseUrl');
+  //   this.apiService.getHttp().subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == "200") {
+  //         this.commonService.snackBar(res.statusMessage, 0);
+  //       } else {
+  //         this.commonService.snackBar(res.statusMessage, 1);
+  //       }
+  //     },
+  //     error: ((err: any) => { this.errors.handelError(err) })
+  //   });
+  // }
 
   clearFilterData() {
     this.search.setValue('');

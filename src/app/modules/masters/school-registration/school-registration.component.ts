@@ -269,7 +269,7 @@ export class SchoolRegistrationComponent implements OnInit {
   //#region ------------------------------------------- Open Dialog Box Function start here ----------------------------------------// 
   addUpdateSchool(obj?: any) {
     const dialogRef = this.dialog.open(AddUpdateSchoolRegistrationComponent, {
-      width: '820px',
+      width: '850px',
       data: obj,
       disableClose: true,
       // autoFocus: false

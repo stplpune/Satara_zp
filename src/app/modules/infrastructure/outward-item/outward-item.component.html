@@ -32,7 +32,7 @@
                 </button>
                 <button mat-flat-button class="bg-danger btn-icon text-white"
                     matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-                    matTooltipClass="tooltip">
+                    matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon>
                         description
                     </mat-icon>
@@ -50,16 +50,25 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
-                        <mat-select formControlName="CategoryId">
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="CategoryId"
+                        (selectionChange)="getSubCategory(filterForm.controls['CategoryId'].value)">
+                            <mat-option *ngFor="let data of categoryresp" [value]="data.id">
+                                {{webStorage.getLangauge() == 'EN' ?
+                                data.category : data.m_Category}}
+                            </mat-option>
+                            <!-- <mat-option *ngFor="let data of categoryresp" [value]="data id">{{data.category}}</mat-option> -->
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
-                        <mat-select formControlName="SubCategoryId">
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="SubCategoryId"
+                        (selectionChange)="getItem(filterForm.controls['SubCategoryId'].value)">
+                            <mat-option *ngFor="let data of subcategoryresp" [value]="data.id">
+                                {{webStorage.getLangauge() == 'EN' ?
+                                data.subCategory : data.m_SubCategory}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -67,28 +76,32 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Items'| translate}}</mat-label>
                         <mat-select formControlName="ItemsId">
-                            <mat-option>Option-1</mat-option>
+                            <mat-option *ngFor="let data of itemresp" [value]="data.id">
+                                {{webStorage.getLangauge() == 'EN' ?
+                                data.item : data.m_Item}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
-                        <input matInput formControlName="textSearch" maxlength="30">
+                        <input matInput formControlName="textSearch" maxlength="30"
+                        (keypress)="Validation.noFirstSpaceAllow($event)" (keyup.enter)="getTableData()">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-auto">
                     <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
-                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
+                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
                           translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second ms-2">{{'Labels.clear'|
+                        <button mat-flat-button type="button" class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear'|
                           translate}}</button>
                     </div>
                 </div>
             </div>
         </form>
     </mat-card-header>
-    <mat-card-content class="card-body pt-0 mt-3">
-        <p>Table</p>
+    <mat-card-content class="card-body pt-0">
+        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
     </mat-card-content>
 </mat-card>

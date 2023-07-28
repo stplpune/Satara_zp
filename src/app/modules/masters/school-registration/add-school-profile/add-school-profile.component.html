@@ -4,171 +4,155 @@
             <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
                 <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
         </li>
-        <li class="breadcrumb-item" aria-current="page">
-            <!-- {{'Labels.master' | translate}} -->
-        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
         <li class="breadcrumb-item active" aria-current="page">
-            <!-- {{'Labels.schoolprofile' | translate}} -->
+            {{'Labels.schoolprofile' | translate}}
         </li>
     </ol>
 </nav>
 <!-- <app-page-statistics></app-page-statistics> -->
-<mat-card class="plain-card" >
+<mat-card class="plain-card">
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
-            <div class="text-main fw-bold">
-                <!-- {{'Labels.schoolprofileList' | translate}} -->
-            </div>
+            <div class="text-main fw-bold">School Profile Details</div>
         </div>
     </mat-card-header>
-    <mat-card-content class="card-body pt-0">
+    <mat-card-content class="card-body">
         <div class="row mb-3">
-            <div class="col-sm-12">
+            <div class="col-sm-12 mb-3">
                 <div class="student-details">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
-                            <!-- <img src="schoolresp?.uploadImage?'schoolresp?.uploadImage':'../../../../../assets/images/user.png'"> -->
-                            <img src="../../../../../assets/images/user.png">
+                            <img
+                                src="schoolresp?.uploadImage?'schoolresp?.uploadImage':'../../../../../assets/images/user.png'">
+                            <!-- <img src="../../../../../assets/images/user.png"> -->
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="mb-1 fw-bold text-break">{{schoolresp?.schoolName}}</h5>
-                            <!-- <p class="text-muted mb-0" style="height:32px;">village name</p> -->
-
                             <div class="data-container">
                                 <div class="row g-2">
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">District</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.district}}
+                                                    : {{schoolresp?.district}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Taluka</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.taluka}}
+                                                    : {{schoolresp?.taluka}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Center</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.center}}
+                                                    : {{schoolresp?.center}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Village</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.village}}
+                                                    : {{schoolresp?.village}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Highest School Name</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.highestSchoolName}}
+                                                    : {{schoolresp?.highestSchoolName}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Lowest School Name</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.lowestSchoolName}}
+                                                    : {{schoolresp?.lowestSchoolName}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Total Student</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.totalStudent}}
+                                                    : {{schoolresp?.totalStudent}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Total Student Male</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.totalStudentMale}}
+                                                    : {{schoolresp?.totalStudentMale}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Total Student Female</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.totalStudentFeMale}}
+                                                    : {{schoolresp?.totalStudentFeMale}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-sm-6" >
+                                    <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
                                                 <span class="data-label text-break">Total Teachers</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                   : {{schoolresp?.totalTeacher}}
+                                                    : {{schoolresp?.totalTeacher}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                  
-
                                     <!-- show kendra Array for office registration -->
-                                    <div class="col-sm-12" >
+                                    <div class="col-sm-12">
                                         <div class="row">
                                             <div class="col-sm-2 col-6">
                                                 <!-- <span class="data-label"
@@ -193,60 +177,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <!-- <div class="table-responsive table-height-xs scrollbar">
-                    <table mat-table [dataSource]="dataSource" class="dashboard-table">
-
-                        <ng-container matColumnDef="position">
-                          <th mat-header-cell *matHeaderCellDef> No. </th>
-                          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                        </ng-container>
-                      
-                        <ng-container matColumnDef="name">
-                          <th mat-header-cell *matHeaderCellDef> </th>
-                          <td mat-cell *matCellDef="let element"> 
-                            <img src="	https://zposmservices.mahamining.com/Uploads/Upload/png_03272023053046PM.png" class="table-img">
-                          </td>
-                        </ng-container>
-                      
-                        <ng-container matColumnDef="TeacherName">
-                          <th mat-header-cell *matHeaderCellDef> Teacher Name </th>
-                          <td mat-cell *matCellDef="let element"> {{element.TeacherName}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="EmailID">
-                            <th mat-header-cell *matHeaderCellDef> Email ID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.EmailID}} </td>
-                          </ng-container>
-
-                        <ng-container matColumnDef="MobileNo">
-                          <th mat-header-cell *matHeaderCellDef> Mobile No. </th>
-                          <td mat-cell *matCellDef="let element"> {{element.MobileNo}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="Desgination">
-                          <th mat-header-cell *matHeaderCellDef>Desgination</th>
-                          <td mat-cell *matCellDef="let element"> {{element.Desgination}}</td>
-                        </ng-container>
-                      
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                      </table>
-                </div> -->
-
-                <mat-card-content class="card-body pt-0">
-                    <app-table (recObjToChild)="childCompInfo($event)"></app-table>
-                </mat-card-content>
-
-                <div class="row g-3">
-                    <mat-label>School photos : </mat-label>
-                    <div class="col-3 col-sm-3" >
-                        <img *ngFor="let item of items; index as i" 
-                        [lightbox]="i"
-                        [src]="item.data.thumb">
-                    </div>
+            <div class="col-sm-5 border-end">
+                <h6 class="text-main mb-0 fw-bold">School photos</h6>
+                <div class="col-3 col-sm-3">
+                    <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb">
                 </div>
-
+            </div>
+            <div class="col-sm-7">
+                <app-table (recObjToChild)="childCompInfo($event)"></app-table>
             </div>
         </div>
     </mat-card-content>

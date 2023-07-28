@@ -56,7 +56,8 @@ export class AddUpdateSchoolRegistrationComponent {
     public validationService: ValidationService,
     public webStorageS: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    ) { }
 
   ngOnInit() {
     this.formFeild();
@@ -125,7 +126,7 @@ export class AddUpdateSchoolRegistrationComponent {
       "id": [this.editEventObj ? this.editEventObj?.id : 0],
       "schoolId": [this.editEventObj ? this.editEventObj?.schoolId : this.webStorageS.getLoggedInLocalstorageData()?.schoolId],
       "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
-      "m_EventName": [''],
+      "m_EventName": [this.editEventObj ? this.editEventObj?.m_EventName : '', [Validators.required, Validators.pattern('^[-\u0900-\u096F ]+$')]],
       "description": [this.editEventObj ? this.editEventObj?.description : ''],
       "createdBy": 0,
       "isDeleted": true,

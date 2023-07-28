@@ -1,4 +1,4 @@
-<form [formGroup]="itemForm">
+<!-- <form [formGroup]="itemForm"> -->
     <mat-card class="plain-card">
         <mat-card-header class="card-header">
             <div class="d-flex align-items-center justify-content-between w-100">
@@ -12,35 +12,39 @@
                 </button>
             </div>
         </mat-card-header>
+        <form  [formGroup]="itemForm" (ngSubmit)="onSubmit()">
         <mat-card-content class="card-body scrollbar card-height-sm">
             <!-- <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.personalDetails'| translate}}</mat-card-subtitle> -->
+            
             <div class="row">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="categoryId" (selectionChange)="getAllSubCategory();clearDropdown('CategoryId')">
+                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">
+                                {{languageFlag == 'EN' ? category.category:category. m_Category}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.subcategoryname'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="subCategoryId">
+                            <mat-option *ngFor="let subCategory of subCategoryArr" [value]="subCategory.id">
+                                {{languageFlag == 'EN' ? subCategory.subCategory:subCategory. m_SubCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="itemName">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Description'| translate}}</mat-label>
-                        <textarea matInput></textarea>
+                        <textarea matInput formControlName="description"></textarea>
                     </mat-form-field>
                 </div>
             </div>
@@ -49,10 +53,11 @@
             <div class="d-flex w-100 align-items-center justify-content-end">
                 <button mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
                     translate}}</button>
-                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
+                <button mat-flat-button class="btn-main" type="submit">{{data ?( 'Labels.update' | translate)
                     :('Labels.submit' |
                     translate)}}</button>
             </div>
         </mat-card-footer>
+    </form>
     </mat-card>
-</form>
+<!-- </form> -->

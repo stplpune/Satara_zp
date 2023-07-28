@@ -23,21 +23,21 @@
                         table_view
                     </mat-icon>
                 </button>
-                <button mat-flat-button class="btn-second btn-icon" matTooltip="{{'Labels.GridView' | translate}}"
+                <!-- <button mat-flat-button class="btn-second btn-icon" matTooltip="{{'Labels.GridView' | translate}}"
                     matTooltipPosition="below" matTooltipClass="tooltip"
                     [ngClass]="{'btn-main':this.cardViewFlag, 'btn-second':!this.cardViewFlag}">
                     <mat-icon>
                         grid_view
                     </mat-icon>
-                </button>
+                </button> -->
                 <button mat-flat-button class="bg-danger btn-icon text-white"
                     matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-                    matTooltipClass="tooltip">
+                    matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
                     <mat-icon>
                         description
                     </mat-icon>
                 </button>
-                <button mat-flat-button class="btn-main" (click)="openDialog()">
+                <button mat-flat-button class="btn-main" (click)="addUpdateItem()">
                     <mat-icon>add</mat-icon>
                     {{'Labels.addItems'| translate}}
                 </button>
@@ -50,8 +50,9 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
-                        <mat-select formControlName="CategoryId">
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="CategoryId" (selectionChange)="getAllSubCategory();clearDropdown('CategoryId')">
+                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">{{languageFlag == 'EN' ?
+                                category.category:category. m_Category}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -59,18 +60,20 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId">
-                            <mat-option>Option-1</mat-option>
+                            <mat-option *ngFor="let subCategory of subCategoryArr" [value]="subCategory.id">{{languageFlag == 'EN' ?
+                                subCategory.subCategory:subCategory. m_SubCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <!-- <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Items'| translate}}</mat-label>
                         <mat-select formControlName="ItemsId">
-                            <mat-option>Option-1</mat-option>
+                            <mat-option *ngFor="let item of itemArr" [value]="item.id">{{languageFlag == 'EN' ?
+                                item.item:item. m_Item}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
@@ -79,9 +82,9 @@
                 </div>
                 <div class="col-sm-auto">
                     <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
-                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
+                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
                           translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second ms-2">{{'Labels.clear'|
+                        <button mat-flat-button type="button" class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear'|
                           translate}}</button>
                     </div>
                 </div>
@@ -89,6 +92,6 @@
         </form>
     </mat-card-header>
     <mat-card-content class="card-body pt-0 mt-3">
-        <p>Table</p>
+        <app-table (recObjToChild)="childTableCompInfo($event)"></app-table>
     </mat-card-content>
 </mat-card>

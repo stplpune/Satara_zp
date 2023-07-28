@@ -1,1 +1,66 @@
-<p>store-master works!</p>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.master'| translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">Stock Report</li>
+    </ol>
+</nav>
+<mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
+    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+        <form [formGroup]="filterForm" class="w-100">
+            <div class="row gx-3">
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.Category'| translate}}</mat-label>
+                        <mat-select formControlName="CategoryId">
+                            <mat-option>Option-1 </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
+                        <mat-select formControlName="CategoryId">
+                            <mat-option>Option-1 </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.itemName'| translate}}</mat-label>
+                        <mat-select formControlName="CategoryId">
+                            <mat-option>Option-1 </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
+                        <input matInput formControlName="textSearch" maxlength="30">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-0 d-flex justify-content-lg-end justify-content-start gap-2">
+                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
+                            translate}}</button>
+                        <button mat-flat-button type="button" class="btn-second">{{'Labels.clear'|
+                            translate}}</button>
+                        <button mat-flat-button class="bg-danger btn-icon text-white"
+                            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+                            matTooltipClass="tooltip">
+                            <mat-icon>
+                                description
+                            </mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card-header>
+    <mat-card-content class="card-body pt-0">
+            <p>table</p>
+    </mat-card-content>
+</mat-card>

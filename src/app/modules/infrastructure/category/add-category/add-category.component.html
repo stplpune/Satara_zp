@@ -14,8 +14,9 @@
         <div class="row">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Category Name</mat-label>
-                    <input matInput maxlength="20" [formControl]="category">
+                    <mat-label>{{'Labels.Category' | translate}}</mat-label>
+                    <input matInput maxlength="20" [formControl]="category"
+                    (keypress)="validation.noFirstSpaceAllow($event);validation.alphaNumericOnly">
                     <mat-error></mat-error>
                 </mat-form-field>
             </div>
@@ -25,7 +26,7 @@
         <mat-card-actions align="end" class="me-3 mb-2">
             <button mat-stroked-button class="btn-second me-2" type="submit" mat-dialog-close>{{'Labels.cancel'|
                 translate}}</button>
-                <button mat-stroked-button class="btn-main" type="submit" (click)="onSubmit()">{{editFlag?'Update':'Submit'}}</button>
+                <button mat-stroked-button class="btn-main" type="submit" (click)="onSubmit()">{{editFlag ? ( 'Labels.update' | translate):('Labels.submit' |translate)}}</button>
         </mat-card-actions>
     </mat-card-footer>
 </mat-card>

@@ -9,6 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-parameter',
@@ -116,12 +117,11 @@ export class InwardItemComponent {
       case 'Edit':
         this.openDialog(obj);
         break;
-      // case 'Delete':
-      //   this.globalDialogOpen(obj);
-      //   break;
+      case 'Delete':
+        this.globalDialogOpen(obj);
+        break;
     }
   }
-
 
   openDialog(obj ?: any) {
     const dialogRef = this.dialog.open(AddInwardItemComponent,
@@ -190,6 +190,50 @@ export class InwardItemComponent {
         }
       }
     });
+  }
+
+  globalDialogOpen(obj:any){
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete Outward Item?' : 'तुम्हाला आवक वस्तू हटवायची आहे का?',
+      cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onClickDelete(obj);
+      }
+      this.highLightFlag=false;
+      this.languageChange();
+    })
+  }
+
+  onClickDelete(obj : any) {
+    let webStorageMethod = this.webStorageS.createdByProps();
+    let deleteObj = {
+      "id": obj.id,
+      "modifiedBy": webStorageMethod.modifiedBy,
+      "modifiedDate": webStorageMethod.modifiedDate,
+      "lan": this.webStorageS.languageFlag
+    }
+    this.apiService.setHttp('delete', 'zp-satara/Inward/DeleteInward', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.commonMethodS.showPopup(res.statusMessage, 0);
+          this.getTableData();
+        }
+      },
+      error: (error: any) => {
+        this.commonMethodS.checkEmptyData(error.statusText) == false ? this.errors.handelError(error.statusCode) : this.commonMethodS.showPopup(error.statusText, 1);
+      }
+    })
   }
 
   onClear() {

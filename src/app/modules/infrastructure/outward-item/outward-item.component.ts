@@ -63,7 +63,7 @@ export class OutwardItemComponent {
     this.filterFlag && data ? '' : (this.getTableData(), this.filterFlag = false);
     const dialogRef = this.dialog.open(AddOutwardItemComponent,
       {
-        width: '500px',
+        width: '700px',
         disableClose: true,
         autoFocus: false,
         data: data

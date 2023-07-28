@@ -105,17 +105,17 @@
                                 matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhoto' |
                                 translate}}</button>
                             <input type="file" name="myfile" [disabled]="uploadImg" accept=".png, .jpg, .jpeg"
-                                 #uploadImage />
+                                 #uploadImage (change)="imgUpload($event)"/>
                         </div>
                         <div class="action-btn" *ngIf="uploadImg">
                             <button mat-icon-button class="btn-icon text-primary" type="button"
                                  matTooltip="{{'Labels.View' | translate}}"
-                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                matTooltipPosition="below" matTooltipClass="tooltip" (click)="viewImg()">
                                 <mat-icon>visibility</mat-icon>
                             </button>
                             <button mat-icon-button class="btn-icon text-danger" type="button"
                                  matTooltip="{{'Labels.delete' | translate}}"
-                                matTooltipPosition="below" matTooltipClass="tooltip">
+                                matTooltipPosition="below" matTooltipClass="tooltip" (click)="clearImg()">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>

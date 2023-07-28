@@ -41,8 +41,6 @@ export class OutwardItemComponent {
     public Validation:ValidationService,
   ) { }
   ngOnInit() {
-
-
     this.filterFormData();
     this.getCategory();
     this.getTableData();
@@ -58,8 +56,8 @@ export class OutwardItemComponent {
     })
   }
 
-  openDialog() {
-    this.filterFlag ? '' : (this.getTableData(), this.filterFlag = false);
+  openDialog(data?:any) {
+    this.filterFlag && data ? '' : (this.getTableData(), this.filterFlag = false);
     const dialogRef = this.dialog.open(AddOutwardItemComponent,
       {
         width: '500px',
@@ -68,8 +66,7 @@ export class OutwardItemComponent {
       });
 
     dialogRef.afterClosed().subscribe(result => {
-   
-      if (result == 'yes') {
+      if (result == 'yes' && data) {
         this.getTableData();
         this.pageNumber = this.pageNumber;
       } else if (result == 'yes') {
@@ -134,7 +131,7 @@ export class OutwardItemComponent {
         this.getTableData();
         break;
       case 'Edit':
-        // this.openDialog(obj);
+        this.openDialog(obj);
         break;
       case 'Block':
         // this.openBlockDialog(obj);

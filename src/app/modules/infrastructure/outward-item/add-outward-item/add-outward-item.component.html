@@ -1,4 +1,4 @@
-<form [formGroup]="itemForm">
+<form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
     <mat-card class="plain-card">
         <mat-card-header class="card-header">
             <div class="d-flex align-items-center justify-content-between w-100">
@@ -18,43 +18,60 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="categoryId"
+                        (selectionChange)="getSubCategory(itemForm.controls['categoryId'].value)">
+                            <mat-option *ngFor="let data of categoryresp" [value]="data.id">
+                                {{webStorage.getLangauge() == 'EN' ?
+                                data.category : data.m_Category}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.subcategoryname'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="subcategoryId"
+                        (selectionChange)="getItem(itemForm.controls['subcategoryId'].value)">
+                            <mat-option *ngFor="let data of subcategoryresp" [value]="data.id">
+                                {{webStorage.getLangauge() == 'EN' ?
+                                data.subCategory : data.m_SubCategory}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="itemId">
+                            <mat-option [value]="0">ds
+                               
+                            </mat-option>
+                            <mat-option *ngFor="let data of itemresp" [value]="data.id">
+                                {{webStorage.getLangauge() == 'EN' ?
+                                data.item : data.m_Item}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="unit"
+                        (keypress)="Validation.noFirstSpaceAllow($event)">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.SellPrice'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="sellprice"
+                        (keypress)="Validation.noFirstSpaceAllow($event)">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.SellDate'| translate}}</mat-label>
-                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly>
+                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly
+                        formControlName="date" >
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -63,7 +80,8 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Outwardto'| translate}}</mat-label>
-                        <textarea matInput rows="1" cols="10"></textarea>
+                        <textarea matInput rows="1" cols="10" formControlName="onwordto"
+                        (keypress)="Validation.noFirstSpaceAllow($event)"></textarea >
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
@@ -75,7 +93,8 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.remark'| translate}}</mat-label>
-                        <textarea matInput rows="2" cols="10"></textarea>
+                        <textarea matInput rows="2" cols="10" formControlName="remark"
+                        (keypress)="Validation.noFirstSpaceAllow($event)"></textarea>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
@@ -110,7 +129,7 @@
             <div class="d-flex w-100 align-items-center justify-content-end">
                 <button mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
                     translate}}</button>
-                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
+                <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate)
                     :('Labels.submit' |
                     translate)}}</button>
             </div>

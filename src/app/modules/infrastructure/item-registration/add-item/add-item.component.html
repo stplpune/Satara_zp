@@ -20,7 +20,7 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
-                        <mat-select formControlName="categoryId" (selectionChange)="getAllSubCategory();clearDropdown('CategoryId')">
+                        <mat-select formControlName="categoryId" (selectionChange)="getAllSubCategory();clearDropdown('categoryId')">
                             <mat-option *ngFor="let category of categoryArr" [value]="category.id">
                                 {{languageFlag == 'EN' ? category.category:category. m_Category}}</mat-option>
                         </mat-select>
@@ -38,13 +38,13 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
-                        <input matInput formControlName="itemName">
+                        <input matInput formControlName="itemName" (keypress)="validators.alphabetsWithSpaces($event);validators.noSpacesAtStart($event)">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Description'| translate}}</mat-label>
-                        <textarea matInput formControlName="description"></textarea>
+                        <textarea matInput formControlName="description" (keypress)="validators.alphabetsWithSpaces($event);validators.noSpacesAtStart($event)"></textarea>
                     </mat-form-field>
                 </div>
             </div>

@@ -124,8 +124,9 @@ export class AddItemComponent {
   }
 
   clearDropdown(dropdown: string) {   
-    if (dropdown == 'CategoryId') {
-      this.itemForm.controls['subCategoryId'].setValue(0);     
+    if (dropdown == 'categoryId') {
+      this.itemForm.controls['subCategoryId'].setValue('');  
+      this.data.subCategoryId = ''   
       this.subCategoryArr = [];
     }
   }

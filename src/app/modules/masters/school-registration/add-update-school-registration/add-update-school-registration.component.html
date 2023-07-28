@@ -318,14 +318,20 @@
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>School Name</mat-label>
-                            <input matInput formControlName="schoolId" readonly>
-                            <!-- [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" -->
+                            <input matInput 
+                            [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" readonly>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Event Name</mat-label>
                             <input matInput formControlName="eventName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Event Name in marathi</mat-label>
+                            <input matInput formControlName="m_EventName"  (keypress)="validationService.noFirstSpaceAllow($event);validationService.unicodeMarathiAlphanumberic($event)">
                         </mat-form-field>
                     </div>
                     <div class="col-sm-6">

@@ -10,6 +10,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
 import { ValidationService } from 'src/app/core/services/validation.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 @Component({
   selector: 'app-item-transfer',
   templateUrl: './outward-item.component.html',
@@ -27,7 +28,9 @@ export class OutwardItemComponent {
   itemresp: any;
   pageNumber: number = 1;
   filterFlag: boolean = false;
+  highLightFlag: boolean = true;
   resultDownloadArr = new Array();
+  tableData:any;
   Id = this.webStorage.getLoggedInLocalstorageData();
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
@@ -138,7 +141,7 @@ export class OutwardItemComponent {
         // this.openBlockDialog(obj);
         break;
       case 'Delete':
-        // this.globalDialogOpen(obj);
+        this.globalDialogOpen(obj);
         break;
     }
   }
@@ -183,7 +186,7 @@ export class OutwardItemComponent {
   setTableData() {
     let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Items', 'Action'];
     let displayedColumns = ['srNo', 'category', 'subCategory', 'item', 'action'];
-    let tableData = {
+    this.tableData  = {
       pageNumber: this.pageNumber,
       img: '',
       blink: '',
@@ -195,8 +198,8 @@ export class OutwardItemComponent {
       tableHeaders: displayedColumnsReadMode,
       // tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
     };
-    // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
-    this.apiService.tableData.next(tableData);
+    this.highLightFlag ? this.tableData .highlightedrow = true : this.tableData .highlightedrow = false,
+    this.apiService.tableData.next(this.tableData );
   }
   clearFilterData() {
     this.filterForm.controls['CategoryId'].setValue('');
@@ -207,6 +210,50 @@ export class OutwardItemComponent {
     this.itemresp = [];
     this.pageNumber = 1;
     this.getTableData();
+  }
+
+  globalDialogOpen(obj:any){
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Outward Item?' : 'तुम्हाला बाह्य वस्तू हटवायची आहेत का?',
+      cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onClickDelete(obj);
+      }
+      this.highLightFlag=false;
+      this.setTableData();
+    })
+  }
+
+  onClickDelete(obj : any) {
+    let webStorageMethod = this.webStorage.createdByProps();
+    let deleteObj = {
+      "id": obj.id,
+      "modifiedBy": webStorageMethod.modifiedBy,
+      "modifiedDate": webStorageMethod.modifiedDate,
+      "lan": this.webStorage.languageFlag
+    }
+    this.apiService.setHttp('delete', 'zp-satara/Outward/DeleteOutward', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.commonMethod.showPopup(res.statusMessage, 0);
+          this.getTableData();
+        }
+      },
+      error: (error: any) => {
+        this.commonMethod.checkEmptyData(error.statusText) == false ? this.errors.handelError(error.statusCode) : this.commonMethod.showPopup(error.statusText, 1);
+      }
+    })
   }
 
   pdfDownload(data: any) {

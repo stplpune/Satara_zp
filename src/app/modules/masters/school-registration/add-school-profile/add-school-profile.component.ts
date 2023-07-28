@@ -31,7 +31,7 @@ import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decry
     MatTableModule,
     TableComponent,
     CommonModule
-    
+
   ]
 })
 export class AddSchoolProfileComponent {
@@ -53,15 +53,18 @@ export class AddSchoolProfileComponent {
     public gallery: Gallery,
     private route: ActivatedRoute,
     private encryptdecrypt: AesencryptDecryptService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getRouteParam();
     this.getTableData();
+    this.lightBox();
+  }
+
+  lightBox() {
     this.items = this.schoolevetArr?.map((item: any) => {
       return new ImageItem({ src: item.docPath, thumb: item.docPath })
     });
-
     this.basicLightboxExample();
   }
 
@@ -79,10 +82,9 @@ export class AddSchoolProfileComponent {
 
   getTableData() {
     this.lightbox
-    this.apiService.setHttp('GET', 'zp-satara/School/GetProfileById?Id='+this.encryptData, false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/School/GetProfileById?Id=' + this.encryptData, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        console.log(res);
         if (res.statusCode == "200") {
           this.schoolresp = res.responseData;
           this.tableresp = res.responseData.teacher;
@@ -90,11 +92,13 @@ export class AddSchoolProfileComponent {
           let evetArr = this.docDataresp.map((x: any) => {
             return x.eventImages
           })
-          this.schoolevetArr  = evetArr.map((x:any)=>{ return x[0]
+          evetArr.map((x: any) => {
+            this.schoolevetArr = x.map((y: any) => {
+              return y;
+            })
           })
-       
-          console.log("docDataresp", this.schoolevetArr);
-          
+          this.lightBox();
+
         } else {
           this.tableresp = [];
         }
@@ -134,19 +138,28 @@ export class AddSchoolProfileComponent {
 
   // dataArr = [
   //   {
-  //     srcUrl: 'https://preview.ibb.co/jrsA6R/img12.jpg',
+  //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180271.jpeg',
   //     previewUrl: 'https://preview.ibb.co/jrsA6R/img12.jpg',
   //   },
   //   {
-  //     srcUrl: 'https://preview.ibb.co/kPE1D6/clouds.jpg',
+  //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180402.jpeg',
   //     previewUrl: 'https://preview.ibb.co/kPE1D6/clouds.jpg',
   //   },
   //   {
-  //     srcUrl: 'https://preview.ibb.co/mwsA6R/img7.jpg',
+  //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180513.jpg',
   //     previewUrl: 'https://preview.ibb.co/mwsA6R/img7.jpg',
   //   },
   //   {
-  //     srcUrl: 'https://preview.ibb.co/kZGsLm/img8.jpg',
+  //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180524.jpg',
+  //     previewUrl: 'https://preview.ibb.co/kZGsLm/img8.jpg',
+  //   },
+
+  //   {
+  //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180535.jpeg',
+  //     previewUrl: 'https://preview.ibb.co/mwsA6R/img7.jpg',
+  //   },
+  //   {
+  //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180546.jpg',
   //     previewUrl: 'https://preview.ibb.co/kZGsLm/img8.jpg',
   //   },
   // ];

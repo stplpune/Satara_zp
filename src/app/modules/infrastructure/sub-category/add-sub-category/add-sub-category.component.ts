@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
+import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 // import { AddUpdateDesignationMasterComponent } from 'src/app/modules/masters/designation-master/add-update-designation-master/add-update-designation-master.component';
 
@@ -27,6 +28,7 @@ export class AddSubCategoryComponent {
     private masterService:MasterService,
     private dialogRef: MatDialogRef<AddSubCategoryComponent>,
     private webStorage:WebStorageService,
+    public validation:ValidationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {

@@ -22,7 +22,6 @@ import { AddCastComponent } from '../../add-cast/add-cast.component';
 export class AddUpdateStudentComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Action'];
  
-  
   stuRegistrationForm!: FormGroup;
   addGardianForm!: FormGroup
   isCheck = new FormControl();
@@ -61,7 +60,8 @@ export class AddUpdateStudentComponent {
   updategardianIndex !: number;
   updategardianFlag : boolean = false
   checkDisable:boolean = false
-  searchMobieNoObj:any
+  searchMobieNoObj:any;
+  get f(){ return this.addGardianForm.controls };
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
@@ -153,6 +153,7 @@ export class AddUpdateStudentComponent {
       m_Name: [''],     
       mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
       relationId: ['',[Validators.required]],
+      relationName: [''],
       isHead: false ,
       headerId: 0,
       timestamp: new Date(),
@@ -163,33 +164,49 @@ export class AddUpdateStudentComponent {
   //#region ---------------------------- Dropdown start here -----------------------------------------------
 
   addGardian(){
+    this.relationArr.map((x:any)=>{
+      if(x.id == this.addGardianForm.value.relationId){
+        this.f['relationName'].setValue(x.relation);
+      }
+    });
+
     let formvalue = this.addGardianForm.value;   
-    if(this.updategardianFlag == true){
-      this.gardianModelArr[this.updategardianIndex] = formvalue;
-      this.updategardianFlag = false;
+    // if(this.updategardianFlag == true){
+    //   this.gardianModelArr[this.updategardianIndex] = formvalue;
+    //   this.updategardianFlag = false;
+    // }
+    
+    if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == '' && this.gardianModelArr.length == 0){
+      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Required at least one Gardian Details' : 'किमान एक गार्डियन तपशील आवश्यक आहे', 1);
+      return;
     }
-   else if(this.gardianModelArr.length == 0){
+    else if(this.gardianModelArr.length == 0){
       this.gardianModelArr.push(formvalue);
     }else{
-      this.gardianModelArr.forEach((res:any)=>{
-        if(res.name == formvalue.name){
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else if(res.mobileNo == formvalue.mobileNo){
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else{
-          this.gardianModelArr.push(formvalue);
-        }
-      })
-    } 
-    this.addGardianForm.controls['name'].setValue('');
-    this.addGardianForm.controls['mobileNo'].setValue('');
-    this.addGardianForm.controls['relationId'].setValue('');
-    this.addGardianForm.controls['isHead'].setValue(false);
-
-    console.log("gardianModelArr",this.gardianModelArr);
+      if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == ''){
+        return
+      }
+      else{
+        this.gardianModelArr.forEach((res:any)=>{
+          if(res.name == formvalue.name){
+            this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+            return;
+          }else if(res.mobileNo == formvalue.mobileNo){
+            this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
+            return;
+          }else{
+            this.gardianModelArr.push(formvalue);
+          }
+        })
+      }
     
+    } 
+    this.f['name'].setValue('');
+    this.f['mobileNo'].setValue('');
+    this.f['relationId'].setValue('');
+    this.f['isHead'].setValue(false);
+
+    this.gardianFormData();
  
     // this.gardianModelArr.forEach((res:any)=>{
     //   if(res.isHead == true){ 
@@ -460,15 +477,13 @@ export class AddUpdateStudentComponent {
 
 
   getRelation() {   
-    console.log("call relation Arrr");
-    
     this.relationArr = [];
     this.apiService.setHttp('get', 'zp-satara/master/GetAllRelation?flag_lang='+this.languageFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.relationArr = res.responseData
-            this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue( this.searchMobieNoObj[0]?.relationId),console.log("set relation")):'';
+            this.relationArr = res.responseData;
+            this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue( this.searchMobieNoObj[0]?.relationId)):'';
           } else {
             this.relationArr=[] 
           }

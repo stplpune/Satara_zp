@@ -199,6 +199,17 @@ input:-webkit-autofill:active {
     height: 17px !important;
 }
 
+.mdc-dialog__title {
+    font-family: 'Noto Sans Devanagari', sans-serif !important;
+    padding: 10px 15px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+}
+
+
+.mdc-dialog__title::before {
+    display: unset !important;
+}
 /*----------------Media-query------------------*/
 
 @media only screen and (max-width: 478px) {

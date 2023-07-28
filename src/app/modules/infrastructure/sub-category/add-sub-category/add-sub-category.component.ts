@@ -27,7 +27,7 @@ export class AddSubCategoryComponent {
     private commonMethod: CommonMethodsService,
     private masterService:MasterService,
     private dialogRef: MatDialogRef<AddSubCategoryComponent>,
-    private webStorage:WebStorageService,
+    public webStorage:WebStorageService,
     public validation:ValidationService,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 

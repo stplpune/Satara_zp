@@ -269,9 +269,6 @@ export class InwardItemComponent {
   }
 
   pdfDownload(data: any) {
-    console.log("data : ", data);
-    // return
-    
     data.map((ele: any, i: any) => {
       ele.purchase_Sales_Date =this.datepipe.transform(ele.purchase_Sales_Date, 'dd/MM/yyyy'); 
       let obj = {

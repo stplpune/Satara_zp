@@ -10,6 +10,8 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 @Component({
   selector: 'app-sub-category',
   templateUrl: './sub-category.component.html',
@@ -25,6 +27,8 @@ export class SubCategoryComponent {
   totalCount:any;
   resultDownloadArr = new Array();
   filterFlag: boolean = false;
+  deleteObj:any;
+  highLightFlag : boolean = true;
   // displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
   displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name','Action'];
@@ -33,7 +37,7 @@ export class SubCategoryComponent {
   constructor(public dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
-    // private commonService: CommonMethodsService,
+    private commonService: CommonMethodsService,
     private webStorage: WebStorageService,
     private excelpdfService:DownloadPdfExcelService,
     public validation:ValidationService,
@@ -82,7 +86,7 @@ export class SubCategoryComponent {
         // this.openBlockDialog(obj);
         break;
       case 'Delete':
-        // this.globalDialogOpen(obj);
+        this.globalDialogOpen(obj);
         break;
     }
   }
@@ -231,6 +235,52 @@ export class SubCategoryComponent {
   //   });
   // }
 
+  globalDialogOpen(obj: any) {
+    this.deleteObj = obj;
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to Sub Category record?' : 'तुम्हाला उपवर्ग रेकॉर्ड हटवायचा आहे का?',
+      cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.deteleDialogOpen();
+      }
+      this.highLightFlag=false;
+      
+    })
+  }
+
+
+  deteleDialogOpen(){
+  
+    let deleteObj = {
+      "id": this.deleteObj.id,
+      "deletedBy": 0,
+      "modifiedDate": new Date(),
+      "lan": "EN"
+    }
+    
+    this.apiService.setHttp('DELETE', 'zp-satara/AssetSubCategory/DeleteSubCategory', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.getTableData();
+          this.commonService.showPopup(res.statusMessage, 0);
+        } else {     
+          this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
+        }
+      },
+      error: ((err: any) => {  this.errors.handelError(err.statusCode) })
+    });
+  }
 
 
 }

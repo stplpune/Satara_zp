@@ -155,7 +155,7 @@ export class AddInwardItemComponent {
     }
     else {
       this.ngxSpinner.show();
-      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Inward/' + url, false, formValue, false, 'baseUrl');
+      this.apiService.setHttp('post', 'zp-satara/Inward/' + url, false, formValue, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();

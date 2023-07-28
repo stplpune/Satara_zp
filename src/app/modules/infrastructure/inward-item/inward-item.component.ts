@@ -10,6 +10,8 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { DatePipe } from '@angular/common';
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 
 @Component({
   selector: 'app-parameter',
@@ -32,6 +34,7 @@ export class InwardItemComponent {
   subCategoryArr = new Array();
   schoolArr = new Array();
   itemArr = new Array();
+  resultDownloadArr = new Array();
   get f() { return this.filterForm.controls };
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Photo', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'टिप्पणी', 'फोटो', 'कृती'];
@@ -44,7 +47,9 @@ export class InwardItemComponent {
     private ngxSpinner: NgxSpinnerService,
     public webStorageS: WebStorageService,
     private masterService: MasterService,
-    public validationService: ValidationService) { }
+    public validationService: ValidationService,
+    private excelpdfService: DownloadPdfExcelService,
+    public datepipe: DatePipe) { }
 
   ngOnInit() {
     this.filterFormData();
@@ -80,12 +85,14 @@ export class InwardItemComponent {
           this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
+          this.resultDownloadArr = [];
+          let data: [] = res.responseData.responseData1;
+          flag == 'excel' ? this.pdfDownload(data) : '';
         }
         else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
           this.tableDatasize = 0;
-          // this.tableDatasize == 0 ? this.commonMethodS.showPopup(this.webStorageS.languageFlag == 'EN' ? 'No Record Found' : 'रेकॉर्ड उपलब्ध नाही', 1) : '';
         }
         this.languageChange();
       },
@@ -126,7 +133,7 @@ export class InwardItemComponent {
   openDialog(obj ?: any) {
     const dialogRef = this.dialog.open(AddInwardItemComponent,
       {
-        width: '500px',
+        width: '700px',
         disableClose: true,
         autoFocus: false,
         data : obj
@@ -259,6 +266,37 @@ export class InwardItemComponent {
         this.itemArr = [];
         break;
     }
+  }
+
+  pdfDownload(data: any) {
+    console.log("data : ", data);
+    // return
+    
+    data.map((ele: any, i: any) => {
+      ele.purchase_Sales_Date =this.datepipe.transform(ele.purchase_Sales_Date, 'dd/MM/yyyy'); 
+      let obj = {
+        "Sr.No": i + 1,
+        "Category Name": ele.category,
+        "Sub Category": ele.subCategory,
+        "Item":ele.item,
+        "Units":ele.quantity,
+        "Purchase Date":ele.purchase_Sales_Date,
+        "Price":ele.price,
+        "Remark":ele.remark,
+      }
+      this.resultDownloadArr.push(obj);
+    });
+    let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category','Item', 'Units', 'Purchase Date', 'Price', 'Remark'];
+    let ValueData =
+      this.resultDownloadArr.reduce(
+        (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+      );// Value Name
+
+    let objData: any = {
+      'topHedingName': 'Inward Itmes List',
+      'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+    }
+    this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
   }
 
 

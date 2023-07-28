@@ -12,6 +12,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { ValidationService } from 'src/app/core/services/validation.service';
 
 @Component({
   selector: 'app-item-registration',
@@ -54,7 +55,8 @@ export class ItemRegistrationComponent {
     private commonMethods: CommonMethodsService,
     private downloadFileService: DownloadPdfExcelService,
     public datepipe: DatePipe,
-    private ngxSpinner: NgxSpinnerService){}
+    private ngxSpinner: NgxSpinnerService,
+    public validators: ValidationService){}
 
  
 

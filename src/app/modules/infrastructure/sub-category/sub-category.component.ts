@@ -8,7 +8,8 @@ import { FormControl } from '@angular/forms';
 // import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
-
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-sub-category',
   templateUrl: './sub-category.component.html',
@@ -21,6 +22,8 @@ export class SubCategoryComponent {
   langTypeName: any;
   pageNumber: number = 1;
   tableresp: any;
+  totalCount:any;
+  resultDownloadArr = new Array();
   filterFlag: boolean = false;
   // displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
@@ -32,7 +35,9 @@ export class SubCategoryComponent {
     private errors: ErrorsService,
     // private commonService: CommonMethodsService,
     private webStorage: WebStorageService,
-    public validation:ValidationService) { }
+    private excelpdfService:DownloadPdfExcelService,
+    public validation:ValidationService,
+    public datepipe : DatePipe) { }
 
   ngOnInit() {
     this.getTableData();
@@ -84,13 +89,19 @@ export class SubCategoryComponent {
 
   getTableData(status?:any) {
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
-    let formData = this.textSearch.value?.trim() || ''
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10', false, false, false, 'baseUrl');
+    let formData = this.textSearch.value?.trim() || '';
+    let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
+    let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
+    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.tableresp = res.responseData.responseData1;
+          status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
+          this.totalCount = res.responseData.responseData2.pageCount;
+          this.resultDownloadArr = [];
+          let data: [] = res.responseData.responseData1;
+          status == 'excel' ? this.pdfDownload(data) : '';
         } else {
           this.tableresp = [];
           this.totalItem=0
@@ -127,6 +138,50 @@ export class SubCategoryComponent {
     this.pageNumber=1;
     this.getTableData();
   }
+
+  pdfDownload(data:any) {
+    data.map((ele: any, i: any)=>{
+          let obj = {
+            "Sr.No": i+1,
+            "Category Name": ele.category,
+            "Sub Category Name": ele.subCategory,
+          }
+          this.resultDownloadArr.push(obj);
+        });
+        let keyPDFHeader = ['Sr.No.', 'Category Name', 'Sub Category Name'];
+              let ValueData =
+                this.resultDownloadArr.reduce(
+                  (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+                );// Value Name
+                       
+                let objData:any = {
+                  'topHedingName': 'Sub Category List',
+                  'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+                }
+               this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+  }
+
+  // downloadPdf(data: any) {
+  //   data.map((ele: any, i: any)=>{
+  //     let obj = {
+  //       "Sr.No": i+1,
+  //       "Designation Name": ele.designationName,
+  //       "Designation Level": ele.designationLevel,
+  //     }
+  //     this.resultDownloadArr.push(obj);
+  //   });
+  //   let keyPDFHeader = ['Sr.No.', 'Designation', 'Designation Level'];
+  //       let ValueData =
+  //         this.resultDownloadArr.reduce(
+  //           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+  //         );// Value Name
+                 
+  //         let objData:any = {
+  //           'topHedingName': 'Designation List',
+  //           'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+  //         }
+  //        this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData);
+  // }
 
   // openBlockDialog(obj: any) {
   //   let userEng = obj.isBlock == false ? 'Active' : 'Inactive';

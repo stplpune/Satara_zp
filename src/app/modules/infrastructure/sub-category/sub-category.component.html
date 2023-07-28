@@ -8,17 +8,22 @@
         <li class="breadcrumb-item active" aria-current="page">Sub Category</li>
     </ol>
 </nav>
-
 <app-page-statistics></app-page-statistics>
-
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
     <mat-card-header class="card-header">
         <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
-            <div class="text-main fw-bold mb-2 mb-lg-0">Sub Category List</div>
-            <button mat-flat-button class="btn-main" (click)="openDialog()">
-                <mat-icon>add</mat-icon>
-                Add Sub Category
-            </button>
+            <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.subcategoryList' | translate}}</div>
+            <div class="d-flex gap-2">
+                <button mat-flat-button class="bg-danger btn-icon text-white"
+                    matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip" (click)="getTableData('excel')">
+                    <mat-icon>description </mat-icon>
+                </button>
+                <button mat-flat-button class="btn-main" (click)="openDialog()">
+                    <mat-icon>add</mat-icon>
+                    {{'Labels.addSubcategory' | translate}}
+                </button>
+            </div>
         </div>
     </mat-card-header>
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
@@ -27,17 +32,18 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.subcategoryname' | translate}}</mat-label>
                     <input matInput maxlength="30" [formControl]="textSearch"
-                    (keypress)="validation.noFirstSpaceAllow($event)"
-                    (keyup.enter)="getTableData()">
+                        (keypress)="validation.noFirstSpaceAllow($event)" (keyup.enter)="getTableData()">
                 </mat-form-field>
             </div>
             <div class="col-sm-auto mb-lg-0 mb-2">
-                <button type="button" mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' | translate}}</button>
-                <button type="button" mat-flat-button class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear' |translate}}</button>
+                <button type="button" mat-flat-button class="btn-main"
+                    (click)="getTableData('filter')">{{'Labels.filter' | translate}}</button>
+                <button type="button" mat-flat-button class="btn-second ms-2"
+                    (click)="clearFilterData()">{{'Labels.clear' |translate}}</button>
             </div>
         </div>
     </mat-card-header>
-   
+
     <mat-card-content class="card-body pt-0">
         <app-table (recObjToChild)="childCompInfo($event)"></app-table>
     </mat-card-content>

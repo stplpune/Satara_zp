@@ -62,7 +62,8 @@ export class OutwardItemComponent {
       {
         width: '500px',
         disableClose: true,
-        autoFocus: false
+        autoFocus: false,
+        data: data
       });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -202,6 +203,8 @@ export class OutwardItemComponent {
     this.filterForm.controls['SubCategoryId'].setValue('');
     this.filterForm.controls['ItemsId'].setValue('');
     this.filterForm.controls['textSearch'].setValue('');
+    this.subcategoryresp = [];
+    this.itemresp = [];
     this.pageNumber = 1;
     this.getTableData();
   }

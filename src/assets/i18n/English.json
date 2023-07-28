@@ -1,5 +1,6 @@
 {
     "Labels": {
+        "searchItems":"Search Items",
         "Openingstock":"Opening Stock",
         "SellPrice":"Sell Price",
         "SellDate":"Sell Date",

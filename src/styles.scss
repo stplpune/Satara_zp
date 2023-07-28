@@ -515,6 +515,10 @@ body {
   max-height: 50vh;
   overflow-y: auto;
 }
+.table-height-md {
+  max-height: 41vh;
+  overflow-y: auto;
+}
 
 .table-height-xs {
   max-height: 30vh;
@@ -523,7 +527,8 @@ body {
 
 .table-height thead,
 .table-height-sm thead,
-.table-height-xs thead {
+.table-height-xs thead ,
+.table-height-md thead{
   position: -webkit-sticky; // this is for all Safari (Desktop & iOS), not for Chrome
   position: sticky;
   top: 0;

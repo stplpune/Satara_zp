@@ -31,7 +31,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka' | translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="clearDropdown('Taluka');getVillage();getBitOrCenter()">
+                            (selectionChange)="clearDropdown('Taluka'); getBitOrCenter();">
                             <mat-option *ngFor="let taluka of talukaArr" [value]="taluka.id">
                                 {{webStorageS.getLangauge() == 'EN' ?
                                 taluka.taluka : taluka.m_Taluka}}
@@ -65,7 +65,7 @@
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.kendra' | translate}}</mat-label>
-                            <mat-select formControlName="centerId">
+                            <mat-select formControlName="centerId" (selectionChange)="clearDropdown('Center'); getVillage();">
                                 <mat-option *ngFor="let center of centerArr" [value]="center.id">
                                     {{webStorageS.getLangauge() == 'EN' ?
                                     center.center : center.m_Center}}
@@ -251,19 +251,19 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div formArrayName="schoolDocument" *ngFor="let img of multipleImg.controls; let i = index;">
+                        <div formArrayName="schoolDocument" *ngFor="let img of multipleDoc.controls; let i = index;">
                             <div [formGroupName]="i" class="d-flex">
                                 <div class="upload-btn-wrapper">
                                     <button type="button" class="upload-btn"
-                                        (click)="uploadGallImage.click()">{{'Labels.UploadSchoolPhoto' |
+                                        (click)="uploadMultiDoc.click()">{{'Labels.UploadSchoolDocuments' |
                                         translate}}</button>
-                                    <input type="file" name="myfile" formControlName="docPath" multiple #uploadGallImage
-                                        (change)="multipleImgUpload($event)" accept=".png, .jpg, .jpeg" />
+                                    <input type="file" name="myfile" formControlName="docPath" multiple #uploadMultiDoc
+                                        (change)="multipleImgUpload($event)" accept=".pdf, .doc, .txt" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteImageFormat' | translate}}</p>
+                    <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteDocumentsFormat' | translate}}</p>
                     <!-- Display Image -->
                     <div class="d-flex flex-wrap gap-4">
                         <ng-container *ngFor="let item of imgArray; let i = index">
@@ -343,7 +343,7 @@
                                         <div class="d-flex">
                                             <button mat-icon-button id="tooltip"
                                                 matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
-                                                type="button" matTooltipClass="tooltip" (click)="onEdit(data)">
+                                                type="button" matTooltipClass="tooltip" (click)="onEditEvent(data)">
                                                 <mat-icon class="text-main">edit</mat-icon>
                                             </button>
                                             <button mat-icon-button id="tooltip"
@@ -386,7 +386,7 @@
                         </mat-form-field>
                     </div>
                     <div class="d-flex justify-content-end align-items-center">
-                        <div formArrayName="eventImages" *ngFor="let img of multipleImg.controls; let i = index;">
+                        <div formArrayName="eventImages" *ngFor="let img of multipleEventImg.controls; let i = index;">
                             <div [formGroupName]="i" class="d-flex justify-content-end">
                                 <div class="upload-btn-wrapper">
                                     <button type="button" class="upload-btn"

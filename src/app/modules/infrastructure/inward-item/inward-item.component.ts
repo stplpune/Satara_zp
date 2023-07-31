@@ -202,7 +202,7 @@ export class InwardItemComponent {
   globalDialogOpen(obj:any){
     let dialoObj = {
       header: 'Delete',
-      title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete Outward Item?' : 'तुम्हाला आवक वस्तू हटवायची आहे का?',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete Inward Item?' : 'तुम्हाला आवक वस्तू हटवायची आहे का?',
       cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

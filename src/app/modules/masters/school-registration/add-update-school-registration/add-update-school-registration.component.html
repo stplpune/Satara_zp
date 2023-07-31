@@ -269,7 +269,7 @@
                         <ng-container *ngFor="let doc of docArray; let i = index">
                             <div class="gallery position-relative">
                                 <!-- <img [src]="doc.docPath " height="130px" width="130px" class="border"> -->
-                                <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " height="130px" width="130px" class="border" (click)="onViewDoc(i)">
+                                <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " height="110px" width="110px" class="border" (click)="onViewDoc(i)">
                                 <span class="position-absolute" style="top:-17px;right:-17px;">
                                     <button type="button" mat-icon-button
                                         class="bg-danger bg-opacity-25 text-danger material-icons"

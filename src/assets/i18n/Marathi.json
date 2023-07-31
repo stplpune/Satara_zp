@@ -1,5 +1,14 @@
 {
     "Labels": {
+        "AddEvent":"कार्यक्रम जोडा",
+        "Schoolphotos":"शाळेचे फोटो",
+        "TotalTeachers":"एकूण शिक्षक",
+        "TotalStudent":"एकूण विद्यार्थी",
+        "TotalStudentmale":"एकूण विद्यार्थी पुरुष",
+        "TotalStudentfemale":"एकूण विद्यार्थी महिला",
+        "HighestSchoolName":"सर्वोच्च शाळेचे नाव",
+        "LowestSchoolName":"सर्वात कमी शाळेचे नाव",
+        "SchoolProfileDetails":"शाळा प्रोफाइल तपशील",
         "EventRegistration":"कार्यक्रम नोंदणी",
         "UpdateEventDetails":"कार्यक्रम तपशील अद्यतनित करा",
         "EventName":"कार्यक्रमाचे नाव",
@@ -13,6 +22,7 @@
         "schoolprofile":"शाळेचे प्रोफाईल",
         "schoolprofileList":"शाळा प्रोफाइल यादी",
         "Edit":"दुरुस्ती",
+        "center":"केंद्र",
         "add":"जोडा",
         "addSubcategory":"उपवर्ग नोंदणी जोडा",
         "updateSubcategory":"अपडेट उपवर्ग",

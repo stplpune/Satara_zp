@@ -14,7 +14,7 @@
 <mat-card class="plain-card">
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
-            <div class="text-main fw-bold">School Profile Details</div>
+            <div class="text-main fw-bold">{{'Labels.SchoolProfileDetails' | translate}}</div>
         </div>
     </mat-card-header>
     <mat-card-content class="card-body">
@@ -34,7 +34,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">District</span>
+                                                <span class="data-label text-break">{{'Labels.district' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -46,7 +46,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Taluka</span>
+                                                <span class="data-label text-break">{{'Labels.taluka' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -58,7 +58,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Center</span>
+                                                <span class="data-label text-break">{{'Labels.taluka' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -70,7 +70,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Village</span>
+                                                <span class="data-label text-break">{{'Labels.village' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -82,7 +82,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Highest School Name</span>
+                                                <span class="data-label text-break">{{'Labels.HighestSchoolName' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -94,7 +94,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Lowest School Name</span>
+                                                <span class="data-label text-break">{{'Labels.LowestSchoolName' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -106,7 +106,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Total Student</span>
+                                                <span class="data-label text-break">{{'Labels.TotalStudent' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -118,7 +118,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Total Student Male</span>
+                                                <span class="data-label text-break">{{'Labels.TotalStudentmale' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -130,7 +130,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Total Student Female</span>
+                                                <span class="data-label text-break">{{'Labels.TotalStudentfemale' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -142,7 +142,7 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">Total Teachers</span>
+                                                <span class="data-label text-break">{{'Labels.TotalTeachers' | translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -178,7 +178,7 @@
                 </div>
             </div>
             <div class="col-sm-5 border-end">
-                <h6 class="text-main mb-0 fw-bold">School photos</h6>
+                <h6 class="text-main mb-0 fw-bold">{{'Labels.Schoolphotos' | translate}}</h6>
                 <div class="col-3 col-sm-3">
                     <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb">
                 </div>

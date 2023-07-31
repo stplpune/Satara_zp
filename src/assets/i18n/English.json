@@ -1,5 +1,14 @@
 {
     "Labels": {
+        "AddEvent":"Add Event",
+        "Schoolphotos":"School Photos",
+        "TotalTeachers":"TotalTeachers",
+        "TotalStudent":"Total Student",
+        "TotalStudentmale":"Total Student Male",
+        "TotalStudentfemale":"Total Student Female",
+        "HighestSchoolName":"Highest School Name",
+        "LowestSchoolName":"Lowest School Name",
+        "SchoolProfileDetails":"School Profile Details",
         "EventRegistration":"Event Registration",
         "UpdateEventDetails":"Update Event Details",
         "EventNamemarathi":"Event Name Marathi",
@@ -35,6 +44,7 @@
         "addCategory":"Add Category",
         "categoryList":"Category List",
         "Edit":"Edit",
+        "center":"Center",
         "add":"Add",
         "addguardian":"Add Guardian",
         "Category":"Category",

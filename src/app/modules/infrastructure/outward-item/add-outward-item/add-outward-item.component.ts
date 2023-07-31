@@ -51,7 +51,7 @@ export class AddOutwardItemComponent {
       sellprice:[this.editObj ? this.editObj.price : '',[Validators.required]],
       date:[this.editObj ? this.editObj.purchase_Sales_Date : '',[Validators.required]],
       onwordto:[this.editObj ? this.editObj.outwardTo : '',[Validators.required]],
-      remark:[this.editObj ? this.editObj.remark : '',[Validators.required]],
+      remark:[this.editObj ? this.editObj.remark : ''],
       photo: ['']
     })
   }
@@ -137,6 +137,7 @@ export class AddOutwardItemComponent {
   onSubmit() {
   
     if (this.itemForm.invalid) {
+      this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }
     let data = this.webStorage.createdByProps();

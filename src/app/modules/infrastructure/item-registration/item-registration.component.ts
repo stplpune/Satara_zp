@@ -62,6 +62,12 @@ export class ItemRegistrationComponent {
 
   ngOnInit(): void {
     this.languageFlag = this.webService.languageFlag;
+    this.webService.langNameOnChange.subscribe(lang => {
+      this.languageFlag = lang;
+      this.setTableData();
+    });
+    console.log("languge flag",this.languageFlag);
+    
     this.getTableData();
     this.filterFormData();
     this.getAllCategory();
@@ -115,10 +121,10 @@ export class ItemRegistrationComponent {
       highlightedrow:true,
       pageNumber: this.pageNumber,
       img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-      displayedColumns: this.isWriteRight == true ? this.languageFlag == 'EN' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'EN' ? displayedColumns : marathiDisplayedColumns,
+      displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: this.languageFlag == 'EN' ? this.displayedheaders : this.marathiDisplayedheaders
+      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders
     };
     this.highLightFlag?tableData.highlightedrow=true:tableData.highlightedrow=false,
     this.apiService.tableData.next(tableData);
@@ -175,7 +181,8 @@ export class ItemRegistrationComponent {
     this.masterService.GetAllAssetCategory(this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.categoryArr= res.responseData;
+          this.categoryArr.push( {id: 0,category: "All category",m_Category: "सर्व श्रेणी"}, ...res.responseData);
+          this.filterForm.controls['CategoryId'].setValue(0);  
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
@@ -191,7 +198,8 @@ export class ItemRegistrationComponent {
     this.masterService.GetAssetSubCateByCateId(catId,this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.subCategoryArr= res.responseData;
+          this.subCategoryArr.push({"id": 0,"subCategory": "All SubCategory","m_SubCategory": "सर्व उपश्रेणी" },...res.responseData);
+          this.filterForm.controls['SubCategoryId'].setValue(0);  
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.subCategoryArr = [];
@@ -225,8 +233,8 @@ export class ItemRegistrationComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
-      header: 'Delete',
-      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete School record?' : 'तुम्हाला शाळेचा रेकॉर्ड हटवायचा आहे का?',
+      header: this.webService.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
+      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

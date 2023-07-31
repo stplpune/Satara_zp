@@ -43,6 +43,15 @@
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.itemNameMarathi'| translate}}</mat-label>
+                        <input matInput formControlName="m_ItemName"  (keypress)="validators.unicodeMarathiValidation($event)"
+                        (keypress)="validators.noSpaceAllow($event)">
+                        <mat-error *ngIf="f['m_ItemName'].hasError('pattern')">{{'Labels.invalidItemName'|
+                            translate}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Description'| translate}}</mat-label>
                         <textarea matInput formControlName="description" (keypress)="validators.alphabetsWithSpaces($event);validators.noSpacesAtStart($event)"></textarea>
                     </mat-form-field>

@@ -2,7 +2,7 @@
     "Labels": {
         "addItems":"वस्तू जोडा",
         "UpdatedAdditems":"अद्यतनित आयटम जोडा",
-        "subcategoryname":"उपवर्गाचे नाव",
+        "subcategoryname":"उपश्रेणी",
         "itemName":"वस्तूचे नाव",
         "description":"विवरण",
         "UploadEventPhoto":"कार्यक्रमाचा फोटो अपलोड करा",
@@ -15,7 +15,7 @@
         "subcategoryList":"उपवर्ग यादी",
         "categoryList":"विभाग यादी",
         "addguardian":"संरक्षक जोडा",
-        "Category":"विभाग",
+        "Category":"श्रेणी",
         "addCategory":"विभाग जोडा",
         "Relations":"धर्म",
         "dashboard": "डॅशबोर्ड",
@@ -175,6 +175,7 @@
         "changePwd": "पासवर्ड बदला",
         "logout": "लॉग आऊट ",
         "NoteImageFormat":"टीप: फक्त jpg, jpeg, png फॉर्मेट स्वीकारा",
+        "NoteDocumentsFormat":"टीप: फक्त pdf, doc, txt फॉर्मेट स्वीकारा",
         "NoteImagePdfFormat":"टीप: फक्त jpg, jpeg, png, pdf फॉर्मेट स्वीकारा",
         "kendraRequired" : "केंद्र आवश्यक आहे",
         "searchByNameContactNo" : "विद्यार्थ्याचे नाव/पालक मोबाईल क्र.",
@@ -292,6 +293,7 @@
         "LightMode" : "लाइट मोड",
         "DarkMode" : "डार्क मोड",
         "UploadSchoolPhoto" : "शाळेचे फोटो अपलोड करा",
+        "UploadSchoolDocuments" : "शाळेची कागदपत्रे अपलोड करा",
         "UploadProfilePhoto" : "प्रोफाइल फोटो अपलोड करा",
         "UpdatedTeacherRegistration" : "शिक्षकाची माहिती अपडेट करा",
         "selectTaluka":"तालुका निवडा",
@@ -340,6 +342,11 @@
         "asset": "मालमत्ता",
         "assetList": "मालमत्तेची यादी",
         "addAsset": "मालमत्ता जोडा",
-        "updateAsset": "मालमत्ता अपडेट करा"
+        "updateAsset": "मालमत्ता अपडेट करा",
+
+        "itemNameMarathi":"वस्तूचे नाव (मराठी)",
+        "invalidItemName":"कृपया वैध वस्तूचे नाव (मराठी) टाका.",
+        "CategoryName" :"श्रेणीचे नाव",
+        "Description":"वर्णन"
     }
 }

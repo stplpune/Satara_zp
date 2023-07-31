@@ -62,6 +62,7 @@
         "SchoolPhotos":"School Photos",
         "enterValidSchoolName":"Please enter valid school name",
         "NoteImageFormat":"Note: Upload only jpg,jpeg,png format",
+        "NoteDocumentsFormat":"Note: Upload only pdf, doc, txt format",
         "NoteImagePdfFormat":"Note: Upload only jpg,jpeg,png,pdf format",
         "agencyNameIsRequired" : "name is required",
         "contactPersonNameIsRequired" : "Contact person name is required",
@@ -311,6 +312,7 @@
         "LightMode" : "Light Mode",
         "DarkMode" : "Dark Mode",
         "UploadSchoolPhoto" : "Upload School Photos",
+        "UploadSchoolDocuments" : "Upload School Documents",
         "UploadProfilePhoto" : "Upload Profile Photo",
         "UpdatedTeacherRegistration" : "Update Teacher Details",
         "selectTaluka":"Select Taluka",
@@ -355,7 +357,13 @@
         "asset": "Asset",
         "assetList": "Asset List",
         "addAsset": "Add Asset",
-        "updateAsset": "Update Asset"
+        "updateAsset": "Update Asset",
 
+        "itemNameMarathi":"Item Name (marathi)",
+        "invalidItemName":"Please enter valid item name (Marathi).",
+        "CategoryName":"Category Name",
+        "Description":"Description"
+
+        
     }
 }

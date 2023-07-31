@@ -42,7 +42,12 @@ export class AddSubCategoryComponent {
     this.subCategoryFrm = this.fb.group({
       category: ['', [Validators.required]],
       subcategory: ['', [Validators.required]],
+      m_subcategory: ['',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
     })
+  }
+
+  get f() {
+    return this.subCategoryFrm.controls;
   }
 
   getCategory() {
@@ -76,7 +81,7 @@ export class AddSubCategoryComponent {
       "id": this.editFlag ? this.editId : 0,
       "categoryId": formData.category,
       "subCategory": formData.subcategory,
-      "m_SubCategory": "",
+      "m_SubCategory": formData.m_subcategory,
       "lan": this.webStorage.languageFlag,
     }
 
@@ -102,7 +107,8 @@ export class AddSubCategoryComponent {
     this.editId=this.data.id
     this.subCategoryFrm.patchValue({
       category:this.data.categoryId,
-      subcategory:this.data.subCategory
+      subcategory:this.data.subCategory,
+      m_subcategory:this.data.m_SubCategory
     })
   }
 

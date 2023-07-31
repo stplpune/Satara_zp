@@ -66,6 +66,8 @@ export class ItemRegistrationComponent {
       this.languageFlag = lang;
       this.setTableData();
     });
+    console.log("languge flag",this.languageFlag);
+    
     this.getTableData();
     this.filterFormData();
     this.getAllCategory();
@@ -179,7 +181,8 @@ export class ItemRegistrationComponent {
     this.masterService.GetAllAssetCategory(this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.categoryArr= res.responseData;
+          this.categoryArr.push( {id: 0,category: "All category",m_Category: "सर्व श्रेणी"}, ...res.responseData);
+          this.filterForm.controls['CategoryId'].setValue(0);  
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
@@ -195,7 +198,8 @@ export class ItemRegistrationComponent {
     this.masterService.GetAssetSubCateByCateId(catId,this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.subCategoryArr= res.responseData;
+          this.subCategoryArr.push({"id": 0,"subCategory": "All SubCategory","m_SubCategory": "सर्व उपश्रेणी" },...res.responseData);
+          this.filterForm.controls['SubCategoryId'].setValue(0);  
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.subCategoryArr = [];

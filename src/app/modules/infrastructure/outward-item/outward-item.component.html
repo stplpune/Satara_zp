@@ -33,11 +33,56 @@
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
         <form [formGroup]="filterForm" class="w-100 gx-2">
             <div class="row">
+
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="onChangeDropD('taluka');getAllCenter();">
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorage.getLangauge() ==
+                                'EN' ?
+                                tal.taluka:tal.m_Taluka }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+                        <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage()">
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorage.getLangauge() ==
+                                'EN' ? cen.center:cen.m_Center}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.village'| translate}}</mat-label>
+                        <mat-select formControlName="villageId" (selectionChange)="onChangeDropD('village'); getAllSchools();">
+                            <mat-option *ngFor="let village of villageArr"
+                                [value]="village.id">{{webStorage.getLangauge() == 'EN' ?
+                                village.village:village.m_Village}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school'); getCategory();">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorage.getLangauge() == 'EN' ?
+                                sch.schoolName:sch.m_SchoolName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
                         <mat-select formControlName="CategoryId"
-                        (selectionChange)="getSubCategory(filterForm.controls['CategoryId'].value)">
+                        (selectionChange)="onChangeDropD('category'); getSubCategory(filterForm.controls['CategoryId'].value);">
                             <mat-option *ngFor="let data of categoryresp" [value]="data.id">
                                 {{webStorage.getLangauge() == 'EN' ?
                                 data.category : data.m_Category}}
@@ -50,7 +95,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId"
-                        (selectionChange)="getItem(filterForm.controls['SubCategoryId'].value)">
+                        (selectionChange)="onChangeDropD('subCategory'); getItem(filterForm.controls['SubCategoryId'].value)">
                             <mat-option *ngFor="let data of subcategoryresp" [value]="data.id">
                                 {{webStorage.getLangauge() == 'EN' ?
                                 data.subCategory : data.m_SubCategory}}
@@ -64,7 +109,7 @@
                         <mat-select formControlName="ItemsId">
                             <mat-option *ngFor="let data of itemresp" [value]="data.id">
                                 {{webStorage.getLangauge() == 'EN' ?
-                                data.item : data.m_Item}}
+                                data.itemName : data.m_ItemName}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

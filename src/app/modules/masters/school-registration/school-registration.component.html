@@ -38,17 +38,13 @@
                 </button>
                 <button *ngIf="isWriteRight === true" class="btn-main d-flex align-items-center justify-content-between"
                     mat-flat-button (click)="addUpdateSchool()">
-                    <mat-icon>
-                        add
-                    </mat-icon>
+                    <mat-icon>add</mat-icon>
                     <span>{{'Labels.addSchool' | translate}}</span>
                 </button>
                 <button *ngIf="userId !== 1" class="btn-main d-flex align-items-center justify-content-between"
                 mat-flat-button (click)="addUpdateSchool()">
-                <mat-icon>
-                    add
-                </mat-icon>
-                <span>Add Event</span>
+                <mat-icon>add</mat-icon>
+                <span>{{'Labels.AddEvent' | translate}}</span>
             </button>
             </div>
         </div>

@@ -350,6 +350,10 @@ export class AddUpdateSchoolRegistrationComponent {
       window.open(this.uploadImg, 'blank');
     }
   }
+
+  onViewDoc(index : any){
+    window.open(this.docArray[index].docPath, 'blank');
+  }
   //#endregionegion ------------------------------------------------- Upload Image end here --------------------------------------------// 
 
   //#region ------------------------------------------------- Add/Update Record start here --------------------------------------------//
@@ -450,6 +454,10 @@ export class AddUpdateSchoolRegistrationComponent {
 
   clearMultipleImg(index: any) {
     this.imgArray.splice(index, 1);
+  }
+
+  clearMultipleDoc(index: any) {
+    this.docArray.splice(index, 1);
   }
   //#endregionegion --------------------------------------------- Clear Img field end here --------------------------------------------//
 

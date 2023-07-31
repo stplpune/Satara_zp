@@ -51,7 +51,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
                         <mat-select formControlName="CategoryId" (selectionChange)="getAllSubCategory();clearDropdown('CategoryId')">
-                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">{{languageFlag == 'EN' ?
+                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">{{languageFlag == 'English' ?
                                 category.category:category. m_Category}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -60,7 +60,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId">
-                            <mat-option *ngFor="let subCategory of subCategoryArr" [value]="subCategory.id">{{languageFlag == 'EN' ?
+                            <mat-option *ngFor="let subCategory of subCategoryArr" [value]="subCategory.id">{{languageFlag == 'English' ?
                                 subCategory.subCategory:subCategory. m_SubCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>

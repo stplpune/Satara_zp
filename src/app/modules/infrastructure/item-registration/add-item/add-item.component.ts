@@ -37,6 +37,8 @@ export class AddItemComponent {
 
   ngOnInit(): void {   
     this.languageFlag = this.webService.languageFlag;
+    console.log("this.languageFlag",this.languageFlag);
+    
     this.formData();
     this.getAllCategory();
   }
@@ -55,7 +57,7 @@ export class AddItemComponent {
         "subCategory": [this.data?.subCategory ||''],
         "m_SubCategory": [this.data?.m_SubCategory ||''],
         "itemName": [this.data?.itemName ||'',[Validators.required,Validators.pattern(this.validators.name)]],
-        "m_ItemName": [this.data?.m_ItemName ||''],
+        "m_ItemName": [this.data?.m_ItemName ||'',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
         "description": [this.data?.description ||'',[Validators.required,Validators.pattern(this.validators.name)]],
         "createdBy": [0],
         "isDeleted": true,

@@ -123,7 +123,7 @@ export class AddUpdateStudentComponent {
       dob: ['', Validators.required],
       gender: ['', Validators.required],
       religionId: ['', Validators.required],
-      castId: ['', Validators.required],
+      casteId: ['', Validators.required],
       casteCategoryId:['', Validators.required],
       saralId: ['', [Validators.maxLength(19), Validators.minLength(19)]],
       mobileNo: [''],
@@ -153,7 +153,7 @@ export class AddUpdateStudentComponent {
       m_Name: [''],     
       mobileNo: ['',[Validators.required, Validators.pattern(this.validators.mobile_No)]],
       relationId: ['',[Validators.required]],
-      relationName: [''],
+      relation: [''],
       isHead: false ,
       headerId: 0,
       timestamp: new Date(),
@@ -166,7 +166,7 @@ export class AddUpdateStudentComponent {
   addGardian(){
     this.relationArr.map((x:any)=>{
       if(x.id == this.addGardianForm.value.relationId){
-        this.f['relationName'].setValue(x.relation);
+        this.f['relation'].setValue(x.relation);
       }
     });
 
@@ -176,7 +176,7 @@ export class AddUpdateStudentComponent {
     //   this.updategardianFlag = false;
     // }
     
-    if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == '' && this.gardianModelArr.length == 0){
+    if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '' && this.gardianModelArr.length == 0){
       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Required at least one Gardian Details' : 'किमान एक गार्डियन तपशील आवश्यक आहे', 1);
       return;
     }
@@ -186,7 +186,7 @@ export class AddUpdateStudentComponent {
       this.formGroupDirective.resetForm();
       
     }else{
-      if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == ''){
+      if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == ''){
         return
       }
       else{
@@ -273,18 +273,18 @@ export class AddUpdateStudentComponent {
   addGardianList(){
     this.relationArr.map((x:any)=>{
       if(x.id == this.addGardianForm.value.relationId){
-        this.f['relationName'].setValue(x.relation);
+        this.f['relation'].setValue(x.relation);
       }
     });
 
     let formvalue = this.addGardianForm.value;   
     
-    if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == '' && this.gardianModelArr.length == 0){
+    if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '' && this.gardianModelArr.length == 0){
       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Required at least one Gardian Details' : 'किमान एक गार्डियन तपशील आवश्यक आहे', 1);
       return;
     }
     else{
-      if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relationName'].value == ''){
+      if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == ''){
         return
       }
       else {
@@ -318,10 +318,13 @@ export class AddUpdateStudentComponent {
 
   deleteGardian(data:any,i: any) {
     console.log(data,i);
-    
-    // this.gardianModelArr[i].isHead == true ? this.checkDisable = false : '';
-    // this.gardianModelArr = this.gardianModelArr.filter(item => item !== data);
-    this.gardianModelArr.splice(i, 1);
+    if(this.editFlag == true){
+      this.gardianModelArr[i].isDeleted = 1
+      this.gardianModelArr[i].id == 0 ? this.gardianModelArr.splice(i, 1) : ''
+    }
+    else{
+      this.gardianModelArr.splice(i, 1);
+    }
     console.log("this.gardianModelArr", this.gardianModelArr);
     
   }
@@ -332,7 +335,6 @@ export class AddUpdateStudentComponent {
     this.addGardianForm.controls['name'].setValue(obj.name);
     this.addGardianForm.controls['mobileNo'].setValue(obj.mobileNo);
     this.addGardianForm.controls['relationId'].setValue(obj.relationId);
-    
   }
   changeCheckBox(i: any){  
       this.gardianModelArr.map((res: any)=>{
@@ -500,7 +502,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.casteArr = res.responseData;
-          this.editFlag ? this.stuRegistrationForm.controls['castId'].setValue(this.editObj?.castId) : '';
+          this.editFlag ? this.stuRegistrationForm.controls['casteId'].setValue(this.editObj?.casteId) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.casteArr = [];
@@ -560,27 +562,28 @@ export class AddUpdateStudentComponent {
       m_MName: this.editObj?.m_MName,
       l_MName: this.editObj?.l_MName,
       saralId: this.editObj?.saralId,
-      mobileNo: this.editObj?.gaurdianModel[0]?.mobileNo,
-      fatherFullName: this.editObj?.gaurdianModel[0]?.fatherFullName,
+      casteId: this.editObj?.casteId,
+      mobileNo: this.editObj?.gaurdianResponse[0]?.mobileNo,
+      fatherFullName: this.editObj?.gaurdianResponse[0]?.fatherFullName,
       // m_FatherFullName: this.editObj?.gaurdianResponse[0]?.m_FatherFullName,
-      motherName: this.editObj?.gaurdianModel[0]?.motherName,
+      motherName: this.editObj?.gaurdianResponse[0]?.motherName,
       // m_MotherName: this.editObj?.gaurdianResponse[0]?.m_MotherName,
       aadharNo: this.editObj?.aadharNo,
       dob: new Date(this.editObj?.dob.split(' ')[0]),
       physicallyDisabled: this.editObj?.isHandicaped ? 1 : 2
     });
-    this.imageArray = this.editObj?.documentModel;
-    let aadharObj = this.editObj?.documentModel?.find((res: any) => res.documentId == 2);
-    let imageObj = this.editObj?.documentModel?.find((res: any) => res.documentId == 1);
+    this.imageArray = this.editObj?.documentResponse;
+    let aadharObj = this.editObj?.documentResponse?.find((res: any) => res.documentId == 2);
+    let imageObj = this.editObj?.documentResponse?.find((res: any) => res.documentId == 1);
     this.uploadAadhaar = aadharObj?.docPath;
     this.uploadImg = imageObj?.docPath;
 
-    this.gardianModelArr = this.editObj.gaurdianModel
-    this.gardianModelArr.forEach((res:any)=>{
-      if(res.isHead == true){ 
-        this.checkDisable = true;
-      }
-    })
+    this.gardianModelArr = this.editObj.gaurdianResponse
+    // this.gardianModelArr.forEach((res:any)=>{
+    //   // if(res.isHead == true){ 
+    //   //   this.checkDisable = true;
+    //   // }
+    // })
     this.allDropdownMethods();
   }
 
@@ -667,7 +670,7 @@ export class AddUpdateStudentComponent {
       "dob": dateWithTime,
       "religionId": obj.religionId,
       "casteCategoryId":obj.casteCategoryId,
-      "castId": obj.castId,
+      "casteId": obj.casteId,
       "aadharNo": obj.aadharNo,
       "isCastCertificate": true,
       "isParentsAlive": true,
@@ -795,10 +798,10 @@ export class AddUpdateStudentComponent {
     }
      else if (name == 'religionId') {
       this.stuRegistrationForm.controls['casteCategoryId'].setValue('');
-      this.stuRegistrationForm.controls['castId'].setValue('');     
+      this.stuRegistrationForm.controls['casteId'].setValue('');     
       this.casteArr = [];
     }else if(name =='casteCategoryId'){
-      this.stuRegistrationForm.controls['castId'].setValue('');
+      this.stuRegistrationForm.controls['casteId'].setValue('');
     }
   }
 

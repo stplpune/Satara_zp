@@ -226,7 +226,7 @@ export class ItemRegistrationComponent {
     this.deleteObj = obj;
     let dialoObj = {
       header: 'Delete',
-      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete School record?' : 'तुम्हाला शाळेचा रेकॉर्ड हटवायचा आहे का?',
+      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

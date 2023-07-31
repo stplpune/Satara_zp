@@ -332,6 +332,8 @@ export class AddUpdateSchoolRegistrationComponent {
             }
             this.docArray.push(data)
           }
+          console.log("docArray : ", this.docArray);
+          
         }
         else {
           return
@@ -349,6 +351,10 @@ export class AddUpdateSchoolRegistrationComponent {
     else {
       window.open(this.uploadImg, 'blank');
     }
+  }
+
+  onViewDoc(index : any){
+    window.open(this.docArray[index].docPath, 'blank');
   }
   //#endregionegion ------------------------------------------------- Upload Image end here --------------------------------------------// 
 
@@ -450,6 +456,10 @@ export class AddUpdateSchoolRegistrationComponent {
 
   clearMultipleImg(index: any) {
     this.imgArray.splice(index, 1);
+  }
+
+  clearMultipleDoc(index: any) {
+    this.docArray.splice(index, 1);
   }
   //#endregionegion --------------------------------------------- Clear Img field end here --------------------------------------------//
 

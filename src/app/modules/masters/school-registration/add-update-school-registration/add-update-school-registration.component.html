@@ -258,7 +258,7 @@
                                         (click)="uploadMultiDoc.click()">{{'Labels.UploadSchoolDocuments' |
                                         translate}}</button>
                                     <input type="file" name="myfile" formControlName="docPath" multiple #uploadMultiDoc
-                                        (change)="multipleImgUpload($event)" accept=".pdf, .doc, .txt" />
+                                        (change)="multipleDocUpload($event)" accept=".pdf, .doc, .txt" />
                                 </div>
                             </div>
                         </div>
@@ -266,13 +266,14 @@
                     <p style="font-size: 11px;" class="mb-3 pt-1">{{'Labels.NoteDocumentsFormat' | translate}}</p>
                     <!-- Display Image -->
                     <div class="d-flex flex-wrap gap-4">
-                        <ng-container *ngFor="let item of imgArray; let i = index">
+                        <ng-container *ngFor="let doc of docArray; let i = index">
                             <div class="gallery position-relative">
-                                <img [src]="item.docPath" height="130px" width="130px" class="border">
+                                <!-- <img [src]="doc.docPath " height="130px" width="130px" class="border"> -->
+                                <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " height="130px" width="130px" class="border" (click)="onViewDoc(i)">
                                 <span class="position-absolute" style="top:-17px;right:-17px;">
                                     <button type="button" mat-icon-button
                                         class="bg-danger bg-opacity-25 text-danger material-icons"
-                                        (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
+                                        (click)="clearMultipleDoc(i)" matTooltip="{{'Labels.delete' | translate}}"
                                         matTooltipPosition="right" matTooltipClass="tooltip">
                                         <mat-icon>delete</mat-icon>
                                     </button>

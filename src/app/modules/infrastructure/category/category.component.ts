@@ -55,7 +55,7 @@ export class CategoryComponent {
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
-      console.log("this.langTypeName",this.langTypeName);
+      
       
       this.getTableTranslatedData();
     });
@@ -275,7 +275,7 @@ export class CategoryComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
-      header: 'Delete',
+      header: this.webStorage.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
       title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Category record?' : 'तुम्हाला श्रेणी रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'

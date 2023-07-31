@@ -66,8 +66,7 @@ export class ItemRegistrationComponent {
       this.languageFlag = lang;
       this.setTableData();
     });
-    console.log("languge flag",this.languageFlag);
-    
+   
     this.getTableData();
     this.filterFormData();
     this.getAllCategory();

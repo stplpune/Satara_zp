@@ -328,12 +328,12 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col"> Sr.No. </th>                                        
+                                        <th scope="col">{{this.languageFlag == "English" ? 'Sr.No.' : 'अनु. क्र'}}  </th>                                        
                                         <th scope="col">{{this.languageFlag == "English" ? 'Name' : 'नाव'}}</th>
                                         <th scope="col"> {{this.languageFlag == "English" ? 'Mobile No.' : 'मोबाईल क्र.'}}</th>
-                                        <th scope="col">Relation</th>
-                                        <th scope="col"> Is Head </th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col">{{this.languageFlag == "English" ? 'Relation' : 'संबंध'}}</th>
+                                        <th scope="col">{{this.languageFlag == "English" ? 'Is Head' : 'प्रमुख'}}  </th>
+                                        <th scope="col">{{this.languageFlag == "English" ? 'Action' : 'कृती'}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

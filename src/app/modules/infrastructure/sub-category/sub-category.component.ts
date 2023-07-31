@@ -238,7 +238,7 @@ export class SubCategoryComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
-      header: 'Delete',
+      header: this.webStorage.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
       title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Sub Category record?' : 'तुम्हाला उपश्रेणी रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'

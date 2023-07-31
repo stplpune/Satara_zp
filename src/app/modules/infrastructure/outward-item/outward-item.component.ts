@@ -20,18 +20,27 @@ export class OutwardItemComponent {
   viewStatus = "Table";
   cardViewFlag: boolean = false;
   filterForm!: FormGroup;
-  categoryresp: any;
-  subcategoryresp: any;
+  talukaArr = new Array();
+  centerArr = new Array();
+  villageArr = new Array();
+  schoolArr = new Array();
+  categoryresp = new Array();
+  subcategoryresp = new Array();
   totalItem: any;
   totalCount: any;
-  tableresp: any;
-  itemresp: any;
+  tableresp = new Array();
+  itemresp = new Array();
   pageNumber: number = 1;
   filterFlag: boolean = false;
   highLightFlag: boolean = true;
   resultDownloadArr = new Array();
   tableData:any;
+  displayedColumns = new Array();
   Id = this.webStorage.getLoggedInLocalstorageData();
+  langTypeName : any;
+  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'कृती'];
+
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
     private masterService: MasterService,
@@ -45,18 +54,25 @@ export class OutwardItemComponent {
   ) { }
   ngOnInit() {
     this.filterFormData();
-    this.getCategory();
+    this.getTaluka();
     this.getTableData();
-
+    this.webStorage.langNameOnChange.subscribe(lang => {
+      this.langTypeName = lang;
+      this.setTableData();
+    });
   }
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      CategoryId: [''],
-      SubCategoryId: [''],
-      ItemsId: [''],
+      talukaId: [0],
+      centerId: [0],
+      villageId: [0],
+      schoolId: [0],
+      CategoryId: [0],
+      SubCategoryId: [0],
+      ItemsId: [0],
       textSearch: ['']
-    })
+    });
   }
 
   openDialog(data?:any) {
@@ -80,12 +96,77 @@ export class OutwardItemComponent {
     });
   }
 
+  getTaluka() {
+    this.talukaArr = [];
+    this.masterService.getAllTaluka('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+        } else {
+          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          this.talukaArr = [];
+        }
+      }
+    });
+  }
+
+  getAllCenter() {
+    this.centerArr = [];
+    let id = this.filterForm.controls['talukaId'].value;
+    if (id != 0) {
+      this.masterService.getAllCenter('', id).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+          } else {
+            this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+            this.centerArr = [];
+          }
+        }
+      });
+    }
+  }
+
+  getVillage() {
+    this.villageArr = [];
+    let Cid = this.filterForm.controls['centerId'].value;
+    if (Cid != 0) {
+      this.masterService.getAllVillage('', Cid).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+          } else {
+            this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+            this.villageArr = [];
+          }
+        }
+      });
+    }
+  }
+
+  getAllSchools() {
+    this.schoolArr = [];
+    let Tid = this.filterForm.controls['talukaId'].value;
+    let Cid = this.filterForm.controls['centerId'].value || 0;
+    let Vid = 0;
+    this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+        } else {
+          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          this.schoolArr = [];
+        }
+      }
+    });
+  }
+
   getCategory() {
     this.categoryresp = [];
     this.masterService.GetAllAssetCategory(this.webStorage.languageFlag).subscribe({
       next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-          this.categoryresp = res.responseData;
+        if (res.statusCode == "200" && res.responseData.length) {
+          this.categoryresp.push({ "id": 0, "category": "All", "m_Category": "सर्व" }, ...res.responseData);
         } else {
           this.categoryresp = [];
         }
@@ -98,10 +179,8 @@ export class OutwardItemComponent {
   getSubCategory(categoryId: any) {
     this.masterService.GetAssetSubCateByCateId(categoryId, '').subscribe({
       next: (res: any) => {
-
-
-        if (res.statusCode == '200') {
-          this.subcategoryresp = res.responseData;
+        if (res.statusCode == "200") {
+          this.subcategoryresp.push({ "id": 0, "subCategory": "All", "m_SubCategory": "सर्व" }, ...res.responseData);
         } else {
           this.subcategoryresp = [];
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
@@ -116,8 +195,7 @@ export class OutwardItemComponent {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.itemresp = res.responseData;
-
+          this.itemresp.push({ "id": 0, "itemName": "All", "m_ItemName": "सर्व" }, ...res.responseData);
         } else {
           this.tableresp = [];
         }
@@ -127,7 +205,6 @@ export class OutwardItemComponent {
   }
 
   childCompInfo(obj: any) {
-
     switch (obj.label) {
       case 'Pagination':
         this.filterFlag ? '' : (this.filterForm.value.setValue(''), this.filterFlag = false);
@@ -136,9 +213,6 @@ export class OutwardItemComponent {
         break;
       case 'Edit':
         this.openDialog(obj);
-        break;
-      case 'Block':
-        // this.openBlockDialog(obj);
         break;
       case 'Delete':
         this.globalDialogOpen(obj);
@@ -156,10 +230,9 @@ export class OutwardItemComponent {
       "textSearch": formData.textSearch || '',
     }
 
-    let str = '&CategoryId=' + obj.CategoryId + '&SubCategoryId=' + obj.SubCategoryId + '&ItemId=' + obj.ItemsId + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + obj.textSearch + '&lan=d'
-    let excel = '&CategoryId=' + obj.CategoryId + '&SubCategoryId=' + obj.SubCategoryId + '&ItemId=' + obj.ItemsId + '&pageno=' + 1 + '&pagesize=10&TextSearch=' + obj.textSearch + '&lan=d'
+    let str = '&CategoryId=' + obj.CategoryId + '&SubCategoryId=' + obj.SubCategoryId + '&ItemId=' + obj.ItemsId + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + obj.textSearch + '&lan=' + this.webStorage.languageFlag
+    let excel = '&CategoryId=' + obj.CategoryId + '&SubCategoryId=' + obj.SubCategoryId + '&ItemId=' + obj.ItemsId + '&pageno=' + 1 + '&pagesize=10&TextSearch=' + obj.textSearch + '&lan=' + this.webStorage.languageFlag
 
-    // this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?SchoolId='+this.Id.schoolId+(status=='filter'?str:excel), false, false, false, 'baseUrl');
     this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?SchoolId=2104' + (status == 'filter' ? str : excel), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -182,32 +255,82 @@ export class OutwardItemComponent {
     });
   }
 
-
   setTableData() {
-    let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Items', 'Action'];
-    let displayedColumns = ['srNo', 'category', 'subCategory', 'item', 'action'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', 'item', 'action'];
     this.tableData  = {
       pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
-      pagintion: this.totalItem > 10 ? true : false,
-      displayedColumns: displayedColumns,
+      pagintion: true,
+      displayedColumns: this.displayedColumns,
       tableData: this.tableresp,
       tableSize: this.totalItem,
-      tableHeaders: displayedColumnsReadMode,
-      // tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
     };
     this.highLightFlag ? this.tableData .highlightedrow = true : this.tableData .highlightedrow = false,
     this.apiService.tableData.next(this.tableData );
   }
+
+  onChangeDropD(label: string) {
+    switch (label) {
+      case 'taluka':
+        this.filterForm.controls['centerId'].setValue(0);
+        this.filterForm.controls['villageId'].setValue(0);
+        this.filterForm.controls['categoryId'].setValue(0);
+        this.filterForm.controls['subCategoryId'].setValue(0);
+        this.filterForm.controls['itemsId'].setValue(0);
+        this.villageArr = [];
+        this.categoryresp = [];
+        this.subcategoryresp = [];
+        this.itemresp = [];
+        this.schoolArr = [];
+        break;
+      case 'center':
+        this.filterForm.controls['villageId'].setValue(0);
+        this.filterForm.controls['categoryId'].setValue(0);
+        this.filterForm.controls['subCategoryId'].setValue(0);
+        this.filterForm.controls['itemsId'].setValue(0);
+        this.categoryresp = [];
+        this.subcategoryresp = [];
+        this.itemresp = [];
+        this.schoolArr = [];
+        break;
+      case 'village':
+        this.filterForm.controls['categoryId'].setValue(0);
+        this.filterForm.controls['subCategoryId'].setValue(0);
+        this.filterForm.controls['itemsId'].setValue(0);
+        this.filterForm.controls['schoolId'].setValue(0);
+        this.categoryresp = [];
+        this.subcategoryresp = [];
+        this.itemresp = [];
+        break;
+      case 'school':
+        this.filterForm.controls['categoryId'].setValue(0);
+        this.filterForm.controls['subCategoryId'].setValue(0);
+        this.filterForm.controls['itemsId'].setValue(0);
+        this.subcategoryresp = [];
+        this.itemresp = [];
+        break;
+      case 'category':
+        this.itemresp = [];
+        this.filterForm.controls['subCategoryId'].setValue(0);
+        this.filterForm.controls['itemsId'].setValue(0);
+        break;
+      case 'subCategory':
+        this.filterForm.controls['itemsId'].setValue(0);
+        break;
+    }
+  }
+
   clearFilterData() {
-    this.filterForm.controls['CategoryId'].setValue('');
-    this.filterForm.controls['SubCategoryId'].setValue('');
-    this.filterForm.controls['ItemsId'].setValue('');
-    this.filterForm.controls['textSearch'].setValue('');
-    this.subcategoryresp = [];
+    this.filterForm.controls['centerId'].setValue(0);
+    this.centerArr = [];
+    this.villageArr = [];
+    this.categoryresp = [];
+    this.schoolArr = [];
     this.itemresp = [];
+    this.subcategoryresp = [];
     this.pageNumber = 1;
     this.getTableData();
   }
@@ -270,7 +393,7 @@ export class OutwardItemComponent {
     let ValueData =
       this.resultDownloadArr.reduce(
         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-      );// Value Name
+      );
 
     let objData: any = {
       'topHedingName': 'Outward Itmes List',

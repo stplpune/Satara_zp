@@ -33,10 +33,55 @@
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
         <form [formGroup]="filterForm" class="w-100 gx-2">
             <div class="row">
+                
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="onChangeDropD('taluka');getAllCenter();">
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
+                                'EN' ?
+                                tal.taluka:tal.m_Taluka }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+                        <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage()">
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
+                                'EN' ? cen.center:cen.m_Center}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.village'| translate}}</mat-label>
+                        <mat-select formControlName="villageId" (selectionChange)="onChangeDropD('village'); getAllSchools();">
+                            <mat-option *ngFor="let village of villageArr"
+                                [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
+                                village.village:village.m_Village}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school'); getCategoryDrop();">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() == 'EN' ?
+                                sch.schoolName:sch.m_SchoolName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
-                        <mat-select formControlName="categoryId" (selectionChange)="onChangeDropD('category'); getSubCategoryDrop();">
+                        <mat-select formControlName="categoryId"
+                            (selectionChange)="onChangeDropD('category'); getSubCategoryDrop();">
                             <mat-option [value]="category.id" *ngFor="let category of categoryArr">
                                 {{webStorageS.getLangauge() == 'EN' ? category.category : category.m_Category}}
                             </mat-option>
@@ -46,24 +91,21 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
-                        <mat-select formControlName="subCategoryId" (selectionChange)="onChangeDropD('subCategory'); getItemDrop();">
-                            <mat-option [value]="subCategory.id" *ngFor="let subCategory of subCategoryArr">{{webStorageS.getLangauge() == 'EN' ? subCategory.subCategory : subCategory.m_subCategory}}</mat-option>
+                        <mat-select formControlName="subCategoryId"
+                            (selectionChange)="onChangeDropD('subCategory'); getItemDrop();">
+                            <mat-option [value]="subCategory.id"
+                                *ngFor="let subCategory of subCategoryArr">{{webStorageS.getLangauge() == 'EN' ?
+                                subCategory.subCategory : subCategory.m_subCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
-                    <mat-form-field appearance="outline" class="w-100 ">
-                        <mat-label>{{'Labels.School'| translate}}</mat-label>
-                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
-                            <mat-option>Option-1</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+                
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Items'| translate}}</mat-label>
                         <mat-select formControlName="itemsId" (keypress)="validationService.noFirstSpaceAllow($event);">
-                            <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() == 'EN' ? item.item : item.m_Item}}</mat-option>
+                            <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() ==
+                                'EN' ? item.itemName : item.m_ItemName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -75,9 +117,11 @@
                 </div>
                 <div class="col-sm-auto">
                     <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
-                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+                        <button mat-flat-button class="btn-main" type="submit"
+                            (click)="getTableData('filter')">{{'Labels.filter'|
                             translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second ms-2" (click)="onClear()">{{'Labels.clear'|
+                        <button mat-flat-button type="button" class="btn-second ms-2"
+                            (click)="onClear()">{{'Labels.clear'|
                             translate}}</button>
                     </div>
                 </div>

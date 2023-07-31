@@ -62,6 +62,10 @@ export class ItemRegistrationComponent {
 
   ngOnInit(): void {
     this.languageFlag = this.webService.languageFlag;
+    this.webService.langNameOnChange.subscribe(lang => {
+      this.languageFlag = lang;
+      this.setTableData();
+    });
     this.getTableData();
     this.filterFormData();
     this.getAllCategory();
@@ -115,10 +119,10 @@ export class ItemRegistrationComponent {
       highlightedrow:true,
       pageNumber: this.pageNumber,
       img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-      displayedColumns: this.isWriteRight == true ? this.languageFlag == 'EN' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'EN' ? displayedColumns : marathiDisplayedColumns,
+      displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: this.languageFlag == 'EN' ? this.displayedheaders : this.marathiDisplayedheaders
+      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders
     };
     this.highLightFlag?tableData.highlightedrow=true:tableData.highlightedrow=false,
     this.apiService.tableData.next(tableData);
@@ -225,7 +229,7 @@ export class ItemRegistrationComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
-      header: 'Delete',
+      header: this.webService.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
       title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'

@@ -9,15 +9,26 @@
             </button>
         </div>
     </mat-card-header>
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
     <mat-card-content class="card-body card-height-mid scrollbar">
         <!-- <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.studentDetails'| translate}}</mat-card-subtitle> -->
         <div class="row">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.Category' | translate}}</mat-label>
-                    <input matInput maxlength="20" [formControl]="category"
-                    (keypress)="validation.noFirstSpaceAllow($event);validation.alphaNumericOnly">
+                    <input matInput maxlength="20" formControlName="category"
+                    (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericOnly">
                     <mat-error></mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>category name marathi</mat-label>
+                    <input matInput maxlength="20" formControlName ="M_category"
+                    (keypress)="validators.unicodeMarathiValidation($event)"
+                        (keypress)="validators.noSpaceAllow($event)">
+                        <mat-error *ngIf="f['M_category'].hasError('pattern')">{{'Labels.invalidItemName'|
+                            translate}}</mat-error>
                 </mat-form-field>
             </div>
         </div>
@@ -29,4 +40,5 @@
                 <button mat-stroked-button class="btn-main" type="submit" (click)="onSubmit()">{{editFlag ? ( 'Labels.update' | translate):('Labels.submit' |translate)}}</button>
         </mat-card-actions>
     </mat-card-footer>
+</form>
 </mat-card>

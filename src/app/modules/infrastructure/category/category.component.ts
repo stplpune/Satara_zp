@@ -126,7 +126,6 @@ export class CategoryComponent {
     this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        console.log(res);
         if (res.statusCode == "200") {
           status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           // this.tableresp = res.responseData.responseData1;
@@ -169,8 +168,6 @@ export class CategoryComponent {
   }
 
   pdfDownload(data:any) {
-    console.log(data);
-    
     data.map((ele: any, i: any)=>{
           let obj = {
             "Sr.No": i+1,

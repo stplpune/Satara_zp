@@ -10,6 +10,8 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 
 @Component({
   selector: 'app-category',
@@ -37,6 +39,7 @@ export class CategoryComponent {
   tableData: any;
   resultDownloadArr = new Array();
   pageNumber: number = 1;
+  deleteObj :any;
   constructor(public dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
@@ -44,7 +47,7 @@ export class CategoryComponent {
     public validation:ValidationService,
     private excelpdfService:DownloadPdfExcelService,
     public datepipe : DatePipe,
-    // private commonService:CommonMethodsService
+    private commonService:CommonMethodsService
     ) { }
 
   ngOnInit() {
@@ -52,6 +55,8 @@ export class CategoryComponent {
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
+      console.log("this.langTypeName",this.langTypeName);
+      
       this.getTableTranslatedData();
     });
     
@@ -106,9 +111,9 @@ export class CategoryComponent {
       case 'Block':
         // this.openBlockDialog(obj);
         break;
-      // case 'Delete':
-      //   // this.globalDialogOpen(obj);
-      //   break;
+      case 'Delete':
+        this.globalDialogOpen(obj);
+        break;
     }
   }
 
@@ -266,6 +271,52 @@ export class CategoryComponent {
   //   }
   // }
 
+
+  globalDialogOpen(obj: any) {
+    this.deleteObj = obj;
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Category record?' : 'तुम्हाला उपवर्ग रेकॉर्ड हटवायचा आहे का?',
+      cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.deteleDialogOpen();
+      }
+      this.highLightFlag=false;
+      
+    })
+  }
+
+
+  deteleDialogOpen(){
+    let deleteObj = {
+      "id": this.deleteObj.id,
+      "deletedBy": 0,
+      "modifiedDate": new Date(),
+      "lan": "EN"
+    }
+    
+    this.apiService.setHttp('DELETE', 'zp-satara/AssetCategory/DeleteCategory', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.getTableData();
+          this.commonService.showPopup(res.statusMessage, 0);
+        } else {     
+          this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
+        }
+      },
+      error: ((err: any) => {  this.errors.handelError(err.statusCode) })
+    });
+  }
 
 }
 

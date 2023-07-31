@@ -37,8 +37,6 @@ export class AddItemComponent {
 
   ngOnInit(): void {   
     this.languageFlag = this.webService.languageFlag;
-    console.log("this.languageFlag",this.languageFlag);
-    
     this.formData();
     this.getAllCategory();
   }

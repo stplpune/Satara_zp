@@ -355,7 +355,13 @@
         "asset": "Asset",
         "assetList": "Asset List",
         "addAsset": "Add Asset",
-        "updateAsset": "Update Asset"
+        "updateAsset": "Update Asset",
 
+        "itemNameMarathi":"Item Name (marathi)",
+        "invalidItemName":"Please enter valid item name (Marathi).",
+        "CategoryName":"Category Name",
+        "Description":"Description"
+
+        
     }
 }

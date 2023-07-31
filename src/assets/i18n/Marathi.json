@@ -2,7 +2,7 @@
     "Labels": {
         "addItems":"वस्तू जोडा",
         "UpdatedAdditems":"अद्यतनित आयटम जोडा",
-        "subcategoryname":"उपवर्गाचे नाव",
+        "subcategoryname":"उपश्रेणी",
         "itemName":"वस्तूचे नाव",
         "description":"विवरण",
         "UploadEventPhoto":"कार्यक्रमाचा फोटो अपलोड करा",
@@ -15,7 +15,7 @@
         "subcategoryList":"उपवर्ग यादी",
         "categoryList":"विभाग यादी",
         "addguardian":"संरक्षक जोडा",
-        "Category":"विभाग",
+        "Category":"श्रेणी",
         "addCategory":"विभाग जोडा",
         "Relations":"धर्म",
         "dashboard": "डॅशबोर्ड",
@@ -340,6 +340,11 @@
         "asset": "मालमत्ता",
         "assetList": "मालमत्तेची यादी",
         "addAsset": "मालमत्ता जोडा",
-        "updateAsset": "मालमत्ता अपडेट करा"
+        "updateAsset": "मालमत्ता अपडेट करा",
+
+        "itemNameMarathi":"वस्तूचे नाव (मराठी)",
+        "invalidItemName":"कृपया वैध वस्तूचे नाव (मराठी) टाका.",
+        "CategoryName" :"श्रेणीचे नाव",
+        "Description":"वर्णन"
     }
 }

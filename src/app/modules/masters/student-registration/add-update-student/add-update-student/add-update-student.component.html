@@ -324,13 +324,13 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="table-responsive table-height-xs scrollbar">
-                        <table class="dashboard-table">
+                        <table class="dashboard-table" *ngIf="gardianModelArr.length>0">
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th scope="col"> Sr.No. </th>                                        
-                                        <th scope="col">Name</th>
-                                        <th scope="col"> Mobile No.</th>
+                                        <th scope="col">{{this.languageFlag == "EN" ? 'Name' : 'नाव'}}</th>
+                                        <th scope="col"> {{this.languageFlag == "EN" ? 'Mobile No.' : 'मोबाईल क्र.'}}</th>
                                         <th scope="col">Relation</th>
                                         <th scope="col"> Is Head </th>
                                         <th scope="col">Action</th>
@@ -348,7 +348,7 @@
                                                 (click)="changeCheckBox(i)"></mat-checkbox>
                                         </td> -->
                                         <td>
-                                            <mat-checkbox type="checkbox"  [checked]="gardianModelArr[i].isHead" [disabled]="gardian.isDeleted == 1" (change)='changeCheckBox(i)'
+                                            <mat-checkbox type="checkbox"  [checked]="gardianModelArr[i].isHead" [disabled]="gardian.isDeleted == 1" (change)='changeCheckBox(i)' [(ngModel)]="gardianModelArr[i].isHead" [ngModelOptions]="{standalone: true}"
                                             ></mat-checkbox>
                                         </td>
                                         <td>

@@ -271,6 +271,7 @@ export class AddUpdateStudentComponent {
   // }
 
   addGardianList(){
+    console.log("this.addGardianForm.value",this.addGardianForm.value);
     this.relationArr.map((x:any)=>{
       if(x.id == this.addGardianForm.value.relationId){
         this.f['relation'].setValue(x.relation);
@@ -341,6 +342,8 @@ export class AddUpdateStudentComponent {
         res.isHead = false
       });
       this.gardianModelArr[i].isHead = true;
+      console.log("this.gardianModelArr[i]",this.gardianModelArr);
+      
   }
 
   getDistrict() {
@@ -702,6 +705,7 @@ export class AddUpdateStudentComponent {
       //   if (!this.uploadAadhaar) { this.aadhaarFlag = true, this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1); };
       //   return
       // }
+      console.log("postObj",postObj);
       let url = this.editObj ? 'UpdateStudent' : 'AddStudent'
       this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Student/' + url, false, postObj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({

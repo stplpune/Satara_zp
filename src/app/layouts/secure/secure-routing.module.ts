@@ -35,6 +35,13 @@ const routes: Routes = [
   { path: 'store-stock-report', loadChildren: () => import('../../modules/infrastructure/store-master/store-master.module').then(m => m.StoreMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Store Master', m_title: 'स्टोअर मास्टर', active: true }] } },
   { path: 'item', loadChildren: () => import('../../modules/infrastructure/item-registration/item-registration.module').then(m => m.ItemRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Item Registration', m_title: 'वस्तू नोंदणी', active: true }] } },
   { path: 'outward-item', loadChildren: () => import('../../modules/infrastructure/outward-item/outward-item.module').then(m => m.OutwardItemModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Item Transfer', m_title: 'वस्तू ट्रान्सफर', active: true }] } },
+
+   //------attendence-routing--------//
+
+  { path: 'tasksheet', loadChildren: () => import('../../modules/attendence/tasksheet/tasksheet.module').then(m => m.TasksheetModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Tasksheet', m_title: 'टास्कशीट', active: true }] }  },
+  { path: 'tasksheet-reports', loadChildren: () => import('../../modules/attendence/tasksheet-reports/tasksheet-reports.module').then(m => m.TasksheetReportsModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Tasksheet Report', m_title: 'टास्कशीट अहवाल', active: true }] } },
+  { path: 'hoilday-master', loadChildren: () => import('../../modules/attendence/hoilday-master/hoilday-master.module').then(m => m.HoildayMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Hoilday Master', m_title: 'हॉलिडे मास्टर', active: true }] }  },
+
 ]
   
 

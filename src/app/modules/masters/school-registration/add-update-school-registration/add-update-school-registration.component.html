@@ -268,8 +268,7 @@
                     <div class="d-flex flex-wrap gap-4">
                         <ng-container *ngFor="let doc of docArray; let i = index">
                             <div class="gallery position-relative">
-                                <!-- <img [src]="doc.docPath " height="130px" width="130px" class="border"> -->
-                                <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " height="130px" width="130px" class="border" (click)="onViewDoc(i)">
+                                <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " height="110px" width="110px" class="border" (click)="onViewDoc(i)">
                                 <span class="position-absolute" style="top:-17px;right:-17px;">
                                     <button type="button" mat-icon-button
                                         class="bg-danger bg-opacity-25 text-danger material-icons"
@@ -287,11 +286,8 @@
         </mat-dialog-content>
         <mat-dialog-actions align="end" class="card-footer">
             <div class="d-flex w-100 justify-content-end align-items-center">
-                <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' |
-                    translate}}</button>
-                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate)
-                    :('Labels.submit' |
-                    translate)}}</button>
+                <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' | translate}}</button>
+                <button mat-flat-button class="btn-main" type="submit">{{editObj ?( 'Labels.update' | translate) : ('Labels.submit' | translate)}}</button>
             </div>
         </mat-dialog-actions>
     </form>
@@ -301,11 +297,9 @@
 <ng-container *ngIf="userId == 4">
     <div mat-dialog-title class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
-            <h6 class="text-main mb-0 fw-bold">{{editFlag ? 'Update Event Details' : 'Event Registration'}}</h6>
+            <h6 class="text-main mb-0 fw-bold">{{editFlag ? ( 'Labels.UpdateEventDetails' | translate ) : ('Labels.EventRegistration' | translate )}}</h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
-                <mat-icon>
-                    close
-                </mat-icon>
+                <mat-icon>close</mat-icon>
             </button>
         </div>
     </div>
@@ -315,15 +309,15 @@
                 <div class="col-sm-7  border-end">
                     <div class="d-flex justify-content-between gap-2">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Event Name</mat-label>
+                            <mat-label>{{'Labels.EventName' | translate}}</mat-label>
                             <input matInput [formControl]="textSearch">
                         </mat-form-field>
                         <div class="d-flex gap-2">
                             <button mat-flat-button class="btn-main" type="button" (click)="getTableData()">
-                                Search
+                               {{'Labels.filter' | translate}}
                             </button>
-                            <button mat-flat-button class="btn-second me-2" type="button" (click)="onClear()">
-                                Clear
+                            <button mat-flat-button class="btn-second px-2" type="button" (click)="onClear()">
+                                {{'Labels.clear' | translate}}
                             </button>
                         </div>
                     </div>
@@ -331,9 +325,9 @@
                         <table class="table dashboard-table">
                             <thead>
                                 <tr>
-                                    <th>Sr. No.</th>
-                                    <th>Event Name</th>
-                                    <th>Action</th>
+                                    <th>{{'Labels.SrNo' | translate}}</th>
+                                    <th>{{'Labels.EventName' | translate}}</th>
+                                    <th>{{'Labels.action' | translate}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -348,7 +342,7 @@
                                                 <mat-icon class="text-main">edit</mat-icon>
                                             </button>
                                             <button mat-icon-button id="tooltip"
-                                                matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
+                                                matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
                                                 type="button" matTooltipClass="tooltip"
                                                 (click)="globalDialogOpen(data.id)">
                                                 <mat-icon class="text-main">delete</mat-icon>
@@ -363,26 +357,26 @@
                 <div class="col-sm-5 mb-3">
                     <div class="">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>School Name</mat-label>
+                            <mat-label>{{'Labels.school' | translate}}</mat-label>
                             <input matInput [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" readonly>
                         </mat-form-field>
                     </div>
                     <div class="">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Event Name</mat-label>
+                            <mat-label>{{'Labels.EventName' | translate}}</mat-label>
                             <input matInput formControlName="eventName">
                         </mat-form-field>
                     </div>
                     <div class="">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Event Name in marathi</mat-label>
+                            <mat-label>{{'Labels.EventNamemarathi' | translate}}</mat-label>
                             <input matInput formControlName="m_EventName"
                                 (keypress)="validationService.noFirstSpaceAllow($event);validationService.unicodeMarathiAlphanumberic($event)">
                         </mat-form-field>
                     </div>
                     <div class="">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Description</mat-label>
+                            <mat-label>{{'Labels.description' | translate}}</mat-label>
                             <textarea matInput formControlName="description"></textarea>
                         </mat-form-field>
                     </div>

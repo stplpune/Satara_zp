@@ -332,8 +332,6 @@ export class AddUpdateSchoolRegistrationComponent {
             }
             this.docArray.push(data)
           }
-          console.log("docArray : ", this.docArray);
-          
         }
         else {
           return

@@ -173,7 +173,7 @@
                     <div class="d-flex justify-content-between gap-2">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.caste'| translate}}</mat-label>
-                            <mat-select formControlName="castId">
+                            <mat-select formControlName="casteId">
                                 <mat-option *ngFor="let cast of casteArr" [value]="cast.id">
                                     {{languageFlag == 'EN'?cast.caste:cast.m_Caste}}
                                 </mat-option>
@@ -337,18 +337,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let gardian of gardianModelArr; let i = index">
+                                    <tr *ngFor="let gardian of gardianModelArr; let i = index" [ngStyle]="(gardian.isDeleted == 1 ) ? {backgroundcolor:'#C6C6C6', opacity:'0.4'} : { }">
                                         <td>{{i+1}}</td>                                        
                                         <td>{{gardian.name}}</td>
                                         <td>{{gardian.mobileNo}}</td>
-                                        <td>{{gardian.relationName}}</td>
+                                        <td>{{gardian.relation}}</td>
                                         <!-- <td>
                                             <mat-checkbox [formControl]="isCheck"
                                                 [disabled]="this.gardianModelArr[i].isHead  == false && this.checkDisable == true"
                                                 (click)="changeCheckBox(i)"></mat-checkbox>
                                         </td> -->
                                         <td>
-                                            <mat-checkbox type="checkbox" (change)='changeCheckBox(i)' [(ngModel)]="gardianModelArr[i].isHead" [ngModelOptions]="{standalone: true}"
+                                            <mat-checkbox type="checkbox"  [checked]="gardianModelArr[i].isHead" [disabled]="gardian.isDeleted == 1" (change)='changeCheckBox(i)'
                                             ></mat-checkbox>
                                         </td>
                                         <td>

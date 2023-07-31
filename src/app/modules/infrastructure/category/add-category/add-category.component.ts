@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -14,34 +14,47 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 })
 export class AddCategoryComponent {
   // editData: any;
+  
+  categoryForm !:FormGroup;
+  languageFlag !:string;
   editObj: any;
-  category = new FormControl('', [Validators.required]);
+  // category = new FormControl('', [Validators.required]);
+  // M_category = new FormControl('', [Validators.required]);
   editFlag = false;
   editId: any;
-  constructor(private apiService: ApiService,
+  constructor(private fb : FormBuilder,
+   private apiService: ApiService,
     private commonMethod: CommonMethodsService,
     private errors: ErrorsService,
-    private webStorage: WebStorageService,
-    public validation:ValidationService,
+    private webStorage: WebStorageService,   
     private dialogRef: MatDialogRef<AddCategoryComponent>,
+    public validators : ValidationService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
   }
 
   ngOnInit() {
+    this.languageFlag = this.webStorage.languageFlag;
+    this.formData();
     this.data ? this.editData() : '';
   }
 
+  formData(){
+    this.categoryForm = this.fb.group({
+      category:['',[Validators.required,Validators.pattern(this.validators.name)]],
+      M_category:['',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]]
+    })
+  }
 
+  get f() {
+    return this.categoryForm.controls;
+  }
   onSubmit() {
-    if (this.category.invalid) {
+    if (this.categoryForm.invalid) {
       return;
-    }
-    console.log(this.category.value);
+    } 
     let data = this.webStorage.createdByProps();
-    console.log(data);
-
-    let formData = this.category.value;
+    let formData = this.categoryForm.value;
     let obj = {
       "createdBy": data.createdBy,
       "modifiedBy": data.modifiedBy,
@@ -49,9 +62,9 @@ export class AddCategoryComponent {
       "modifiedDate": data.modifiedDate,
       "isDeleted": data.isDeleted,
       "id":  this.editFlag?this.editId:0,
-      "category": formData,
-      "m_Category": "",
-      "lan": ""
+      "category": formData.category,
+      "m_Category":formData.M_category,
+      "lan": this.languageFlag
     }
 
     let method = this.editFlag ? 'PUT' : 'POST';
@@ -73,7 +86,9 @@ export class AddCategoryComponent {
 
   editData() {
     this.editFlag = true;
-    this.editId = this.data.id
-    this.category.patchValue(this.data?.category)
+    this.editId = this.data.id;    
+    this.f['category'].setValue(this.data?.category)
+    this.f['M_category'].setValue(this.data?.m_Category)
+
   }
 }

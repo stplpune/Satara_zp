@@ -1,5 +1,9 @@
 {
     "Labels": {
+        "EventRegistration":"कार्यक्रम नोंदणी",
+        "UpdateEventDetails":"कार्यक्रम तपशील अद्यतनित करा",
+        "EventName":"कार्यक्रमाचे नाव",
+        "EventNamemarathi":"कार्यक्रमाचे नाव मराठी",
         "addItems":"वस्तू जोडा",
         "UpdatedAdditems":"अद्यतनित आयटम जोडा",
         "subcategoryname":"उपश्रेणी",
@@ -71,6 +75,8 @@
         "maximummLength500Characters": "कमाल लांबी 200 वर्णांपेक्षा कमी असावी",
         "EmailIDofficer" : "ई-मेल आयडी (BEO कार्यालय)",
         "clear":"रद्द करा",
+        "SrNo":"अनुक्रमांक",
+        "action":"कृती",
         "HeaderEnglish":"इंग्रजी",
         "HeaderMarathi":"मराठी",
         "setting":"सेटिंग्ज",

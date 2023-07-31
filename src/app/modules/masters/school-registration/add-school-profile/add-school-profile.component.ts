@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-school-profile',
@@ -48,7 +49,9 @@ export class AddSchoolProfileComponent {
   id: any;
   encryptData: any;
   routingData: any;
-  schoolevetArr: any
+  schoolevetArr: any;
+  langTypeName: any;
+  langChnge!: Subscription;
   constructor(public webStorage: WebStorageService,
     private apiService: ApiService,
     private errors: ErrorsService,
@@ -59,8 +62,12 @@ export class AddSchoolProfileComponent {
   ) { }
 
   ngOnInit() {
+    this.langChnge = this.webStorage.langNameOnChange.subscribe(lang => {
+      this.langTypeName = lang;
+      this.setTableData();
+    });
+
     this.getRouteParam();
-    this.getTableData();
     this.lightBox();
   }
 
@@ -80,12 +87,16 @@ export class AddSchoolProfileComponent {
       this.routingData = queryParams['id'];
     });
     this.encryptData = this.encryptdecrypt.decrypt(`${decodeURIComponent(this.routingData)}`);
+    console.log("encryptData", this.encryptData);
+    this.getTableData();
+
+    
   }
 
 
   getTableData() {
     this.lightbox
-    this.apiService.setHttp('GET', 'zp-satara/School/GetProfileById?Id=' + this.encryptData, false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/School/GetProfileById?Id='+ this.encryptData, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -121,7 +132,7 @@ export class AddSchoolProfileComponent {
 
   setTableData() {
     // this.highLightFlag=true;
-    let displayedColumnsReadMode = ['Sr. No.', 'Teacher Name', 'Email ID', 'Mobile No.', 'Desgination'];
+    let displayedColumnsReadMode =  (this.langTypeName == 'English') ? ['Sr. No.', 'Teacher Name', 'Email ID', 'Mobile No.', 'Desgination'] : ['अनुक्रमांक', 'शिक्षकाचे नाव', 'ई-मेल आयडी', 'मोबाइल क्रमांक', 'पदनाम'];
     let displayedColumns = ['srNo', 'name', 'emailId', 'mobileNo', 'designationType'];
     let tableData = {
       // pageNumber: this.pageNumber,

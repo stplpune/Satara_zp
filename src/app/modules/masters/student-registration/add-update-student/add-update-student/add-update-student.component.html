@@ -28,7 +28,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
                         <mat-select formControlName="districtId" [disabled]="stuRegistrationForm.value.districtId == 1">
-                            <mat-option *ngFor="let dist of districtArr" [value]="dist.id">{{languageFlag == 'EN' ?
+                            <mat-option *ngFor="let dist of districtArr" [value]="dist.id">{{languageFlag == 'English' ?
                                 dist.district : dist.m_District}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['districtId'].hasError('required')">User Name Is Required</mat-error> -->
@@ -39,7 +39,7 @@
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
                             (selectionChange)="clearDropdown('talukaId');getAllCenter()">
-                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'EN' ?
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['talukaId'].hasError('required')"> {{'Labels.pleaseSelectTaluka'| translate }} </mat-error> -->
@@ -50,7 +50,7 @@
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
                             (selectionChange)="clearDropdown('centerId');getVillage()">
-                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'EN'
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                                 ?cen.center:cen.m_Center}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
@@ -60,7 +60,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
-                            <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag == 'EN'
+                            <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag == 'English'
                                 ?village.village:village.m_Village}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
@@ -71,7 +71,7 @@
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId"
                             (selectionChange)="clearDropdown('schoolId');getStandard()">
-                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'EN' ?
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
                                 sch.schoolName:sch. m_SchoolName}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['schoolId'].hasError('required')">  {{'Labels.pleaseSelectSchool'| translate }} </mat-error> -->
@@ -81,7 +81,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.standard'| translate}}</mat-label>
                         <mat-select formControlName="standard">
-                            <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{languageFlag == 'EN'
+                            <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{languageFlag == 'English'
                                 ?stan.standard:stan.m_Standard}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['standard'].hasError('required')"> {{'Labels.pleaseSelectStandard'| translate}} </mat-error> -->
@@ -149,7 +149,7 @@
                         <mat-label>{{'Labels.Relations'| translate}}</mat-label>
                         <mat-select formControlName="religionId"
                             (selectionChange)="clearDropdown('religionId');getCatogory()">
-                            <mat-option *ngFor="let religon of religionArr" [value]="religon.id">{{languageFlag == 'EN'
+                            <mat-option *ngFor="let religon of religionArr" [value]="religon.id">{{languageFlag == 'English'
                                 ?religon.religion:religon.m_Religion}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['lName'].hasError('pattern')">{{'Labels.InvalidstudentLastName'|
@@ -162,7 +162,7 @@
                         <mat-select formControlName="casteCategoryId"
                             (selectionChange)="clearDropdown('casteCategoryId');getCaste()">
                             <mat-option *ngFor="let category of catogoryArr" [value]="category.id">{{languageFlag ==
-                                'EN'
+                                'English'
                                 ?category.category:category.m_Category}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['lName'].hasError('pattern')">{{'Labels.InvalidstudentLastName'|
@@ -175,7 +175,7 @@
                             <mat-label>{{'Labels.caste'| translate}}</mat-label>
                             <mat-select formControlName="casteId">
                                 <mat-option *ngFor="let cast of casteArr" [value]="cast.id">
-                                    {{languageFlag == 'EN'?cast.caste:cast.m_Caste}}
+                                    {{languageFlag == 'English'?cast.caste:cast.m_Caste}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -202,7 +202,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.gender'| translate}}</mat-label>
                         <mat-select formControlName="gender">
-                            <mat-option *ngFor="let gen of genderArr" [value]="gen.id">{{languageFlag == 'EN'
+                            <mat-option *ngFor="let gen of genderArr" [value]="gen.id">{{languageFlag == 'English'
                                 ?gen.studentGender:gen.m_StudentGender}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['gender'].hasError('required')"> {{'Labels.pleaseSelectGender'|
@@ -329,8 +329,8 @@
                                 <thead>
                                     <tr>
                                         <th scope="col"> Sr.No. </th>                                        
-                                        <th scope="col">{{this.languageFlag == "EN" ? 'Name' : 'नाव'}}</th>
-                                        <th scope="col"> {{this.languageFlag == "EN" ? 'Mobile No.' : 'मोबाईल क्र.'}}</th>
+                                        <th scope="col">{{this.languageFlag == "English" ? 'Name' : 'नाव'}}</th>
+                                        <th scope="col"> {{this.languageFlag == "English" ? 'Mobile No.' : 'मोबाईल क्र.'}}</th>
                                         <th scope="col">Relation</th>
                                         <th scope="col"> Is Head </th>
                                         <th scope="col">Action</th>

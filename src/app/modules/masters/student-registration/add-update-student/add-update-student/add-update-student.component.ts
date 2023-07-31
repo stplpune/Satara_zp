@@ -92,7 +92,10 @@ export class AddUpdateStudentComponent {
     }
 
   ngOnInit() {
-    this.languageFlag = this.webService.languageFlag;
+    this.webService.langNameOnChange.subscribe(lang => {
+      this.languageFlag = lang;
+    });
+
     this.formData();
     this.gardianFormData()
     // this.data ? (this.editObj = JSON.parse(this.data), this.patchValue()) : this.allDropdownMethods();
@@ -348,7 +351,7 @@ export class AddUpdateStudentComponent {
 
   getDistrict() {
     this.districtArr = [];
-    this.masterService.getAllDistrict(this.languageFlag).subscribe({
+    this.masterService.getAllDistrict('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.districtArr = res.responseData;
@@ -365,7 +368,7 @@ export class AddUpdateStudentComponent {
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka(this.languageFlag).subscribe({
+    this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;
@@ -382,7 +385,7 @@ export class AddUpdateStudentComponent {
   getAllCenter() {
     this.centerArr = [];
     let id = this.stuRegistrationForm.value.talukaId;
-    this.masterService.getAllCenter(this.languageFlag, id).subscribe({
+    this.masterService.getAllCenter('', id).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.centerArr = res.responseData;
@@ -399,7 +402,7 @@ export class AddUpdateStudentComponent {
   getVillage() {
     let cId = this.stuRegistrationForm.value.centerId;
     // let Cid = 0;
-    this.masterService.getAllVillage(this.languageFlag, cId).subscribe({
+    this.masterService.getAllVillage('', cId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
@@ -418,7 +421,7 @@ export class AddUpdateStudentComponent {
     let Tid = this.stuRegistrationForm.value.talukaId
     let Cid = this.stuRegistrationForm.value.centerId || 0;
     let Vid = 0;
-    this.masterService.getAllSchoolByCriteria(this.languageFlag, Tid, Vid, Cid).subscribe({
+    this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr = res.responseData;
@@ -435,7 +438,7 @@ export class AddUpdateStudentComponent {
   getStandard() {
     this.standardArr = [];
     let schoolId = this.stuRegistrationForm.value.schoolId
-    this.masterService.GetStandardBySchool(schoolId, this.languageFlag).subscribe({
+    this.masterService.GetStandardBySchool(schoolId,'').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.standardArr = res.responseData;
@@ -451,7 +454,7 @@ export class AddUpdateStudentComponent {
 
   getGender() {
     this.genderArr = [];
-    this.masterService.getAllStudentGender(this.languageFlag).subscribe({
+    this.masterService.getAllStudentGender('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.genderArr = res.responseData;
@@ -467,7 +470,7 @@ export class AddUpdateStudentComponent {
 
   getReligion() {
     this.religionArr = [];
-    this.masterService.getAllReligion(this.languageFlag).subscribe({
+    this.masterService.getAllReligion('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.religionArr = res.responseData;
@@ -484,7 +487,7 @@ export class AddUpdateStudentComponent {
   getCatogory() {
     this.catogoryArr = [];
     let id = this.stuRegistrationForm.value.religionId;
-    this.masterService.GetAllCasteCategory(id,this.languageFlag).subscribe({
+    this.masterService.GetAllCasteCategory(id,'').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.catogoryArr = res.responseData;
@@ -501,7 +504,7 @@ export class AddUpdateStudentComponent {
   getCaste() {
     this.casteArr = [];
     let id = this.stuRegistrationForm.value.casteCategoryId;
-    this.masterService.getAllCaste(id,this.languageFlag).subscribe({
+    this.masterService.getAllCaste(id,'').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.casteArr = res.responseData;
@@ -518,7 +521,7 @@ export class AddUpdateStudentComponent {
 
   getRelation() {   
     this.relationArr = [];
-    this.apiService.setHttp('get', 'zp-satara/master/GetAllRelation?flag_lang='+this.languageFlag, false, false, false, 'baseUrl');
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllRelation?flag_lang=', false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
@@ -536,7 +539,7 @@ export class AddUpdateStudentComponent {
   //#endregion  ---------------------------------- Dropdown End here -----------------------------------------------
 
   onEdit(studentId:any){
-    this.apiService.setHttp( 'get', 'zp-satara/Student/GetById?Id='+studentId+'&lan='+this.languageFlag, false, false, false, 'baseUrl');
+    this.apiService.setHttp( 'get', 'zp-satara/Student/GetById?Id='+studentId+'&lan=', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {         
@@ -688,7 +691,7 @@ export class AddUpdateStudentComponent {
       "mobileNo": obj.mobileNo,
       "gaurdianModel":this.gardianModelArr,
       "documentModel": this.imageArray,
-      "lan": this.languageFlag,
+      "lan": '',
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
  
@@ -735,7 +738,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {   
         if (res.statusCode == 200) {
           if (this.imageFile.nativeElement.value == this.aadharFile.nativeElement.value) {
-            let msg = this.languageFlag == 'EN' ? photoName == 'img' ? 'Upload different profile photo' : 'Upload different Aadhaar card' : photoName == 'img' ? 'भिन्न प्रोफाइल फोटो अपलोड करा' : 'वेगवेगळे आधार कार्ड अपलोड करा';
+            let msg = this.languageFlag == 'English' ? photoName == 'img' ? 'Upload different profile photo' : 'Upload different Aadhaar card' : photoName == 'img' ? 'भिन्न प्रोफाइल फोटो अपलोड करा' : 'वेगवेगळे आधार कार्ड अपलोड करा';
             this.commonMethods.showPopup(msg, 1);
             return
           }
@@ -813,7 +816,7 @@ export class AddUpdateStudentComponent {
     // let mobileNo = this.stuRegistrationForm.value.mobileNo;
     let mobileNo = this.addGardianForm.value.mobileNo;
     if (this.stuRegistrationForm.controls['mobileNo'].valid) {
-      this.apiService.setHttp('get', 'zp-satara/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan='+this.languageFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('get', 'zp-satara/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan=', false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {

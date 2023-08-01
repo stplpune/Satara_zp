@@ -1,5 +1,9 @@
 {
     "Labels": {
+        "HolidayName":"सुट्टीचे नाव",
+        "AddHoliday":"सुट्टीचा जोडा",
+        "HolidayMaster":"सुट्टीचा मास्टर",
+        "HolidayMasterList":"सुट्टीचा मास्टर यादी",
         "TeacherAttendanceList":"शिक्षक हजेरी यादी",
         "TeacherAttendanceReport":"शिक्षक हजेरी अहवाल",
         "AttendanceReport":"हजेरी अहवाल",

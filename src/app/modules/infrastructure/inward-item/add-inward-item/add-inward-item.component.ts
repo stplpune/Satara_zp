@@ -25,6 +25,7 @@ export class AddInwardItemComponent {
   subCategoryArr = new Array();
   itemArr = new Array();
   imgValidation : boolean = true;
+  openingStock : number = 0;
   get f() { return this.itemForm.controls };
 
   constructor(private fb: FormBuilder,
@@ -138,7 +139,15 @@ export class AddInwardItemComponent {
     this.uploadImg = '';
     this.itemForm.value.photo = '';
     this.f['photo'].setValue('');
-    // this.editObj.photo = '';
+  }
+
+  getOpeningStock(){
+    let formValue = this.itemForm.value;
+    this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorageS.getLangauge()).subscribe({
+      next : (res : any)=>{
+        res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
+      }
+    });  
   }
 
   onSubmit(){
@@ -189,4 +198,5 @@ export class AddInwardItemComponent {
         break;
     }
   }
+
 }

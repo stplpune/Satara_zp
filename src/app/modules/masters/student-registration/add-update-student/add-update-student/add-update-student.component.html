@@ -337,7 +337,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let gardian of gardianModelArr; let i = index" [ngStyle]="(gardian.isDeleted == 1 ) ? {backgroundcolor:'#C6C6C6', opacity:'0.4'} : { }">
+                                    <tr *ngFor="let gardian of gardianModelArr; let i = index" [ngStyle]="(gardian.isDeleted == true ) ? {backgroundcolor:'#C6C6C6', opacity:'0.4'} : { }">
                                         <td>{{i+1}}</td>                                        
                                         <td>{{gardian.name}}</td>
                                         <td>{{gardian.mobileNo}}</td>
@@ -348,7 +348,7 @@
                                                 (click)="changeCheckBox(i)"></mat-checkbox>
                                         </td> -->
                                         <td>
-                                            <mat-checkbox type="checkbox"  [checked]="gardianModelArr[i].isHead" [disabled]="gardian.isDeleted == 1" (change)='changeCheckBox(i)' [(ngModel)]="gardianModelArr[i].isHead" [ngModelOptions]="{standalone: true}"
+                                            <mat-checkbox type="checkbox"  [checked]="gardianModelArr[i].isHead" [disabled]="gardian.isDeleted == true" (change)='changeCheckBox(i)' [(ngModel)]="gardianModelArr[i].isHead" [ngModelOptions]="{standalone: true}"
                                             ></mat-checkbox>
                                         </td>
                                         <td>

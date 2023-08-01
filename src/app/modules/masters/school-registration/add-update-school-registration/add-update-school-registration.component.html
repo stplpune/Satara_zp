@@ -304,7 +304,7 @@
             </button>
         </div>
     </div>
-    <form [formGroup]="eventForm" (ngSubmit)="onSubmitEvent()">
+    <form [formGroup]="eventForm" #formDirective="ngForm" (ngSubmit)="onSubmitEvent()">
         <mat-dialog-content class="card-body card-height-mid scrollbar">
             <div class="row">
                 <div class="col-sm-7  border-end">

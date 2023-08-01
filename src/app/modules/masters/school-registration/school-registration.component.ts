@@ -67,7 +67,6 @@ export class SchoolRegistrationComponent implements OnInit {
     this.getDistrict();
     // this.getofficeReport();
     this.userId = this.webStorageS.getUserTypeId();
-    console.log("userTypeId : ", this.userId);
     
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
@@ -316,7 +315,6 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   openDetailsDialog(obj: any) {
-    console.log(obj.id);
     let eventId: any = this.encryptdecrypt.encrypt(`${obj?.id}`);
     this.router.navigate(['/view-profile-school'],{
       queryParams: {

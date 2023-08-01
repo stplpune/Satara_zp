@@ -23,6 +23,8 @@ export class AddOutwardItemComponent {
   categoryresp: any;
   subcategoryresp:any;
   itemresp:any;
+  openingStock : number = 0;
+  openingStockFlag : boolean = true;
   get f(){ return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -52,7 +54,8 @@ export class AddOutwardItemComponent {
       date:[this.editObj ? this.editObj.purchase_Sales_Date : '',[Validators.required]],
       onwordto:[this.editObj ? this.editObj.outwardTo : '',[Validators.required]],
       remark:[this.editObj ? this.editObj.remark : ''],
-      photo: ['']
+      photo: [''],
+      schoolId: [this.editObj ? this.editObj.schoolId : 2104],
     })
   }
 
@@ -67,9 +70,6 @@ export class AddOutwardItemComponent {
           this.categoryresp = [];
         }
       })
-      // , error: (error: any) => {
-      //   this.errors.handelError(error.statusCode)
-      // }
     })
   }
 
@@ -97,8 +97,7 @@ export class AddOutwardItemComponent {
         } else {
           this.itemresp = [];
         }
-      },
-      // error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
@@ -135,8 +134,24 @@ export class AddOutwardItemComponent {
     this.itemForm.controls['photo'].setValue('');
   }
 
+  getOpeningStock(){
+    let formValue = this.itemForm.value;
+    this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorage.getLangauge()).subscribe({
+      next : (res : any)=>{
+        res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
+      }
+    });  
+  }
+
+  getUnitByQty(){
+    if(this.openingStock < this.itemForm.value.unit){
+      this.openingStockFlag = false;
+      return
+    }
+  }
+
   onSubmit() {
-    if (this.itemForm.invalid) {
+    if (this.itemForm.invalid && this.openingStockFlag == false) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }

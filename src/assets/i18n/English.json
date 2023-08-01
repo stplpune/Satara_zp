@@ -51,8 +51,8 @@
         "items":"Item",
         "addItems":"Add Item",
         "UpdatedAdditems":"Updated Add Item",
-        "subcategoryname":"Sub Category Name",
-        "itemName":"Item Name",
+        "subcategoryname":"Sub Category",
+        "itemName":"Item",
         "description":"Description",
         "UploadEventPhoto":"Upload Event Photo",
         "schoolprofile":"School Profile",
@@ -396,7 +396,7 @@
 
         "itemNameMarathi":"Item Name (marathi)",
         "invalidItemName":"Please enter valid item name (Marathi).",
-        "CategoryName":"Category Name",
+        "CategoryName":"Category",
         "Description":"Description",
         "filterSubCategory":"Category/Sub Category"
 

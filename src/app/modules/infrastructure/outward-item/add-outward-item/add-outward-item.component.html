@@ -54,7 +54,8 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
                         <input matInput formControlName="unit"
-                        (keypress)="Validation.noFirstSpaceAllow($event);Validation.onlyDigits($event)">
+                        (keypress)="Validation.noFirstSpaceAllow($event);Validation.onlyDigits($event)" (input)="getUnitByQty()">
+                        <mat-error *ngIf="openingStockFlag == false">Unit Should Be Less Than Opening Stock</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
@@ -84,7 +85,7 @@
                 <div class="col-sm-6">
                     <div class="d-flex justify-content-start">
                         <p class="text-main mb-0 fw-bold">{{'Labels.Openingstock'| translate}} :</p>
-                        <p class="text-main mb-0 ps-2">10</p>
+                        <p class="text-main mb-0 ps-2">{{openingStock}}</p>
                     </div>
                 </div>
                 <div class="col-sm-6">

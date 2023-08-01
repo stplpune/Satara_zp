@@ -150,6 +150,10 @@ export class AddSchoolProfileComponent {
     this.apiService.tableData.next(tableData);
   }
 
+  onViewDoc(index: number){
+    window.open(this.schoolresp?.schoolDocument[index].docPath, 'blank');
+  }
+
   // dataArr = [
   //   {
   //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180271.jpeg',

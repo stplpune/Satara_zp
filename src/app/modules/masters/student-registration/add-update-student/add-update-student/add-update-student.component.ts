@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -65,7 +65,7 @@ export class AddUpdateStudentComponent {
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
-  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
+  @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(
     public dialog: MatDialog,
@@ -186,7 +186,7 @@ export class AddUpdateStudentComponent {
     else if(this.gardianModelArr.length == 0){
       this.gardianModelArr.push(formvalue);
       console.log("length is 0");
-      this.formGroupDirective.resetForm();
+      // this.gardianFormData()
       
     }else{
       if(this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == ''){
@@ -308,6 +308,7 @@ export class AddUpdateStudentComponent {
           }
           else {
             this.gardianModelArr.push(formvalue);
+            this.formDirective.resetForm();
           }
       }
     } 

@@ -10,18 +10,18 @@ import { WebStorageService } from './web-storage.service';
   providedIn: 'root'
 })
 export class MasterService {
-  baseUrl =  "http://apisatara.shikshandarpan.com/"
+  baseUrl = "http://apisatara.shikshandarpan.com/"
   constructor(private apiService: ApiService,
-              private http: HttpClient,
-              private webstorageService: WebStorageService,
-              private router: Router,
-              private commonMethods: CommonMethodsService) { }
+    private http: HttpClient,
+    private webstorageService: WebStorageService,
+    private router: Router,
+    private commonMethods: CommonMethodsService) { }
 
   getAllState(langFlag?: string) {
     return new Observable((obj: any) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllState?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -37,7 +37,7 @@ export class MasterService {
     });
   }
 
-  getAlllDistrict(langFlag?: string) : Observable<any> {
+  getAlllDistrict(langFlag?: string): Observable<any> {
     const URL = `${this.baseUrl}zp-satara/master/GetAllDistrict?flag_lang='${langFlag}`
     return this.http.get<any>(URL).pipe(map((resp: any) => resp.responseData));
   }
@@ -65,9 +65,9 @@ export class MasterService {
 
   getAllVillage(langFlag?: string, centerId?: any) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllVillageByCenterId?flag_lang='+langFlag+'&CenterId='+centerId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllVillageByCenterId?flag_lang=' + langFlag + '&CenterId=' + centerId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -75,9 +75,9 @@ export class MasterService {
 
   getAllCenter(langFlag?: string, talukaId?: any) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterByTalukaId?flag_lang=' + langFlag+'&TalukaId='+talukaId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterByTalukaId?flag_lang=' + langFlag + '&TalukaId=' + talukaId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -87,7 +87,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolType?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -97,27 +97,27 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllSubject?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-    GetAllSubjectsByGroupClassId(langFlag?: string, groupId?:any) {
+  GetAllSubjectsByGroupClassId(langFlag?: string, groupId?: any) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSubjectsByGroupClassId?flag_lang=' + langFlag+'&GroupClassId='+ groupId , false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSubjectsByGroupClassId?flag_lang=' + langFlag + '&GroupClassId=' + groupId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getAllStandard(schoolId?: number, groupId?:number,langFlag?: string) {
+  getAllStandard(schoolId?: number, groupId?: number, langFlag?: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllStandard?schoolId='+schoolId+'&GroupId='+groupId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllStandard?schoolId=' + schoolId + '&GroupId=' + groupId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -125,19 +125,19 @@ export class MasterService {
 
   getClassWiseSubject(lan?: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?&lan='+ lan, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?&lan=' + lan, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
-  }  
+  }
 
   getAllGroupClass(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllGroupClass?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -147,7 +147,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllGender?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -157,17 +157,17 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllReligion?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  GetAllCasteCategory(religionId?:number,langFlag?: string) {
+  GetAllCasteCategory(religionId?: number, langFlag?: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCasteCategory?ReligionId='+religionId+'&flag_lang='+langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCasteCategory?ReligionId=' + religionId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -177,17 +177,17 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllSpecialization?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
   // http://apisatara.shikshandarpan.com/zp-satara/master/GetAllCaste?CategoryId=1&flag_lang=EN
-  getAllCaste(casteCategoryId?: number,langFlag?: string) {
+  getAllCaste(casteCategoryId?: number, langFlag?: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCaste?CategoryId='+casteCategoryId+'&flag_lang='+langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCaste?CategoryId=' + casteCategoryId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -197,7 +197,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetRoleOfTeacher?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -207,7 +207,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllUserType?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -217,7 +217,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllSubUserByUserTypeId?UserTypeId=' + id, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -226,7 +226,7 @@ export class MasterService {
 
   GetAllDesignationLevel(langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllDesignationLevel?flag_lang='+ langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllDesignationLevel?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
@@ -240,9 +240,9 @@ export class MasterService {
 
   GetDesignationByLevelId(langFlag: string, desigLevelId: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetDesignationByLevelId?DesignationLevelId='+desigLevelId+'&flag_lang= '+langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetDesignationByLevelId?DesignationLevelId=' + desigLevelId + '&flag_lang= ' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -252,7 +252,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetSchoolCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -262,139 +262,139 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetSchoolMngDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getUniversityCategoryDescById(langFlag: string){
+  getUniversityCategoryDescById(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetUniversityCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getTwelveBranchCategoryDescById(langFlag: string){
+  getTwelveBranchCategoryDescById(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetTwelveBranchCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getOptionalSubjectCategoryDescById(langFlag: string){
+  getOptionalSubjectCategoryDescById(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetOptionalSubjectCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getPayscaleCategoryDescById(langFlag: string){
+  getPayscaleCategoryDescById(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetPayscaleCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getClusterCategoryDescById(langFlag: string){
+  getClusterCategoryDescById(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetClusterCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getCastCategoryDescById(langFlag: string){
+  getCastCategoryDescById(langFlag: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetCastCategoryDescById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getAllSchoolByCriteria(langFlag: string, TalukaId: number, VillageId: number, CenterId: number  ){
+  getAllSchoolByCriteria(langFlag: string, TalukaId: number, VillageId: number, CenterId: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolByCriteria?flag_lang='+langFlag+'+&TalukaId='+TalukaId+'&VillageId='+VillageId+'&CenterId='+CenterId+'', false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolByCriteria?flag_lang=' + langFlag + '+&TalukaId=' + TalukaId + '&VillageId=' + VillageId + '&CenterId=' + CenterId + '', false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getEducationalQualificationById(langFlag: string){
+  getEducationalQualificationById(langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetEducationalQualificationById?flag_lang=' +langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetEducationalQualificationById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  
-  getProfessinalQualificationById(langFlag: string){
+
+  getProfessinalQualificationById(langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetProfessinalQualificationById?flag_lang=' +langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetProfessinalQualificationById?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getAllInterDistrictTransferType(langFlag: string){
+  getAllInterDistrictTransferType(langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllInterDistrictTransferType?flag_lang=' +langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllInterDistrictTransferType?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  getAllSchoolsByCenterId(langFlag?: string, CenterId?: number, TalukaId?:number){
+  getAllSchoolsByCenterId(langFlag?: string, CenterId?: number, TalukaId?: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolsByCenterId?flag_lang='+langFlag+'&CenterId='+CenterId+'&TalukaId='+TalukaId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolsByCenterId?flag_lang=' + langFlag + '&CenterId=' + CenterId + '&TalukaId=' + TalukaId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
 
-  GetStandardBySchool(schoolId: number, langFlag: string){
+  GetStandardBySchool(schoolId: number, langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllStandard?SchoolId='+schoolId+'&lan='+langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllStandard?SchoolId=' + schoolId + '&lan=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
 
-  
-   
+
+
   GetDesignationLevel(langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetDesignationLevel?flag_lang='+ langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetDesignationLevel?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
@@ -408,7 +408,7 @@ export class MasterService {
 
   GetAllAgencyRegistration(langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAgencyRegistration?flag_lang='+ langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAgencyRegistration?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
@@ -422,7 +422,7 @@ export class MasterService {
 
   GetBit(langFlag?: string, talukaId?: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetBit?TalukaId='+talukaId+'&flag_lang='+ langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetBit?TalukaId=' + talukaId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
@@ -434,9 +434,9 @@ export class MasterService {
     });
   }
 
-  GetAllSchoolsByTalukaAndCenterId(langFlag?: string, centerId?: number, talukaId?: number){ 
+  GetAllSchoolsByTalukaAndCenterId(langFlag?: string, centerId?: number, talukaId?: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolsByTalukaAndCenterId?flag_lang='+langFlag+'&CenterId='+ centerId+'&TalukaId='+talukaId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllSchoolsByTalukaAndCenterId?flag_lang=' + langFlag + '&CenterId=' + centerId + '&TalukaId=' + talukaId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
@@ -452,7 +452,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllStudentGender?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -462,7 +462,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetEductionYearMaster?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -472,7 +472,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllExamType?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -482,7 +482,7 @@ export class MasterService {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAssessmentTypeMaster?flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
-        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
@@ -518,9 +518,9 @@ export class MasterService {
     });
   }
 
-  GetAssetSubCateByCateId(categoryId: number, langFlag: string){
+  GetAssetSubCateByCateId(categoryId: number, langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetSubCategory?CategoryId='+categoryId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetSubCategory?CategoryId=' + categoryId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
@@ -528,19 +528,29 @@ export class MasterService {
     });
   }
 
-  GetAllAssetType(subCategoryId: number, langFlag: string){
+  GetAllAssetType(subCategoryId: number, langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetType?SubCategoryId='+subCategoryId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllAssetType?SubCategoryId=' + subCategoryId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
       });
     });
   }
-  
-  GetAllItem(subCategoryId: number, langFlag: string){
+
+  GetAllItem(subCategoryId: number, langFlag: string) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllItem?SubCategoryId='+subCategoryId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllItem?SubCategoryId=' + subCategoryId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
+  GetAllOpeningQty(schoolId: number, categoryId: number, subCategoryId: number, itemId: number, langFlag: string) {
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/ItemMaster/GetOpeningQty?SchoolId=' + schoolId + '&CategoryId=' + categoryId + '&SubCategoryId=' + subCategoryId + '&ItemId=' + itemId + '&lan=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }
@@ -554,12 +564,12 @@ export class MasterService {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          let loginObj:any = this.webstorageService.getLoggedInLocalstorageData();
+          let loginObj: any = this.webstorageService.getLoggedInLocalstorageData();
           loginObj = res.responseData;
           // this.encryptInfo = encodeURIComponent(());
           localStorage.setItem('loggedInTokenData', JSON.stringify(loginObj));
           // window.location.reload();
-        } else { 
+        } else {
           localStorage.removeItem('loggedInData');
           localStorage.removeItem('loggedInTokenData');
 
@@ -567,18 +577,18 @@ export class MasterService {
           this.commonMethods.snackBar('Your Session Has Expired. Please Re-Login Again.', 1);
         }
       },
-      error: () => { 
+      error: () => {
         localStorage.removeItem('loggedInData');
         localStorage.removeItem('loggedInTokenData');
         this.router.navigate(['/login']);
         this.commonMethods.snackBar('Your Session Has Expired. Please Re Login Again.', 1);
-       }
+      }
     });
   }
 
-  GetOptionListByGroupSubject(groupId?: number,subId?: number, langFlag?: any) {
+  GetOptionListByGroupSubject(groupId?: number, subId?: number, langFlag?: any) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetOptionListByGroupSubject?GroupId='+groupId+'&AssessmentSubjectId='+ subId+'&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetOptionListByGroupSubject?GroupId=' + groupId + '&AssessmentSubjectId=' + subId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }

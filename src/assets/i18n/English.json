@@ -1,5 +1,7 @@
 {
     "Labels": {
+        "TeacherAttendanceList":"Teacher Attendance List",
+        "TeacherAttendanceReport":"Teacher Attendance Report",
         "AttendanceReport":"Attendance Report",
         "AttendanceReportList":"Attendance Report List",
         "Present":"Present",

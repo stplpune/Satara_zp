@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tasksheet-reports',
@@ -9,6 +10,17 @@ export class TasksheetReportsComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Absent','Action'];
   dataSource = ELEMENT_DATA;
   viewStatus='Table';
+
+  constructor(private router: Router){
+
+  }
+
+  ngOnInit(){
+  }
+
+  navigateToReport(){
+    this.router.navigate(['/teacher-tasksheet']);
+  }
 }
 export interface PeriodicElement {
   name: string;

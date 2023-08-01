@@ -362,9 +362,7 @@ export class AddUpdateSchoolRegistrationComponent {
     !formValue.centerId ? formValue.centerId = this.editObj?.centerId : formValue.centerId = formValue.centerId;
     formValue.uploadImage ? formValue.uploadImage = this.uploadImg : '';
     formValue.uploadImage = this.schoolRegForm.value.uploadImage;
-    // }
-    formValue.schoolDocument = this.imgArray;
-    // return
+    formValue.schoolDocument = this.docArray;
 
     if (formValue.isKendraSchool == true) {
       this.f['centerId'].clearValidators();

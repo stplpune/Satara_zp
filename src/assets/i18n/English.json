@@ -386,7 +386,8 @@
         "itemNameMarathi":"Item Name (marathi)",
         "invalidItemName":"Please enter valid item name (Marathi).",
         "CategoryName":"Category Name",
-        "Description":"Description"
+        "Description":"Description",
+        "filterSubCategory":"Category/Sub Category"
 
         
     }

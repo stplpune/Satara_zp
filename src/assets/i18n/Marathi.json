@@ -372,6 +372,7 @@
         "itemNameMarathi":"वस्तूचे नाव (मराठी)",
         "invalidItemName":"कृपया वैध वस्तूचे नाव (मराठी) टाका.",
         "CategoryName" :"श्रेणीचे नाव",
-        "Description":"वर्णन"
+        "Description":"वर्णन",
+        "filterSubCategory":"श्रेणी/उप श्रेणी"
     }
 }

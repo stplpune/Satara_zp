@@ -70,7 +70,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school'); getCategoryDrop();">
+                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
                             <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() == 'EN' ?
                                 sch.schoolName:sch.m_SchoolName}}</mat-option>
                         </mat-select>

@@ -62,6 +62,7 @@ export class InwardItemComponent {
       this.languageChange();
     });
     this.getTaluka();
+    this.getCategoryDrop();
   }
 
   filterFormData() {

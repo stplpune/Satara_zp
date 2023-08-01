@@ -346,7 +346,7 @@ export class TeacherRegistrationComponent implements OnInit {
     this.deleteObj = obj;
     let dialoObj = {
       header: 'Delete',
-      title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete School record?' : 'तुम्हाला शाळेचा रेकॉर्ड हटवायचा आहे का?',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do You Want To Delete Teacher Record?' : 'तुम्हाला शिक्षकाचा रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }
@@ -388,11 +388,6 @@ export class TeacherRegistrationComponent implements OnInit {
       this.commonMethodS.checkEmptyData(error.statusText) == false ? this.errors.handelError(error.statusCode) : this.commonMethodS.showPopup(error.statusText, 1);
     }
   }
-
-  // onFilterClick() {
-  //   this.pageNumber = 1;
-  //   this.getTableData();
-  // }
 
   clearFilterData() {
     if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value) {

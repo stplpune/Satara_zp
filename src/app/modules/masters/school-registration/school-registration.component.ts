@@ -189,7 +189,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.talukaArr = res.responseData;
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
           // this.villageId.setValue(0);
         }
       },
@@ -203,7 +203,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.masterService.getAllCenter('', talukaId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.centerArr.push({ "id": 0, "center": "All Kendra", "m_Center": "सर्व केंद्र" }, ...res.responseData);
+          this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
           this.centerId.setValue(0);
         }
       },
@@ -220,7 +220,7 @@ export class SchoolRegistrationComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
-          let obj = { id: 0, village: 'All Village', m_Village: 'सर्व गाव' }
+          let obj = { id: 0, village: 'All', m_Village: 'सर्व' }
           this.villageArr.unshift(obj)
           this.villageId.setValue(0);
         }

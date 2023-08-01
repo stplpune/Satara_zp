@@ -23,6 +23,7 @@ export class AddOutwardItemComponent {
   categoryresp: any;
   subcategoryresp:any;
   itemresp:any;
+  openingStock : number = 0;
   get f(){ return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -52,7 +53,8 @@ export class AddOutwardItemComponent {
       date:[this.editObj ? this.editObj.purchase_Sales_Date : '',[Validators.required]],
       onwordto:[this.editObj ? this.editObj.outwardTo : '',[Validators.required]],
       remark:[this.editObj ? this.editObj.remark : ''],
-      photo: ['']
+      photo: [''],
+      schoolId: [this.editObj ? this.editObj.schoolId : 2104],
     })
   }
 
@@ -133,6 +135,15 @@ export class AddOutwardItemComponent {
     this.uploadImg = '';
     this.itemForm.value.photo = '';
     this.itemForm.controls['photo'].setValue('');
+  }
+
+  getOpeningStock(){
+    let formValue = this.itemForm.value;
+    this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorage.getLangauge()).subscribe({
+      next : (res : any)=>{
+        res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
+      }
+    });  
   }
 
   onSubmit() {

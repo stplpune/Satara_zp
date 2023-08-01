@@ -97,7 +97,7 @@ export class AddInwardItemComponent {
     this.masterService.GetAllItem(this.itemForm.value.subCategoryId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.itemArr.push({ "id": 0, "item": "All", "m_Item": "सर्व" }, ...res.responseData);
+          this.itemArr.push({ "id": 0, "itemName": "All", "m_Item": "सर्व" }, ...res.responseData);
           this.editFlag ? (this.f['itemId'].setValue(this.editObj.itemId)) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);

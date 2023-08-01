@@ -45,8 +45,8 @@ export class SchoolRegistrationComponent implements OnInit {
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
   userId!:number;
-  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'District', 'Taluka', 'Kendra', 'Village', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'जिल्हा', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'Kendra', 'Village', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
   viewStatus='Table';
   constructor(private dialog: MatDialog,
     private apiService: ApiService,
@@ -67,7 +67,6 @@ export class SchoolRegistrationComponent implements OnInit {
     this.getDistrict();
     // this.getofficeReport();
     this.userId = this.webStorageS.getUserTypeId();
-    console.log("userTypeId : ", this.userId);
     
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
@@ -91,8 +90,8 @@ export class SchoolRegistrationComponent implements OnInit {
   
   languageChange() {
     this.highLightFlag=true;
-    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'district' : 'm_District', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
-    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'district' : 'm_District', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
+    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'uploadImage', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "defaultSchoolImg",
@@ -149,15 +148,15 @@ export class SchoolRegistrationComponent implements OnInit {
       let obj = {
         srNo: i + 1,
         schoolName: ele.schoolName,
-        district: ele.district,
         taluka: ele.taluka,
+        center: ele.center,
         village: ele.village,
       }
       this.resultDownloadArr.push(obj);
     });
     // download pdf call
     if (this.resultDownloadArr.length > 0) {
-      let keyPDFHeader = ["Sr.No.", "School Name", "District", "Taluka", "Village"];
+      let keyPDFHeader = ["Sr.No.", "School Name", "Taluka", "Kendra", "Village"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -316,7 +315,6 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   openDetailsDialog(obj: any) {
-    console.log(obj.id);
     let eventId: any = this.encryptdecrypt.encrypt(`${obj?.id}`);
     this.router.navigate(['/view-profile-school'],{
       queryParams: {

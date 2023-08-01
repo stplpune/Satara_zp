@@ -1,5 +1,7 @@
 {
     "Labels": {
+        "AttendanceReport":"Attendance Report",
+        "AttendanceReportList":"Attendance Report List",
         "Present":"Present",
         "Absent":"Absent",
         "Updateattendence":"Update Attendence",

@@ -1,5 +1,7 @@
 {
     "Labels": {
+        "AttendanceReport":"हजेरी अहवाल",
+        "AttendanceReportList":"हजेरी अहवाल यादी",
         "Present":"उपस्थित",
         "Absent":"अनुपस्थित",
         "Updateattendence":"उपस्थिती अद्यतनित करा",

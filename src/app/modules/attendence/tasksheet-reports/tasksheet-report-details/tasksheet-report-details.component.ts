@@ -33,7 +33,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./tasksheet-report-details.component.scss']
 })
 export class TasksheetReportDetailsComponent {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Absent',];
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Absent','Remark'];
   dataSource = ELEMENT_DATA;
   viewStatus='Table';
 
@@ -44,12 +44,13 @@ export interface PeriodicElement {
   weight: number;
   symbol: string;
   Absent:any;
+  Remark:any;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: '0',Absent:'0',},
-  {position: 2, name: 'Hydrogen', weight: 1.0079, symbol: '2',Absent:'5',},
-  {position: 3, name: 'Hydrogen', weight: 1.0079, symbol: '1',Absent:'3',},
-  {position: 4, name: 'Hydrogen', weight: 1.0079, symbol: '5',Absent:'4',},
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: '0',Absent:'0',Remark:''},
+  {position: 2, name: 'Hydrogen', weight: 1.0079, symbol: '2',Absent:'5',Remark:''},
+  {position: 3, name: 'Hydrogen', weight: 1.0079, symbol: '1',Absent:'3',Remark:''},
+  {position: 4, name: 'Hydrogen', weight: 1.0079, symbol: '5',Absent:'4',Remark:''},
   
 ];

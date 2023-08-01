@@ -1,63 +1,82 @@
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb align-items-center">
-      <li aria-current="page">
-        <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
-          <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
-      </li>
-      <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
-      <li class="breadcrumb-item active" aria-current="page">{{'Labels.TeacherAttendanceReport' | translate}}</li>
-    </ol>
-  </nav>
-  <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
-    <mat-card-header class="card-header">
-      <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
-        <div class="text-main fw-bold">
-          {{'Labels.TeacherAttendanceList' | translate}}
+  <ol class="breadcrumb align-items-center">
+    <li aria-current="page">
+      <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+        <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+    </li>
+    <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{'Labels.TeacherAttendanceReport' | translate}}</li>
+  </ol>
+</nav>
+<mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
+  <mat-card-header class="card-header">
+    <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
+      <div class="text-main fw-bold">
+        {{'Labels.TeacherAttendanceList' | translate}}
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-header class="card-header pb-0 border-bottom-0">
+    <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
+      <p class="small text-main fw-bold mb-3">
+        SANJAY ASHVANT SHRINAME
+      </p>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{'Labels.selectDate' | translate}}</mat-label>
+          <mat-select>
+            <mat-option>Option-1</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-header>
+  <mat-card-content class="card-body mt-0">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="table-resopnsive">
+          <table mat-table [dataSource]="dataSource" class="dashboard-table">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
+              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Day</th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+              <th mat-header-cell *matHeaderCellDef> Check In Time </th>
+              <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+              <th mat-header-cell *matHeaderCellDef> Check Out Time </th>
+              <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="Absent">
+              <th mat-header-cell *matHeaderCellDef> Attendence </th>
+              <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Remark">
+              <th mat-header-cell *matHeaderCellDef> Remark </th>
+              <td mat-cell *matCellDef="let element"> {{element.Remark}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
         </div>
       </div>
-    </mat-card-header>
-    <mat-card-content class="card-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="table-resopnsive">
-                    <table mat-table [dataSource]="dataSource" class="dashboard-table">
-                      
-                        <!-- Position Column -->
-                        <ng-container matColumnDef="position">
-                          <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
-                          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                        </ng-container>
-                      
-                        <!-- Name Column -->
-                        <ng-container matColumnDef="name">
-                          <th mat-header-cell *matHeaderCellDef> Teacher Name </th>
-                          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                        </ng-container>
-                      
-                        <!-- Weight Column -->
-                        <ng-container matColumnDef="weight">
-                          <th mat-header-cell *matHeaderCellDef> Mobile No. </th>
-                          <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                        </ng-container>
-                      
-                        <!-- Symbol Column -->
-                        <ng-container matColumnDef="symbol">
-                          <th mat-header-cell *matHeaderCellDef> Present Day's  </th>
-                          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                        </ng-container>
-
-                        <!-- Symbol Column -->
-                        <ng-container matColumnDef="Absent">
-                          <th mat-header-cell *matHeaderCellDef> Absent Day's  </th>
-                          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </mat-card-content>
+    </div>
+  </mat-card-content>
 </mat-card>
-

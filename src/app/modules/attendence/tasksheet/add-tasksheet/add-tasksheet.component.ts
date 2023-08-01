@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-tasksheet',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-tasksheet.component.scss']
 })
 export class AddTasksheetComponent {
-
+  editFlag:any;
+  eventForm !: FormGroup;
 }

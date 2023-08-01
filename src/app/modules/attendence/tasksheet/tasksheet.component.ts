@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./tasksheet.component.scss']
 })
 export class TasksheetComponent {
-  [x: string]: any;
+  
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Attendence','Remark','Action'];
   dataSource = ELEMENT_DATA;
   viewStatus='Table';

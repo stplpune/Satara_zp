@@ -1,5 +1,10 @@
 {
     "Labels": {
+        "documnentphotos":"Documnent Photos",
+        "HolidayName":"Holiday Name",
+        "AddHoliday":"Add Holiday",
+        "HolidayMaster":"Holiday Master",
+        "HolidayMasterList":"Holiday Master List",
         "TeacherAttendanceList":"Teacher Attendance List",
         "TeacherAttendanceReport":"Teacher Attendance Report",
         "AttendanceReport":"Attendance Report",

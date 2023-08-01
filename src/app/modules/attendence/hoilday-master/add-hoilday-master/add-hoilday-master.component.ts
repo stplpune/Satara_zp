@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-hoilday-master.component.scss']
 })
 export class AddHoildayMasterComponent {
-
+  editFlag:any;
 }

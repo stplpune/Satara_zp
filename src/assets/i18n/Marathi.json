@@ -1,6 +1,14 @@
 {
     "Labels": {
+        "Present":"उपस्थित",
+        "Absent":"अनुपस्थित",
+        "Updateattendence":"उपस्थिती अद्यतनित करा",
+        "applyattendence":"उपस्थिती लागू करा",
+        "apply":"अर्ज करा",
+        "selectDate":"तारीख निवडा",
+        "tasksheet":"कार्यपत्रक",
         "AddEvent":"कार्यक्रम जोडा",
+        "tasksheetList":"कार्यपत्रक यादी",
         "Schoolphotos":"शाळेचे फोटो",
         "TotalTeachers":"एकूण शिक्षक",
         "TotalStudent":"एकूण विद्यार्थी",
@@ -218,6 +226,7 @@
         "workingSchoolName" : "कार्यरत शाळेचे नाव",
         "clusterName" : "क्लस्टरचे नाव",
         "cluster" : "केंद्र",
+        "remark":"शेरा",
         "graduateTeacherSubject" : "पदवीधर शिक्षकाचा विषय",
         "takingGraduatePayScale" : "पदवीधर वेतनश्रेणी घेत आहे का?",
         "casteCategory" : "जात श्रेणी",

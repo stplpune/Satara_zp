@@ -1,5 +1,13 @@
 {
     "Labels": {
+        "Present":"Present",
+        "Absent":"Absent",
+        "Updateattendence":"Update Attendence",
+        "applyattendence":"Apply Attendence",
+        "apply":"Apply",
+        "selectDate":"Select Date",
+        "tasksheet":"Tasksheet",
+        "tasksheetList":"Tasksheet List",
         "AddEvent":"Add Event",
         "Schoolphotos":"School Photos",
         "TotalTeachers":"TotalTeachers",

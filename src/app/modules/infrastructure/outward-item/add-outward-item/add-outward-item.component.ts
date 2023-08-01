@@ -66,9 +66,10 @@ export class AddOutwardItemComponent {
         } else {
           this.categoryresp = [];
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
+      })
+      // , error: (error: any) => {
+      //   this.errors.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -97,7 +98,7 @@ export class AddOutwardItemComponent {
           this.itemresp = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err) })
+      // error: ((err: any) => { this.errors.handelError(err) })
     });
   }
 
@@ -135,7 +136,6 @@ export class AddOutwardItemComponent {
   }
 
   onSubmit() {
-  
     if (this.itemForm.invalid) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;

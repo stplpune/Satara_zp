@@ -45,8 +45,8 @@ export class SchoolRegistrationComponent implements OnInit {
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
   userId!:number;
-  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'District', 'Taluka', 'Kendra', 'Village', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'जिल्हा', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'Kendra', 'Village', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
   viewStatus='Table';
   constructor(private dialog: MatDialog,
     private apiService: ApiService,
@@ -90,8 +90,8 @@ export class SchoolRegistrationComponent implements OnInit {
   
   languageChange() {
     this.highLightFlag=true;
-    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'district' : 'm_District', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
-    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'district' : 'm_District', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
+    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'uploadImage', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "defaultSchoolImg",
@@ -119,7 +119,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.totalCount = res.responseData.responseData2.pageCount;
@@ -148,15 +148,15 @@ export class SchoolRegistrationComponent implements OnInit {
       let obj = {
         srNo: i + 1,
         schoolName: ele.schoolName,
-        district: ele.district,
         taluka: ele.taluka,
+        center: ele.center,
         village: ele.village,
       }
       this.resultDownloadArr.push(obj);
     });
     // download pdf call
     if (this.resultDownloadArr.length > 0) {
-      let keyPDFHeader = ["Sr.No.", "School Name", "District", "Taluka", "Village"];
+      let keyPDFHeader = ["Sr.No.", "School Name", "Taluka", "Kendra", "Village"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -175,10 +175,13 @@ export class SchoolRegistrationComponent implements OnInit {
   getDistrict() {
     this.masterService.getAllDistrict('').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.districtArr = res.responseData;
           this.districtId.setValue(this.districtArr[0].id);
           this.getTaluka();
+        }
+        else{
+          this.districtArr = [];
         }
       },
       error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
@@ -188,12 +191,13 @@ export class SchoolRegistrationComponent implements OnInit {
   getTaluka() {
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.talukaArr = res.responseData;
-          // this.villageId.setValue(0);
+        if (res.statusCode == "200") {
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
         }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+        else{
+          this.talukaArr = [];
+        }
+      }
     });
   }
 
@@ -202,12 +206,14 @@ export class SchoolRegistrationComponent implements OnInit {
     let talukaId: any = this.talukaId.value;
     this.masterService.getAllCenter('', talukaId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.centerArr.push({ "id": 0, "center": "All Kendra", "m_Center": "सर्व केंद्र" }, ...res.responseData);
+        if (res.statusCode == "200") {
+          this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
           this.centerId.setValue(0);
         }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+        else{
+          this.centerArr = [];
+        }
+      }
     });
   }
 
@@ -215,17 +221,18 @@ export class SchoolRegistrationComponent implements OnInit {
   getVillage() {
     this.villageArr = []
     let centerId = this.centerId.value;
-    // let centerId = this.centerId.value;
     this.masterService.getAllVillage('', centerId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.villageArr = res.responseData;
-          let obj = { id: 0, village: 'All Village', m_Village: 'सर्व गाव' }
+          let obj = { id: 0, village: 'All', m_Village: 'सर्व' }
           this.villageArr.unshift(obj)
           this.villageId.setValue(0);
         }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+        else{
+          this.villageArr = [];
+        }
+      }
     });
   }
   //#endregion ------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
@@ -374,7 +381,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.apiService.setHttp('delete', 'zp-satara/School/Delete', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.commonMethodS.showPopup(res.statusMessage, 0);
           this.getTableData();
         }

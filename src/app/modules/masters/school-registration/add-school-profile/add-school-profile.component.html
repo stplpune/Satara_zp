@@ -177,13 +177,19 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-5 border-end">
+            <div class="col-sm-6 border-end">
                 <h6 class="text-main mb-0 fw-bold">{{'Labels.Schoolphotos' | translate}}</h6>
                 <div class="col-3 col-sm-3">
-                    <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb">
+                    <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb" class="gallery-img">
                 </div>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-6">
+                <h6 class="text-main mb-0 fw-bold">{{'Labels.documnentphotos' | translate}}</h6>
+                <div class="col-3 col-sm-3">
+                    <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb" class="gallery-img">
+                </div>
+            </div>
+            <div class="col-sm-12 mt-3">
                 <app-table (recObjToChild)="childCompInfo($event)"></app-table>
             </div>
         </div>

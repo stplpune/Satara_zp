@@ -1,5 +1,7 @@
 {
     "Labels": {
+        "TeacherAttendanceList":"शिक्षक हजेरी यादी",
+        "TeacherAttendanceReport":"शिक्षक हजेरी अहवाल",
         "AttendanceReport":"हजेरी अहवाल",
         "AttendanceReportList":"हजेरी अहवाल यादी",
         "Present":"उपस्थित",

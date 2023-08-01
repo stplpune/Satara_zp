@@ -52,7 +52,6 @@
                     <mat-label>{{'Labels.taluka' | translate}}</mat-label>
                     <mat-select [formControl]="talukaId"
                         (selectionChange)="clearDropdown('Taluka');getCenter()">
-                        <mat-option [value]="0">{{'Labels.AllTaluka' | translate}}</mat-option>
                         <mat-option *ngFor="let taluka of talukaArr" [value]="taluka.id">
                             {{webStorageS.getLangauge() == 'EN' ?
                             taluka.taluka : taluka.m_Taluka}}

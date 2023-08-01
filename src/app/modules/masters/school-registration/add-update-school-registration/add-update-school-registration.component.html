@@ -294,6 +294,7 @@
 </ng-container>
 
 
+<!-- Event form start here  -->
 <ng-container *ngIf="userId == 4">
     <div mat-dialog-title class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
@@ -358,7 +359,8 @@
                     <div class="">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.school' | translate}}</mat-label>
-                            <input matInput [value]="webStorageS.getLoggedInLocalstorageData()?.schoolName" readonly>
+                            <!-- m_SchoolName -->
+                            <input matInput [value]=" webStorageS.languageFlag == 'EN' ?  webStorageS.getLoggedInLocalstorageData()?.schoolName :  webStorageS.getLoggedInLocalstorageData()?.m_SchoolName" readonly>
                         </mat-form-field>
                     </div>
                     <div class="">

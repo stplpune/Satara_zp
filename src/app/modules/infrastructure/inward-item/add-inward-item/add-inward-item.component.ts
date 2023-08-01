@@ -68,7 +68,7 @@ export class AddInwardItemComponent {
     this.masterService.GetAllAssetCategory('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.categoryArr.push({ "id": 0, "category": "All", "m_Category": "सर्व" }, ...res.responseData);
+          this.categoryArr = res.responseData;
           this.editFlag ? (this.f['categoryId'].setValue(this.editObj.categoryId), this.getSubCategoryDrop()) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
@@ -82,8 +82,8 @@ export class AddInwardItemComponent {
     this.subCategoryArr = [];
     this.masterService.GetAssetSubCateByCateId(this.itemForm.value.categoryId, '').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.subCategoryArr.push({ "id": 0, "subCategory": "All", "m_SubCategory": "सर्व" }, ...res.responseData);
+        if (res.statusCode == "200") {
+          this.subCategoryArr = res.responseData;
           this.editFlag ? (this.f['subCategoryId'].setValue(this.editObj.subCategoryId), this.getItemDrop()) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
@@ -98,7 +98,7 @@ export class AddInwardItemComponent {
     this.masterService.GetAllItem(this.itemForm.value.subCategoryId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.itemArr.push({ "id": 0, "itemName": "All", "m_Item": "सर्व" }, ...res.responseData);
+          this.itemArr = res.responseData;
           this.editFlag ? (this.f['itemId'].setValue(this.editObj.itemId)) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);

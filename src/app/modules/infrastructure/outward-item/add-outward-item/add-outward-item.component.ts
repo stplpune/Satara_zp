@@ -24,6 +24,7 @@ export class AddOutwardItemComponent {
   subcategoryresp:any;
   itemresp:any;
   openingStock : number = 0;
+  openingStockFlag : boolean = true;
   get f(){ return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -69,9 +70,6 @@ export class AddOutwardItemComponent {
           this.categoryresp = [];
         }
       })
-      // , error: (error: any) => {
-      //   this.errors.handelError(error.statusCode)
-      // }
     })
   }
 
@@ -99,8 +97,7 @@ export class AddOutwardItemComponent {
         } else {
           this.itemresp = [];
         }
-      },
-      // error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
@@ -146,8 +143,15 @@ export class AddOutwardItemComponent {
     });  
   }
 
+  getUnitByQty(){
+    if(this.openingStock < this.itemForm.value.unit){
+      this.openingStockFlag = false;
+      return
+    }
+  }
+
   onSubmit() {
-    if (this.itemForm.invalid) {
+    if (this.itemForm.invalid && this.openingStockFlag == false) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }

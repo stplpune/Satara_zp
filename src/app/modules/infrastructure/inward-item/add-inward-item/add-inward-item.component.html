@@ -36,7 +36,7 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
-                        <mat-select formControlName="itemId" (selectionChange)="getOpeningStock();">
+                        <mat-select formControlName="itemId" (selectionChange)="getOpeningStock();" >
                             <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() == 'EN' ? item.itemName : item.m_ItemName}}</mat-option>
                         </mat-select>
                     </mat-form-field>

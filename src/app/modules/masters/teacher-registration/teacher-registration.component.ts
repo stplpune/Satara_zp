@@ -24,9 +24,9 @@ import { MasterService } from 'src/app/core/services/master.service';
 export class TeacherRegistrationComponent implements OnInit {
   pageNumber: number = 1;
   searchContent = new FormControl('');
-  talukaId = new FormControl('');
-  clusterId = new FormControl('');
-  villageId = new FormControl('');
+  talukaId = new FormControl(0);
+  clusterId = new FormControl(0);
+  villageId = new FormControl(0);
   tableDataArray = new Array();
   totalCount: number = 0;
   cardCurrentPage: number = 0;
@@ -39,14 +39,14 @@ export class TeacherRegistrationComponent implements OnInit {
   toggleControl = new FormControl(false);
   cardViewFlag: boolean = false;
   langChnge!: Subscription;
-  displayedheadersEnglish = ['Sr. No.','',  'Teacher Name', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
-  displayedheadersMarathi = ['अनुक्रमांक','',  'शिक्षकाचे नाव', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', '', 'Teacher Name', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्', 'अनब्लॉक/ब्लॉक', 'कृती'];
   isWriteRight!: boolean;
-  highLightFlag: boolean =true;
+  highLightFlag: boolean = true;
   talukaArray = new Array();
   clusterArray = new Array();
   villageArray = new Array();
-  viewStatus='Table';
+  viewStatus = 'Table';
   @HostBinding('class') className = '';
   constructor(private dialog: MatDialog, private overlay: OverlayContainer, private apiService: ApiService, private errors: ErrorsService,
     public webStorageS: WebStorageService, private downloadFileService: DownloadPdfExcelService, private commonMethodS: CommonMethodsService,
@@ -83,9 +83,9 @@ export class TeacherRegistrationComponent implements OnInit {
   languageChange() {
     // this.webStorageS.langNameOnChange.subscribe(lang => {
     //   this.langTypeName = lang;
-    this.highLightFlag=true;
-    let displayedColumnsReadMode = ['srNo','uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center'];
-    this.displayedColumns = ['srNo','uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', 'isBlock', 'action'];
+    this.highLightFlag = true;
+    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center'];
+    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', 'isBlock', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'uploadImage', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "defaultUserImg",
@@ -95,8 +95,8 @@ export class TeacherRegistrationComponent implements OnInit {
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi
     };
-    this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
-    this.apiService.tableData.next(this.tableData);
+    this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
+      this.apiService.tableData.next(this.tableData);
     // });
   }
 
@@ -121,12 +121,12 @@ export class TeacherRegistrationComponent implements OnInit {
     this.apiService.setHttp('GET', 'zp-satara/Teacher/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
-      next: (res: any) => {       
-        
-        if (res.statusCode == 200) {
+      next: (res: any) => {
+
+        if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-          
+
           // this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
@@ -160,15 +160,13 @@ export class TeacherRegistrationComponent implements OnInit {
     this.talukaArray = [];
     this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
       next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-          this.talukaArray = res.responseData;
+        if (res.statusCode == "200" && res.responseData.length) {
+          this.talukaArray.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArray = [];
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
+      })
     })
   }
 
@@ -178,34 +176,30 @@ export class TeacherRegistrationComponent implements OnInit {
 
     this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaFilterId).subscribe({
       next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-          this.clusterArray = res.responseData;
+        if (res.statusCode == "200" && res.responseData.length) {
+          this.clusterArray.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
+      })
     });
   }
-
 
   getVillage() {
     this.villageArray = [];
     let centerId = this.clusterId.value;
+    console.log("centerId : ", centerId);
+
     this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
       next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-         this.villageArray = res.responseData;
-        
+        if (res.statusCode == "200" && res.responseData.length) {
+          this.villageArray.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
+      })
     })
   }
 
@@ -261,11 +255,11 @@ export class TeacherRegistrationComponent implements OnInit {
   }
 
   openBlockDialog(obj?: any) {
-    let userEng = obj.isBlock == false ?'Block' : 'Unblock';
-    let userMara = obj.isBlock == false ?'ब्लॉक' : 'अनब्लॉक';
+    let userEng = obj.isBlock == false ? 'Block' : 'Unblock';
+    let userMara = obj.isBlock == false ? 'ब्लॉक' : 'अनब्लॉक';
     let dialoObj = {
-      header: this.langTypeName == 'English' ? userEng+' Teacher' : userMara+' शिक्षक',
-      title: this.langTypeName == 'English' ? 'Do You Want To '+userEng+' The Teacher?' : 'आपण शिक्षक '+userMara+' करू इच्छिता?',
+      header: this.langTypeName == 'English' ? userEng + ' Teacher' : userMara + ' शिक्षक',
+      title: this.langTypeName == 'English' ? 'Do You Want To ' + userEng + ' The Teacher?' : 'आपण शिक्षक ' + userMara + ' करू इच्छिता?',
       cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',
       okButton: this.langTypeName == 'English' ? 'Ok' : 'ओके'
     }
@@ -277,7 +271,7 @@ export class TeacherRegistrationComponent implements OnInit {
     })
     deleteDialogRef.afterClosed().subscribe((result: any) => {
       result == 'yes' ? this.blockOffice(obj) : this.getTableData();
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     })
   }
@@ -334,7 +328,7 @@ export class TeacherRegistrationComponent implements OnInit {
       autoFocus: false
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      if (result == 'Yes' && obj) {        
+      if (result == 'Yes' && obj) {
         this.pageNumber = this.pageNumber;
         this.clearFilterData();
         // this.getTableData();
@@ -343,7 +337,7 @@ export class TeacherRegistrationComponent implements OnInit {
         this.pageNumber = 1;
         this.clearFilterData();
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     });
   }
@@ -368,7 +362,7 @@ export class TeacherRegistrationComponent implements OnInit {
       if (result == 'yes') {
         this.onClickDelete();
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     })
   }
@@ -384,7 +378,7 @@ export class TeacherRegistrationComponent implements OnInit {
     this.apiService.setHttp('delete', 'zp-satara/Teacher/Delete', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.commonMethodS.showPopup(res.statusMessage, 0);
           this.getTableData();
         }
@@ -401,19 +395,21 @@ export class TeacherRegistrationComponent implements OnInit {
   // }
 
   clearFilterData() {
-    if(this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value){
+    if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value) {
       this.searchContent.setValue('');
-      this.talukaId.setValue('');
-      this.clusterId.setValue('');
+      this.clusterArray = [];
+      this.villageArray = [];
+      this.talukaId.setValue(0);
+      this.clusterId.setValue(0);
       this.getTableData();
     }
-    else{
+    else {
       this.getTableData();
     }
   }
 
   selectGrid(label: string) {
-    this.viewStatus=label
+    this.viewStatus = label
     if (label == 'Table') {
       this.cardViewFlag = false;
       this.pageNumber = 1;
@@ -452,12 +448,20 @@ export class TeacherRegistrationComponent implements OnInit {
       if (result == 'yes') {
         this.getTableData();
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     });
   }
 
-  onChangeFilter(){
-    this.clusterId.setValue('');
+  onChangeFilter(label: string) {
+    switch (label) {
+      case 'taluka':
+        this.clusterId.setValue(0);
+        this.villageId.setValue(0);
+        this.villageArray = [];
+        break;
+      case 'cluster':
+        this.villageId.setValue(0);
+    }
   }
 }

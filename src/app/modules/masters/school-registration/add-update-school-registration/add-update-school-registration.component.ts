@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -45,7 +45,7 @@ export class AddUpdateSchoolRegistrationComponent {
   tableDatasize!: number;
   editEventObj: any;
   textSearch = new FormControl('');
-  // schoolDocument!: FormArray;
+  @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(private masterService: MasterService,
     private errors: ErrorsService,
@@ -127,7 +127,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.eventForm = this.fb.group({
       "id": [this.editEventObj ? this.editEventObj?.id : 0],
       "schoolId": [this.editEventObj ? this.editEventObj?.schoolId : this.webStorageS.getLoggedInLocalstorageData()?.schoolId],
-      "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
+      "eventName": [this.editEventObj ? this.editEventObj?.eventName : '', Validators.required],
       "m_EventName": [this.editEventObj ? this.editEventObj?.m_EventName : '', [Validators.required, Validators.pattern('^[-\u0900-\u096F ]+$')]],
       "description": [this.editEventObj ? this.editEventObj?.description : ''],
       "createdBy": 0,
@@ -400,7 +400,7 @@ export class AddUpdateSchoolRegistrationComponent {
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
   onEdit() {
     this.editFlag = true;
-    this.imgArray = [];
+    this.docArray = [];
   
       this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
       this.uploadImg = this.data?.uploadImage
@@ -416,33 +416,13 @@ export class AddUpdateSchoolRegistrationComponent {
           "modifiedDate": new Date(),
           "isDeleted": true
         };
-        this.imgArray.push(schoolDocumentObj);
+        this.docArray.push(schoolDocumentObj);
       })
       this.getDistrict();
   }
-
-  onEditEvent(data?: any){
-    this.editFlag = true;
-    this.imgArray = [];
-
-    this.editEventObj = data;
-      this.eventFormFeild();
-      this.editEventObj?.eventImages.map((res: any) => {
-        let eventImgObj = {
-          "id": res.id,
-          "schoolId": res.schoolId,
-          "documentId": res.documentId,
-          "eventId": res.eventId,
-          "docPath": res.docPath,
-          "createdBy": 0,
-          "isDeleted": true
-        }
-        this.imgArray.push(eventImgObj);
-      });
-  }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 
-  //#region ------------------------------------------------- Clear Img field start here --------------------------------------------//
+  //#region ------------------------------------------------- Clear Img/Doc field start here --------------------------------------------//
   clearImg() {
     this.uploadImg = '';
     this.schoolRegForm.value.uploadImage = '';
@@ -457,9 +437,9 @@ export class AddUpdateSchoolRegistrationComponent {
   clearMultipleDoc(index: any) {
     this.docArray.splice(index, 1);
   }
-  //#endregionegion --------------------------------------------- Clear Img field end here --------------------------------------------//
+  //#endregionegion --------------------------------------------- Clear Img/Doc field end here --------------------------------------------//
 
-  //#region ----------------------------------------------- Clear dropdown on change start here --------------------------------------------//
+  //#region ------------------------------------------------- Clear dropdown on change start here --------------------------------------------//
   clearDropdown(dropdown: string) {
     this.editFlag = false;
     if (dropdown == 'Taluka') {
@@ -494,7 +474,7 @@ export class AddUpdateSchoolRegistrationComponent {
     }
 
   }
-  //#endregiongion ----------------------------------------------- Clear dropdown on change end here --------------------------------------------//
+  //#endregiongion --------------------------------------------- Clear dropdown on change end here --------------------------------------------//
 
   getBitOrCenter() {
     if (this.isKendra) {
@@ -504,9 +484,10 @@ export class AddUpdateSchoolRegistrationComponent {
     }
   }
 
+  //#region -------------------------------------------------- Event Table start here --------------------------------------------------------//
   getTableData() {
     this.ngxSpinner.show();
-    let str = `SchoolId=${this.webStorageS.getLoggedInLocalstorageData()?.schoolId}&pageno=1&pagesize=10&TextSearch=${this.textSearch.value}&lan=${this.webStorageS.languageFlag}`;
+    let str = `SchoolId=${this.webStorageS.getLoggedInLocalstorageData()?.schoolId}&pageno=1&pagesize=10&TextSearch=${(this.textSearch.value || '').trim()}&lan=${this.webStorageS.languageFlag}`;
  
     this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetAllEvent?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -523,12 +504,13 @@ export class AddUpdateSchoolRegistrationComponent {
           this.tableDataArray = [];
           this.tableDatasize = 0;
         }
-        // this.languageChange();
       },
       error: ((err: any) => { this.commonMethod.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusText, 1); })
     });
   }
+  //#endregion -------------------------------------------------- Event Table end here --------------------------------------------------------//
 
+  //#region ------------------------------------------------- Event Submit method start here -------------------------------------------------//
   onSubmitEvent() {
     let formValue = this.eventForm.value;
     formValue.eventImages = this.imgArray;
@@ -546,7 +528,14 @@ export class AddUpdateSchoolRegistrationComponent {
           this.ngxSpinner.hide();
           this.apiService.staticData.next('getRefreshStaticdata');
           res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          res.statusCode == "200" ? (this.ngxSpinner.hide(), this.getTableData()) : '';
+          // res.statusCode == "200" ? (this.ngxSpinner.hide(), this.getTableData()) : '';
+          if(res.statusCode == "200"){
+            this.ngxSpinner.hide();
+            this.getTableData();
+            this.eventFormFeild();
+            this.formDirective.resetForm(); 
+            this.imgArray = [];
+          }
           // this.dialogRef.close('yes')
         },
         error: ((err: any) => {
@@ -556,7 +545,31 @@ export class AddUpdateSchoolRegistrationComponent {
       });
     }
   }
+  //#endregion------------------------------------------------- Event Submit method end here -------------------------------------------------//
 
+  //#region --------------------------------------------------- Event Edit method start here -------------------------------------------------//
+  onEditEvent(data?: any){
+    this.editFlag = true;
+    this.imgArray = [];
+
+    this.editEventObj = data;
+      this.eventFormFeild();
+      this.editEventObj?.eventImages.map((res: any) => {
+        let eventImgObj = {
+          "id": res.id,
+          "schoolId": res.schoolId,
+          "documentId": res.documentId,
+          "eventId": res.eventId,
+          "docPath": res.docPath,
+          "createdBy": 0,
+          "isDeleted": true
+        }
+        this.imgArray.push(eventImgObj);
+      });
+  }
+  //#endregion--------------------------------------------------- Event Edit method end here -------------------------------------------------//
+
+  //#region --------------------------------------------------- Event Delete method start here -------------------------------------------------//
   globalDialogOpen(id: number) {
     let dialoObj = {
       header: 'Delete',
@@ -576,7 +589,7 @@ export class AddUpdateSchoolRegistrationComponent {
       }
     })
   }
-
+ 
   onDeleteEvent(id: number) {
     let deleteObj = {
       "id": id,
@@ -595,6 +608,7 @@ export class AddUpdateSchoolRegistrationComponent {
       })
     })
   }
+ //#endregion--------------------------------------------------- Event Delete method end here -------------------------------------------------//
 
   onClear(){
     this.textSearch.setValue('');

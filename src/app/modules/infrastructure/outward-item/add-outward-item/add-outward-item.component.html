@@ -43,12 +43,9 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
                         <mat-select formControlName="itemId">
-                            <mat-option [value]="0">ds
-                               
-                            </mat-option>
-                            <mat-option *ngFor="let data of itemresp" [value]="data.id">
+                            <mat-option *ngFor="let item of itemresp" [value]="item.id" >
                                 {{webStorage.getLangauge() == 'EN' ?
-                                data.item : data.m_Item}}
+                                item.itemName : item. m_ItemName}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -57,7 +54,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
                         <input matInput formControlName="unit"
-                        (keypress)="Validation.noFirstSpaceAllow($event)">
+                        (keypress)="Validation.noFirstSpaceAllow($event);Validation.onlyDigits($event)">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">

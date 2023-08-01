@@ -38,6 +38,7 @@ export class OutwardItemComponent {
   displayedColumns = new Array();
   Id = this.webStorage.getLoggedInLocalstorageData();
   langTypeName : any;
+  get f(){return this.filterForm.controls}
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'कृती'];
 
@@ -53,13 +54,14 @@ export class OutwardItemComponent {
     public Validation:ValidationService,
   ) { }
   ngOnInit() {
-    this.filterFormData();
-    this.getTaluka();
+    this.filterFormData(); 
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.setTableData();
-    });
+    });   
+    this.getTaluka();
+    this.getCategory();
   }
 
   filterFormData() {
@@ -112,7 +114,8 @@ export class OutwardItemComponent {
 
   getAllCenter() {
     this.centerArr = [];
-    let id = this.filterForm.controls['talukaId'].value;
+    // let id = this.filterForm.controls['talukaId'].value;
+    let id = this.filterForm.value.talukaId
     if (id != 0) {
       this.masterService.getAllCenter('', id).subscribe({
         next: (res: any) => {
@@ -129,7 +132,8 @@ export class OutwardItemComponent {
 
   getVillage() {
     this.villageArr = [];
-    let Cid = this.filterForm.controls['centerId'].value;
+    // let Cid = this.filterForm.controls['centerId'].value;
+    let Cid = this.filterForm.value.centerId
     if (Cid != 0) {
       this.masterService.getAllVillage('', Cid).subscribe({
         next: (res: any) => {
@@ -146,8 +150,10 @@ export class OutwardItemComponent {
 
   getAllSchools() {
     this.schoolArr = [];
-    let Tid = this.filterForm.controls['talukaId'].value;
-    let Cid = this.filterForm.controls['centerId'].value || 0;
+    // let Tid = this.filterForm.controls['talukaId'].value;
+    // let Cid = this.filterForm.controls['centerId'].value || 0;
+    let Tid = this.filterForm.value.talukaId;
+    let Cid = this.filterForm.value.centerId || 0;
     let Vid = 0;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
@@ -170,14 +176,16 @@ export class OutwardItemComponent {
         } else {
           this.categoryresp = [];
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errors.handelError(error.statusCode)
+      // }
     })
   }
 
-  getSubCategory(categoryId: any) {
-    this.masterService.GetAssetSubCateByCateId(categoryId, '').subscribe({
+  getSubCategory() {
+  let catId = this.filterForm.value.CategoryId
+    this.masterService.GetAssetSubCateByCateId(catId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subcategoryresp.push({ "id": 0, "subCategory": "All", "m_SubCategory": "सर्व" }, ...res.responseData);
@@ -190,8 +198,9 @@ export class OutwardItemComponent {
     });
   }
 
-  getItem(subcategoryId: any) {
-    this.apiService.setHttp('GET', 'zp-satara/master/GetAllItem?SubCategoryId=' + subcategoryId + '&flag_lang=e', false, false, false, 'baseUrl');
+  getItem() {
+    let subCatId = this.filterForm.value.SubCategoryId
+    this.apiService.setHttp('GET', 'zp-satara/master/GetAllItem?SubCategoryId=' + subCatId + '&flag_lang=e', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -200,7 +209,7 @@ export class OutwardItemComponent {
           this.tableresp = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err) })
+      // error: ((err: any) => { this.errors.handelError(err) })
     });
   }
 
@@ -223,25 +232,29 @@ export class OutwardItemComponent {
   getTableData(status?: any) {
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.filterForm.value;
-    let obj = {
-      "CategoryId": formData.CategoryId || 0,
-      "SubCategoryId": formData.SubCategoryId || 0,
-      "ItemsId": formData.ItemsId || 0,
-      "textSearch": formData.textSearch || '',
-    }
+    // let obj = {
+    //   "SchoolId" : formData.schoolId || 0,
+    //   "CategoryId": formData.CategoryId || 0,
+    //   "SubCategoryId": formData.SubCategoryId || 0,
+    //   "ItemsId": formData.ItemsId || 0,      
+    //   "textSearch": formData.textSearch || '',
+    // }
+    
+    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=1&pagesize=10&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
+    // let str = 'SchoolId='+formData?.schoolId || 0 +'&CategoryId=' + formData?.CategoryId || 0 + '&SubCategoryId=' + formData?.SubCategoryId || 0 + '&ItemId=' + formData?.ItemsId || 0+ '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + formData?.textSearch || '' + '&lan=' + this.webStorage.languageFlag
+    let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=1&pagesize=${this.totalItem *10}&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
 
-    let str = '&CategoryId=' + obj.CategoryId + '&SubCategoryId=' + obj.SubCategoryId + '&ItemId=' + obj.ItemsId + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + obj.textSearch + '&lan=' + this.webStorage.languageFlag
-    let excel = '&CategoryId=' + obj.CategoryId + '&SubCategoryId=' + obj.SubCategoryId + '&ItemId=' + obj.ItemsId + '&pageno=' + 1 + '&pagesize=10&TextSearch=' + obj.textSearch + '&lan=' + this.webStorage.languageFlag
-
-    this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?SchoolId=2104' + (status == 'filter' ? str : excel), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?' + (status == 'excel' ? excel : str ), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
       
         if (res.statusCode == "200") {
           status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          console.log("table response",this.tableresp);
+          
           // this.tableresp = res.responseData.responseData1 ;
           this.totalItem = res.responseData.responseData2.pageCount;
-          this.totalCount = res.responseData.responseData2.pageCount;
+          // this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
           let data: [] = res.responseData.responseData1;
           status == 'excel' ? this.pdfDownload(data) : '';
@@ -275,11 +288,11 @@ export class OutwardItemComponent {
   onChangeDropD(label: string) {
     switch (label) {
       case 'taluka':
-        this.filterForm.controls['centerId'].setValue(0);
-        this.filterForm.controls['villageId'].setValue(0);
-        this.filterForm.controls['categoryId'].setValue(0);
-        this.filterForm.controls['subCategoryId'].setValue(0);
-        this.filterForm.controls['itemsId'].setValue(0);
+        this.filterForm.controls['centerId']?.setValue(0);
+        this.filterForm.controls['villageId']?.setValue(0);       
+        this.filterForm.controls['categoryId']?.setValue(0);
+        this.filterForm.controls['subCategoryId']?.setValue(0);
+        this.filterForm.controls['itemsId']?.setValue(0);
         this.villageArr = [];
         this.categoryresp = [];
         this.subcategoryresp = [];
@@ -287,50 +300,57 @@ export class OutwardItemComponent {
         this.schoolArr = [];
         break;
       case 'center':
-        this.filterForm.controls['villageId'].setValue(0);
-        this.filterForm.controls['categoryId'].setValue(0);
-        this.filterForm.controls['subCategoryId'].setValue(0);
-        this.filterForm.controls['itemsId'].setValue(0);
+        this.filterForm.controls['villageId']?.setValue(0);
+        this.filterForm.controls['categoryId']?.setValue(0);
+        this.filterForm.controls['subCategoryId']?.setValue(0);
+        this.filterForm.controls['itemsId']?.setValue(0);
         this.categoryresp = [];
         this.subcategoryresp = [];
         this.itemresp = [];
         this.schoolArr = [];
         break;
       case 'village':
-        this.filterForm.controls['categoryId'].setValue(0);
-        this.filterForm.controls['subCategoryId'].setValue(0);
-        this.filterForm.controls['itemsId'].setValue(0);
-        this.filterForm.controls['schoolId'].setValue(0);
+        this.filterForm.controls['categoryId']?.setValue(0);
+        this.filterForm.controls['subCategoryId']?.setValue(0);
+        this.filterForm.controls['itemsId']?.setValue(0);
+        this.filterForm.controls['schoolId']?.setValue(0);
         this.categoryresp = [];
         this.subcategoryresp = [];
         this.itemresp = [];
         break;
       case 'school':
-        this.filterForm.controls['categoryId'].setValue(0);
-        this.filterForm.controls['subCategoryId'].setValue(0);
-        this.filterForm.controls['itemsId'].setValue(0);
+        this.filterForm.controls['categoryId']?.setValue(0);
+        this.filterForm.controls['subCategoryId']?.setValue(0);
+        this.filterForm.controls['itemsId']?.setValue(0);
         this.subcategoryresp = [];
         this.itemresp = [];
         break;
       case 'category':
         this.itemresp = [];
-        this.filterForm.controls['subCategoryId'].setValue(0);
-        this.filterForm.controls['itemsId'].setValue(0);
+        this.filterForm.controls['subCategoryId']?.setValue(0);
+        this.filterForm.controls['itemsId']?.setValue(0);
         break;
       case 'subCategory':
-        this.filterForm.controls['itemsId'].setValue(0);
+        this.filterForm.controls['itemsId']?.setValue(0);
         break;
     }
   }
 
   clearFilterData() {
-    this.filterForm.controls['centerId'].setValue(0);
-    this.centerArr = [];
-    this.villageArr = [];
-    this.categoryresp = [];
-    this.schoolArr = [];
-    this.itemresp = [];
-    this.subcategoryresp = [];
+    // this.f['talukaId']?.setValue(0);
+    // this.f['centerId']?.setValue(0);
+    // this.f['villageId']?.setValue(0);      
+    // this.f['schoolId']?.setValue(0);   
+    // this.f['categoryId']?.setValue(0);
+    // this.f['subCategoryId']?.setValue(0);
+    // this.f['itemsId']?.setValue(0);
+    // this.centerArr = [];
+    // this.villageArr = [];
+    // this.categoryresp = [];
+    // this.schoolArr = [];
+    // this.itemresp = [];
+    // this.subcategoryresp = [];
+    this.filterForm.reset();
     this.pageNumber = 1;
     this.getTableData();
   }
@@ -389,7 +409,7 @@ export class OutwardItemComponent {
       }
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Category Name', 'Sub Category Name','Items'];
+    let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category','Items'];
     let ValueData =
       this.resultDownloadArr.reduce(
         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []

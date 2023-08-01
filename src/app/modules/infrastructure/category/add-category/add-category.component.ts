@@ -49,11 +49,12 @@ export class AddCategoryComponent {
   get f() {
     return this.categoryForm.controls;
   }
+
   onSubmit() {
     if (this.categoryForm.invalid) {
       return;
-    } 
-    let data = this.webStorage.createdByProps();
+    }else{
+      let data = this.webStorage.createdByProps();
     let formData = this.categoryForm.value;
     let obj = {
       "createdBy": data.createdBy,
@@ -82,6 +83,8 @@ export class AddCategoryComponent {
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
+    } 
+    
   }
 
   editData() {

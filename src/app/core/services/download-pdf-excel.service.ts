@@ -21,9 +21,9 @@ export class DownloadPdfExcelService {
       margin: { top: 25 },
 
       didDrawPage: function (_data: any) {
-        var imgWidth = 33;
-        var height = 20;
-        doc.addImage('../../../../assets/images/.jpeg', 'JPEG', 2, -3, imgWidth, height); //add image
+        // var imgWidth = 33;
+        // var height = 20;
+        // doc.addImage('../../../../assets/images/.jpeg', 'JPEG', 2, -3, imgWidth, height); //add image
 
         doc.setFontSize(13);
         doc.text(objData.topHedingName, 100, 8, "center");

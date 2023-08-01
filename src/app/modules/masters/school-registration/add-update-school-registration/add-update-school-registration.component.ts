@@ -127,7 +127,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.eventForm = this.fb.group({
       "id": [this.editEventObj ? this.editEventObj?.id : 0],
       "schoolId": [this.editEventObj ? this.editEventObj?.schoolId : this.webStorageS.getLoggedInLocalstorageData()?.schoolId],
-      "eventName": [this.editEventObj ? this.editEventObj?.eventName : ''],
+      "eventName": [this.editEventObj ? this.editEventObj?.eventName : '', Validators.required],
       "m_EventName": [this.editEventObj ? this.editEventObj?.m_EventName : '', [Validators.required, Validators.pattern('^[-\u0900-\u096F ]+$')]],
       "description": [this.editEventObj ? this.editEventObj?.description : ''],
       "createdBy": 0,
@@ -400,7 +400,7 @@ export class AddUpdateSchoolRegistrationComponent {
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
   onEdit() {
     this.editFlag = true;
-    this.imgArray = [];
+    this.docArray = [];
   
       this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
       this.uploadImg = this.data?.uploadImage
@@ -416,29 +416,9 @@ export class AddUpdateSchoolRegistrationComponent {
           "modifiedDate": new Date(),
           "isDeleted": true
         };
-        this.imgArray.push(schoolDocumentObj);
+        this.docArray.push(schoolDocumentObj);
       })
       this.getDistrict();
-  }
-
-  onEditEvent(data?: any){
-    this.editFlag = true;
-    this.imgArray = [];
-
-    this.editEventObj = data;
-      this.eventFormFeild();
-      this.editEventObj?.eventImages.map((res: any) => {
-        let eventImgObj = {
-          "id": res.id,
-          "schoolId": res.schoolId,
-          "documentId": res.documentId,
-          "eventId": res.eventId,
-          "docPath": res.docPath,
-          "createdBy": 0,
-          "isDeleted": true
-        }
-        this.imgArray.push(eventImgObj);
-      });
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 
@@ -506,7 +486,7 @@ export class AddUpdateSchoolRegistrationComponent {
 
   getTableData() {
     this.ngxSpinner.show();
-    let str = `SchoolId=${this.webStorageS.getLoggedInLocalstorageData()?.schoolId}&pageno=1&pagesize=10&TextSearch=${this.textSearch.value}&lan=${this.webStorageS.languageFlag}`;
+    let str = `SchoolId=${this.webStorageS.getLoggedInLocalstorageData()?.schoolId}&pageno=1&pagesize=10&TextSearch=${(this.textSearch.value || '').trim()}&lan=${this.webStorageS.languageFlag}`;
  
     this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetAllEvent?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -557,6 +537,26 @@ export class AddUpdateSchoolRegistrationComponent {
     }
   }
 
+  onEditEvent(data?: any){
+    this.editFlag = true;
+    this.imgArray = [];
+
+    this.editEventObj = data;
+      this.eventFormFeild();
+      this.editEventObj?.eventImages.map((res: any) => {
+        let eventImgObj = {
+          "id": res.id,
+          "schoolId": res.schoolId,
+          "documentId": res.documentId,
+          "eventId": res.eventId,
+          "docPath": res.docPath,
+          "createdBy": 0,
+          "isDeleted": true
+        }
+        this.imgArray.push(eventImgObj);
+      });
+  }
+
   globalDialogOpen(id: number) {
     let dialoObj = {
       header: 'Delete',
@@ -599,6 +599,10 @@ export class AddUpdateSchoolRegistrationComponent {
   onClear(){
     this.textSearch.setValue('');
     this.getTableData();
+  }
+
+  onClearForm(){
+    this.eventForm.reset();
   }
 
 }

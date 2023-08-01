@@ -31,7 +31,7 @@ export class SubCategoryComponent {
   highLightFlag : boolean = true;
   // displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
-  displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name','Action'];
+  displayedheadersEnglish = ['Sr. No.', ' Category','Sub Category','Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव', 'कृती'];
  
   constructor(public dialog: MatDialog,
@@ -152,7 +152,7 @@ export class SubCategoryComponent {
           }
           this.resultDownloadArr.push(obj);
         });
-        let keyPDFHeader = ['Sr.No.', 'Category Name', 'Sub Category Name'];
+        let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category'];
               let ValueData =
                 this.resultDownloadArr.reduce(
                   (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -273,6 +273,8 @@ export class SubCategoryComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.getTableData();
+          console.log("delete msg",res.statusMessage);
+          
           this.commonService.showPopup(res.statusMessage, 0);
         } else {     
           this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);

@@ -30,7 +30,7 @@
         <div class="row gx-2 w-100">
             <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.subcategoryname' | translate}}</mat-label>
+                    <mat-label>{{'Labels.filterSubCategory' | translate}}</mat-label>
                     <input matInput maxlength="30" [formControl]="textSearch"
                         (keypress)="validation.noFirstSpaceAllow($event)" (keyup.enter)="getTableData()">
                 </mat-form-field>

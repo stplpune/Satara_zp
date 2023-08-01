@@ -166,7 +166,7 @@ getTableTranslatedData(){
   globalDialogOpen(obj:any) {
     let dialoObj = {
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Designation record?' : 'तुम्हाला पदनाम रेकॉर्ड हटवायचा आहे का',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Designation record?' : 'तुम्हाला पदनाम रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

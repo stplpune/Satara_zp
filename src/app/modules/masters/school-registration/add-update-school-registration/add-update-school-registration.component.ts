@@ -542,7 +542,7 @@ export class AddUpdateSchoolRegistrationComponent {
     }
     else {
       this.ngxSpinner.show();
-      this.apiService.setHttp(this.editEventObj ? 'put' : 'post', 'zp-satara/SchoolEvent/' + url, false, formValue, false, 'baseUrl');
+      this.apiService.setHttp(this.editEventObj ? 'post' : 'post', 'zp-satara/SchoolEvent/' + url, false, formValue, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();

@@ -526,15 +526,16 @@ export class AddUpdateSchoolRegistrationComponent {
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();
-          this.apiService.staticData.next('getRefreshStaticdata');
-          res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          // res.statusCode == "200" ? (this.ngxSpinner.hide(), this.getTableData()) : '';
+          // this.apiService.staticData.next('getRefreshStaticdata');
           if(res.statusCode == "200"){
             this.ngxSpinner.hide();
             this.getTableData();
-            this.eventFormFeild();
             this.formDirective.resetForm(); 
             this.imgArray = [];
+            this.commonMethod.showPopup(res.statusMessage, 0);
+          }
+          else{
+            this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           }
           // this.dialogRef.close('yes')
         },
@@ -551,7 +552,8 @@ export class AddUpdateSchoolRegistrationComponent {
   onEditEvent(data?: any){
     this.editFlag = true;
     this.imgArray = [];
-
+    console.log("onEditObj : ", data);
+    
     this.editEventObj = data;
       this.eventFormFeild();
       this.editEventObj?.eventImages.map((res: any) => {

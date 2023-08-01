@@ -119,7 +119,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.totalCount = res.responseData.responseData2.pageCount;
@@ -175,10 +175,13 @@ export class SchoolRegistrationComponent implements OnInit {
   getDistrict() {
     this.masterService.getAllDistrict('').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.districtArr = res.responseData;
           this.districtId.setValue(this.districtArr[0].id);
           this.getTaluka();
+        }
+        else{
+          this.districtArr = [];
         }
       },
       error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
@@ -188,12 +191,13 @@ export class SchoolRegistrationComponent implements OnInit {
   getTaluka() {
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          // this.villageId.setValue(0);
         }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+        else{
+          this.talukaArr = [];
+        }
+      }
     });
   }
 
@@ -202,12 +206,14 @@ export class SchoolRegistrationComponent implements OnInit {
     let talukaId: any = this.talukaId.value;
     this.masterService.getAllCenter('', talukaId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
           this.centerId.setValue(0);
         }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+        else{
+          this.centerArr = [];
+        }
+      }
     });
   }
 
@@ -215,17 +221,18 @@ export class SchoolRegistrationComponent implements OnInit {
   getVillage() {
     this.villageArr = []
     let centerId = this.centerId.value;
-    // let centerId = this.centerId.value;
     this.masterService.getAllVillage('', centerId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.villageArr = res.responseData;
           let obj = { id: 0, village: 'All', m_Village: 'सर्व' }
           this.villageArr.unshift(obj)
           this.villageId.setValue(0);
         }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+        else{
+          this.villageArr = [];
+        }
+      }
     });
   }
   //#endregion ------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
@@ -374,7 +381,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.apiService.setHttp('delete', 'zp-satara/School/Delete', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.commonMethodS.showPopup(res.statusMessage, 0);
           this.getTableData();
         }

@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   lang !: string;
   schoolData = new Array();
   centerData = new Array();
+  villageData = new Array();
   subjectData = new Array();
   filterForm!: FormGroup;
   filterFormForBarGraph!: FormGroup;
@@ -152,6 +153,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.filterForm = this.fb.group({
       acYearId: [],
       talukaId: [0],
+      villageId:[0],
       centerId: [0],
       schoolId: [0],
       examTypeId: [0]
@@ -207,21 +209,36 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.masterService.getAllCenter('', (this.f['talukaId'].value | 0)).subscribe((res: any) => {
         this.centerData.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
         this.f['centerId'].patchValue(0);
-        this.getschools();
+        this.getVillage();
       })
     }
-
   }
+
+  getVillage() {
+    this.villageData = [];
+    if(this.f['centerId'].value > 0){
+      this.masterService.getAllVillage('', (this.f['centerId'].value | 0)).subscribe((res : any)=>{
+        this.villageData.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+        this.f['villageId'].patchValue(0);
+        this.getschools();
+      });
+    }
+  }
+
+
   getschools() {
     this.schoolData = [];
     this.selectedCenter = this.centerData.find((x: any) => x.id == this.f['centerId'].value);
     // if(this.f['centerId'].value){
 
     this.fBgraph['filtercenterId'].patchValue(this.f['centerId'].value)
-    this.masterService.getAllSchoolByCriteria('', (this.f['talukaId'].value | 0), 0, (this.f['centerId'].value | 0)).subscribe((res: any) => {
-      this.schoolData.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-      this.selectedSchool();
-    })
+    if(this.f['centerId'].value > 0){
+      this.masterService.getAllSchoolByCriteria('', (this.f['talukaId'].value | 0), (this.f['villageId'].value | 0), (this.f['centerId'].value | 0)).subscribe((res: any) => {
+        this.schoolData.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+        this.selectedSchool();
+      })
+    }
+    
     // }
   }
   getExamType() {
@@ -484,7 +501,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.dashboardCountData = [];
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount_V3?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -923,6 +940,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   clearForm() {
     this.centerData = [];
     this.schoolData = [];
+    this.villageData = [];
     this.filterForm.reset();
     this.f['acYearId'].patchValue(this.educationYear)
     this.f['talukaId'].patchValue(0);
@@ -1005,7 +1023,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         min: 0,
         max: false
       },
-      source: this.selectedLang == 'English' ? "assets/distSVG/3 Satara.svg" : "assets/distSVG/Osmanabad_Marathi.svg",
+      source: this.selectedLang == 'English' ? "assets/distSVG/satara.svg" : "assets/distSVG/satara_marathi.svg",
       title: "Satara_Dist",
       responsive: true
     });

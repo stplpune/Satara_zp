@@ -41,9 +41,20 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
                             <mat-select formControlName="centerId" [placeholder]="'All'"
-                                (selectionChange)="getschools()">
+                                (selectionChange)="getVillage();">
                                 <mat-option *ngFor="let center of centerData" [value]="center.id">
                                     {{webStorage.languageFlag == 'EN'?center.center:center.m_Center}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
+                            <mat-select formControlName="villageId" [placeholder]="'All'"
+                                (selectionChange)="getschools()">
+                                <mat-option *ngFor="let village of villageData" [value]="village.id">
+                                    {{webStorage.languageFlag == 'EN'? village.village:village.m_Village}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

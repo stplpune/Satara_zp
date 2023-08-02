@@ -7,7 +7,7 @@
         </button>
     </div>
 </div>
-<form [formGroup]="eventForm">
+<form [formGroup]="attendenceForm" (ngSubmit)="onSubmit()">
     <mat-dialog-content class="card-body scrollbar">
         <div class="row">
             <div class="col-sm-12 mb-2">
@@ -19,7 +19,7 @@
             <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.remark' | translate}}</mat-label>
-                    <textarea matInput ></textarea>
+                    <textarea matInput formControlName="remark" ></textarea>
                 </mat-form-field>
             </div>
         </div>

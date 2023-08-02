@@ -35,6 +35,7 @@
         "SellPrice":"Sell Price",
         "SellDate":"Sell Date",
         "Outwardto":"Outward To",
+        "Assignto":"Assign To",
         "OutwardItmes":"Outward Itmes",
         "OutwardItmesList":"Outward Itmes List",
         "remark":"Remark",

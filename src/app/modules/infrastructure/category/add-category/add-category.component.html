@@ -23,7 +23,7 @@
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>category name marathi</mat-label>
+                    <mat-label>Category Name (Marathi)</mat-label>
                     <input matInput maxlength="20" formControlName ="M_category"
                     (keypress)="validators.noSpaceAllow($event);validators.unicodeMarathiValidation($event)">
                         <mat-error *ngIf="f['M_category'].hasError('pattern')">{{'Labels.invalidItemName'|

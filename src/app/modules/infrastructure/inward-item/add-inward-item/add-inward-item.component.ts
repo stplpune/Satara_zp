@@ -146,6 +146,7 @@ export class AddInwardItemComponent {
     this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorageS.getLangauge()).subscribe({
       next : (res : any)=>{
         res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
+        console.log("opening stock : ", this.openingStock);
       }
     });  
   }

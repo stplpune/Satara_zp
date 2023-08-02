@@ -112,6 +112,7 @@ export class InwardItemComponent {
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'photo', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
+      date: 'purchase_Sales_Date',
       displayedColumns: this.displayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,

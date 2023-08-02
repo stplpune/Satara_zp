@@ -275,6 +275,7 @@ export class OutwardItemComponent {
       img: 'photo',
       blink: '',
       badge: '',
+      date: 'purchase_Sales_Date',
       pagintion: this.totalItem > 10 ? true : false,
       displayedColumns: this.displayedColumns,
       tableData: this.tableresp,

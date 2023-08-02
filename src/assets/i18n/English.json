@@ -86,7 +86,7 @@
         "taluka" : "Taluka",
         "address" : "Address",
         "agencyAdd" :"Address",
-        "AgencyList" : "Other Registration List",   
+        "AgencyList" : "Other Registration List",
         "cancel": "Cancel",
         "submit" : "Submit",
         "update" : "Update",
@@ -155,7 +155,7 @@
         "schoolCategoryDescription" : "School Category ",
         "schoolManagementDescription" : "School Management ",
         "groupClass" : "Group of Class",
-       
+
         "uploadPhoto" : "Upload Photo",
         "districtIsRequired" : "District is required",
         "talukaIsRequired" : "Taluka is required",
@@ -308,7 +308,7 @@
         "Atleast1LowercaseCharacters(a-z)" : "Must contain at least one Number (0-9)",
         "Atleast1UpercaseCharacters(A-Z)" : "Must contain at least one Upper case (A-Z) and one Lower case (a-z) character",
         "Atleast1Digits(0-9)" :"Atleast 1 Digits(0-9)",
-        "(*$@#)Atleast1SpecialCharacters(*$@#)" :"Must contain at least one Special character (@,#,&,$)", 
+        "(*$@#)Atleast1SpecialCharacters(*$@#)" :"Must contain at least one Special character (@,#,&,$)",
         "show" : "Show",
         "hide" : "Hide",
         "Urban" : "Urban",
@@ -399,8 +399,9 @@
         "invalidItemName":"Please enter valid item name (Marathi).",
         "CategoryName":"Category",
         "Description":"Description",
-        "filterSubCategory":"Category/Sub Category"
+        "filterSubCategory":"Category/Sub Category",
+        "updateCategory": "Update Category"
 
-        
+
     }
 }

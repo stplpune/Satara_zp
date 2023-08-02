@@ -68,13 +68,13 @@ export class InwardItemComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      talukaId: [0],
-      centerId: [0],
-      villageId: [0],
-      schoolId: [0],
-      categoryId: [0],
-      subCategoryId: [0],
-      itemsId: [0],
+      talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
+      centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
+      villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
+      schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
+      categoryId: [''],
+      subCategoryId: [''],
+      itemsId: [''],
       textSearch: ['']
     })
   }
@@ -83,7 +83,7 @@ export class InwardItemComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm.value;
-    let str = `SchoolId=2104&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=1&pagesize=10&TextSearch=${(formValue?.textSearch || '')}&lan=${this.webStorageS.languageFlag}`;
+    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=1&pagesize=10&TextSearch=${(formValue?.textSearch || '')}&lan=${this.webStorageS.languageFlag}`;
     this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -171,7 +171,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.f['talukaId'].setValue(this.loginData.talukaId),this.getAllCenter();
+          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -188,7 +188,7 @@ export class InwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.f['centerId'].setValue(this.loginData.centerId),this.getVillage();
+            this.filterForm?.value.centerId ? this.getVillage():'';
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -206,7 +206,7 @@ export class InwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.f['villageId'].setValue(this.loginData.villageId),this.getAllSchools();
+            this.filterForm?.value.villageId ? this.getAllSchools():'';
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];

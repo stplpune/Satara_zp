@@ -214,9 +214,10 @@ export class OutwardItemComponent {
   }
 
   childCompInfo(obj: any) {
+    // let formData=this.filterForm.value
     switch (obj.label) {
       case 'Pagination':
-        this.filterFlag ? '' : (this.filterForm.value.setValue(''), this.filterFlag = false);
+        // this.filterFlag ? '' : (formData.textSearch.setValue(''), this.filterFlag = false);
         this.pageNumber = obj.pageNumber;
         this.getTableData();
         break;
@@ -240,7 +241,7 @@ export class OutwardItemComponent {
     //   "textSearch": formData.textSearch || '',
     // }
     
-    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=1&pagesize=10&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
+    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=${ this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
     // let str = 'SchoolId='+formData?.schoolId || 0 +'&CategoryId=' + formData?.CategoryId || 0 + '&SubCategoryId=' + formData?.SubCategoryId || 0 + '&ItemId=' + formData?.ItemsId || 0+ '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + formData?.textSearch || '' + '&lan=' + this.webStorage.languageFlag
     let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=1&pagesize=${this.totalItem *10}&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
 
@@ -250,8 +251,7 @@ export class OutwardItemComponent {
       
         if (res.statusCode == "200") {
           status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
-          console.log("table response",this.tableresp);
-          
+       
           // this.tableresp = res.responseData.responseData1 ;
           this.totalItem = res.responseData.responseData2.pageCount;
           // this.totalCount = res.responseData.responseData2.pageCount;
@@ -275,7 +275,7 @@ export class OutwardItemComponent {
       img: '',
       blink: '',
       badge: '',
-      pagintion: true,
+      pagintion: this.totalItem > 10 ? true : false,
       displayedColumns: this.displayedColumns,
       tableData: this.tableresp,
       tableSize: this.totalItem,

@@ -154,7 +154,7 @@ export class AddOutwardItemComponent {
   }
 
   onSubmit() {
-    if (this.itemForm.invalid && this.openingStockFlag == true) {
+    if (this.itemForm.invalid || this.openingStockFlag == true) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }

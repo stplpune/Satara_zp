@@ -26,6 +26,7 @@ export class AddInwardItemComponent {
   itemArr = new Array();
   imgValidation : boolean = true;
   openingStock : number = 0;
+  openingStockFlag : boolean = false;
   get f() { return this.itemForm.controls };
 
   constructor(private fb: FormBuilder,
@@ -146,9 +147,18 @@ export class AddInwardItemComponent {
     this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorageS.getLangauge()).subscribe({
       next : (res : any)=>{
         res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
-        console.log("opening stock : ", this.openingStock);
       }
     });  
+  }
+
+  getUnitByQty(){
+    let unit = Number(this.itemForm.value.quantity);
+    if(unit <= 0){
+      this.openingStockFlag = true;
+      this.f['quantity'].setValue('');
+      this.commonMethodS.snackBar(this.webStorageS.languageFlag == 'EN' ? 'Unit Should Be Greater Than 0' : 'युनिट 0 पेक्षा जास्त असावे',1);
+      return;
+    }
   }
 
   onSubmit(){
@@ -159,7 +169,7 @@ export class AddInwardItemComponent {
     formValue.photo = this.itemForm.value.photo;
 
     let url = this.editObj ? 'UpdateInward' : 'AddInward'
-    if (!this.itemForm.valid) {
+    if (!this.itemForm.valid || this.openingStockFlag == true) {
       this.commonMethodS.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }

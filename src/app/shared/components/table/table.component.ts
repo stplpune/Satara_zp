@@ -63,7 +63,7 @@ export class TableComponent implements OnInit {
    this.tableSub =  this.apiService.tableData.subscribe((res: any) => {
     
       this.tableInfo = res;
-      // console.log("table info",this.tableInfo);
+      console.log("table info",this.tableInfo);
       
       if (this.tableInfo) {
         this.highlightedRow = this.tableInfo.highlightedRow;

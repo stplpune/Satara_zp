@@ -16,7 +16,7 @@
         <mat-card-content class="card-body scrollbar card-height-sm">
             <!-- <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.personalDetails'| translate}}</mat-card-subtitle> -->
 
-            <div class="row">
+            <div class="row gx-2">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
@@ -49,23 +49,22 @@
                             translate}}</mat-error>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Description'| translate}}</mat-label>
                         <textarea matInput formControlName="description" (keypress)="validators.noSpacesAtStart($event)"></textarea>
                     </mat-form-field>
                 </div>
             </div>
-        </mat-card-content>
-        <mat-card-footer class="card-footer">
             <div class="d-flex w-100 align-items-center justify-content-end">
-                <button mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
-                    translate}}</button>
-                <button mat-flat-button class="btn-main" type="submit">{{data ?( 'Labels.update' | translate)
-                    :('Labels.submit' |
-                    translate)}}</button>
-            </div>
-        </mat-card-footer>
+              <button mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
+                  translate}}</button>
+              <button mat-flat-button class="btn-main" type="submit">{{data ?( 'Labels.update' | translate)
+                  :('Labels.submit' |
+                  translate)}}</button>
+          </div>
+        </mat-card-content>
+
     </form>
     </mat-card>
 <!-- </form> -->

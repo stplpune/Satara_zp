@@ -21,11 +21,13 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
 import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view.component';
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { ViewStockDetailsComponent } from './view-stock-details/view-stock-details.component';
 
 
 @NgModule({
   declarations: [
-    StoreMasterComponent
+    StoreMasterComponent,
+    ViewStockDetailsComponent
   ],
   imports: [
     CommonModule,

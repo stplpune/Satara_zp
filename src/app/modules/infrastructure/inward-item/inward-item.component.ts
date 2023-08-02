@@ -38,6 +38,7 @@ export class InwardItemComponent {
   subCategoryArr = new Array();
   itemArr = new Array();
   resultDownloadArr = new Array();
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
   get f() { return this.filterForm.controls };
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Photo', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'शेरा', 'फोटो', 'कृती'];
@@ -170,6 +171,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          this.f['talukaId'].setValue(this.loginData.talukaId),this.getAllCenter();
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -186,6 +188,7 @@ export class InwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+            this.f['centerId'].setValue(this.loginData.centerId),this.getVillage();
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -203,6 +206,7 @@ export class InwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.f['villageId'].setValue(this.loginData.villageId),this.getAllSchools();
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -221,6 +225,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+          this.f['schoolId'].setValue(this.loginData.schoolId);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

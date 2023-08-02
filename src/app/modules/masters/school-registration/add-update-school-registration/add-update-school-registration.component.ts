@@ -183,7 +183,8 @@ export class AddUpdateSchoolRegistrationComponent {
   }
 
   getVillage() {
-    this.masterService.getAllVillage(this.webStorageS.languageFlag, this.schoolRegForm.value.talukaId).subscribe({
+    let cId = this.schoolRegForm.value.centerId;
+    this.masterService.getAllVillage(this.webStorageS.languageFlag,cId).subscribe({
       next: (res: any) => {
         res.statusCode == 200 ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
         this.editFlag ? (this.f['villageId'].setValue(this.data.villageId), this.getSchoolType()) : '';

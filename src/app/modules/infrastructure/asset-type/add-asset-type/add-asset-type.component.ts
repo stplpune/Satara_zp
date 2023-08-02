@@ -53,9 +53,9 @@ export class AddAssetTypeComponent {
         } else {
           this.categoryresp = [];
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errors.handelError(error.statusCode)}
     })
   }
 

@@ -1005,7 +1005,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         min: 0,
         max: false
       },
-      source: this.selectedLang == 'English' ? "assets/distSVG/3 Satara.svg" : "assets/distSVG/Osmanabad_Marathi.svg",
+      source: this.selectedLang == 'English' ? "assets/distSVG/satara.svg" : "assets/distSVG/Osmanabad_Marathi.svg",
       title: "Satara_Dist",
       responsive: true
     });

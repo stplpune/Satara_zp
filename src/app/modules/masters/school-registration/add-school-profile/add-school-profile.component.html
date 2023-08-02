@@ -183,7 +183,7 @@
                     <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb" class="gallery-img">
                 </div>
             </div>
-            <!-- <div class="col-sm-6" *ngIf="schoolresp?.schoolDocument.length > 0">
+            <div class="col-sm-6" *ngIf="schoolresp?.schoolDocument.length > 0">
                 <h6 class="text-main mb-0 fw-bold">{{'Labels.documnentphotos' | translate}}</h6>
                 <div class="col-3 col-sm-3">
                     <ng-container *ngFor="let doc of schoolresp?.schoolDocument; let i = index">
@@ -193,7 +193,7 @@
                         </div>
                     </ng-container>
                 </div>
-            </div> -->
+            </div>
             <div class="col-sm-12 mt-3">
                 <app-table (recObjToChild)="childCompInfo($event)"></app-table>
             </div>

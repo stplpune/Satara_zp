@@ -187,7 +187,7 @@ export class ItemRegistrationComponent {
           this.categoryArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -204,7 +204,7 @@ export class ItemRegistrationComponent {
           this.subCategoryArr = [];
         }
       },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 

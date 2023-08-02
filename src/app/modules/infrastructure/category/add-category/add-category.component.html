@@ -2,7 +2,7 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">
-                {{editFlag ? 'Updated Category':'Add Category'}}
+                {{editFlag ? ( 'Labels.updateCategory' | translate): ('Labels.addCategory' | translate)}}
             </h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
                 <mat-icon>close</mat-icon>
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.Category' | translate}}</mat-label>
+                    <mat-label>{{'Labels.Categoryname' | translate}}</mat-label>
                     <input matInput maxlength="20" formControlName="category"
                     (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericOnly">
                     <mat-error></mat-error>
@@ -23,7 +23,7 @@
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>category name marathi</mat-label>
+                    <mat-label>Category Name (Marathi)</mat-label>
                     <input matInput maxlength="20" formControlName ="M_category"
                     (keypress)="validators.noSpaceAllow($event);validators.unicodeMarathiValidation($event)">
                         <mat-error *ngIf="f['M_category'].hasError('pattern')">{{'Labels.invalidItemName'|
@@ -36,7 +36,7 @@
         <mat-card-actions align="end" class="me-3 mb-2">
             <button mat-stroked-button class="btn-second me-2" type="submit" mat-dialog-close>{{'Labels.cancel'|
                 translate}}</button>
-                <button mat-stroked-button class="btn-main" type="submit" >{{editFlag ? ( 'Labels.update' | translate):('Labels.submit' |translate)}}</button>
+                <button mat-stroked-button class="btn-main" type="submit" >{{editFlag ? ( 'Labels.update' | translate):('Labels.add' |translate)}}</button>
         </mat-card-actions>
     </mat-card-footer>
 </form>

@@ -24,7 +24,7 @@ export class AddOutwardItemComponent {
   subcategoryresp:any;
   itemresp:any;
   openingStock : number = 0;
-  openingStockFlag : boolean = true;
+  openingStockFlag : boolean = false;
   get f(){ return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -136,7 +136,7 @@ export class AddOutwardItemComponent {
 
   getOpeningStock(){
     let formValue = this.itemForm.value;
-    this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorage.getLangauge()).subscribe({
+    this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subcategoryId || 0), (formValue.itemId || 0), this.webStorage.getLangauge()).subscribe({
       next : (res : any)=>{
         res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
       }
@@ -144,18 +144,27 @@ export class AddOutwardItemComponent {
   }
 
   getUnitByQty(){
-    if(this.openingStock < this.itemForm.value.unit){
-      this.openingStockFlag = false;
-      return
+    let unit = Number(this.itemForm.value.unit);
+    if(unit >= (this.openingStock)){
+      this.openingStockFlag = true;
+      this.f['unit'].setValue('');
+      this.commonMethod.snackBar(this.webStorage.languageFlag == 'EN' ? 'Unit Should Be Less Than Opening Stock' : 'युनिट ओपनिंग स्टॉकपेक्षा कमी असावे',1);
+      return;
     }
   }
 
   onSubmit() {
-    if (this.itemForm.invalid && this.openingStockFlag == false) {
+    if (this.itemForm.invalid && this.openingStockFlag == true) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }
-    let data = this.webStorage.createdByProps();
+    // else if(this.openingStockFlag == true){
+    //   this.commonMethod.snackBar(this.webStorage.languageFlag == 'EN' ? 'Unit Should Be Less Than Opening Stock' : 'युनिट ओपनिंग स्टॉकपेक्षा कमी असावे',1);
+    //   this.openingStockFlag = true;
+    //   return;
+    // }
+    else{
+      let data = this.webStorage.createdByProps();
     let formData = this.itemForm.value;
 
     let obj={
@@ -193,6 +202,7 @@ export class AddOutwardItemComponent {
       error: ((err: any) => { this.errors.handelError(err) })
     });
   }
+}
 
   editData(){
     this.editFlag=true;

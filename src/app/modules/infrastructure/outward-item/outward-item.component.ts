@@ -39,8 +39,8 @@ export class OutwardItemComponent {
   Id = this.webStorage.getLoggedInLocalstorageData();
   langTypeName : any;
   get f(){return this.filterForm.controls}
-  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark', 'Photo', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट', 'विक्री दिनांक', 'असाइन करा', 'शेरा', 'फोटो', 'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
@@ -269,10 +269,10 @@ export class OutwardItemComponent {
   }
 
   setTableData() {
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', 'item', 'action'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'item' : 'm_Item', 'quantity', 'purchase_Sales_Date', 'outwardTo', 'remark', 'photo', 'action'];
     this.tableData  = {
       pageNumber: this.pageNumber,
-      img: '',
+      img: 'photo',
       blink: '',
       badge: '',
       pagintion: this.totalItem > 10 ? true : false,

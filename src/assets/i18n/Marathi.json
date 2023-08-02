@@ -384,6 +384,7 @@
         "invalidItemName":"कृपया वैध वस्तूचे नाव (मराठी) टाका.",
         "CategoryName" :"श्रेणीचे नाव",
         "Description":"वर्णन",
-        "filterSubCategory":"श्रेणी/उप श्रेणी"
+        "filterSubCategory":"श्रेणी/उप श्रेणी",
+        "Assignto":"असाइन करा"
     }
 }

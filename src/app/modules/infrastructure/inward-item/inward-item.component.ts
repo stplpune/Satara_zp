@@ -40,7 +40,7 @@ export class InwardItemComponent {
   resultDownloadArr = new Array();
   get f() { return this.filterForm.controls };
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Photo', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'टिप्पणी', 'फोटो', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'शेरा', 'फोटो', 'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,

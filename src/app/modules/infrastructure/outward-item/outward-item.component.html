@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
-                        <mat-label>{{'Labels.SubCategory'| translate}}</mat-label>
+                        <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId"
                         (selectionChange)="onChangeDropD('subCategory'); getItem()">
                             <mat-option *ngFor="let data of subcategoryresp" [value]="data.id">
@@ -103,7 +103,7 @@
                 </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
-                        <mat-label>{{'Labels.Items'| translate}}</mat-label>
+                        <mat-label>{{'Labels.items'| translate}}</mat-label>
                         <mat-select formControlName="ItemsId">
                             <mat-option *ngFor="let data of itemresp" [value]="data.id">
                                 {{webStorage.getLangauge() == 'EN' ?

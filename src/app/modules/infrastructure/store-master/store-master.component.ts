@@ -2,14 +2,15 @@ import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
-import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
 
 @Component({
   selector: 'app-store-master',
@@ -54,6 +55,8 @@ export class StoreMasterComponent {
     private downloadFileService: DownloadPdfExcelService,
     public datepipe: DatePipe,
     private ngxSpinner: NgxSpinnerService,
+    private encrypt: AesencryptDecryptService,
+    private router:Router,
     ){}
 
  
@@ -181,32 +184,39 @@ export class StoreMasterComponent {
   }
 
   openDetailsDialog(obj: any) {
-    console.log("obj",obj);
+    let eventId: any = this.encrypt.encrypt(`${obj?.id}`);
+    this.router.navigate(['/view-stock-details'],{
+      queryParams: {
+        id:eventId
+      },
+    })
+    // return
+    // console.log("obj",obj);
     
-    var data = {
-      headerImage: obj.uploadImage,
-      header: this.webService.languageFlag == 'EN' ? obj.name : obj.m_Name,
-      subheader: this.webService.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
-      labelHeader: this.webService.languageFlag == 'EN' ? ['Mobile No.', 'Email ID', 'Village', 'Taluka'] : ['मोबाईल क्र.', 'ई-मेल आयडी ', 'गाव', 'तालुका'],
-      labelKey: this.webService.languageFlag == 'EN' ? ['mobileNo', 'emailId', 'village', 'taluka'] : ['mobileNo', 'emailId', 'village', 'taluka'],
-      Obj: obj,
-      chart: false,
-      checkbox: this.webService.languageFlag == 'EN' ? 'Subject' : 'विषय',
-      schoolName: this.webService.languageFlag == 'EN' ? 'School Name' : 'शाळेचे नाव'
-    }
-    const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
-      width: '900px',
-      data: data,
-      disableClose: true,
-      autoFocus: false
-    });
-    viewDialogRef.afterClosed().subscribe((result: any) => {
-      if (result == 'yes') {
-        this.getTableData();
-      }
-      this.highLightFlag = false;
-      // this.languageChange();
-    });
+    // var data = {
+    //   headerImage: obj.uploadImage,
+    //   header: this.webService.languageFlag == 'EN' ? obj.name : obj.m_Name,
+    //   subheader: this.webService.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
+    //   labelHeader: this.webService.languageFlag == 'EN' ? ['Mobile No.', 'Email ID', 'Village', 'Taluka'] : ['मोबाईल क्र.', 'ई-मेल आयडी ', 'गाव', 'तालुका'],
+    //   labelKey: this.webService.languageFlag == 'EN' ? ['mobileNo', 'emailId', 'village', 'taluka'] : ['mobileNo', 'emailId', 'village', 'taluka'],
+    //   Obj: obj,
+    //   chart: false,
+    //   checkbox: this.webService.languageFlag == 'EN' ? 'Subject' : 'विषय',
+    //   schoolName: this.webService.languageFlag == 'EN' ? 'School Name' : 'शाळेचे नाव'
+    // }
+    // const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
+    //   width: '900px',
+    //   data: data,
+    //   disableClose: true,
+    //   autoFocus: false
+    // });
+    // viewDialogRef.afterClosed().subscribe((result: any) => {
+    //   if (result == 'yes') {
+    //     this.getTableData();
+    //   }
+    //   this.highLightFlag = false;
+    //   // this.languageChange();
+    // });
   }
 
   getTaluka() {

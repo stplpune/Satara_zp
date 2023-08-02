@@ -5,6 +5,7 @@ import { SecureComponent } from './secure.component';
 import { AddUpdateStudentComponent } from 'src/app/modules/masters/student-registration/add-update-student/add-update-student/add-update-student.component';
 import { AddSchoolProfileComponent } from 'src/app/modules/masters/school-registration/add-school-profile/add-school-profile.component';
 import { TasksheetReportDetailsComponent } from 'src/app/modules/attendence/tasksheet-reports/tasksheet-report-details/tasksheet-report-details.component';
+import { ViewStockDetailsComponent } from 'src/app/modules/infrastructure/store-master/view-stock-details/view-stock-details.component';
 
 const routes: Routes = [
   { path: '', component: SecureComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'school-registration', loadChildren: () => import('../../modules/masters/school-registration/school-registration.module').then(m => m.SchoolRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'School Registration', m_title: 'शाळा नोंदणी', active: true }] } },
   { path: 'student-registration', loadChildren: () => import('../../modules/masters/student-registration/student-registration.module').then(m => m.StudentRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Student Registration',m_title: 'विद्यार्थी नोंदणी', active: true }] } },
   { path: 'add-student', component:AddUpdateStudentComponent , data: { breadcrumb: [{ title: 'Add Student',m_title: 'विद्यार्थी नोंदणी', active: true }] } },
+  { path: 'view-stock-details', component: ViewStockDetailsComponent, data: { breadcrumb: [{ title: 'view-stock-detail ',m_title: 'स्टॉक-तपशील', active: true }] } },
   { path: 'view-profile-school', component:AddSchoolProfileComponent , data: { breadcrumb: [{ title: 'view-profie',m_title: 'प्रोफाइल पहा', active: true }] } },
   { path: 'teacher-tasksheet', component:TasksheetReportDetailsComponent, data:{ breadcrumb: [{ title: 'view-tasksheet-report',m_title: 'कार्यपत्रक-अहवाल पहा', active: true }] }},
   { path: 'teacher-registration', loadChildren: () => import('../../modules/masters/teacher-registration/teacher-registration.module').then(m => m.TeacherRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Teacher Registration',m_title: 'शिक्षक नोंदणी', active: true }] } },

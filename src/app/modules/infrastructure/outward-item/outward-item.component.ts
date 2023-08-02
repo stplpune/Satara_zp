@@ -68,13 +68,13 @@ export class OutwardItemComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      talukaId: [0],
-      centerId: [0],
-      villageId: [0],
-      schoolId: [0],
-      CategoryId: [0],
-      SubCategoryId: [0],
-      ItemsId: [0],
+      talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
+      centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
+      villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
+      schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],   
+      CategoryId: [''],
+      SubCategoryId: [''],
+      ItemsId: [''],
       textSearch: ['']
     });
   }
@@ -106,7 +106,7 @@ export class OutwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.f['talukaId'].setValue(this.loginData.talukaId),this.getAllCenter();
+          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
         } else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -124,7 +124,7 @@ export class OutwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.f['centerId'].setValue(this.loginData.centerId),this.getVillage();
+            this.filterForm?.value.centerId ? this.getVillage():'';
           } else {
             this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -143,7 +143,7 @@ export class OutwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.f['villageId'].setValue(this.loginData.villageId),this.getAllSchools();
+            this.filterForm?.value.villageId ? this.getAllSchools():'';
           } else {
             this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
             this.villageArr = [];

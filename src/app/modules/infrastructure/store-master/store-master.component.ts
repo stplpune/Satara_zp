@@ -35,7 +35,7 @@ export class StoreMasterComponent {
   categoryArr = new Array();
   subCategoryArr = new Array();
   itemArr = new Array();
-
+  loginData = this.webService.getLoggedInLocalstorageData();
   
   displayedColumns = [ 'srNo','category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock','action'];
   marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
@@ -59,7 +59,7 @@ export class StoreMasterComponent {
     private router:Router,
     ){}
 
- 
+    get f(){return this.filterForm.controls}
 
   ngOnInit(): void {
     this.languageFlag = this.webService.languageFlag;
@@ -67,19 +67,21 @@ export class StoreMasterComponent {
       this.languageFlag = lang;
       this.setTableData();
     });
-   
-    this.getTableData();
     this.filterFormData();
+    this.getTableData();
+
     this.getTaluka();
     this.getAllCategory();
+    console.log("loginData",this.loginData);
+    
   }
 
   filterFormData() {
-    this.filterForm = this.fb.group({
-      talukaId :[''],
-      centerId:[''],
-      villageId:[''],
-      schoolId:[''],
+    this.filterForm = this.fb.group({  
+      talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
+      centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
+      villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
+      schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
       CategoryId: [''],
       SubCategoryId: [''],     
       ItemsId: [''],
@@ -88,7 +90,7 @@ export class StoreMasterComponent {
   }
 
   getTableData(flag?: string) {
-    let formValue =this.filterForm?.value
+    let formValue =this.filterForm?.value;
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     // let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;   
@@ -225,7 +227,7 @@ export class StoreMasterComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);   
-          this.filterForm.controls['talukaId'].setValue(0); 
+          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -243,7 +245,8 @@ export class StoreMasterComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);    
-            this.filterForm.controls['centerId'].setValue(0); 
+            // this.filterForm.controls['centerId'].setValue(0); 
+            this.filterForm?.value.centerId ? this.getVillage():'';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -263,7 +266,8 @@ export class StoreMasterComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All village", "m_Village": "सर्व गाव" }, ...res.responseData);     
-            this.filterForm.controls['villageId'].setValue(0); 
+            // this.filterForm.controls['villageId'].setValue(0); 
+            this.filterForm?.value.villageId ? this.getAllSchoolsByCenterId():'';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -283,7 +287,7 @@ export class StoreMasterComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);   
-          this.filterForm.controls['schoolId'].setValue(0);  
+          
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

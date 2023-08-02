@@ -69,6 +69,7 @@ export class StudentReportComponent {
 
   maxDate = new Date();
   studentCount : any;
+  logInDetails : any;
 
   constructor(private fb: FormBuilder,
     private masterService: MasterService,
@@ -96,6 +97,9 @@ export class StudentReportComponent {
     this.getAllgroupClassDrop();
     this.getStandard();
     this.searchAssessMent();    
+    
+    this.logInDetails = this.webService.getLoggedInLocalstorageData();
+    console.log("logInDetails : ", this.logInDetails);
   }
 
   languageChange() {
@@ -156,8 +160,8 @@ export class StudentReportComponent {
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);
-          this.studentReportForm.controls['talukaId'].setValue(0);
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          this.logInDetails ? this.studentReportForm.controls['talukaId'].setValue(this.logInDetails?.talukaId): this.studentReportForm.controls['talukaId'].setValue(0), this.getAllCenter();
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -174,8 +178,8 @@ export class StudentReportComponent {
       this.masterService.getAllCenter('', id).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);
-            this.studentReportForm.controls['centerId'].setValue(0);
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+            this.logInDetails ? this.studentReportForm.controls['centerId'].setValue(this.logInDetails?.centerId): this.studentReportForm.controls['centerId'].setValue(0), this.getVillage();
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -194,8 +198,8 @@ export class StudentReportComponent {
       this.masterService.getAllVillage('', Cid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.villageArr.push({ "id": 0, "village": "All village", "m_Village": "सर्व गाव" }, ...res.responseData);
-            this.studentReportForm.controls['villageId'].setValue(0);
+            this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.logInDetails ? this.studentReportForm.controls['villageId'].setValue(this.logInDetails?.villageId): this.studentReportForm.controls['villageId'].setValue(0), this.getAllSchoolsByCenterId();
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -208,14 +212,14 @@ export class StudentReportComponent {
 
   getAllSchoolsByCenterId() {
     this.schoolArr = [];
-    let Tid = this.studentReportForm.value.talukaId
+    let Tid = this.studentReportForm.value.talukaId || 0;
     let Cid = this.studentReportForm.value.centerId || 0;
-    let Vid = 0;
+    let Vid = this.studentReportForm.value.villageId || 0;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);
-          this.studentReportForm.controls['schoolId'].setValue(0);
+          this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+          this.logInDetails ? this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId): this.studentReportForm.controls['schoolId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -249,7 +253,7 @@ export class StudentReportComponent {
     this.masterService.getAllStandard(0, groupId || 0, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.standardArr.push({ "id": 0, "standard": "All standard", "m_Standard": "सर्व इयत्ता" }, ...res.responseData);
+          this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
           this.studentReportForm.controls['standardId'].setValue(0);
           this.studentReportForm.value.AssessmentTypeId == 2 ? this.getClassWiseSubject() : '';
         } else {

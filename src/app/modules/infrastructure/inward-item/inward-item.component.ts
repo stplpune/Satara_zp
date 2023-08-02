@@ -25,7 +25,7 @@ export class InwardItemComponent {
   pageNumber: number = 1;
   tableDataArray = new Array();
   tableDatasize!: Number;
-  totalCount!: number;
+  totalCount: number = 0;
   tableData: any;
   highLightFlag: boolean = true;
   displayedColumns = new Array();

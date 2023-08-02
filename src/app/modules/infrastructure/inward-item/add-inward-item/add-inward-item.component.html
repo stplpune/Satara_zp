@@ -44,7 +44,7 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
-                        <input matInput formControlName="quantity" (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);">
+                        <input matInput formControlName="quantity" (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);" (change)="getUnitByQty();">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">

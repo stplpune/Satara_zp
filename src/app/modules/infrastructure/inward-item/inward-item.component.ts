@@ -205,6 +205,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          this.f['talukaId'].setValue(0);
           this.filterForm?.value.talukaId ? this.getAllCenter() : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
@@ -274,6 +275,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.categoryArr.push({ "id": 0, "category": "All", "m_Category": "सर्व" }, ...res.responseData);
+          this.f['categoryId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
@@ -362,7 +364,7 @@ export class InwardItemComponent {
     this.subCategoryArr = [];
     this.schoolArr = [];
     this.itemArr = [];
-    this.f['centerId'].setValue(0);
+    this.f['talukaId'].setValue(0);
     this.f['categoryId'].setValue(0);
   }
 

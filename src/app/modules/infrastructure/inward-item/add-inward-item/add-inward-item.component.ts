@@ -98,8 +98,6 @@ export class AddInwardItemComponent {
   }
 
   getSubCategoryDrop() {
-    console.log("hi.");
-    
     this.subCategoryArr = [];
     this.masterService.GetAssetSubCateByCateId(this.itemForm.value.categoryId, '').subscribe({
       next: (res: any) => {

@@ -66,7 +66,7 @@
                         <mat-label>{{'Labels.PurchaseDate'| translate}}</mat-label>
                         <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly
                             formControlName="purchase_Sales_Date" [max]="currentDate">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker" ></mat-datepicker-toggle>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
@@ -131,7 +131,8 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.remark'| translate}}</mat-label>
-                        <textarea matInput rows="3" cols="10" formControlName="remark" (keypress)="validationService.noFirstSpaceAllow($event)"></textarea>
+                        <textarea matInput rows="3" cols="10" formControlName="remark"
+                            (keypress)="validationService.noFirstSpaceAllow($event)"></textarea>
                     </mat-form-field>
                 </div>
             </div>

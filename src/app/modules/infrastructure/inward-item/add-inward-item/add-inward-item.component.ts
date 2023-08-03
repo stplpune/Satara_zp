@@ -208,8 +208,6 @@ export class AddInwardItemComponent {
 
   getOpeningStock() {
     let formValue = this.itemForm.value;
-    console.log("formValue : ", formValue);
-    
     this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorageS.getLangauge()).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
@@ -238,7 +236,7 @@ export class AddInwardItemComponent {
     formValue.inwardOutwardDocs = this.imgArray;
 
     let url = this.editObj ? 'UpdateInward' : 'AddInward'
-    if (!this.itemForm.valid || this.openingStockFlag == true || this.imgValidation == false) {
+    if (!this.itemForm.valid || this.openingStockFlag == true || this.imgValidation == false || formValue.subCategoryId == 0 || formValue.itemId == 0) {
       this.commonMethodS.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }
@@ -263,8 +261,6 @@ export class AddInwardItemComponent {
   onEdit() {
     this.editFlag = true;
     this.editObj = this.data;
-    console.log("onEdit : ", this.editObj);
-    
     this.formFeild();
     // this.uploadImg = this.editObj.photo;
 
@@ -293,13 +289,15 @@ export class AddInwardItemComponent {
   onChangeDropD(label: string) {
     switch (label) {
       case 'category':
-        this.f['subCategoryId'].setValue(0);
+        this.f['subCategoryId'].setValue('');
+        this.f['itemId'].setValue('');
         this.itemArr = [];
-        this.editObj.subCategoryId = 0;
+        this.editObj.subCategoryId = null;
+        this.editObj.itemId = null;
         break;
       case 'subCategory':
-        this.f['itemId'].setValue(0);
-        this.editObj = null;
+        this.f['itemId'].setValue('');
+        this.editObj.itemId = null;
         break;
     }
   }

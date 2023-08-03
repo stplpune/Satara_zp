@@ -136,7 +136,8 @@ export class StoreMasterComponent {
       displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,      
-      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders
+      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,
+      edit: false, delete: false, view: true
     };
     this.highLightFlag?tableData.highlightedrow=true:tableData.highlightedrow=false,
     this.apiService.tableData.next(tableData);

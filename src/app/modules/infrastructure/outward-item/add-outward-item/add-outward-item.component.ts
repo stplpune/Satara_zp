@@ -28,7 +28,7 @@ export class AddOutwardItemComponent {
   openingStock: number = 0;
   uploadMultipleImg: any;
   openingStockFlag: boolean = false;
-  imgValidation: boolean = true;
+  imgValidation: boolean = false;
   get f() { return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -127,7 +127,6 @@ export class AddOutwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.uploadMultipleImg = res.responseData;
-          this.imgValidation = true;
           this.commonMethod.showPopup(res.statusMessage, 0);
           let imgArr = this.uploadMultipleImg.split(',')
           for (let i = 0; i < imgArr.length; i++) {
@@ -205,10 +204,8 @@ export class AddOutwardItemComponent {
 
   onSubmit() {
     let formData = this.itemForm.getRawValue();
-    console.log(formData);
-    
-   
-    if (this.itemForm.invalid || this.openingStockFlag == true  ) {
+    if (this.itemForm.invalid || this.openingStockFlag == true ) {
+      this.imgValidation = true;
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }

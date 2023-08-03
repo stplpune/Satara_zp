@@ -11,6 +11,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { DatePipe } from '@angular/common';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
 @Component({
   selector: 'app-item-transfer',
   templateUrl: './outward-item.component.html',
@@ -62,16 +63,18 @@ export class OutwardItemComponent {
     });   
     this.getTaluka();
     this.getCategory();
-    console.log("loginData",this.loginData);
-    
   }
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
-      centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
-      villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
-      schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],   
+      // talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
+      // centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
+      // villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
+      // schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],   
+      talukaId :[''],
+      centerId:[''],
+      villageId:[''],
+      schoolId:[''],  
       CategoryId: [''],
       SubCategoryId: [''],
       ItemsId: [''],
@@ -233,9 +236,41 @@ export class OutwardItemComponent {
       case 'Delete':
         this.globalDialogOpen(obj);
         break;
+      case 'View':
+        this.openDetailsDialog(obj);
+        break;
     }
   }
 
+  openDetailsDialog(obj: any) {
+
+    console.log(obj);
+    // return;
+    var data = {     
+      headerImage: '',
+      // header: '',
+      // subheader: '',
+      labelHeader: '',
+      labelKey: '',
+      Obj: obj,
+      chart: false,
+      multipleImage: true,
+      pdf:true
+    }
+    const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
+      width: '900px',
+      data: data,
+      disableClose: true,
+      autoFocus: false
+    });
+    viewDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        // this.getTableData();
+      }
+      this.highLightFlag=false;
+      // this.languageChange();
+    });
+  }
   getTableData(status?: any) {
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.filterForm.value;

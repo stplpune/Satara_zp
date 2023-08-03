@@ -38,8 +38,11 @@ export class GlobalDetailComponent {
   objData: any;
   showImg!: boolean;
   languageFlag: any;
+  imageArr = new Array();
+  pdfArr = new Array();
   constructor(private webService: WebStorageService,
     public gallery: Gallery, public dialogRef: MatDialogRef<GlobalDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public webStorage: WebStorageService) {
+console.log("data",this.data);
 
   }
 
@@ -50,10 +53,26 @@ export class GlobalDetailComponent {
     if (this.data.headerImage != '') {
       this.showImg = true;
     }
-    this.dataArray = this.data.Obj.schoolDocument;
+    this.dataArray = this.data.Obj.inwardOutwardDocs;
 
-    this.items = this.dataArray?.map(item =>
-      new ImageItem({ src: item.docPath, thumb: item.docPath })
+    this.dataArray?.map((x: any) => {
+      let imgPath = x.photo;
+      let extension = imgPath.split('.');
+
+      console.log("extension",extension);
+      
+      if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {        
+       this.pdfArr.push({photo : x.photo ,docFlag:true})       
+      }
+      if (extension[3] == 'jpg' || extension[3] == 'jpeg' || extension[3] == 'png') {        
+        this.imageArr.push({photo : x.photo})        
+       }
+    });
+
+
+
+    this.items = this.imageArr?.map(item =>
+      new ImageItem({ src: item.photo, thumb: item.photo})
     );
 
     this.basicLightboxExample();
@@ -78,5 +97,9 @@ export class GlobalDetailComponent {
       lang: this.languageFlag,
     }
     this.objData.objData ? this.webService.selectedLineChartObj.next(this.objData) : '';
+  }
+
+  onViewDoc(index: any) {
+    window.open(this.pdfArr[index].photo, 'blank');
   }
 }

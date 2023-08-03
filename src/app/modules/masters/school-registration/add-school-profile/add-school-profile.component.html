@@ -28,17 +28,19 @@
                             <!-- <img src="../../../../../assets/images/user.png"> -->
                         </div>
                         <div class="flex-grow-1 ms-3">
-                            <h5 class="mb-1 fw-bold text-break">{{schoolresp?.schoolName}}</h5>
+                            <h5 class="mb-1 fw-bold text-break">{{langTypeName =='English' ? schoolresp?.schoolName: schoolresp?.m_SchoolName}}</h5>
+                            <span>({{langTypeName =='English' ? schoolresp?.schoolType : schoolresp?.m_SchoolType}})</span>
                             <div class="data-container">
                                 <div class="row g-2">
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.district' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.district' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.district}}
+                                                    : {{langTypeName=='English' ? schoolresp?.district: schoolresp?.m_District}}
                                                 </div>
                                             </div>
                                         </div>
@@ -46,11 +48,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.taluka' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.taluka' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.taluka}}
+                                                    : {{langTypeName=='English' ? schoolresp?.taluka : schoolresp?.m_Taluka}}
                                                 </div>
                                             </div>
                                         </div>
@@ -58,11 +61,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.taluka' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.center' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.center}}
+                                                    : {{langTypeName=='English' ? schoolresp?.center : schoolresp?.m_Center }}
                                                 </div>
                                             </div>
                                         </div>
@@ -70,11 +74,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.village' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.village' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.village}}
+                                                    : {{langTypeName=='English' ? schoolresp?.village : schoolresp?.m_Village}}
                                                 </div>
                                             </div>
                                         </div>
@@ -82,11 +87,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.HighestSchoolName' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.HighestClass' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.highestSchoolName}}
+                                                    : {{schoolresp?.highestClass}}
                                                 </div>
                                             </div>
                                         </div>
@@ -94,11 +100,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.LowestSchoolName' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.LowestClass' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.lowestSchoolName}}
+                                                    : {{schoolresp?.lowestClass}}
                                                 </div>
                                             </div>
                                         </div>
@@ -106,7 +113,8 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.TotalStudent' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.TotalStudent' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -118,7 +126,8 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.TotalStudentmale' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.TotalStudentmale' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -130,7 +139,8 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.TotalStudentfemale' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.TotalStudentfemale' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -142,7 +152,8 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-5">
-                                                <span class="data-label text-break">{{'Labels.TotalTeachers' | translate}}</span>
+                                                <span class="data-label text-break">{{'Labels.TotalTeachers' |
+                                                    translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-7">
                                                 <div class="data-text text-break">
@@ -179,19 +190,19 @@
             </div>
             <div class="col-sm-6 border-end">
                 <h6 class="text-main mb-0 fw-bold">{{'Labels.Schoolphotos' | translate}}</h6>
-                <div class="col-3 col-sm-3">
-                    <img *ngFor="let item of items; index as i" [lightbox]="i" [src]="item.data.thumb" class="gallery-img">
+                <div class="row gx-2 gy-2">
+                    <div class="col-sm-3" *ngFor="let item of items; index as i">
+                        <img [lightbox]="i" [src]="item.data.thumb" class="gallery-img">
+                    </div>
                 </div>
             </div>
             <div class="col-sm-6" *ngIf="schoolresp?.schoolDocument.length > 0">
                 <h6 class="text-main mb-0 fw-bold">{{'Labels.documnentphotos' | translate}}</h6>
-                <div class="col-3 col-sm-3">
-                    <ng-container *ngFor="let doc of schoolresp?.schoolDocument; let i = index">
-                        <div class="gallery position-relative">
-                            <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " height="110px" width="110px" class="border" (click)="onViewDoc(i)">
-                           
-                        </div>
-                    </ng-container>
+                <div class="row gx-2 gy-2">
+                    <div class="col-3 col-sm-3" *ngFor="let doc of schoolresp?.schoolDocument; let i = index">
+                        <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' " 
+                        class="border img-fluid w-100" (click)="onViewDoc(i)">
+                    </div>
                 </div>
             </div>
             <div class="col-sm-12 mt-3">

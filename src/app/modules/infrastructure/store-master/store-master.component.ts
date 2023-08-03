@@ -72,16 +72,19 @@ export class StoreMasterComponent {
 
     this.getTaluka();
     this.getAllCategory();
-    console.log("loginData",this.loginData);
     
   }
 
   filterFormData() {
     this.filterForm = this.fb.group({  
-      talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
-      centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
-      villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
-      schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
+      // talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
+      // centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
+      // villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
+      // schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
+      talukaId :[''],
+      centerId:[''],
+      villageId:[''],
+      schoolId:[''],
       CategoryId: [''],
       SubCategoryId: [''],     
       ItemsId: [''],
@@ -186,12 +189,23 @@ export class StoreMasterComponent {
   }
 
   openDetailsDialog(obj: any) {
-    let eventId: any = this.encrypt.encrypt(`${obj?.id}`);
-    this.router.navigate(['/view-stock-details'],{
-      queryParams: {
-        id:eventId
-      },
-    })
+    console.log("obj",obj);
+      let id:any = obj.schoolId+'.'+obj.categoryId+'.'+obj.subCategoryId+'.'+obj.itemId;
+      let formdata:any = this.encrypt.encrypt(`${id}`);
+       this.router.navigate(['/view-stock-details'], {
+         queryParams: { id: formdata },
+       });
+      
+
+
+    
+    // let eventId: any = this.encrypt.encrypt(`${obj?.id}`);
+    // this.router.navigate(['/view-stock-details'],{
+    //   queryParams: {
+    //     id:eventId
+    //   },
+    // })
+
     // return
     // console.log("obj",obj);
     
@@ -345,4 +359,6 @@ export class StoreMasterComponent {
       }
     });
   }
+
+  
 }

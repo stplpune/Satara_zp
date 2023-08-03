@@ -13,14 +13,12 @@ import { DatePipe } from '@angular/common';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { ValidationService } from 'src/app/core/services/validation.service';
-
 @Component({
   selector: 'app-item-registration',
   templateUrl: './item-registration.component.html',
   styleUrls: ['./item-registration.component.scss']
 })
 export class ItemRegistrationComponent {
-  
   viewStatus="Table";
   cardViewFlag: boolean = false;
   filterForm!: FormGroup;
@@ -38,12 +36,10 @@ export class ItemRegistrationComponent {
   resultDownloadArr = new Array();
   deleteObj:any;
 
-
   displayedColumns = [ 'srNo','category', 'subCategory', 'itemName', 'description','action'];
   marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
   displayedheaders = ['Sr. No.',' Category', 'Sub Category', 'Item Name', 'Description','action'];
   marathiDisplayedheaders = ['अनुक्रमांक','श्रेणी', 'उप श्रेणी', 'वस्तूचे नाव', 'वर्णन', 'कृती'];
-
 
   constructor (private fb: FormBuilder,
     public dialog: MatDialog,
@@ -57,8 +53,6 @@ export class ItemRegistrationComponent {
     public datepipe: DatePipe,
     private ngxSpinner: NgxSpinnerService,
     public validators: ValidationService){}
-
- 
 
   ngOnInit(): void {
     this.languageFlag = this.webService.languageFlag;
@@ -108,7 +102,6 @@ export class ItemRegistrationComponent {
         this.setTableData();
       },
       error: ((err: any) => { (this.ngxSpinner.hide(),this.commonMethodS.checkEmptyData(err.statusText) == false) ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
-   
     });
   }
 
@@ -123,7 +116,8 @@ export class ItemRegistrationComponent {
       displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders
+      tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,
+      edit: true, delete: true,
     };
     this.highLightFlag?tableData.highlightedrow=true:tableData.highlightedrow=false,
     this.apiService.tableData.next(tableData);

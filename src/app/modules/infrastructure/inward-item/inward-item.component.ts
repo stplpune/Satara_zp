@@ -121,7 +121,8 @@ export class InwardItemComponent {
       displayedColumns: this.displayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi
+      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+      edit: true, delete: true,
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);

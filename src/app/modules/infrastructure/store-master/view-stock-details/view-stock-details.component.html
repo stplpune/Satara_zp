@@ -10,7 +10,7 @@
 </nav>
 
 <mat-card class="plain-card form-container">
-  <mat-card-header class="card-header small">
+  <mat-card-header class="card-header ">
     <div class="row w-100">
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
@@ -43,14 +43,12 @@
     </div>
   </mat-card-header>
   <mat-card-content class="card-body">
-    <div class="row">
+    <div class="row gx-2 gy-2">
       <div class="col-sm-6">
-        <div class="card-header border-0 bg-transparent">
-          <h6 class="text-main fw-bold mb-2 mb-lg-0">Inward</h6>
-        </div>
-        <div class="card"  *ngFor="let cardInward of cardInwardData">
+        <h6 class="text-main fw-bold my-2">Inward</h6>
+        <div class="card mb-2" *ngFor="let cardInward of cardInwardData">
           <div class="card-body">
-            <div class="row">
+            <div class="row gy-2">
               <div class="col-sm-8">
                 <div class="d-flex">
                   <div class="form-label">Username</div>
@@ -81,7 +79,7 @@
                   <div class="form-data">:- {{cardInward.inwardRemark}}</div>
                 </div>
               </div>
-              <div class="col-sm-12" >
+              <div class="col-sm-12">
                 <div class="d-flex align-items-center gap-3">
                   <div class="form-label">Photo :</div>
                   <div *ngFor="let cardDoc of cardInward.inwardOutwardDoc1">
@@ -97,11 +95,9 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="card-header border-0 bg-transparent">
-          <h6 class="text-main fw-bold mb-2 mb-lg-0">Outward</h6>
-        </div>
-        <div class="card" *ngFor=" let cardOutWard of cardOutwardData">
-          <div class="card-body" >
+        <h6 class="text-main fw-bold my-2">Outward</h6>
+        <div class="card mb-2" *ngFor=" let cardOutWard of cardOutwardData">
+          <div class="card-body">
             <div class="row">
               <div class="col-sm-8">
                 <div class="d-flex">
@@ -133,7 +129,7 @@
                   <div class="form-data">:- {{cardOutWard.outwardRemark}}</div>
                 </div>
               </div>
-              <div class="col-sm-12" >
+              <div class="col-sm-12">
                 <div class="d-flex align-items-center gap-3">
                   <div class="form-label">Photo :</div>
                   <div *ngFor="let cardOutWardDoc of cardOutWard.inwardOutwardDoc2">

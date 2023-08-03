@@ -47,6 +47,7 @@
         "add":"जोडा",
         "addSubcategory":"उपवर्ग नोंदणी जोडा",
         "updateSubcategory":"अपडेट उपवर्ग",
+        "InwardItmes":"आयटम आवक",
         "subcategoryList":"उपवर्ग यादी",
         "categoryList":"श्रेणी यादी",
         "addguardian":"संरक्षक जोडा",
@@ -393,10 +394,15 @@
         "OutwardItmes":"बाह्य  वस्तू",
         "OutwardItmesList":"आयटम बाह्य सूची",
         "addoutwardItems":"बाह्य वस्तू जोडा",
+        "InwardItmesList":"आयटम आवक यादी",
         "updateCategory": "अपडेट श्रेणी",
         "SellPrice":"विक्री किंमत",
         "SellDate":"विक्रीची तारीख",
         "Openingstock":"सुरुवातीचआ स्टॉक",
-        "uploadPhotoBill": "फोटो/बिल अपलोड करा"
+        "uploadPhotoBill": "फोटो/बिल अपलोड करा",
+        "addInwardItems": "आवक वस्तू जोडा",
+        "Units":"युनिट्स",
+        "PurchasePrice":"खरेदी किंमत",
+        "PurchaseDate":"खरेदीची तारीख"
     }
 }

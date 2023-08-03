@@ -18,7 +18,8 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
-                        <mat-select formControlName="categoryId" (selectionChange)="onChangeDropD('category'); getSubCategoryDrop();">
+                        <mat-select formControlName="categoryId"
+                            (selectionChange)="onChangeDropD('category'); getSubCategoryDrop();">
                             <mat-option [value]="category.id" *ngFor="let category of categoryArr">
                                 {{webStorageS.getLangauge() == 'EN' ? category.category : category.m_Category}}
                             </mat-option>
@@ -28,36 +29,44 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.subcategoryname'| translate}}</mat-label>
-                        <mat-select formControlName="subCategoryId" (selectionChange)="onChangeDropD('subCategory'); getItemDrop();">
-                            <mat-option [value]="subCategory.id" *ngFor="let subCategory of subCategoryArr">{{webStorageS.getLangauge() == 'EN' ? subCategory.subCategory : subCategory.m_subCategory}}</mat-option>
+                        <mat-select formControlName="subCategoryId"
+                            (selectionChange)="onChangeDropD('subCategory'); getItemDrop();">
+                            <mat-option [value]="subCategory.id"
+                                *ngFor="let subCategory of subCategoryArr">{{webStorageS.getLangauge() == 'EN' ?
+                                subCategory.subCategory : subCategory.m_subCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.itemName'| translate}}</mat-label>
-                        <mat-select formControlName="itemId" (selectionChange)="getOpeningStock();" >
-                            <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() == 'EN' ? item.itemName : item.m_ItemName}}</mat-option>
+                        <mat-select formControlName="itemId" (selectionChange)="getOpeningStock();">
+                            <mat-option [value]="item.id" *ngFor="let item of itemArr">{{webStorageS.getLangauge() ==
+                                'EN' ? item.itemName : item.m_ItemName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
-                        <input matInput formControlName="quantity" (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);" (change)="getUnitByQty();">
+                        <input matInput formControlName="quantity"
+                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);"
+                            (change)="getUnitByQty();">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.PurchasePrice'| translate}}</mat-label>
-                        <input matInput formControlName="price" (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);">
+                        <input matInput formControlName="price"
+                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.PurchaseDate'| translate}}</mat-label>
-                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly formControlName="purchase_Sales_Date">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly
+                            formControlName="purchase_Sales_Date" [max]="currentDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker" ></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
@@ -67,15 +76,22 @@
                         <p class="text-main mb-0 ps-2">{{openingStock}}</p>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="upload-btn-wrapper">
-                            <button class="upload-btn" type="button"
-                                matTooltip="{{uploadImg ? uploadImg.split('/').pop() :''}}" matTooltipPosition="below"
-                                matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhoto' |
-                                translate}}</button>
-                            <input type="file" name="myfile" [disabled]="uploadImg" accept=".png, .jpg, .jpeg"
-                                 #uploadImage (change)="imgUpload($event)" />
+                        <div formArrayName="inwardOutwardDocs" *ngFor="let img of multipleImg.controls; let i = index;">
+                            <div [formGroupName]="i" class="d-flex">
+                                <div class="upload-btn-wrapper">
+                                    <button class="upload-btn" type="button"
+                                        matTooltip="{{uploadImg ? uploadImg.split('/').pop() :''}}"
+                                        matTooltipPosition="below" matTooltipClass="tooltip"
+                                        (click)="uploadImage.click()">{{'Labels.uploadPhotoBill' |
+                                        translate}}</button>
+                                    <input type="file" name="myfile" [disabled]="uploadImg"
+                                        accept=".png, .jpg, .jpeg, .pdf, .doc, .txt" multiple #uploadImage
+                                        (change)="multipleImgUpload($event)" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="action-btn" *ngIf="uploadImg">
+
+                        <!-- <div class="action-btn" *ngIf="uploadImg">
                             <button mat-icon-button class="btn-icon text-primary" type="button"
                                  matTooltip="{{'Labels.View' | translate}}"
                                 matTooltipPosition="below" matTooltipClass="tooltip" (click)="viewImg()">
@@ -86,17 +102,36 @@
                                 matTooltipPosition="below" matTooltipClass="tooltip" (click)="clearImg()">
                                 <mat-icon>delete</mat-icon>
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                     <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
                         Photo Is Required
                     </mat-error>
+
+                    <!-- Display Image -->
+                    <div class="d-flex flex-wrap gap-4">
+                        <ng-container *ngFor="let item of imgArray; let i = index">
+                            <div class="gallery position-relative">
+                                <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo" height="130px"
+                                    width="130px" class="border" (click)="onViewDoc(i)">
+                                <span class="position-absolute" style="top:-17px;right:-17px;">
+                                    <button type="button" mat-icon-button
+                                        class="bg-danger bg-opacity-25 text-danger material-icons"
+                                        (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
+                                        matTooltipPosition="right" matTooltipClass="tooltip">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- Display Image -->
                 </div>
-                
+
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.remark'| translate}}</mat-label>
-                        <textarea matInput rows="3" cols="10" formControlName="remark"></textarea>
+                        <textarea matInput rows="3" cols="10" formControlName="remark" (keypress)="validationService.noFirstSpaceAllow($event)"></textarea>
                     </mat-form-field>
                 </div>
             </div>

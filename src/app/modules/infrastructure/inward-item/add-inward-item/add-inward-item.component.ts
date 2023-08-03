@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -24,22 +24,25 @@ export class AddInwardItemComponent {
   categoryArr = new Array();
   subCategoryArr = new Array();
   itemArr = new Array();
-  imgValidation : boolean = true;
-  openingStock : number = 0;
-  openingStockFlag : boolean = false;
+  imgValidation: boolean = true;
+  openingStock: number = 0;
+  openingStockFlag: boolean = false;
+  uploadMultipleImg: any;
+  imgArray = new Array();
   get f() { return this.itemForm.controls };
+  currentDate = new Date();
 
   constructor(private fb: FormBuilder,
     private commonMethodS: CommonMethodsService,
     private masterService: MasterService,
     private errors: ErrorsService,
-    public webStorageS: WebStorageService, 
-    private fileUpload : FileUploadService,
+    public webStorageS: WebStorageService,
+    private fileUpload: FileUploadService,
     private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddUpdateSchoolRegistrationComponent>,
-    public validationService : ValidationService) { }
+    public validationService: ValidationService) { }
 
   ngOnInit() {
     this.formFeild();
@@ -60,8 +63,23 @@ export class AddInwardItemComponent {
       "remark": [this.editObj ? this.editObj.remark : ''],
       "photo": [this.editObj ? this.editObj.photo : ''],
       "lan": this.webStorageS.languageFlag,
+      inwardOutwardDocs: this.fb.array([
+        this.fb.group({
+          "id": 0,
+          "schoolId": 0,
+          "inwardOutwardId": 0,
+          "type": "string",
+          "documentId": 0,
+          "photo": "string",
+          "createdby": 0
+        })
+      ]),
       ...this.webStorageS.createdByProps()
     })
+  }
+
+  get multipleImg(): FormArray {
+    return this.itemForm.get('inwardOutwardDocs') as FormArray;
   }
 
   getCategoryDrop() {
@@ -108,68 +126,117 @@ export class AddInwardItemComponent {
       }
     });
   }
-  
-  imgUpload(event : any){
-    let type = 'jpg, jpeg, png';
-    this.fileUpload.uploadDocuments(event, 'Upload', type).subscribe({
+
+  multipleImgUpload(event: any) {
+    this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.uploadImg = res.responseData;
-          this.itemForm.value.photo = this.uploadImg;     
+        if (res.statusCode == "200") {
+          this.uploadMultipleImg = res.responseData;
+          this.imgValidation = true;
           this.commonMethodS.showPopup(res.statusMessage, 0);
+          // multiple image 
+          let imgArr = this.uploadMultipleImg.split(',')
+          for (let i = 0; i < imgArr.length; i++) {
+            let data = {
+              "id": 0,
+              "schoolId": 0,
+              "inwardOutwardId": 0,
+              "type": "string",
+              "documentId": 0,
+              "photo": imgArr[i],
+              "createdby": 0
+            }
+            this.imgArray.push(data)
+          }
         }
         else {
           return
         }
+
+        this.imgArray.map((x: any) => {
+          let imgPath = x.photo;
+          let extension = imgPath.split('.');
+          if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+            x.docFlag = true;
+          }
+        });
       },
-      error: ((err: any) => { err.statusCode ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err, 1) })
     });
   }
 
-  viewImg() {
-    if (this.editFlag == true) {
-      let viewImg = this.editObj.photo;
-      this.uploadImg ? window.open(this.uploadImg, 'blank') : window.open(viewImg, 'blank')
-    }
-    else {
-      window.open(this.uploadImg, 'blank');
-    }
+  // imgUpload(event: any) {
+  //   let type = 'jpg, jpeg, png';
+  //   this.fileUpload.uploadDocuments(event, 'Upload', type).subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == 200) {
+  //         this.uploadImg = res.responseData;
+  //         this.itemForm.value.photo = this.uploadImg;
+  //         this.commonMethodS.showPopup(res.statusMessage, 0);
+  //       }
+  //       else {
+  //         return
+  //       }
+  //     },
+  //     error: ((err: any) => { err.statusCode ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err, 1) })
+  //   });
+  // }
+
+  // viewImg() {
+  //   if (this.editFlag == true) {
+  //     let viewImg = this.editObj.photo;
+  //     this.uploadImg ? window.open(this.uploadImg, 'blank') : window.open(viewImg, 'blank')
+  //   }
+  //   else {
+  //     window.open(this.uploadImg, 'blank');
+  //   }
+  // }
+
+  // clearImg() {
+  //   this.uploadImg = '';
+  //   this.itemForm.value.photo = '';
+  //   this.f['photo'].setValue('');
+  // }
+
+  onViewDoc(index: any) {
+    window.open(this.imgArray[index].photo, 'blank');
   }
 
-  clearImg() {   
-    this.uploadImg = '';
-    this.itemForm.value.photo = '';
-    this.f['photo'].setValue('');
+  clearMultipleImg(index: any) {
+    this.imgArray.splice(index, 1);
+    this.imgValidation = false;
   }
 
-  getOpeningStock(){
+  getOpeningStock() {
     let formValue = this.itemForm.value;
     this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorageS.getLangauge()).subscribe({
-      next : (res : any)=>{
+      next: (res: any) => {
         res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
       }
-    });  
+    });
   }
 
-  getUnitByQty(){
+  getUnitByQty() {
     let unit = Number(this.itemForm.value.quantity);
-    if(unit <= 0){
+    if (unit <= 0) {
       this.openingStockFlag = true;
       this.f['quantity'].setValue('');
-      this.commonMethodS.snackBar(this.webStorageS.languageFlag == 'EN' ? 'Unit Should Be Greater Than 0' : 'युनिट 0 पेक्षा जास्त असावे',1);
+      this.commonMethodS.snackBar(this.webStorageS.languageFlag == 'EN' ? 'Unit Should Be Greater Than 0' : 'युनिट 0 पेक्षा जास्त असावे', 1);
       return;
     }
   }
 
-  onSubmit(){
+  onSubmit() {
     let formValue = this.itemForm.value;
     formValue.price = Number(formValue?.price);
     formValue.quantity = Number(formValue?.quantity);
-    formValue.photo ? formValue.photo = this.uploadImg : this.imgValidation = false;
-    formValue.photo = this.itemForm.value.photo;
+    // formValue.photo ? formValue.photo = this.uploadImg : this.imgValidation = false;
+    // formValue.photo = this.itemForm.value.photo;
+
+    this.uploadImg ? formValue.inwardOutwardDocs = this.imgArray : this.imgValidation = false;
+    // formValue.inwardOutwardDocs = this.imgArray;
 
     let url = this.editObj ? 'UpdateInward' : 'AddInward'
-    if (!this.itemForm.valid || this.openingStockFlag == true) {
+    if (!this.itemForm.valid || this.openingStockFlag == true || this.imgValidation == false) {
       this.commonMethodS.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }
@@ -191,11 +258,33 @@ export class AddInwardItemComponent {
     }
   }
 
-  onEdit(){
+  onEdit() {
     this.editFlag = true;
     this.editObj = this.data;
     this.formFeild();
-    this.uploadImg = this.editObj.photo;
+    // this.uploadImg = this.editObj.photo;
+
+    this.data?.inwardOutwardDocs?.map((res: any) => {
+      let imgObj = {
+        "id": res.id,
+        "schoolId": res.schoolId,
+        "inwardOutwardId": res.inwardOutwardId,
+        "type": res.type,
+        "documentId": res.documentId,
+        "photo": res.photo,
+        "createdby": 0
+      };
+      this.imgArray.push(imgObj);
+    });
+
+    this.imgArray.map((x: any) => {
+      let imgPath = x.photo;
+      let extension = imgPath.split('.');
+      if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+        x.docFlag = true;
+      }
+    });
+    
   }
 
   onChangeDropD(label: string) {

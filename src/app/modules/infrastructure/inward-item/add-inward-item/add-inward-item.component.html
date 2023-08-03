@@ -47,6 +47,12 @@
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
+                    <div class="d-flex justify-content-start mt-2">
+                        <p class="text-main mb-0 fw-bold">{{'Labels.Openingstock'| translate}}:</p>
+                        <p class="text-main mb-0 ps-2">{{openingStock}}</p>
+                    </div>
+                </div>
+                <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.Units'| translate}}</mat-label>
                         <input matInput formControlName="quantity"
@@ -71,10 +77,6 @@
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
-                    <div class="d-flex justify-content-start mb-3">
-                        <p class="text-main mb-0 fw-bold">{{'Labels.Openingstock'| translate}}:</p>
-                        <p class="text-main mb-0 ps-2">{{openingStock}}</p>
-                    </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <div formArrayName="inwardOutwardDocs" *ngFor="let img of multipleImg.controls; let i = index;">
                             <div [formGroupName]="i" class="d-flex">
@@ -107,34 +109,35 @@
                     <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
                         Photo Is Required
                     </mat-error>
-
-                    <!-- Display Image -->
-                    <div class="d-flex flex-wrap gap-4">
-                        <ng-container *ngFor="let item of imgArray; let i = index">
-                            <div class="gallery position-relative">
-                                <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo" height="130px"
-                                    width="130px" class="border" (click)="onViewDoc(i)">
-                                <span class="position-absolute" style="top:-17px;right:-17px;">
-                                    <button type="button" mat-icon-button
-                                        class="bg-danger bg-opacity-25 text-danger material-icons"
-                                        (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
-                                        matTooltipPosition="right" matTooltipClass="tooltip">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </span>
-                            </div>
-                        </ng-container>
-                    </div>
-                    <!-- Display Image -->
                 </div>
 
-                <div class="col-sm-6">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label> {{'Labels.remark'| translate}}</mat-label>
-                        <textarea matInput rows="3" cols="10" formControlName="remark"
-                            (keypress)="validationService.noFirstSpaceAllow($event)"></textarea>
-                    </mat-form-field>
+
+                <!-- Display Image -->
+                <div class="d-flex flex-wrap gap-4">
+                    <ng-container *ngFor="let item of imgArray; let i = index">
+                        <div class="gallery position-relative">
+                            <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo" height="130px"
+                                width="130px" class="border" (click)="onViewDoc(i)">
+                            <span class="position-absolute" style="top:-17px;right:-17px;">
+                                <button type="button" mat-icon-button
+                                    class="bg-danger bg-opacity-25 text-danger material-icons"
+                                    (click)="clearMultipleImg(i)" matTooltip="{{'Labels.delete' | translate}}"
+                                    matTooltipPosition="right" matTooltipClass="tooltip">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </span>
+                        </div>
+                    </ng-container>
                 </div>
+                <!-- Display Image -->
+            </div>
+
+            <div class="col-sm-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label> {{'Labels.remark'| translate}}</mat-label>
+                    <textarea matInput rows="3" cols="10" formControlName="remark"
+                        (keypress)="validationService.noFirstSpaceAllow($event)"></textarea>
+                </mat-form-field>
             </div>
         </mat-card-content>
         <mat-card-footer class="card-footer">

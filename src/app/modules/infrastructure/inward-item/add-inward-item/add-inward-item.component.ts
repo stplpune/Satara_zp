@@ -98,6 +98,8 @@ export class AddInwardItemComponent {
   }
 
   getSubCategoryDrop() {
+    console.log("hi.");
+    
     this.subCategoryArr = [];
     this.masterService.GetAssetSubCateByCateId(this.itemForm.value.categoryId, '').subscribe({
       next: (res: any) => {
@@ -292,12 +294,12 @@ export class AddInwardItemComponent {
         this.f['subCategoryId'].setValue('');
         this.f['itemId'].setValue('');
         this.itemArr = [];
-        this.editObj.subCategoryId = null;
-        this.editObj.itemId = null;
+        this.editObj ? this.editObj.subCategoryId = null : '';
+        this.editObj ? this.editObj.itemId = null : '';
         break;
       case 'subCategory':
         this.f['itemId'].setValue('');
-        this.editObj.itemId = null;
+        this.editObj ? this.editObj.itemId = null : '';
         break;
     }
   }

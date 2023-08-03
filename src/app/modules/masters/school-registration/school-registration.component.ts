@@ -98,7 +98,8 @@ export class SchoolRegistrationComponent implements OnInit {
       displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi
+      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+      edit: true
     };
     this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
     this.apiService.tableData.next(this.tableData);

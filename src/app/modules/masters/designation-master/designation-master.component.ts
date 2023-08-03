@@ -61,6 +61,7 @@ getTableTranslatedData(){
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheaders : this.displayedheadersMarathi,
+      edit: true
     };
     this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
   this.apiService.tableData.next(this.tableData);

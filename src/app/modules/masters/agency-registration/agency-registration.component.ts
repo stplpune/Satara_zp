@@ -67,6 +67,7 @@ export class AgencyRegistrationComponent implements OnInit {
         tableData: this.tableDataArray,
         tableSize: this.tableDatasize,
         tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+        edit: true
       };
       this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
       this.apiService.tableData.next(this.tableData);

@@ -402,7 +402,8 @@
         "CategoryName":"Category",
         "Description":"Description",
         "filterSubCategory":"Category/Sub Category",
-        "updateCategory": "Update Category"
+        "updateCategory": "Update Category",
+        "uploadPhotoBill": "Upload Photo/Bill"
 
 
     }

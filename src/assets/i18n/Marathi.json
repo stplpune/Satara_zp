@@ -396,6 +396,7 @@
         "updateCategory": "अपडेट श्रेणी",
         "SellPrice":"विक्री किंमत",
         "SellDate":"विक्रीची तारीख",
-        "Openingstock":"सुरुवातीचआ स्टॉक"
+        "Openingstock":"सुरुवातीचआ स्टॉक",
+        "uploadPhotoBill": "फोटो/बिल अपलोड करा"
     }
 }

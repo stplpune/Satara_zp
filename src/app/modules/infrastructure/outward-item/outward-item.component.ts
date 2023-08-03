@@ -11,6 +11,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { DatePipe } from '@angular/common';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
 @Component({
   selector: 'app-item-transfer',
   templateUrl: './outward-item.component.html',
@@ -220,6 +221,8 @@ export class OutwardItemComponent {
   }
 
   childCompInfo(obj: any) {
+    console.log(obj);
+    
     // let formData=this.filterForm.value
     switch (obj.label) {
       case 'Pagination':
@@ -233,7 +236,36 @@ export class OutwardItemComponent {
       case 'Delete':
         this.globalDialogOpen(obj);
         break;
+        case 'View':
+          this.getDetailsDialog();
+          break;
     }
+  }
+
+  getDetailsDialog(){
+    // var data = {
+    //   headerImage: obj.uploadImage,
+    //   header: this.webStorageS.languageFlag == 'EN' ? obj.name : obj.m_Name,
+    //   subheader: this.webStorageS.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
+    //   labelHeader: this.webStorageS.languageFlag == 'EN' ? ['Mobile No.', 'Email ID', 'Village', 'Taluka'] : ['मोबाईल क्र.', 'ई-मेल आयडी ', 'गाव', 'तालुका'],
+    //   labelKey: this.webStorageS.languageFlag == 'EN' ? ['mobileNo', 'emailId', 'village', 'taluka'] : ['mobileNo', 'emailId', 'village', 'taluka'],
+    //   Obj: obj,
+    //   chart: false,
+    //   checkbox: this.webStorageS.languageFlag == 'EN' ? 'Subject' : 'विषय',
+    //   schoolName: this.webStorageS.languageFlag == 'EN' ? 'School Name' : 'शाळेचे नाव'
+    // }
+    const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
+      width: '900px',
+      data: 'data',
+      disableClose: true,
+      autoFocus: false
+    });
+    viewDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.getTableData();
+      }
+      this.highLightFlag = false;
+    });
   }
 
   getTableData(status?: any) {

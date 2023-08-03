@@ -26,7 +26,9 @@ export class AddOutwardItemComponent {
   imageData: any;
   imgArray = new Array();
   openingStock: number = 0;
+  uploadMultipleImg: any;
   openingStockFlag: boolean = false;
+  imgValidation: boolean = false;
   get f() { return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -121,13 +123,12 @@ export class AddOutwardItemComponent {
   // }
 
   multipleImgUpload(event: any) {
-    this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png').subscribe({
+    this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.uploadImg = res.responseData;
+          this.uploadMultipleImg = res.responseData;
           this.commonMethod.showPopup(res.statusMessage, 0);
-          // multiple image 
-          let imgArr = this.uploadImg.split(',')
+          let imgArr = this.uploadMultipleImg.split(',')
           for (let i = 0; i < imgArr.length; i++) {
             let data = {
               "id": 0,
@@ -144,26 +145,33 @@ export class AddOutwardItemComponent {
         else {
           return
         }
+        this.imgArray.map((x: any) => {
+          let imgPath = x.photo;
+          let extension = imgPath.split('.');
+          if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+            x.docFlag = true;
+          }
+        });
       },
       //  error: ((err: any) => {  err.statusCode ? this.errors.handelError(err.statusCode):this.commonMethod.showPopup(err, 1) })
     });
   }
 
-  viewImg() {
-    if (this.editFlag == true) {
-      let viewImg = this.editObj.photo;
-      this.uploadImg ? window.open(this.uploadImg, 'blank') : window.open(viewImg, 'blank')
-    }
-    else {
-      window.open(this.uploadImg, 'blank');
-    }
-  }
+  // viewImg() {
+  //   if (this.editFlag == true) {
+  //     let viewImg = this.editObj.photo;
+  //     this.uploadImg ? window.open(this.uploadImg, 'blank') : window.open(viewImg, 'blank')
+  //   }
+  //   else {
+  //     window.open(this.uploadImg, 'blank');
+  //   }
+  // }
 
-  clearImg() {
-    this.uploadImg = '';
-    this.itemForm.value.photo = '';
-    this.itemForm.controls['photo'].setValue('');
-  }
+  // clearImg() {
+  //   this.uploadImg = '';
+  //   this.itemForm.value.photo = '';
+  //   this.itemForm.controls['photo'].setValue('');
+  // }
 
   getOpeningStock() {
     let formValue = this.itemForm.value;
@@ -185,7 +193,9 @@ export class AddOutwardItemComponent {
   }
 
   clearMultipleImg(index: any) {
+    this.imgValidation = false;
     this.imgArray.splice(index, 1);
+    
   }
 
   onViewDoc(index: any) {
@@ -193,7 +203,9 @@ export class AddOutwardItemComponent {
   }
 
   onSubmit() {
-    if (this.itemForm.invalid || this.openingStockFlag == true) {
+    let formData = this.itemForm.getRawValue();
+    if (this.itemForm.invalid || this.openingStockFlag == true ) {
+      this.imgValidation = true;
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }
@@ -204,7 +216,7 @@ export class AddOutwardItemComponent {
     // }
     else {
       let data = this.webStorage.createdByProps();
-      let formData = this.itemForm.value;
+     
       
       let obj = {
         "id": this.editObj ? this.editObj.id : 0,
@@ -225,7 +237,8 @@ export class AddOutwardItemComponent {
         "lan": this.webStorage.languageFlag,
         "inwardOutwardDocs": this.imgArray
       }
-
+     
+      
       let method = 'POST';
       let url = this.editFlag ? 'UpdateOutward' : 'AddOutward';
       this.apiService.setHttp(method, 'zp-satara/Outward/' + url, false, obj, false, 'baseUrl');
@@ -258,9 +271,18 @@ export class AddOutwardItemComponent {
         "createdby":0,
       }
       this.imgArray.push(imgObj);
-      console.log(this.imgArray);
     });
+
     this.defaultForm();
+    this.imgArray.map((x: any) => {
+      console.log(x);
+      
+      let imgPath = x.photo;
+      let extension = imgPath.split('.');
+      if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+        x.docFlag = true;
+      }
+    });
    
   }
 

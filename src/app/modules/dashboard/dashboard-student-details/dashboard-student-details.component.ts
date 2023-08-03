@@ -26,6 +26,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   dashboardObj: any
   talukaArr: any = []
   centerArr: any = []
+  villageArr = new Array();
   schoolArr: any = []
   standardArr: any = [];
   subjectArr: any = [];
@@ -104,6 +105,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
       acYearId:[],
       talukaId: [0],
       centerId: [0],
+      villageId: [0],
       schoolId: [0],
       groupByClass: [0],
       // standardId: [0],
@@ -379,6 +381,17 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
           }
         },
         error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+  getVillage() {
+    this.villageArr = [];
+    if(this.filterForm.controls['centerId'].value > 0){
+      this.masterService.getAllVillage('', (this.filterForm.controls['centerId'].value | 0)).subscribe((res : any)=>{
+        this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+        this.filterForm.controls['villageId'].patchValue(0);
+        this.getAllSchoolsByCenterId();
       });
     }
   }

@@ -40,8 +40,8 @@ export class OutwardItemComponent {
   loginData = this.webStorage.getLoggedInLocalstorageData();
   langTypeName : any;
   get f(){return this.filterForm.controls}
-  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark', 'Photo', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट', 'विक्री दिनांक', 'असाइन करा', 'शेरा', 'फोटो', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट', 'विक्री दिनांक','विक्री किंमत', 'असाइन करा', 'शेरा',  'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
@@ -223,7 +223,6 @@ export class OutwardItemComponent {
   }
 
   childCompInfo(obj: any) {
-    // let formData=this.filterForm.value
     switch (obj.label) {
       case 'Pagination':
         // this.filterFlag ? '' : (formData.textSearch.setValue(''), this.filterFlag = false);
@@ -281,8 +280,8 @@ export class OutwardItemComponent {
     //   "ItemsId": formData.ItemsId || 0,      
     //   "textSearch": formData.textSearch || '',
     // }
-    
-    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=${ this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
+    // SchoolId=0&CategoryId=0&SubCategoryId=0&ItemId=0&DistrictId=0&CenterId=0&TalukaId=0&VillageId=0&pageno=1&pagesize=10&TextSearch=0&lan=0
+    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${ this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
     // let str = 'SchoolId='+formData?.schoolId || 0 +'&CategoryId=' + formData?.CategoryId || 0 + '&SubCategoryId=' + formData?.SubCategoryId || 0 + '&ItemId=' + formData?.ItemsId || 0+ '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + formData?.textSearch || '' + '&lan=' + this.webStorage.languageFlag
     let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=1&pagesize=${this.totalItem *10}&TextSearch=${formData?.textSearch || '' }&lan=${this.webStorage.languageFlag}`
 
@@ -310,7 +309,7 @@ export class OutwardItemComponent {
   }
 
   setTableData() {
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'item' : 'm_Item', 'quantity', 'purchase_Sales_Date', 'outwardTo', 'remark', 'photo', 'action'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_Item', 'quantity', 'purchase_Sales_Date','price', 'outwardTo', 'remark',  'action'];
     this.tableData  = {
       pageNumber: this.pageNumber,
       img: 'photo',

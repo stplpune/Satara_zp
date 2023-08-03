@@ -110,7 +110,8 @@ export class StudentReportComponent {
       displayedColumns: this.languageFlag == 'English' ? this.displayedColumnsEng : this.displayedColumnMarathi,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: this.languageFlag == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi
+      tableHeaders: this.languageFlag == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+      edit: true
     };
     // this.apiService.tableData.next(this.tableData);
   }

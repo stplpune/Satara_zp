@@ -88,7 +88,7 @@ export class AddInwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.categoryArr = res.responseData;
-          this.editFlag ? (this.f['categoryId'].setValue(this.editObj.categoryId), this.getSubCategoryDrop()) : '';
+          this.editFlag && this.editObj ? (this.f['categoryId'].setValue(this.editObj.categoryId), this.getSubCategoryDrop()) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
@@ -103,7 +103,7 @@ export class AddInwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subCategoryArr = res.responseData;
-          this.editFlag ? (this.f['subCategoryId'].setValue(this.editObj.subCategoryId), this.getItemDrop()) : '';
+          this.editFlag && this.editObj ? (this.f['subCategoryId'].setValue(this.editObj.subCategoryId), this.getItemDrop()) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.subCategoryArr = [];
@@ -118,7 +118,7 @@ export class AddInwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.itemArr = res.responseData;
-          this.editFlag ? (this.f['itemId'].setValue(this.editObj.itemId)) : '';
+          this.editFlag && this.editObj ? (this.f['itemId'].setValue(this.editObj.itemId), this.getOpeningStock()) : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.itemArr = [];
@@ -208,6 +208,8 @@ export class AddInwardItemComponent {
 
   getOpeningStock() {
     let formValue = this.itemForm.value;
+    console.log("formValue : ", formValue);
+    
     this.masterService.GetAllOpeningQty((formValue.schoolId || 0), (formValue.categoryId || 0), (formValue.subCategoryId || 0), (formValue.itemId || 0), this.webStorageS.getLangauge()).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.openingStock = res?.responseData?.quantity : 0;
@@ -261,6 +263,8 @@ export class AddInwardItemComponent {
   onEdit() {
     this.editFlag = true;
     this.editObj = this.data;
+    console.log("onEdit : ", this.editObj);
+    
     this.formFeild();
     // this.uploadImg = this.editObj.photo;
 
@@ -284,7 +288,6 @@ export class AddInwardItemComponent {
         x.docFlag = true;
       }
     });
-    
   }
 
   onChangeDropD(label: string) {
@@ -292,9 +295,11 @@ export class AddInwardItemComponent {
       case 'category':
         this.f['subCategoryId'].setValue(0);
         this.itemArr = [];
+        this.editObj.subCategoryId = 0;
         break;
       case 'subCategory':
         this.f['itemId'].setValue(0);
+        this.editObj = null;
         break;
     }
   }

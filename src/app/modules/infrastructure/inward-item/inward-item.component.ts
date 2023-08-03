@@ -109,7 +109,7 @@ export class InwardItemComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', 'item', 'quantity', 'purchase_Sales_Date', 'price', 'remark', 'photo', 'action'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'remark', 'photo', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'photo', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",

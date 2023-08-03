@@ -203,7 +203,7 @@ export class AddInwardItemComponent {
 
   clearMultipleImg(index: any) {
     this.imgArray.splice(index, 1);
-    this.imgValidation = false;
+    !this.imgArray.length ? this.imgValidation = false : '';
   }
 
   getOpeningStock() {
@@ -232,8 +232,8 @@ export class AddInwardItemComponent {
     // formValue.photo ? formValue.photo = this.uploadImg : this.imgValidation = false;
     // formValue.photo = this.itemForm.value.photo;
 
-    this.uploadImg ? formValue.inwardOutwardDocs = this.imgArray : this.imgValidation = false;
-    // formValue.inwardOutwardDocs = this.imgArray;
+    !this.imgArray.length ? this.imgValidation = false : '';
+    formValue.inwardOutwardDocs = this.imgArray;
 
     let url = this.editObj ? 'UpdateInward' : 'AddInward'
     if (!this.itemForm.valid || this.openingStockFlag == true || this.imgValidation == false) {

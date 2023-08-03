@@ -119,7 +119,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6" *ngIf="data?.pdf == true">
+            <div class="col-sm-6" *ngIf="data?.pdf == true && pdfArr.length > 0">
                 <mat-label>Outword Documents : </mat-label>
                 <div class="row gy-2 gx-2">
                     <div class=" col-sm-4" *ngFor="let pdf of pdfArr; index as i">
@@ -136,22 +136,7 @@
         </div>
 
 
-        <!-- <div class="row gy-2 gx-2">
-            <div class="col-sm-4" *ngFor="let item of items; index as i">
-                <img [lightbox]="i" [src]="item.data.src" class="gallery-img img-fluid">
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <mat-label>Outword Documents : </mat-label>
-        <div class="row gy-2 gx-2">
-            <div class=" col-sm-4" *ngFor="let pdf of pdfArr; index as i">
-                <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" class="img-fluid border" (click)="onViewDoc(i)">                    
-            </div>
-        </div>
-        
-    </div>
-</div> -->
+      
 
 
     </mat-card-content>

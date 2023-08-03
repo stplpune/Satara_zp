@@ -46,7 +46,7 @@
     </mat-card-header>
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <div class="row gx-2 w-100">
-            <div class="col-sm-3">
+            <div class="col-sm-auto">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                     <mat-select [formControl]="talukaId" (selectionChange)="onChangeFilter('taluka'); getCluster();">
@@ -79,14 +79,14 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-sm-3">
+            <div class="col-sm-auto">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.searchbyNameContactEmailTeacher'| translate}}</mat-label>
                     <input matInput [formControl]="searchContent" (keypress)="validation.noFirstSpaceAllow($event)"
                         (keyup.enter)="getTableData()">
                 </mat-form-field>
             </div>
-  
+
             <div class="col-sm-auto mb-lg-0 mb-2">
                 <button mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter'|
                     translate}}</button>
@@ -139,7 +139,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-sm  form-label">
-                                    {{'Labels.mobileNo'| translate}} : 
+                                    {{'Labels.mobileNo'| translate}} :
                                 </div>
                                 <div class="col-6 col-sm  form-deta">
                                     {{webStorageS.getLangauge() == 'EN' ?
@@ -148,7 +148,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-sm form-label">
-                                    {{'Labels.emailID'| translate}} : 
+                                    {{'Labels.emailID'| translate}} :
                                 </div>
                                 <div class="col-6 col-sm form-deta">
                                     {{data.emailId}}
@@ -156,7 +156,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-sm form-label">
-                                    {{'Labels.gender'| translate}} : 
+                                    {{'Labels.gender'| translate}} :
                                 </div>
                                 <div class="col-6 col-sm form-deta">
                                     {{webStorageS.getLangauge() == 'EN' ?

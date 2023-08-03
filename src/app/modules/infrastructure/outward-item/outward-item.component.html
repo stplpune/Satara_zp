@@ -32,8 +32,8 @@
     </mat-card-header>
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
         <form [formGroup]="filterForm" class="w-100 gx-2">
-            <div class="row">
-                <div class="col-sm">
+            <div class="row gx-2">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
@@ -45,7 +45,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage()">
@@ -55,7 +55,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId" (selectionChange)="onChangeDropD('village'); getAllSchools();">
@@ -66,7 +66,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
@@ -76,7 +76,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
                         <mat-select formControlName="CategoryId"
@@ -89,7 +89,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId"
@@ -101,7 +101,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.items'| translate}}</mat-label>
                         <mat-select formControlName="ItemsId">
@@ -112,20 +112,23 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
-                        <input matInput formControlName="textSearch" maxlength="30"
-                        (keypress)="Validation.noFirstSpaceAllow($event)" (keyup.enter)="getTableData()">
-                    </mat-form-field>
+                <div class="col-sm-3">
+                    <div class="d-flex gap-2">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
+                            <input matInput formControlName="textSearch" maxlength="30"
+                            (keypress)="Validation.noFirstSpaceAllow($event)" (keyup.enter)="getTableData()">
+                        </mat-form-field>
+                        <div class="d-flex gap-1">
+                            <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+                              translate}}</button>
+                            <button mat-flat-button type="button" class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear'|
+                              translate}}</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-sm-auto">
-                    <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
-                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
-                          translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear'|
-                          translate}}</button>
-                    </div>
+                  
                 </div>
             </div>
         </form>

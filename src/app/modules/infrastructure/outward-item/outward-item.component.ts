@@ -67,14 +67,10 @@ export class OutwardItemComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      // talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
-      // centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
-      // villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
-      // schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],   
-      talukaId :[''],
-      centerId:[''],
-      villageId:[''],
-      schoolId:[''],  
+      talukaId :[this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
+      centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
+      villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
+      schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],       
       CategoryId: [''],
       SubCategoryId: [''],
       ItemsId: [''],

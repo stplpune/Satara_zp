@@ -19,7 +19,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.CategoryName'| translate}}</mat-label>
                         <mat-select formControlName="categoryId"
-                            (selectionChange)="getSubCategory(itemForm.controls['categoryId'].value)">
+                            (selectionChange)="onChangeDropD('category');getSubCategory(itemForm.controls['categoryId'].value)">
                             <mat-option *ngFor="let data of categoryresp" [value]="data.id">
                                 {{webStorage.getLangauge() == 'EN' ?
                                 data.category : data.m_Category}}
@@ -31,7 +31,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.subcategoryname'| translate}}</mat-label>
                         <mat-select formControlName="subcategoryId"
-                            (selectionChange)="getItem(itemForm.controls['subcategoryId'].value)">
+                            (selectionChange)="onChangeDropD('subcategory');getItem(itemForm.controls['subcategoryId'].value)">
                             <mat-option *ngFor="let data of subcategoryresp" [value]="data.id">
                                 {{webStorage.getLangauge() == 'EN' ?
                                 data.subCategory : data.m_SubCategory}}
@@ -62,14 +62,15 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.SellPrice'| translate}}</mat-label>
-                        <input matInput formControlName="sellprice" (keypress)="Validation.noFirstSpaceAllow($event)">
+                        <input matInput formControlName="sellprice" (keypress)="Validation.noFirstSpaceAllow($event);Validation.onlyDigits($event)"
+                        maxlength="20">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.SellDate'| translate}}</mat-label>
                         <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly
-                            formControlName="date">
+                            formControlName="date" [max]="currentDate">
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -110,7 +111,7 @@
 
 
                         </div>
-                        <mat-error *ngIf="imgValidation">
+                        <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
                             Photo Is Required
                         </mat-error>
                         <!-- <div class="action-btn" *ngIf="uploadImg">

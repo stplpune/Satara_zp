@@ -27,8 +27,9 @@ export class AddOutwardItemComponent {
   imgArray = new Array();
   openingStock: number = 0;
   uploadMultipleImg: any;
+  currentDate = new Date();
   openingStockFlag: boolean = false;
-  imgValidation: boolean = false;
+  imgValidation: boolean = true;
   get f() { return this.itemForm.controls };
 
   constructor(private masterService: MasterService,
@@ -82,7 +83,7 @@ export class AddOutwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.subcategoryresp = res.responseData;
-          this.editFlag ? (this.f['subcategoryId'].setValue(this.editObj.subCategoryId), this.getItem(categoryId)) : '';
+          this.editFlag ? (this.f['subcategoryId'].setValue(this.editObj.subCategoryId), this.getItem(this.editObj.subCategoryId)) : '';
         } else {
           this.subcategoryresp = [];
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
@@ -97,7 +98,7 @@ export class AddOutwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.itemresp = res.responseData;
-          this.editFlag ? (this.f['itemId'].setValue(this.editObj.itemId)) : '';
+          this.editFlag ? (this.f['itemId'].setValue(this.editObj.itemId), this.getOpeningStock()) : '';
         } else {
           this.itemresp = [];
         }
@@ -127,6 +128,7 @@ export class AddOutwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.uploadMultipleImg = res.responseData;
+          this.imgValidation = true;
           this.commonMethod.showPopup(res.statusMessage, 0);
           let imgArr = this.uploadMultipleImg.split(',')
           for (let i = 0; i < imgArr.length; i++) {
@@ -193,9 +195,9 @@ export class AddOutwardItemComponent {
   }
 
   clearMultipleImg(index: any) {
-    this.imgValidation = false;
     this.imgArray.splice(index, 1);
-    
+    !this.imgArray.length ? this.imgValidation = false : '';
+
   }
 
   onViewDoc(index: any) {
@@ -204,8 +206,8 @@ export class AddOutwardItemComponent {
 
   onSubmit() {
     let formData = this.itemForm.getRawValue();
-    if (this.itemForm.invalid || this.openingStockFlag == true ) {
-      this.imgValidation = true;
+    !this.imgArray.length ? this.imgValidation = false : '';
+    if (this.itemForm.invalid || this.openingStockFlag == true || this.imgValidation == false || formData.subcategoryId == 0 || formData.itemId == 0) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }
@@ -216,8 +218,8 @@ export class AddOutwardItemComponent {
     // }
     else {
       let data = this.webStorage.createdByProps();
-     
-      
+
+
       let obj = {
         "id": this.editObj ? this.editObj.id : 0,
         "schoolId": this.editObj ? this.editObj.schoolId : 2104,
@@ -237,8 +239,8 @@ export class AddOutwardItemComponent {
         "lan": this.webStorage.languageFlag,
         "inwardOutwardDocs": this.imgArray
       }
-     
-      
+
+
       let method = 'POST';
       let url = this.editFlag ? 'UpdateOutward' : 'AddOutward';
       this.apiService.setHttp(method, 'zp-satara/Outward/' + url, false, obj, false, 'baseUrl');
@@ -260,30 +262,38 @@ export class AddOutwardItemComponent {
     this.editFlag = true;
     this.imgArray = [];
     this.editObj = this.data;
+    this.defaultForm();
     this.editObj?.inwardOutwardDocs.map((res: any) => {
       let imgObj = {
-        "id":res.id,
+        "id": res.id,
         "schoolId": res.schoolId,
-        "inwardOutwardId":res.inwardOutwardId,
+        "inwardOutwardId": res.inwardOutwardId,
         "type": res.type,
         "documentId": res.documentId,
         "photo": res.photo,
-        "createdby":0,
+        "createdby": 0,
       }
       this.imgArray.push(imgObj);
     });
 
-    this.defaultForm();
+
     this.imgArray.map((x: any) => {
-      console.log(x);
-      
       let imgPath = x.photo;
       let extension = imgPath.split('.');
       if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
         x.docFlag = true;
       }
     });
-   
+
+  }
+
+  onChangeDropD(label: any) {
+    if (label == 'category') {
+      this.itemForm.controls['subcategoryId']?.setValue(0);
+      this.itemForm.controls['itemId']?.setValue(0);
+    } else if (label == 'subcategory') {
+      this.itemForm.controls['itemId']?.setValue(0);
+    }
   }
 
 }

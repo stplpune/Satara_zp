@@ -12,6 +12,7 @@ import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { DatePipe } from '@angular/common';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
+import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
 
 @Component({
   selector: 'app-parameter',
@@ -135,7 +136,40 @@ export class InwardItemComponent {
       case 'Delete':
         this.globalDialogOpen(obj);
         break;
+        case 'View':
+          this.openDetailsDialog(obj);
+          break;
     }
+  }
+
+  openDetailsDialog(obj: any) {
+
+    console.log(obj);
+    // return;
+    var data = {     
+      headerImage: '',
+      // header: '',
+      // subheader: '',
+      labelHeader: '',
+      labelKey: '',
+      Obj: obj,
+      chart: false,
+      multipleImage: true,
+      pdf:true
+    }
+    const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
+      width: '900px',
+      data: data,
+      disableClose: true,
+      autoFocus: false
+    });
+    viewDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        // this.getTableData();
+      }
+      this.highLightFlag=false;
+      // this.languageChange();
+    });
   }
 
   openDialog(obj?: any) {

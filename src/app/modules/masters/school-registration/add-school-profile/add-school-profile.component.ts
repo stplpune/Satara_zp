@@ -66,15 +66,13 @@ export class AddSchoolProfileComponent {
       this.langTypeName = lang;
       this.setTableData();
     });
-
     this.getRouteParam();
-    this.lightBox();
   }
 
   lightBox() {
     this.items = this.schoolevetArr?.map((item: any) => {
       return new ImageItem({ src: item.docPath, thumb: item.docPath })
-    });
+    });    
     this.basicLightboxExample();
   }
 

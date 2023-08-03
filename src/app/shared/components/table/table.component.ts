@@ -12,7 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DashPipe } from 'src/app/core/pipes/dash.pipe';
 import { NumberTransformPipe } from 'src/app/core/pipes/number-tranform.pipe';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule} from '@angular/material/tooltip';
 import { TranslateModule } from '@ngx-translate/core';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { Subscription } from 'rxjs';

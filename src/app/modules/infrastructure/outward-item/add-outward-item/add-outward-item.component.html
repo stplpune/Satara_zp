@@ -105,11 +105,14 @@
                             <!-- <input type="file" name="myfile"  [disabled]="uploadImg" multiple accept=".png, .jpg, .jpeg"
                                  #uploadImage (change)="multipleImgUpload($event)"/> -->
 
-                            <input type="file" name="myfile" formControlName="photo" multiple accept=".png, .jpg, .jpeg"
+                            <input type="file" name="myfile" formControlName="photo" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
                                 #uploadImage (change)="multipleImgUpload($event)" />
 
 
                         </div>
+                        <mat-error *ngIf="imgValidation == false">
+                            Photo Is Required
+                        </mat-error>
                         <!-- <div class="action-btn" *ngIf="uploadImg">
                             <button mat-icon-button class="btn-icon text-primary" type="button"
                                  matTooltip="{{'Labels.View' | translate}}"
@@ -125,12 +128,14 @@
                     </div>
                 </div>
 
+              
+
 
                 <div class="col-sm-12 mt-3">
                     <div class="d-flex flex-wrap gap-4">
-                        <ng-container *ngFor="let item of imgArray; let i = index">
+                        <ng-container *ngFor="let data of imgArray; let i = index">
                             <div class="gallery position-relative">
-                                <img [src]="item.photo" height="110px" width="110px" class="border"
+                                <img [src]="data.docFlag?'assets/images/pdf-image.png':data.photo" height="110px" width="110px" class="border"
                                 (click)="onViewDoc(i)">
                                 <span class="position-absolute" style="top:-17px;right:-17px;">
                                     <button type="button" mat-icon-button

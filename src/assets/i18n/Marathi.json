@@ -32,6 +32,7 @@
         "searchItems":"शोधा",
         "EventNamemarathi":"कार्यक्रमाचे नाव मराठी",
         "addItems":"वस्तू जोडा",
+        "items":"आयटम",
         "UpdatedAdditems":"अद्यतनित आयटम जोडा",
         "subcategoryname":"उपश्रेणी",
         "itemName":"वस्तूचे नाव",
@@ -96,6 +97,7 @@
         "pleaseSelectTaluka" : "कृपया तालुका निवडा",
         "pleaseSelectCenter" : "कृपया केंद्र निवडा",
         "pleaseSelectSchool" : "कृपया शाळा निवडा",
+        "selectVillage": "गाव निवडा",
         "pleaseSelectStandard" : "कृपया इयत्ता निवडा",
         "pleaseSelectBirthDate" : "कृपया जन्मदिनांक निवडा",
         "pleaseSelectGender" : "कृपया लिंग निवडा",
@@ -388,6 +390,12 @@
         "Description":"वर्णन",
         "filterSubCategory":"श्रेणी/उप श्रेणी",
         "Assignto":"असाइन करा",
-        "updateCategory": "अपडेट श्रेणी"
+        "OutwardItmes":"बाह्य  वस्तू",
+        "OutwardItmesList":"आयटम बाह्य सूची",
+        "addoutwardItems":"बाह्य वस्तू जोडा",
+        "updateCategory": "अपडेट श्रेणी",
+        "SellPrice":"विक्री किंमत",
+        "SellDate":"विक्रीची तारीख",
+        "Openingstock":"सुरुवातीचआ स्टॉक"
     }
 }

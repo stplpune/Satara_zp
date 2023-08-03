@@ -18,7 +18,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="mb-1 fw-bold text-break">{{ data?.header }}</h5>
-                            <p class="text-muted mb-0" style="height:32px;">({{ data?.subheader || data?.Obj.village }})
+                            <p *ngIf="data?.subheader || data?.Obj.village" class="text-muted mb-0" style="height:32px;">({{ data?.subheader || data?.Obj.village }})
                             </p>
 
                             <div class="data-container">
@@ -110,14 +110,49 @@
                 </div>
             </div>
         </div>
-        <div class="row g-3" *ngIf="data?.multipleImage == true && items.length > 0">
-            <mat-label>{{'Labels.SchoolPhotos'| translate}} : </mat-label>
-            <div class="col-3 col-sm-3" *ngFor="let item of items; index as i">
-                <img [lightbox]="i" [src]="item.data.src" class="gallery-img">
+        <div class="row g-3">
+            <div class="col-sm-6" *ngIf="data?.multipleImage == true && items.length > 0">
+                <mat-label>Outword Photos : </mat-label>
+                <div class="row gy-2 gx-2" >
+                    <div class="col-sm-4" *ngFor="let item of items; index as i">
+                        <img [lightbox]="i" [src]="item.data.src" class="gallery-img img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" *ngIf="data?.pdf == true">
+                <mat-label>Outword Documents : </mat-label>
+                <div class="row gy-2 gx-2">
+                    <div class=" col-sm-4" *ngFor="let pdf of pdfArr; index as i">
+                        <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" class="img-fluid border"
+                            (click)="onViewDoc(i)">
+                    </div>
+                </div>
+                <!-- (click)="onViewDoc(i)" -->
             </div>
         </div>
+
         <div *ngIf="data?.chart && data.Obj.isAssessment">
             <progressChartLine></progressChartLine>
         </div>
+
+
+        <!-- <div class="row gy-2 gx-2">
+            <div class="col-sm-4" *ngFor="let item of items; index as i">
+                <img [lightbox]="i" [src]="item.data.src" class="gallery-img img-fluid">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <mat-label>Outword Documents : </mat-label>
+        <div class="row gy-2 gx-2">
+            <div class=" col-sm-4" *ngFor="let pdf of pdfArr; index as i">
+                <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" class="img-fluid border" (click)="onViewDoc(i)">                    
+            </div>
+        </div>
+        
+    </div>
+</div> -->
+
+
     </mat-card-content>
 </mat-card>

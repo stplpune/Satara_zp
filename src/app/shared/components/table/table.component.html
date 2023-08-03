@@ -10,13 +10,15 @@
                     <div (click)="action(element, 'View', i)">
                         <ng-container *ngIf="'srNo' == columns">{{((pageNumber + 1) * 10 + i + 1)-20 |
                             numberTranformPipe}}</ng-container>
-                        <ng-container 
-                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns">{{ element[columns] | dash }}
+                        <ng-container
+                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns">{{
+                            element[columns] | dash }}
                         </ng-container>
                         <ng-container *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]"
                                 src="{{element[columns] ? element[columns] : defaultImage}}"></ng-container>
                         <!-- <ng-container  *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]" src="{{element[columns]}}"></ng-container> -->
-                        <ng-container *ngIf="tableInfo?.blink == columns"><span> </span> {{element[columns] }}</ng-container>
+                        <ng-container *ngIf="tableInfo?.blink == columns"><span> </span> {{element[columns]
+                            }}</ng-container>
 
                         <!-- <ng-container *ngIf="tableInfo?.desig == columns">{{(element?.designationLevelId == 7?'Other':element[columns])}}</ng-container> -->
 
@@ -45,7 +47,8 @@
                     <ng-container *ngIf="tableInfo?.email == columns">
                         <span [ngClass]="{'text-primary':element[columns]}">{{element[columns] | dash}}</span>
                     </ng-container>
-                    <ng-container *ngIf="tableInfo?.date == columns">{{(element[columns] | date:'dd-MM-yyyy')}}</ng-container>
+                    <ng-container *ngIf="tableInfo?.date == columns">{{(element[columns] |
+                        date:'dd-MM-yyyy')}}</ng-container>
                 </td>
             </ng-container>
             <ng-container *ngIf="columns =='action'">
@@ -53,18 +56,18 @@
                     {{tableHeaders[j] | titlecase}}
                 </th>
                 <td mat-cell *matCellDef="let element let i=index">
-                    <button [disabled]="tableInfo.tableData[i]?.isBlock == true" mat-icon-button id="tooltip"
+                    <button *ngIf="tableInfo?.edit"  [disabled]="tableInfo.tableData[i]?.isBlock == true" mat-icon-button id="tooltip"
                         matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right" matTooltipClass="tooltip"
                         (click)="action(element, 'Edit', i)">
                         <mat-icon class="text-main">edit</mat-icon>
                     </button>
-                    <button mat-icon-button (click)="action(element, 'Delete')">
-                                <mat-icon class="text-danger">
-                                    delete
-                                </mat-icon>
-                            </button>
+                    <button *ngIf="tableInfo?.delete" mat-icon-button (click)="action(element, 'Delete')">
+                        <mat-icon class="text-danger">
+                            delete
+                        </mat-icon>
+                    </button>
 
-                            <!-- <button mat-icon-button (click)="action(element, 'View')">
+                    <!-- <button mat-icon-button (click)="action(element, 'View')">
                                 <mat-icon class="text-danger">
                                     visibility
                                 </mat-icon>

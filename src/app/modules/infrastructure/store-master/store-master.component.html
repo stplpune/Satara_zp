@@ -89,9 +89,9 @@
                 </div>
                 <div class="col-sm-2">
                     <div class="mb-0 d-flex justify-content-lg-end justify-content-start gap-2">
-                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
+                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
                             translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second">{{'Labels.clear'|
+                        <button mat-flat-button type="button" class="btn-second" (click)="filterForm.reset();getTableData()" >{{'Labels.clear'|
                             translate}}</button>
                         <button mat-flat-button class="bg-danger btn-icon text-white"
                             matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"

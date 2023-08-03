@@ -15,25 +15,29 @@
       <div class="col-sm-3">
         <div class="d-flex gap-2">
           <div class="form-label">School</div>
-          <div class="form-label">: -</div>
+          <div class="form-label">: - {{languageFlag == 'English' ?
+            cardHeaderData[0]?.schoolName:cardHeaderData[0]?.m_SchoolName}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex gap-2">
           <div class="form-label">Category</div>
-          <div class="form-label">: -</div>
+          <div class="form-label">: - {{languageFlag == 'English' ?
+            cardHeaderData[0]?.category:cardHeaderData[0]?.m_Category}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex gap-2">
           <div class="form-label">SubCategory</div>
-          <div class="form-label">: -</div>
+          <div class="form-label">: - {{languageFlag == 'English' ?
+            cardHeaderData[0]?.subCategory:cardHeaderData[0]?.m_SubCategory}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex gap-2">
           <div class="form-label">Item</div>
-          <div class="form-label">: -</div>
+          <div class="form-label">: - {{languageFlag == 'English' ?
+            cardHeaderData[0]?.itemName:cardHeaderData[0]?.m_ItemName}}</div>
         </div>
       </div>
     </div>
@@ -41,46 +45,48 @@
   <mat-card-content class="card-body">
     <div class="row">
       <div class="col-sm-6">
-        <div class="card">
-          <div class="card-header border-0 bg-transparent">
-            <h6 class="text-main fw-bold mb-2 mb-lg-0">Inward</h6>
-          </div>
+        <div class="card-header border-0 bg-transparent">
+          <h6 class="text-main fw-bold mb-2 mb-lg-0">Inward</h6>
+        </div>
+        <div class="card"  *ngFor="let cardInward of cardInwardData">      
           <div class="card-body">
             <div class="row">
               <div class="col-sm-8">
                 <div class="d-flex">
                   <div class="form-label">Username</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardInward.intwardUserName}}</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="d-flex">
                   <div class="form-label">Date</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardInward.inwardDate}}</div>
                 </div>
               </div>
               <div class="col-sm-8">
                 <div class="d-flex">
                   <div class="form-label">Unit</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardInward.inwardQuantity}}</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="d-flex">
                   <div class="form-label">Price</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardInward.inwardPrice}}</div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="d-flex ">
                   <div class="form-label">Remark</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardInward.inwardRemark}}</div>
                 </div>
               </div>
-              <div class="col-sm-12">
+              <div class="col-sm-12" >
                 <div class="d-flex align-items-center gap-3">
                   <div class="form-label">Photo :</div>
-                  <img src="../../../../../assets/images/home-page/rahul-gupta.png" alt="" height="60px" width="60px">
+                  <div *ngFor="let cardDoc of cardInward.inwardOutwardDoc1">
+                    <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px">
+                  </div>
                 </div>
               </div>
               <div class="col-sm-12">
@@ -91,46 +97,49 @@
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="card">
-          <div class="card-header border-0 bg-transparent">
-            <h6 class="text-main fw-bold mb-2 mb-lg-0">Outward</h6>
-          </div>
-          <div class="card-body">
+        <div class="card-header border-0 bg-transparent">
+          <h6 class="text-main fw-bold mb-2 mb-lg-0">Outward</h6>
+        </div>
+        <div class="card" *ngFor=" let cardOutWard of cardOutwardData">         
+          <div class="card-body" >
             <div class="row">
               <div class="col-sm-8">
                 <div class="d-flex">
                   <div class="form-label">Username</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardOutWard.outwardUserName}}</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="d-flex">
                   <div class="form-label">Date</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardOutWard.outwardDate}}</div>
                 </div>
               </div>
               <div class="col-sm-8">
                 <div class="d-flex">
                   <div class="form-label">Unit</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardOutWard.outwardQuantity}}</div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="d-flex">
                   <div class="form-label">Price</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardOutWard.outwardPrice}}</div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="d-flex ">
                   <div class="form-label">Remark</div>
-                  <div class="form-data">:-</div>
+                  <div class="form-data">:- {{cardOutWard.outwardRemark}}</div>
                 </div>
               </div>
-              <div class="col-sm-12">
+              <div class="col-sm-12" >
                 <div class="d-flex align-items-center gap-3">
                   <div class="form-label">Photo :</div>
-                  <img src="../../../../../assets/images/home-page/rahul-gupta.png" alt="" height="60px" width="60px">
+                  <div *ngFor="let cardOutWardDoc of cardOutWard.inwardOutwardDoc2">
+                    <img src="{{cardOutWardDoc.photo}}" alt="" height="60px" width="60px">
+                  </div>
+                 
                 </div>
               </div>
               <div class="col-sm-12">

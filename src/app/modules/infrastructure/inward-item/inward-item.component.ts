@@ -41,8 +41,8 @@ export class InwardItemComponent {
   resultDownloadArr = new Array();
   loginData = this.webStorageS.getLoggedInLocalstorageData();
   get f() { return this.filterForm.controls };
-  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Photo', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'शेरा', 'फोटो', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'शेरा', 'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,
@@ -84,13 +84,16 @@ export class InwardItemComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm.value;
-    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=1&pagesize=10&TextSearch=${(formValue?.textSearch || '')}&lan=${this.webStorageS.languageFlag}`;
-    this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + str, false, false, false, 'baseUrl');
+    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=${this.pageNumber}&pagesize=${this.totalCount * 10}&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
+
+    this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + (flag == 'excel' ? reportStr : str ), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          this.tableDataArray = res.responseData.responseData1;
+          flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          // this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
@@ -110,10 +113,10 @@ export class InwardItemComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'remark', 'photo', 'action'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'remark', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
-      img: 'photo', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
+      img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
       date: 'purchase_Sales_Date',
       displayedColumns: this.displayedColumns,
       tableData: this.tableDataArray,
@@ -143,9 +146,6 @@ export class InwardItemComponent {
   }
 
   openDetailsDialog(obj: any) {
-
-    console.log(obj);
-    // return;
     var data = {     
       headerImage: '',
       // header: '',
@@ -205,6 +205,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          this.f['talukaId'].setValue(0);
           this.filterForm?.value.talukaId ? this.getAllCenter() : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
@@ -274,6 +275,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.categoryArr.push({ "id": 0, "category": "All", "m_Category": "सर्व" }, ...res.responseData);
+          this.f['categoryId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
@@ -359,11 +361,11 @@ export class InwardItemComponent {
     this.getTableData();
     this.centerArr = [];
     this.villageArr = [];
-    this.categoryArr = [];
     this.subCategoryArr = [];
     this.schoolArr = [];
     this.itemArr = [];
-    this.f['centerId'].setValue(0);
+    this.f['talukaId'].setValue(0);
+    this.f['categoryId'].setValue(0);
   }
 
   onChangeDropD(label: string) {
@@ -371,40 +373,15 @@ export class InwardItemComponent {
       case 'taluka':
         this.f['centerId'].setValue(0);
         this.f['villageId'].setValue(0);
-        this.f['categoryId'].setValue(0);
-        this.f['subCategoryId'].setValue(0);
-        this.f['itemsId'].setValue(0);
         this.villageArr = [];
-        this.categoryArr = [];
-        this.subCategoryArr = [];
-        this.itemArr = [];
         this.schoolArr = [];
         break;
       case 'center':
         this.f['villageId'].setValue(0);
-        this.f['categoryId'].setValue(0);
-        this.f['subCategoryId'].setValue(0);
-        this.f['itemsId'].setValue(0);
-        this.categoryArr = [];
-        this.subCategoryArr = [];
-        this.itemArr = [];
         this.schoolArr = [];
         break;
       case 'village':
-        this.f['categoryId'].setValue(0);
-        this.f['subCategoryId'].setValue(0);
-        this.f['itemsId'].setValue(0);
         this.f['schoolId'].setValue(0);
-        this.categoryArr = [];
-        this.subCategoryArr = [];
-        this.itemArr = [];
-        break;
-      case 'school':
-        this.f['categoryId'].setValue(0);
-        this.f['subCategoryId'].setValue(0);
-        this.f['itemsId'].setValue(0);
-        this.subCategoryArr = [];
-        this.itemArr = [];
         break;
       case 'category':
         this.itemArr = [];
@@ -424,7 +401,7 @@ export class InwardItemComponent {
         "Sr.No": i + 1,
         "Category Name": ele.category,
         "Sub Category": ele.subCategory,
-        "Item": ele.item,
+        "Item": ele.itemName,
         "Units": ele.quantity,
         "Purchase Date": ele.purchase_Sales_Date,
         "Price": ele.price,

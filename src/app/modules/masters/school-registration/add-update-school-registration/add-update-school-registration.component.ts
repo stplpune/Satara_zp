@@ -59,7 +59,7 @@ export class AddUpdateSchoolRegistrationComponent {
     public webStorageS: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
     private dialog: MatDialog,
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.formFeild();
@@ -155,71 +155,64 @@ export class AddUpdateSchoolRegistrationComponent {
   getDistrict() {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? (this.districtArr = res.responseData, this.schoolRegForm.controls['districtId'].setValue(1)) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
+        res.statusCode == "200" ? (this.districtArr = res.responseData, this.schoolRegForm.controls['districtId'].setValue(1)) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
         this.editFlag ? (this.f['districtId'].setValue(this.data.districtId), this.getTaluka()) : this.getTaluka();
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
   getTaluka() {
     this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
-        this.editFlag ? (this.f['talukaId'].setValue(this.data.talukaId), this.getBitOrCenter(), this.getVillage()) : '';
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+        res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
+        this.editFlag ? (this.f['talukaId'].setValue(this.data.talukaId), this.getBitOrCenter()) : '';
+      }
     });
   }
 
   getCenter() {
     this.masterService.getAllCenter(this.webStorageS.languageFlag, this.schoolRegForm.value.talukaId).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? this.centerArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.centerArr = []);
-        this.editFlag ? (this.f['centerId'].setValue(this.data.centerId)) : '';
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+        res.statusCode == "200" ? this.centerArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.centerArr = []);
+        this.editFlag ? (this.f['centerId'].setValue(this.data.centerId), this.getVillage()) : '';
+      }
     });
   }
 
   getVillage() {
     let cId = this.schoolRegForm.value.centerId;
-    this.masterService.getAllVillage(this.webStorageS.languageFlag,cId).subscribe({
+    this.masterService.getAllVillage(this.webStorageS.languageFlag, cId).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
+        res.statusCode == "200" ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
         this.editFlag ? (this.f['villageId'].setValue(this.data.villageId), this.getSchoolType()) : '';
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
   getSchoolType() {
     this.masterService.getAllSchoolType(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? this.schoolTypeArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.schoolTypeArr = []);
+        res.statusCode == "200" ? this.schoolTypeArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.schoolTypeArr = []);
         this.editFlag ? (this.f['s_TypeId'].setValue(this.data.s_TypeId), this.getCategoryDes()) : this.getCategoryDes();
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
   getCategoryDes() {
     this.masterService.GetSchoolCategoryDescById(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? this.categoryArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.categoryArr = []);
+        res.statusCode == "200" ? this.categoryArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.categoryArr = []);
         this.editFlag ? (this.f['s_CategoryId'].setValue(this.data.s_CategoryId), this.getSchoolMngDesc()) : this.getSchoolMngDesc();
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
   getSchoolMngDesc() {
     this.masterService.GetSchoolMngDescById(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? this.schoolMngArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.schoolMngArr = []);
+        res.statusCode == "200" ? this.schoolMngArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.schoolMngArr = []);
         this.editFlag ? (this.f['s_ManagementId'].setValue(this.data.s_ManagementId), this.getLowestGroupClass()) : '';
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
+      }
     });
   }
 
@@ -252,10 +245,8 @@ export class AddUpdateSchoolRegistrationComponent {
   getBit() {
     this.masterService.GetBit(this.webStorageS.languageFlag, this.schoolRegForm.value.talukaId).subscribe({
       next: (res: any) => {
-        res.statusCode == 200 ? (this.bitArr = res.responseData, this.editFlag ? (this.f['bitId'].setValue(this.data.bitId)) : null) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.bitArr = []);
-
-      },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+        res.statusCode == "200" ? (this.bitArr = res.responseData, this.editFlag ? (this.f['bitId'].setValue(this.data.bitId)) : null) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.bitArr = []);
+      }
     });
   }
 
@@ -267,7 +258,7 @@ export class AddUpdateSchoolRegistrationComponent {
     let type = 'jpg, jpeg, png';
     this.fileUpload.uploadDocuments(event, 'Upload', type).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.uploadImg = res.responseData;
           this.schoolRegForm.value.uploadImage = this.uploadImg;
           this.commonMethod.showPopup(res.statusMessage, 0);
@@ -307,7 +298,6 @@ export class AddUpdateSchoolRegistrationComponent {
           return
         }
       },
-      //  error: ((err: any) => {  err.statusCode ? this.errors.handelError(err.statusCode):this.commonMethod.showPopup(err, 1) })
     });
   }
 
@@ -338,7 +328,6 @@ export class AddUpdateSchoolRegistrationComponent {
           return
         }
       },
-      //  error: ((err: any) => {  err.statusCode ? this.errors.handelError(err.statusCode):this.commonMethod.showPopup(err, 1) })
     });
   }
 
@@ -352,7 +341,7 @@ export class AddUpdateSchoolRegistrationComponent {
     }
   }
 
-  onViewDoc(index : any){
+  onViewDoc(index: any) {
     window.open(this.docArray[index].docPath, 'blank');
   }
   //#endregionegion ------------------------------------------------- Upload Image end here --------------------------------------------// 
@@ -385,8 +374,8 @@ export class AddUpdateSchoolRegistrationComponent {
         next: (res: any) => {
           this.ngxSpinner.hide();
           this.apiService.staticData.next('getRefreshStaticdata');
-          res.statusCode == 200 ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          res.statusCode == 200 ? this.dialogRef.close('yes') : this.ngxSpinner.hide();
+          res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          res.statusCode == "200" ? this.dialogRef.close('yes') : this.ngxSpinner.hide();
         },
         error: ((err: any) => {
           this.ngxSpinner.hide();
@@ -402,24 +391,23 @@ export class AddUpdateSchoolRegistrationComponent {
   onEdit() {
     this.editFlag = true;
     this.docArray = [];
-  
-      this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
-      this.uploadImg = this.data?.uploadImage
-      this.data?.schoolDocument?.map((res: any) => {
-        let schoolDocumentObj = {
-          "id": res.id,
-          "schoolId": res.schoolId,
-          "documentId": res.documentId,
-          "docPath": res.docPath,
-          "createdBy": 0,
-          "createdDate": new Date(),
-          "modifiedBy": 0,
-          "modifiedDate": new Date(),
-          "isDeleted": true
-        };
-        this.docArray.push(schoolDocumentObj);
-      })
-      this.getDistrict();
+    this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);
+    this.uploadImg = this.data?.uploadImage
+    this.data?.schoolDocument?.map((res: any) => {
+      let schoolDocumentObj = {
+        "id": res.id,
+        "schoolId": res.schoolId,
+        "documentId": res.documentId,
+        "docPath": res.docPath,
+        "createdBy": 0,
+        "createdDate": new Date(),
+        "modifiedBy": 0,
+        "modifiedDate": new Date(),
+        "isDeleted": true
+      };
+      this.docArray.push(schoolDocumentObj);
+    })
+    this.getDistrict();
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 
@@ -449,7 +437,7 @@ export class AddUpdateSchoolRegistrationComponent {
       this.f['villageId'].setValue('');
       this.villageArr = [];
     }
-    else if(dropdown == 'Center'){
+    else if (dropdown == 'Center') {
       this.f['villageId'].setValue('');
     }
     else if (dropdown == 'LowestClass') {
@@ -489,12 +477,12 @@ export class AddUpdateSchoolRegistrationComponent {
   getTableData() {
     this.ngxSpinner.show();
     let str = `SchoolId=${this.webStorageS.getLoggedInLocalstorageData()?.schoolId}&pageno=1&pagesize=10&TextSearch=${(this.textSearch.value || '').trim()}&lan=${this.webStorageS.languageFlag}`;
- 
+
     this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetAllEvent?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
@@ -528,14 +516,14 @@ export class AddUpdateSchoolRegistrationComponent {
         next: (res: any) => {
           this.ngxSpinner.hide();
           // this.apiService.staticData.next('getRefreshStaticdata');
-          if(res.statusCode == "200"){
+          if (res.statusCode == "200") {
             this.ngxSpinner.hide();
             this.getTableData();
-            this.formDirective.resetForm(); 
+            this.formDirective.resetForm();
             this.imgArray = [];
             this.commonMethod.showPopup(res.statusMessage, 0);
           }
-          else{
+          else {
             this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           }
           // this.dialogRef.close('yes')
@@ -550,25 +538,23 @@ export class AddUpdateSchoolRegistrationComponent {
   //#endregion------------------------------------------------- Event Submit method end here -------------------------------------------------//
 
   //#region --------------------------------------------------- Event Edit method start here -------------------------------------------------//
-  onEditEvent(data?: any){
+  onEditEvent(data?: any) {
     this.editFlag = true;
     this.imgArray = [];
-    console.log("onEditObj : ", data);
-    
     this.editEventObj = data;
-      this.eventFormFeild();
-      this.editEventObj?.eventImages.map((res: any) => {
-        let eventImgObj = {
-          "id": res.id,
-          "schoolId": res.schoolId,
-          "documentId": res.documentId,
-          "eventId": res.eventId,
-          "docPath": res.docPath,
-          "createdBy": 0,
-          "isDeleted": true
-        }
-        this.imgArray.push(eventImgObj);
-      });
+    this.eventFormFeild();
+    this.editEventObj?.eventImages.map((res: any) => {
+      let eventImgObj = {
+        "id": res.id,
+        "schoolId": res.schoolId,
+        "documentId": res.documentId,
+        "eventId": res.eventId,
+        "docPath": res.docPath,
+        "createdBy": 0,
+        "isDeleted": true
+      }
+      this.imgArray.push(eventImgObj);
+    });
   }
   //#endregion--------------------------------------------------- Event Edit method end here -------------------------------------------------//
 
@@ -592,7 +578,7 @@ export class AddUpdateSchoolRegistrationComponent {
       }
     })
   }
- 
+
   onDeleteEvent(id: number) {
     let deleteObj = {
       "id": id,
@@ -605,15 +591,15 @@ export class AddUpdateSchoolRegistrationComponent {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.getTableData() : '';
-        res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1); 
+        res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
       }, error: ((err: any) => {
         this.commonMethod.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusMessage, 1);
       })
     })
   }
- //#endregion--------------------------------------------------- Event Delete method end here -------------------------------------------------//
+  //#endregion--------------------------------------------------- Event Delete method end here -------------------------------------------------//
 
-  onClear(){
+  onClear() {
     this.textSearch.setValue('');
     this.getTableData();
   }

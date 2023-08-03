@@ -42,7 +42,6 @@ export class GlobalDetailComponent {
   pdfArr = new Array();
   constructor(private webService: WebStorageService,
     public gallery: Gallery, public dialogRef: MatDialogRef<GlobalDetailComponent>, @Inject(MAT_DIALOG_DATA) public data: any, public webStorage: WebStorageService) {
-console.log("data",this.data);
 
   }
 
@@ -58,9 +57,6 @@ console.log("data",this.data);
     this.dataArray?.map((x: any) => {
       let imgPath = x.photo;
       let extension = imgPath.split('.');
-
-      console.log("extension",extension);
-      
       if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {        
        this.pdfArr.push({photo : x.photo ,docFlag:true})       
       }
@@ -68,8 +64,6 @@ console.log("data",this.data);
         this.imageArr.push({photo : x.photo})        
        }
     });
-
-
 
     this.items = this.imageArr?.map(item =>
       new ImageItem({ src: item.photo, thumb: item.photo})

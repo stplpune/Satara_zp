@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { GlobalDetailComponent } from 'src/app/shared/components/global-detail/global-detail.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-item-transfer',
   templateUrl: './outward-item.component.html',
@@ -54,6 +55,7 @@ export class OutwardItemComponent {
     private excelpdfService: DownloadPdfExcelService,
     public datepipe: DatePipe,
     public Validation:ValidationService,
+    private ngxSipnner:NgxSpinnerService
   ) { }
   ngOnInit() {
     this.getIsWriteFunction();
@@ -247,9 +249,6 @@ export class OutwardItemComponent {
   }
 
   openDetailsDialog(obj: any) {
-
-    console.log(obj);
-    // return;
     var data = {     
       headerImage: '',
       // header: '',
@@ -276,6 +275,7 @@ export class OutwardItemComponent {
     });
   }
   getTableData(status?: any) {
+    this.ngxSipnner.show();
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.filterForm.value;
     // let obj = {
@@ -295,6 +295,7 @@ export class OutwardItemComponent {
       next: (res: any) => {
       
         if (res.statusCode == "200") {
+          this.ngxSipnner.hide();
           status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
        
           // this.tableresp = res.responseData.responseData1 ;
@@ -304,6 +305,7 @@ export class OutwardItemComponent {
           let data: [] = res.responseData.responseData1;
           status == 'excel' ? this.pdfDownload(data) : '';
         } else {
+          this.ngxSipnner.hide();
           this.tableresp = [];
           this.totalItem = 0
         }

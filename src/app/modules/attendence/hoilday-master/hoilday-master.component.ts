@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-hoilday-master',
@@ -17,9 +18,9 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./hoilday-master.component.scss']
 })
 export class HoildayMasterComponent {
-  displayedheadersEnglish = ['Sr. No.', ' Hiloday Name', 'Holiday Date', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
-  tableresp: any;
+  displayedheadersEnglish = ['Sr. No.', 'Year', ' Hiloday Name', 'Holiday Date', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'वर्ष', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
+  tableresp= new Array();
   viewStatus = 'Table';
   langTypeName: any;
   totalItem: any;
@@ -27,6 +28,8 @@ export class HoildayMasterComponent {
   yearId = new FormControl();
   textsearch = new FormControl();
   pageNumber: number = 1;
+  totalCount: any;
+  filterFlag: boolean = false;
   resultDownloadArr = new Array();
   constructor(public dialog: MatDialog,
     private errors: ErrorsService,
@@ -35,7 +38,8 @@ export class HoildayMasterComponent {
     private commonService: CommonMethodsService,
     public validation: ValidationService,
     private excelpdfService: DownloadPdfExcelService,
-    public datepipe : DatePipe
+    public datepipe: DatePipe,
+    private ngxSpinner: NgxSpinnerService,
   ) { }
 
 
@@ -48,7 +52,8 @@ export class HoildayMasterComponent {
   }
 
   year = [
-    { id: '1', name: '2023', Mname: '' }
+    { id: 2023, year: '2023', Mname: '' },
+    { id: 2024, year: '2024', Mname: '' }
   ]
 
   openDialog(data?: any) {
@@ -72,15 +77,12 @@ export class HoildayMasterComponent {
   childCompInfo(obj: any) {
     switch (obj.label) {
       case 'Pagination':
-        // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
+        this.filterFlag ? '' : (this.textsearch.setValue(''), this.filterFlag = false);
         this.pageNumber = obj.pageNumber;
         this.getTableData();
         break;
       case 'Edit':
         this.openDialog(obj);
-        break;
-      case 'Block':
-        // this.openBlockDialog(obj);
         break;
       case 'Delete':
         this.deleteDialog(obj);
@@ -89,27 +91,26 @@ export class HoildayMasterComponent {
   }
 
   getTableData(status?: any) {
-    status
-    // status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
-    // let formData = this.textSearch.value?.trim() || '';
-    // let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
-    // let pdf = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    // let str='Year='+(this.yearId || 0)+'&pageno='+this.pageNumber+'&pagesize=10&TextSearch='+(this.textsearch || "")+'&lan=EN'
-    this.apiService.setHttp('GET', 'zp-satara/HolidayMaster/GetAllHoliday?pageno=1&pagesize=10', false, false, false, 'baseUrl');
+    this.ngxSpinner.show();
+    let yearID = this.yearId.value;
+    let textsearch = this.textsearch.value?.trim();
+    status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
+    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
+    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
+    this.apiService.setHttp('GET', 'zp-satara/HolidayMaster/GetAllHoliday?' + (status == 'pdf' ? pdf : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         console.log(res);
         if (res.statusCode == "200") {
-          this.tableresp = res.responseData.responseData1;
-          console.log(this.tableresp);
-
-          // status != 'pdf' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          this.ngxSpinner.hide();
+          status != 'pdf' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
-          // this.totalCount = res.responseData.responseData2.pageCount;
+          this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
           let data: [] = res.responseData.responseData1;
           status == 'pdf' ? this.pdfDownload(data) : '';
         } else {
+          this.ngxSpinner.hide();
           this.tableresp = [];
           this.totalItem = 0
         }
@@ -120,20 +121,19 @@ export class HoildayMasterComponent {
   }
 
   setTableData() {
-    // this.highLightFlag=true;
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'holidayName', 'holidayDate', 'action'];
+    let displayedColumns = ['srNo', 'year', 'holidayName', 'holidayDate', 'action'];
     let tableData = {
-      // pageNumber: this.pageNumber,
+      pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
-      // isBlock: 'status',
       pagintion: this.totalItem > 10 ? true : false,
       displayedColumns: displayedColumns,
       tableData: this.tableresp,
       tableSize: this.totalItem,
       edit: true, delete: true,
+      date:'holidayDate',
       // tableHeaders: displayedColumnsReadMode,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
     };
@@ -146,7 +146,7 @@ export class HoildayMasterComponent {
     this.deleteId = obj.id;
     let dialoObj = {
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Holiday Master record?' : 'तुम्हाला उपश्रेणी रेकॉर्ड हटवायचा आहे का?',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Holiday Master record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }
@@ -160,8 +160,6 @@ export class HoildayMasterComponent {
       if (result == 'yes') {
         this.getDeleteData();
       }
-      // this.highLightFlag=false;
-
     })
   }
 
@@ -169,7 +167,7 @@ export class HoildayMasterComponent {
   getDeleteData() {
     let deleteObj = {
       "id": this.deleteId,
-      "deletedBy": 0,
+      "modifiedBy": 0,
       "modifiedDate": new Date(),
       "lan": "EN"
     }
@@ -194,22 +192,29 @@ export class HoildayMasterComponent {
       let obj = {
         "Sr.No": i + 1,
         "Year": ele.year,
-        "Holiday Name": ele.category,
-        "Holiday Date": ele.subCategory,
+        "Holiday Name": ele.holidayName,
+        "Holiday Date": ele.holidayDate,
       }
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Year','Holiday Name', 'Holiday Date'];
+    let keyPDFHeader = ['Sr.No.', 'Year', 'Holiday Name', 'Holiday Date'];
     let ValueData =
       this.resultDownloadArr.reduce(
         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-      );// Value Name
+      );
 
     let objData: any = {
       'topHedingName': 'Holiday List',
       'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
     }
     this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+  }
+
+  clearFilterData() {
+    this.textsearch.setValue('');
+    this.yearId.setValue('');
+    this.pageNumber = 1;
+    this.getTableData();
   }
 
 }

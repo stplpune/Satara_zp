@@ -114,8 +114,11 @@ export class SubCategoryComponent {
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = res.responseData.responseData1;
-          status == 'excel' ? this.pdfDownload(data) : '';
+          // let data: [] = res.responseData.responseData1;
+          // status == 'excel' ? this.pdfDownload(data) : '';
+
+          let data: [] = (status == 'pdfFlag' || status == 'excel') ? res.responseData.responseData1 : [];
+          status == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : status == 'excel' ? this.pdfDownload(data,'excel') :'';  
         } else {
           this.tableresp = [];
           this.totalItem=0
@@ -154,26 +157,32 @@ export class SubCategoryComponent {
     this.getTableData();
   }
 
-  pdfDownload(data:any) {
-    data.map((ele: any, i: any)=>{
-          let obj = {
-            "Sr.No": i+1,
-            "Category Name": ele.category,
-            "Sub Category Name": ele.subCategory,
-          }
-          this.resultDownloadArr.push(obj);
-        });
-        let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category'];
-              let ValueData =
-                this.resultDownloadArr.reduce(
-                  (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-                );// Value Name
-                       
-                let objData:any = {
-                  'topHedingName': 'Sub Category List',
-                  'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-                }
-               this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+  pdfDownload(data?: any,flag?:string) {   
+    this.resultDownloadArr=[];  
+    data.find((ele: any, i: any) => {
+      let obj = {
+        srNo: i + 1,
+        category: ele.category,
+        subCategory: ele.subCategory,
+        itemName: ele.itemName,
+        description: ele.description,
+      }
+      this.resultDownloadArr.push(obj);
+    });
+
+    if (this.resultDownloadArr?.length > 0) {
+      let keyPDFHeader = ['Sr. No.','Category','Sub Category'];
+      let ValueData =
+        this.resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+        let objData: any = {
+          'topHedingName': 'Sub-Category List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7, 15, 20, 30, 40,]
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+    }
   }
 
   // downloadPdf(data: any) {

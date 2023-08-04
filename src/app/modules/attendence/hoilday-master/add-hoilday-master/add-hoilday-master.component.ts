@@ -26,8 +26,6 @@ export class AddHoildayMasterComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    console.log(this.data);
-    
     this.defaultForm();
     this.data?this.editData():'';
   }
@@ -41,15 +39,17 @@ export class AddHoildayMasterComponent {
   }
 
   year=[
-    {'id':1,name:'2023',Mname:''}
+    {id:2023,name:'2023',Mname:''},
+    {id:2024,name:'2024',Mname:''}
   ]
 
   onSubmit() {
-    if (this.holidayFrm.invalid) {
+    let formData=this.holidayFrm.getRawValue();
+    if (this.holidayFrm.invalid || formData.yearId ==0) {
       return
     }
     let data = this.webStorage.createdByProps();
-    let formData=this.holidayFrm.getRawValue();
+    
     let obj={
       "id":this.editFlag?this.editId:0,
       "holidayName": formData.holidayName,
@@ -60,7 +60,6 @@ export class AddHoildayMasterComponent {
       "lan": this.webStorage.languageFlag,
     }
     
-    console.log(this.holidayFrm.value);
     let method=this.editFlag?'put':'post';
     let url=this.editFlag?'UpdateHoliday':'AddHoliday'
     this.apiService.setHttp(method, 'zp-satara/HolidayMaster/'+url, false, obj, false, 'baseUrl');
@@ -80,7 +79,6 @@ export class AddHoildayMasterComponent {
     editData(){
       this.editFlag=true;
       this.editId=this.data.id;
-      console.log(this.editId);
       this.holidayFrm.patchValue({
         date:this.data.holidayDate,
         holidayName:this.data.holidayName,

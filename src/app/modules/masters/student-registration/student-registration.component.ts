@@ -96,14 +96,13 @@ export class StudentRegistrationComponent {
     let pageNo = this.pageNumber;
     let str = `?pageno=${pageNo}&pagesize=10&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
     let reportStr =   `?pageno=1&pagesize=${this.totalCount * 10}&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
-    this.apiService.setHttp('GET', 'zp-satara/Student/GetAll' + (flag == 'reportFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Student/GetAll' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.ngxSpinner.hide();
-          flag != 'reportFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-          flag != 'reportFlag' ? this.tableDatasize = res.responseData.responseData2.pageCount : this.tableDatasize = this.tableDatasize;
-          console.log("this.tableDataArray",this.tableDataArray);
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDatasize = res.responseData.responseData2.pageCount : this.tableDatasize = this.tableDatasize;
           
           this.tableDataArray.map((res: any) => {
             let index = res.documentResponse.findIndex((ele: any) => ele.documentId == 1);
@@ -111,39 +110,11 @@ export class StudentRegistrationComponent {
           })
           this.totalCount = res.responseData.responseData2.pageCount;
           this.studentData = []
-          let data: [] = flag == 'reportFlag' ? res.responseData.responseData1 : [];
-          data.find((ele: any, i: any) => {
-            let obj = {
-              srNo: i + 1,
-              id: ele.id,
-              fullName: ele.fullName,
-              gender: ele.gender,
-              mobileNo: ele.parentMobileNo,
-              standard: ele.standard,
-              schoolName: ele.schoolName,
-              caste: ele.caste,
-              taluka: ele.taluka,
-              center: ele.center,
-            }
-            this.studentData.push(obj);
-          });
-          if (this.studentData.length > 0 && flag == 'reportFlag') {
-            let keyPDFHeader = ['SrNo', "ID", "Full Name", "Gender", "Contact No.", "Standard", "School Name", "Caste", "Taluka", "Center"];
-            let ValueData =
-              this.studentData.reduce(
-                (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-              );// Value Name           
-            let objData: any = {
-              'topHedingName': 'Student List',
-              'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-            }
-            this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData);
-          } else {
-            flag == 'reportFlag' ? this.commonMethods.showPopup("No Data Found", 1) : '';
-          }
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.downloadPDF(data,'pdfFlag') : flag == 'excel' ? this.downloadPDF(data,'excel') :'';   
         } else {
           this.ngxSpinner.hide();
-          flag == 'reportFlag' ? this.commonMethods.showPopup("No Data Found", 1) : '';
+          (flag == 'pdfFlag' || flag == 'excel') ? this.commonMethods.showPopup("No Data Found", 1) : '';
           this.tableDataArray = [];
           this.tableDatasize = 0;
         }
@@ -151,6 +122,38 @@ export class StudentRegistrationComponent {
       },
       error: ((err: any) => { this.ngxSpinner.hide(); this.errors.handelError(err.statusCode) })
     });
+  }
+
+  downloadPDF(data?: any,flag?:string){
+    this.studentData = [];
+    data.find((ele: any, i: any) => {
+      let obj = {
+        srNo: i + 1,
+        id: ele.id,
+        fullName: ele.fullName,
+        gender: ele.gender,
+        mobileNo: ele.parentMobileNo,
+        standard: ele.standard,
+        schoolName: ele.schoolName,
+        caste: ele.caste,
+        taluka: ele.taluka,
+        center: ele.center,
+      }
+      this.studentData.push(obj);
+    });
+    if (this.studentData.length > 0) {
+      let keyPDFHeader = ['SrNo', "ID", "Full Name", "Gender", "Contact No.", "Standard", "School Name", "Caste", "Taluka", "Center"];
+      let ValueData =
+        this.studentData.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );// Value Name           
+      let objData: any = {
+        'topHedingName': 'Student List',
+        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+      let headerKeySize = [7, 7, 30, 10, 10, 10, 30, 10, 10, 10];
+      flag == 'pdfFlag' ? this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadPdfservice.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+    } 
   }
   
   setTableData(){
@@ -192,7 +195,6 @@ export class StudentRegistrationComponent {
  
 
   addUpdateStudent(obj?: any) {
-    console.log("obj",obj?.id);
     if(obj){
       let id:any = obj.id;
       let formdata:any = this.encDec.encrypt(`${id}`);
@@ -339,9 +341,9 @@ export class StudentRegistrationComponent {
   }
   //#endregion -------------------------------------------------- Delete Logic End Here ------------------------------------------------------
 
-  downloadPdf() {
-    this.getTableData('reportFlag');
-  }
+  // downloadPdf() {
+  //   this.getTableData('reportFlag');
+  // }
 
   getTaluka() {
     this.talukaArr = [];

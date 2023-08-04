@@ -39,6 +39,7 @@ export class OutwardItemComponent {
   displayedColumns = new Array();
   loginData = this.webStorage.getLoggedInLocalstorageData();
   langTypeName : any;
+  isWriteRight!: boolean;
   get f(){return this.filterForm.controls}
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट', 'विक्री दिनांक','विक्री किंमत', 'असाइन करा', 'शेरा',  'कृती'];
@@ -55,6 +56,7 @@ export class OutwardItemComponent {
     public Validation:ValidationService,
   ) { }
   ngOnInit() {
+    this.getIsWriteFunction();
     this.filterFormData(); 
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
@@ -63,6 +65,13 @@ export class OutwardItemComponent {
     });   
     this.getTaluka();
     this.getCategory();
+  }
+
+  getIsWriteFunction() {
+    let print = this.webStorage?.getAllPageName().find((x: any) => {
+      return x.pageURL == "outward-item"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
 
   filterFormData() {
@@ -305,7 +314,8 @@ export class OutwardItemComponent {
   }
 
   setTableData() {
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_Item', 'quantity', 'purchase_Sales_Date','price', 'outwardTo', 'remark',  'action'];
+    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_Item', 'quantity', 'purchase_Sales_Date','price', 'outwardTo', 'remark'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_Item', 'quantity', 'purchase_Sales_Date','price', 'outwardTo', 'remark', 'action'];
     this.tableData  = {
       pageNumber: this.pageNumber,
       img: 'photo',
@@ -313,7 +323,7 @@ export class OutwardItemComponent {
       badge: '',
       date: 'purchase_Sales_Date',
       pagintion: this.totalItem > 10 ? true : false,
-      displayedColumns: this.displayedColumns,
+      displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
       tableData: this.tableresp,
       tableSize: this.totalItem,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,

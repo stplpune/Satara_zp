@@ -103,7 +103,7 @@ getTableTranslatedData(){
       next: (res: any) => {
         if (res.statusCode == "200") {
           // this.tableDataArray = res.responseData.responseData1;
-          flag != ('pdfFlag' || 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];

@@ -107,8 +107,11 @@ export class HoildayMasterComponent {
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = res.responseData.responseData1;
-          status == 'pdf' ? this.pdfDownload(data) : '';
+          // let data: [] = res.responseData.responseData1;
+          // status == 'pdf' ? this.pdfDownload(data) : '';
+
+          let data: [] = (status == 'pdf' || status == 'excel') ? res.responseData.responseData1 : [];
+          status == 'pdf' ? this.pdfDownload(data,'pdf') : status == 'excel' ? this.pdfDownload(data,'excel') :'';  
         } else {
           this.ngxSpinner.hide();
           this.tableresp = [];
@@ -187,7 +190,7 @@ export class HoildayMasterComponent {
     });
   }
 
-  pdfDownload(data: any) {
+  pdfDownload(data: any,flag:any) {
     data.map((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
@@ -207,7 +210,9 @@ export class HoildayMasterComponent {
       'topHedingName': 'Holiday List',
       'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
     }
-    this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+    let headerKeySize = [7, 15, 20, 30, 40,]
+    // this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+    flag == 'pdf' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
   }
 
   clearFilterData() {

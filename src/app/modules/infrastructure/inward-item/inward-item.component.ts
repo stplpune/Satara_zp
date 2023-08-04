@@ -39,6 +39,7 @@ export class InwardItemComponent {
   subCategoryArr = new Array();
   itemArr = new Array();
   resultDownloadArr = new Array();
+  isWriteRight!: boolean;
   loginData = this.webStorageS.getLoggedInLocalstorageData();
   get f() { return this.filterForm.controls };
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Action'];
@@ -57,6 +58,7 @@ export class InwardItemComponent {
     public datepipe: DatePipe) { }
 
   ngOnInit() {
+    this.getIsWriteFunction();
     this.filterFormData();
     this.getTableData();
     this.webStorageS.langNameOnChange.subscribe(lang => {
@@ -65,6 +67,13 @@ export class InwardItemComponent {
     });
     this.getTaluka();
     this.getCategoryDrop();
+  }
+
+  getIsWriteFunction() {
+    let print = this.webStorageS?.getAllPageName().find((x: any) => {
+      return x.pageURL == "inward-item"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
 
   filterFormData() {
@@ -113,12 +122,13 @@ export class InwardItemComponent {
 
   languageChange() {
     this.highLightFlag = true;
+    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'remark'];
     this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'remark', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
       date: 'purchase_Sales_Date',
-      displayedColumns: this.displayedColumns,
+      displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,

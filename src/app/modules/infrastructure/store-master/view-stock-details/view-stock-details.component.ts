@@ -20,6 +20,10 @@ export class ViewStockDetailsComponent {
   cardInwardData = new Array();
   cardOutwardData = new Array();
   languageFlag!: string
+  showPdf = new Array();
+  showImage = new Array();
+  outwardShowPdf = new Array();
+  outwardShowImage = new Array();
 
   constructor(private activatedRoute :ActivatedRoute,
    private encDec: AesencryptDecryptService,
@@ -27,9 +31,6 @@ export class ViewStockDetailsComponent {
     public webService: WebStorageService,
     private commonMethodS: CommonMethodsService,
     private errors: ErrorsService,
-    // private masterService: MasterService,
-    // private commonMethods: CommonMethodsService,
-    // private downloadFileService: DownloadPdfExcelService,
     public datepipe: DatePipe,
     private ngxSpinner: NgxSpinnerService,
    ){
@@ -38,7 +39,6 @@ export class ViewStockDetailsComponent {
     this.activatedRoute.queryParams.subscribe((queryParams: any) => { Obj = queryParams['id'] });
     decryptData = this.encDec.decrypt(`${decodeURIComponent(Obj)}`);
     this.storeObj = decryptData.split('.');
-    // console.log("storeObj",this.storeObj); 
     }
 
   ngOnInit(){
@@ -60,10 +60,46 @@ export class ViewStockDetailsComponent {
          this.cardHeaderData = res.responseData.responseData1; 
          this.cardInwardData = res.responseData.responseData2; 
          this.cardOutwardData = res.responseData.responseData3;
-         console.log("cardHeaderData",this.cardHeaderData);
-         console.log("cardInwardData",this.cardInwardData);
-         console.log("cardOutwardData",this.cardOutwardData);
-         
+          // inward data
+          let inwardPdfArr = new Array();
+          let inwardImageArr = new Array();
+          this.cardInwardData?.map((x: any) => {
+            x.inwardOutwardDoc1?.map((y: any) => {
+              let imaPath = y.photo;
+              let extension = imaPath.split('.')
+              if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+                inwardPdfArr.push({ photo: y.photo, docFlag: true })
+              }
+              if (extension[3] == 'jpg' || extension[3] == 'jpeg' || extension[3] == 'png') {
+                inwardImageArr.push({ photo: y.photo })
+              }
+            })
+            this.showPdf.push({ pdfData: inwardPdfArr })
+            this.showImage.push({ imgData: inwardImageArr })
+            inwardPdfArr = [];
+            inwardImageArr = [];
+          });
+
+          // outward data
+          let outWardpdfArr = new Array();
+          let outWardImageArr = new Array();
+
+          this.cardOutwardData?.map((x: any) => {
+            x.inwardOutwardDoc2?.map((y: any) => {
+              let imaPath = y.photo;
+              let extension = imaPath.split('.')
+              if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+                outWardpdfArr.push({ photo: y.photo, docFlag: true })
+              }
+              if (extension[3] == 'jpg' || extension[3] == 'jpeg' || extension[3] == 'png') {
+                outWardImageArr.push({ photo: y.photo })
+              }
+            })
+            this.outwardShowPdf.push({ pdfData: outWardpdfArr })
+            this.outwardShowImage.push({ imgData: outWardImageArr })
+            outWardpdfArr = [];
+            outWardImageArr = [];
+          });
         }else{
           this.ngxSpinner.hide();
           this.cardHeaderData =[];
@@ -76,5 +112,20 @@ export class ViewStockDetailsComponent {
     });
   }
 
+  viewImages(i:any,j:any,flag:string){
+    if(flag == 'inward'){
+      window.open(this.showImage[i].imgData[j].photo, 'blank');
+    }else if(flag == 'outward'){
+      window.open(this.outwardShowImage[i].imgData[j].photo, 'blank');
+    }
+    
+  }
+  viewDocument(i:any,j:any,flag:string){
+    if(flag == 'inward'){
+      window.open(this.showPdf[i].pdfData[j].photo, 'blank');
+    }else if(flag == 'outward'){
+      window.open(this.outwardShowPdf[i].pdfData[j].photo, 'blank');
+    }   
+  }
 
 }

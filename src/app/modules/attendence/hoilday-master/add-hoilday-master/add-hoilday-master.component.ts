@@ -39,15 +39,17 @@ export class AddHoildayMasterComponent {
   }
 
   year=[
-    {id:2023,name:'2023',Mname:''}
+    {id:2023,name:'2023',Mname:''},
+    {id:2024,name:'2024',Mname:''}
   ]
 
   onSubmit() {
-    if (this.holidayFrm.invalid) {
+    let formData=this.holidayFrm.getRawValue();
+    if (this.holidayFrm.invalid || formData.yearId ==0) {
       return
     }
     let data = this.webStorage.createdByProps();
-    let formData=this.holidayFrm.getRawValue();
+    
     let obj={
       "id":this.editFlag?this.editId:0,
       "holidayName": formData.holidayName,

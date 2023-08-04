@@ -74,41 +74,19 @@ export class OfficeUsersComponent implements OnInit {
 
     let reportStr = `?textSearch=${this.searchContent.value}&pageno=${1}&pagesize=${(this.totalCount * 10)}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
     let str = `?textSearch=${this.searchContent.value}&pageno=${this.pageNumber}&pagesize=10&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
-    this.apiService.setHttp('GET', 'zp-satara/Office/GetAllOffice' + (flag == 'reportFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Office/GetAllOffice' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          flag != 'reportFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           
           // this.tableDataArray = res.responseData.responseData1;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = (flag == 'reportFlag') ? res.responseData.responseData1 : [];
-          data.find((ele: any, i: any) => {
-            let obj = {
-              "Sr.No": i + 1,
-              "name": ele.officeName,
-              "designation": ele.designation,
-              "taluka": ele.taluka,
-              "mobileNo": ele.mobileNo,
-              "emailId": ele.emailId,
-            }
-            this.resultDownloadArr.push(obj);
-          });
-          if (this.resultDownloadArr.length > 0) {
-            let keyPDFHeader = ['Sr. No.', "Office User Name", "Designation", 'Taluka', "Mobile No.", "Email ID"];
-            let ValueData =
-              this.resultDownloadArr.reduce(
-                (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-              );
-            let objData: any = {
-              'topHedingName': 'Office User List',
-              'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-            }
-            this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData);
-          }
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+         flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';  
         } else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
@@ -119,6 +97,33 @@ export class OfficeUsersComponent implements OnInit {
       },
       error: ((err: any) => { this.errors.handelError(err.message) })
     });
+  }
+
+  downloadPdf(data?: any,flag?:string){
+    data.find((ele: any, i: any) => {
+      let obj = {
+        "Sr.No": i + 1,
+        "name": ele.officeName,
+        "designation": ele.designation,
+        "taluka": ele.taluka,
+        "mobileNo": ele.mobileNo,
+        "emailId": ele.emailId,
+      }
+      this.resultDownloadArr.push(obj);
+    });
+    if (this.resultDownloadArr.length > 0) {
+      let keyPDFHeader = ['Sr. No.', "Office User Name", "Designation", 'Taluka', "Mobile No.", "Email ID"];
+      let ValueData =
+        this.resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+      let objData: any = {
+        'topHedingName': 'Office User List',
+        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+      let headerKeySize = [7, 15, 10, 10, 10, 15];
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+    }
   }
   
   languageChange() {
@@ -276,9 +281,9 @@ export class OfficeUsersComponent implements OnInit {
   }
 
 
-  downloadPdf() {
-    this.getTableData('reportFlag');
-  }
+  // downloadPdf() {
+  //   this.getTableData('reportFlag');
+  // }
 
   // filterData(){
   //   this.getTableData();

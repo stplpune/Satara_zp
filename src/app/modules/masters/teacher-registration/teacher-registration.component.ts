@@ -119,21 +119,21 @@ export class TeacherRegistrationComponent implements OnInit {
     let str = `pageno=${pageNo}&pagesize=10&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
     let reportStr = `pageno=${pageNo}&pagesize=${this.totalCount * 10}&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
 
-    this.apiService.setHttp('GET', 'zp-satara/Teacher/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Teacher/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {
 
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
 
           // this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = flag == 'pdfFlag' ? res.responseData.responseData1 : [];
-          flag == 'pdfFlag' ? this.downloadPdf(data) : '';
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';   
         } else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
@@ -206,7 +206,8 @@ export class TeacherRegistrationComponent implements OnInit {
 
   //#endregion ---------------------------------------------- PDF Download start here ----------------------------------------// 
 
-  downloadPdf(data: any) {
+  downloadPdf(data: any, flag?:string) {
+    this.resultDownloadArr = [];
     data.map((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
@@ -219,7 +220,7 @@ export class TeacherRegistrationComponent implements OnInit {
       this.resultDownloadArr.push(obj);
     });
     // download pdf call
-    if (this.resultDownloadArr.length > 0) {
+    if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ["Sr.No.", "Teacher Name", "Mobile No.", "Email ID", "Taluka", "Cluster"];
       let ValueData =
         this.resultDownloadArr.reduce(
@@ -230,7 +231,8 @@ export class TeacherRegistrationComponent implements OnInit {
         'topHedingName': 'Teacher List',
         'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
-      this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData);
+      let headerKeySize = [7, 15, 10, 15, 20, 20];
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
     }
   }
   //#endregion ---------------------------------------------- PDF Download end here ----------------------------------------// 

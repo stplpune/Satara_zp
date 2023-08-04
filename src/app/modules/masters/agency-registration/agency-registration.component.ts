@@ -80,17 +80,17 @@ export class AgencyRegistrationComponent implements OnInit {
     flag == 'filter' ? this.agencyReport = [] : '';
     let str = `pageno=${pageNo || ''}&pagesize=10&&TextSearch=${this.searchText.value || ''}&lan=${this.webStroageService.languageFlag || ''}`;
     let reportStr = `pageno=${1}&pagesize=${this.totalCount * 10}&TextSearch=${this.searchText.value}&lan=${this.webStroageService.languageFlag}`
-    this.apiService.setHttp('GET', 'zp-satara/Agency/GetAll?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Agency/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           this.agencyReport = [];
-          flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
-          let data: [] = res.responseData.responseData1;
-          flag == 'pdfFlag' ? this.downloadPdf(data) : '';
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :''; 
         } else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
@@ -103,7 +103,7 @@ export class AgencyRegistrationComponent implements OnInit {
     });
   }
 
-  downloadPdf(data: any) {
+  downloadPdf(data?: any,flag?:string) {
     data.map((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
@@ -124,7 +124,8 @@ export class AgencyRegistrationComponent implements OnInit {
         'topHedingName': 'Other Registration List',
         'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
-      this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData);
+      let headerKeySize = [7, 25, 20, 30];
+      flag == 'pdfFlag' ? this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadPdfservice.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
     else {
       this.common.showPopup('No Record Found', 1)

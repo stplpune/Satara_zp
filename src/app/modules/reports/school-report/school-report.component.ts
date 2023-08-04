@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -51,6 +52,7 @@ export class SchoolReportComponent {
     public datepipe: DatePipe,
     private downloadFileService: DownloadPdfExcelService,
     private activatedRoute :ActivatedRoute,
+    private ngxSpinner : NgxSpinnerService,
    private encDec: AesencryptDecryptService){
     let studentObj: any;
     let decryptData:any
@@ -234,15 +236,6 @@ export class SchoolReportComponent {
   //   });
   // }
 
-
-
-
-
-
-
-
-
-
   clearDropdown(flag?: string){
     if (flag == 'talukaId'){
       this.schoolReportForm.controls['centerId'].setValue(0);
@@ -257,10 +250,10 @@ export class SchoolReportComponent {
     } else if (flag == 'schoolId') {
       this.schoolReportForm.controls['standardId'].setValue(0);
     }    
-   
   }
 
   searchAssessMent(flag? : any){
+    this.ngxSpinner.show();
     let formData = this.schoolReportForm.value;
     let fromDate = this.datepipe.transform(formData.fromDate, 'yyyy-MM-dd')
     let toDate = this.datepipe.transform(formData.toDate, 'yyyy-MM-dd')
@@ -271,6 +264,7 @@ export class SchoolReportComponent {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
+          this.ngxSpinner.hide();
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.tableDatasize = res.responseData.responseData2[0].totalCount;
           console.log("tableDatasize", this.tableDatasize);
@@ -280,6 +274,7 @@ export class SchoolReportComponent {
           let data: [] = res.responseData.responseData1;
           flag == 'pdfFlag' ? this.downloadPdf(data) : '';
         } else {
+          this.ngxSpinner.hide();
           this.tableDataArray = [];
           this.tableDatasize = 0;
           this.tableDatasize == 0 && flag == 'pdfFlag' ? this.commonMethods.showPopup('No Record Found', 1) : '';

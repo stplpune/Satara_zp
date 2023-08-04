@@ -54,7 +54,7 @@
         "itemList":"Item List",
         "items":"Item",
         "addItems":"Add Item",
-        "UpdatedAdditems":"Updated Add Item",
+        "UpdatedAdditems":"Updated Item",
         "subcategoryname":"Sub Category",
         "itemName":"Item",
         "description":"Description",
@@ -406,7 +406,8 @@
         "Description":"Description",
         "filterSubCategory":"Category/Sub Category",
         "updateCategory": "Update Category",
-        "uploadPhotoBill": "Upload Photo/Bill"
+        "uploadPhotoBill": "Upload Photo/Bill",
+        "UpdatedInwardItems":"Update Item Inward"
 
 
     }

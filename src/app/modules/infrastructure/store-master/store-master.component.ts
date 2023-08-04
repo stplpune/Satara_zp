@@ -36,6 +36,7 @@ export class StoreMasterComponent {
   subCategoryArr = new Array();
   itemArr = new Array();
   loginData = this.webService.getLoggedInLocalstorageData();
+  totalCount!:number;
   
   displayedColumns = [ 'srNo','category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock','action'];
   marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
@@ -96,23 +97,22 @@ export class StoreMasterComponent {
     let formValue =this.filterForm?.value;
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
-    // let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;   
    
     let str =`SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=1&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
     // let str=`CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=10&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`   
-    let reportStr = `SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=1&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=1&PageSize=${this.tableDatasize * 10}&lan=${this.languageFlag}`
+    let reportStr = `SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=1&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=1&PageSize=${this.tableDatasize*10}&lan=${this.languageFlag}`
 
-    this.apiService.setHttp('GET', 'zp-satara/InwardOutwardReport/GetInwardOutwardReport?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');     
+    this.apiService.setHttp('GET', 'zp-satara/InwardOutwardReport/GetInwardOutwardReport?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');     
     this.apiService.getHttp().subscribe({
       next: (res: any) => {   
         if (res.statusCode == 200) {
           this.ngxSpinner.hide();
-          flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-        // this.tableDataArray = res.responseData.responseData1 
-         this.tableDatasize = res.responseData.responseData2.pageCount 
+          flag != 'pdfFlag' && flag !='excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;      
+         this.tableDatasize = res.responseData.responseData2[0].pageCount; 
+         this.totalCount = res.responseData.responseData2[0].totalCount;    
          this.resultDownloadArr=[];
-         let data: [] = flag == 'pdfFlag' ? res.responseData.responseData1 : [];
-         flag == 'pdfFlag' ? this.downloadPdf(data) : '';     
+         let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+         flag == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : flag == 'excel' ? this.pdfDownload(data,'excel') :'';  
         }else{
           this.ngxSpinner.hide();
           this.tableDataArray =[];
@@ -132,41 +132,73 @@ export class StoreMasterComponent {
     let tableData = {
       highlightedrow:true,
       pageNumber: this.pageNumber,
-      img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
+      img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.totalCount > 10 ? true : false,
       displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
-      tableSize: this.tableDatasize,      
+      tableSize: this.totalCount,      
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,
     };
     this.highLightFlag?tableData.highlightedrow=true:tableData.highlightedrow=false,
     this.apiService.tableData.next(tableData);
   }
 
-  downloadPdf(data: any) { 
+  // downloadPdf(data: any) { 
+  //   data.find((ele: any, i: any) => {
+  //     let obj = {
+  //       srNo: i + 1,
+  //       category: ele.category,
+  //       subCategory: ele.subCategory,
+  //       itemName: ele.itemName,
+  //       description: ele.description,
+  //     }
+  //     this.resultDownloadArr.push(obj);
+  //   });
+  //   // download pdf call
+  //   if (this.resultDownloadArr.length > 0) {
+  //     let keyPDFHeader = ['Sr. No.',' Category', 'Type', 'Item Name', 'Total Inward','Total Outward','Available Stock'];;
+  //     let ValueData =
+  //       this.resultDownloadArr.reduce(
+  //         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+  //       );
+  //     let objData: any = {
+  //       'topHedingName': 'Stock Store List',
+  //       'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+  //     }
+  //     ValueData.length > 0 ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : ''
+  //   }
+  // }
+
+  pdfDownload(data?: any,flag?:string) {  
+    this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
       let obj = {
-        srNo: i + 1,
-        category: ele.category,
-        subCategory: ele.subCategory,
-        itemName: ele.itemName,
-        description: ele.description,
-      }
+              srNo: i + 1,
+              category: ele.category,
+              type: ele.subCategory,
+              itemName: ele.itemName,
+              totalInward: ele.totalInward,
+              totalOutward:ele.totalOutward,
+              availableStock:ele.availableStock
+            }
       this.resultDownloadArr.push(obj);
     });
-    // download pdf call
-    if (this.resultDownloadArr.length > 0) {
-      let keyPDFHeader = ['Sr. No.',' Category', 'Type', 'Item Name', 'Total Inward','Total Outward','Available Stock'];;
+
+
+    if (this.resultDownloadArr?.length > 0) {
+      let keyPDFHeader = [ 'SrNo','Category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-      let objData: any = {
-        'topHedingName': 'Stock Store List',
-        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-      }
-      ValueData.length > 0 ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : ''
+        let objData: any = {
+          'topHedingName': 'Store Stock List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7, 15, 20, 30, 20,20,20,20]
+        flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
+
 
 
   
@@ -194,45 +226,7 @@ export class StoreMasterComponent {
       let formdata:any = this.encrypt.encrypt(`${id}`);
        this.router.navigate(['/view-stock-details'], {
          queryParams: { id: formdata },
-       });
-      
-
-
-    
-    // let eventId: any = this.encrypt.encrypt(`${obj?.id}`);
-    // this.router.navigate(['/view-stock-details'],{
-    //   queryParams: {
-    //     id:eventId
-    //   },
-    // })
-
-    // return
-    // console.log("obj",obj);
-    
-    // var data = {
-    //   headerImage: obj.uploadImage,
-    //   header: this.webService.languageFlag == 'EN' ? obj.name : obj.m_Name,
-    //   subheader: this.webService.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
-    //   labelHeader: this.webService.languageFlag == 'EN' ? ['Mobile No.', 'Email ID', 'Village', 'Taluka'] : ['मोबाईल क्र.', 'ई-मेल आयडी ', 'गाव', 'तालुका'],
-    //   labelKey: this.webService.languageFlag == 'EN' ? ['mobileNo', 'emailId', 'village', 'taluka'] : ['mobileNo', 'emailId', 'village', 'taluka'],
-    //   Obj: obj,
-    //   chart: false,
-    //   checkbox: this.webService.languageFlag == 'EN' ? 'Subject' : 'विषय',
-    //   schoolName: this.webService.languageFlag == 'EN' ? 'School Name' : 'शाळेचे नाव'
-    // }
-    // const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
-    //   width: '900px',
-    //   data: data,
-    //   disableClose: true,
-    //   autoFocus: false
-    // });
-    // viewDialogRef.afterClosed().subscribe((result: any) => {
-    //   if (result == 'yes') {
-    //     this.getTableData();
-    //   }
-    //   this.highLightFlag = false;
-    //   // this.languageChange();
-    // });
+       });   
   }
 
   getTaluka() {

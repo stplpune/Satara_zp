@@ -407,6 +407,7 @@
         "addInwardItems": "आवक वस्तू जोडा",
         "Units":"युनिट्स",
         "PurchasePrice":"खरेदी किंमत",
-        "PurchaseDate":"खरेदीची तारीख"
+        "PurchaseDate":"खरेदीची तारीख",
+        "UpdatedInwardItems":"आयटम आवक अपडेट करा"
     }
 }

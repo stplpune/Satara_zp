@@ -10,6 +10,18 @@
 <form [formGroup]="holidayFrm" (ngSubmit)="onSubmit()">
     <mat-dialog-content class="card-body scrollbar">
         <div class="row">
+
+            <div class="col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'Labels.Category' | translate}}</mat-label>
+                    <mat-select formControlName="yearId">
+                        <mat-option *ngFor="let data of year" [value]="data.id">
+                            {{webStorage.getLangauge() == 'EN' ?
+                            data.name : data.Mname}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
             <div class="col-sm-12 mb-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label> {{'Labels.selectDate'| translate}}</mat-label>

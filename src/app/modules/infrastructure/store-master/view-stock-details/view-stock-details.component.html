@@ -46,7 +46,7 @@
     <div class="row gx-2 gy-2">
       <div class="col-sm-6">
         <h6 class="text-main fw-bold my-2">Inward</h6>
-        <div class="card mb-2" *ngFor="let cardInward of cardInwardData">
+        <div class="card mb-2" *ngFor="let cardInward of cardInwardData; let i = index">
           <div class="card-body">
             <div class="row gy-2">
               <div class="col-sm-8">
@@ -80,15 +80,24 @@
                 </div>
               </div>
               <div class="col-sm-12">
-                <div class="d-flex align-items-center gap-3">
+                <div class="d-flex flex-column gap-1 mb-2">
                   <div class="form-label">Photo :</div>
-                  <div *ngFor="let cardDoc of cardInward.inwardOutwardDoc1">
-                    <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px">
+                  <div class="row">
+                    <div class="col-sm-3" *ngFor="let cardDoc of showImage[i]?.imgData;let j= index">
+                      <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px" (click)="viewImages(i,j,'inward')">
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-12">
 
+              <div class="col-sm-12">
+                <div class="d-flex flex-column gap-1 mb-2">
+                  <div class="form-label">Document :</div>
+                  <div *ngFor="let cardDoc of showPdf[i]?.pdfData;let j= index">
+                    <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px"
+                      width="60px" (click)="viewDocument(i,j,'inward')">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -96,7 +105,7 @@
       </div>
       <div class="col-sm-6">
         <h6 class="text-main fw-bold my-2">Outward</h6>
-        <div class="card mb-2" *ngFor=" let cardOutWard of cardOutwardData">
+        <div class="card mb-2" *ngFor=" let cardOutWard of cardOutwardData; let i = index">
           <div class="card-body">
             <div class="row">
               <div class="col-sm-8">
@@ -130,16 +139,27 @@
                 </div>
               </div>
               <div class="col-sm-12">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="form-label">Photo :</div>
-                  <div *ngFor="let cardOutWardDoc of cardOutWard.inwardOutwardDoc2">
-                    <img src="{{cardOutWardDoc.photo}}" alt="" height="60px" width="60px">
+                <div class="d-flex flex-column gap-1 mb-2">
+                  <div class="form-label">Photo:</div>
+                  <div class="row gy-2">
+                    <div class="col-sm-3" *ngFor="let cardDoc of outwardShowImage[i]?.imgData;let j= index">
+                      <img class="img-fluid object-fit-cover w-100 " src="{{cardDoc.photo}}" alt=""
+                        (click)="viewImages(i,j,'outward')" style="height: 100px;width: 100px;">
+                    </div>
                   </div>
-
                 </div>
               </div>
-              <div class="col-sm-12">
 
+              <div class="col-sm-12">
+                <div class="d-flex flex-column gap-1 mb-2">
+                  <div class="form-label">Documents:</div>
+                  <div class="row">
+                    <div class="col-sm-3" *ngFor="let cardDoc of outwardShowPdf[i]?.pdfData;let j= index">
+                      <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px"
+                        width="60px" (click)="viewDocument(i,j,'outward')">
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

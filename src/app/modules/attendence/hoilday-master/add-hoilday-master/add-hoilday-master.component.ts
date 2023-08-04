@@ -13,7 +13,8 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-hoilday-master.component.scss']
 })
 export class AddHoildayMasterComponent {
-  editFlag: any;
+  editFlag:boolean=false;
+  editId:any;
   holidayFrm!: FormGroup;
   constructor(private fb: FormBuilder,
     private apiService:ApiService,
@@ -25,7 +26,10 @@ export class AddHoildayMasterComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    console.log(this.data);
+    
     this.defaultForm();
+    this.data?this.editData():'';
   }
 
   defaultForm() {
@@ -43,7 +47,7 @@ export class AddHoildayMasterComponent {
     let data = this.webStorage.createdByProps();
     let formData=this.holidayFrm.getRawValue();
     let obj={
-      "id": 0,
+      "id":this.editFlag?this.editId:0,
       "holidayName": formData.holidayName,
       "holidayDate": formData.date,
       "year": 0,
@@ -53,7 +57,9 @@ export class AddHoildayMasterComponent {
     }
     
     console.log(this.holidayFrm.value);
-    this.apiService.setHttp('POST', 'zp-satara/HolidayMaster/AddHoliday', false, obj, false, 'baseUrl');
+    let method=this.editFlag?'put':'post';
+    let url=this.editFlag?'UpdateHoliday':'AddHoliday'
+    this.apiService.setHttp(method, 'zp-satara/HolidayMaster/'+url, false, obj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -62,10 +68,19 @@ export class AddHoildayMasterComponent {
         } else {
           this.commonMethod.showPopup(res.statusMessage, 1);
         }
-
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
     } 
+
+    editData(){
+      this.editFlag=true;
+      this.editId=this.data.id;
+      console.log(this.editId);
+      this.holidayFrm.patchValue({
+        date:this.data.holidayDate,
+        holidayName:this.data.holidayName
+      })
+    }
   }
 

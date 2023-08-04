@@ -307,15 +307,15 @@ export class DownloadPdfExcelService {
  
      worksheet.addRow([]);
      worksheet.getCell('C4').value = objData.topHedingName
-     worksheet.getCell('C4').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
+     worksheet.getCell('C4').font = { name: 'Calibri', family: 3, size: 13, bold: true, };
  
      if (objData?.timePeriod != null) {
        worksheet.getCell('C5').value = objData.timePeriod
-       worksheet.getCell('C5').font = { name: 'Corbel', family: 3, size: 13, bold: true, };
+       worksheet.getCell('C5').font = { name: 'Calibri', family: 3, size: 13, bold: true, };
      }
  
      worksheet.getCell('E5').value = objData.createdDate
-     worksheet.getCell('E5').font = { name: 'Corbel', family: 3, size: 12, bold: true, };
+     worksheet.getCell('E5').font = { name: 'Calibri', family: 3, size: 12, bold: true, };
  
     //  const response = await fetch('../../../../assets/images/samadhanLogo.jpeg');
     //  const buffer = await response.arrayBuffer();

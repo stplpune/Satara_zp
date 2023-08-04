@@ -406,7 +406,8 @@
         "Description":"Description",
         "filterSubCategory":"Category/Sub Category",
         "updateCategory": "Update Category",
-        "uploadPhotoBill": "Upload Photo/Bill"
+        "uploadPhotoBill": "Upload Photo/Bill",
+        "UpdatedInwardItems":"Update Item Inward"
 
 
     }

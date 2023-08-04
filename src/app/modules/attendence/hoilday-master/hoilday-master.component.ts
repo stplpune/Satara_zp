@@ -20,7 +20,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class HoildayMasterComponent {
   displayedheadersEnglish = ['Sr. No.', 'Year', ' Hiloday Name', 'Holiday Date', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'वर्ष', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
-  tableresp: any;
+  tableresp= new Array();
   viewStatus = 'Table';
   langTypeName: any;
   totalItem: any;
@@ -95,8 +95,8 @@ export class HoildayMasterComponent {
     let yearID = this.yearId.value;
     let textsearch = this.textsearch.value?.trim();
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
-    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan=EN'
-    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan=EN'
+    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
+    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
     this.apiService.setHttp('GET', 'zp-satara/HolidayMaster/GetAllHoliday?' + (status == 'pdf' ? pdf : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -146,7 +146,7 @@ export class HoildayMasterComponent {
     this.deleteId = obj.id;
     let dialoObj = {
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Holiday Master record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Delete Holiday Master Record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }
@@ -193,7 +193,7 @@ export class HoildayMasterComponent {
         "Sr.No": i + 1,
         "Year": ele.year,
         "Holiday Name": ele.holidayName,
-        "Holiday Date": ele.holidayDate,
+        "Holiday Date":this.datepipe.transform( ele.holidayDate, 'dd-MM-yyyy'),
       }
       this.resultDownloadArr.push(obj);
     });

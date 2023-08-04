@@ -46,6 +46,7 @@ export class AddHoildayMasterComponent {
   onSubmit() {
     let formData=this.holidayFrm.getRawValue();
     if (this.holidayFrm.invalid || formData.yearId ==0) {
+      this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }
     let data = this.webStorage.createdByProps();

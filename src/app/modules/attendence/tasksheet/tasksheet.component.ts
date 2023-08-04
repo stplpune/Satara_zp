@@ -16,11 +16,14 @@ export class TasksheetComponent {
   tableresp: any;
   totalItem: any;
   langTypeName: any;
+  totalCount: number = 0;
+  pageSize: number = 10;
+  pageNo: number = 1;
   displayedheadersEnglish = ['Sr. No.', ' Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Remark', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक इन वेळ', 'वेळ तपासा', 'उपस्थिती', 'शेरा', 'कृती'];
 
-  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Attendence','Remark','Action'];
-  // dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Attendence','Remark','Action'];
+  dataSource :any;
   viewStatus = 'Table';
   constructor(public dialog: MatDialog,
     private errors: ErrorsService,
@@ -32,7 +35,7 @@ export class TasksheetComponent {
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
-      this.getTableTranslatedData();
+      // this.getTableTranslatedData();
     });
   }
 
@@ -104,53 +107,59 @@ export class TasksheetComponent {
           this.tableresp = [];
           this.totalItem = 0
         }
-        this.getTableTranslatedData();
+        // this.getTableTranslatedData();
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
   }
 
-  getTableTranslatedData() {
-    // this.highLightFlag=true;
-    // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'category', 'subCategory', 'status', 'id', 'categoryId', 'action'];
-    let tableData = {
-      // pageNumber: this.pageNumber,
-      img: '',
-      blink: '',
-      badge: '',
-      // isBlock: 'status',
-      pagintion: this.totalItem > 10 ? true : false,
-      displayedColumns: displayedColumns,
-      tableData: this.tableresp,
-      tableSize: this.totalItem,
-      edit: true,
-      // tableHeaders: displayedColumnsReadMode,
-      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-    };
-    // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
-    this.apiService.tableData.next(tableData);
-  }
+  // getTableTranslatedData() {
+  //   // this.highLightFlag=true;
+  //   // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
+  //   let displayedColumns = ['srNo', 'category', 'subCategory', 'status', 'id', 'categoryId', 'action'];
+  //   let tableData = {
+  //     // pageNumber: this.pageNumber,
+  //     img: '',
+  //     blink: '',
+  //     badge: '',
+  //     // isBlock: 'status',
+  //     pagintion: this.totalItem > 10 ? true : false,
+  //     displayedColumns: displayedColumns,
+  //     tableData: this.tableresp,
+  //     tableSize: this.totalItem,
+  //     edit: true,
+  //     // tableHeaders: displayedColumnsReadMode,
+  //     tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+  //   };
+  //   // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
+  //   this.apiService.tableData.next(tableData);
+  // }
 
-  childCompInfo(obj: any) {
-    switch (obj.label) {
-      case 'Pagination':
-        // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
-        // this.pageNumber = obj.pageNumber;
-        this.getTableData();
-        break;
-      case 'Edit':
-        this.openDialog();
-        break;
-      case 'Block':
-        // this.openBlockDialog();
-        break;
-      case 'Delete':
-        // this.globalDialogOpen(obj);
-        break;
-    }
-  }
+  // childCompInfo(obj: any) {
+  //   switch (obj.label) {
+  //     case 'Pagination':
+  //       // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
+  //       // this.pageNumber = obj.pageNumber;
+  //       this.getTableData();
+  //       break;
+  //     case 'Edit':
+  //       this.openDialog();
+  //       break;
+  //     case 'Block':
+  //       // this.openBlockDialog();
+  //       break;
+  //     case 'Delete':
+  //       // this.globalDialogOpen(obj);
+  //       break;
+  //   }
+  // }
 
+  paginationEvent(event: any) {
+    event
+    // this.pageNo = event.pageIndex + 1;
+    // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
+    this.getTableData();
+  }
 
 }
 

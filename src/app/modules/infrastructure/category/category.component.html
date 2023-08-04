@@ -19,8 +19,11 @@
 
               <button mat-flat-button class="bg-danger btn-icon text-white"
               matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-              matTooltipClass="tooltip" (click)="getTableData('excel')">
+              matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
               <mat-icon>description </mat-icon>
+            </button>
+            <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+                <mat-icon class="material-symbols-outlined">table</mat-icon>
             </button>
             <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="openDialog()">
               <mat-icon>add</mat-icon>

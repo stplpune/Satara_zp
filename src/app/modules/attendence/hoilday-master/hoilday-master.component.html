@@ -22,6 +22,9 @@
           matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('pdf')">
           <mat-icon>description </mat-icon>
         </button>
+        <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+          <mat-icon class="material-symbols-outlined">table</mat-icon>
+      </button>
         <button mat-flat-button class="btn-main" (click)="openDialog()">
           <mat-icon>add</mat-icon>
           {{'Labels.AddHoliday'| translate}}

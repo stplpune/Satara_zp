@@ -39,6 +39,10 @@ export class AddHoildayMasterComponent {
     })
   }
 
+  get f(){
+    return this.holidayFrm.controls
+  }
+
   year=[
     {id:2023,name:'2023',Mname:'२०२३'},
     {id:2024,name:'2024',Mname:'२०२४'}

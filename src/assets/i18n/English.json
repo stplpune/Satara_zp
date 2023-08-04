@@ -1,6 +1,8 @@
 {
     "Labels": {
         "year":"Year",
+        "HolidayNameMarathi":"Holiday Name(Marathi)",
+        "holidayNameMarathiIsRequired":" Please Enter Valid Holiday Name(Marathi)",
         "documnentphotos":"Documnent Photos",
         "HolidayName":"Holiday Name",
         "AddHoliday":"Add Holiday",

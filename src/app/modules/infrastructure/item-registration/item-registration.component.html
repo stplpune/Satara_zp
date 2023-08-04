@@ -37,7 +37,7 @@
                         description
                     </mat-icon>
                 </button>
-                <button mat-flat-button class="btn-main" (click)="addUpdateItem()">
+                <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateItem()">
                     <mat-icon>add</mat-icon>
                     {{'Labels.addItems'| translate}}
                 </button>

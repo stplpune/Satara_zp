@@ -79,25 +79,25 @@
                   <div class="form-data">:- {{cardInward.inwardRemark}}</div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="d-flex align-items-center gap-3">
+              <div class="col-sm-12">
+                <div class="d-flex flex-column gap-1 mb-2">
                   <div class="form-label">Photo :</div>
-                  <div *ngFor="let cardDoc of showImage[i]?.imgData;let j= index">
-                    <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px" (click)="viewImages(i,j,'inward')">
+                  <div class="row">
+                    <div class="col-sm-3" *ngFor="let cardDoc of showImage[i]?.imgData;let j= index">
+                      <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px" (click)="viewImages(i,j,'inward')">
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div class="col-sm-6">
-                <div class="d-flex align-items-center gap-3">
+              <div class="col-sm-12">
+                <div class="d-flex flex-column gap-1 mb-2">
                   <div class="form-label">Document :</div>
                   <div *ngFor="let cardDoc of showPdf[i]?.pdfData;let j= index">
-                    <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px" width="60px" (click)="viewDocument(i,j,'inward')">
+                    <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px"
+                      width="60px" (click)="viewDocument(i,j,'inward')">
                   </div>
                 </div>
-              </div>
-              <div class="col-sm-12">
-
               </div>
             </div>
           </div>
@@ -138,28 +138,28 @@
                   <div class="form-data">:- {{cardOutWard.outwardRemark}}</div>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="form-label">Photo :</div>
-                  <div *ngFor="let cardDoc of outwardShowImage[i]?.imgData;let j= index">
-                    <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px" (click)="viewImages(i,j,'outward')">
+              <div class="col-sm-12">
+                <div class="d-flex flex-column gap-1 mb-2">
+                  <div class="form-label">Photo:</div>
+                  <div class="row gy-2">
+                    <div class="col-sm-3" *ngFor="let cardDoc of outwardShowImage[i]?.imgData;let j= index">
+                      <img class="img-fluid object-fit-cover w-100 " src="{{cardDoc.photo}}" alt=""
+                        (click)="viewImages(i,j,'outward')" style="height: 100px;width: 100px;">
+                    </div>
                   </div>
-
-                </div>
-              </div>
-
-              <div class="col-sm-6">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="form-label">Photo :</div>
-                  <div *ngFor="let cardDoc of outwardShowPdf[i]?.pdfData;let j= index">
-                    <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px" width="60px" (click)="viewDocument(i,j,'outward')">
-                  </div>
-
                 </div>
               </div>
 
               <div class="col-sm-12">
-
+                <div class="d-flex flex-column gap-1 mb-2">
+                  <div class="form-label">Documents:</div>
+                  <div class="row">
+                    <div class="col-sm-3" *ngFor="let cardDoc of outwardShowPdf[i]?.pdfData;let j= index">
+                      <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px"
+                        width="60px" (click)="viewDocument(i,j,'outward')">
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

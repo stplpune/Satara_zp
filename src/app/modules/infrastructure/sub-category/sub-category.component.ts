@@ -29,6 +29,7 @@ export class SubCategoryComponent {
   filterFlag: boolean = false;
   deleteObj:any;
   highLightFlag : boolean = true;
+  isWriteRight!: boolean;
   // displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
   displayedheadersEnglish = ['Sr. No.', ' Category','Sub Category','Action'];
@@ -44,12 +45,21 @@ export class SubCategoryComponent {
     public datepipe : DatePipe) { }
 
   ngOnInit() {
+    this.getIsWriteFunction();
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.getTableTranslatedData();
     });
   }
+
+  getIsWriteFunction() {
+    let print = this.webStorage?.getAllPageName().find((x: any) => {
+      return x.pageURL == "sub-category"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
+  }
+
   openDialog(data?: any) {
     data?'':this.textSearch.setValue('');
     this.filterFlag && data?'':(this.getTableData(),this.filterFlag=false);
@@ -118,8 +128,8 @@ export class SubCategoryComponent {
 
   getTableTranslatedData() {
     // this.highLightFlag=true;
-    // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'category', 'subCategory', 'action'];
+    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory' ];
+    let displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
@@ -127,7 +137,7 @@ export class SubCategoryComponent {
       badge: '',
       // isBlock: 'status',
       pagintion:this.totalItem > 10 ? true : false,
-      displayedColumns: displayedColumns,
+      displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode,
       tableData: this.tableresp,
       tableSize: this.totalItem,
       // tableHeaders: displayedColumnsReadMode,

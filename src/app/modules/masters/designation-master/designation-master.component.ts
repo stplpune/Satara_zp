@@ -47,7 +47,7 @@ export class DesignationMasterComponent implements OnInit {
       return x.pageURL == "designation-registration"
      });
      (print.writeRight === true) ?  this.isWriteRight = true : this.isWriteRight = false
-      }
+    }
 //#region ------------------------------------- Designation-Master Dropdown ------------------------------- //
 
 getTableTranslatedData(){

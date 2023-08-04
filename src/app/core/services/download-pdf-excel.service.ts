@@ -342,16 +342,7 @@ export class DownloadPdfExcelService {
      ValueData.forEach((d: any) => {
        let row = worksheet.addRow(d); row
      });
- 
-    //  worksheet.getColumn(2).width = 30;
-    //  worksheet.getColumn(3).width = 30;
-    //  worksheet.getColumn(4).width = 30;
-    //  worksheet.getColumn(5).width = 30;
-    //  worksheet.getColumn(6).width = 30;
-    //  worksheet.getColumn(7).width = 30;
-    //  worksheet.getColumn(8).width = 30;
-    //  worksheet.getColumn(9).width = 30;
-    //  worksheet.getColumn(10).width = 30;
+
      worksheet.addRow([]);
  
      // Generate Excel File with given name

@@ -22,7 +22,7 @@
               matTooltipClass="tooltip" (click)="getTableData('excel')">
               <mat-icon>description </mat-icon>
             </button>
-            <button mat-flat-button class="btn-main" (click)="openDialog()">
+            <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="openDialog()">
               <mat-icon>add</mat-icon>
               {{'Labels.addCategory' |translate}}
             </button>

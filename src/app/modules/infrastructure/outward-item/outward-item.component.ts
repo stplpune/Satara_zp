@@ -290,8 +290,11 @@ export class OutwardItemComponent {
           this.totalItem = res.responseData.responseData2.pageCount;
           // this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = res.responseData.responseData1;
-          status == 'excel' ? this.pdfDownload(data) : '';
+          // let data: [] = res.responseData.responseData1;
+          // status == 'excel' ? this.pdfDownload(data) : '';
+
+          let data: [] = (status == 'pdfFlag' || status == 'excel') ? res.responseData.responseData1 : [];
+          status == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : status == 'excel' ? this.pdfDownload(data,'excel') :'';  
         } else {
           this.ngxSipnner.hide();
           this.tableresp = [];
@@ -425,27 +428,42 @@ export class OutwardItemComponent {
     })
   }
 
-  pdfDownload(data: any) {
-    data.map((ele: any, i: any) => {
+
+
+  pdfDownload(data?: any,flag?:string) {   
+    console.log("data",data);
+    
+    this.resultDownloadArr=[];  
+    data.find((ele: any, i: any) => { 
       let obj = {
         "Sr.No": i + 1,
-        "Category Name": ele.category,
-        "Sub Category Name": ele.subCategory,
-        "Items": ele.item,
+        "Category": ele.category,
+        "Sub Category": ele.subCategory,
+        "Item": ele.itemName,
+        "Unit": ele.quantity,
+        "Sell Date":this.datepipe.transform(ele.purchase_Sales_Date,'yyyy-MM-dd'),
+        "Sell Price": ele.price,
+        "Assign To":ele.outwardTo,
+        "Remark": ele.remark,
       }
+
+
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category', 'Items'];
-    let ValueData =
-      this.resultDownloadArr.reduce(
-        (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-      );
 
-    let objData: any = {
-      'topHedingName': 'Outward Itmes List',
-      'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+    if (this.resultDownloadArr?.length > 0) {
+      let keyPDFHeader =  ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark'];
+      let ValueData =
+        this.resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+        let objData: any = {
+          'topHedingName': 'Outward Item List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7,15,20,30,10,20,15,20,20]
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
-    this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
   }
 }
 

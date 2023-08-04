@@ -25,57 +25,46 @@ export class CategoryComponent {
 
   displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव', 'कृती'];
-  
+
   search = new FormControl('');
   tableresp: any;
   totalItem: any;
   langTypeName: any;
-  filterFlag:boolean=false;
+  filterFlag: boolean = false;
   cardViewFlag: boolean = false;
-  highLightFlag: boolean =true;
-  totalCount:any;
+  highLightFlag: boolean = true;
+  totalCount: any;
   isWriteRight!: boolean;
-  displayedColumns :any;
+  displayedColumns: any;
   tableData: any;
   resultDownloadArr = new Array();
   pageNumber: number = 1;
-  deleteObj :any;
+  deleteObj: any;
   constructor(public dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
     private webStorage: WebStorageService,
-    public validation:ValidationService,
-    private excelpdfService:DownloadPdfExcelService,
-    public datepipe : DatePipe,
-    private commonService:CommonMethodsService
-    ) { }
+    public validation: ValidationService,
+    private excelpdfService: DownloadPdfExcelService,
+    public datepipe: DatePipe,
+    private commonService: CommonMethodsService
+  ) { }
 
   ngOnInit() {
-    // this.getIsWriteFunction()
+    this.getIsWriteFunction();
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
-      
-      
       this.getTableTranslatedData();
     });
-    
   }
 
-
-  // getIsWriteFunction(){
-  //   console.log(this.webStorage?.getAllPageName());
-    
-  //   let print = this.webStorage?.getAllPageName().find((x: any) => {
-  //     console.log("x",x);
-      
-  //     return x.pageURL == "category"
-  //    });
-  //    (print.writeRight === true) ?  this.isWriteRight = true : this.isWriteRight = false
-
-  //    console.log(print);
-     
-  //     }
+  getIsWriteFunction() {
+    let print = this.webStorage?.getAllPageName().find((x: any) => {
+      return x.pageURL == "category"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false;
+  }
 
   openDialog(data?: any) {
     const dialogRef = this.dialog.open(AddCategoryComponent, {
@@ -93,7 +82,7 @@ export class CategoryComponent {
         this.getTableData();
         this.pageNumber = 1;
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.getTableTranslatedData();
     });
   }
@@ -101,7 +90,7 @@ export class CategoryComponent {
   childCompInfo(obj: any) {
     switch (obj.label) {
       case 'Pagination':
-        this.filterFlag?'': (this.search.setValue(''),this.filterFlag=false);
+        this.filterFlag ? '' : (this.search.setValue(''), this.filterFlag = false);
         this.pageNumber = obj.pageNumber;
         this.getTableData();
         break;
@@ -117,13 +106,13 @@ export class CategoryComponent {
     }
   }
 
-  getTableData(status?:any) {
+  getTableData(status?: any) {
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.search.value?.trim() || '';
-    let str = 'TextSearch='+formData+'&PageNo='+this.pageNumber+'&PageSize=10';
-    let excel = 'TextSearch='+formData+'&PageNo='+1+'&PageSize='+this.totalCount ;
+    let str = 'TextSearch=' + formData + '&PageNo=' + this.pageNumber + '&PageSize=10';
+    let excel = 'TextSearch=' + formData + '&PageNo=' + 1 + '&PageSize=' + this.totalCount;
 
-    this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/AssetCategory/GetAll?' + (status == 'excel' ? excel : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -136,18 +125,18 @@ export class CategoryComponent {
           status == 'excel' ? this.pdfDownload(data) : '';
         } else {
           this.tableresp = [];
-          this.totalItem=0;
+          this.totalItem = 0;
         }
         this.getTableTranslatedData();
-        
+
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
   }
 
   getTableTranslatedData() {
-    this.highLightFlag=true;
-    // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Inactive/Active', 'Action'];
+    this.highLightFlag = true;
+    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'm_Category' : ''];
     let displayedColumns = ['srNo', 'category', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
@@ -156,11 +145,10 @@ export class CategoryComponent {
       badge: '',
       // isBlock: 'status',
       pagintion: this.totalItem > 10 ? true : false,
-      displayedColumns: displayedColumns,
-      // displayedColumns: this.isWriteRight === true ?displayedColumns : displayedColumnsReadMode, 
+      // displayedColumns: displayedColumns,
+      displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode, 
       tableData: this.tableresp,
       tableSize: this.totalItem,
-      // tableHeaders: displayedColumnsReadMode,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
       edit: true, delete: true,
     };
@@ -168,25 +156,25 @@ export class CategoryComponent {
     this.apiService.tableData.next(tableData);
   }
 
-  pdfDownload(data:any) {
-    data.map((ele: any, i: any)=>{
-          let obj = {
-            "Sr.No": i+1,
-            "Category Name": ele.category,
-          }
-          this.resultDownloadArr.push(obj);
-        });
-        let keyPDFHeader = ['Sr.No.', 'Category Name'];
-              let ValueData =
-                this.resultDownloadArr.reduce(
-                  (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-                );// Value Name
-                       
-                let objData:any = {
-                  'topHedingName': 'Category List',
-                  'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-                }
-               this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+  pdfDownload(data: any) {
+    data.map((ele: any, i: any) => {
+      let obj = {
+        "Sr.No": i + 1,
+        "Category Name": ele.category,
+      }
+      this.resultDownloadArr.push(obj);
+    });
+    let keyPDFHeader = ['Sr.No.', 'Category Name'];
+    let ValueData =
+      this.resultDownloadArr.reduce(
+        (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+      );// Value Name
+
+    let objData: any = {
+      'topHedingName': 'Category List',
+      'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+    }
+    this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
   }
 
   // openBlockDialog(obj: any) {
@@ -220,8 +208,8 @@ export class CategoryComponent {
   //     "statusChangeDate": webdata.modifiedDate,
   //     "lan": this.webStorage.languageFlag
   //   }
-   
-    
+
+
   //   this.apiService.setHttp('put', 'zp-satara/AssetCategory/UpdateStatus', false, obj, false, 'baseUrl');
   //   this.apiService.getHttp().subscribe({
   //     next: (res: any) => {
@@ -241,7 +229,7 @@ export class CategoryComponent {
     this.getTableData();
   }
 
-  
+
   // selectGrid(label: string) {
   //   this.viewStatus=label;
   //   if (label == 'Table') {
@@ -263,7 +251,7 @@ export class CategoryComponent {
   //     case 'Edit':
   //       this.openDialog(obj);
   //       break;
-     
+
   //     case 'Block':
   //       this.openBlockDialog(obj);
   //   }
@@ -273,7 +261,7 @@ export class CategoryComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
-      header: this.webStorage.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
+      header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
       title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Category record?' : 'तुम्हाला श्रेणी रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
@@ -288,31 +276,31 @@ export class CategoryComponent {
       if (result == 'yes') {
         this.deteleDialogOpen();
       }
-      this.highLightFlag=false;
-      
+      this.highLightFlag = false;
+
     })
   }
 
 
-  deteleDialogOpen(){
+  deteleDialogOpen() {
     let deleteObj = {
       "id": this.deleteObj.id,
       "deletedBy": 0,
       "modifiedDate": new Date(),
       "lan": "EN"
     }
-    
+
     this.apiService.setHttp('DELETE', 'zp-satara/AssetCategory/DeleteCategory', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.getTableData();
           this.commonService.showPopup(res.statusMessage, 0);
-        } else {     
+        } else {
           this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
         }
       },
-      error: ((err: any) => {  this.errors.handelError(err.statusCode) })
+      error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 

@@ -102,19 +102,19 @@
                         <div class="upload-btn-wrapper">
                             <button class="upload-btn" type="button"
                                 matTooltip="{{uploadImg ? uploadImg.split('/').pop() :''}}" matTooltipPosition="below"
-                                matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhoto' |
+                                matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhotodocument' |
                                 translate}}</button>
                             <!-- <input type="file" name="myfile"  [disabled]="uploadImg" multiple accept=".png, .jpg, .jpeg"
                                  #uploadImage (change)="multipleImgUpload($event)"/> -->
 
                             <input type="file" name="myfile" formControlName="photo" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
                                 #uploadImage (change)="multipleImgUpload($event)" />
-
+                                <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
+                                    Photo Is Required
+                                </mat-error>
 
                         </div>
-                        <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
-                            Photo Is Required
-                        </mat-error>
+                       
                         <!-- <div class="action-btn" *ngIf="uploadImg">
                             <button mat-icon-button class="btn-icon text-primary" type="button"
                                  matTooltip="{{'Labels.View' | translate}}"

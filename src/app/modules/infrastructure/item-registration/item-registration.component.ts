@@ -81,7 +81,7 @@ export class ItemRegistrationComponent {
       villageId:[''],
       // ItemsId: [''],
       textSearch: ['']
-    })
+    });
   }
 
   getTableData(flag?: string) {
@@ -91,17 +91,16 @@ export class ItemRegistrationComponent {
     let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;    
     let str=`CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=10&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`   
     let reportStr = `CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=${this.tableDatasize *10}&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`  
-    this.apiService.setHttp('GET', 'zp-satara/ItemMaster/GetAllItem?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');     
+    this.apiService.setHttp('GET', 'zp-satara/ItemMaster/GetAllItem?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');     
     this.apiService.getHttp().subscribe({
       next: (res: any) => {   
         if (res.statusCode == 200) {
           this.ngxSpinner.hide();
-          flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-        // this.tableDataArray = res.responseData.responseData1 
-         this.tableDatasize = res.responseData.responseData2.pageCount 
-         this.resultDownloadArr=[];
-         let data: [] = flag == 'pdfFlag' ? res.responseData.responseData1 : [];
-         flag == 'pdfFlag' ? this.downloadPdf(data) : '';     
+         (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+        // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
+        this.tableDatasize = res.responseData.responseData2.pageCount 
+         let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+         flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';     
         }else{
           this.ngxSpinner.hide();
           this.tableDataArray =[];
@@ -132,7 +131,8 @@ export class ItemRegistrationComponent {
     this.apiService.tableData.next(tableData);
   }
 
-  downloadPdf(data: any) { 
+  downloadPdf(data?: any,flag?:string) {   
+    this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
       let obj = {
         srNo: i + 1,
@@ -143,20 +143,23 @@ export class ItemRegistrationComponent {
       }
       this.resultDownloadArr.push(obj);
     });
-    // download pdf call
-    if (this.resultDownloadArr.length > 0) {
+
+    if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ["Sr.No.", "Category", "Sub Category", "Item Name", "Description"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-      let objData: any = {
-        'topHedingName': 'Item List',
-        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-      }
-      ValueData.length > 0 ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : ''
+        let objData: any = {
+          'topHedingName': 'Item List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7, 15, 20, 30, 40,]
+        flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
+
+  
 
 
   

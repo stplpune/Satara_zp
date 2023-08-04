@@ -55,6 +55,7 @@ export class ItemRegistrationComponent {
     public validators: ValidationService){}
 
   ngOnInit(): void {
+    this.getIsWriteFunction();
     this.languageFlag = this.webService.languageFlag;
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
@@ -64,6 +65,13 @@ export class ItemRegistrationComponent {
     this.getTableData();
     this.filterFormData();
     this.getAllCategory();
+  }
+
+  getIsWriteFunction() {
+    let print = this.webService?.getAllPageName().find((x: any) => {
+      return x.pageURL == "item"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
 
   filterFormData() {
@@ -107,13 +115,14 @@ export class ItemRegistrationComponent {
 
   setTableData(){
     this.highLightFlag =true;
-    let displayedColumns  = [ 'srNo','category', 'subCategory', 'itemName', 'description','action'];
-    let marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
+    let displayedColumnsReadMode  = [ 'srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', 'itemName', 'description'];
+    this.displayedColumns = [ 'srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', 'itemName', 'description','action'];
+
     let tableData = {
       highlightedrow:true,
       pageNumber: this.pageNumber,
       img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-      displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
+      displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,

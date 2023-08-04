@@ -45,7 +45,7 @@
             <mat-select [formControl]="yearId">
                 <mat-option *ngFor="let data of year" [value]="data.id">
                     {{webStorage.getLangauge() == 'EN' ?
-                    data.name : data.Mname}}
+                    data.year : data.Mname}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -54,13 +54,14 @@
       <div class="col-sm-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{'Labels.Category' |translate}}</mat-label>
-          <input matInput maxlength="50" [formControl]="textsearch" (keypress)="validation.noFirstSpaceAllow($event)">
+          <input matInput maxlength="50" [formControl]="textsearch"
+           (keypress)="validation.noFirstSpaceAllow($event)" (keyup.enter)="getTableData()">
         </mat-form-field>
       </div>
       <div class="col-sm-auto mb-lg-0 mb-2">
-        <button type="button" mat-flat-button class="btn-main">{{'Labels.filter'|
+        <button type="button" mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter'|
           translate}}</button>
-        <button type="button" mat-flat-button class="btn-second ms-2">{{'Labels.clear' |translate}}</button>
+        <button type="button" mat-flat-button class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear' |translate}}</button>
       </div>
     </div>
     <app-table (recObjToChild)="childCompInfo($event)"></app-table>

@@ -26,8 +26,6 @@ export class AddHoildayMasterComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    console.log(this.data);
-    
     this.defaultForm();
     this.data?this.editData():'';
   }
@@ -41,7 +39,7 @@ export class AddHoildayMasterComponent {
   }
 
   year=[
-    {'id':1,name:'2023',Mname:''}
+    {id:2023,name:'2023',Mname:''}
   ]
 
   onSubmit() {
@@ -60,7 +58,6 @@ export class AddHoildayMasterComponent {
       "lan": this.webStorage.languageFlag,
     }
     
-    console.log(this.holidayFrm.value);
     let method=this.editFlag?'put':'post';
     let url=this.editFlag?'UpdateHoliday':'AddHoliday'
     this.apiService.setHttp(method, 'zp-satara/HolidayMaster/'+url, false, obj, false, 'baseUrl');
@@ -80,7 +77,6 @@ export class AddHoildayMasterComponent {
     editData(){
       this.editFlag=true;
       this.editId=this.data.id;
-      console.log(this.editId);
       this.holidayFrm.patchValue({
         date:this.data.holidayDate,
         holidayName:this.data.holidayName,

@@ -96,9 +96,9 @@ export class ItemRegistrationComponent {
       next: (res: any) => {   
         if (res.statusCode == 200) {
           this.ngxSpinner.hide();
-          flag != ('pdfFlag' || 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-        // this.tableDataArray = res.responseData.responseData1 
-         this.tableDatasize = res.responseData.responseData2.pageCount 
+         (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+        // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
+        this.tableDatasize = res.responseData.responseData2.pageCount 
          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
          flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';     
         }else{

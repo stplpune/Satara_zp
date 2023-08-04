@@ -462,7 +462,7 @@ export class InwardItemComponent {
           'topHedingName': 'Inward List List',
           'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
-        let headerKeySize = [7, 15, 20, 30, 40,]
+        let headerKeySize = [7, 15, 20, 20,10,20,15,20]
         flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
   }

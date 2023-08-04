@@ -117,12 +117,13 @@ export class CategoryComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
-          // this.tableresp = res.responseData.responseData1;
+  
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = res.responseData.responseData1;
-          status == 'excel' ? this.pdfDownload(data) : '';
+  
+          let data: [] = (status == 'pdfFlag' || status == 'excel') ? res.responseData.responseData1 : [];
+          status == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : status == 'excel' ? this.pdfDownload(data,'excel') :'';  
         } else {
           this.tableresp = [];
           this.totalItem = 0;
@@ -156,26 +157,34 @@ export class CategoryComponent {
     this.apiService.tableData.next(tableData);
   }
 
-  pdfDownload(data: any) {
-    data.map((ele: any, i: any) => {
+  pdfDownload(data?: any,flag?:string) {   
+    this.resultDownloadArr=[];  
+    data.find((ele: any, i: any) => {
       let obj = {
-        "Sr.No": i + 1,
-        "Category Name": ele.category,
+        srNo: i + 1,
+        category: ele.category,
+        subCategory: ele.subCategory,
+        itemName: ele.itemName,
+        description: ele.description,
       }
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Category Name'];
-    let ValueData =
-      this.resultDownloadArr.reduce(
-        (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-      );// Value Name
 
-    let objData: any = {
-      'topHedingName': 'Category List',
-      'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+    if (this.resultDownloadArr?.length > 0) {
+      let keyPDFHeader = ["Sr.No.", "Category"];
+      let ValueData =
+        this.resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+        let objData: any = {
+          'topHedingName': 'Category List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7, 15, 20, 30, 40,]
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
-    this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
   }
+
 
   // openBlockDialog(obj: any) {
   //   let userEng = obj.isBlock == false ?'Active' : 'Inactive';

@@ -52,8 +52,8 @@ export class HoildayMasterComponent {
   }
 
   year = [
-    { id: 2023, year: '2023', Mname: '' },
-    { id: 2024, year: '2024', Mname: '' }
+    { id: 2023, year: '2023', Mname: '२०२३' },
+    { id: 2024, year: '2024', Mname: '२०२४' }
   ]
 
   openDialog(data?: any) {
@@ -122,7 +122,7 @@ export class HoildayMasterComponent {
 
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'year', 'holidayName', 'holidayDate', 'action'];
+    let displayedColumns = ['srNo', 'year', this.langTypeName == 'English'?'holidayName':'m_HolidayName', 'holidayDate', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',

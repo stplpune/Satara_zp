@@ -34,13 +34,14 @@ export class AddHoildayMasterComponent {
     this.holidayFrm = this.fb.group({
       date: ['',[Validators.required]],
       holidayName: ['',[Validators.required]],
-      yearId:['',[Validators.required]]
+      yearId:['',[Validators.required]],
+      holidayNameMarathi:['',[Validators.required,Validators.pattern('^[-\u0900-\u096F ]+$')]]
     })
   }
 
   year=[
-    {id:2023,name:'2023',Mname:''},
-    {id:2024,name:'2024',Mname:''}
+    {id:2023,name:'2023',Mname:'२०२३'},
+    {id:2024,name:'2024',Mname:'२०२४'}
   ]
 
   onSubmit() {
@@ -54,6 +55,7 @@ export class AddHoildayMasterComponent {
     let obj={
       "id":this.editFlag?this.editId:0,
       "holidayName": formData.holidayName,
+      "m_HolidayName": formData.holidayNameMarathi,
       "holidayDate": formData.date,
       "year": formData.yearId,
       "isDeleted": false,
@@ -83,7 +85,8 @@ export class AddHoildayMasterComponent {
       this.holidayFrm.patchValue({
         date:this.data.holidayDate,
         holidayName:this.data.holidayName,
-        yearId:this.data.year
+        yearId:this.data.year,
+        holidayNameMarathi:this.data.m_HolidayName
       })
     }
   }

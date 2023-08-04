@@ -193,7 +193,7 @@ export class HoildayMasterComponent {
         "Sr.No": i + 1,
         "Year": ele.year,
         "Holiday Name": ele.holidayName,
-        "Holiday Date": ele.holidayDate,
+        "Holiday Date":this.datepipe.transform( ele.holidayDate, 'dd-MM-yyyy'),
       }
       this.resultDownloadArr.push(obj);
     });

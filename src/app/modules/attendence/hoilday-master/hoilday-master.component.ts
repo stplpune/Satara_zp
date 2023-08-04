@@ -146,7 +146,7 @@ export class HoildayMasterComponent {
     this.deleteId = obj.id;
     let dialoObj = {
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Holiday Master record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Delete Holiday Master Record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }
@@ -193,7 +193,7 @@ export class HoildayMasterComponent {
         "Sr.No": i + 1,
         "Year": ele.year,
         "Holiday Name": ele.holidayName,
-        "Holiday Date": ele.holidayDate,
+        "Holiday Date":this.datepipe.transform( ele.holidayDate, 'dd-MM-yyyy'),
       }
       this.resultDownloadArr.push(obj);
     });

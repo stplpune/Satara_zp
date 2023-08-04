@@ -96,18 +96,21 @@ export class InwardItemComponent {
     let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
     let reportStr = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=${this.pageNumber}&pagesize=${this.totalCount * 10}&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
 
-    this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + (flag == 'excel' ? reportStr : str ), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str ), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          flag != 'excel' && flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           // this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = res.responseData.responseData1;
-          flag == 'excel' ? this.pdfDownload(data) : '';
+          // let data: [] = res.responseData.responseData1;
+          // flag == 'excel' ? this.pdfDownload(data) : '';
+
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : flag == 'excel' ? this.pdfDownload(data,'excel') :'';  
         }
         else {
           this.ngxSpinner.hide();
@@ -405,32 +408,63 @@ export class InwardItemComponent {
     }
   }
 
-  pdfDownload(data: any) {
-    data.map((ele: any, i: any) => {
-      ele.purchase_Sales_Date = this.datepipe.transform(ele.purchase_Sales_Date, 'dd/MM/yyyy');
+  // pdfDownload(data: any) {
+  //   data.map((ele: any, i: any) => {
+  //     ele.purchase_Sales_Date = this.datepipe.transform(ele.purchase_Sales_Date, 'dd/MM/yyyy');
+  //     let obj = {
+  //       "Sr.No": i + 1,
+  //       "Category Name": ele.category,
+  //       "Sub Category": ele.subCategory,
+  //       "Item": ele.itemName,
+  //       "Units": ele.quantity,
+  //       "Purchase Date": ele.purchase_Sales_Date,
+  //       "Price": ele.price,
+  //       "Remark": ele.remark,
+  //     }
+  //     this.resultDownloadArr.push(obj);
+  //   });
+  //   let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark'];
+  //   let ValueData =
+  //     this.resultDownloadArr.reduce(
+  //       (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+  //     );// Value Name
+
+  //   let objData: any = {
+  //     'topHedingName': 'Inward Itmes List',
+  //     'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+  //   }
+  //   this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
+  // }
+
+  pdfDownload(data?: any,flag?:string) {   
+    this.resultDownloadArr=[];  
+    data.find((ele: any, i: any) => {
       let obj = {
-        "Sr.No": i + 1,
-        "Category Name": ele.category,
-        "Sub Category": ele.subCategory,
-        "Item": ele.itemName,
-        "Units": ele.quantity,
-        "Purchase Date": ele.purchase_Sales_Date,
-        "Price": ele.price,
-        "Remark": ele.remark,
-      }
+              "Sr.No": i + 1,
+              "Category Name": ele.category,
+              "Sub Category": ele.subCategory,
+              "Item": ele.itemName,
+              "Units": ele.quantity,
+              "Purchase Date": ele.purchase_Sales_Date,
+              "Price": ele.price,
+              "Remark": ele.remark,
+            }
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark'];
-    let ValueData =
-      this.resultDownloadArr.reduce(
-        (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-      );// Value Name
 
-    let objData: any = {
-      'topHedingName': 'Inward Itmes List',
-      'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+    if (this.resultDownloadArr?.length > 0) {
+      let keyPDFHeader = ['Sr.No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark'];
+      let ValueData =
+        this.resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+        let objData: any = {
+          'topHedingName': 'Inward List List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7, 15, 20, 30, 40,]
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
-    this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
   }
 
 

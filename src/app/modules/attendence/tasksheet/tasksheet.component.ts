@@ -124,6 +124,7 @@ export class TasksheetComponent {
       displayedColumns: displayedColumns,
       tableData: this.tableresp,
       tableSize: this.totalItem,
+      edit: true,
       // tableHeaders: displayedColumnsReadMode,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
     };

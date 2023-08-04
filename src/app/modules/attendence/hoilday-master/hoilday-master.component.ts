@@ -102,7 +102,6 @@ export class HoildayMasterComponent {
         console.log(res);
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          // this.tableresp = res.responseData.responseData1;
           status != 'pdf' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
@@ -133,6 +132,7 @@ export class HoildayMasterComponent {
       tableData: this.tableresp,
       tableSize: this.totalItem,
       edit: true, delete: true,
+      date:'holidayDate',
       // tableHeaders: displayedColumnsReadMode,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
     };
@@ -159,8 +159,6 @@ export class HoildayMasterComponent {
       if (result == 'yes') {
         this.getDeleteData();
       }
-      // this.highLightFlag=false;
-
     })
   }
 

@@ -186,7 +186,7 @@ export class AddOutwardItemComponent {
 
   getUnitByQty() {
     let unit = Number(this.itemForm.value.unit);
-    if (unit >= (this.openingStock)) {
+    if ((unit) > (this.openingStock)) {
       this.openingStockFlag = true;
       this.f['unit'].setValue('');
       this.commonMethod.snackBar(this.webStorage.languageFlag == 'EN' ? 'Unit Should Be Less Than Opening Stock' : 'युनिट ओपनिंग स्टॉकपेक्षा कमी असावे', 1);

@@ -20,7 +20,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class HoildayMasterComponent {
   displayedheadersEnglish = ['Sr. No.', 'Year', ' Hiloday Name', 'Holiday Date', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'वर्ष', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
-  tableresp: any;
+  tableresp= new Array();
   viewStatus = 'Table';
   langTypeName: any;
   totalItem: any;
@@ -95,8 +95,8 @@ export class HoildayMasterComponent {
     let yearID = this.yearId.value;
     let textsearch = this.textsearch.value?.trim();
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
-    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan=EN'
-    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan=EN'
+    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
+    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
     this.apiService.setHttp('GET', 'zp-satara/HolidayMaster/GetAllHoliday?' + (status == 'pdf' ? pdf : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

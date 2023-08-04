@@ -32,6 +32,9 @@
                     matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
                     <mat-icon>description </mat-icon>
                 </button>
+                <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+                    <mat-icon class="material-symbols-outlined">table</mat-icon>
+                </button>
                 <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateAgency()">
                     <mat-icon>
                         add

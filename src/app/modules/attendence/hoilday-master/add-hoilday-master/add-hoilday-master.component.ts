@@ -20,7 +20,7 @@ export class AddHoildayMasterComponent {
     private apiService:ApiService,
     private commonMethod:CommonMethodsService,
     private errors:ErrorsService,
-    private webStorage:WebStorageService,
+    public webStorage:WebStorageService,
     public validation:ValidationService,
     private dialogRef: MatDialogRef<AddHoildayMasterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -35,10 +35,14 @@ export class AddHoildayMasterComponent {
   defaultForm() {
     this.holidayFrm = this.fb.group({
       date: ['',[Validators.required]],
-      holidayName: ['',[Validators.required]]
+      holidayName: ['',[Validators.required]],
+      yearId:['',[Validators.required]]
     })
   }
 
+  year=[
+    {'id':1,name:'2023',Mname:''}
+  ]
 
   onSubmit() {
     if (this.holidayFrm.invalid) {
@@ -50,8 +54,8 @@ export class AddHoildayMasterComponent {
       "id":this.editFlag?this.editId:0,
       "holidayName": formData.holidayName,
       "holidayDate": formData.date,
-      "year": 0,
-      "isDeleted": data.isDeleted,
+      "year": formData.yearId,
+      "isDeleted": false,
       "createdBy":data.createdBy,
       "lan": this.webStorage.languageFlag,
     }
@@ -79,7 +83,8 @@ export class AddHoildayMasterComponent {
       console.log(this.editId);
       this.holidayFrm.patchValue({
         date:this.data.holidayDate,
-        holidayName:this.data.holidayName
+        holidayName:this.data.holidayName,
+        yearId:this.data.year
       })
     }
   }

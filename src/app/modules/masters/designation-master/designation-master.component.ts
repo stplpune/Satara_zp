@@ -97,18 +97,18 @@ getTableTranslatedData(){
    
     let str = `pageno=${this.pageNumber}&pagesize=10&textSearch=${this.searchContent.value ? this.searchContent.value:''}&lan=${this.webStorage.languageFlag}`;
     let reportStr = `pageno=${this.pageNumber}&pagesize=${this.totalCount* 10}&textSearch=${this.searchContent.value ? this.searchContent.value:''}&lan=${this.webStorage.languageFlag}`;
-    this.apiService.setHttp('GET', 'zp-satara/register-designation/GetAllByCriteria?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/register-designation/GetAllByCriteria?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
 
       next: (res: any) => {
         if (res.statusCode == "200") {
           // this.tableDataArray = res.responseData.responseData1;
-          flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          flag != ('pdfFlag' || 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          let data: [] = res.responseData.responseData1;
-          flag == 'pdfFlag' ? this.downloadPdf(data) : '';
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';     
         } else {
           this.tableDataArray = [];
           this.tableDatasize = 0;
@@ -227,7 +227,10 @@ getTableTranslatedData(){
   //   });
   // }
 
-  downloadPdf(data: any) {
+  downloadPdf(data: any, flag?:string) {
+    console.log("flag : ", flag);
+    
+    this.resultDownloadArr = [];
     data.map((ele: any, i: any)=>{
       let obj = {
         "Sr.No": i+1,
@@ -236,17 +239,21 @@ getTableTranslatedData(){
       }
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Designation', 'Designation Level'];
-        let ValueData =
-          this.resultDownloadArr.reduce(
-            (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
-          );// Value Name
-                 
-          let objData:any = {
-            'topHedingName': 'Designation List',
-            'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
-         this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData);
+
+    if(this.resultDownloadArr?.length > 0){
+      let keyPDFHeader = ['Sr.No.', 'Designation', 'Designation Level'];
+      let ValueData =
+      this.resultDownloadArr.reduce(
+        (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+      );// Value Name
+
+      let objData:any = {
+        'topHedingName': 'Designation List',
+        'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+      let headerKeySize = [7, 15, 20];
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+    } 
   }
 
   clearForm() {

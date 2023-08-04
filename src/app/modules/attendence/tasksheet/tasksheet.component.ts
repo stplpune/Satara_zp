@@ -16,9 +16,9 @@ export class TasksheetComponent {
   tableresp: any;
   totalItem: any;
   langTypeName: any;
-  totalCount: number = 0;
-  pageSize: number = 10;
-  pageNo: number = 1;
+  // totalCount: number = 0;
+  // pageSize: number = 10;
+  // pageNo: number = 1;
   displayedheadersEnglish = ['Sr. No.', ' Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Remark', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक इन वेळ', 'वेळ तपासा', 'उपस्थिती', 'शेरा', 'कृती'];
 
@@ -88,7 +88,7 @@ export class TasksheetComponent {
     // let formData = this.textSearch.value?.trim() || '';
     // let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     // let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?', false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=2023-03&UserId=4', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         console.log(res);
@@ -154,12 +154,12 @@ export class TasksheetComponent {
   //   }
   // }
 
-  paginationEvent(event: any) {
-    event
-    // this.pageNo = event.pageIndex + 1;
-    // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
-    this.getTableData();
-  }
+  // paginationEvent(event: any) {
+  //   event
+  //   // this.pageNo = event.pageIndex + 1;
+  //   // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
+  //   this.getTableData();
+  // }
 
 }
 

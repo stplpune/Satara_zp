@@ -38,8 +38,8 @@ export class ItemRegistrationComponent {
 
   displayedColumns = [ 'srNo','category', 'subCategory', 'itemName', 'description','action'];
   marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
-  displayedheaders = ['Sr. No.',' Category', 'Sub Category', 'Item Name', 'Description','action'];
-  marathiDisplayedheaders = ['अनुक्रमांक','श्रेणी', 'उप श्रेणी', 'वस्तूचे नाव', 'वर्णन', 'कृती'];
+  displayedheaders = ['Sr. No.',' Category', 'Sub Category', 'Item', 'Description','action'];
+  marathiDisplayedheaders = ['अनुक्रमांक','श्रेणी', 'उप श्रेणी', 'वस्तू', 'वर्णन', 'कृती'];
 
   constructor (private fb: FormBuilder,
     public dialog: MatDialog,
@@ -145,7 +145,7 @@ export class ItemRegistrationComponent {
     });
 
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ["Sr.No.", "Category", "Sub Category", "Item Name", "Description"];
+      let keyPDFHeader = ["Sr.No.", "Category", "Sub Category", "Item", "Description"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -239,7 +239,7 @@ export class ItemRegistrationComponent {
     this.deleteObj = obj;
     let dialoObj = {
       header: this.webService.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
-      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
+      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

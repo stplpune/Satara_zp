@@ -120,7 +120,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   initialApiCall(val: any) {
     if (val == 'initial') {
       this.createFilterForm();
-      this.getBarChartOption();
       this.getPieChart();
       this.getTalukas();
       this.getExamType();
@@ -135,7 +134,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     } else if (val == 'languageChange') {
       this.showSvgMap(this.commonMethods.mapRegions());
       this.getPieChartData();
-      this.constructStackBarChart();
       this.getBarChartSubject()
       setTimeout(() => {
         this.clickOnSvgMap('select');
@@ -343,127 +341,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     };
   }
   
-  getBarChartOption() {
-
-    // ----  stack bar for base level
-    this.stackbarchartOptions = {
-      series: [],
-      chart: {
-        type: "bar",
-        offsetX: -30,
-        height: 350,
-        width: 300,
-        horizontal: false,
-        borderRadius: 10,
-        columnWidth: '45%',
-        stacked: true,
-        stackType: "100%",
-        toolbar: {
-          show: false,
-          enabled: false,
-
-        },
-        events: {
-          click: (_event: any, _chartContext: any, config: any) => {
-            if (config.seriesIndex >= 0) {
-              
-              console.log("_event",_event, config);
-              this.optionalSubjectindex = config.seriesIndex;
-              const index = this.stackbarchartOptions.xaxis.subjects.findIndex((i: any) => i == this.selectedbar);
-              const data = this.stackbarChartData.find((x: any) => (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName) == this.selectedbar && (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptions.series[0][index][this.optionalSubjectindex]?.name);
-              const examTypeId = this.stackbarchartOptions.xaxis.examSet[config?.dataPointIndex]
-              this.selectedBarstatus = 'stack';
-              this.passingParameters(data, examTypeId)
-            }
-          },
-          legendClick: function(event: any) {
-            console.log("legendClick", event);
-            
-            // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts.
-          }
-        }
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: "bottom",
-              // colors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#9ddcb4', '#65C889'],
-              colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#468C5F'],
-            }
-          }
-        }
-      ],
-      plotOptions: {
-        bar: {
-          rangeBarGroupRows: false,
-          barHeight: '40%',
-        }
-      },
-      xaxis: {
-        axisTicks: {
-          show: false
-        },
-        show: true,
-        labels: {
-          show: true,
-          rotate: -90
-        },
-        categories: [
-        ],
-        parameters: [],
-        subjects: [],
-        examSet: []
-
-      },
-
-      grid: {
-        show: false,      // you can either change hear to disable all grids
-
-      },
-      yaxis: {
-        show: false,
-        showAlways: false,
-        floating: false,
-        axisTicks: {
-          show: false
-        },
-        axisBorder: {
-          show: false
-        },
-        labels: {
-          show: false
-        },
-      },
-      fill: {
-        // colors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#9ddcb4', '#65C889'],
-        colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#468C5F'],
-      },
-      legend: {
-        offsetX: 17,
-        showForSingleSeries: true,
-        inverseOrder: true,
-        position: 'right',
-        fontSize: '12px',
-        show: true,
-        markers: {
-          width: 12,
-          height: 12,
-          strokeWidth: 0,
-          strokeColor: '#fff',
-          // fillColors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#9ddcb4', '#65C889'],
-          fillColors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#468C5F'],
-        }
-      },
-      dataLabels: {
-        enabled: false,
-        formatter: function (val: any,) {
-          return val.toFixed(2) + ' %'
-        }
-      },
-    };
-  }
+ 
 
   passingParameters(data: any, examTypeId: any) {
     const formData = this.filterForm.value;
@@ -517,8 +395,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.totalStudentSurveyData[1].status = true;
           }
           this.totalStudentSurveyData[0].ischeckboxShow = false;
-          const filterObj = this.totalStudentSurveyData.find((x: any) => x.status == true);
-          this.asessmwntLavel.value == '0' ? this.checkData(filterObj, 'checkbox') : '';
           setTimeout(() => {
             this.getPieChartData();
           }, 100)
@@ -534,49 +410,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.error.handelError(error.message)
       }
     });
-  }
-  checkData(obj: any, status: any) {
-    if (obj.status != true && status == 'radio' || obj.status == true && status == 'checkbox') {
-      this.selectedGroupIdindex = this.totalStudentSurveyData.findIndex((x: any) => x.groupId == obj.groupId);
-      if (status == 'radio') {
-        this.totalStudentSurveyData.map((x: any) => {
-          x.status = false;
-        })
-        this.totalStudentSurveyData[this.selectedGroupIdindex].status = true;
-        this.totalStudentSurveyData.map((x: any) => {
-          if (x.status == true) {
-            x.standardDetails.map((y: any) => {
-              y.status = true;
-            })
-            this.standardArray = x.standardDetails.filter((y: any) => y.status == true);
-          }
-        })
-      }
-      setTimeout(() => {
-        this.totalStudentSurveyData.forEach((x: any) => {
-          if (x.status == true) {
-            this.standardArray = x.standardDetails.filter((y: any) => y.status == true);
-            if (this.standardArray.length) {
-              let studentTotal = 0;
-              let assessmentTotal = 0;
-              this.selectedSurveyData = [];
-              this.standardArray.forEach((y: any) => {
-                studentTotal += y.studentCount,
-                  assessmentTotal += y.assessmentCount
-              })
-              this.selectedSurveyData = assessmentTotal + '/' + studentTotal;
-            } else {
-              this.selectedSurveyData = x.assessmentCount + '/' + x.studentCount;
-              this.standardArray = x.standardDetails;
-            }
-          }
-        })
-      }, 50)
-      this.getSubject(obj.groupId);
-      setTimeout(() => {
-        this.getBarChart(obj);
-      }, 50);
-    }
   }
   // ----------------------------------Pie chart---------------------------------------------------------------//
   getPieChartData() {
@@ -599,96 +432,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.piechartOptions.labels = this.selectedLang == 'English' ? ['Government', 'Private', 'Other'] : ['सरकारी', 'खाजगी', 'इतर'];
   }
   // ---------------------------------- bar chart by group / standard ----------------------------------------//
-  getBarChart(obj: any) {
-    const formData = this.filterForm.value;
-    this.showBarChartF = false;
-    this.selectedObj = obj;
-    this.barChartData = [];
-    this.stackbarChartData = [];
-    const subjectId = '';
-    const standardData = this.standardArray.map((x: any) => x.standardId);
-
-    //'?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&GroupId=' + obj?.groupId+'&StandardIds='+standardData+'&SubjectIds='+subjectId+'&ExamTypeId='+(formData?.examTypeId || 0)+'&EducationYearId='+ (formData?.acYearId || 0) //old api
-    // this.apiService.setHttp('GET', 'zp-satara/Dashboard/' + (obj.groupId == 1 ? 'GetDataFor1st2ndStdForBarChart' : 'GetDataFor3rdAboveStdForBarChart') + '?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&groupId=' + obj?.groupId+'&StandardIds='+standardData.toString(), false, false, false, 'baseUrl');
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataForCommon_V2' + '?GroupId=' + obj?.groupId + '&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&StandardIds=' + standardData + '&SubjectIds=' + subjectId + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&AcademicYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.commonDataResArray = [];
-          this.commonDataResArray = res.responseData?.responseData1;
-          res.responseData.responseData1.map((x: any) => {
-            x.isOption == true ? this.stackbarChartData.push(x) : this.barChartData.push(x);
-          })
-          // this.barChartData = res.responseData.responseData1;
-
-          this.isStackbarEmpty = this.stackbarChartData.every((item: any) => item.totalPercentage === 0);
-          this.isBarChartEmty = this.barChartData.every((item: any) => item.totalPercentage === 0);
-          this.constructStackBarChart();
-          this.getBarChartSubject();
-        }
-      },
-      error: (error: any) => { this.error.handelError(error.message) }
-    });
-  }
-  constructStackBarChart() {
-    // -----------------------------------------  stack bar chart ------------------------------------------------//
-    const subjectSet = [...new Set(this.stackbarChartData.map((sub: any) => sub.subjectName))];    //separte unique subjectlist
-    const subjectSet_m = [...new Set(this.stackbarChartData.map((sub: any) => sub.m_SubjectName))];
-    const examIdSet = [...new Set(this.stackbarChartData.map((sub: any) => sub.examTypeId))]; //examType
-    const testSet = [...new Set(this.stackbarChartData.map((sub: any) => sub.shortForm))]; //examType
-    // const testSet_M= [...new Set(this.stackbarChartData.map((sub:any) => sub.m_ExamType))];
-    this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
-    this.stackbarchartOptions.series = [];
-    this.stackbarchartOptions.xaxis.categories = [];
-    this.stackbarchartOptions.xaxis.subjects = [];
-    this.stackbarchartOptions.xaxis.examSet = [];
-    let dataArray: any[] = [];
-    subjectSet.map((x: any, index: any) => { //crete list of same subjectname 
-      const filterSubject = this.stackbarChartData.filter((y: any) => y.subjectName == x);
-      const optionalSubArray = [...new Set(filterSubject.map((sub: any) => sub.optionGrade))];
-      let dataObjArray: any[] = [];
-      optionalSubArray.reverse().map((z: any) => {
-        const filterArray = filterSubject.filter((a: any) => a.optionGrade == z)
-        const subData = {
-          name: this.selectedLang == 'English' ? filterArray[0].optionName : filterArray[0].m_OptionName,
-          data: filterArray.map((b: any) => b.totalPercentage),//([z.totalPercentage]),
-          dataValue: filterArray.map((b: any) => b.totalStudent),//(z.totalStudent),
-          subject: (this.selectedLang == 'English' ? subjectSet[index] : subjectSet_m[index]),
-          totalStudent: filterArray.map((b: any) => b.actualStudent),//(z.totalStudent),
-
-        }
-        dataObjArray.push(subData);
-      })
-      dataArray.push(dataObjArray);
-    })
-    this.stackbarchartOptions.series.push(dataArray);
-    this.stackbarchartOptions.xaxis.categories.push(...(this.selectedLang == 'English' ? testSet : testSet));
-    this.stackbarchartOptions.xaxis.subjects.push(...(this.selectedLang == 'English' ? subjectSet : subjectSet_m));
-    this.stackbarchartOptions.xaxis.examSet.push(...examIdSet);
-
-    // this.stackbarchartOptions.xaxis.parameters= this.selectedLang == 'English' ?['Level','Total Tested Students','Student(%)',]:['स्तर','एकुण टेस्टेड विद्यार्थी', 'विद्यार्थी (%)'];
-
-    this.stackbarchartOptions.xaxis.parameters = this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'];
-    this.showBarChartF = true;
-
-    this.stackbarchartOptions.tooltip = {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-        return (
-          '<div class="arrow_box" style="padding:10px;">' +
-          "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-          "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent[dataPointIndex] + '</b>' + "</div>" +
-          "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
-          "<div>" + w.config.xaxis.parameters[3] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
-          "</div>"
-        );
-      },
-    }
-
-    // ----------------------------------------- bar chart ------------------------------------------------//
-
-
-
-  }
   getBarChartSubject() {
     this.BarChartSubjectArray = [...new Set(this.barChartData.map((x: any) => this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName))];
     this.subjectforBar.patchValue(this.BarChartSubjectArray[0]);
@@ -1163,7 +906,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const formData = this.filterForm.value;
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise' + '?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0) + '&GroupId=' + this.selectedObjByClass.groupId + '&StandardId=' + this.selectedObjByClass?.standardId + '&SubjectId=' + this.subjectforBarByCLass.value + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&AcademicYearId=' + (formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise' + '?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0) + '&GroupId=' + this.selectedObjByClass.groupId +  '&SubjectId=' + this.subjectforBarByCLass.value + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&AcademicYearId=' + (formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -1173,7 +916,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.isStackbarEmpty = this.stackbarChartDataByClass.every((item: any) => item.totalPercentage === 0);
           this.isBarChartEmty = this.barChartDataByClass.every((item: any) => item.totalPercentage === 0);
           this.constructStackBarChartByClass();
-          this.constructBarChartByClass();
+         this.constructBarChartByClass();
 
         }
       },
@@ -1184,25 +927,34 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // ----------------------------------------- stack bar chart by class ------------------------------------------------//
 
   constructStackBarChartByClass() {
-    const questionSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.question))];
-    const m_QuestionSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
-    this.graphSubjectDataByClass = this.selectedLang == 'English' ? questionSet : m_QuestionSet;
+    const subjectSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.question))];    //separte unique subjectlist
+    const subjectSet_m = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
+    // const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
+    const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
+    // const testSet_M= [...new Set(this.stackbarChartData.map((sub:any) => sub.m_ExamType))];
+    this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
     let dataArray: any[] = [];
-    questionSet.map((x: any, index: any) => {
+    subjectSet.map((x: any, index: any) => { //crete list of same subjectname 
       const filterSubject = this.stackbarChartDataByClass.filter((y: any) => y.question == x);
+      const optionalSubArray = [...new Set(filterSubject.map((sub: any) => sub.optionGrade))];
       let dataObjArray: any[] = [];
-      filterSubject.reverse().map((z: any) => {
+      optionalSubArray.reverse().map((z: any) => {
+        const filterArray = filterSubject.filter((a: any) => a.optionGrade == z)
+        console.log(filterSubject, filterArray)
         const subData = {
-          name: this.selectedLang == 'English' ? z.optionName : z.m_OptionName,
-          data: ([z.totalPercentage]),
-          dataValue: (z.totalStudent),
-          subject: (this.selectedLang == 'English' ? questionSet[index] : m_QuestionSet[index]),
+          name: this.selectedLang == 'English' ? filterArray[0].optionName : filterArray[0].m_OptionName,
+          data: filterArray.map((b: any) => b.totalPercentage),//([z.totalPercentage]),
+          dataValue: filterArray.map((b: any) => b.totalStudent),//(z.totalStudent),
+          subject: (this.selectedLang == 'English' ? subjectSet[index] : subjectSet_m[index]),
+          totalStudent: filterArray.map((b: any) => b.totalStudent),//(z.totalStudent),
+
         }
         dataObjArray.push(subData);
       })
       dataArray.push(dataObjArray);
-    })
-    this.constructSatackChartByCLass(dataArray, this.selectedLang == 'English' ? questionSet : m_QuestionSet);
+      console.log(dataArray)
+    }) 
+    this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet)
   }
   /// --- stack bar for class level 
   constructSatackChartByCLass(seriesData: any, categoryData: any) {
@@ -1263,7 +1015,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           show: false,
         },
         categories: categoryData,
-        parameters: this.selectedLang == 'English' ? ['Level', 'Total Student', 'Student(%)',] : ['स्तर', 'एकूण विद्यार्थी', 'विद्यार्थी (%)']
+        parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
       },
 
       grid: {
@@ -1303,17 +1055,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       },
       dataLabels: {
-        formatter: function (val: any,) {
-          return val.toFixed(2) + ' %'
-        }
+        enabled: false,
+        // formatter: function (val: any,) {
+        //   return val.toFixed(2) + ' %'
+        // }
       },
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
           return (
             '<div class="arrow_box" style="padding:10px;">' +
             "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[3] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
             "</div>"
           );
         },
@@ -1324,6 +1078,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   constructBarChartByClass() {
     this.subjectObjforClass = this.barChartDataByClass.find((x: any) => x.subjectId == this.subjectforBarByCLass.value);
+    console.log(this.subjectObjforClass)
     const obj = {
       name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
       data: this.barChartDataByClass.map((z: any) => z.totalPercentage),

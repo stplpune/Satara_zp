@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -90,7 +91,8 @@ export class AddUpdateTeacherRegistrationComponent {
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
 
-  constructor(private masterService: MasterService, private commonMethod: CommonMethodsService, private errorHandler: ErrorsService,
+  constructor(private masterService: MasterService,
+    private datePipe:DatePipe, private commonMethod: CommonMethodsService, private errorHandler: ErrorsService,
     private fileUpload: FileUploadService, public validation: ValidationService, public webStorageS: WebStorageService, private ngxSpinner: NgxSpinnerService,
     private fb: FormBuilder, private service: ApiService, public dialogRef: MatDialogRef<AddUpdateTeacherRegistrationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -704,6 +706,7 @@ export class AddUpdateTeacherRegistrationComponent {
   OnSubmit() {
     this.isSubmitted = true;
     let formValue = this.teacherRegForm.value;
+    formValue.birthDate = this.datePipe.transform(formValue.birthDate, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     // if (this.editFlag == true) {
     //   this.img ? formValue.uploadImage = this.uploadImghtml : formValue.uploadImage = this.data.uploadImage                                
     // } else {

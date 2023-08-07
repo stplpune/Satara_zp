@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -40,6 +41,7 @@ export class AddInwardItemComponent {
     private fileUpload: FileUploadService,
     private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
+    private datePipe:DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddUpdateSchoolRegistrationComponent>,
     public validationService: ValidationService) { }
@@ -227,6 +229,7 @@ export class AddInwardItemComponent {
 
   onSubmit() {
     let formValue = this.itemForm.value;
+    formValue.purchase_Sales_Date = this.datePipe.transform(formValue.purchase_Sales_Date, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     formValue.price = Number(formValue?.price);
     formValue.quantity = Number(formValue?.quantity);
     // formValue.photo ? formValue.photo = this.uploadImg : this.imgValidation = false;

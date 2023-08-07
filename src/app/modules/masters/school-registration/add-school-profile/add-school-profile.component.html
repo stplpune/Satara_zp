@@ -189,19 +189,19 @@
                 </div>
             </div>
             <div class="col-sm-6 border-end">
-                <h6 class="text-main mb-0 fw-bold">{{'Labels.Schoolphotos' | translate}}</h6>
-                <div class="row gx-2 gy-2">
+                <h6 class="text-main fw-bold">{{'Labels.Schoolphotos' | translate}}</h6>
+                <div class="row g-3">
                     <div class="col-sm-3" *ngFor="let item of items; index as i">
                         <img [lightbox]="i" [src]="item.data.thumb" class="gallery-img">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6" *ngIf="schoolresp?.schoolDocument.length > 0">
-                <h6 class="text-main mb-0 fw-bold">{{'Labels.documnentphotos' | translate}}</h6>
-                <div class="row gx-2 gy-2">
+                <h6 class="text-main fw-bold">{{'Labels.documnentphotos' | translate}}</h6>
+                <div class="row g-3">
                     <div class="col-3 col-sm-3" *ngFor="let doc of schoolresp?.schoolDocument; let i = index">
                         <img [src]="doc.docPath ? 'assets/images/pdf-image.png':'' "
-                        class="border img-fluid w-100" (click)="onViewDoc(i)">
+                        class="gallery-img" (click)="onViewDoc(i)">
                     </div>
                 </div>
             </div>

@@ -409,8 +409,14 @@
         "filterSubCategory":"Category/Sub Category",
         "updateCategory": "Update Category",
         "uploadPhotoBill": "Upload Photo/Bill",
-        "UpdatedInwardItems":"Update Item Inward"
-
-
+        "UpdatedInwardItems":"Update Item Inward",
+        "cctvregistration":"CCTV Location Registration",
+        "cctvregistrationList":"CCTV Location List",
+        "Addcctvrlocation":"Add CCTV Location",
+        "CCTVLocation":"CCTV Location",
+        "CCTVName":"CCTV Name",
+        "CCTVModel":"CCTV Model",
+        "CloudID":"Cloud ID",
+        "RegistrationDate":"Registration Date"
     }
 }

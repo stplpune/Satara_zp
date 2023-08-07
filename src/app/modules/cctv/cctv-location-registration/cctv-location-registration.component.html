@@ -1,1 +1,79 @@
-<p>cctv-location-registration works!</p>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.cctvregistration' | translate}}</li>
+    </ol>
+</nav>
+<app-page-statistics></app-page-statistics>
+<mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
+    <mat-card-header class="card-header">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <div class="text-main fw-bold">
+                {{'Labels.cctvregistrationList' | translate}}
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button mat-flat-button class="bg-danger btn-icon text-white"
+                    matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip">
+                    <mat-icon>description </mat-icon>
+                </button>
+                <button mat-flat-button class="bg-success btn-icon text-white">
+                    <mat-icon class="material-symbols-outlined">table</mat-icon>
+                </button>
+                <button mat-flat-button class="btn-main" (click)="openDialog()">
+                    <mat-icon>add</mat-icon>
+                    {{'Labels.Addcctvrlocation'| translate}}
+                </button>
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-header class="card-header pb-0 border-bottom-0">
+        <div class="row">
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'Labels.district'| translate}}</mat-label>
+                    <mat-select>
+                        <mat-option>Option-1</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                    <mat-select>
+                        <mat-option>Option-1</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'Labels.village'| translate}}</mat-label>
+                    <mat-select>
+                        <mat-option>Option-1</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'Labels.school'| translate}}</mat-label>
+                    <mat-select>
+                        <mat-option>Option-1</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-auto mb-2 mb-lg-0">
+                <button mat-flat-button class="btn-main">{{'Labels.filter' |
+                    translate}}</button>
+                <button mat-flat-button class="btn-second ms-2">{{'Labels.clear'
+                    |translate}}</button>
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-content class="card-body mt-0">
+        <p>Table</p>
+    </mat-card-content>
+</mat-card>

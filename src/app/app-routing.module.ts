@@ -21,6 +21,7 @@ const routes: Routes = [
   // { path: 'doc-download-for-android/:ed', loadChildren: () => import('./modules/doc-download-for-android/doc-download-for-android.module').then(m => m.DocDownloadForAndroidModule) },
   { path: 'doc-download-for-android/:id', loadChildren: () => import('./modules/doc-download-for-android/doc-download-for-android-routing.module').then(m => m.DocDownloadForAndroidRoutingModule) },
   { path: 'school-report', loadChildren: () => import('./modules/reports/school-report/school-report.module').then(m => m.SchoolReportModule) },
+ 
   
   
   // { path: 'web-help', loadChildren: () => import('./modules/settings/web-help/web-help.module').then(m => m.WebHelpModule) },

@@ -23,8 +23,8 @@ export class CategoryComponent {
   // displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
 
-  displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', ' Category', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे', 'कृती'];
 
   search = new FormControl('');
   tableresp: any;
@@ -271,7 +271,7 @@ export class CategoryComponent {
     this.deleteObj = obj;
     let dialoObj = {
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Category record?' : 'तुम्हाला श्रेणी रेकॉर्ड हटवायचा आहे का?',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Delete Category Record?' : 'तुम्हाला श्रेणी रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

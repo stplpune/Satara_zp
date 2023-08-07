@@ -111,13 +111,12 @@
                     </mat-error>
                 </div>
 
-
                 <!-- Display Image -->
-                <div class="d-flex flex-wrap gap-4">
+                <div class="d-flex flex-wrap gap-4 mb-3">
                     <ng-container *ngFor="let item of imgArray; let i = index">
                         <div class="gallery position-relative">
-                            <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo" height="130px"
-                                width="130px" class="border" (click)="onViewDoc(i)">
+                            <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo"
+                                 class="gallery-img" (click)="onViewDoc(i)">
                             <span class="position-absolute" style="top:-17px;right:-17px;">
                                 <button type="button" mat-icon-button
                                     class="bg-danger bg-opacity-25 text-danger material-icons"

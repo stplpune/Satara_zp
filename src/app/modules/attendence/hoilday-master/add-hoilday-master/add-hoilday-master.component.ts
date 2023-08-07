@@ -6,6 +6,7 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-add-hoilday-master',
@@ -22,6 +23,7 @@ export class AddHoildayMasterComponent {
     private errors:ErrorsService,
     public webStorage:WebStorageService,
     public validation:ValidationService,
+    private datePipe:DatePipe,
     private dialogRef: MatDialogRef<AddHoildayMasterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -50,6 +52,8 @@ export class AddHoildayMasterComponent {
 
   onSubmit() {
     let formData=this.holidayFrm.getRawValue();
+    let fromDate = this.datePipe.transform(formData.date, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
+    
     if (this.holidayFrm.invalid || formData.yearId ==0) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
@@ -60,7 +64,7 @@ export class AddHoildayMasterComponent {
       "id":this.editFlag?this.editId:0,
       "holidayName": formData.holidayName,
       "m_HolidayName": formData.holidayNameMarathi,
-      "holidayDate": formData.date,
+      "holidayDate":fromDate,
       "year": formData.yearId,
       "isDeleted": false,
       "createdBy":data.createdBy,

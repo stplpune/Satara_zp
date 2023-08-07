@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -40,6 +41,7 @@ export class AddOutwardItemComponent {
     public Validation: ValidationService,
     private fb: FormBuilder,
     private fileUpload: FileUploadService,
+    private datePipe:DatePipe,
     private dialogRef: MatDialogRef<AddOutwardItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
@@ -206,6 +208,7 @@ export class AddOutwardItemComponent {
 
   onSubmit() {
     let formData = this.itemForm.getRawValue();
+    let fromDate = this.datePipe.transform(formData.date, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     !this.imgArray.length ? this.imgValidation = false : '';
     if (this.itemForm.invalid || this.openingStockFlag == true || this.imgValidation == false || formData.subcategoryId == 0 || formData.itemId == 0) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
@@ -227,7 +230,7 @@ export class AddOutwardItemComponent {
         "subCategoryId": formData.subcategoryId,
         "itemId": formData.itemId,
         "quantity": Number(formData.unit),
-        "purchase_Sales_Date": formData.date,
+        "purchase_Sales_Date": fromDate,
         "price": Number(formData.sellprice),
         "outwardTo": formData.onwordto,
         "remark": formData.remark,

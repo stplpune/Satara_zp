@@ -250,6 +250,8 @@ export class TasksheetComponent {
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date.setValue(ctrlValue);
     datepicker.close();
+    console.log("hii");
+    
 
   }
 

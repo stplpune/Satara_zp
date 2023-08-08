@@ -37,7 +37,7 @@
         <form [formGroup]="filterForm" class="w-100 gx-2">
             <div class="row gx-2">
 
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
@@ -49,7 +49,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage()">
@@ -59,7 +59,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId" (selectionChange)="onChangeDropD('village'); getAllSchools();">
@@ -70,7 +70,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
@@ -80,7 +80,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
                         <mat-select formControlName="categoryId"
@@ -91,7 +91,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
                         <mat-select formControlName="subCategoryId"
@@ -103,7 +103,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.items'| translate}}</mat-label>
                         <mat-select formControlName="itemsId" (keypress)="validationService.noFirstSpaceAllow($event);">
@@ -112,12 +112,12 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="d-flex gap-1">
-                        <mat-form-field appearance="outline" class="w-100">
+                        <!-- <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
                             <input matInput formControlName="textSearch" maxlength="30">
-                        </mat-form-field>
+                        </mat-form-field> -->
                         <div class="mb-0 d-flex gap-1">
                             <button mat-flat-button class="btn-main" type="submit"
                                 (click)="getTableData('filter')">{{'Labels.filter'|
@@ -127,9 +127,6 @@
                                 translate}}</button>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-auto">
-                   
                 </div>
             </div>
         </form>

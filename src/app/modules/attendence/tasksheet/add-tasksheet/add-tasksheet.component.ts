@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
@@ -16,47 +16,36 @@ export class AddTasksheetComponent {
   attendenceForm !: FormGroup;
  
   constructor(private fb:FormBuilder,
-    private webStorage:WebStorageService,
     private apiService:ApiService,
     private commonMethod:CommonMethodsService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<AddTasksheetComponent>,
     private errors:ErrorsService,
+    public webStorageS : WebStorageService
     ){}
 
   ngOnInit(){
     this.defaultForm();
+    console.log("data : ", this.data);
   }
 
   defaultForm(){
     this.attendenceForm=this.fb.group({
-      remark:['',[Validators.required]]
+      isPresent: [1],
+      remark: ['',[Validators.required]]
     })
   }
 
 
   onSubmit() {
-    console.log(this.attendenceForm.value);
-    
+    let formValue = this.attendenceForm.value
+    console.log("onSubmit : ",formValue);
+    // return
     if (this.attendenceForm.invalid) {
       return;
     }else{
-      let data = this.webStorage.createdByProps();
-    let formData = this.attendenceForm.value;
-    let obj = {
-      "createdBy": data.createdBy,
-      "modifiedBy": data.modifiedBy,
-      "createdDate": data.createdDate,
-      "modifiedDate": data.modifiedDate,
-      "isDeleted": data.isDeleted,
-      "id":  this.editFlag,
-      "category": formData.category,
-      "m_Category":formData.M_category,
-      // "lan": this.languageFlag
-    }
-
-    // let method = this.editFlag ? 'PUT' : 'POST';
-    // let url = this.editFlag ? 'UpdateCategory' : 'AddCategory';
-    this.apiService.setHttp('POST', 'zp-satara/AssetCategory/AddCategory', false, obj, false, 'baseUrl');
+      // zp-satara/Attendance/SaveManualAttendance?UserId=5&Attendance=1&Date=08%2F01%2F2023%2000%3A00%3A00&Remark=ee&lan=EN
+    this.apiService.setHttp('POST', 'zp-satara/Attendance/SaveManualAttendance?UserId=' + this.webStorageS.getUserId() + '&Attendance=' + formValue.isPresent + '&Date=' + this.data.date + '&Remark=' + formValue.remark + '&lan=' + this.webStorageS.languageFlag, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

@@ -11,9 +11,9 @@
     <mat-dialog-content class="card-body scrollbar">
         <div class="row">
             <div class="col-sm-12 mb-2">
-                <mat-radio-group aria-label="Select an option">
-                    <mat-radio-button value="1">{{'Labels.Present' | translate}}</mat-radio-button>
-                    <mat-radio-button value="2">{{'Labels.Absent' | translate}}</mat-radio-button>
+                <mat-radio-group aria-label="Select an option" formControlName="isPresent">
+                    <mat-radio-button [value] = "1">{{'Labels.Present' | translate}}</mat-radio-button>
+                    <mat-radio-button [value] = "0">{{'Labels.Absent' | translate}}</mat-radio-button>
                 </mat-radio-group>
             </div>
             <div class="col-sm-12">

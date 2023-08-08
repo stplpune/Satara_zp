@@ -22,14 +22,29 @@
   <mat-card-header class="card-header pb-0 border-bottom-0">
     <div class="row w-100">
       <div class="col-sm-3">
-        <mat-form-field appearance="outline" class="w-100">
+        <!-- <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{'Labels.selectDate' | translate}}</mat-label>
           <mat-select [formControl]="Date">
             <mat-option *ngFor="let food of foods" [value]="food.value">
               {{food.viewValue}}
             </mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
+        <!-- <mat-form-field appearance="outline" class="w-100">
+          <mat-label> {{'Labels.selectDate'| translate}}</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="ate" (click)="picker.open()"
+            (click)="closeDatePicker($event, picker)" readonly>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label> {{'Labels.selectDate'| translate}}</mat-label>
+        <input matInput [matDatepicker]="dp2" [formControl]="date"  placeholder="Select a Date" (click)="dp2.open()">
+        <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
+        <mat-datepicker #dp2 startView="multi-year" (monthSelected)="closeDatePicker($event, dp2)"
+        (yearSelected)="chosenYearHandler($event)"></mat-datepicker>
+      </mat-form-field>
       </div>
     </div>
   </mat-card-header>
@@ -37,37 +52,37 @@
     <div class="table-responsive">
       <table mat-table [dataSource]="tableresp" class="dashboard-table">
 
-      
+
         <ng-container matColumnDef="position">
           <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
           <td mat-cell *matCellDef="let element;let i=index"> {{i+1}} </td>
         </ng-container>
 
-      
+
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Day </th>
           <td mat-cell *matCellDef="let element"> {{element.day}} </td>
         </ng-container>
 
-       
+
         <ng-container matColumnDef="weight">
           <th mat-header-cell *matHeaderCellDef> Check In Time </th>
-          <td mat-cell *matCellDef="let element"> {{element.checkinTime}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.checkInTime}} </td>
         </ng-container>
 
-   
+
         <ng-container matColumnDef="symbol">
           <th mat-header-cell *matHeaderCellDef> Check Out Time </th>
-          <td mat-cell *matCellDef="let element"> {{element.checkoutTime}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.checkOutTime}} </td>
         </ng-container>
 
-      
+
         <ng-container matColumnDef="Attendence">
           <th mat-header-cell *matHeaderCellDef> Attendence </th>
           <td mat-cell *matCellDef="let element"> {{element.attendance}} </td>
         </ng-container>
 
-        
+
         <ng-container matColumnDef="Remark">
           <th mat-header-cell *matHeaderCellDef> Remark </th>
           <td mat-cell *matCellDef="let element"> {{element.remark?element.remark:'-'}} </td>
@@ -86,7 +101,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-     
+
     </div>
   </mat-card-content>
   <!-- <mat-card-content class="card-body pt-0">

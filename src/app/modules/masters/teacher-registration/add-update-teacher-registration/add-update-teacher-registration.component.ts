@@ -172,7 +172,7 @@ export class AddUpdateTeacherRegistrationComponent {
       teacherDetails: this.fb.group({
         ...this.webStorageS.createdByProps(),
         "id": 0,
-        "teacherId": [''],
+        "teacherId": 0,
         "districtId": [''],
         "talukaId": ['', Validators.required],
         "villageId": 0,

@@ -12,54 +12,52 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-tasksheet.component.scss']
 })
 export class AddTasksheetComponent {
-  editFlag:any;
+  editFlag: any;
   attendenceForm !: FormGroup;
- 
-  constructor(private fb:FormBuilder,
-    private apiService:ApiService,
-    private commonMethod:CommonMethodsService,
+
+  constructor(private fb: FormBuilder,
+    private apiService: ApiService,
+    private commonMethod: CommonMethodsService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<AddTasksheetComponent>,
-    private errors:ErrorsService,
-    public webStorageS : WebStorageService
-    ){}
+    private errors: ErrorsService,
+    public webStorageS: WebStorageService
+  ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.defaultForm();
     console.log("data : ", this.data);
   }
 
-  defaultForm(){
-    this.attendenceForm=this.fb.group({
+  defaultForm() {
+    this.attendenceForm = this.fb.group({
       isPresent: [1],
-      remark: ['',[Validators.required]]
+      remark: ['', [Validators.required]]
     })
   }
 
-
   onSubmit() {
     let formValue = this.attendenceForm.value
-    console.log("onSubmit : ",formValue);
-    // return
+    console.log("onSubmit : ", formValue);
+    console.log("date : ", this.data.date);
+
     if (this.attendenceForm.invalid) {
       return;
-    }else{
-      // zp-satara/Attendance/SaveManualAttendance?UserId=5&Attendance=1&Date=08%2F01%2F2023%2000%3A00%3A00&Remark=ee&lan=EN
-    this.apiService.setHttp('POST', 'zp-satara/Attendance/SaveManualAttendance?UserId=' + this.webStorageS.getUserId() + '&Attendance=' + formValue.isPresent + '&Date=' + this.data.date + '&Remark=' + formValue.remark + '&lan=' + this.webStorageS.languageFlag, false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.commonMethod.showPopup(res.statusMessage, 0);
-          this.dialogRef.close('yes');
-        } else {
-          this.commonMethod.showPopup(res.statusMessage, 1);
-        }
+    } else {
+      this.apiService.setHttp('POST', 'zp-satara/Attendance/SaveManualAttendance?UserId=' + this.webStorageS.getUserId() + '&Attendance=' + formValue.isPresent + '&Date=' + this.data.date + '&Remark=' + formValue.remark + '&lan=' + this.webStorageS.languageFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.commonMethod.showPopup(res.statusMessage, 0);
+            this.dialogRef.close('yes');
+          } else {
+            this.commonMethod.showPopup(res.statusMessage, 1);
+          }
 
-      },
-      error: ((err: any) => { this.errors.handelError(err) })
-    });
-    } 
-    
+        },
+        error: ((err: any) => { this.errors.handelError(err) })
+      });
+    }
   }
 
 }

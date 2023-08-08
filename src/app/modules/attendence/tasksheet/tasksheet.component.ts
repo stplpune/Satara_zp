@@ -254,7 +254,7 @@ export class TasksheetComponent {
   }
 
   onClear() {
-    // this.date.setValue(null);
+    this.date.setValue(moment());
     this.getTableData()
   }
 

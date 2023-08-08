@@ -931,6 +931,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const subjectSet_m = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
     // const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
     const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
+    
     // const testSet_M= [...new Set(this.stackbarChartData.map((sub:any) => sub.m_ExamType))];
     this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
     let dataArray: any[] = [];
@@ -1012,7 +1013,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
         show: true,
         labels: {
-          show: false,
+          show: true,
         },
         categories: categoryData,
         parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
@@ -1073,6 +1074,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
       }
     };
+
   }
   // -----------------------------------------  bar chart by class ------------------------------------------------//
 

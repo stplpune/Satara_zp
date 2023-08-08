@@ -706,8 +706,7 @@ export class AddUpdateTeacherRegistrationComponent {
   //#region  -------------------------------------start submit --------------------------------------------
   OnSubmit() {
     this.isSubmitted = true;
-    let formValue = this.teacherRegForm.value;
-    formValue.teacherDetails.teacherId = Number(formValue.teacherDetails.teacherId)
+    let formValue = this.teacherRegForm.value;   
     formValue.birthDate = this.datePipe.transform(formValue.birthDate, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     // if (this.editFlag == true) {
     //   this.img ? formValue.uploadImage = this.uploadImghtml : formValue.uploadImage = this.data.uploadImage                                
@@ -747,7 +746,7 @@ export class AddUpdateTeacherRegistrationComponent {
   //#endregion -------------------------------------end submit-----------------------------------------------
   //#region ---------------------------------------- start edit ----------------------------------------------
   onEdit() {    
-    console.log("this.editObj",this.editObj);
+   
     
     this.editFlag = true;
     this.assignClassArray = this.editObj.assignTeacher;

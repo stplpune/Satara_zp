@@ -371,9 +371,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.genderArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
   getDistrict() {
@@ -388,9 +389,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode);
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode);
+      // }
     })
   }
   getTaluka() {
@@ -404,9 +406,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     });
   }
   getVillage() {
@@ -421,9 +424,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArrayTeacherDeatails = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
   getEducationQualification() {
@@ -437,9 +441,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.educationQualificationArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
   getTwelveBranch() {
@@ -452,9 +457,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.twelveBranchArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
   getOptionalSubject() {
@@ -468,9 +474,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.optionalSubjectArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -485,9 +492,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.degreeUniversityArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -502,9 +510,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.profesionalQualificationArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -521,9 +530,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArrayTeacherDeatails = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -538,9 +548,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArrayTeacherDetails = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }),
+      //  error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -556,9 +567,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -574,9 +586,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
 
@@ -595,9 +608,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.schoolArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
   getRole() {
@@ -611,9 +625,10 @@ export class AddUpdateTeacherRegistrationComponent {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.teacherRoleArray = [];
         }
-      }), error: (error: any) => {
-        this.errorHandler.handelError(error.statusCode)
-      }
+      }), 
+      // error: (error: any) => {
+      //   this.errorHandler.handelError(error.statusCode)
+      // }
     })
   }
   // getGraduateTeacherSubject() {

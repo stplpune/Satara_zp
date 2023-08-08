@@ -116,7 +116,8 @@ export class StoreMasterComponent {
         }else{
           this.ngxSpinner.hide();
           this.tableDataArray =[];
-          this.tableDatasize = 0
+          this.tableDatasize = 0;
+          this.totalCount = 0;
         }
         this.setTableData();
       },
@@ -220,8 +221,7 @@ export class StoreMasterComponent {
     }
   }
 
-  openDetailsDialog(obj: any) {
-    console.log("obj",obj);
+  openDetailsDialog(obj: any) {  
       let id:any = obj.schoolId+'.'+obj.categoryId+'.'+obj.subCategoryId+'.'+obj.itemId;
       let formdata:any = this.encrypt.encrypt(`${id}`);
        this.router.navigate(['/view-stock-details'], {

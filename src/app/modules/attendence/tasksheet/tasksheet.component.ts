@@ -6,15 +6,48 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { DatePipe } from '@angular/common';
+import { MatDatepicker } from '@angular/material/datepicker';
+import * as _moment from 'moment';
+import { default as _rollupMoment, Moment } from 'moment';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 // import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+// const moment = _moment;
+const moment = _rollupMoment || _moment;
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'YYYY-MM',
+  },
+  display: {
+    dateInput: 'YYYY-MM',
+    monthYearLabel: 'YYYY-MM',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY-MM',
+  },
+};
+
 
 @Component({
   selector: 'app-tasksheet',
   templateUrl: './tasksheet.component.html',
   styleUrls: ['./tasksheet.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
+
 })
 export class TasksheetComponent {
-  date = new FormControl('');
+  date = new FormControl(moment());
+  // date = new FormControl('');
   tableresp: any;
   totalItem: any;
   langTypeName: any;
@@ -59,9 +92,6 @@ export class TasksheetComponent {
   ]
 
   chosenYearHandler(normalizedYear: any) {
-    console.log(this.date.value);
-    
-    console.log(normalizedYear);
     let datePipeString = this.datePipe.transform(normalizedYear, 'yyyy-MM');
     console.log(datePipeString);
 
@@ -72,9 +102,6 @@ export class TasksheetComponent {
     // this.Date.setValue(ctrlValue);
   }
 
-
-
-
   // openDatePicker(dp:any) {
   //   console.log(dp);
 
@@ -82,16 +109,13 @@ export class TasksheetComponent {
   // }
 
   closeDatePicker(eventData: any, dp?: any) {
-   let formData=this.date.value;
-   console.log(formData);
-   console.log(this.date.value);
-    console.log(eventData);
+    let formData = this.date.value;
+    console.log(formData);
     let datePipeString = this.datePipe.transform(eventData, 'yyyy-MM');
     console.log(datePipeString);
     // ctrlValue.year(normalizedYear.year());
-//  console.log(this.date.setValue(datePipeString));
+    //  console.log(this.date.setValue(datePipeString));
     dp.close();
-    console.log(this.date.value);
     let ctrlValue = this.date.value;
     console.log("ctrlValue", ctrlValue);
     // this.date.setValue(ctrlValue);
@@ -136,19 +160,25 @@ export class TasksheetComponent {
   // }
 
   getTableData(status?: any) {
+    let date = this.date.value
+    let yearMonth = moment(date).format('YYYY-MM');
+
+    // let dateYear = date[0].Moment
+    // this.datePipe.transform(this.date.value, 'yyyy-MM');
+    // return
     status
     // status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     // let formData = this.textSearch.value?.trim() || '';
     // let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     // let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=2023-08&UserId=1242', false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=' + yearMonth + '&UserId=1242', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        console.log(res);
+        // console.log(res);
 
         if (res.statusCode == "200") {
           this.tableresp = res.responseData.responseData1
-          console.log(this.tableresp);
+          // console.log(this.tableresp);
 
           // status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           // this.totalItem = res.responseData.responseData2.pageCount;
@@ -213,6 +243,20 @@ export class TasksheetComponent {
   //   // this.filterFlag ? '' : (this.textSearch.setValue(''), this.filterFlag = false);
   //   this.getTableData();
   // }
+
+  setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value!;
+    ctrlValue.month(normalizedMonthAndYear.month());
+    ctrlValue.year(normalizedMonthAndYear.year());
+    this.date.setValue(ctrlValue);
+    datepicker.close();
+
+  }
+
+  onClear() {
+    // this.date.setValue(null);
+    this.getTableData()
+  }
 
 }
 

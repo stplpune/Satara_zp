@@ -11,8 +11,9 @@ import * as _moment from 'moment';
 import { default as _rollupMoment, Moment } from 'moment';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
-// import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
-// const moment = _moment;
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
+
 const moment = _rollupMoment || _moment;
 
 export const MY_FORMATS = {
@@ -27,15 +28,11 @@ export const MY_FORMATS = {
   },
 };
 
-
 @Component({
   selector: 'app-tasksheet',
   templateUrl: './tasksheet.component.html',
   styleUrls: ['./tasksheet.component.scss'],
   providers: [
-    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
-    // application's root module. We provide it at the component level here, due to limitations of
-    // our example generation script.
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
@@ -43,20 +40,17 @@ export const MY_FORMATS = {
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
-
 })
 export class TasksheetComponent {
   date = new FormControl(moment());
-  // date = new FormControl('');
   tableresp: any;
   totalItem: any;
   langTypeName: any;
   today = new Date();
   sixMonthsAgo = new Date();
   startDate = new Date(1990, 0);
-  // totalCount: number = 0;
-  // pageSize: number = 10;
-  // pageNo: number = 1;
+  resultDownloadArr = new Array();
+  submitFlag : boolean = false;
   displayedheadersEnglish = ['Sr. No.', ' Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Remark', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक इन वेळ', 'वेळ तपासा', 'उपस्थिती', 'शेरा', 'कृती'];
 
@@ -68,7 +62,9 @@ export class TasksheetComponent {
     private apiService: ApiService,
     private webStorage: WebStorageService,
     private datePipe: DatePipe,
-    // private commonMethod:CommonMethodsService,
+    private ngxSpinner : NgxSpinnerService,
+    private excelpdfService : DownloadPdfExcelService,
+    public datepipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -160,14 +156,16 @@ export class TasksheetComponent {
   //   });
   // }
 
-  getTableData(status?: any) {
+  getTableData(flag?: any) {
+    this.ngxSpinner.show();
+    console.log("flag : ", flag);
     let date = this.date.value
     let yearMonth = moment(date).format('YYYY-MM');
 
     // let dateYear = date[0].Moment
     // this.datePipe.transform(this.date.value, 'yyyy-MM');
     // return
-    status
+    // status
     // status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     // let formData = this.textSearch.value?.trim() || '';
     // let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
@@ -178,16 +176,20 @@ export class TasksheetComponent {
         // console.log(res);
 
         if (res.statusCode == "200") {
+          this.ngxSpinner.hide();
           this.tableresp = res.responseData.responseData1
           // console.log(this.tableresp);
 
-          // status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          flag != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           // this.totalItem = res.responseData.responseData2.pageCount;
           // this.totalCount = res.responseData.responseData2.pageCount;
           // this.resultDownloadArr = [];
           // let data: [] = res.responseData.responseData1;
           // status == 'excel' ? this.pdfDownload(data) : '';
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : flag == 'excel' ? this.pdfDownload(data,'excel') :'';  
         } else {
+          this.ngxSpinner.hide();
           this.tableresp = [];
           this.totalItem = 0
         }
@@ -256,6 +258,39 @@ export class TasksheetComponent {
   onClear() {
     this.date.setValue(moment());
     this.getTableData()
+  }
+
+  pdfDownload(data?: any,flag?:string) {   
+    this.resultDownloadArr=[];  
+    data.find((ele: any, i: any) => {
+      let obj = {
+              "Sr.No": i + 1,
+              "Day": ele.day,
+              "Check In Time": ele.checkInTime,
+              "Check Out Time": ele.checkOutTime,
+              "Attendence": ele.attendance,
+              "Remark": ele.remark,
+            }
+      this.resultDownloadArr.push(obj);
+    });
+
+    if (this.resultDownloadArr?.length > 0) {
+      let keyPDFHeader = ['Sr.No.', 'Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Remark'];
+      let ValueData =
+        this.resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+        let objData: any = {
+          'topHedingName': 'Tasksheet List',
+          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+        let headerKeySize = [7, 15, 15, 15, 15, 40]
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+    }
+  }
+
+  onSubmit(){
+    this.submitFlag = true;
   }
 
 }

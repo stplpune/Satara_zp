@@ -12,7 +12,7 @@
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
         <form [formGroup]="filterForm" class="w-100">
             <div class="row gx-3">
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId" (selectionChange)="getAllCenter()">
@@ -22,7 +22,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId" (selectionChange)="getVillage()">
@@ -32,8 +32,8 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" class="w-100 ">
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
                             <!-- <mat-option>Option-1 </mat-option> -->
@@ -42,7 +42,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId">
@@ -52,7 +52,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
                         <mat-select formControlName="CategoryId" (selectionChange)="getAllSubCategory()">
@@ -62,7 +62,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId" (selectionChange)="getItemDrop()">
@@ -72,7 +72,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.itemName'| translate}}</mat-label>
                         <mat-select formControlName="ItemsId">
@@ -81,14 +81,14 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-3">
+                <!-- <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
                         <input matInput formControlName="textSearch" maxlength="30">
                     </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                    <div class="mb-0 d-flex justify-content-lg-end justify-content-start gap-2">
+                </div> -->
+                <div class="col-sm-4">
+                    <div class="mb-0 d-flex justify-content-start gap-2">
                         <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
                             translate}}</button>
                         <button mat-flat-button type="button" class="btn-second" (click)="filterForm.reset();getTableData()" >{{'Labels.clear'|

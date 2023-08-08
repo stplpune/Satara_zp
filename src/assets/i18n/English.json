@@ -417,6 +417,7 @@
         "CCTVName":"CCTV Name",
         "CCTVModel":"CCTV Model",
         "CloudID":"Cloud ID",
-        "RegistrationDate":"Registration Date"
+        "RegistrationDate":"Registration Date",
+        "teacherId":"Teacher ID"
     }
 }

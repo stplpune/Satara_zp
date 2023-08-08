@@ -410,6 +410,14 @@
         "Units":"युनिट्स",
         "PurchasePrice":"खरेदी किंमत",
         "PurchaseDate":"खरेदीची तारीख",
-        "UpdatedInwardItems":"आयटम आवक अपडेट करा"
+        "UpdatedInwardItems":"आयटम आवक अपडेट करा",
+        "cctvregistration":"CCTV स्थान नोंदणी",
+        "cctvregistrationList":"CCTV स्थान यादी",
+        "Addcctvrlocation":"CCTV स्थान जोडा",
+        "CCTVLocation":"CCTV स्थान",
+        "CCTVName":"CCTV नाव",
+        "CCTVModel":"CCTV मॉडेल",
+        "CloudID":"क्लाउड आयडी",
+        "RegistrationDate":"नोंदणी दिनांक"
     }
 }

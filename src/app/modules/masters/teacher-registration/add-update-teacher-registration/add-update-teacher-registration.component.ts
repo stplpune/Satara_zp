@@ -149,6 +149,7 @@ export class AddUpdateTeacherRegistrationComponent {
       "id": [this.data ? this.data?.id : 0],
       "name": [this.data ? this.data?.name : '', [Validators.required, Validators.pattern(this.validation.fullName)]],
       "m_Name": [this.data ? this.data?.m_Name : '', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
+      "teacherCode":[this.data ? this.data?.teacherCode : ''],
       "address": [''],
       "stateId": [0],
       "districtId": [''],
@@ -171,8 +172,8 @@ export class AddUpdateTeacherRegistrationComponent {
       teacherDetails: this.fb.group({
         ...this.webStorageS.createdByProps(),
         "id": 0,
-        "teacherId": 0,
-        "districtId": ['', Validators.required],
+        "teacherId": [''],
+        "districtId": [''],
         "talukaId": ['', Validators.required],
         "villageId": 0,
         "schoolId": ['', Validators.required],
@@ -706,6 +707,7 @@ export class AddUpdateTeacherRegistrationComponent {
   OnSubmit() {
     this.isSubmitted = true;
     let formValue = this.teacherRegForm.value;
+    formValue.teacherDetails.teacherId = Number(formValue.teacherDetails.teacherId)
     formValue.birthDate = this.datePipe.transform(formValue.birthDate, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     // if (this.editFlag == true) {
     //   this.img ? formValue.uploadImage = this.uploadImghtml : formValue.uploadImage = this.data.uploadImage                                

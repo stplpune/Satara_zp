@@ -22,6 +22,8 @@ import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import {MatRadioModule} from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -50,7 +52,10 @@ import {MatRadioModule} from '@angular/material/radio';
     GridViewComponent,
     MatTooltipModule,
     MatTableModule,
-    MatRadioModule
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    
   ]
 })
 export class TasksheetModule { }

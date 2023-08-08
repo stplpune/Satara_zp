@@ -5,38 +5,51 @@ import { FormControl } from '@angular/forms';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { ApiService } from 'src/app/core/services/api.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
+import { DatePipe } from '@angular/common';
+// import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 
 @Component({
   selector: 'app-tasksheet',
   templateUrl: './tasksheet.component.html',
-  styleUrls: ['./tasksheet.component.scss']
+  styleUrls: ['./tasksheet.component.scss'],
 })
 export class TasksheetComponent {
-  Date = new FormControl('');
+  date = new FormControl('');
   tableresp: any;
   totalItem: any;
   langTypeName: any;
+  today = new Date();
+  sixMonthsAgo = new Date();
+  startDate = new Date(1990, 0);
   // totalCount: number = 0;
   // pageSize: number = 10;
   // pageNo: number = 1;
   displayedheadersEnglish = ['Sr. No.', ' Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Remark', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक इन वेळ', 'वेळ तपासा', 'उपस्थिती', 'शेरा', 'कृती'];
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Attendence','Remark','Action'];
-  dataSource :any;
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
+  dataSource: any;
   viewStatus = 'Table';
   constructor(public dialog: MatDialog,
     private errors: ErrorsService,
     private apiService: ApiService,
     private webStorage: WebStorageService,
+    private datePipe: DatePipe,
+    // private commonMethod:CommonMethodsService,
   ) { }
 
   ngOnInit() {
+    this.webStorage.getUserId()
+    // let dateOfexpense = this.commonMethod.setDate(date.dateOfexpense);
+    // console.log(dateOfexpense);
+
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       // this.getTableTranslatedData();
     });
+
+    this.sixMonthsAgo.setMonth(this.today.getMonth() - 6);
   }
 
   foods = [
@@ -44,6 +57,46 @@ export class TasksheetComponent {
     { value: 'pizza-1', viewValue: 'Aug-2023' },
     { value: 'tacos-2', viewValue: 'Sept-2023' },
   ]
+
+  chosenYearHandler(normalizedYear: any) {
+    console.log(this.date.value);
+    
+    console.log(normalizedYear);
+    let datePipeString = this.datePipe.transform(normalizedYear, 'yyyy-MM');
+    console.log(datePipeString);
+
+    let ctrlValue = this.date.value;
+    console.log(ctrlValue);
+
+    // ctrlValue.year(normalizedYear.year());
+    // this.Date.setValue(ctrlValue);
+  }
+
+
+
+
+  // openDatePicker(dp:any) {
+  //   console.log(dp);
+
+  //   dp.open();
+  // }
+
+  closeDatePicker(eventData: any, dp?: any) {
+   let formData=this.date.value;
+   console.log(formData);
+   console.log(this.date.value);
+    console.log(eventData);
+    let datePipeString = this.datePipe.transform(eventData, 'yyyy-MM');
+    console.log(datePipeString);
+    // ctrlValue.year(normalizedYear.year());
+//  console.log(this.date.setValue(datePipeString));
+    dp.close();
+    console.log(this.date.value);
+    let ctrlValue = this.date.value;
+    console.log("ctrlValue", ctrlValue);
+    // this.date.setValue(ctrlValue);
+  }
+
 
   openDialog() {
     const dialogRef = this['dialog'].open(AddTasksheetComponent, {
@@ -88,7 +141,7 @@ export class TasksheetComponent {
     // let formData = this.textSearch.value?.trim() || '';
     // let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     // let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=2023-03&UserId=4', false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=2023-08&UserId=1242', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         console.log(res);
@@ -98,7 +151,7 @@ export class TasksheetComponent {
           console.log(this.tableresp);
 
           // status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
-          this.totalItem = res.responseData.responseData2.pageCount;
+          // this.totalItem = res.responseData.responseData2.pageCount;
           // this.totalCount = res.responseData.responseData2.pageCount;
           // this.resultDownloadArr = [];
           // let data: [] = res.responseData.responseData1;

@@ -39,8 +39,8 @@ export class TeacherRegistrationComponent implements OnInit {
   toggleControl = new FormControl(false);
   cardViewFlag: boolean = false;
   langChnge!: Subscription;
-  displayedheadersEnglish = ['Sr. No.', '', 'Teacher Name', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
-  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', '', 'Teacher Name','Teacher ID', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव','शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्', 'अनब्लॉक/ब्लॉक', 'कृती'];
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
   talukaArray = new Array();
@@ -84,8 +84,8 @@ export class TeacherRegistrationComponent implements OnInit {
     // this.webStorageS.langNameOnChange.subscribe(lang => {
     //   this.langTypeName = lang;
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center'];
-    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', 'isBlock', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name','teacherCode', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center'];
+    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name','teacherCode', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', 'isBlock', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'uploadImage', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "defaultUserImg",
@@ -127,7 +127,7 @@ export class TeacherRegistrationComponent implements OnInit {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-
+                   
           // this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
@@ -212,6 +212,7 @@ export class TeacherRegistrationComponent implements OnInit {
       let obj = {
         "Sr.No": i + 1,
         "Name": ele.name,
+        "Teacher ID" : ele.teacherCode,
         "Contact No.": ele.mobileNo,
         "Email ID": ele.emailId,
         "Taluka": ele.taluka,
@@ -221,7 +222,7 @@ export class TeacherRegistrationComponent implements OnInit {
     });
     // download pdf call
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ["Sr.No.", "Teacher Name", "Mobile No.", "Email ID", "Taluka", "Cluster"];
+      let keyPDFHeader = ["Sr.No.", "Teacher Name","Teacher ID" ,"Mobile No.", "Email ID", "Taluka", "Cluster"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []

@@ -35,6 +35,13 @@
                             {{'Labels.pleaseEnterValidTeacherNameMarathi' | translate}}</mat-error>
                     </mat-form-field>
                 </div>
+                        <div class="col-sm">
+                            <mat-form-field appearance="outline" class="w-100 ">
+                                <mat-label>{{'Labels.teacherId'| translate}}</mat-label>
+                                <input matInput formControlName="teacherCode" maxlength="5"
+                                    (keypress)="validation.noFirstSpaceAllow($event);validation.onlyDigits($event)">
+                            </mat-form-field>
+                        </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.gender'| translate}}</mat-label>
@@ -289,6 +296,11 @@
                                     districtObj.district : districtObj.m_District}}</mat-option>
                             </mat-select>
                         </mat-form-field>
+                        <!-- <mat-form-field appearance="outline" class="w-100 ">
+                            <mat-label>Teacher ID</mat-label>
+                            <input matInput formControlName="teacherCode" maxlength="5"
+                                (keypress)="validation.noFirstSpaceAllow($event);validation.onlyDigits($event)">
+                        </mat-form-field> -->
                     </div>
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">

@@ -122,9 +122,10 @@ export class TasksheetComponent {
   }
 
 
-  openDialog() {
+  openDialog(data : any) {
     const dialogRef = this['dialog'].open(AddTasksheetComponent, {
       width: '500px',
+      data: data
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {

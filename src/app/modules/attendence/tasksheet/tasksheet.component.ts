@@ -158,7 +158,6 @@ export class TasksheetComponent {
 
   getTableData(flag?: any) {
     this.ngxSpinner.show();
-    console.log("flag : ", flag);
     let date = this.date.value
     let yearMonth = moment(date).format('YYYY-MM');
 
@@ -170,7 +169,7 @@ export class TasksheetComponent {
     // let formData = this.textSearch.value?.trim() || '';
     // let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     // let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=' + yearMonth + '&UserId=1242', false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=' + yearMonth + '&UserId=' + this.webStorage.getUserId(), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         // console.log(res);

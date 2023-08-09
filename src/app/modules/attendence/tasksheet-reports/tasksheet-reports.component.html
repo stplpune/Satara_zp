@@ -16,55 +16,67 @@
         </div>
       </div>
     </mat-card-header>
-    <!-- <mat-card-content class="card-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="table-resopnsive">
-                    <table mat-table [dataSource]="dataSource" class="dashboard-table">
-                      
-                      
-                        <ng-container matColumnDef="position">
-                          <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
-                          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                        </ng-container>
-                      
-                       
-                        <ng-container matColumnDef="name">
-                          <th mat-header-cell *matHeaderCellDef> Teacher Name </th>
-                          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                        </ng-container>
-                      
-                      
-                        <ng-container matColumnDef="weight">
-                          <th mat-header-cell *matHeaderCellDef> Mobile No. </th>
-                          <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                        </ng-container>
-                      
-                        
-                        <ng-container matColumnDef="symbol">
-                          <th mat-header-cell *matHeaderCellDef> Present Day's  </th>
-                          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                        </ng-container>
-
-                    
-                        <ng-container matColumnDef="Absent">
-                          <th mat-header-cell *matHeaderCellDef> Absent Day's  </th>
-                          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="Action">
-                          <th mat-header-cell *matHeaderCellDef> Action </th>
-                          <td mat-cell *matCellDef="let element"> 
-                            <button mat-flat-button mat-dialog-close class="btn-second" type="button" (click)="navigateToReport()">
-                              {{'Labels.ViewReport' | translate}}</button>
-                          </td>
-                        </ng-container>
-                      
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    </table>
+    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+        <form>
+            <div class="row">
+              <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100 ">
+                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                  <mat-select>
+                    <mat-option *ngFor="let food of foods" [value]="food.value">
+                      {{food.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100 ">
+                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                  <mat-select>
+                    <mat-option *ngFor="let food of foods" [value]="food.value">
+                      {{food.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100 ">
+                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                  <mat-select>
+                    <mat-option *ngFor="let food of foods" [value]="food.value">
+                      {{food.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100 ">
+                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                  <mat-select>
+                    <mat-option *ngFor="let food of foods" [value]="food.value">
+                      {{food.viewValue}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-sm">
+                <div class="d-flex gap-1">
+                    <!-- <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
+                        <input matInput formControlName="textSearch" maxlength="30">
+                    </mat-form-field> -->
+                    <div class="mb-0 d-flex gap-1">
+                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
+                            translate}}</button>
+                        <button mat-flat-button type="button" class="btn-second ms-2">{{'Labels.clear'|
+                            translate}}</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </mat-card-content> -->
+            </div>
+        </form>
+    </mat-card-header>
+    <mat-card-content class="card-body">
+        <p>Table</p>
+    </mat-card-content>
 </mat-card>

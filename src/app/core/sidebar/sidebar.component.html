@@ -1,3 +1,86 @@
+<div class="sidebar" [ngClass]="{'open' : getSideBarState()}">
+  <div class="sidebar-header">
+    <div class="d-flex align-items-center">
+      <div class="logo">
+        <img src="assets/images/ZP-satara-logo.svg">
+      </div>
+      <img src="assets/images/shiksha_darpan_text.svg" class="text">
+    </div>
+    <button (click)="closeSidebar()" class="btn btn-sidebar-close">
+      <mat-icon class="material-symbols-rounded">
+        close
+      </mat-icon>
+    </button>
+  </div>
+  <div class="sidebar-body">
+    <ul class="main-menu">
+      <ng-container *ngFor="let pages of loginPages; let i = index">
+      <!-- FOR ONLY ONE DASHBOARD MENU  -->
+        <ng-container *ngIf="pages.pageURL.length <= 1">
+          <li routerLinkActive="active">
+            <a routerLink="/{{pages.pageURL}}" routerLinkActive="active"
+              (click)="closeSidebar();sidebarMenuClick(pages.pageId, pages.isCollapsed)">
+              <div class="d-flex align-items-center">
+                <div class="icon"><img src="{{pages.menuIcon}}"></div>
+                <span>
+                  {{WebStorageService.languageFlag == 'EN' ? pages.pageName :
+                  pages.m_PageName}}
+                </span>
+              </div>
+            </a>
+          </li>
+        </ng-container>
+      <!--END FOR ONLY ONE DASHBOARD MENU  -->
+
+      <!-- FOR ONLY ONE MENU PART  -->
+        <ng-container *ngIf="pages.pageURL.length > 1">
+          <li>
+            <a data-bs-toggle="collapse" href="#collapseMaster{{i}}" role="button"
+              [attr.aria-expanded]="pages.isCollapsed ? true : false" aria-controls="collapseMaster"
+              (click)="pages.isCollapsed = !pages?.isCollapsed; sidebarMenuClick(pages.pageId, pages.isCollapsed)"
+              [attr.aria-controls]="'collapseMaster' + i" routerLinkActive="active"
+              [class]="pages.isCollapsed ? 'collapsed active' : ''">
+              <div class="d-flex align-items-center">
+                <div class="icon">
+                  <img src="{{pages.menuIcon}}">
+                </div>
+                <span> {{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
+                  pages.m_PageNameView}}
+                </span>
+              </div>
+              <span class="dropdown-toggle"></span>
+            </a>
+            <div [class]="pages.isCollapsed ? 'show collapse' : 'collapse'" id="collapsemaster{{i}}">
+              <div class="card card-body">
+                <ul class="submenu">
+                  <!-- <li>
+                <a>
+                  {{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
+                pages.m_PageNameView}}
+                </a>
+              </li> -->
+                  <li *ngFor="let page of pages?.pageURL; let pageUrlIndex = index">
+                    <a routerLinkActive="active" routerLink="/{{page}}" (click)="closeSidebar()">
+                      <ng-container
+                        *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? pages.pageName : pages.m_PageName; let pageNameIndex = index">
+                        <ng-container *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</ng-container>
+                      </ng-container>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ng-container>
+      <!-- END FOR ONLY ONE MENU PART  -->
+      </ng-container>
+    </ul>
+  </div>
+</div>
+
+
+
+
 <!-- <div class="sidebar bg-main">
   <div class="logo-details">
     <img src="assets/images/logo-white.svg" alt="Logo">
@@ -47,89 +130,7 @@
 
 
 
-<div class="sidebar" [ngClass]="{'open' : getSideBarState()}">
-  <div class="sidebar-header">
-    <div class="d-flex align-items-center">
-      <div class="logo">
-        <img src="assets/images/ZP-satara-logo.svg">
-      </div>
-      <img src="assets/images/shiksha_darpan_text.svg" class="text">
-    </div>
-    <button (click)="closeSidebar()" class="btn btn-sidebar-close">
-      <mat-icon class="material-symbols-rounded">
-        close
-      </mat-icon>
-    </button>
-  </div>
-  <div class="sidebar-body">
-    <ul class="main-menu">
-      <ng-container *ngFor="let pages of loginPages; let i = index">
-      <!-- FOR ONLY ONE DASHBOARD MENU  -->
 
-        <ng-container *ngIf="pages.pageURL.length <= 1">
-          <li routerLinkActive="active">
-            <a routerLink="/{{pages.pageURL}}" routerLinkActive="active"
-              (click)="closeSidebar();sidebarMenuClick(pages.pageId, pages.isCollapsed)">
-              <div class="d-flex align-items-center">
-                <div class="icon"><img src="{{pages.menuIcon}}"></div>
-                <span>
-                  {{WebStorageService.languageFlag == 'EN' ? pages.pageName :
-                  pages.m_PageName}}
-                </span>
-              </div>
-            </a>
-          </li>
-        </ng-container>
-
-      <!--END FOR ONLY ONE DASHBOARD MENU  -->
-
-      <!-- FOR ONLY ONE MENU PART  -->
-
-        <ng-container *ngIf="pages.pageURL.length > 1">
-          <li>
-            <a data-bs-toggle="collapse" href="#collapseMaster{{i}}" role="button"
-              [attr.aria-expanded]="pages.isCollapsed ? true : false" aria-controls="collapseMaster"
-              (click)="pages.isCollapsed = !pages?.isCollapsed; sidebarMenuClick(pages.pageId, pages.isCollapsed)"
-              [attr.aria-controls]="'collapseMaster' + i" routerLinkActive="active"
-              [class]="pages.isCollapsed ? 'collapsed active' : ''">
-              <div class="d-flex align-items-center">
-                <div class="icon">
-                  <img src="{{pages.menuIcon}}">
-                </div>
-                <span> {{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
-                  pages.m_PageNameView}}
-                </span>
-              </div>
-              <span class="dropdown-toggle"></span>
-            </a>
-            <div [class]="pages.isCollapsed ? 'show collapse' : 'collapse'" id="collapsemaster{{i}}">
-              <div class="card card-body">
-                <ul class="submenu">
-                  <!-- <li>
-                <a>
-                  {{WebStorageService.languageFlag == 'EN' ? pages.pageNameView :
-                pages.m_PageNameView}}
-                </a>
-              </li> -->
-                  <li *ngFor="let page of pages?.pageURL; let pageUrlIndex = index">
-                    <a routerLinkActive="active" routerLink="/{{page}}" (click)="closeSidebar()">
-                      <ng-container
-                        *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? pages.pageName : pages.m_PageName; let pageNameIndex = index">
-                        <ng-container *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</ng-container>
-                      </ng-container>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </li>
-        </ng-container>
-        
-       <!-- END FOR ONLY ONE MENU PART  -->
-      </ng-container>
-    </ul>
-  </div>
-</div>
 
 
 

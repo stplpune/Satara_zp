@@ -1,82 +1,105 @@
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb align-items-center">
-      <li aria-current="page">
-        <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
-          <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
-      </li>
-      <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
-      <li class="breadcrumb-item active" aria-current="page">{{'Labels.AttendanceReport' | translate}}</li>
-    </ol>
-  </nav>
-  <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
-    <mat-card-header class="card-header">
-      <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
-        <div class="text-main fw-bold">
-          {{'Labels.AttendanceReportList' | translate}}
+  <ol class="breadcrumb align-items-center">
+    <li aria-current="page">
+      <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
+        <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+    </li>
+    <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{'Labels.AttendanceReport' | translate}}</li>
+  </ol>
+</nav>
+<mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
+  <mat-card-header class="card-header">
+    <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
+      <div class="text-main fw-bold">
+        {{'Labels.AttendanceReportList' | translate}}
+      </div>
+      <div class="d-flex flex-wrap justify-content-start align-items-center justify-content-lg-end gap-2">
+        <button mat-flat-button class="bg-danger btn-icon text-white"
+            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+            matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
+            <mat-icon>
+                description
+            </mat-icon>
+        </button>
+        <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+            <mat-icon class="material-symbols-outlined">table</mat-icon>
+        </button>
+    </div>
+    </div>
+  </mat-card-header>
+  <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+    <form [formGroup]="filterForm">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+            <mat-select formControlName="talukaId" (selectionChange)="onChangeDropD('taluka');getAllCenter();">
+              <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
+                'EN' ?
+                tal.taluka:tal.m_Taluka }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+            <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage()">
+              <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
+                'EN' ? cen.center:cen.m_Center}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.village'| translate}}</mat-label>
+            <mat-select formControlName="villageId" (selectionChange)="onChangeDropD('village'); getAllSchools();">
+              <mat-option *ngFor="let village of villageArr" [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
+                village.village:village.m_Village}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+            <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
+              <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() == 'EN' ?
+                sch.schoolName:sch.m_SchoolName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{'Labels.selectDate'| translate}}</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="date" readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)">
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm">
+          <div class="d-flex gap-1">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
+              <input matInput formControlName="textSearch" maxlength="30">
+            </mat-form-field>
+            <div class="mb-0 d-flex gap-1">
+              <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+                translate}}</button>
+              <button mat-flat-button type="button" class="btn-second ms-2">{{'Labels.clear'|
+                translate}}</button>
+            </div>
+          </div>
         </div>
       </div>
-    </mat-card-header>
-    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
-        <form>
-            <div class="row">
-              <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                  <mat-select>
-                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                      {{food.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                  <mat-select>
-                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                      {{food.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                  <mat-select>
-                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                      {{food.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                  <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                  <mat-select>
-                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                      {{food.viewValue}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-sm">
-                <div class="d-flex gap-1">
-                    <!-- <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.searchItems'| translate}}</mat-label>
-                        <input matInput formControlName="textSearch" maxlength="30">
-                    </mat-form-field> -->
-                    <div class="mb-0 d-flex gap-1">
-                        <button mat-flat-button class="btn-main" type="submit">{{'Labels.filter'|
-                            translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second ms-2">{{'Labels.clear'|
-                            translate}}</button>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </form>
-    </mat-card-header>
-    <mat-card-content class="card-body">
-        <p>Table</p>
-    </mat-card-content>
+    </form>
+  </mat-card-header>
+  <mat-card-content class="card-body">
+    <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+  </mat-card-content>
 </mat-card>

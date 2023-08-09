@@ -93,8 +93,8 @@ export class InwardItemComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm.value;
-    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
-    let reportStr = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&pageno=${this.pageNumber}&pagesize=${this.totalCount * 10}&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
+    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&DistrictId=1&CenterId=${(formValue?.centerId || 0)}&TalukaId=${(formValue?.talukaId || 0)}&VillageId=${(formValue?.villageId || 0)}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&DistrictId=1&CenterId=${(formValue?.centerId || 0)}&TalukaId=${(formValue?.talukaId || 0)}&VillageId=${(formValue?.villageId || 0)}&pageno=${this.pageNumber}&pagesize=${this.totalCount * 10}&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
 
     this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str ), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

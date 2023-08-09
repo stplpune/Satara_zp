@@ -705,12 +705,13 @@ export class AddUpdateStudentComponent {
       "localId": 0,
       "fatherFullName": obj.fatherFullName?.trim(),
       "motherName": obj.motherName?.trim(),
-      "mobileNo": obj.mobileNo,
+      "mobileNo": obj.mobileNo || '',
       "gaurdianModel":this.gardianModelArr,
       "documentModel": this.imageArray,
       "lan": '',
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
+    
     let isAtlstoneHead = this.gardianModelArr.some((item: any) => (item.isHead == true));
     // let isAtlstDeletFlag = this.gardianModelArr.some((item: any) => (item.isDeleted === false));
 

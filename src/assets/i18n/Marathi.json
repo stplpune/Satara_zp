@@ -419,6 +419,10 @@
         "CCTVModel":"CCTV मॉडेल",
         "CloudID":"क्लाउड आयडी",
         "RegistrationDate":"नोंदणी दिनांक",
-        "teacherId":"शिक्षक आयडी"
+        "teacherId":"शिक्षक आयडी",
+
+        "cctv":"CCTV",
+        "cctvlist":"CCTV यादी",
+        "location":"शाळेचे स्थान"
     }
 }

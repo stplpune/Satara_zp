@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -21,12 +22,12 @@ export class AddTasksheetComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<AddTasksheetComponent>,
     private errors: ErrorsService,
-    public webStorageS: WebStorageService
+    public webStorageS: WebStorageService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
     this.defaultForm();
-    console.log("data : ", this.data);
   }
 
   defaultForm() {
@@ -38,8 +39,7 @@ export class AddTasksheetComponent {
 
   onSubmit() {
     let formValue = this.attendenceForm.value
-    console.log("onSubmit : ", formValue);
-    console.log("date : ", this.data.date);
+    this.data.date = this.datePipe.transform(this.data.date, 'yyyy-MM-dd');
 
     if (this.attendenceForm.invalid) {
       return;
@@ -53,7 +53,6 @@ export class AddTasksheetComponent {
           } else {
             this.commonMethod.showPopup(res.statusMessage, 1);
           }
-
         },
         error: ((err: any) => { this.errors.handelError(err) })
       });

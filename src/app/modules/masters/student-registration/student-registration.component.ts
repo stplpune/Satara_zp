@@ -162,6 +162,8 @@ export class StudentRegistrationComponent {
     let marathiDisplayedColumns = ['docPath', 'srNo', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender'];
     let tableData = {
       highlightedrow:true,
+      edit: true,
+      delete: false,
       pageNumber: this.pageNumber,
       img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
       displayedColumns: this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,

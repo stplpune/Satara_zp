@@ -941,7 +941,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       let dataObjArray: any[] = [];
       optionalSubArray.reverse().map((z: any) => {
         const filterArray = filterSubject.filter((a: any) => a.optionGrade == z)
-        console.log(filterSubject, filterArray)
         const subData = {
           name: this.selectedLang == 'English' ? filterArray[0].optionName : filterArray[0].m_OptionName,
           data: filterArray.map((b: any) => b.totalPercentage),//([z.totalPercentage]),
@@ -953,7 +952,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         dataObjArray.push(subData);
       })
       dataArray.push(dataObjArray);
-      console.log(dataArray)
     }) 
     this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet)
   }
@@ -1079,24 +1077,47 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // -----------------------------------------  bar chart by class ------------------------------------------------//
 
   constructBarChartByClass() {
-    this.subjectObjforClass = this.barChartDataByClass.find((x: any) => x.subjectId == this.subjectforBarByCLass.value);
-    console.log(this.subjectObjforClass)
-    const obj = {
-      name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
-      data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
-      dataValue: this.barChartDataByClass.map((z: any) => z.totalStudent),
-    }
-    const barSubjectSet = this.barChartDataByClass.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName)
-    let SeriesArray: any[] = [];
-    SeriesArray.push(obj);
-    // this.createBarchartByClass(SeriesArray,barSubjectSet, obj?.name  );
-    this.createBarchartByClass(SeriesArray, barSubjectSet);
+    const filterData = this.barChartDataByClass.filter((x: any) => x.subjectId == this.subjectforBarByCLass.value)
+    console.log("filterData", filterData);
+    
+    const barSubjectSet = [...new Set(filterData.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName))];
+    const testSet = [...new Set(filterData.map((sub: any) => sub.examTypeId))];
+    let dataArray: any[] = [];
 
+    // this.subjectObjforClass = this.barChartDataByClass.find((x: any) => x.subjectId == this.subjectforBarByCLass.value);
+   testSet.map((t: any)=>{
+    const filterSub = filterData.filter((a: any)=>a.examTypeId == t);
+    console.log("filterSub",filterSub);
+    
+    const obj = {
+      examTypeId:filterSub[0]?.examTypeId,
+      name: filterSub[0]?.shortForm+'-'+filterSub[0]?.examType,
+      data: filterSub.map((d: any) => d.totalPercentage), //this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.totalPercentage),
+      dataValue: filterSub.map((d: any) => d.actualStudent),//this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.actualStudent),
+      totalStudent: filterSub.map((d: any) => d.totalStudent)
+    }
+    dataArray.push(obj);
+   })
+
+   console.log("dataArray",dataArray, barSubjectSet);
+   
+    // const obj = {
+    //   name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
+    //   data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
+    //   dataValue: this.barChartDataByClass.map((z: any) => z.totalStudent),
+    // }
+    // const barSubjectSet = this.barChartDataByClass.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName)
+    // let SeriesArray: any[] = [];
+    // SeriesArray.push(obj);
+    // this.createBarchartByClass(SeriesArray,barSubjectSet, obj?.name  );
+    this.createBarchartByClass(dataArray, barSubjectSet, this.selectedLang == 'English' ? filterData[0]?.subjectName : filterData[0]?.m_SubjectName);
   }
-  createBarchartByClass(SeriesArray: any, barSubjectSet: any) {
+  createBarchartByClass(SeriesArray: any, barSubjectSet: any, sub: any) {
     // createBarchartByClass(SeriesArray:any, barSubjectSet:any, sub:any){
+      console.log(barSubjectSet);
+      
     this.barChaOptionHeight = 350;
-    const length = this.barChartDataByClass.length;
+    const length = barSubjectSet.length;
     let width = this.subjectforBarByCLass.getRawValue()==1?(length < 2 ? 200 : length < 3 ? 300 : 600) :1200 //length < 5 ? 600 : length < 8 ? 500 : 500
     this.barchartOptionsByClass = {
       series: SeriesArray,
@@ -1104,6 +1125,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         height: this.barChaOptionHeight,
         type: "bar",
         width: width,
+        // columnWidth: '10%',
         toolbar: {
           show: false
         },
@@ -1111,29 +1133,30 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           click: (_event: any, _chartContext: any, config: any) => {
             if (config.seriesIndex >= 0) {
               this.optionalSubjectindex = config.seriesIndex;
-              // const data = this.barChartDataByClass.find((x: any) => (this.selectedLang == 'English' ? x.optionName : x.m_OptionName == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub ==( this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName) );
-              const data = this.barChartDataByClass.find((x: any) => ((this.selectedLang == 'English' ? x.question : x.m_Question) === (this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex])));
+              // const data = this.barChartDataByClass.find((x: any) => ((this.selectedLang == 'English' ? x.question : x.m_Question) === (this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex])));
+              // this.selectedBarstatus = 'bar';
+              // const examTypeId = 0;
+              const data = (this.barChartDataByClass.filter((x: any) => ((this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub == (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName ))).find((x: any) =>  this.barchartOptionsByClass?.series[config.seriesIndex]?.examTypeId ==x.examTypeId);
               this.selectedBarstatus = 'bar';
-              const examTypeId = 0;
-              this.passingParameters(data, examTypeId)
+             this.passingParameters(data, data?.examTypeId)
             }
           }
         }
       },
-      colors: ["#fd7e14"],
+      // colors: ["#fd7e14"],
+      colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#468C5F'],
       plotOptions: {
         bar: {
           // columnWidth: "45%", // on condition
           // barHeight: '50%',// on condition
           distributed: false,
-          horizontal: false,
           colors: {
             backgroundBarColors: ['#f2f2f2'],
           },
         }
       },
       dataLabels: {
-        enabled: true,
+        enabled: false,
         formatter: function (val: any) {
           return val + "%";
         },
@@ -1155,9 +1178,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
         position: 'top',
         categories: barSubjectSet,
-        parameters: this.selectedLang == 'English' ? ['Level', 'Total Student', 'Student(%)',] : ['स्तर', 'एकूण विद्यार्थी', 'विद्यार्थी (%)'],
+        parameters: this.selectedLang == 'English' ? ['Level', 'Total Tested Student', 'Total Pass Student', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'एकूण पास विद्यार्थी', 'विद्यार्थी (%)'],
+
+        // parameters: this.selectedLang == 'English' ? ['Level', 'Total Student', 'Student(%)',] : ['स्तर', 'एकूण विद्यार्थी', 'विद्यार्थी (%)'],
         labels: {
-          hideOverlappingLabels: true,
+          // hideOverlappingLabels: true,
           rotate: -90,
           show: true,
           trim: true,
@@ -1175,6 +1200,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         show: false,
         min: 0,
         max: 100
+      },
+      stroke: {
+        colors: ["transparent"],
+        width: 10
       },
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {

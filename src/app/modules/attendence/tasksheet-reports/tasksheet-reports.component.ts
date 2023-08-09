@@ -226,9 +226,9 @@ export class TasksheetReportsComponent {
         this.pageNumber = obj.pageNumber;
         this.getTableData();
         break;
-      // case 'View':
-      //   this.openDetailsDialog(obj);
-      //   break;
+      case 'View':
+        this.router.navigate(['/tasksheet']);
+        break;
     }
   }
 

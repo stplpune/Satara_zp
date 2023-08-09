@@ -106,11 +106,11 @@ export class TasksheetReportsComponent {
 
     // let date = formValue?.date
     // let yearMonth = moment(date).format('YYYY-MM');
-
+    
+    let str =  `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=398&lan=EN`;
     // let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
     let reportStr = `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=1291&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
 
-    let str =  `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=398&lan=EN`;
     this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
     // this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
     

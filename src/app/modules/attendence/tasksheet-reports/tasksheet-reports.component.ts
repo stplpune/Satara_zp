@@ -59,8 +59,8 @@ export class TasksheetReportsComponent {
   langTypeName: any;
   isWriteRight!: boolean;
   get f() { return this.filterForm.controls };
-  displayedheadersEnglish = ['Sr. No.', 'Teacher Name', 'Mobile No', 'Present Days', 'Absent Days', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस', 'कृती'];
 
   constructor(private router: Router,
     private apiService: ApiService,
@@ -139,8 +139,8 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays'];
-    this.displayedColumns = ['srNo', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays'];
+    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
@@ -271,6 +271,7 @@ export class TasksheetReportsComponent {
     data.find((ele: any, i: any) => {
       let obj = {
               "Sr.No": i + 1,
+              "Teacher Code": ele.teacherCode,
               "Teacher Name": ele.teacherName,
               "Mobile No": ele.mobileNo,
               "Present Days": ele.totalPresentDays,
@@ -280,7 +281,7 @@ export class TasksheetReportsComponent {
     });
 
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ['Sr. No.', 'Teacher Name', 'Mobile No', 'Present Days', 'Absent Days'];
+      let keyPDFHeader = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []

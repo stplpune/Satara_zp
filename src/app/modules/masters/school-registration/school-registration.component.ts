@@ -158,7 +158,7 @@ export class SchoolRegistrationComponent implements OnInit {
     });
     // download pdf call
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ["Sr.No.", "School Name", "Taluka", "Kendra", "Village"];
+      let keyPDFHeader = ["Sr.No", "School Name", "Taluka", "Kendra", "Village"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []

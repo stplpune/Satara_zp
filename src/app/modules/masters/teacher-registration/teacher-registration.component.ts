@@ -222,7 +222,7 @@ export class TeacherRegistrationComponent implements OnInit {
     });
     // download pdf call
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ["Sr.No.", "Teacher Name","Teacher ID" ,"Mobile No.", "Email ID", "Taluka", "Cluster"];
+      let keyPDFHeader = ["Sr.No ", "Teacher Name","Teacher ID" ,"Mobile No.", "Email ID", "Taluka", "Cluster"];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -232,7 +232,7 @@ export class TeacherRegistrationComponent implements OnInit {
         'topHedingName': 'Teacher List',
         'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
-      let headerKeySize = [7, 15, 10, 15, 20, 20];
+      let headerKeySize = [15, 15, 10, 15, 20, 20];
       flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
     }
   }

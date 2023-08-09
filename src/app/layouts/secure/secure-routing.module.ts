@@ -45,6 +45,7 @@ const routes: Routes = [
   { path: 'tasksheet-report', loadChildren: () => import('../../modules/attendence/tasksheet-reports/tasksheet-reports.module').then(m => m.TasksheetReportsModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Tasksheet Report', m_title: 'टास्कशीट अहवाल', active: true }] } },
   { path: 'holiday-master', loadChildren: () => import('../../modules/attendence/hoilday-master/hoilday-master.module').then(m => m.HoildayMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Hoilday Master', m_title: 'हॉलिडे मास्टर', active: true }] }  },
   { path: 'cctv-location-registration', loadChildren: () => import('../../modules/cctv/cctv-location-registration/cctv-location-registration.module').then(m => m.CctvLocationRegistrationModule) ,canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV Location Registration', m_title: 'CCTV स्थान नोंदणी', active: true }] }  },
+  { path: 'cctv', loadChildren: () => import('../../modules/cctv/cctv/cctv.module').then(m => m.CctvModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV', m_title: 'CCTV स्थान', active: true }] }   },
 ]
   
 

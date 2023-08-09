@@ -14,6 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
+import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -70,7 +71,8 @@ export class TasksheetReportsComponent {
     public webStorageS: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
     private excelpdfService: DownloadPdfExcelService,
-    public datepipe: DatePipe) { }
+    public datepipe: DatePipe,
+    private encDec : AesencryptDecryptService) { }
 
   ngOnInit() {
     this.webStorageS.langNameOnChange.subscribe(lang => {
@@ -99,17 +101,19 @@ export class TasksheetReportsComponent {
 
   getTableData(flag?: string) {
     this.ngxSpinner.show();
-    console.log("table...");
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm?.value;
 
-    let date = formValue?.date
-    let yearMonth = moment(date).format('YYYY-MM');
+    // let date = formValue?.date
+    // let yearMonth = moment(date).format('YYYY-MM');
 
-    let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&lan=${this.webStorageS.languageFlag}`;
-    let reportStr = `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=1291&TextSearch=${formValue?.textSearch.trim() || ''}&lan=${this.webStorageS.languageFlag}`;
+    // let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=1291&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
 
+    let str =  `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=398&lan=EN`;
     this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
+    // this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
+    
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -221,13 +225,17 @@ export class TasksheetReportsComponent {
   }
 
   childCompInfo(obj: any) {
+    let teacherDetail = obj.userId + '.' + obj.teacherName + '.' + moment(this.f['date'].value).format('YYYY-MM');
     switch (obj.label) {
       case 'Pagination':
         this.pageNumber = obj.pageNumber;
         this.getTableData();
         break;
       case 'View':
-        this.router.navigate(['/tasksheet']);
+        let formData = this.encDec.encrypt(`${teacherDetail}`);
+        this.router.navigate(['/tasksheet'],{
+          queryParams: { obj: formData },  
+        });  
         break;
     }
   }
@@ -281,7 +289,7 @@ export class TasksheetReportsComponent {
           'topHedingName': 'Attendance Report List',
           'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
-        let headerKeySize = [7, 30, 20, 10, 10]
+        let headerKeySize = [7, 30, 20, 15, 15]
         flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
   }

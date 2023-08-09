@@ -186,7 +186,7 @@ export class AddUpdateStudentComponent {
     }
     else if(this.gardianModelArr.length == 0){
       this.gardianModelArr.push(formvalue);
-      console.log("length is 0");
+    
       // this.gardianFormData()
       
     }else{
@@ -338,8 +338,8 @@ export class AddUpdateStudentComponent {
   }
 
 
-  deleteGardian(data:any,i: any) {
-    console.log(data,i);
+  deleteGardian(i: any) {
+  
     if(this.editFlag == true){
       this.gardianModelArr[i].isDeleted = true;
       this.gardianModelArr[i].isHead = false;
@@ -348,7 +348,7 @@ export class AddUpdateStudentComponent {
     else{
       this.gardianModelArr.splice(i, 1);
     }
-    console.log("this.gardianModelArr", this.gardianModelArr);
+   
     
   }
 
@@ -358,7 +358,7 @@ export class AddUpdateStudentComponent {
           res.isHead = false
         });
         this.gardianModelArr[i].isHead = true;
-        console.log("this.gardianModelArr[i]",this.gardianModelArr);
+      
       }    
       
       
@@ -559,9 +559,6 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {         
           this.editObj = res.responseData;
-          console.log(" this.editObj", this.editObj);
-          
-         
           this. patchValue();
         } else {
           this.ngxSpinner.hide();
@@ -735,7 +732,7 @@ export class AddUpdateStudentComponent {
       //   return
       // }
       
-      console.log("postObj",postObj);
+    
       let url = this.editObj ? 'UpdateStudent' : 'AddStudent'
       this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Student/' + url, false, postObj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({

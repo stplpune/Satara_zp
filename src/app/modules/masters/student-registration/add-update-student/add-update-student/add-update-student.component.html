@@ -293,7 +293,7 @@
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>Mobile No.</mat-label>
-                            <input matInput formControlName="mobileNo" maxlength="10" (change)="searchMobileNo()">
+                            <input matInput formControlName="mobileNo" maxlength="10" (change)="searchMobileNo()" (keypress)="validators.noFirstSpaceAllow($event); validators.onlyDigits($event);">
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
@@ -355,7 +355,7 @@
                                         <td>
                                             <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
                                                 matTooltipPosition="right" matTooltipClass="tooltip" type="button"
-                                                (click)="deleteGardian(gardian,i)">
+                                                (click)="deleteGardian(i)">
                                                 <mat-icon class="text-danger"> delete</mat-icon>
                                             </button>
                                             <!-- <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"

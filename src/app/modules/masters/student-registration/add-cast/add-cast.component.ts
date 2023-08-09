@@ -90,20 +90,23 @@ export class AddCastComponent {
 
   onSubmit(){   
     let postObj = this.addCastForm.value
-    this.apiService.setHttp('post','zp-satara/Student/AddCaste', false, postObj, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.commonMethods.showPopup(res.statusMessage, 0);
-          this.dialogRef.close('yes')
-          
-        } else {
-        
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-        }
-      },
-      error: ((err: any) => {  this.errors.handelError(err.statusCode) })
-    });
+    if(this.addCastForm.invalid){
+      return;
+    }else{
+      this.apiService.setHttp('post','zp-satara/Student/AddCaste', false, postObj, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.commonMethods.showPopup(res.statusMessage, 0);
+            this.dialogRef.close('yes')            
+          } else {          
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          }
+        },
+        error: ((err: any) => {  this.errors.handelError(err.statusCode) })
+      });
+    }
+   
   }
   }
  

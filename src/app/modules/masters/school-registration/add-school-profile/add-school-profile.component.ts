@@ -99,6 +99,8 @@ export class AddSchoolProfileComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.schoolresp = res.responseData;
+          console.log("school res",this.schoolresp);
+          
           this.tableresp = res.responseData.teacher;
           this.docDataresp = res.responseData.schoolEvent;
           let evetArr = this.docDataresp.map((x: any) => {

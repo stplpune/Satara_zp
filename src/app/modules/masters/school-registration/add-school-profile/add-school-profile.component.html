@@ -23,9 +23,9 @@
                 <div class="student-details">
                     <div class="d-flex">
                         <div class="flex-shrink-0">
-                            <img
-                                src="schoolresp?.uploadImage?'schoolresp?.uploadImage':'../../../../../assets/images/user.png'">
+                            <img [src]="schoolresp?.uploadImage ? schoolresp?.uploadImage :'../../../../../assets/images/user.png'">
                             <!-- <img src="../../../../../assets/images/user.png"> -->
+                            
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="mb-1 fw-bold text-break">{{langTypeName =='English' ? schoolresp?.schoolName: schoolresp?.m_SchoolName}}</h5>

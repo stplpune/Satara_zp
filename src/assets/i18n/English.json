@@ -418,6 +418,10 @@
         "CCTVModel":"CCTV Model",
         "CloudID":"Cloud ID",
         "RegistrationDate":"Registration Date",
-        "teacherId":"Teacher ID"
+        "teacherId":"Teacher ID",
+
+        "cctv":"CCTV",
+        "cctvlist":"CCTV List",
+        "location":"School Location"
     }
 }

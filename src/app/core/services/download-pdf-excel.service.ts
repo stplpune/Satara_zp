@@ -18,7 +18,7 @@ export class DownloadPdfExcelService {
       startY: 25,
       rowPageBreak: 'avoid',
       // margin: { horizontal: 7 , verticle: 10},
-      margin: { top: 25 },
+      margin: { horizontal: 1,top: 25 },
 
       didDrawPage: function (_data: any) {
         // var imgWidth = 33;

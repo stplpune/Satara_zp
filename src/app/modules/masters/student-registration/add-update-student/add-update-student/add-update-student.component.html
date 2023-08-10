@@ -290,18 +290,31 @@
                         <mat-checkbox formControlName="isHead" [disabled]="checkDisable == true"> Is
                             Default</mat-checkbox>
                     </div> -->
+
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.name' | translate}}</mat-label>
+                            <input matInput formControlName="name"
+                            (keypress)="validators.noFirstSpaceAllow($event);">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>name (Marathi)</mat-label>
+                            <input matInput formControlName="m_Name" 
+                            (keypress)="validators.noFirstSpaceAllow($event); validators.unicodeMarathiValidation($event);">
+                        </mat-form-field>
+                    </div>
+
+
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.agencyMobileNo.' | translate}}</mat-label>
                             <input matInput formControlName="mobileNo" maxlength="10" (change)="searchMobileNo()" (keypress)="validators.noFirstSpaceAllow($event); validators.onlyDigits($event);">
                         </mat-form-field>
                     </div>
-                    <div class="col-sm-4">
-                        <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.name' | translate}}</mat-label>
-                            <input matInput formControlName="name">
-                        </mat-form-field>
-                    </div>
+                 
                     <div class="col-sm-4">
                         <div class="row gx-3">
                             <div class="col-sm-7">
@@ -320,6 +333,9 @@
                             </div>
                         </div>
                     </div>
+
+
+
                 </div>
             </form>
             <div class="row">

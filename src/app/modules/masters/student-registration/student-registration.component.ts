@@ -277,11 +277,12 @@ export class StudentRegistrationComponent {
       headerImage: obj.documentResponse[index]?.docPath || "assets/images/user.png",
       header: this.webService.languageFlag == 'EN' ? obj.fullName : obj.m_FullName,
       subheader: this.webService.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
-      labelHeader: this.webService.languageFlag == 'EN' ? ['Father Name', 'Mother Name', 'Parent Mobile No.', 'Aadhaar No.', 'Standard', 'School Name'] : ['वडीलांचे नावं', 'आईचे नावं', 'पालक मोबाईल क्र.', 'आधार क्र.', 'इयत्ता', 'शाळेचे नाव'],
-      labelKey: this.webService.languageFlag == 'EN' ? ['fatherFullName', 'motherName', 'mobileNo', 'aadharNo', 'standard', 'schoolName'] : ['m_FatherFullName', 'm_MotherName', 'mobileNo', 'aadharNo', 'standard', 'm_SchoolName'],
+      labelHeader: this.webService.languageFlag == 'EN' ? ['Gaurdian Name', 'Relation', 'Parent Mobile No.', 'Aadhaar No.', 'Standard', 'School Name'] : ['पालकाचे नाव', 'नाते', 'पालक मोबाईल क्र.', 'आधार क्र.', 'इयत्ता', 'शाळेचे नाव'],
+      labelKey: this.webService.languageFlag == 'EN' ? ['gaurdianName', 'relation', 'mobileNo', 'aadharNo', 'standard', 'schoolName'] : ['m_GaurdianName', 'm_Relation', 'mobileNo', 'aadharNo', 'standard', 'm_SchoolName'],
       Obj: obj,
       chart: true
-    }
+    } 
+    
     const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
       width: '900px',
       data: data,

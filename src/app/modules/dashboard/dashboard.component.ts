@@ -880,6 +880,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           this.totalStudentSurveyDataByCLass[0].ischeckboxShow = false;
           this.checkDataByClass(1, this.totalStudentSurveyDataByCLass[1]);
+          
         } else {
           this.totalStudentSurveyDataByCLass = [];
         }
@@ -893,12 +894,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkDataByClass(index: number, obj: any) {
-    this.selectedObjByClass = obj;
+    this.selectedObjByClass = obj;    
     // this.totalStudentSurveyDataByCLass.map((x: any) => {
     //   x.status = false;
     // })
     this.selectedGroupIdindex = index;
     this.totalStudentSurveyDataByCLass[index].status = true;
+    this.getSubject(obj?.groupId);
     this.selectedSurveyData = this.selectedObjByClass?.assessmentCount + '/' + this.selectedObjByClass?.studentCount;
     this.getchartDataByCLass();
   }

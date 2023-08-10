@@ -13,7 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -52,13 +52,16 @@ export class AddSchoolProfileComponent {
   schoolevetArr: any;
   langTypeName: any;
   langChnge!: Subscription;
+  pageNumber: number = 1;
+  evetArr = new Array();
   constructor(public webStorage: WebStorageService,
     private apiService: ApiService,
     private errors: ErrorsService,
     private lightbox: Lightbox,
     public gallery: Gallery,
     private route: ActivatedRoute,
-    private encryptdecrypt: AesencryptDecryptService
+    private encryptdecrypt: AesencryptDecryptService,
+    private router : Router
   ) { }
 
   ngOnInit() {
@@ -70,7 +73,7 @@ export class AddSchoolProfileComponent {
   }
 
   lightBox() {
-    this.items = this.schoolevetArr?.map((item: any) => {
+    this.items = this.evetArr?.map((item: any) => {     
       return new ImageItem({ src: item.docPath, thumb: item.docPath })
     });    
     this.basicLightboxExample();
@@ -92,27 +95,21 @@ export class AddSchoolProfileComponent {
   }
 
 
-  getTableData() {
+  getTableData() {   
     this.lightbox
     this.apiService.setHttp('GET', 'zp-satara/School/GetProfileById?Id='+ this.encryptData, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.schoolresp = res.responseData;
-          console.log("school res",this.schoolresp);
-          
+          this.schoolresp = res.responseData;      
           this.tableresp = res.responseData.teacher;
           this.docDataresp = res.responseData.schoolEvent;
-          let evetArr = this.docDataresp.map((x: any) => {
-            return x.eventImages
-          })
-          evetArr.map((x: any) => {
-            this.schoolevetArr = x.map((y: any) => {
-              return y;
-            })
+           this.docDataresp.map((x: any) => {        
+            x.eventImages.map((y:any)=>{           
+              this.evetArr.push(y);              
+            })   
           })
           this.lightBox();
-
         } else {
           this.tableresp = [];
         }
@@ -135,7 +132,7 @@ export class AddSchoolProfileComponent {
     let displayedColumnsReadMode =  (this.langTypeName == 'English') ? ['Sr. No.', 'Teacher Name', 'Email ID', 'Mobile No.', 'Desgination'] : ['अनुक्रमांक', 'शिक्षकाचे नाव', 'ई-मेल आयडी', 'मोबाइल क्रमांक', 'पदनाम'];
     let displayedColumns = ['srNo', 'name', 'emailId', 'mobileNo', 'designationType'];
     let tableData = {
-      // pageNumber: this.pageNumber,
+      pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
@@ -153,7 +150,9 @@ export class AddSchoolProfileComponent {
   onViewDoc(index: number){
     window.open(this.schoolresp?.schoolDocument[index].docPath, 'blank');
   }
-
+  redirect(){
+    this.router.navigate(['/school-registration'])
+  }
   // dataArr = [
   //   {
   //     srcUrl: 'https://apisatara.shikshandarpan.com//SchoolDoc/docs/file_202307271728180271.jpeg',
@@ -181,6 +180,8 @@ export class AddSchoolProfileComponent {
   //     previewUrl: 'https://preview.ibb.co/kZGsLm/img8.jpg',
   //   },
   // ];
+
+
 
 }
 

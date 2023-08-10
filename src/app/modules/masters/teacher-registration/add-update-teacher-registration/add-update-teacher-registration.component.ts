@@ -160,7 +160,7 @@ export class AddUpdateTeacherRegistrationComponent {
       "subUserTypeId": [0],
       "genderId": ['', Validators.required],
       "mobileNo": [this.data ? this.data?.mobileNo : '', [Validators.required, Validators.pattern(this.validation.mobile_No)]],
-      "emailId": [this.data ? this.data?.emailId : '', Validators.pattern(this.validation.email)],
+      "emailId": [this.data ? this.data?.emailId : '', Validators.pattern(this.validation.email1)],
       "birthDate": [this.data ? this.data?.birthDate : '', Validators.required],
       "age": [this.data ? this.data?.age : 0],
       "uploadImage": [''],

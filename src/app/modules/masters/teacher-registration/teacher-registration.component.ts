@@ -40,7 +40,7 @@ export class TeacherRegistrationComponent implements OnInit {
   cardViewFlag: boolean = false;
   langChnge!: Subscription;
   displayedheadersEnglish = ['Sr. No.', '', 'Teacher Name','Teacher ID', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
-  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव','शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव','शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक', 'कृती'];
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
   talukaArray = new Array();

@@ -581,6 +581,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // --------- ----------------------- selected bar chart value for click event -----------------------------//
   selectedBar(selectedbar: any, selectedIndex?: any) {
+    console.log("selectedbar", selectedbar, selectedIndex);
+    
     this.selectedbar = selectedbar;
     this.selectedBarIndex = selectedIndex;
   }
@@ -656,7 +658,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
     // this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?TalukaId=' + (TalukaId || 0) + (TalukaId ? '&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) : ''), false, false, false, 'baseUrl');
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool_V2' + '?AssessmentTypeId=' + (this.asessmwntLavel.value == 0 ? 1 : 2) + '&ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (TalukaId || 0) + ('&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?AssessmentTypeId=' + (this.asessmwntLavel.value == 0 ? 1 : 2) + '&ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (TalukaId || 0) + ('&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -912,8 +914,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         if (res.statusCode == "200") {
           res.responseData.responseData1.map((x: any) => {
             x.isOption == true ? this.stackbarChartDataByClass.push(x) : this.barChartDataByClass.push(x);
-          });
+          });          
           this.isStackbarEmpty = this.stackbarChartDataByClass.every((item: any) => item.totalPercentage === 0);
+          
           this.isBarChartEmty = this.barChartDataByClass.every((item: any) => item.totalPercentage === 0);
           this.constructStackBarChartByClass();
          this.constructBarChartByClass();
@@ -931,9 +934,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const subjectSet_m = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
     // const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
     const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
-    
-    // const testSet_M= [...new Set(this.stackbarChartData.map((sub:any) => sub.m_ExamType))];
-    this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
+        // this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
+        this.graphSubjectDataByClass = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
+
     let dataArray: any[] = [];
     subjectSet.map((x: any, index: any) => { //crete list of same subjectname 
       const filterSubject = this.stackbarChartDataByClass.filter((y: any) => y.question == x);
@@ -953,10 +956,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       })
       dataArray.push(dataObjArray);
     }) 
-    this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet)
+    this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet, this.selectedLang == 'English' ? subjectSet : subjectSet_m)
   }
   /// --- stack bar for class level 
-  constructSatackChartByCLass(seriesData: any, categoryData: any) {
+  constructSatackChartByCLass(seriesData: any, categoryData: any, sub:any) {
     this.stackbarchartOptionsByClass = {
       series: [...seriesData],
       chart: {
@@ -976,11 +979,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         events: {
           click: (_event: any, _chartContext: any, config: any) => {
             if (config.seriesIndex >= 0) {
-              this.optionalSubjectindex = config.seriesIndex;
-              const index = this.stackbarchartOptionsByClass.xaxis.categories.findIndex((i: any) => i == this.selectedbar);
+              debugger
+              this.optionalSubjectindex = config.seriesIndex; // index of bar 
+
+              const index = this.stackbarchartOptionsByClass.xaxis.subjects.findIndex((i: any) => (console.log(i), i == this.selectedbar));
+              
               const data = this.stackbarChartDataByClass.find((x: any) =>
                 (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
                 (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
+                
+                console.log("datadata",data);
+                
               this.selectedBarstatus = 'stack';
               const examTypeId = 0;
               this.passingParameters(data, examTypeId)
@@ -1013,6 +1022,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         labels: {
           show: true,
         },
+        subjects:sub,
         categories: categoryData,
         parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
       },
@@ -1086,9 +1096,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // this.subjectObjforClass = this.barChartDataByClass.find((x: any) => x.subjectId == this.subjectforBarByCLass.value);
    testSet.map((t: any)=>{
-    const filterSub = filterData.filter((a: any)=>a.examTypeId == t);
-    console.log("filterSub",filterSub);
-    
+    const filterSub = filterData.filter((a: any)=>a.examTypeId == t);    
     const obj = {
       examTypeId:filterSub[0]?.examTypeId,
       name: filterSub[0]?.shortForm+'-'+filterSub[0]?.examType,
@@ -1097,10 +1105,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       totalStudent: filterSub.map((d: any) => d.totalStudent)
     }
     dataArray.push(obj);
-   })
-
-   console.log("dataArray",dataArray, barSubjectSet);
-   
+   })   
     // const obj = {
     //   name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
     //   data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
@@ -1136,7 +1141,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               // const data = this.barChartDataByClass.find((x: any) => ((this.selectedLang == 'English' ? x.question : x.m_Question) === (this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex])));
               // this.selectedBarstatus = 'bar';
               // const examTypeId = 0;
-              const data = (this.barChartDataByClass.filter((x: any) => ((this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub == (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName ))).find((x: any) =>  this.barchartOptionsByClass?.series[config.seriesIndex]?.examTypeId ==x.examTypeId);
+              const data = (this.barChartDataByClass.filter((x: any) => ((this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub == (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName ))).find((x: any) =>  this.barchartOptionsByClass?.series[config.seriesIndex]?.examTypeId == x.examTypeId);
               this.selectedBarstatus = 'bar';
              this.passingParameters(data, data?.examTypeId)
             }
@@ -1167,7 +1172,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       },
       legend: {
-        show: false
+        show: true
       },
       grid: {
         show: false
@@ -1206,16 +1211,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         width: 10
       },
       tooltip: {
-        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {          
           return (
             '<div class="arrow_box" style="padding:10px;">' +
-            "<div>" + w.globals.seriesNames[seriesIndex] + " : <b> " + w.config.xaxis.categories[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
+            "<div>" + w.config.xaxis.categories[dataPointIndex] + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[3] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
             "</div>"
           );
         },
       }
+      
     };
   }
   onStudentDetails(index: number, label: string) {

@@ -360,24 +360,6 @@
                                     </div>
                                     <div class="col-sm-6 border-start border-3"
                                         *ngIf="barChartDataByClass.length && subjectforBarByCLass.value==1">
-                                        <!-- <div class="row justify-content-between align-items-center"
-                                            *ngIf="BarChartSubjectArray.length>1">
-                                            <div class="col-sm-4">
-                                                <p class="fw-bold">{{subjectforBar.value}}</p>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <mat-form-field appearance="outline" class="w-100">
-                                                    <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
-                                                    <mat-select [formControl]="subjectforBar"
-                                                        (selectionChange)="constructBarChart()">
-                                                        <mat-option *ngFor="let sub of BarChartSubjectArray"
-                                                            [value]="sub">
-                                                            {{sub}}
-                                                        </mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div> -->
                                         <div class="d-flex justify-content-start">
                                             <div class="fw-bold text-start mb-0 mx-3"> {{this.webStorage.languageFlag ==
                                                 'EN'?this.subjectObjforClass?.question :
@@ -407,7 +389,7 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="barChartData.length ==0 && stackbarChartData.length == 0 ">
+                                <div *ngIf="barChartDataByClass.length ==0 && stackbarChartDataByClass.length == 0 ">
                                     <div class="alert alert-danger text-center py-2 ">
                                         {{'Labels.dataNotFound' | translate}}
                                     </div>

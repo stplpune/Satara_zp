@@ -53,7 +53,9 @@ export class HoildayMasterComponent {
 
   year = [
     { id: 2023, year: '2023', Mname: '२०२३' },
-    { id: 2024, year: '2024', Mname: '२०२४' }
+    { id: 2024, year: '2024', Mname: '२०२४' },
+    { id: 2025, year: '2025', Mname: '२०२५' },
+    { id: 2026, year: '2026', Mname: '२०२६' },
   ]
 
   openDialog(data?: any) {

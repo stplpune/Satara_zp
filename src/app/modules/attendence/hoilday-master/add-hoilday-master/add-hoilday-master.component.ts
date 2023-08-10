@@ -36,7 +36,7 @@ export class AddHoildayMasterComponent {
     this.holidayFrm = this.fb.group({
       date: ['',[Validators.required]],
       holidayName: ['',[Validators.required]],
-      yearId:['',[Validators.required]],
+      yearId:[''],
       holidayNameMarathi:['',[Validators.required,Validators.pattern('^[-\u0900-\u096F ]+$')]]
     })
   }
@@ -45,16 +45,16 @@ export class AddHoildayMasterComponent {
     return this.holidayFrm.controls
   }
 
-  year=[
-    {id:2023,name:'2023',Mname:'२०२३'},
-    {id:2024,name:'2024',Mname:'२०२४'}
-  ]
+  // year=[
+  //   {id:2023,name:'2023',Mname:'२०२३'},
+  //   {id:2024,name:'2024',Mname:'२०२४'}
+  // ]
 
   onSubmit() {
     let formData=this.holidayFrm.getRawValue();
     let fromDate = this.datePipe.transform(formData.date, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     
-    if (this.holidayFrm.invalid || formData.yearId ==0) {
+    if (this.holidayFrm.invalid ) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }
@@ -65,7 +65,7 @@ export class AddHoildayMasterComponent {
       "holidayName": formData.holidayName,
       "m_HolidayName": formData.holidayNameMarathi,
       "holidayDate":fromDate,
-      "year": formData.yearId,
+      "year":0,
       "isDeleted": false,
       "createdBy":data.createdBy,
       "lan": this.webStorage.languageFlag,

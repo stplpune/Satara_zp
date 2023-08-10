@@ -55,7 +55,7 @@ export class AddItemComponent {
         "subCategory": [this.data?.subCategory ||''],
         "m_SubCategory": [this.data?.m_SubCategory ||''],
         "itemName": [this.data?.itemName ||'',[Validators.required]],
-        "m_ItemName": [this.data?.m_ItemName ||'',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
+        "m_ItemName": [this.data?.m_ItemName ||'', [Validators.required, Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
         "description": [this.data?.description ||''],
         "createdBy": [0],
         "isDeleted": true,

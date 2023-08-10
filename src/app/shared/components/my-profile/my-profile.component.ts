@@ -115,6 +115,8 @@ export class MyProfileComponent {
   }
 
   defaultForm(data?: any) {
+    console.log("profile pic", data?.profilePhoto);
+    
     this.userProfile = this.fb.group({
       "name": [data ? data?.name : ''],
       "mobileNo": [data ? data?.mobileNo : '', [Validators.required, Validators.pattern(this.validation.mobile_No)]],
@@ -126,7 +128,7 @@ export class MyProfileComponent {
 
     // image patch when its officer (not admin)
     // data && (this.webStorage.getUserTypeId() != 1) && (this.webStorage.getUserSubTypeId() != 1) ? (this.uploadImg = data?.profilePhoto, this.showButton = true) : (this.uploadImg = "assets/images/user.png", this.showButton = false)
-    data && data.profilePhoto != null ? (this.uploadImg = data?.profilePhoto, this.showButton = true) : (this.uploadImg = "assets/images/user.png", this.showButton = false)
+    data && data.profilePhoto != '' ? (this.uploadImg = data?.profilePhoto, this.showButton = true) : (this.uploadImg = "assets/images/user.png", this.showButton = false)
 
   }
 
@@ -136,6 +138,8 @@ export class MyProfileComponent {
     this.fileUpl.uploadDocuments(event, 'Upload', 'jpg, jpeg, png').subscribe((res: any) => {
       if (res.statusCode == 200) {
         this.uploadImg = res.responseData;
+        console.log("upload profie",this.uploadImg);
+        
         this.fc['profilePhoto'].setValue(this.uploadImg);
         this.showButton = true;
         this.commonMethods.snackBar(res.statusMessage, 0);

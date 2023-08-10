@@ -48,6 +48,8 @@ export class OfficeUsersComponent implements OnInit {
     // this.getofficeReport();
     this.webStorageService.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
+      console.log("langTypeName",this.langTypeName);
+      
       this.languageChange();
     });
   }
@@ -161,7 +163,7 @@ export class OfficeUsersComponent implements OnInit {
 
   getAllTaluka() {
     this.talukaArray = [];
-    this.masterService.getAllTaluka(this.webStorageService.languageFlag).subscribe({
+    this.masterService.getAllTaluka(this.langTypeName).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.talukaArray = res.responseData;

@@ -80,6 +80,13 @@ export class ValidationService {
     return !maskSeperator.test(event.key);
   }
 
+  alphaNumericWithSpaces(event: any) {
+    // alphaNumeric With Spaces but first Space Not Allow
+    this.noFirstSpaceAllow(event);
+    const maskSeperator = new RegExp('^([a-zA-Z0-9 ])', 'g');
+    return maskSeperator.test(event.key);
+  }
+
   emailRegex(event: any) { //Email Validation
     if (!this.noSpacesAtStart(event)) return false; // First Space not Accept
     if (event.currentTarget.value.split('..').length - 1 == 1 && (event.keyCode == 46)) return false;  // double .Dot not accept

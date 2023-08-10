@@ -439,6 +439,11 @@ export class InwardItemComponent {
   pdfDownload(data?: any,flag?:string) {   
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
+      if(ele.purchase_Sales_Date){
+        let date = ele.purchase_Sales_Date?.split('T');
+        ele.purchase_Sales_Date = date[0];
+        ele.purchase_Sales_Date = this.datepipe.transform(ele.purchase_Sales_Date, 'dd/MM/yyyy');
+      }
       let obj = {
               "Sr.No": i + 1,
               "Category Name": ele.category,

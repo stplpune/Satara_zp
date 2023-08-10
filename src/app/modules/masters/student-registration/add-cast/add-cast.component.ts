@@ -50,7 +50,7 @@ export class AddCastComponent {
         religionId: [this.data.religionId],
         casteCategoryId: [this.data.casteCategoryId],
         caste: ['',[Validators.required, Validators.pattern(this.validators.name)]],
-        m_Caste: ['',Validators.required],
+        m_Caste: ['',[Validators.required, Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
         lan: ['']
       
     })

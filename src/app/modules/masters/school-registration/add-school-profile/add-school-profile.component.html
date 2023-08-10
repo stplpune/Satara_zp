@@ -16,6 +16,10 @@
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
             <div class="text-main fw-bold">{{'Labels.SchoolProfileDetails' | translate}}</div>
         </div>
+        <a class="text-decoration-none text-main d-flex align-items-center" (click)="redirect()">
+            <mat-icon>keyboard_double_arrow_left</mat-icon>
+            <span class="text-main mt-1">Back</span>
+        </a>
     </mat-card-header>
     <mat-card-content class="card-body">
         <div class="row mb-3">
@@ -188,7 +192,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 border-end">
+            <div class="col-sm-6 border-end" *ngIf="items.length > 0">
                 <h6 class="text-main fw-bold">{{'Labels.Schoolphotos' | translate}}</h6>
                 <div class="row g-3">
                     <div class="col-sm-3" *ngFor="let item of items; index as i">

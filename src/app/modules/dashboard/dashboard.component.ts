@@ -159,6 +159,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.filterFormForBarGraph = this.fb.group({
       filtertalukaId: [0],
       filtercenterId: [0],
+      filterVillage: [0],
       filtersubjectId: [],
       optionId: [0],
       subjectId: [0],
@@ -189,7 +190,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       centerId: 0,
       schoolId: 0
     })
-    this.masterService.getAllTaluka().subscribe((res: any) => {
+    this.masterService.getAllTaluka('').subscribe((res: any) => {
       this.talukaData.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
       this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
       this.getCenters();
@@ -240,7 +241,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // }
   }
   getExamType() {
-    this.masterService.getExamType().subscribe((res: any) => {
+    this.masterService.getExamType('').subscribe((res: any) => {
       this.ExamTypeArray = [{ "id": 0, "examType": "All", "m_ExamType": "सर्व" }].concat(res.responseData);
       this.ExamTypeArray.sort((a, b) => a.id - b.id);
     })
@@ -658,7 +659,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
     // this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?TalukaId=' + (TalukaId || 0) + (TalukaId ? '&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) : ''), false, false, false, 'baseUrl');
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?AssessmentTypeId=' + (this.asessmwntLavel.value == 0 ? 1 : 2) + '&ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (TalukaId || 0) + ('&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (TalukaId || 0) + ('&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0)+'&VillageId=' + (formDatafilterbyTaluka?.filterVillage || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

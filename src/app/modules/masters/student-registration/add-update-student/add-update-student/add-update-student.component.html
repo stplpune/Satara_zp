@@ -16,7 +16,7 @@
                 translate):('Labels.studentRegistration'| translate)}}</h6>
             <a class="text-decoration-none text-main d-flex align-items-center" routerLink="/student-registration">
                 <mat-icon>keyboard_double_arrow_left</mat-icon>
-                <span class="text-main mt-1">Back</span>
+                <span class="text-main mt-1">{{'Labels.Back'| translate}}</span>
             </a>
         </div>
     </mat-card-header>
@@ -292,13 +292,13 @@
                     </div> -->
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Mobile No.</mat-label>
+                            <mat-label>{{'Labels.agencyMobileNo.' | translate}}</mat-label>
                             <input matInput formControlName="mobileNo" maxlength="10" (change)="searchMobileNo()" (keypress)="validators.noFirstSpaceAllow($event); validators.onlyDigits($event);">
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Name</mat-label>
+                            <mat-label>{{'Labels.name' | translate}}</mat-label>
                             <input matInput formControlName="name">
                         </mat-form-field>
                     </div>
@@ -306,7 +306,7 @@
                         <div class="row gx-3">
                             <div class="col-sm-7">
                                 <mat-form-field appearance="outline" class="w-100">
-                                    <mat-label>Relations</mat-label>
+                                    <mat-label>{{'Labels.relations' | translate}}</mat-label>
                                     <mat-select formControlName="relationId">
                                         <mat-option *ngFor="let relation of relationArr"
                                             [value]="relation.id">{{relation.relation}}</mat-option>

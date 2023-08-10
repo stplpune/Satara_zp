@@ -36,7 +36,7 @@ export class OfficeUsersComponent implements OnInit {
   highLightFlag: boolean =true;
   viewStatus='Table';
   displayedheadersEnglish = ['Sr. No.', ' Office User Name', 'Designation', 'Taluka', 'Mobile No.', 'Email ID', 'Unblock/Block', 'action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'ऑफिस युजर नाव', 'पदनाम', 'तालुका', 'मोबाईल क्र.', 'ई-मेल आयडी', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'ऑफिस युजर नावे', 'पदनाम', 'तालुका', 'मोबाईल क्र.', 'ई-मेल आयडी', 'अनब्लॉक/ब्लॉक', 'कृती'];
   constructor(private apiService: ApiService, private errors: ErrorsService, private dialog: MatDialog, private commonService: CommonMethodsService,
     public webStorageService: WebStorageService, private downloadFileService: DownloadPdfExcelService, public validation: ValidationService,
     private ngxSpinner: NgxSpinnerService, public datepipe: DatePipe, private masterService: MasterService) { }

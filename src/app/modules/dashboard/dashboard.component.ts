@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.masterService.getAllVillage('', (this.f['centerId'].value | 0)).subscribe((res : any)=>{
         this.villageData.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
         this.f['villageId'].patchValue(0);
-        this.getschools();
+        console.log(this.filterForm.value.villageId);
       });
     }
   }
@@ -654,12 +654,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const filterformData = this.filterForm.value;
     this.tableDataTopPerformance = [];
     const formDatafilterbyTaluka = this.filterFormForBarGraph.value;
-    const TalukaId = filterformData?.talukaId ? filterformData?.talukaId : formDatafilterbyTaluka?.filtertalukaId;
-    // const centerId = filterformData?.centerId ? filterformData?.centerId : formDatafilterbyTaluka?.filtercenterId;
-
+    // const TalukaId = filterformData?.talukaId ? filterformData?.talukaId : formDatafilterbyTaluka?.filtertalukaId;
 
     // this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?TalukaId=' + (TalukaId || 0) + (TalukaId ? '&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) : ''), false, false, false, 'baseUrl');
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (TalukaId || 0) + ('&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0)+'&VillageId=' + (formDatafilterbyTaluka?.filterVillage || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (filterformData?.talukaId || 0) + ('&CenterId=' + (filterformData?.centerId || 0)+'&VillageId=' + (filterformData?.villageId || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

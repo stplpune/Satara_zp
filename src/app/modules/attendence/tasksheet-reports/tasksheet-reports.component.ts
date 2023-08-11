@@ -80,15 +80,14 @@ export class TasksheetReportsComponent {
     ) { }
 
   ngOnInit() {
-    this.loginData = this.webStorageS.getLoggedInLocalstorageData()
-    console.log("loginData",this.loginData);
-    
+    this.loginData = this.webStorageS.getLoggedInLocalstorageData();
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
     });
-    this.getTableData();
     this.formField();
+    this.getTableData();
+    
     this.getTaluka();
   }
 
@@ -172,6 +171,8 @@ export class TasksheetReportsComponent {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
           
           this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);
+          console.log("talukaId",this.filterForm?.value.talukaId );
+          
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];

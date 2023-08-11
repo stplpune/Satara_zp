@@ -4,7 +4,7 @@
       <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
         <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
     </li>
-    <li class="breadcrumb-item" aria-current="page">{{'Labels.master' | translate}}</li>
+    <li class="breadcrumb-item" aria-current="page">{{'Labels.AttendanceDetails' | translate}}</li>
     <li class="breadcrumb-item active" aria-current="page">{{'Labels.tasksheet' | translate}}</li>
   </ol>
 </nav>
@@ -19,17 +19,16 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-start align-items-center justify-content-lg-end gap-2">
-        <button mat-flat-button class="bg-danger btn-icon text-white"
-            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-            matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
-            <mat-icon>
-                description
-            </mat-icon>
+        <button mat-flat-button class="bg-danger btn-icon text-white" matTooltip="{{'Labels.DownloadPdf' | translate}}"
+          matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
+          <mat-icon>
+            description
+          </mat-icon>
         </button>
         <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
-            <mat-icon class="material-symbols-outlined">table</mat-icon>
+          <mat-icon class="material-symbols-outlined">table</mat-icon>
         </button>
-    </div>
+      </div>
 
     </div>
   </mat-card-header>
@@ -92,7 +91,8 @@
           <th mat-header-cell *matHeaderCellDef> Action </th>
           <td mat-cell *matCellDef="let element">
             <!-- [disabled]="element.isSubmitted == 1  || submitFlag == true " -->
-            <button mat-flat-button [ngClass]="element.isSubmitted == 1 || submitFlag == true ? '':'btn-main ms-2'" (click)="openDialog(element)" [disabled]="element.isSubmitted == 1  || submitFlag == true " >
+            <button mat-flat-button [ngClass]="element.isSubmitted == 1 || submitFlag == true ? '':'btn-main ms-2'"
+              (click)="openDialog(element)" [disabled]="element.isSubmitted == 1  || submitFlag == true ">
               {{'Labels.apply' | translate}}
             </button>
           </td>
@@ -102,13 +102,10 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
       <ng-container *ngIf="!tableresp?.length">
-        <div class="row">
-            <div class="alert alert-danger text-center py-2 mt-1">
-                No Data Found !
-            </div>
+        <div class="alert alert-danger text-center py-2 mt-1">
+          Data not available
         </div>
-    </ng-container>
-
+      </ng-container>
     </div>
   </mat-card-content>
   <!-- <mat-card-content class="card-body pt-0">

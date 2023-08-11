@@ -428,6 +428,7 @@
         "cctvlist":"CCTV List",
         "location":"School Location",
         "AllRightsReserved":"ZP Satara, All Rights Reserved.",
-        "PoweredBy":"Powered By"
+        "PoweredBy":"Powered By",
+        "AttendanceDetails":"Attendance Details"
     }
 }

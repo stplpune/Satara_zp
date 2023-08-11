@@ -72,7 +72,8 @@ export class TasksheetReportsComponent {
     private ngxSpinner: NgxSpinnerService,
     private excelpdfService: DownloadPdfExcelService,
     public datepipe: DatePipe,
-    private encDec : AesencryptDecryptService) { }
+    private encDec : AesencryptDecryptService,
+    ) { }
 
   ngOnInit() {
     this.webStorageS.langNameOnChange.subscribe(lang => {
@@ -139,7 +140,7 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays'];
+    let displayedColumnsReadMode = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','action'];
     this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
@@ -149,7 +150,7 @@ export class TasksheetReportsComponent {
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-      edit: false, delete: false,
+      edit: false, delete: false, approve :true
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);
@@ -237,6 +238,9 @@ export class TasksheetReportsComponent {
           queryParams: { obj: formData },  
         });  
         break;
+        case 'Approve':
+          this.approveSubmitData();
+          break;
     }
   }
 
@@ -294,5 +298,25 @@ export class TasksheetReportsComponent {
         flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
+
+  approveSubmitData(){
+let date =  moment(this.f['date'].value).format('YYYY-MM')
+    this.apiService.setHttp('POST', `zp-satara/Attendance/ApproveAttendance?MonthYear=${date}&UserId=${this.webStorageS.getUserId()}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.commonMethodS.showPopup(res.statusMessage, 0);
+          // this.dialogRef.close('yes');
+        } else {
+          this.commonMethodS.showPopup(res.statusMessage, 1);
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
+  
+
+
+  }
+  
 
 }

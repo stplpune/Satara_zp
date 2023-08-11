@@ -23,9 +23,11 @@
             description
           </mat-icon>
         </button>
-        <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+        <button mat-flat-button class="bg-success btn-icon text-white"
+          matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip"
+          (click)="getTableData('excel')">
           <mat-icon class="material-symbols-outlined">table</mat-icon>
-      </button>
+        </button>
         <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateOffice()">
           <mat-icon>
             add
@@ -39,14 +41,14 @@
     <div class="row w-100 gx-2">
       <div class="col-sm-3">
         <mat-form-field appearance="outline" class="w-100 ">
-            <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-            <mat-select [formControl]="talukaId">
-                <mat-option *ngFor="let talukaObj of talukaArray" [value]="talukaObj.id">
-                    {{webStorageService.getLangauge() == 'EN' ?
-                    talukaObj.taluka : talukaObj.m_Taluka}}</mat-option>
-            </mat-select>
+          <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+          <mat-select [formControl]="talukaId">
+            <mat-option *ngFor="let talukaObj of talukaArray" [value]="talukaObj.id">
+              {{webStorageService.getLangauge() == 'EN' ?
+              talukaObj.taluka : talukaObj.m_Taluka}}</mat-option>
+          </mat-select>
         </mat-form-field>
-    </div>
+      </div>
       <div class="col-sm-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{'Labels.searchByName' | translate}}</mat-label>

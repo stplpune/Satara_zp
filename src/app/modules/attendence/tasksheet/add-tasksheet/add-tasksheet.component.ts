@@ -15,6 +15,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 export class AddTasksheetComponent {
   editFlag: any;
   attendenceForm !: FormGroup;
+  AttType!:number;
 
   constructor(private fb: FormBuilder,
     private apiService: ApiService,
@@ -24,27 +25,46 @@ export class AddTasksheetComponent {
     private errors: ErrorsService,
     public webStorageS: WebStorageService,
     private datePipe: DatePipe
-  ) { }
+  ) {
+    console.log("data",this.data);
+    
+   }
 
   ngOnInit() {
-    this.defaultForm();
+    this.defaultForm(); 
   }
 
   defaultForm() {
     this.attendenceForm = this.fb.group({
       isPresent: [1],
-      remark: ['', [Validators.required]]
+      remark: [this.data?.remark || '', [Validators.required]],
+      inTime:[this.data?.checkInTime || ''],
+      OutTime:[this.data?.checkOutTime || '']
     })
   }
 
   onSubmit() {
-    let formValue = this.attendenceForm.value
+    let formValue = this.attendenceForm.getRawValue();
+
+    console.log(formValue);
+    // return;
+    
+    if(this.data.checkInTime == '' || this.data.checkInTime == null ){
+      this.AttType = 1
+    }else if (this.data.checkOutTime == '' || this.data.checkOutTime == null ){
+      this.AttType = 2
+    }else if(this.data.checkInTime == '' || this.data.checkInTime == null && this.data.checkOutTime == '' ||  this.data.checkOutTime == null ){
+      this.AttType = 3
+    }
+    
     this.data.date = this.datePipe.transform(this.data.date, 'yyyy-MM-dd');
+
 
     if (this.attendenceForm.invalid) {
       return;
     } else {
-      this.apiService.setHttp('POST', 'zp-satara/Attendance/SaveManualAttendance?UserId=' + this.webStorageS.getUserId() + '&Attendance=' + formValue.isPresent + '&Date=' + this.data.date + '&Remark=' + formValue.remark + '&lan=' + this.webStorageS.languageFlag, false, false, false, 'baseUrl');
+      // this.apiService.setHttp('POST', 'zp-satara/Attendance/SaveManualAttendance?UserId=' + this.webStorageS.getUserId() + '&Attendance=' + formValue.isPresent + '&Date=' + this.data.date + '&Remark=' + formValue.remark + '&lan=' + this.webStorageS.languageFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('POST', `zp-satara/Attendance/SaveManualAttendance?UserId=${this.webStorageS.getUserId()}&Date=${this.data.date }&Attendance=${formValue.isPresent}&AttType=${this.AttType}&InTime=${formValue.inTime}&OutTime=${formValue.OutTime}&Remark=${formValue.remark}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
@@ -58,5 +78,7 @@ export class AddTasksheetComponent {
       });
     }
   }
+
+
 
 }

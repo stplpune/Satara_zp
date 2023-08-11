@@ -18,7 +18,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./hoilday-master.component.scss']
 })
 export class HoildayMasterComponent {
-  displayedheadersEnglish = ['Sr. No.', 'Year', ' Hiloday Name', 'Holiday Date', 'Action'];
+  displayedheadersEnglish = ['Sr. No.', 'Year', ' Holiday Name', 'Holiday Date', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'वर्ष', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
   tableresp= new Array();
   viewStatus = 'Table';
@@ -151,7 +151,7 @@ export class HoildayMasterComponent {
     this.deleteId = obj.id;
     let dialoObj = {
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Delete Holiday Master Record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
+      title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Delete Holiday Record?' : 'तुम्हाला सुट्टीचा रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webStorage.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

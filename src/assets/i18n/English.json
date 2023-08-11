@@ -9,7 +9,7 @@
         "uploadPhotodocument":"Upload Photo/Documents",
         "UpdatedoutwardItems":"Update Outward Items",
         "HolidayMaster":"Holiday Master",
-        "HolidayMasterList":"Holiday Master List",
+        "HolidayMasterList":"Holiday List",
         "TeacherAttendanceList":"Teacher Attendance List",
         "TeacherAttendanceReport":"Teacher Attendance Report",
         "AttendanceReport":"Attendance Report",
@@ -426,6 +426,8 @@
 
         "cctv":"CCTV",
         "cctvlist":"CCTV List",
-        "location":"School Location"
+        "location":"School Location",
+        "AllRightsReserved":"ZP Satara, All Rights Reserved.",
+        "PoweredBy":"Powered By"
     }
 }

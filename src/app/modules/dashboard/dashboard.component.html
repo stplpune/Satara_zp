@@ -433,7 +433,7 @@
                         <form [formGroup]="filterFormForBarGraph" class="w-100">
                             <div class="row w-100 gx-2  justify-content-start">
 
-                                <div class="col-sm-3 mt-2">
+                                <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
                                         <mat-select formControlName="examId" placeholder="All"
@@ -446,7 +446,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-sm-3 mt-2">
+                                <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100 ">
                                         <mat-label>{{'Labels.setNumber' | translate}}</mat-label>
                                         <input matInput formControlName="filterSetNumber"
@@ -454,11 +454,11 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-sm-3 mt-2">
+                                <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100 mb-0">
                                         <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
                                         <mat-select formControlName="subjectId"
-                                            (selectionChange)="clearDropLowHighFilter('subject'); getQuestion();">
+                                            (selectionChange)="clearDropLowHighFilter('subject'); getQuestion(); getTabledataByTaluka();">
                                             <mat-option *ngFor="let sub of subjectArrayByClass" [value]="sub.id">
                                                 {{webStorage.languageFlag == 'EN'?sub.subjectName:
                                                 sub.m_SubjectName}}
@@ -467,11 +467,11 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-sm-3 mt-2">
+                                <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.selectQuestion' | translate}}</mat-label>
                                         <mat-select formControlName="questionId"
-                                        (selectionChange)="clearDropLowHighFilter('question'); getOptionBySubjects();">
+                                        (selectionChange)="clearDropLowHighFilter('question'); getOptionBySubjects(); getTabledataByTaluka();">
                                             <mat-option *ngFor="let question of questionArray" [value]="question.questionId">
                                                 {{webStorage.languageFlag ==
                                                 'EN' ? question.question : question.m_Question }}
@@ -480,11 +480,11 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-sm-3 mt-2">
+                                <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.selectOption' | translate}}</mat-label>
                                         <mat-select formControlName="optionId"
-                                            (selectionChange)="getTabledataByTaluka();">
+                                            (selectionChange)="getTabledataByTaluka(); getTabledataByTaluka()">
                                             <mat-option *ngFor="let option of optionNameArr" [value]="option.optionId">
                                                 {{webStorage.languageFlag ==
                                                 'EN' ? option.optionName : option.m_OptionName }}

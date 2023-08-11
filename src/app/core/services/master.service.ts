@@ -586,9 +586,9 @@ export class MasterService {
     });
   }
 
-  GetOptionListByGroupSubject(groupId?: number, subId?: number, langFlag?: any) {
+  GetOptionListByGroupSubject(groupId?: number, subId?: number, questionId?: number, langFlag?: any) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetOptionListByGroupSubject?GroupId=' + groupId + '&AssessmentSubjectId=' + subId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetOptionListByGroupSubject?GroupId=' + groupId + '&AssessmentSubjectId=' + subId + '&QuestionId=' + questionId + '&flag_lang=' + langFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }

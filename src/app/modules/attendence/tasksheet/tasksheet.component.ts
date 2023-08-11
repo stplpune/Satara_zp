@@ -106,9 +106,10 @@ export class TasksheetComponent {
   getTableData(flag?: any) {
     this.ngxSpinner.show();
     let date = this.attendanceSheetRes ? this.attendanceSheetRes[2] : this.date.value;
-    let yearMonth = moment(date).format('YYYY-MM');
+    let yearMonth = moment(date).format('YYYY-MM');   
+    let filterDate =  moment(this.date.value).format('YYYY-MM');      
 
-    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=' + yearMonth + '&UserId=' + (this.attendanceSheetRes[0] || this.webStorage.getUserId()), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceTasksheet?MonthYear=' + ((flag == 'filter' || flag == 'pdfFlag' || flag == 'excel') ? filterDate : yearMonth) + '&UserId=' + (this.attendanceSheetRes[0] || this.webStorage.getUserId()), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

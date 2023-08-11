@@ -338,6 +338,7 @@ export class TasksheetReportsComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.commonMethodS.showPopup(res.statusMessage, 0);
+          this.getTableData();
           // this.dialogRef.close('yes');
         } else {
           this.commonMethodS.showPopup(res.statusMessage, 1);

@@ -63,6 +63,8 @@ export class TableComponent implements OnInit {
    this.tableSub =  this.apiService.tableData.subscribe((res: any) => {
     
       this.tableInfo = res;
+      console.log("tableInfo",this.tableInfo);
+      
       if (this.tableInfo) {
         this.highlightedRow = this.tableInfo.highlightedRow;
         this.displayedColumns = this.tableInfo.displayedColumns;

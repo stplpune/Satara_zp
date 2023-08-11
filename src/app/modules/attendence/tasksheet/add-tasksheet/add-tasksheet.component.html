@@ -16,9 +16,25 @@
                     <mat-radio-button [value] = "0">{{'Labels.Absent' | translate}}</mat-radio-button>
                 </mat-radio-group>
             </div>
+            <div class="col-sm-6 mb-2">
+                <mat-label>check In</mat-label >
+                <input [ngxTimepicker]="picker" formControlName="inTime"
+                [class]="(attendenceForm.getRawValue()?.inTime ) ? attendenceForm.controls['inTime'].disable({ onlySelf: true }) : attendenceForm.controls['inTime'].enable({ onlySelf: true })">
+                <ngx-material-timepicker-toggle [for]="picker" ></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #picker></ngx-material-timepicker>
+            </div>
+
+            <div class="col-sm-6 mb-2">
+                <mat-label>check Out</mat-label>                
+                <input [ngxTimepicker]="picker1" formControlName="OutTime"
+                [class]="(attendenceForm.getRawValue()?.OutTime ) ? attendenceForm.controls['OutTime'].disable({ onlySelf: true }) : attendenceForm.controls['OutTime'].enable({ onlySelf: true })">
+               <ngx-material-timepicker-toggle [for]="picker1" ></ngx-material-timepicker-toggle>
+                <ngx-material-timepicker #picker1></ngx-material-timepicker>
+            </div>
+
             <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.remark' | translate}}</mat-label>
+                    <mat-label>Task</mat-label>
                     <textarea matInput formControlName="remark" ></textarea>
                 </mat-form-field>
             </div>

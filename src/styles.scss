@@ -714,3 +714,20 @@ textarea {
   border:solid 1px #ddd;
   cursor: pointer;
 }
+.timepicker {
+  z-index: 999999 !important;
+}
+
+.timepicker-overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999 !important;
+  pointer-events: none;
+}
+
+.timepicker-backdrop-overlay {
+  z-index: 99999 !important;
+}

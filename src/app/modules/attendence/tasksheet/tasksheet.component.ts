@@ -15,6 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { ActivatedRoute } from '@angular/router';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
+import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -67,7 +68,9 @@ export class TasksheetComponent {
     private excelpdfService : DownloadPdfExcelService,
     public datepipe: DatePipe,
     private route : ActivatedRoute,
-    private encDec: AesencryptDecryptService
+    private encDec: AesencryptDecryptService,   
+    private commonMethod: CommonMethodsService,
+    public webStorageS: WebStorageService,
   ) { 
     let teacherObj: any;    
      this.route.queryParams.subscribe((queryParams: any) => { teacherObj = queryParams['obj'] });
@@ -169,7 +172,23 @@ export class TasksheetComponent {
   }
 
   onSubmit(){
-    this.submitFlag = true;
+    // this.submitFlag = true;
+    let date = this.attendanceSheetRes ? this.attendanceSheetRes[2] : this.date.value;
+    let yearMonth = moment(date).format('YYYY-MM');  
+    this.apiService.setHttp('POST', `zp-satara/Attendance/SubmitAttendance?MonthYear=${yearMonth}&UserId=${this.webStorage.getUserId()}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.commonMethod.showPopup(res.statusMessage, 0);
+          // this.dialogRef.close('yes');
+        } else {
+          this.commonMethod.showPopup(res.statusMessage, 1);
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
+  
+
   }
 
 }

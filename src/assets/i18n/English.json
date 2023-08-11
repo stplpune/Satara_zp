@@ -410,6 +410,7 @@
         "invalidItemName":"Please enter valid item name (Marathi).",
         "CategoryName":"Category",
         "CategoryMarathi":"Category(Marathi)",
+        "SubCategoryMarathi":"Sub Category (Marathi)",
         "Description":"Description",
         "filterSubCategory":"Category/Sub Category",
         "updateCategory": "Update Category",

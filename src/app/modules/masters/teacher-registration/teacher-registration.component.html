@@ -11,10 +11,11 @@
 <app-page-statistics></app-page-statistics>
 
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
-    <mat-card-header class="card-header" >
+    <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
             <div class="text-main fw-bold mb-sm-0 mb-2">
-                {{'Labels.teacherList'| translate}} ({{'Labels.total'   | translate }} - {{webStorageS.numberTransformFunction(totalCount)}})
+                {{'Labels.teacherList'| translate}} ({{'Labels.total' | translate }} -
+                {{webStorageS.numberTransformFunction(totalCount)}})
             </div>
             <div class="d-flex flex-wrap justify-content-start align-items-center justify-content-lg-end gap-2">
                 <button mat-flat-button class="bg-danger btn-icon text-white"
@@ -24,7 +25,9 @@
                         description
                     </mat-icon>
                 </button>
-                <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+                <button mat-flat-button class="bg-success btn-icon text-white"
+                    matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
                 <!-- <button mat-flat-button class="btn-main btn-icon" [matMenuTriggerFor]="menu">
@@ -73,7 +76,7 @@
             <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.village'| translate}}</mat-label>
-                    <mat-select [formControl] = "villageId">
+                    <mat-select [formControl]="villageId">
                         <mat-option *ngFor="let village of villageArray"
                             [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
                             village.village : village.m_Village}}</mat-option>

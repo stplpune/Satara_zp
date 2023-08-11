@@ -1000,7 +1000,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         events: {
           click: (_event: any, _chartContext: any, config: any) => {
             if (config.seriesIndex >= 0) {
-              debugger
               this.optionalSubjectindex = config.seriesIndex; // index of bar 
 
               const index = this.stackbarchartOptionsByClass.xaxis.subjects.findIndex((i: any) => (console.log(i), i == this.selectedbar));

@@ -388,6 +388,7 @@ export class OutwardItemComponent {
 
   globalDialogOpen(obj: any) {
     let dialoObj = {
+      img: 'assets/images/trash.gif',
       header: 'Delete',
       title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Outward Item?' : 'तुम्हाला बाह्य वस्तू हटवायची आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',

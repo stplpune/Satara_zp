@@ -270,6 +270,7 @@ export class CategoryComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
+      img: 'assets/images/trash.gif',
       header: this.webStorage.languageFlag == 'EN' ? 'Delete' : 'हटवा',
       title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Delete Category Record?' : 'तुम्हाला श्रेणी रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',

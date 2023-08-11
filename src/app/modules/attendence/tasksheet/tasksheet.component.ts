@@ -16,6 +16,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { ActivatedRoute } from '@angular/router';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 const moment = _rollupMoment || _moment;
 
@@ -173,6 +174,26 @@ export class TasksheetComponent {
     }
   }
 
+  submitDialog() {
+    let dialoObj = {
+      header: this.webStorageS.languageFlag == 'EN' ? 'Submit ' : 'प्रस्तुत करणे',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do You Want To Submit Task Sheet ?' : 'तुम्ही टास्क शीट प्रस्तुत करू इच्छिता?',
+      cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onSubmit()
+      }
+    })
+  }
+
   onSubmit(){
     let date = this.attendanceSheetRes ? this.attendanceSheetRes[2] : this.date.value;
     let yearMonth = moment(date).format('YYYY-MM');  
@@ -192,6 +213,8 @@ export class TasksheetComponent {
   
 
   }
+
+ 
 
 }
 

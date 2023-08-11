@@ -129,7 +129,7 @@ export class AddSchoolProfileComponent {
 
   setTableData() {
     // this.highLightFlag=true;
-    let displayedColumnsReadMode =  (this.langTypeName == 'English') ? ['Sr. No.', 'Teacher Name', 'Email ID', 'Mobile No.', 'Desgination'] : ['अनुक्रमांक', 'शिक्षकाचे नाव', 'ई-मेल आयडी', 'मोबाइल क्रमांक', 'पदनाम'];
+    let displayedColumnsReadMode =  (this.langTypeName == 'English') ? ['Sr. No.', 'Teacher Name', 'Email ID', 'Mobile No.', 'Designation'] : ['अनुक्रमांक', 'शिक्षकाचे नाव', 'ई-मेल आयडी', 'मोबाइल क्रमांक', 'पदनाम'];
     let displayedColumns = ['srNo', 'name', 'emailId', 'mobileNo', 'designationType'];
     let tableData = {
       pageNumber: this.pageNumber,

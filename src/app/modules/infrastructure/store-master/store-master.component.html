@@ -4,8 +4,8 @@
             <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
                 <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
         </li>
-        <li class="breadcrumb-item" aria-current="page">{{'Labels.master'| translate}}</li>
-        <li class="breadcrumb-item active" aria-current="page">Stock Report</li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.AssetManagement' |translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.StockReport' |translate}}</li>
     </ol>
 </nav>
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
@@ -37,7 +37,8 @@
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
                             <!-- <mat-option>Option-1 </mat-option> -->
-                            <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag =='English'
+                            <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag
+                                =='English'
                                 ?village.village:village.m_Village}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -57,7 +58,8 @@
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
                         <mat-select formControlName="CategoryId" (selectionChange)="getAllSubCategory()">
                             <!-- <mat-option>Option-1 </mat-option> -->
-                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">{{languageFlag == 'English' ?
+                            <mat-option *ngFor="let category of categoryArr" [value]="category.id">{{languageFlag ==
+                                'English' ?
                                 category.category:category. m_Category}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -67,7 +69,8 @@
                         <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
                         <mat-select formControlName="SubCategoryId" (selectionChange)="getItemDrop()">
                             <!-- <mat-option>Option-1 </mat-option> -->
-                            <mat-option *ngFor="let subCategory of subCategoryArr" [value]="subCategory.id">{{languageFlag == 'English' ?
+                            <mat-option *ngFor="let subCategory of subCategoryArr"
+                                [value]="subCategory.id">{{languageFlag == 'English' ?
                                 subCategory.subCategory:subCategory. m_SubCategory}}</mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -77,7 +80,8 @@
                         <mat-label>{{'Labels.itemName'| translate}}</mat-label>
                         <mat-select formControlName="ItemsId">
                             <!-- <mat-option>Option-1 </mat-option> -->
-                            <mat-option *ngFor="let item of itemArr" [value]="item.id" >{{languageFlag == 'English' ? item.itemName : item.m_Item}}</mat-option>
+                            <mat-option *ngFor="let item of itemArr" [value]="item.id">{{languageFlag == 'English' ?
+                                item.itemName : item.m_Item}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -89,9 +93,11 @@
                 </div> -->
                 <div class="col-sm-4">
                     <div class="mb-0 d-flex justify-content-start gap-2">
-                        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+                        <button mat-flat-button class="btn-main" type="submit"
+                            (click)="getTableData('filter')">{{'Labels.filter'|
                             translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second" (click)="filterForm.reset();getTableData()" >{{'Labels.clear'|
+                        <button mat-flat-button type="button" class="btn-second"
+                            (click)="filterForm.reset();getTableData()">{{'Labels.clear'|
                             translate}}</button>
                         <button mat-flat-button class="bg-danger btn-icon text-white"
                             matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
@@ -100,7 +106,9 @@
                                 description
                             </mat-icon>
                         </button>
-                        <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+                        <button mat-flat-button class="bg-success btn-icon text-white"
+                            matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                            matTooltipClass="tooltip" (click)="getTableData('excel')">
                             <mat-icon class="material-symbols-outlined">table</mat-icon>
                         </button>
                     </div>

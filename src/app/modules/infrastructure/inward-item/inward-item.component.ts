@@ -43,7 +43,7 @@ export class InwardItemComponent {
   loginData = this.webStorageS.getLoggedInLocalstorageData();
   get f() { return this.filterForm.controls };
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Units', 'Purchase Date', 'Price', 'Remark', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'शेरा', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'मालमत्ता', 'युनिट्स', 'खरेदी दिनांक', 'किंमत', 'शेरा', 'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,

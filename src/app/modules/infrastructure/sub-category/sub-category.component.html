@@ -4,22 +4,25 @@
             <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
                 <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
         </li>
-        <li class="breadcrumb-item" aria-current="page">Masters</li>
-        <li class="breadcrumb-item active" aria-current="page">Sub Category</li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.AssetManagement' |translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.subcategoryname' |translate}}</li>
     </ol>
 </nav>
 <app-page-statistics></app-page-statistics>
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
     <mat-card-header class="card-header">
         <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
-            <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.subcategoryList' | translate}} ({{'Labels.total'| translate }} - {{totalItem}})</div>
+            <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.subcategoryList' | translate}} ({{'Labels.total'|
+                translate }} - {{totalItem}})</div>
             <div class="d-flex gap-2">
                 <button mat-flat-button class="bg-danger btn-icon text-white"
                     matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
                     matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
                     <mat-icon>description </mat-icon>
                 </button>
-                <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+                <button mat-flat-button class="bg-success btn-icon text-white"
+                    matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
                 <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="openDialog()">

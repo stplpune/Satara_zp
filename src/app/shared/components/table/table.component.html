@@ -66,9 +66,13 @@
                             delete
                         </mat-icon>
                     </button>
+                    <!-- <button *ngIf="tableInfo?.approve" mat-icon-button (click)="action(element,'Approve')">
+                        <span class="text-main">Approve</span>
+                    </button> -->
 
-                    <button *ngIf="tableInfo?.approve" mat-icon-button (click)="action(element, 'Approve')">
-                        <mat-icon class="text-main">Approve</mat-icon>
+                    <button mat-flat-button
+                       (click)="action(element,'Approve')">
+                       Approve
                     </button>
 
                     <!-- <button mat-icon-button (click)="action(element, 'View')">

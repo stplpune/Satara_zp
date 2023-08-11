@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ValidationService } from 'src/app/core/services/validation.service';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -77,18 +78,17 @@ export class TasksheetReportsComponent {
     public datepipe: DatePipe,
     private encDec : AesencryptDecryptService,
     public dialog: MatDialog,
+    public validation: ValidationService
     ) { }
 
   ngOnInit() {
-    this.loginData = this.webStorageS.getLoggedInLocalstorageData()
-    console.log("loginData",this.loginData);
-    
+    this.loginData = this.webStorageS.getLoggedInLocalstorageData();
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
     });
-    this.getTableData();
     this.formField();
+    this.getTableData();    
     this.getTaluka();
   }
 
@@ -169,9 +169,9 @@ export class TasksheetReportsComponent {
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);          
+          this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);        
           
-          this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];

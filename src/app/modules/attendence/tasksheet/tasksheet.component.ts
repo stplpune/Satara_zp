@@ -115,6 +115,7 @@ export class TasksheetComponent {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           this.tableresp = res.responseData.responseData1;
+          this.submitFlag = this.tableresp.some((x: any) => x.isSubmitted == 1);
           flag != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
 
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
@@ -173,7 +174,6 @@ export class TasksheetComponent {
   }
 
   onSubmit(){
-    // this.submitFlag = true;
     let date = this.attendanceSheetRes ? this.attendanceSheetRes[2] : this.date.value;
     let yearMonth = moment(date).format('YYYY-MM');  
     this.apiService.setHttp('POST', `zp-satara/Attendance/SubmitAttendance?MonthYear=${yearMonth}&UserId=${this.webStorage.getUserId()}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
@@ -181,6 +181,7 @@ export class TasksheetComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.commonMethod.showPopup(res.statusMessage, 0);
+          this.getTableData();
           // this.dialogRef.close('yes');
         } else {
           this.commonMethod.showPopup(res.statusMessage, 1);

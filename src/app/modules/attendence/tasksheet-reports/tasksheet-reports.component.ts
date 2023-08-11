@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ValidationService } from 'src/app/core/services/validation.service';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -77,6 +78,7 @@ export class TasksheetReportsComponent {
     public datepipe: DatePipe,
     private encDec : AesencryptDecryptService,
     public dialog: MatDialog,
+    public validation: ValidationService
     ) { }
 
   ngOnInit() {

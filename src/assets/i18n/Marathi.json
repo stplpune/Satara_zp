@@ -433,6 +433,8 @@
         "PoweredBy":"द्वारा संचालित",
         "AttendanceDetails":"हजेरी तपशील",
         "AssetManagement":"मालमत्ता व्यवस्थापन",
-        "StockReport":"स्टॉक अहवाल"
+        "StockReport":"स्टॉक अहवाल",
+        "selectQuestion": "प्रश्न निवडा",
+        "selectOption": "पर्याय निवडा"
     }
 }

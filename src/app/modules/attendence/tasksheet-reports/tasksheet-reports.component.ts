@@ -86,8 +86,7 @@ export class TasksheetReportsComponent {
       this.languageChange();
     });
     this.formField();
-    this.getTableData();
-    
+    this.getTableData();    
     this.getTaluka();
   }
 
@@ -168,10 +167,8 @@ export class TasksheetReportsComponent {
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          
-          this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);
-          console.log("talukaId",this.filterForm?.value.talukaId );
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);          
+          this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);        
           
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);

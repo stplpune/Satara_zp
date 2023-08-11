@@ -15,11 +15,12 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
             <div class="text-main fw-bold">{{'Labels.SchoolProfileDetails' | translate}}</div>
+            <a class="text-decoration-none text-main d-flex align-items-center" (click)="redirect()">
+                <mat-icon>keyboard_double_arrow_left</mat-icon>
+                <span class="text-main mt-1">{{'Labels.Back' |
+                    translate}}</span>
+            </a>
         </div>
-        <a class="text-decoration-none text-main d-flex align-items-center" (click)="redirect()">
-            <mat-icon>keyboard_double_arrow_left</mat-icon>
-            <span class="text-main mt-1">Back</span>
-        </a>
     </mat-card-header>
     <mat-card-content class="card-body">
         <div class="row mb-3">
@@ -29,7 +30,6 @@
                         <div class="flex-shrink-0">
                             <img [src]="schoolresp?.uploadImage ? schoolresp?.uploadImage :'../../../../../assets/images/user.png'">
                             <!-- <img src="../../../../../assets/images/user.png"> -->
-                            
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="mb-1 fw-bold text-break">{{langTypeName =='English' ? schoolresp?.schoolName: schoolresp?.m_SchoolName}}</h5>
@@ -91,19 +91,6 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-4">
-                                                <span class="data-label text-break">{{'Labels.HighestClass' |
-                                                    translate}}</span>
-                                            </div>
-                                            <div class="col-6 col-sm-8">
-                                                <div class="data-text text-break">
-                                                    : {{schoolresp?.highestClass}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="row g-0">
-                                            <div class="col-6 col-sm-4">
                                                 <span class="data-label text-break">{{'Labels.LowestClass' |
                                                     translate}}</span>
                                             </div>
@@ -130,12 +117,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-4">
-                                                <span class="data-label text-break">{{'Labels.TotalStudentmale' |
+                                                <span class="data-label text-break">{{'Labels.HighestClass' |
                                                     translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-8">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.totalStudentMale}}
+                                                    : {{schoolresp?.highestClass}}
                                                 </div>
                                             </div>
                                         </div>
@@ -143,12 +130,12 @@
                                     <div class="col-sm-6">
                                         <div class="row g-0">
                                             <div class="col-6 col-sm-4">
-                                                <span class="data-label text-break">{{'Labels.TotalStudentfemale' |
+                                                <span class="data-label text-break">{{'Labels.TotalStudentmale' |
                                                     translate}}</span>
                                             </div>
                                             <div class="col-6 col-sm-8">
                                                 <div class="data-text text-break">
-                                                    : {{schoolresp?.totalStudentFeMale}}
+                                                    : {{schoolresp?.totalStudentMale}}
                                                 </div>
                                             </div>
                                         </div>
@@ -166,6 +153,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="row g-0">
+                                            <div class="col-6 col-sm-4">
+                                                <span class="data-label text-break">{{'Labels.TotalStudentfemale' |
+                                                    translate}}</span>
+                                            </div>
+                                            <div class="col-6 col-sm-8">
+                                                <div class="data-text text-break">
+                                                    : {{schoolresp?.totalStudentFeMale}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <!-- show kendra Array for office registration -->
                                     <div class="col-sm-12">
                                         <div class="row">

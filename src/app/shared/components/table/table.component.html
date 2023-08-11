@@ -70,7 +70,7 @@
                         <span class="text-main">Approve</span>
                     </button> -->
 
-                    <button mat-flat-button
+                    <button *ngIf="tableInfo?.approve"  mat-flat-button
                        (click)="action(element,'Approve')">
                        Approve
                     </button>

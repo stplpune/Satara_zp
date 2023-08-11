@@ -19,7 +19,7 @@
             <div class="col-sm-6 mb-2">
                 <mat-label>check In</mat-label >
                 <input [ngxTimepicker]="picker" formControlName="inTime"
-                [class]="(attendenceForm.getRawValue()?.inTime ) ? attendenceForm.controls['inTime'].disable({ onlySelf: true }) : attendenceForm.controls['inTime'].enable({ onlySelf: true })">
+                [class]="(data?.checkInTime) ? attendenceForm.controls['inTime'].disable({ onlySelf: true }) : attendenceForm.controls['inTime'].enable({ onlySelf: true })">
                 <ngx-material-timepicker-toggle [for]="picker" ></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #picker></ngx-material-timepicker>
             </div>
@@ -27,7 +27,7 @@
             <div class="col-sm-6 mb-2">
                 <mat-label>check Out</mat-label>                
                 <input [ngxTimepicker]="picker1" formControlName="OutTime"
-                [class]="(attendenceForm.getRawValue()?.OutTime ) ? attendenceForm.controls['OutTime'].disable({ onlySelf: true }) : attendenceForm.controls['OutTime'].enable({ onlySelf: true })">
+                [class]="(data?.checkOutTime || !data?.checkOutTime == null) ? attendenceForm.controls['OutTime'].disable({ onlySelf: true }) : attendenceForm.controls['OutTime'].enable({ onlySelf: true })">
                <ngx-material-timepicker-toggle [for]="picker1" ></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #picker1></ngx-material-timepicker>
             </div>

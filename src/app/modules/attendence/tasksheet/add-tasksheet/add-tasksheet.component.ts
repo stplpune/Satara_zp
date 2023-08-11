@@ -25,10 +25,7 @@ export class AddTasksheetComponent {
     private errors: ErrorsService,
     public webStorageS: WebStorageService,
     private datePipe: DatePipe
-  ) {
-    console.log("data",this.data);
-    
-   }
+  ) {}
 
   ngOnInit() {
     this.defaultForm(); 
@@ -46,9 +43,6 @@ export class AddTasksheetComponent {
   onSubmit() {
     let formValue = this.attendenceForm.getRawValue();
 
-    console.log(formValue);
-    // return;
-    
     if(this.data.checkInTime == '' || this.data.checkInTime == null ){
       this.AttType = 1
     }else if (this.data.checkOutTime == '' || this.data.checkOutTime == null ){

@@ -79,6 +79,7 @@ export class HeaderComponent {
 
   logOut() {
     let dialoObj = {
+      img: 'assets/images/logout.gif',
       header: this.webStorage.languageFlag == 'EN' ? 'Confirmation' : 'पुष्टीकरण',
       title: this.webStorage.languageFlag == 'EN' ? 'Do You Want To Logout ?' : 'तुम्हाला लॉगआउट करायचे आहे का ?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',

@@ -70,8 +70,8 @@
                         <span class="text-main">Approve</span>
                     </button> -->
 
-                    <button *ngIf="tableInfo?.approve"  mat-flat-button
-                       (click)="action(element,'Approve')">
+                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 1 && tableInfo.tableData[i]?.isSubmitted == 1 ? '':'btn-main ms-2'"
+                      [disabled]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 1 && tableInfo.tableData[i]?.isSubmitted == 1" (click)="action(element,'Approve')">
                        Approve
                     </button>
 

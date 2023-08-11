@@ -238,6 +238,7 @@ export class ItemRegistrationComponent {
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;
     let dialoObj = {
+      img: 'assets/images/trash.gif',
       header: this.webService.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
       title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',

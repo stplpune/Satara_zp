@@ -32,6 +32,8 @@ export class GlobalDialogComponent {
 
 
   ngOnInit(): void {
+    console.log(this.data?.img);
+    
   }
 
   closeDialog(result: string) {

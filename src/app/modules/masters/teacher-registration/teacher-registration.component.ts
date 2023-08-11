@@ -262,6 +262,7 @@ export class TeacherRegistrationComponent implements OnInit {
     let userEng = obj.isBlock == false ? 'Block' : 'Unblock';
     let userMara = obj.isBlock == false ? 'ब्लॉक' : 'अनब्लॉक';
     let dialoObj = {
+      img: 'assets/images/unblock-gif',
       header: this.langTypeName == 'English' ? userEng + ' Teacher' : userMara + ' शिक्षक',
       title: this.langTypeName == 'English' ? 'Do You Want To ' + userEng + ' The Teacher?' : 'आपण शिक्षक ' + userMara + ' करू इच्छिता?',
       cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',

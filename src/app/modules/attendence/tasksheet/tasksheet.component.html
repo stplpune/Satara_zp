@@ -117,7 +117,7 @@
         {{'Labels.cancel' | translate}}</button> -->
       <!-- <button mat-flat-button class="btn-main" type="submit">
         {{'Labels.Save' |translate}}</button> -->
-      <button mat-flat-button class="btn-main" type="submit" (click)="onSubmit()">
+      <button [disabled]="submitFlag == true" mat-flat-button class="btn-main" type="submit" (click)="onSubmit()">
         {{'Labels.submited' |translate}}</button>
     </div>
   </mat-card-footer>

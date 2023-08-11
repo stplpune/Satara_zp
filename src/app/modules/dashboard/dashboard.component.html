@@ -269,7 +269,7 @@
                                             ' इयत्ता निहाय'}}</mat-radio-button>
                                     </mat-radio-group> -->
                                 </div>
-                                <div class="col-sm-4" *ngIf="asessmwntLavel.value=='1'">
+                                <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100 mb-0">
                                         <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
                                         <mat-select [formControl]="subjectforBarByCLass"
@@ -455,14 +455,13 @@
                                 </div>
 
                                 <div class="col-sm-3 mt-2">
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                                    <mat-form-field appearance="outline" class="w-100 mb-0">
+                                        <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
                                         <mat-select formControlName="subjectId"
-                                            (selectionChange)="clearDropLowHighFilter('subjectFilter')"
-                                            (selectionChange)="getTabledataByTaluka();getOptionBySubjects()">
-                                            <mat-option *ngFor="let subject of subjectdataFilter" [value]="subject.id">
-                                                {{ webStorage.languageFlag ==
-                                                'EN' ? subject.subjectName : subject.m_SubjectName }}
+                                            (selectionChange)="clearDropLowHighFilter('subject'); getQuestion();">
+                                            <mat-option *ngFor="let sub of subjectArrayByClass" [value]="sub.id">
+                                                {{webStorage.languageFlag == 'EN'?sub.subjectName:
+                                                sub.m_SubjectName}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -470,7 +469,20 @@
 
                                 <div class="col-sm-3 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>Options</mat-label>
+                                        <mat-label>{{'Labels.selectQuestion' | translate}}</mat-label>
+                                        <mat-select formControlName="questionId"
+                                        (selectionChange)="clearDropLowHighFilter('question'); getOptionBySubjects();">
+                                            <mat-option *ngFor="let question of questionArray" [value]="question.questionId">
+                                                {{webStorage.languageFlag ==
+                                                'EN' ? question.question : question.m_Question }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-3 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.selectOption' | translate}}</mat-label>
                                         <mat-select formControlName="optionId"
                                             (selectionChange)="getTabledataByTaluka();">
                                             <mat-option *ngFor="let option of optionNameArr" [value]="option.optionId">

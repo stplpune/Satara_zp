@@ -429,6 +429,8 @@
         "location":"School Location",
         "AllRightsReserved":"ZP Satara, All Rights Reserved.",
         "PoweredBy":"Powered By",
-        "AttendanceDetails":"Attendance Details"
+        "AttendanceDetails":"Attendance Details",
+        "selectQuestion": "Select Question",
+        "selectOption": "Select Option"
     }
 }

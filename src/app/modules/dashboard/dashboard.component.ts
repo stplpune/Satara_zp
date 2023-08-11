@@ -94,6 +94,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   optionNameArr = new Array();
   optionArr = new Array();
   commonDataResArray = new Array();
+  questionArray = new Array();
 
   constructor(public translate: TranslateService, private masterService: MasterService,
     public webStorage: WebStorageService, private fb: FormBuilder, private apiService: ApiService,
@@ -161,8 +162,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       filtercenterId: [0],
       filterVillage: [0],
       filtersubjectId: [],
-      optionId: [0],
       subjectId: [0],
+      questionId: [0],
+      optionId: [0],
       examId: [0],
       filterSetNumber: ['', [this.validation.onlyDigits]]
     })
@@ -829,6 +831,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  getQuestion(){
+    const formData = this.filterFormForBarGraph.value;
+    this.questionArray = [];
+    this.apiService.setHttp('GET', 'zp-satara/master/GetQuestionListByGroupSubject?GroupId='+(this.selectedObjByClass.groupId || 0)+'&AssessmentSubjectId='+(formData?.subjectId || 0)+'&flag_lang='+ this.selectedLang, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next : (res: any)=>{
+        if(res.statusCode == "200"){
+          this.questionArray.push({ "questionId": 0, "question": "All", "m_Question": "सर्व" }, ...res.responseData);
+          this.fBgraph['questionId'].setValue(0);
+        }
+        else{
+          this.questionArray = [];
+        }
+      }
+    })
+  }
+
   getRefstandardTableArrayCount() {
     const formData = this.filterForm.value;
     this.spinner.show();
@@ -1261,9 +1281,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   }
 
-  onchnageTableSub() {
-    this.asessmwntLavel.value == "1" ? this.getSubjectDropForClass() : ''
-  }
+  // onchnageTableSub() {
+  //   this.asessmwntLavel.value == "1" ? this.getSubjectDropForClass() : ''
+  // }
   getOption() {
     this.optionNameArr = [];
     this.commonDataResArray.map((x: any) => {
@@ -1294,9 +1314,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getOptionBySubjects() {
-    let subId = this.filterFormForBarGraph.value.subjectId;
+    let formValue = this.filterFormForBarGraph.value;
     this.optionNameArr = [];
-    this.masterService.GetOptionListByGroupSubject(this.selectedObj?.groupId, subId, this.selectedLang).subscribe({
+    this.masterService.GetOptionListByGroupSubject(this.selectedObjByClass.groupId, (formValue?.subjectId || 0), (formValue?.questionId || 0), this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           // this.optionNameArr = res.responseData
@@ -1325,14 +1345,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   clearDropLowHighFilter(flag: string) {
     switch (flag) {
-      case 'groupradio':
-        this.filterFormForBarGraph.controls['subjectId'].setValue(0);
-        this.filterFormForBarGraph.controls['optionId'].setValue(0)
-        this.filterFormForBarGraph.controls['filterSetNumber'].setValue('')
-        this.filterFormForBarGraph.controls['examId'].setValue(0);
+      case 'subject':
+        this.filterFormForBarGraph.controls['questionId'].setValue(0);
+        this.filterFormForBarGraph.controls['optionId'].setValue(0);
+        this.optionNameArr = [];
         break;
-      case 'subjectFilter':
-        this.filterFormForBarGraph.controls['optionId'].setValue(0)
+      case 'question':
+        this.filterFormForBarGraph.controls['optionId'].setValue(0);
         break;
       default:
       // code block

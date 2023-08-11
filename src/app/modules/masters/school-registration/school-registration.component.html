@@ -14,7 +14,8 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
             <div class="text-main fw-bold">
-                {{'Labels.schoolList' | translate}} ({{'Labels.total'   | translate }} - {{webStorageS.numberTransformFunction(totalCount)}})
+                {{'Labels.schoolList' | translate}} ({{'Labels.total' | translate }} -
+                {{webStorageS.numberTransformFunction(totalCount)}})
             </div>
             <div class="d-flex flex-wrap align-items-center justify-content-lg-end justify-content-start gap-2">
                 <button mat-flat-button class="bg-danger btn-icon text-white"
@@ -22,7 +23,9 @@
                     matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
                     <mat-icon>description</mat-icon>
                 </button>
-                <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
+                <button mat-flat-button class="bg-success btn-icon text-white"
+                    matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
                 <button *ngIf="isWriteRight === true" class="btn-main d-flex align-items-center justify-content-between"
@@ -31,10 +34,10 @@
                     <span>{{'Labels.addSchool' | translate}}</span>
                 </button>
                 <button *ngIf="userId !== 1" class="btn-main d-flex align-items-center justify-content-between"
-                mat-flat-button (click)="addUpdateSchool()">
-                <mat-icon>add</mat-icon>
-                <span>{{'Labels.AddEvent' | translate}}</span>
-            </button>
+                    mat-flat-button (click)="addUpdateSchool()">
+                    <mat-icon>add</mat-icon>
+                    <span>{{'Labels.AddEvent' | translate}}</span>
+                </button>
             </div>
         </div>
     </mat-card-header>
@@ -53,8 +56,7 @@
             <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.taluka' | translate}}</mat-label>
-                    <mat-select [formControl]="talukaId"
-                        (selectionChange)="clearDropdown('Taluka');getCenter()">
+                    <mat-select [formControl]="talukaId" (selectionChange)="clearDropdown('Taluka');getCenter()">
                         <mat-option *ngFor="let taluka of talukaArr" [value]="taluka.id">
                             {{webStorageS.getLangauge() == 'EN' ?
                             taluka.taluka : taluka.m_Taluka}}
@@ -74,7 +76,7 @@
             <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.village' | translate}}</mat-label>
-                    <mat-select [formControl]="villageId">      
+                    <mat-select [formControl]="villageId">
                         <mat-option *ngFor="let village of villageArr" [value]="village.id">
                             {{webStorageS.getLangauge() == 'EN' ?
                             village.village : village.m_Village}}

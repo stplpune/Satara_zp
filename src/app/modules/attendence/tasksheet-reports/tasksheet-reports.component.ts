@@ -15,6 +15,8 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
 import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decrypt.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -58,9 +60,10 @@ export class TasksheetReportsComponent {
   displayedColumns = new Array();
   langTypeName: any;
   isWriteRight!: boolean;
+  loginData :any;
   get f() { return this.filterForm.controls };
-  displayedheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा बंद', 'कृती'];
 
   constructor(private router: Router,
     private apiService: ApiService,
@@ -73,9 +76,13 @@ export class TasksheetReportsComponent {
     private excelpdfService: DownloadPdfExcelService,
     public datepipe: DatePipe,
     private encDec : AesencryptDecryptService,
+    public dialog: MatDialog,
     ) { }
 
   ngOnInit() {
+    this.loginData = this.webStorageS.getLoggedInLocalstorageData()
+    console.log("loginData",this.loginData);
+    
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
@@ -91,10 +98,10 @@ export class TasksheetReportsComponent {
 
   formField() {
     this.filterForm = this.fb.group({
-      talukaId: [''],
-      centerId: [''],
-      villageId: [''],
-      schoolId: [''],
+      talukaId: [this.loginData?.talukaId || ''],
+      centerId: [this.loginData?.centerId || ''],
+      villageId: [this.loginData?.villageId || ''],
+      schoolId: [this.loginData?.schoolId || ''],
       date: [moment()],
       textSearch: ['']
     });
@@ -105,21 +112,21 @@ export class TasksheetReportsComponent {
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm?.value;
 
-    // let date = formValue?.date
-    // let yearMonth = moment(date).format('YYYY-MM');
-    
-    let str =  `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=398&lan=EN`;
-    // let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
-    let reportStr = `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=1291&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
+    let date = formValue?.date
+    let yearMonth = moment(date).format('YYYY-MM');
+    // MonthYear=2023&TalukaId=1&CenterId=1&VillageId=1&SchoolId=1&UserId=0&TextSearch=tt&PageNo=1&RowCount=10&lan=EN
+    // let str =  `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=398&lan=EN`;
+    let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
 
-    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
-    // this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
-    
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl'); 
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           flag != 'excel' && flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          
+          
           // this.totalCount = res.responseData.responseData2.pageCount;
           // this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
@@ -140,8 +147,9 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','action'];
-    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','action'];
+    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'action'];
+
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
@@ -162,8 +170,8 @@ export class TasksheetReportsComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.f['talukaId'].setValue(0);
-          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
+          
+          this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -179,8 +187,8 @@ export class TasksheetReportsComponent {
       this.masterService.getAllCenter('', id).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.filterForm?.value.centerId ? this.getVillage() : '';
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);    
+            this.filterForm?.value.centerId ? this.getVillage() : this.f['centerId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -198,7 +206,7 @@ export class TasksheetReportsComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.filterForm?.value.villageId ? this.getAllSchools() : '';
+            this.filterForm?.value.villageId ? this.getAllSchools() : this.f['villageId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -217,6 +225,7 @@ export class TasksheetReportsComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+          this.filterForm?.value.schoolId ?'': this.f['schoolId'].setValue(0)
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -239,7 +248,7 @@ export class TasksheetReportsComponent {
         });  
         break;
         case 'Approve':
-          this.approveSubmitData();
+          this.deleteDialog();
           break;
     }
   }
@@ -299,8 +308,31 @@ export class TasksheetReportsComponent {
     }
   }
 
+
+  
+  deleteDialog() {
+   
+    let dialoObj = {
+      header: this.webStorageS.languageFlag == 'EN' ? 'Approve' : 'मंजूर',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do You Want To Approve Record?' : 'आपण रेकॉर्ड मंजूर करू इच्छिता?',
+      cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.approveSubmitData();
+      }
+    })
+  }
+
   approveSubmitData(){
-let date =  moment(this.f['date'].value).format('YYYY-MM')
+    let date =  moment(this.f['date'].value).format('YYYY-MM')
     this.apiService.setHttp('POST', `zp-satara/Attendance/ApproveAttendance?MonthYear=${date}&UserId=${this.webStorageS.getUserId()}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

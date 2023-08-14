@@ -41,7 +41,7 @@ export class AddSubCategoryComponent {
   defaultForm() {
     this.subCategoryFrm = this.fb.group({
       category: ['', [Validators.required]],
-      subcategory: ['', [Validators.required]],
+      subcategory: ['', [Validators.required,Validators.pattern(this.validation.fullName)]],
       m_subcategory: ['',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
     })
   }

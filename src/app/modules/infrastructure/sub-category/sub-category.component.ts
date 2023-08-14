@@ -106,11 +106,11 @@ export class SubCategoryComponent {
     let formData = this.textSearch.value?.trim() || '';
     let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+((status=='excel' || status == 'pdfFlag'?excel:str)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          status != 'excel' && status != 'pdfFlag'? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];

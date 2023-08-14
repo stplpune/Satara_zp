@@ -61,7 +61,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
-                        (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId()">
+                            (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId()">
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
                                 'English'
                                 ?village.village:village.m_Village}}</mat-option>
@@ -134,47 +134,49 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-3">
-                    <div class="d-flex">
-                        <mat-form-field appearance="outline" class="">
-                            <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
-                            <mat-select formControlName="examTypeId">
-                                <mat-option *ngFor="let exam of examTypeArr" [value]="exam.id">{{languageFlag ==
-                                    'English' ?
-                                    exam.examType:exam. m_ExamType}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <mat-form-field appearance="outline" class="ms-2">
-                            <mat-label>{{'Labels.acYear'| translate}}</mat-label>
-                            <mat-select formControlName="educationYearId">
-                                <mat-option *ngFor="let academic of academicYearsArr"
-                                    [value]="academic.id">{{languageFlag
-                                    == 'English' ?
-                                    academic.eductionYear:academic. eductionYear_M}}</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                </div>
-                <div class="col-sm-3">
-                    <mat-form-field class="w-100" appearance="outline">
-                        <mat-label>Year From To</mat-label>
-                        <mat-date-range-input [rangePicker]="campaignOnePicker" [max]="maxDate"
-                            [comparisonStart]="campaignTwo.value.start" [comparisonEnd]="campaignTwo.value.end">
-                            <input matStartDate placeholder="Start date" formControlName="start">
-                            <input matEndDate placeholder="End date" formControlName="end">
-                        </mat-date-range-input>
-                        <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
+                        <mat-select formControlName="examTypeId">
+                            <mat-option *ngFor="let exam of examTypeArr" [value]="exam.id">{{languageFlag ==
+                                'English' ?
+                                exam.examType:exam. m_ExamType}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
+                    
+                <div class="col-sm-4">
+                    <div class="row gx-2">
+                        <div class="col-sm-6">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{'Labels.acYear'| translate}}</mat-label>
+                                <mat-select formControlName="educationYearId">
+                                    <mat-option *ngFor="let academic of academicYearsArr" [value]="academic.id">{{languageFlag
+                                        == 'English' ?
+                                        academic.eductionYear:academic. eductionYear_M}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-6">
+                            <mat-form-field appearance="outline"  class="w-100">
+                                <mat-label>Year From To</mat-label>
+                                <mat-date-range-input [rangePicker]="campaignOnePicker" [max]="maxDate"
+                                    [comparisonStart]="campaignTwo.value.start" [comparisonEnd]="campaignTwo.value.end">
+                                    <input matStartDate placeholder="Start date" formControlName="start">
+                                    <input matEndDate placeholder="End date" formControlName="end">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-2">
-                    <div class="d-flex gap-2 justify-content-end">
-                        <button mat-flat-button class="btn-second" (click)="clearForm()">{{'Labels.clear'|
-                            translate}}</button>
+                    <div class="d-flex gap-2 justify-content-start">
                         <button mat-flat-button class="btn-main" type="submit">{{'Labels.ViewReport' |
                             translate}}</button>
-
+                        <button mat-flat-button class="btn-second" (click)="clearForm()">{{'Labels.clear'|
+                            translate}}</button>
                         <button mat-flat-button class="bg-danger btn-icon text-white" type="button"
                             matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
                             matTooltipClass="tooltip" (click)="searchAssessMent('pdfFlag')"> <mat-icon>description
@@ -212,7 +214,7 @@
                                 sub.m_SubjectName }}</span>
                         </th>
                     </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="this.newheaderArray"></tr>
+                    <tr mat-header-row *matHeaderRowDef="this.newheaderArray"></tr>
                     <!-- End parent header -->
 
                     <tr mat-header-row

@@ -106,11 +106,11 @@ export class SubCategoryComponent {
     let formData = this.textSearch.value?.trim() || '';
     let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+((status=='excel' || status == 'pdfFlag'?excel:str)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          status != 'excel' && status != 'pdfFlag'? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
@@ -157,31 +157,74 @@ export class SubCategoryComponent {
     this.getTableData();
   }
 
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
+  }
+
   pdfDownload(data?: any,flag?:string) {   
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
-      let obj = {
-        srNo: i + 1,
-        category: ele.category,
-        subCategory: ele.subCategory,
-        itemName: ele.itemName,
-        description: ele.description,
+      // let obj = {
+      //   srNo: i + 1,
+      //   category: ele.category,
+      //   subCategory: ele.subCategory,
+      //   itemName: ele.itemName,
+      //   description: ele.description,
+      // }
+      let obj:any;
+      if(flag=='excel'){
+        obj = {
+          srNo: this.langTypeName == 'English'?(i + 1):this.convertToMarathiNumber(i+1),
+          category: this.langTypeName == 'English'?ele.category:ele.m_Category,
+          subCategory:this.langTypeName == 'English'?ele.subCategory:ele.m_SubCategory,
+          itemName: ele.itemName,
+          description: ele.description,
+        }
+      }else if(flag=='pdfFlag'){
+        obj = {
+          srNo: i + 1,
+          category: ele.category,
+          subCategory: ele.subCategory,
+          itemName: ele.itemName,
+          description: ele.description,
+        }
       }
       this.resultDownloadArr.push(obj);
     });
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ['Sr. No.','Category','Sub Category'];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'श्रेणीचे नाव', 'उपवर्गाचे नाव']
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-        let objData: any = {
-          'topHedingName': 'Sub-Category List',
-          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+
+        let objData: any 
+        if(flag=='excel'){
+          objData = {
+            'topHedingName':this.langTypeName == 'English'? 'Sub-Category List':'उप-वर्ग सूची',
+            'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
+        }else if(flag=='pdfFlag'){
+           objData = {
+            'topHedingName': 'Sub-Category List',
+            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
         }
+        // let objData: any = {
+        //   'topHedingName': 'Sub-Category List',
+        //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        // }
         let headerKeySize = [7, 15, 20, 30, 40,]
-        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(this.langTypeName == 'English'?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
 

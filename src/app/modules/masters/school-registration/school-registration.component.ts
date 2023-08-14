@@ -144,31 +144,70 @@ export class SchoolRegistrationComponent implements OnInit {
 
   //#endregion ---------------------------------------------- PDF Download start here ----------------------------------------// 
 
+  //convert number into marathi
+
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
+  }
+
+
   downloadPdf(data: any, flag?:string) {
+    console.log("flag",flag);
+    console.log("data",data);   
+    
     this.resultDownloadArr = [];
     data.find((ele: any, i: any) => {
-      let obj = {
-        srNo: i + 1,
-        schoolName: ele.schoolName,
-        taluka: ele.taluka,
-        center: ele.center,
-        village: ele.village,
+      if(flag == 'excel'){
+        let obj = {
+          srNo: this.langTypeName == 'English' ? (i + 1) : this.convertToMarathiNumber(i+1),
+          schoolName: this.langTypeName == 'English' ? ele.schoolName : ele.m_SchoolName,
+          taluka:  this.langTypeName == 'English' ? ele.taluka : ele.m_Taluka,
+          center:this.langTypeName == 'English' ? ele.center : ele.m_Center,
+          village:this.langTypeName == 'English' ? ele.village : ele.m_Village,
+        }
+        this.resultDownloadArr.push(obj);
+      }else if( flag == 'pdfFlag'){
+        let obj = {
+          srNo: i + 1,
+          schoolName: ele.schoolName,
+          taluka: ele.taluka,
+          center: ele.center,
+          village: ele.village,
+        }
+        this.resultDownloadArr.push(obj);
       }
-      this.resultDownloadArr.push(obj);
+      
     });
     // download pdf call
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ["Sr.No", "School Name", "Taluka", "Kendra", "Village"];
+      let marathikeyHeader = ['अनुक्रमांक', 'शाळेचे नाव', 'तालुका', 'केंद्र', 'गाव']
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-      let objData: any = {
-        'topHedingName': 'School List',
-        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-      }
+        let objData : any
+        if(flag == 'excel'){
+          objData = {
+            'topHedingName': this.langTypeName == 'English' ? 'School List' : 'शाळेची यादी',
+            'createdDate': this.langTypeName == 'English' ?'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') :  'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
+        }else if(flag == 'pdfFlag'){
+          objData = {
+            'topHedingName': 'School List',
+            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
+        }
+   
       let headerKeySize = [7, 40, 15, 15, 15,];
-      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader :marathikeyHeader, ValueData, objData, headerKeySize);
     }
   }
   //#endregion ---------------------------------------------- PDF Download end here ----------------------------------------// 

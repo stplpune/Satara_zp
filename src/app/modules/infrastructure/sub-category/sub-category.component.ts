@@ -110,7 +110,7 @@ export class SubCategoryComponent {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          status != 'excel' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
+          status != 'excel' && status != 'pdfFlag'? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
@@ -158,8 +158,6 @@ export class SubCategoryComponent {
   }
 
   pdfDownload(data?: any,flag?:string) {   
-
-    debugger
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
       let obj = {

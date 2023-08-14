@@ -244,12 +244,23 @@ getTableTranslatedData(){
   downloadPdf(data: any, flag?:string) {
     this.resultDownloadArr = [];
     data.map((ele: any, i: any)=>{
-      let obj = {
-        "Sr.No":this.langTypeName == 'English' ? (i+1): this.convertToMarathiNumber(i+1),
-        "Designation Name":this.langTypeName == 'English' ? ele.designationName : ele.m_DesignationType,
-        "Designation Level":this.langTypeName == 'English' ? ele.designationLevel : ele.m_DesignationLevel,
+      if(flag == 'excel'){
+        let obj = {
+          "Sr.No":this.langTypeName == 'English' ? (i+1) : this.convertToMarathiNumber(i+1),
+          "Designation Name":this.langTypeName == 'English' ? ele.designationName : ele.m_DesignationType,
+          "Designation Level":this.langTypeName == 'English' ? ele.designationLevel : ele.m_DesignationLevel,
+        }
+        this.resultDownloadArr.push(obj);
+      }else if( flag == 'pdfFlag'){
+        let obj = {
+          "Sr.No":i+1,
+          "Designation Name": ele.designationName,
+          "Designation Level":ele.designationLevel 
+        }
+        this.resultDownloadArr.push(obj);
       }
-      this.resultDownloadArr.push(obj);
+     
+      
     });
 
     if(this.resultDownloadArr?.length > 0){
@@ -260,10 +271,19 @@ getTableTranslatedData(){
         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
       );// Value Name
 
-      let objData:any = {
-        'topHedingName': this.langTypeName == 'English'?'Designation List' : 'पदनाम यादी',
-        'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      let objData :any
+      if(flag == 'excel'){
+        objData = {
+          'topHedingName': this.langTypeName == 'English'?'Designation List' : 'पदनाम यादी',
+          'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+      }else if(flag == 'pdfFlag'){
+        objData = {
+          'topHedingName':'Designation List',
+          'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') 
+        }
       }
+  
       let headerKeySize = [7, 15, 20];
       flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader : MarathikeyPDFHeader, ValueData, objData, headerKeySize);
     } 

@@ -106,7 +106,7 @@ export class SubCategoryComponent {
     let formData = this.textSearch.value?.trim() || '';
     let str = 'TextSearch='+formData+  '&PageNo='+this.pageNumber+'&PageSize=10' ;
     let excel = 'TextSearch='+formData+  '&PageNo='+1+'&PageSize='+this.totalCount ;
-    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+(status=='excel'?excel:str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/AssetSubCategory/GetAll?'+((status=='excel' || status == 'pdfFlag'?excel:str)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -158,6 +158,8 @@ export class SubCategoryComponent {
   }
 
   pdfDownload(data?: any,flag?:string) {   
+
+    debugger
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
       let obj = {

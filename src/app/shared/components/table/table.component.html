@@ -66,18 +66,21 @@
                             delete
                         </mat-icon>
                     </button>
-                
-                    <!-- <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 0 && tableInfo.tableData[i]?.isSubmitted == 0 ? '':'btn-main ms-2'"
-                      [disabled]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 0 && tableInfo.tableData[i]?.isSubmitted == 0" (click)="action(element,'Approve')">
-                       Approve
-                    </button> -->
 
                     <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false ? '':'btn-main ms-2'"
                       [disabled]="tableInfo.tableData[i]?.isAppr == false" (click)="action(element,'Approve')">
                        {{tableInfo.tableData[i]?.isApproved == 1 ? 'Approved' : 'Approve'}}
-                       </button>
-                    
+                    </button>
 
+                    <!-- <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.attendance != 'Absent' || this.submitFlag == true ? '':'btn-main ms-2'"
+                    [disabled]="tableInfo.tableData[i]?.attendance != 'Absent'  || this.submitFlag == true " (click)="action(element,'apply')">
+                       {{'Labels.apply' | translate}}
+                    </button> -->
+                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.attendance != 'Absent' || tableInfo?.isSubmitted == true  ? '':'btn-main ms-2'"
+                    [disabled]="tableInfo.tableData[i]?.attendance != 'Absent' || tableInfo?.isSubmitted == true " (click)="action(element,'apply')">
+                       {{'Labels.apply' | translate}}
+                    </button>
+                    
                     <!-- <button mat-icon-button (click)="action(element, 'View')">
                                 <mat-icon class="text-danger">
                                     visibility
@@ -110,3 +113,10 @@
         <span *ngIf="webStorageService.languageFlag =='mr-IN'">डेटा उपलब्ध नाही</span>
     </div>
 </div>
+
+<!-- <mat-card-footer class="card-footer" *ngIf="tableInfo?.isSubBtn">
+    <div class="d-flex w-100 align-items-center justify-content-end gap-2">
+      <button [disabled]="tableInfo?.submitFlag == true" mat-flat-button class="btn-main" type="submit" (click)="action('element','submit')">
+        {{'Labels.submited' |translate}}</button>
+    </div>
+  </mat-card-footer> -->

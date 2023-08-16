@@ -84,7 +84,7 @@ export class TasksheetComponent {
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
-      // this.getTableTranslatedData();
+      this.setTableData();
     });
   }
 
@@ -227,6 +227,10 @@ export class TasksheetComponent {
       case 'Delete':
         // this.deleteDialog(obj);
         break;
+        case 'apply':
+          this.openDialog(obj);
+          break;
+          
     }
   }
 
@@ -243,6 +247,7 @@ export class TasksheetComponent {
       tableData: this.tableresp,
       tableSize: this.totalItem,
       apply:true,
+      isSubmitted: this.submitFlag,
       // edit: true, delete: true,
       // date:'holidayDate',
       // tableHeaders: displayedColumnsReadMode,

@@ -169,34 +169,81 @@ export class StoreMasterComponent {
   //   }
   // }
 
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
+  }
+
   pdfDownload(data?: any,flag?:string) {  
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
-      let obj = {
-              srNo: i + 1,
-              category: ele.category,
-              type: ele.subCategory,
-              itemName: ele.itemName,
-              totalInward: ele.totalInward,
-              totalOutward:ele.totalOutward,
-              availableStock:ele.availableStock
-            }
+      let obj:any;
+      if(flag=='excel'){
+         obj = {
+          srNo: this.languageFlag == 'English' ? (i + 1):this.convertToMarathiNumber(i+1),
+          category: this.languageFlag == 'English' ? ele.category:ele.m_Category,
+          type: this.languageFlag == 'English' ?ele.subCategory:ele.m_SubCategory,
+          itemName:this.languageFlag == 'English' ? ele.itemName:ele.m_ItemName,
+          totalInward: ele.totalInward,
+          totalOutward:ele.totalOutward,
+          availableStock:ele.availableStock
+        }
+      }else if(flag=='pdfFlag'){
+         obj = {
+          srNo: i + 1,
+          category: ele.category,
+          type: ele.subCategory,
+          itemName: ele.itemName,
+          totalInward: ele.totalInward,
+          totalOutward:ele.totalOutward,
+          availableStock:ele.availableStock
+        }
+      }
+      // let obj = {
+      //         srNo: i + 1,
+      //         category: ele.category,
+      //         type: ele.subCategory,
+      //         itemName: ele.itemName,
+      //         totalInward: ele.totalInward,
+      //         totalOutward:ele.totalOutward,
+      //         availableStock:ele.availableStock
+      //       }
       this.resultDownloadArr.push(obj);
     });
 
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = [ 'SrNo','Category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock'];
+      let MarathikeyPDFHeader =['अनुक्रमांक','श्रेणी', 'प्रकार', 'वस्तू', 'एकूण आवक','एकूण जावक','उपलब्ध साठा'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-        let objData: any = {
-          'topHedingName': 'Store Stock List',
-          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+
+        let objData: any;
+        if(flag=='excel'){
+          objData = {
+            'topHedingName': this.languageFlag == 'English'?'Store Stock List':'स्टोअर स्टॉक यादी',
+            'createdDate':this.languageFlag == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
+        }else if(flag=='pdfFlag'){
+          objData = {
+            'topHedingName': 'Store Stock List',
+            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
         }
+        //  objData = {
+        //   'topHedingName': 'Store Stock List',
+        //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        // }
         let headerKeySize = [7, 15, 20, 30, 20,20,20,20]
-        flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+        flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.languageFlag == 'English'?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
 

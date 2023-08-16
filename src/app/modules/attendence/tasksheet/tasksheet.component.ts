@@ -54,9 +54,10 @@ export class TasksheetComponent {
   startDate = new Date(1990, 0);
   resultDownloadArr = new Array();
   submitFlag : boolean = false;
+  pageNumber: number = 1;
   displayedheadersEnglish = ['Sr. No.', ' Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Remark', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक इन वेळ', 'वेळ तपासा', 'उपस्थिती', 'शेरा', 'कृती'];
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
+  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   dataSource: any;
   viewStatus = 'Table';
   attendanceSheetRes : any;
@@ -126,7 +127,7 @@ export class TasksheetComponent {
           this.tableresp = [];
           this.totalItem = 0
         }
-        // this.getTableTranslatedData();
+        this.setTableData();
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
@@ -210,9 +211,47 @@ export class TasksheetComponent {
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
-  
 
   }
+
+  childCompInfo(obj: any) {
+    switch (obj.label) {
+      case 'Pagination':
+        // this.filterFlag ? '' : (this.textsearch.setValue(''), this.filterFlag = false);
+        // this.pageNumber = obj.pageNumber;
+        this.getTableData();
+        break;
+      case 'Edit':
+        this.openDialog(obj);
+        break;
+      case 'Delete':
+        // this.deleteDialog(obj);
+        break;
+    }
+  }
+
+  setTableData() {
+    // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
+    let displayedColumns = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark', 'action'];
+    let tableData = {
+      pageNumber: this.pageNumber,
+      img: '',
+      blink: '',
+      badge: '',
+      // pagintion: this.totalItem > 10 ? true : false,
+      displayedColumns: displayedColumns,
+      tableData: this.tableresp,
+      tableSize: this.totalItem,
+      apply:true,
+      // edit: true, delete: true,
+      // date:'holidayDate',
+      // tableHeaders: displayedColumnsReadMode,
+      tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
+    };
+    // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
+    this.apiService.tableData.next(tableData);
+  }
+
 
  
 

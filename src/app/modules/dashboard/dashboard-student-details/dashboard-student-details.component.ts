@@ -86,6 +86,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.getGroupIdByTalukaCenterSchool();
     this.getYearArray();
     this.getTaluka();
+    this.getStandard();
     // this.getTableData();
     this.getExamType();
     this.getTableData();
@@ -149,8 +150,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         headerImage: obj?.profilePhoto,
         header: this.languageFlag == 'Marathi' ? obj.m_FullName : obj.fullName,
         subheader: this.languageFlag == 'Marathi' ? obj.m_Gender : obj.gender,
-        labelHeader: this.languageFlag == 'Marathi' ? ['वडीलांचे नाव', 'आईचे नाव', 'पालक मोबाईल क्र.', 'चाचणी क्र', 'शैक्षणिक वर्ष', 'आधार क्र.', 'इयत्ता', 'शाळेचे नाव'] : ['Father Name', 'Mother Name', 'Parent Mobile No.', 'Academic Year', 'Aadhaar No.', 'Standard', 'School Name'],
-        labelKey: this.languageFlag == 'Marathi' ? ['fatherFullName', 'motherName', 'mobileNo', '', 'm_AcademicYear', 'aadharNo', 'standard', 'm_SchoolName'] : ['fatherFullName','motherName', 'mobileNo', 'm_AcademicYear', 'aadharNo', 'standard', 'schoolName'],
+        labelHeader: this.languageFlag == 'Marathi' ? ['पालकाचे नाव', 'पालक मोबाईल क्र.', 'चाचणी क्र', 'शैक्षणिक वर्ष', 'आधार क्र.', 'इयत्ता', 'शाळेचे नाव'] : ['Guardian Name', 'Parent Mobile No.', 'Academic Year', 'Aadhaar No.', 'Standard', 'School Name'],
+        labelKey: this.languageFlag == 'Marathi' ? ['m_GaurdianName', 'mobileNo', '', 'm_AcademicYear', 'aadharNo', 'standard', 'm_SchoolName'] : ['gaurdianName', 'mobileNo', 'm_AcademicYear', 'aadharNo', 'standard', 'schoolName'],
         Obj: obj,
         chart: false
       }
@@ -439,9 +440,13 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   }
 
   getStandard() {
-    this.groupID = this.filterForm.value.groupByClass;
+    this.groupID = this.filterForm.value.groupByClass || 0;
     let groupId = this.groupID ? this.groupID : this.dashboardObj.groupId;
-    this.masterService.getAllStandard(0, groupId, this.languageFlag).subscribe({
+    console.log("groupId : ", groupId);
+    console.log("languagaeFlag : ", this.languageFlag);
+    
+    
+    this.masterService.getAllStandard(0, 0, this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.standardArr = [];

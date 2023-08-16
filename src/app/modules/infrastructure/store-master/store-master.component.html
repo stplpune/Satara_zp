@@ -11,7 +11,7 @@
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
         <form [formGroup]="filterForm" class="w-100">
-            <div class="row gx-3">
+            <div class="row gx-2">
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
@@ -92,25 +92,29 @@
                     </mat-form-field>
                 </div> -->
                 <div class="col-sm-4">
-                    <div class="mb-0 d-flex justify-content-start gap-2">
-                        <button mat-flat-button class="btn-main" type="submit"
-                            (click)="getTableData('filter')">{{'Labels.filter'|
-                            translate}}</button>
-                        <button mat-flat-button type="button" class="btn-second"
-                            (click)="filterForm.reset();getTableData()">{{'Labels.clear'|
-                            translate}}</button>
-                        <button mat-flat-button class="bg-danger btn-icon text-white"
-                            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-                            matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
-                            <mat-icon>
-                                description
-                            </mat-icon>
-                        </button>
-                        <button mat-flat-button class="bg-success btn-icon text-white"
-                            matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
-                            matTooltipClass="tooltip" (click)="getTableData('excel')">
-                            <mat-icon class="material-symbols-outlined">table</mat-icon>
-                        </button>
+                    <div class="mb-0 d-flex justify-content-between">
+                        <div class="d-flex justify-content-start gap-2">
+                            <button mat-flat-button class="btn-main" type="submit"
+                                (click)="getTableData('filter')">{{'Labels.filter'|
+                                translate}}</button>
+                            <button mat-flat-button type="button" class="btn-second"
+                                (click)="filterForm.reset();getTableData()">{{'Labels.clear'|
+                                translate}}</button>
+                        </div>
+                        <div class="d-flex justify-content-start gap-2">
+                            <button mat-flat-button class="bg-danger btn-icon text-white"
+                                matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
+                                matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
+                                <mat-icon>
+                                    description
+                                </mat-icon>
+                            </button>
+                            <button mat-flat-button class="bg-success btn-icon text-white"
+                                matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                                matTooltipClass="tooltip" (click)="getTableData('excel')">
+                                <mat-icon class="material-symbols-outlined">table</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

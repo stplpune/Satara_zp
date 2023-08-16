@@ -388,6 +388,7 @@ export class OutwardItemComponent {
 
   globalDialogOpen(obj: any) {
     let dialoObj = {
+      img: 'assets/images/trash.gif',
       header: 'Delete',
       title: this.webStorage.languageFlag == 'EN' ? 'Do you want to delete Outward Item?' : 'तुम्हाला बाह्य वस्तू हटवायची आहे का?',
       cancelButton: this.webStorage.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
@@ -430,41 +431,86 @@ export class OutwardItemComponent {
     })
   }
 
-
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
+  }
 
   pdfDownload(data?: any,flag?:string) {   
-    console.log("data",data);
-    
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => { 
-      let obj = {
-        "Sr.No": i + 1,
-        "Category": ele.category,
-        "Sub Category": ele.subCategory,
-        "Item": ele.itemName,
-        "Unit": ele.quantity,
-        "Sell Date":this.datepipe.transform(ele.purchase_Sales_Date,'yyyy-MM-dd'),
-        "Sell Price": ele.price,
-        "Assign To":ele.outwardTo,
-        "Remark": ele.remark,
+      // let obj = {
+      //   "Sr.No": i + 1,
+      //   "Category": ele.category,
+      //   "Sub Category": ele.subCategory,
+      //   "Item": ele.itemName,
+      //   "Unit": ele.quantity,
+      //   "Sell Date":this.datepipe.transform(ele.purchase_Sales_Date,'yyyy-MM-dd'),
+      //   "Sell Price": ele.price,
+      //   "Assign To":ele.outwardTo,
+      //   "Remark": ele.remark,
+      // }
+      let obj:any;
+
+      if(flag=='excel'){
+        obj={
+          "Sr.No":this.langTypeName == 'English' ? (i + 1):this.convertToMarathiNumber(i+1),
+          "Category":this.langTypeName == 'English' ? ele.category:ele.m_Category,
+          "Sub Category":this.langTypeName == 'English' ? ele.subCategory:ele.m_SubCategory,
+          "Item":this.langTypeName == 'English' ? ele.itemName:ele.m_ItemName,
+          "Unit": ele.quantity,
+          "Sell Date":this.datepipe.transform(ele.purchase_Sales_Date,'yyyy-MM-dd'),
+          "Sell Price": ele.price,
+          "Assign To":ele.outwardTo,
+          "Remark": ele.remark,
+        }
+      }else if(flag=='pdfFlag'){
+        obj={
+          "Sr.No": i + 1,
+          "Category": ele.category,
+          "Sub Category": ele.subCategory,
+          "Item": ele.itemName,
+          "Unit": ele.quantity,
+          "Sell Date":this.datepipe.transform(ele.purchase_Sales_Date,'yyyy-MM-dd'),
+          "Sell Price": ele.price,
+          "Assign To":ele.outwardTo,
+          "Remark": ele.remark,
+        }
       }
-
-
       this.resultDownloadArr.push(obj);
     });
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader =  ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark'];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट', 'विक्री दिनांक', 'विक्री किंमत', 'असाइन करा', 'शेरा'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-        let objData: any = {
-          'topHedingName': 'Outward Item List',
-          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        let objData: any;
+        if(flag=='excel'){
+          objData= {
+            'topHedingName': this.langTypeName == 'English'?'Outward Item List':'बाह्य वस्तूंची यादी',
+            'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
+        }else if(flag =='pdfFlag'){
+          objData= {
+            'topHedingName': 'Outward Item List',
+            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+          }
         }
+        // objData= {
+        //   'topHedingName': 'Outward Item List',
+        //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        // }
         let headerKeySize = [7,15,20,30,10,20,15,20,20]
-        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(this.langTypeName == 'English' ?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
 }

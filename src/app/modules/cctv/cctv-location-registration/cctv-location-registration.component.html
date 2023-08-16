@@ -21,7 +21,9 @@
                     matTooltipClass="tooltip">
                     <mat-icon>description </mat-icon>
                 </button>
-                <button mat-flat-button class="bg-success btn-icon text-white">
+                <button mat-flat-button class="bg-success btn-icon text-white"
+                    matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                    matTooltipClass="tooltip">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
                 <button mat-flat-button class="btn-main" (click)="openDialog()">
@@ -32,7 +34,7 @@
         </div>
     </mat-card-header>
     <mat-card-header class="card-header pb-0 border-bottom-0">
-        <div class="row">
+        <div class="row gx-2">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.district'| translate}}</mat-label>

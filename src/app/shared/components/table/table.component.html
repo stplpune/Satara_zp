@@ -11,8 +11,8 @@
                         <ng-container *ngIf="'srNo' == columns">{{((pageNumber + 1) * 10 + i + 1)-20 |
                             numberTranformPipe}}</ng-container>
                         <ng-container
-                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns">{{
-                            element[columns] | dash }}
+                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns">
+                            <div class="text-ellipsis-250-L2">{{element[columns] | dash }}</div>
                         </ng-container>
                         <ng-container *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]"
                                 src="{{element[columns] ? element[columns] : defaultImage}}"></ng-container>
@@ -75,7 +75,8 @@
                     <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false ? '':'btn-main ms-2'"
                       [disabled]="tableInfo.tableData[i]?.isAppr == false" (click)="action(element,'Approve')">
                        {{tableInfo.tableData[i]?.isApproved == 1 ? 'Approved' : 'Approve'}}
-                    </button>
+                       </button>
+                    
 
                     <!-- <button mat-icon-button (click)="action(element, 'View')">
                                 <mat-icon class="text-danger">

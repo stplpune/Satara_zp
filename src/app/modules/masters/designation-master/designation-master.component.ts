@@ -10,6 +10,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { AddUpdateDesignationMasterComponent } from './add-update-designation-master/add-update-designation-master.component';
+
 @Component({
   selector: 'app-designation-master',
   templateUrl: './designation-master.component.html',
@@ -227,32 +228,64 @@ getTableTranslatedData(){
   //   });
   // }
 
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
+  }
+
+
+
   downloadPdf(data: any, flag?:string) {
-    console.log("flag : ", flag);
-    
     this.resultDownloadArr = [];
     data.map((ele: any, i: any)=>{
-      let obj = {
-        "Sr.No": i+1,
-        "Designation Name": ele.designationName,
-        "Designation Level": ele.designationLevel,
+      if(flag == 'excel'){
+        let obj = {
+          "Sr.No":this.langTypeName == 'English' ? (i+1) : this.convertToMarathiNumber(i+1),
+          "Designation Name":this.langTypeName == 'English' ? ele.designationName : ele.m_DesignationType,
+          "Designation Level":this.langTypeName == 'English' ? ele.designationLevel : ele.m_DesignationLevel,
+        }
+        this.resultDownloadArr.push(obj);
+      }else if( flag == 'pdfFlag'){
+        let obj = {
+          "Sr.No":i+1,
+          "Designation Name": ele.designationName,
+          "Designation Level":ele.designationLevel 
+        }
+        this.resultDownloadArr.push(obj);
       }
-      this.resultDownloadArr.push(obj);
+     
+      
     });
 
     if(this.resultDownloadArr?.length > 0){
       let keyPDFHeader = ['Sr.No.', 'Designation', 'Designation Level'];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'पदनाम', 'पदनाम स्तर']
       let ValueData =
       this.resultDownloadArr.reduce(
         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
       );// Value Name
 
-      let objData:any = {
-        'topHedingName': 'Designation List',
-        'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      let objData :any
+      if(flag == 'excel'){
+        objData = {
+          'topHedingName': this.langTypeName == 'English'?'Designation List' : 'पदनाम यादी',
+          'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+      }else if(flag == 'pdfFlag'){
+        objData = {
+          'topHedingName':'Designation List',
+          'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') 
+        }
       }
+  
       let headerKeySize = [7, 15, 20];
-      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader : MarathikeyPDFHeader, ValueData, objData, headerKeySize);
     } 
   }
 

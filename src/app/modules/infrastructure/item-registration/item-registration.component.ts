@@ -19,29 +19,29 @@ import { ValidationService } from 'src/app/core/services/validation.service';
   styleUrls: ['./item-registration.component.scss']
 })
 export class ItemRegistrationComponent {
-  viewStatus="Table";
+  viewStatus = "Table";
   cardViewFlag: boolean = false;
   filterForm!: FormGroup;
   pageNumber: number = 1;
   searchContent = new FormControl('');
   totalCount: number = 0;
   tableDataArray = new Array();
-  tableDatasize!:number;
-  languageFlag!:string;
-  highLightFlag : boolean = true;
+  tableDatasize!: number;
+  languageFlag!: string;
+  highLightFlag: boolean = true;
   isWriteRight!: boolean;
   categoryArr = new Array();
   subCategoryArr = new Array();
   itemArr = new Array();
   resultDownloadArr = new Array();
-  deleteObj:any;
+  deleteObj: any;
 
-  displayedColumns = [ 'srNo','category', 'subCategory', 'itemName', 'description','action'];
-  marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
-  displayedheaders = ['Sr. No.',' Category', 'Sub Category', 'Item', 'Description','action'];
-  marathiDisplayedheaders = ['अनुक्रमांक','श्रेणी', 'उप श्रेणी', 'वस्तू', 'वर्णन', 'कृती'];
+  displayedColumns = ['srNo', 'category', 'subCategory', 'itemName', 'description', 'action'];
+  marathiDisplayedColumns = ['srNo', 'm_Category', 'm_SubCategory', 'm_ItemName', 'description', 'action'];
+  displayedheaders = ['Sr. No.', ' Category', 'Sub Category', 'Item', 'Description', 'action'];
+  marathiDisplayedheaders = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'वर्णन', 'कृती'];
 
-  constructor (private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     public dialog: MatDialog,
     private apiService: ApiService,
     public webService: WebStorageService,
@@ -52,7 +52,7 @@ export class ItemRegistrationComponent {
     private downloadFileService: DownloadPdfExcelService,
     public datepipe: DatePipe,
     private ngxSpinner: NgxSpinnerService,
-    public validators: ValidationService){}
+    public validators: ValidationService) { }
 
   ngOnInit(): void {
     this.getIsWriteFunction();
@@ -61,7 +61,7 @@ export class ItemRegistrationComponent {
       this.languageFlag = lang;
       this.setTableData();
     });
-   
+
     this.getTableData();
     this.filterFormData();
     this.getAllCategory();
@@ -78,47 +78,47 @@ export class ItemRegistrationComponent {
     this.filterForm = this.fb.group({
       CategoryId: [''],
       SubCategoryId: [''],
-      villageId:[''],
+      villageId: [''],
       // ItemsId: [''],
       textSearch: ['']
     });
   }
 
   getTableData(flag?: string) {
-    let formValue =this.filterForm?.value
+    let formValue = this.filterForm?.value
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
-    let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;    
-    let str=`CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=10&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`   
-    let reportStr = `CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=${this.tableDatasize *10}&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`  
-    this.apiService.setHttp('GET', 'zp-satara/ItemMaster/GetAllItem?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');     
+    let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;
+    let str = `CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=10&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`
+    let reportStr = `CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=${this.tableDatasize * 10}&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`
+    this.apiService.setHttp('GET', 'zp-satara/ItemMaster/GetAllItem?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
-      next: (res: any) => {   
+      next: (res: any) => {
         if (res.statusCode == 200) {
           this.ngxSpinner.hide();
-         (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-        // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
-        this.tableDatasize = res.responseData.responseData2.pageCount 
-         let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
-         flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';     
-        }else{
+          (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
+          this.tableDatasize = res.responseData.responseData2.pageCount
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
+        } else {
           this.ngxSpinner.hide();
-          this.tableDataArray =[];
+          this.tableDataArray = [];
           this.tableDatasize = 0
         }
         this.setTableData();
       },
-      error: ((err: any) => { (this.ngxSpinner.hide(),this.commonMethodS.checkEmptyData(err.statusText) == false) ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+      error: ((err: any) => { (this.ngxSpinner.hide(), this.commonMethodS.checkEmptyData(err.statusText) == false) ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
   }
 
-  setTableData(){
-    this.highLightFlag =true;
-    let displayedColumnsReadMode  = [ 'srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', 'itemName', 'description'];
-    this.displayedColumns = [ 'srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', 'itemName', 'description','action'];
+  setTableData() {
+    this.highLightFlag = true;
+    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', 'itemName', 'description'];
+    this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', this.languageFlag == 'English' ?'itemName':'m_ItemName', this.languageFlag == 'English' ?'description':'description', 'action'];
 
     let tableData = {
-      highlightedrow:true,
+      highlightedrow: true,
       pageNumber: this.pageNumber,
       img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
       displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
@@ -127,42 +127,83 @@ export class ItemRegistrationComponent {
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,
       edit: true, delete: true,
     };
-    this.highLightFlag?tableData.highlightedrow=true:tableData.highlightedrow=false,
-    this.apiService.tableData.next(tableData);
+    this.highLightFlag ? tableData.highlightedrow = true : tableData.highlightedrow = false,
+      this.apiService.tableData.next(tableData);
   }
 
-  downloadPdf(data?: any,flag?:string) {   
-    this.resultDownloadArr=[];  
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
+  }
+
+  downloadPdf(data?: any, flag?: string) {
+    this.resultDownloadArr = [];
     data.find((ele: any, i: any) => {
-      let obj = {
-        srNo: i + 1,
-        category: ele.category,
-        subCategory: ele.subCategory,
-        itemName: ele.itemName,
-        description: ele.description,
+      // let obj = {
+      //   srNo: i + 1,
+      //   category: ele.category,
+      //   subCategory: ele.subCategory,
+      //   itemName: ele.itemName,
+      //   description: ele.description,
+      // }
+
+      let obj: any;
+      if (flag == 'excel') {
+        obj = {
+          srNo: this.languageFlag == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
+          category: this.languageFlag == 'English' ? ele.category : ele.m_Category,
+          subCategory: this.languageFlag == 'English' ? ele.subCategory : ele.m_SubCategory,
+          itemName: this.languageFlag == 'English' ? ele.itemName : ele.m_ItemName,
+          description: this.languageFlag == 'English' ? ele.description : ele.description,
+        }
+
+      } else if (flag == 'pdfFlag') {
+        obj = {
+          srNo: i + 1,
+          category: ele.category,
+          subCategory: ele.subCategory,
+          itemName: ele.itemName,
+          description: ele.description,
+        }
       }
       this.resultDownloadArr.push(obj);
     });
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ["Sr.No.", "Category", "Sub Category", "Item", "Description"];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'वर्णन'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-        let objData: any = {
+
+      let objData: any
+      if (flag == 'excel') {
+        objData = {
+          'topHedingName':this.languageFlag == 'English' ? 'Item List':'आयटम सूची',
+          'createdDate':this.languageFlag == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        }
+      } else if (flag == 'pdfFlag') {
+        objData = {
           'topHedingName': 'Item List',
           'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
-        let headerKeySize = [7, 15, 20, 30, 40,]
-        flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+      }
+      let headerKeySize = [7, 15, 20, 30, 40,]
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.languageFlag == 'English' ?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
 
-  
 
 
-  
+
+
   childTableCompInfo(obj: any) {
     switch (obj.label) {
       case 'Pagination':
@@ -170,7 +211,7 @@ export class ItemRegistrationComponent {
         this.getTableData();
         break;
       case 'Edit':
-         this.addUpdateItem(obj);
+        this.addUpdateItem(obj);
         break;
       case 'Delete':
         this.globalDialogOpen(obj);
@@ -186,8 +227,8 @@ export class ItemRegistrationComponent {
     this.masterService.GetAllAssetCategory(this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.categoryArr.push( {id: 0,category: "All category",m_Category: "सर्व श्रेणी"}, ...res.responseData);
-          this.filterForm.controls['CategoryId'].setValue(0);  
+          this.categoryArr.push({ id: 0, category: "All category", m_Category: "सर्व श्रेणी" }, ...res.responseData);
+          this.filterForm.controls['CategoryId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.categoryArr = [];
@@ -198,13 +239,13 @@ export class ItemRegistrationComponent {
   }
 
   getAllSubCategory() {
-    let catId = this.filterForm.value.CategoryId; 
+    let catId = this.filterForm.value.CategoryId;
     this.subCategoryArr = [];
-    this.masterService.GetAssetSubCateByCateId(catId,this.languageFlag).subscribe({
+    this.masterService.GetAssetSubCateByCateId(catId, this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.subCategoryArr.push({"id": 0,"subCategory": "All SubCategory","m_SubCategory": "सर्व उपश्रेणी" },...res.responseData);
-          this.filterForm.controls['SubCategoryId'].setValue(0);  
+          this.subCategoryArr.push({ "id": 0, "subCategory": "All SubCategory", "m_SubCategory": "सर्व उपश्रेणी" }, ...res.responseData);
+          this.filterForm.controls['SubCategoryId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.subCategoryArr = [];
@@ -214,13 +255,13 @@ export class ItemRegistrationComponent {
     });
   }
 
-  addUpdateItem(obj?:any){
+  addUpdateItem(obj?: any) {
     const dialogRef = this.dialog.open(AddItemComponent, {
       width: '500px',
       disableClose: true,
       autoFocus: false,
       data: obj
- 
+
     });
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 'yes' && obj) {
@@ -230,7 +271,7 @@ export class ItemRegistrationComponent {
         this.pageNumber = 1;
         this.getTableData();
       }
-      this.highLightFlag =false;
+      this.highLightFlag = false;
       this.setTableData();
     });
   }
@@ -239,7 +280,7 @@ export class ItemRegistrationComponent {
     this.deleteObj = obj;
     let dialoObj = {
       img: 'assets/images/trash.gif',
-      header: this.webService.languageFlag == 'EN'  ? 'Delete' : 'हटवा',
+      header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
       title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete Item?' : 'तुम्हाला वस्तू हटवायची आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
@@ -254,17 +295,17 @@ export class ItemRegistrationComponent {
       if (result == 'yes') {
         this.deteleDialogOpen();
       }
-      this.highLightFlag=false;
-      
+      this.highLightFlag = false;
+
     })
   }
 
-  deteleDialogOpen(){
+  deteleDialogOpen() {
     let deleteObj = {
-        "id": this.deleteObj.id,
-        "modifiedBy": 0,
-        "modifiedDate": new Date(),
-        "lan": "EN"
+      "id": this.deleteObj.id,
+      "modifiedBy": 0,
+      "modifiedDate": new Date(),
+      "lan": "EN"
     }
     this.apiService.setHttp('DELETE', 'zp-satara/ItemMaster/DeleteItem', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -272,20 +313,20 @@ export class ItemRegistrationComponent {
         if (res.statusCode == 200) {
           this.getTableData();
           this.commonMethods.showPopup(res.statusMessage, 0);
-        } else {     
+        } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
         }
       },
-      error: ((err: any) => {  this.errors.handelError(err.statusCode) })
+      error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
-  clearForm(){
+  clearForm() {
     this.filterForm.reset();
     this.getTableData();
   }
 
-  clearDropdown(dropdown: string) {   
+  clearDropdown(dropdown: string) {
     if (dropdown == 'CategoryId') {
       this.filterForm.controls['SubCategoryId'].setValue(0);
       this.filterForm.controls['textSearch'].setValue('');

@@ -125,6 +125,14 @@ export class TasksheetReportsComponent {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           flag != 'excel' && flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          this.tableDataArray.map((x:any)=>{
+            if(x.isApproved == 0 && x.isManualAtt == 1 && x.isSubmitted == 1){
+              x.isAppr = true
+            }else{
+              x.isAppr = false
+            }
+          });
+          console.log("this.tableDataArray",this.tableDataArray);
           
           
           // this.totalCount = res.responseData.responseData2.pageCount;
@@ -248,7 +256,7 @@ export class TasksheetReportsComponent {
         });  
         break;
         case 'Approve':
-          this.deleteDialog();
+          this.deleteDialog(obj?.userId);
           break;
     }
   }
@@ -310,7 +318,7 @@ export class TasksheetReportsComponent {
 
 
   
-  deleteDialog() {
+  deleteDialog(userId: any) {
    
     let dialoObj = {
       header: this.webStorageS.languageFlag == 'EN' ? 'Approve' : 'मंजूर',
@@ -326,14 +334,14 @@ export class TasksheetReportsComponent {
     })
     deleteDialogRef.afterClosed().subscribe((result: any) => {
       if (result == 'yes') {
-        this.approveSubmitData();
+        this.approveSubmitData(userId);
       }
     })
   }
 
-  approveSubmitData(){
+  approveSubmitData(userId: any){
     let date =  moment(this.f['date'].value).format('YYYY-MM')
-    this.apiService.setHttp('POST', `zp-satara/Attendance/ApproveAttendance?MonthYear=${date}&UserId=${this.webStorageS.getUserId()}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
+    this.apiService.setHttp('POST', `zp-satara/Attendance/ApproveAttendance?MonthYear=${date}&UserId=${userId}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

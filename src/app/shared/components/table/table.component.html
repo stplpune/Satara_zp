@@ -66,13 +66,15 @@
                             delete
                         </mat-icon>
                     </button>
-                    <!-- <button *ngIf="tableInfo?.approve" mat-icon-button (click)="action(element,'Approve')">
-                        <span class="text-main">Approve</span>
+                
+                    <!-- <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 0 && tableInfo.tableData[i]?.isSubmitted == 0 ? '':'btn-main ms-2'"
+                      [disabled]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 0 && tableInfo.tableData[i]?.isSubmitted == 0" (click)="action(element,'Approve')">
+                       Approve
                     </button> -->
 
-                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 1 && tableInfo.tableData[i]?.isSubmitted == 1 ? '':'btn-main ms-2'"
-                      [disabled]="tableInfo.tableData[i]?.isApproved == 1 && tableInfo.tableData[i]?.isManualAtt == 1 && tableInfo.tableData[i]?.isSubmitted == 1" (click)="action(element,'Approve')">
-                       Approve
+                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false ? '':'btn-main ms-2'"
+                      [disabled]="tableInfo.tableData[i]?.isAppr == false" (click)="action(element,'Approve')">
+                       {{tableInfo.tableData[i]?.isApproved == 1 ? 'Approved' : 'Approve'}}
                     </button>
 
                     <!-- <button mat-icon-button (click)="action(element, 'View')">

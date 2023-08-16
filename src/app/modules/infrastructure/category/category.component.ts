@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { AddCategoryComponent } from './add-category/add-category.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 // import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 // import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -19,6 +18,11 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
   styleUrls: ['./category.component.scss']
 })
 export class CategoryComponent {
+  categoryForm !:FormGroup;
+  languageFlag !:string;
+  editObj: any;
+  editFlag = false;
+  editId: any;
   viewStatus = 'Table';
   // displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
@@ -47,17 +51,30 @@ export class CategoryComponent {
     public validation: ValidationService,
     private excelpdfService: DownloadPdfExcelService,
     public datepipe: DatePipe,
-    private commonService: CommonMethodsService
+    private commonService: CommonMethodsService,
+
+    private fb : FormBuilder,
+    public validators : ValidationService,
   ) { }
 
   ngOnInit() {
+
     this.getIsWriteFunction();
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.getTableTranslatedData();
     });
+    this.formData()
   }
+
+  formData(){
+    this.categoryForm = this.fb.group({
+      category:['',[Validators.required,Validators.pattern(this.validators.name)]],
+      M_category:['',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]]
+    })
+  }
+
 
   getIsWriteFunction() {
     let print = this.webStorage?.getAllPageName().find((x: any) => {
@@ -66,26 +83,76 @@ export class CategoryComponent {
     (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false;
   }
 
-  openDialog(data?: any) {
-    const dialogRef = this.dialog.open(AddCategoryComponent, {
-      width: '400px',
-      data: data,
-      disableClose: true,
-      autoFocus: false
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == 'yes') {
-        this.getTableData();
-        this.pageNumber = this.pageNumber;
-      } else if (result == 'yes') {
-        this.getTableData();
-        this.pageNumber = 1;
-      }
-      this.highLightFlag = false;
-      this.getTableTranslatedData();
-    });
+  get f() {
+    return this.categoryForm.controls;
   }
+
+  onSubmit() {
+    if (this.categoryForm.invalid) {
+      return;
+    }else{
+      let data = this.webStorage.createdByProps();
+    let formData = this.categoryForm.value;
+    let obj = {
+      "createdBy": data.createdBy,
+      "modifiedBy": data.modifiedBy,
+      "createdDate": data.createdDate,
+      "modifiedDate": data.modifiedDate,
+      "isDeleted": data.isDeleted,
+      "id":  this.editFlag?this.editId:0,
+      "category": formData.category,
+      "m_Category":formData.M_category,
+      "lan": this.languageFlag
+    }
+
+    let method = this.editFlag ? 'PUT' : 'POST';
+    let url = this.editFlag ? 'UpdateCategory' : 'AddCategory';
+    this.apiService.setHttp(method, 'zp-satara/AssetCategory/'+url, false, obj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.commonService.showPopup(res.statusMessage, 0);
+          this.editFlag = false;
+          this.formData()
+        } else {
+          this.commonService.showPopup(res.statusMessage, 1);
+        }
+
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
+    } 
+    
+  }
+
+  editData(data: any) {
+    this.editFlag = true;
+    this.editId = data.id;    
+    this.f['category'].setValue(data?.category)
+    this.f['M_category'].setValue(data?.m_Category)
+
+  }
+
+  // openDialog(data?: any) {
+  //   const dialogRef = this.dialog.open(AddCategoryComponent, {
+  //     width: '400px',
+  //     data: data,
+  //     disableClose: true,
+  //     autoFocus: false
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result == 'yes') {
+  //       this.getTableData();
+  //       this.pageNumber = this.pageNumber;
+  //     } else if (result == 'yes') {
+  //       this.getTableData();
+  //       this.pageNumber = 1;
+  //     }
+  //     this.highLightFlag = false;
+  //     this.getTableTranslatedData();
+  //   });
+  // }
 
   childCompInfo(obj: any) {
     switch (obj.label) {
@@ -95,7 +162,7 @@ export class CategoryComponent {
         this.getTableData();
         break;
       case 'Edit':
-        this.openDialog(obj);
+        this.editData(obj);
         break;
       case 'Block':
         // this.openBlockDialog(obj);
@@ -322,7 +389,6 @@ export class CategoryComponent {
         this.deteleDialogOpen();
       }
       this.highLightFlag = false;
-
     })
   }
 

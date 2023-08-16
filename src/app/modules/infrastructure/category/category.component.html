@@ -17,7 +17,6 @@
             <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.categoryList' |translate}} ({{'Labels.total'|
                 translate }} - {{totalItem}})</div>
             <div class="d-flex gap-2">
-
                 <button mat-flat-button class="bg-danger btn-icon text-white"
                     matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
                     matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
@@ -28,14 +27,89 @@
                     matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
-                <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="openDialog()">
+                <!-- <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="openDialog()">
                     <mat-icon>add</mat-icon>
                     {{'Labels.addCategory' |translate}}
-                </button>
+                </button> -->
             </div>
         </div>
     </mat-card-header>
-    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+    <mat-card-content class="card-body p-0">
+        <div class="row">
+            <div class="col-sm-8 border-end">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+                        <div class="row gx-2 w-100">
+                            <div class="col-sm-4">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{'Labels.Category' |translate}}</mat-label>
+                                    <input matInput maxlength="50" [formControl]="search" (keyup.enter)="getTableData()"
+                                        (keypress)="validation.noFirstSpaceAllow($event)">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-auto mb-lg-0 mb-2">
+                                <button type="button" mat-flat-button class="btn-main"
+                                    (click)="getTableData('filter')">{{'Labels.filter'|
+                                    translate}}</button>
+                                <button type="button" mat-flat-button class="btn-second ms-2"
+                                    (click)="clearFilterData()">{{'Labels.clear' |translate}}</button>
+                            </div>
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content class="card-body pt-0 pe-0">
+                        <ng-container *ngIf="!cardViewFlag">
+                            <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+                        </ng-container>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-sm-4">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header border-bottom-0 ps-0">
+                        <h6 class="text-main fw-bold my-2">
+                            {{editFlag ? ( 'Labels.updateCategory' | translate): ('Labels.addCategory' | translate)}}
+                        </h6>
+                    </mat-card-header>
+                    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+                        <mat-card-content class="card-body ps-0">
+                            <div class="row ">
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.CategoryName' | translate}}</mat-label>
+                                        <input matInput maxlength="20" formControlName="category"
+                                            (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericOnly">
+                                        <mat-error></mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.CategoryMarathi' | translate}}</mat-label>
+                                        <input matInput maxlength="20" formControlName="M_category"
+                                            (keypress)="validators.noSpaceAllow($event);validators.unicodeMarathiValidation($event)">
+                                        <mat-error
+                                            *ngIf="f['M_category'].hasError('pattern')">{{'Labels.invalidItemName'|
+                                            translate}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-footer>
+                            <mat-card-actions align="end" class="me-1">
+                                <button mat-stroked-button class="btn-second me-2" type="submit"
+                                    mat-dialog-close>{{'Labels.clear'|
+                                    translate}}</button>
+                                <button mat-stroked-button class="btn-main" type="submit">{{editFlag ? (
+                                    'Labels.update' |
+                                    translate):('Labels.add' |translate)}}</button>
+                            </mat-card-actions>
+                        </mat-card-footer>
+                    </form>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+
+    <!-- <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
         <div class="row gx-2 w-100">
             <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100">
@@ -53,15 +127,12 @@
             </div>
         </div>
     </mat-card-header>
-
     <mat-card-content class="card-body pt-0">
         <ng-container *ngIf="!cardViewFlag">
             <app-table (recObjToChild)="childCompInfo($event)"></app-table>
         </ng-container>
         <!-- <ng-container *ngIf="cardViewFlag">
             <app-grid-view (gridToChild)="childGridCompInfo($event)"></app-grid-view>
-          </ng-container> -->
-    </mat-card-content>
-
-
+          </ng-container> --
+    </mat-card-content> -->
 </mat-card>

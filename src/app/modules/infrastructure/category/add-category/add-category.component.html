@@ -10,34 +10,35 @@
         </div>
     </mat-card-header>
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-    <mat-card-content class="card-body card-height-mid scrollbar">
-        <!-- <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.studentDetails'| translate}}</mat-card-subtitle> -->
-        <div class="row">
-            <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CategoryName' | translate}}</mat-label>
-                    <input matInput maxlength="20" formControlName="category"
-                    (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericOnly">
-                    <mat-error></mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CategoryMarathi' | translate}}</mat-label>
-                    <input matInput maxlength="20" formControlName ="M_category"
-                    (keypress)="validators.noSpaceAllow($event);validators.unicodeMarathiValidation($event)">
+        <mat-card-content class="card-body card-height-mid scrollbar">
+            <!-- <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.studentDetails'| translate}}</mat-card-subtitle> -->
+            <div class="row">
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.CategoryName' | translate}}</mat-label>
+                        <input matInput maxlength="20" formControlName="category"
+                            (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericOnly">
+                        <mat-error></mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.CategoryMarathi' | translate}}</mat-label>
+                        <input matInput maxlength="20" formControlName="M_category"
+                            (keypress)="validators.noSpaceAllow($event);validators.unicodeMarathiValidation($event)">
                         <mat-error *ngIf="f['M_category'].hasError('pattern')">{{'Labels.invalidItemName'|
                             translate}}</mat-error>
-                </mat-form-field>
+                    </mat-form-field>
+                </div>
             </div>
-        </div>
-    </mat-card-content>
-    <mat-card-footer>
-        <mat-card-actions align="end" class="me-3 mb-2">
-            <button mat-stroked-button class="btn-second me-2" type="submit" mat-dialog-close>{{'Labels.cancel'|
-                translate}}</button>
-                <button mat-stroked-button class="btn-main" type="submit" >{{editFlag ? ( 'Labels.update' | translate):('Labels.add' |translate)}}</button>
-        </mat-card-actions>
-    </mat-card-footer>
-</form>
+        </mat-card-content>
+        <mat-card-footer>
+            <mat-card-actions align="end" class="me-3 mb-2">
+                <button mat-stroked-button class="btn-second me-2" type="submit" mat-dialog-close>{{'Labels.cancel'|
+                    translate}}</button>
+                <button mat-stroked-button class="btn-main" type="submit">{{editFlag ? ( 'Labels.update' |
+                    translate):('Labels.add' |translate)}}</button>
+            </mat-card-actions>
+        </mat-card-footer>
+    </form>
 </mat-card>

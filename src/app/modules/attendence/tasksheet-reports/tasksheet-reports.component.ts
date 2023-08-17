@@ -63,8 +63,8 @@ export class TasksheetReportsComponent {
   isWriteRight!: boolean;
   loginData :any;
   get f() { return this.filterForm.controls };
-  displayedheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा बंद', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Manual Att.', 'Submitted Att', 'Manual Att. Approved', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा बंद','मॅन्युअल उपस्थिती','सादर केलेली उपस्थिती','मॅन्युअल उपस्थिती मंजूर', 'कृती'];
 
   constructor(private router: Router,
     private apiService: ApiService,
@@ -155,8 +155,8 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','action'];
-    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved','action'];
+    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'isManualAtt', 'isSubmitted', 'isApproved', 'action'];
 
     this.tableData = {
       pageNumber: this.pageNumber,
@@ -166,7 +166,10 @@ export class TasksheetReportsComponent {
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-      edit: false, delete: false, approve :true
+      edit: false, delete: false, approve :true,
+      isManual: 'isManualAtt',
+      isManSubmit: 'isSubmitted',
+      isManualAppr: 'isApproved',
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);

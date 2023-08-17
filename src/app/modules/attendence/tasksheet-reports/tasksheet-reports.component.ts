@@ -87,9 +87,9 @@ export class TasksheetReportsComponent {
       this.langTypeName = lang;
       this.languageChange();
     });
+    this.getTaluka();
     this.formField();
     this.getTableData();    
-    this.getTaluka();
   }
 
   navigateToReport() {
@@ -98,10 +98,10 @@ export class TasksheetReportsComponent {
 
   formField() {
     this.filterForm = this.fb.group({
-      talukaId: [this.loginData?.talukaId || ''],
-      centerId: [this.loginData?.centerId || ''],
-      villageId: [this.loginData?.villageId || ''],
-      schoolId: [this.loginData?.schoolId || ''],
+      talukaId: [this.loginData?.talukaId  == '' ? 0 :  this.loginData?.talukaId ],
+      centerId: [this.loginData?.centerId == '' ? 0 : this.loginData?.centerId],
+      villageId: [this.loginData?.villageId == '' ? 0 : this.loginData?.villageId],
+      schoolId: [this.loginData?.schoolId == '' ? 0 : this.loginData?.schoolId],
       date: [moment()],
       textSearch: ['']
     });
@@ -181,7 +181,7 @@ export class TasksheetReportsComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);          
-          this.filterForm?.value.talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);        
+          this.filterForm?.getRawValue().talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);        
           
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);

@@ -34,7 +34,8 @@
         <div class="col-sm">
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-            <mat-select formControlName="talukaId" (selectionChange)="onChangeDropD('taluka');getAllCenter();">
+            <mat-select formControlName="talukaId" (selectionChange)="onChangeDropD('taluka');getAllCenter();"
+            [class]="webStorageS.getUserTypeId() > 2 ? filterForm.controls['talukaId'].disable({ onlySelf: true }) : filterForm.controls['talukaId'].enable({ onlySelf: true })">          
               <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
                 'EN' ?
                 tal.taluka:tal.m_Taluka }}</mat-option>

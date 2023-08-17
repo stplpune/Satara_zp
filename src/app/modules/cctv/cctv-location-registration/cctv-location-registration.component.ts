@@ -182,8 +182,8 @@ export class CctvLocationRegistrationComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     
-    let str = `TalukaId=${formValue?.TalukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&CCTVLocationId=${formValue?.cctvLocation || 0}&TextSearch=${formValue?.textSearch || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
-    let reportStr = `TalukaId=${formValue?.TalukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&CCTVLocationId=${formValue?.cctvLocation || 0}&TextSearch=${formValue?.textSearch || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
+    let str = `TalukaId=${formValue?.TalukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&CCTVLocationId=${formValue?.cctvLocation || 0}&TextSearch=${formValue?.textSearch?.trim() || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
+    let reportStr = `TalukaId=${formValue?.TalukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&CCTVLocationId=${formValue?.cctvLocation || 0}&TextSearch=${formValue?.textSearch?.trim() || 0}&PageNo=${this.pageNumber}&PageSize=${this.tableDatasize * 10}&lan=${this.languageFlag}`
     this.apiService.setHttp('GET', 'zp-satara/CCTVLocation/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

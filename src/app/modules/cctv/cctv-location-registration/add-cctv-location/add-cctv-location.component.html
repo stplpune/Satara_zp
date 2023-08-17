@@ -9,7 +9,7 @@
 <form [formGroup]="cctvLocationForm" (ngSubmit)="onSubmit()">
 <mat-dialog-content class="card-body card-height-sm scrollbar">
     <div class="row gx-2 gy-0">
-        <div class="col-sm-6">
+        <!-- <div class="col-sm-6">
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>{{'Labels.district'| translate}}</mat-label>
                 <mat-select formControlName="districtId" (selectionChange)="getTaluka()" >
@@ -17,7 +17,7 @@
                         dist.district : dist.m_District}}</mat-option>
                 </mat-select>
             </mat-form-field>
-        </div>
+        </div> -->
         <div class="col-sm-6">
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>{{'Labels.taluka'| translate}}</mat-label>
@@ -85,7 +85,7 @@
         <div class="col-sm-6">
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>{{'Labels.RegistrationDate'| translate}}</mat-label>
-                <input matInput [matDatepicker]="picker"  formControlName="registrationDate" >
+                <input matInput [matDatepicker]="picker"  formControlName="registrationDate" (click)="picker.open()">
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>

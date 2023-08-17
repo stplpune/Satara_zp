@@ -237,13 +237,15 @@ export class TasksheetComponent {
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
     let displayedColumns = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark', 'action'];
+    let displayedColNavigateReport = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark'];
+
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
       blink: '',
       badge: '',
       // pagintion: this.totalItem > 10 ? true : false,
-      displayedColumns: displayedColumns,
+      displayedColumns: this.attendanceSheetRes[2] ? displayedColNavigateReport : displayedColumns,
       tableData: this.tableresp,
       tableSize: this.totalItem,
       apply:true,

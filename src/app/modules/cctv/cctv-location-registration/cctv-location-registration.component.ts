@@ -11,6 +11,8 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { MasterService } from 'src/app/core/services/master.service';
+import { ValidationService } from 'src/app/core/services/validation.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-cctv-location-registration',
@@ -32,9 +34,9 @@ export class CctvLocationRegistrationComponent {
   villageArr = new Array();
   centerArr = new Array();
   schoolArr = new Array();
+  CCTVLocation = new Array();
+  deleteObj: any;
 
-  // displayedColumns = ['srNo', 'category', 'subCategory', 'itemName', 'description', 'action'];
-  // marathiDisplayedColumns = ['srNo', 'm_Category', 'm_SubCategory', 'm_ItemName', 'description', 'action'];
   displayedheaders = ['Sr. No.', 'CCTV Name', 'CCTV Location', 'Registration Date', 'CCTV Model','Remark', 'action'];
   marathiDisplayedheaders = ['अनुक्रमांक', 'सीसीटीव्हीचे नाव', 'सीसीटीव्ही स्थान','नोंदणी दिनांक', 'सीसीटीव्ही मॉडेल', 'वर्णन', 'कृती'];
 
@@ -47,11 +49,13 @@ export class CctvLocationRegistrationComponent {
     private errors: ErrorsService,
     private downloadFileService: DownloadPdfExcelService,
     public datepipe: DatePipe,
-    private masterService: MasterService
+    private masterService: MasterService,
+    public validators: ValidationService,
      ) {}
 
 
   ngOnInit() {
+    this.getIsWriteFunction();
     this.languageFlag = this.webService.languageFlag;
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
@@ -59,26 +63,27 @@ export class CctvLocationRegistrationComponent {
     });
     this.filterFormData();
     this.getTableData();    
-    this.getDistrict();
+    this.getTaluka();;
+    this.getCCTVLocation();
   }
 
+  getIsWriteFunction() {
+    let print = this.webService?.getAllPageName().find((x: any) => {
+      return x.pageURL == "item"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
+  }
 
   filterFormData() {
-    this.filterForm = this.fb.group({
-      districtId: [''],
+    this.filterForm = this.fb.group({  
       centerId : [''],
       TalukaId: [''],
-      villageId: [''],     
-      SchoolId: ['']
-    });
-  }
-
-  getDistrict() {
-    this.$districts = this.masterService.getAlllDistrict(this.languageFlag);
-    console.log("district",this.$districts);
+      villageId: [''],  
+      SchoolId: [''],
+      cctvLocation :[''],
+      textSearch : ['']
     
-    // this.studentReportForm.controls['districtId'].setValue(1);
-    this.getTaluka();
+    });
   }
 
   getTaluka() {
@@ -100,14 +105,13 @@ export class CctvLocationRegistrationComponent {
   getAllCenter() {
     this.centerArr = [];
     let id = this.filterForm.value.TalukaId;
-    console.log("Id",id);
+    
     
     if (id != 0) {
       this.masterService.getAllCenter('', id).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            console.log("this.centerArr",this.centerArr);
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);            
             
             // this.logInDetails ? this.studentReportForm.controls['centerId'].setValue(this.logInDetails?.centerId): this.studentReportForm.controls['centerId'].setValue(0), this.getVillage();
           } else {
@@ -156,25 +160,43 @@ export class CctvLocationRegistrationComponent {
       });
     }
 
-    // http://apisatara.shikshandarpan.com/zp-satara/CCTV/GetAllCCTV?DistrictId=1&TalukaId=1&VillageId=1&SchoolId=1&PageNo=1&PageSize=10&lan=EN
+    getCCTVLocation(){
+      this.CCTVLocation = [];
+      this.masterService.getCCTVLocation('').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.CCTVLocation =res.responseData         
+            
+            // this.logInDetails ? this.studentReportForm.controls['villageId'].setValue(this.logInDetails?.villageId): this.studentReportForm.controls['villageId'].setValue(0), this.getAllSchoolsByCenterId();
+          } else {
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.CCTVLocation = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      });
+    }
   
   getTableData(flag?: string) {
     let formValue = this.filterForm?.value
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     
-    let str = `DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.TalukaId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
-    let reportStr = `DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.TalukaId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
-    this.apiService.setHttp('GET', 'zp-satara/CCTV/GetAllCCTV?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
+    let str = `TalukaId=${formValue?.TalukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&CCTVLocationId=${formValue?.cctvLocation || 0}&TextSearch=${formValue?.textSearch || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
+    let reportStr = `TalukaId=${formValue?.TalukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.SchoolId || 0}&CCTVLocationId=${formValue?.cctvLocation || 0}&TextSearch=${formValue?.textSearch || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
+    this.apiService.setHttp('GET', 'zp-satara/CCTVLocation/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          console.log("respone",res);
-          
           this.ngxSpinner.hide();
           (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+        
           // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
-          // this.tableDatasize = res.responseData.responseData2.pageCount
+          this.tableDatasize = res.responseData.responseData2.pageCount
+          console.log(res.responseData.responseData2);
+          
+          console.log("this.tableDatasize",this.tableDatasize);
+          
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
           flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
         } else {
@@ -190,8 +212,8 @@ export class CctvLocationRegistrationComponent {
 
   setTableData() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'cctvName', this.languageFlag == 'English' ? 'cctvLocation' : 'm_CCTVLocation', 'registrationDate', 'cctvModel'];
-    let displayedColumns = ['srNo','cctvName', this.languageFlag == 'English' ? 'cctvLocation' : 'm_CCTVLocation', 'registrationDate','cctvModel', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'cctvName', this.languageFlag == 'English' ? 'cctvLocation' : 'm_CCTVLocation', 'registrationDate', 'cctvModel','remark'];
+    let displayedColumns = ['srNo','cctvName', this.languageFlag == 'English' ? 'cctvLocation' : 'm_CCTVLocation', 'registrationDate','cctvModel','remark', 'action'];
 
     let tableData = {
       highlightedrow: true,
@@ -202,6 +224,7 @@ export class CctvLocationRegistrationComponent {
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,
       edit: true, delete: true,
+      date : 'registrationDate'
     };
     this.highLightFlag ? tableData.highlightedrow = true : tableData.highlightedrow = false,
       this.apiService.tableData.next(tableData);
@@ -224,16 +247,17 @@ export class CctvLocationRegistrationComponent {
       case 'Pagination':
         this.pageNumber = obj.pageNumber;
         this.getTableData();
+        this.clearForm();
         break;
       case 'Edit':
-        // this.addUpdateItem(obj);
+        this.openDialog(obj);
         break;
       case 'Delete':
-        // this.globalDialogOpen(obj);
+        this.globalDialogOpen(obj);
         break;
-      case 'View':
-        // this.openDetailsDialog(obj);
-        break;
+      // case 'View':
+      //   // this.openDetailsDialog(obj);
+      //   break;
     }
   }
 
@@ -249,15 +273,17 @@ export class CctvLocationRegistrationComponent {
           cctvLocation: this.languageFlag == 'English' ? ele.cctvLocation : ele.m_CCTVLocation,
           registrationDate: ele.registrationDate,
           cctvModel: ele.cctvModel,
+          remark : ele.remark
         }
 
       } else if (flag == 'pdfFlag') {
         obj = {
           srNo: i + 1,
-          category: ele.cctvName,
-          subCategory: ele.cctvLocation,
+          cctvName: ele.cctvName,
+          cctvLocation: ele.cctvLocation,
           itemName: ele.registrationDate,
-          description: ele.cctvModel,
+          registrationDate: ele.cctvModel,
+          remark : ele.remark
         }
       }
       this.resultDownloadArr.push(obj);
@@ -298,17 +324,89 @@ export class CctvLocationRegistrationComponent {
 
 
 
-  openDialog() {
+  openDialog(obj?:any) {
     const dialogRef = this.dialog.open(AddCctvLocationComponent,{
       width: '500px',
       disableClose: true,
-      autoFocus: false
+      autoFocus: false,
+      data :obj
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result == 'yes' && obj) {
+        this.pageNumber = obj.pageNumber;
+        this.getTableData();
+      } else if (result == 'yes') {
+        this.pageNumber = 1;
+        this.getTableData();
+      }
+      this.highLightFlag = false;
+      this.setTableData();      
     });
   }
 
+  globalDialogOpen(obj: any) {
+    this.deleteObj = obj;
+    let dialoObj = {
+      img: 'assets/images/trash.gif',
+      header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
+      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Location?' : 'तुम्हाला सीसीटीव्ही स्थान हटवायचे आहे का?',
+      cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onDelete();
+      }
+      this.highLightFlag = false;
+
+    })
+  }
+
+  onDelete(){
+    let deleteObj = {
+      "id": this.deleteObj.id,
+      "modifiedBy": 0,
+      "modifiedDate": new Date(),
+      "lan": "EN"
+    }
+    this.apiService.setHttp('DELETE', 'zp-satara/CCTVLocation/DeleteCCTVLocation', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.getTableData();
+          this.commonMethods.showPopup(res.statusMessage, 0);
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+        }
+      },
+      error: ((err: any) => { this.errors.handelError(err.statusCode) })
+    });
+  }
+
+  clearDependency(flag : any){
+    if(flag == 'TalukaId'){
+      this.filterForm.controls['centerId']?.setValue(0);
+      this.filterForm.controls['villageId']?.setValue('');
+      this.filterForm.controls['SchoolId']?.setValue('');   
+      this.centerArr = [];  
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if (flag == 'centerId'){
+      this.filterForm.controls['villageId']?.setValue(0);
+      this.filterForm.controls['SchoolId']?.setValue('');
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if (flag =='villageId'){
+      this.filterForm.controls['SchoolId']?.setValue(0);
+      this.schoolArr = [];
+    }
+  }
  
 }

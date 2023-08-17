@@ -36,7 +36,7 @@
     <form [formGroup]="filterForm">
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <div class="row gx-2">
-            <div class="col-sm">
+            <!-- <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.district'| translate}}</mat-label>
                     <mat-select formControlName="districtId" (selectionChange)="getTaluka()">
@@ -44,11 +44,11 @@
                             dist.district : dist.m_District}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
+            </div> -->
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select formControlName="TalukaId" (selectionChange)="getAllCenter()">
+                    <mat-select formControlName="TalukaId" (selectionChange)="getAllCenter();clearDependency('TalukaId')">
                         <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                             tal.taluka:tal.m_Taluka }}</mat-option>
                     </mat-select>
@@ -57,7 +57,7 @@
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Center</mat-label>
-                    <mat-select formControlName="centerId" (selectionChange)="getVillage()">
+                    <mat-select formControlName="centerId" (selectionChange)="getVillage();clearDependency('centerId')">
                         <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                             ?cen.center:cen.m_Center}}</mat-option>
                     </mat-select>
@@ -66,7 +66,7 @@
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.village'| translate}}</mat-label>
-                    <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
+                    <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId();clearDependency('villageId')">
                         <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
                             'English'
                             ?village.village:village.m_Village}}</mat-option>
@@ -80,6 +80,21 @@
                         <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
                             sch.schoolName:sch.m_SchoolName}}</mat-option>
                     </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{'Labels.CCTVLocation'| translate}}</mat-label>
+                    <mat-select formControlName="cctvLocation">
+                        <mat-option  *ngFor="let cctvLoc of CCTVLocation" [value]="cctvLoc.id">{{languageFlag == 'English' ?
+                            cctvLoc.cctvLocation:cctvLoc.m_CCTVLocation}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>CCTV Name / CCTV Model</mat-label>               
+                        <input matInput formControlName="textSearch" (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)" maxlength="100">               
                 </mat-form-field>
             </div>
             <div class="col-sm-auto mb-2 mb-lg-0">

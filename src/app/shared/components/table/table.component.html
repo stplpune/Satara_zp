@@ -11,7 +11,7 @@
                         <ng-container *ngIf="'srNo' == columns">{{((pageNumber + 1) * 10 + i + 1)-20 |
                             numberTranformPipe}}</ng-container>
                         <ng-container
-                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns">
+                            *ngIf="'srNo' !=columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns && tableInfo?.isManual != columns && tableInfo?.isManualAppr != columns && tableInfo?.isManSubmit != columns">
                             <div class="text-ellipsis-250-L2">{{element[columns] | dash }}</div>
                         </ng-container>
                         <ng-container *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]"
@@ -49,6 +49,9 @@
                     </ng-container>
                     <ng-container *ngIf="tableInfo?.date == columns">{{(element[columns] |
                         date:'dd-MM-yyyy')}}</ng-container>
+                    <ng-container *ngIf="tableInfo?.isManual == columns">{{(element[columns] == 0) ? webStorageService.languageFlag =='EN' ? 'No' : 'नाही' : webStorageService.languageFlag =='EN'? 'Yes' : 'होय'}}</ng-container>
+                    <ng-container *ngIf="tableInfo?.isManSubmit == columns">{{(element[columns] == 0) ? webStorageService.languageFlag =='EN' ? 'No' : 'नाही' : webStorageService.languageFlag =='EN'? 'Yes' : 'होय'}}</ng-container>
+                    <ng-container *ngIf="tableInfo?.isManualAppr == columns">{{(element[columns] == 0) ? webStorageService.languageFlag =='EN' ? 'No' : 'नाही' : webStorageService.languageFlag =='EN'? 'Yes' : 'होय'}}</ng-container>
                 </td>
             </ng-container>
             <ng-container *ngIf="columns =='action'">
@@ -76,8 +79,8 @@
                     [disabled]="tableInfo.tableData[i]?.attendance != 'Absent'  || this.submitFlag == true " (click)="action(element,'apply')">
                        {{'Labels.apply' | translate}}
                     </button> -->
-                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.attendance != 'Absent' || tableInfo?.isSubmitted == true  ? '':'btn-main ms-2'"
-                    [disabled]="tableInfo.tableData[i]?.attendance != 'Absent' || tableInfo?.isSubmitted == true " (click)="action(element,'apply')">
+                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo?.isSubmitted == true  ? '':'btn-main ms-2'"
+                    [disabled]="tableInfo?.isSubmitted == true " (click)="action(element,'apply')">
                        {{'Labels.apply' | translate}}
                     </button>
                     
@@ -109,8 +112,7 @@
 </mat-paginator>
 <div *ngIf="tableInfo?.tableData?.length ==0">
     <div class="alert alert-danger text-center me-2  mt-1 py-2 ">
-        <span *ngIf="webStorageService.languageFlag =='EN'">Data not available</span>
-        <span *ngIf="webStorageService.languageFlag =='mr-IN'">डेटा उपलब्ध नाही</span>
+        <span>{{webStorageService.languageFlag =='EN' ? 'Data not available' :'डेटा उपलब्ध नाही'}}</span>
     </div>
 </div>
 

@@ -175,7 +175,7 @@ export class AddUpdateTeacherRegistrationComponent {
         "teacherId": 0,
         "districtId": [''],
         "talukaId": ['', Validators.required],
-        "villageId": 0,
+        "villageId": ['',Validators.required],
         "schoolId": ['', Validators.required],
         "clusterId": ['', Validators.required],
         "designationId": [0, Validators.required],
@@ -808,7 +808,7 @@ export class AddUpdateTeacherRegistrationComponent {
   clearDropdown(dropdown: string) {
     this.editFlag = false;
     if (dropdown == 'Taluka') {
-      this.f['villageId'].setValue('');
+      this.f['villageId'].setValue(0);
       this.villageArray = [];
     } else if (dropdown == 'talukaTeacherDetails') {
       this.td['clusterId'].setValue('');

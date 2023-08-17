@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 // import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 // import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -24,12 +24,11 @@ export class CategoryComponent {
   editFlag = false;
   editId: any;
   viewStatus = 'Table';
-  // displayedheadersEnglish = ['Sr. No.', ' Category Name', 'Inactive/Active','Action'];
-  // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
 
   displayedheadersEnglish = ['Sr. No.', ' Category', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे', 'कृती'];
-
+  @ViewChild('formDirective')
+  private formDirective!: NgForm;
   search = new FormControl('');
   tableresp: any;
   totalItem: any;
@@ -52,13 +51,11 @@ export class CategoryComponent {
     private excelpdfService: DownloadPdfExcelService,
     public datepipe: DatePipe,
     private commonService: CommonMethodsService,
-
     private fb : FormBuilder,
     public validators : ValidationService,
   ) { }
 
   ngOnInit() {
-
     this.getIsWriteFunction();
     this.getTableData();
     this.webStorage.langNameOnChange.subscribe(lang => {
@@ -111,6 +108,8 @@ export class CategoryComponent {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
+          this.formDirective.resetForm();
+          this.getTableData();
           this.commonService.showPopup(res.statusMessage, 0);
           this.editFlag = false;
           this.formData()
@@ -187,6 +186,7 @@ export class CategoryComponent {
   
           this.totalItem = res.responseData.responseData2.pageCount;
           this.totalCount = res.responseData.responseData2.pageCount;
+
           this.resultDownloadArr = [];
   
           let data: [] = (status == 'pdfFlag' || status == 'excel') ? res.responseData.responseData1 : [];
@@ -235,19 +235,9 @@ export class CategoryComponent {
     return marathiNumberString;
   }
 
-
-
   pdfDownload(data?: any,flag?:string) {   
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
-      // let obj = {
-      //   srNo: i + 1,
-      //   category: ele.category,
-      //   subCategory: ele.subCategory,
-      //   itemName: ele.itemName,
-      //   description: ele.description,
-      // }
-
       if(flag == 'excel'){
         let obj = {
           "Sr.No":this.langTypeName == 'English' ? (i+1) : this.convertToMarathiNumber(i+1),
@@ -340,34 +330,10 @@ export class CategoryComponent {
     this.getTableData();
   }
 
-
-  // selectGrid(label: string) {
-  //   this.viewStatus=label;
-  //   if (label == 'Table') {
-  //     this.cardViewFlag = false;
-  //     this.pageNumber = 1;
-  //   } else if (label == 'Card') {
-  //     this.cardViewFlag = true;
-  //     this.pageNumber = 1;
-  //   }
-  //   this.getTableData();
-  // }
-
-  // childGridCompInfo(obj: any) {
-  //   switch (obj.label) {
-  //     case 'Pagination':
-  //       this.pageNumber = obj.pageNumber;
-  //       this.getTableData();
-  //       break;
-  //     case 'Edit':
-  //       this.openDialog(obj);
-  //       break;
-
-  //     case 'Block':
-  //       this.openBlockDialog(obj);
-  //   }
-  // }
-
+  clearFormData(){
+    this.formDirective.resetForm();
+    this.editFlag = false;
+  }
 
   globalDialogOpen(obj: any) {
     this.deleteObj = obj;

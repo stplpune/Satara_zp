@@ -51,7 +51,7 @@ export class AddCctvLocationComponent {
       this.languageFlag = lang;    
     });
     this.filterFormData();
-    this.getDistrict();
+    this.getTaluka();
     this.getCCTVLocation();
  
   }
@@ -60,7 +60,7 @@ export class AddCctvLocationComponent {
   filterFormData() {
     this.cctvLocationForm = this.fb.group({
       ...this.webStorageS.createdByProps(),
-      "id": [this.data?.id || 0],
+      "id": [0],
       "districtId": [this.data?.districtId || '', [Validators.required]],
       "talukaId": ['',[Validators.required]],
       "centerId": ['',[Validators.required]],
@@ -77,10 +77,10 @@ export class AddCctvLocationComponent {
   }
 
 
-  getDistrict() {
-    this.$districts = this.masterService.getAlllDistrict(this.languageFlag);   
-    this.getTaluka();
-  }
+  // getDistrict() {
+  //   this.$districts = this.masterService.getAlllDistrict(this.languageFlag);   
+  //   this.getTaluka();
+  // }
 
   getTaluka() {
     this.talukaArr = [];

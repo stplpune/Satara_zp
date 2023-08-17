@@ -18,12 +18,12 @@
             <div class="d-flex align-items-center gap-2">
                 <button mat-flat-button class="bg-danger btn-icon text-white"
                     matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-                    matTooltipClass="tooltip">
+                    matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
                     <mat-icon>description </mat-icon>
                 </button>
                 <button mat-flat-button class="bg-success btn-icon text-white"
                     matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
-                    matTooltipClass="tooltip">
+                    matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
                 <button mat-flat-button class="btn-main" (click)="openDialog()">
@@ -33,49 +33,65 @@
             </div>
         </div>
     </mat-card-header>
+    <form [formGroup]="filterForm">
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <div class="row gx-2">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.district'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="districtId" (selectionChange)="getTaluka()">
+                        <mat-option *ngFor="let dist of $districts | async" [value]="dist.id">{{languageFlag =='English' ?
+                            dist.district : dist.m_District}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="TalukaId" (selectionChange)="getAllCenter()">
+                        <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
+                            tal.taluka:tal.m_Taluka }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Center</mat-label>
+                    <mat-select formControlName="centerId" (selectionChange)="getVillage()">
+                        <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
+                            ?cen.center:cen.m_Center}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.village'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
+                        <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
+                            'English'
+                            ?village.village:village.m_Village}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.school'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="SchoolId">
+                        <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
+                            sch.schoolName:sch.m_SchoolName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-auto mb-2 mb-lg-0">
-                <button mat-flat-button class="btn-main">{{'Labels.filter' |
+                <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter' |
                     translate}}</button>
-                <button mat-flat-button class="btn-second ms-2">{{'Labels.clear'
+                <button mat-flat-button class="btn-second ms-2"  (click)="clearForm()">{{'Labels.clear'
                     |translate}}</button>
             </div>
         </div>
     </mat-card-header>
+</form>
     <mat-card-content class="card-body mt-0">
-        <p>Table</p>
+        <app-table (recObjToChild)="childTableCompInfo($event)"></app-table>
     </mat-card-content>
 </mat-card>

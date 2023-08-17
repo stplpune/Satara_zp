@@ -33,6 +33,7 @@
         </div>
     </mat-card-header>
     <mat-card-content class="card-body p-0">
+        
         <div class="row">
             <div class="col-sm-8 border-end">
                 <mat-card class="plain-card">
@@ -59,12 +60,14 @@
                 </mat-card>
             </div>
             <div class="col-sm-4">
+                <form [formGroup]="subCategoryFrm" (ngSubmit)="onSubmit()" #formDirective="ngForm">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header border-bottom-0 ps-0">
                         <h6 class="text-main fw-bold my-2">
                             {{editFlag ? ('Labels.updateSubcategory' | translate):('Labels.addSubcategory' | translate)}}
                         </h6>
                     </mat-card-header>
+                   
                     <mat-card-content class="card-body ps-0">
                         <div class="row">
                             <div class="col-sm-12">
@@ -97,13 +100,15 @@
                     </mat-card-content>
                     <mat-card-footer>
                         <mat-card-actions align="end" class="me-1">
-                            <button mat-stroked-button class="btn-second me-2" type="button" mat-dialog-close>{{'Labels.clear'|
+                            <button mat-stroked-button class="btn-second me-2" (click)="clearFormData()" type="button" >{{'Labels.clear'|
                                 translate}}</button>
                             <button mat-stroked-button class="btn-main" type="submit">{{editFlag ? ( 'Labels.update' | translate):('Labels.add' |translate)}}</button>
                         </mat-card-actions>
                     </mat-card-footer>
                 </mat-card>
+            </form>
             </div>
         </div>
+    
     </mat-card-content>
 </mat-card>

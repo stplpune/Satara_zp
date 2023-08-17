@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
+// import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 // import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 // import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
@@ -19,9 +19,9 @@ import { MasterService } from 'src/app/core/services/master.service';
   styleUrls: ['./sub-category.component.scss']
 })
 export class SubCategoryComponent {
-  [x: string]: any;
+  // [x: string]: any;
   editId:any;
-  editObj: any;
+  // editObj: any;
   subCategoryFrm!: FormGroup;
   categoryresp: any;
   editFlag = false;
@@ -41,7 +41,8 @@ export class SubCategoryComponent {
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
   displayedheadersEnglish = ['Sr. No.', ' Category','Sub Category','Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव', 'कृती'];
- 
+  @ViewChild('formDirective')
+  private formDirective!: NgForm;
   constructor(public dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
@@ -98,26 +99,26 @@ export class SubCategoryComponent {
       }
     })
   }
-  openDialog(data?: any) {
-    data?'':this.textSearch.setValue('');
-    this.filterFlag && data?'':(this.getTableData(),this.filterFlag=false);
-    const dialogRef = this.dialog.open(AddSubCategoryComponent, {
-      width: '400px',
-      data: data,
-      disableClose: true,
-      autoFocus: false
-    });
+  // openDialog(data?: any) {
+  //   data?'':this.textSearch.setValue('');
+  //   this.filterFlag && data?'':(this.getTableData(),this.filterFlag=false);
+  //   const dialogRef = this.dialog.open(AddSubCategoryComponent, {
+  //     width: '400px',
+  //     data: data,
+  //     disableClose: true,
+  //     autoFocus: false
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == 'yes' && data) {
-        this.getTableData();
-        this.pageNumber = this.pageNumber;
-      } else if (result == 'yes') {
-        this.getTableData();
-        this.pageNumber = 1;
-      }
-    });
-  }
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result == 'yes' && data) {
+  //       this.getTableData();
+  //       this.pageNumber = this.pageNumber;
+  //     } else if (result == 'yes') {
+  //       this.getTableData();
+  //       this.pageNumber = 1;
+  //     }
+  //   });
+  // }
 
 
   childCompInfo(obj: any) {
@@ -128,7 +129,7 @@ export class SubCategoryComponent {
         this.getTableData();
         break;
       case 'Edit':
-        this.openDialog(obj);
+        this.editData(obj);
         break;
       case 'Block':
         // this.openBlockDialog(obj);
@@ -209,13 +210,6 @@ export class SubCategoryComponent {
   pdfDownload(data?: any,flag?:string) {   
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
-      // let obj = {
-      //   srNo: i + 1,
-      //   category: ele.category,
-      //   subCategory: ele.subCategory,
-      //   itemName: ele.itemName,
-      //   description: ele.description,
-      // }
       let obj:any;
       if(flag=='excel'){
         obj = {
@@ -257,10 +251,7 @@ export class SubCategoryComponent {
             'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
           }
         }
-        // let objData: any = {
-        //   'topHedingName': 'Sub-Category List',
-        //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-        // }
+       
         let headerKeySize = [7, 15, 20, 30, 40,]
         flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(this.langTypeName == 'English'?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
@@ -362,7 +353,6 @@ export class SubCategoryComponent {
 
 
   deteleDialogOpen(){
-  
     let deleteObj = {
       "id": this.deleteObj.id,
       "deletedBy": 0,
@@ -375,8 +365,6 @@ export class SubCategoryComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.getTableData();
-          console.log("delete msg",res.statusMessage);
-          
           this.commonService.showPopup(res.statusMessage, 0);
         } else {     
           this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
@@ -386,6 +374,62 @@ export class SubCategoryComponent {
     });
   }
 
+  
+  onSubmit() {
+    if (this.subCategoryFrm.invalid) {
+      return;
+    }else{
+    let data = this.webStorage.createdByProps();
+    let formData = this.subCategoryFrm.value;
+    let obj = {
+      "createdBy":data.createdBy,
+      "modifiedBy":data.modifiedBy,
+      "createdDate": data.createdDate,
+      "modifiedDate": data.modifiedDate,
+      "isDeleted": data.isDeleted,
+      "id": this.editFlag ? this.editId : 0,
+      "categoryId": formData.category,
+      "subCategory": formData.subcategory,
+      "m_SubCategory": formData.m_subcategory,
+      "lan": this.webStorage.languageFlag,
+    }
+
+    let method = this.editFlag ? 'PUT' : 'POST';
+    let url = this.editFlag ? 'UpdateSubCategory' : 'AddSubCategory';
+    this.apiService.setHttp(method, 'zp-satara/AssetSubCategory/'+url, false, obj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.getTableData();
+          this.commonService.showPopup(res.statusMessage, 0);
+          this.formDirective.resetForm();
+          this.editFlag = false;
+          this.defaultForm();
+          // this.dialogRef.close('yes')
+        } else {
+          this.commonService.showPopup(res.statusMessage, 1);
+        }
+
+      },
+      error: ((err: any) => { this.errors.handelError(err) })
+    });
+  }
+  }
+
+  clearFormData(){
+    this.formDirective.resetForm();
+    this.editFlag = false;
+  }
+
+  editData(data:any){
+    this.editFlag=true;
+    this.editId=data.id;
+    this.subCategoryFrm.patchValue({
+      category:data.categoryId,
+      subcategory:data.subCategory,
+      m_subcategory:data.m_SubCategory
+    })
+  }
 
 }
 

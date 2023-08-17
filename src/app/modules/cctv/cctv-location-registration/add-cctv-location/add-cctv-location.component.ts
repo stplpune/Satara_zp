@@ -16,7 +16,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-cctv-location.component.scss']
 })
 export class AddCctvLocationComponent {
-  editFlag:any;
+ 
   cctvLocationForm !: FormGroup;
   languageFlag!:string;
   $districts?: Observable<any>;
@@ -25,6 +25,7 @@ export class AddCctvLocationComponent {
   villageArr = new Array();
   schoolArr = new Array();
   CCTVLocation = new Array();
+  editFlag : boolean = false;
 
 
 
@@ -45,6 +46,7 @@ export class AddCctvLocationComponent {
 
 
   ngOnInit() {
+    this.data ? this.editFlag = true : this.editFlag= false
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;    
     });
@@ -86,7 +88,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;
-          this.data? (this.cctvLocationForm.controls['talukaId'].setValue(this.data?.talukaId),this.getAllCenter()): '';
+          this.data && this.editFlag? (this.cctvLocationForm.controls['talukaId'].setValue(this.data?.talukaId),this.getAllCenter()): '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -104,7 +106,7 @@ export class AddCctvLocationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr = res.responseData;    
-            this.data? (this.cctvLocationForm.controls['centerId'].setValue(this.data?.centerId),this.getVillage()): '';
+            this.data && this.editFlag? (this.cctvLocationForm.controls['centerId'].setValue(this.data?.centerId),this.getVillage()): '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -122,7 +124,7 @@ export class AddCctvLocationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr = res.responseData;
-            this.data? (this.cctvLocationForm.controls['villageId'].setValue(this.data?.villageId),this.getAllSchoolsByCenterId()): '';
+            this.data && this.editFlag ? (this.cctvLocationForm.controls['villageId'].setValue(this.data?.villageId),this.getAllSchoolsByCenterId()): '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -141,7 +143,7 @@ export class AddCctvLocationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.schoolArr = res.responseData;
-            this.data? (this.cctvLocationForm.controls['schoolId'].setValue(this.data?.schoolId)): '';
+            this.data && this.editFlag ? (this.cctvLocationForm.controls['schoolId'].setValue(this.data?.schoolId)): '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.schoolArr = [];
@@ -158,7 +160,7 @@ export class AddCctvLocationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.CCTVLocation =res.responseData;
-            this.data? (this.cctvLocationForm.controls['cctvLocationId'].setValue(this.data?.cctvLocationId)): '';
+            this.data && this.editFlag ? (this.cctvLocationForm.controls['cctvLocationId'].setValue(this.data?.cctvLocationId)): '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.CCTVLocation = [];
@@ -193,21 +195,23 @@ export class AddCctvLocationComponent {
     }
 
     clearDependency(flag : any){
-      if(flag == 'taluka'){
+      this.editFlag = false
+      if(flag == 'taluka'){       
         this.cctvLocationForm.controls['centerId'].setValue('');
         this.cctvLocationForm.controls['villageId'].setValue('');
         this.cctvLocationForm.controls['schoolId'].setValue('');
         this.centerArr = [];
         this.villageArr = [];
-        this.schoolArr = [];
+        this.schoolArr = [];       
       }else if (flag == 'centerId'){
         this.cctvLocationForm.controls['villageId'].setValue('');
         this.cctvLocationForm.controls['schoolId'].setValue('');
         this.villageArr = [];
-        this.schoolArr = [];
+        this.schoolArr = [];    
       }else if (flag =='villageId'){
         this.cctvLocationForm.controls['schoolId'].setValue('');
         this.schoolArr = [];
+       
       }
     }
 

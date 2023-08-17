@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddSubCategoryComponent } from './add-sub-category/add-sub-category.component';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 // import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 // import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
@@ -12,12 +12,19 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { DatePipe } from '@angular/common';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { MasterService } from 'src/app/core/services/master.service';
 @Component({
   selector: 'app-sub-category',
   templateUrl: './sub-category.component.html',
   styleUrls: ['./sub-category.component.scss']
 })
 export class SubCategoryComponent {
+  [x: string]: any;
+  editId:any;
+  editObj: any;
+  subCategoryFrm!: FormGroup;
+  categoryresp: any;
+  editFlag = false;
   viewStatus = 'Table';
   totalItem: any;
   textSearch = new FormControl();
@@ -39,10 +46,13 @@ export class SubCategoryComponent {
     private apiService: ApiService,
     private errors: ErrorsService,
     private commonService: CommonMethodsService,
-    private webStorage: WebStorageService,
+    public webStorage: WebStorageService,
     private excelpdfService:DownloadPdfExcelService,
     public validation:ValidationService,
-    public datepipe : DatePipe) { }
+    public datepipe : DatePipe,
+    private fb : FormBuilder,
+    private masterService:MasterService,
+    ) { }
 
   ngOnInit() {
     this.getIsWriteFunction();
@@ -51,8 +61,21 @@ export class SubCategoryComponent {
       this.langTypeName = lang;
       this.getTableTranslatedData();
     });
+    this.defaultForm();
+    this.getCategory();
   }
-
+ defaultForm() {
+    this.subCategoryFrm = this.fb.group({
+      category: ['', [Validators.required]],
+      subcategory: ['', [Validators.required,Validators.pattern(this.validation.fullName)]],
+      m_subcategory: ['',[Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
+    })
+  }
+  
+  get f() {
+    return this.subCategoryFrm.controls;
+  }
+  
   getIsWriteFunction() {
     let print = this.webStorage?.getAllPageName().find((x: any) => {
       return x.pageURL == "sub-category"
@@ -60,6 +83,21 @@ export class SubCategoryComponent {
     (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
 
+ 
+  getCategory() {
+    this.categoryresp = [];
+    this.masterService.GetAllAssetCategory(this.webStorage.languageFlag).subscribe({
+      next: ((res: any) => {
+        if (res.statusCode == 200 && res.responseData.length) {
+          this.categoryresp = res.responseData;
+        } else {
+          this.categoryresp = [];
+        }
+      }), error: (error: any) => {
+        this.errors.handelError(error.statusCode)
+      }
+    })
+  }
   openDialog(data?: any) {
     data?'':this.textSearch.setValue('');
     this.filterFlag && data?'':(this.getTableData(),this.filterFlag=false);

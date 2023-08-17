@@ -110,12 +110,8 @@
   <mat-card-content class="card-body pt-0">
     <app-table (recObjToChild)="childCompInfo($event)"></app-table>
 </mat-card-content>
-  <mat-card-footer class="card-footer">
+  <mat-card-footer class="card-footer" *ngIf="attendanceSheetRes && this.attendanceSheetRes.length < 2">
     <div class="d-flex w-100 align-items-center justify-content-end gap-2">
-      <!-- <button mat-flat-button mat-dialog-close class="btn-second" type="button">
-        {{'Labels.cancel' | translate}}</button> -->
-      <!-- <button mat-flat-button class="btn-main" type="submit">
-        {{'Labels.Save' |translate}}</button> -->
       <button [disabled]="submitFlag == true" mat-flat-button class="btn-main" type="submit" (click)="submitDialog()">
         {{'Labels.submited' |translate}}</button>
     </div>

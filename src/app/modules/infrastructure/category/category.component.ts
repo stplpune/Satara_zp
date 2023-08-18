@@ -26,7 +26,7 @@ export class CategoryComponent {
   viewStatus = 'Table';
 
   displayedheadersEnglish = ['Sr. No.', ' Category', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणींचे नाव', 'कृती'];
   @ViewChild('formDirective')
   private formDirective!: NgForm;
   search = new FormControl('');

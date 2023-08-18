@@ -3,16 +3,9 @@
         <div class="col-sm-8">
             <mat-card class="plain-card">
                 <mat-card-header class="card-header bg-main">
-                    <h6 class="text-white fw-bold mb-0 ">School Name</h6>
+                    <h6 class="text-white fw-bold mb-0 ">{{eventData?.[0].schoolName}}</h6>
                 </mat-card-header>
-                <mat-card-header class="card-header">
-                    <div class="d-flex gap-2">
-                        <p class="form-label text-main fw-normal mb-0">Event Name :</p>
-                        <p class="form-data mb-0">{{ data?.[1] == 'EN' ? eventData?.[0].eventName :
-                            eventData?.[0].m_EventName}}</p>
-                    </div>
-                </mat-card-header>
-                <mat-card-content class="card-body border-bottom mb-2 pb-0" *ngIf="imgArray && imgArray.length > 0">
+                <mat-card-content class="card-body pb-0" *ngIf="imgArray && imgArray.length > 0">
                     <div id="carouselExample" class="carousel slide mb-2">
                         <div class="carousel-inner rounded">
                             <div class="carousel-item active" *ngFor="let img of imgArray">
@@ -39,20 +32,28 @@
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
-                    <div class="d-flex justify-content-between form-container">
-                        <div class="d-flex align-items-center">
-                            <mat-icon class="material-symbols-outlined mb-1">pace</mat-icon>
-                            <span class=" form-label pe-1">Posted At :</span>
-                            <span class=" form-data">20/03/2023 06:39 PM</span>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <mat-icon class="material-symbols-outlined mb-1">favorite</mat-icon>
-                            <span class=" form-label pe-1">75</span>
-                        </div>
+                    <div class="d-flex gap-2 my-2">
+                        <!-- <p class="form-label text-main fw-normal mb-0">Event Name :</p> -->
+                        <h5 class="form-label mb-0">{{ data?.[1] == 'EN' ? eventData?.[0].eventName :
+                            eventData?.[0].m_EventName}}</h5>
                     </div>
                 </mat-card-content>
                 <mat-card-content>
-                    <div class="row form-container gx-2">
+                    <div class="d-flex justify-content-between form-container border border-start-0 border-end-0 my-2 py-2">
+                        <div class="d-flex align-items-center">
+                            <mat-icon class="material-symbols-outlined mb-1">pace</mat-icon>
+                            <span class=" form-label pe-1">Posted At :</span>
+                            <span class=" form-data">{{eventData?.[0].postedDate | date:'dd-MM-yyyy h:mm a'}}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <mat-icon class="material-symbols-outlined mb-1">favorite</mat-icon>
+                            <span class=" form-label pe-1">{{eventData?.[0].totalComment}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-container gx-2 mt-2">
+                        <div class="text-end" *ngIf="eventData?.[0].postedBy">
+                            - {{eventData?.[0].postedBy}}
+                        </div>
                         <h6 class="text-main fw-bold mb-0">Description</h6>
                         <div class="col-sm-12 col-12">
                             <p class="form-data">{{ eventData?.[0].description}}</p>

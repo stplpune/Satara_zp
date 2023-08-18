@@ -130,7 +130,7 @@ export class AddUpdateSchoolRegistrationComponent {
       "eventName": [this.editEventObj ? this.editEventObj?.eventName : '', Validators.required],
       "m_EventName": [this.editEventObj ? this.editEventObj?.m_EventName : '', [Validators.required, Validators.pattern('^[-\u0900-\u096F ]+$')]],
       "description": [this.editEventObj ? this.editEventObj?.description : ''],
-      "createdBy": 0,
+      "createdBy": this.webStorageS.getUserId() || 0,
       "isDeleted": true,
       "lan": [''],
       eventImages: this.fb.array([

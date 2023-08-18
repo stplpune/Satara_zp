@@ -28,7 +28,7 @@ export class DocDownloadForAndroidComponent {
     ){     
     let queryparams = this.router.url.split('/')[2];
     let params: any = queryparams.split('&');
-    this.data = params    
+    this.data = params        
    }
 
   ngOnInit(){

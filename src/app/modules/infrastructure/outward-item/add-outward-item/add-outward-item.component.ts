@@ -57,7 +57,7 @@ export class AddOutwardItemComponent {
       subcategoryId: ['', [Validators.required]],
       itemId: ['', [Validators.required]],
       unit: [this.editObj ? this.editObj.quantity : '', [Validators.required]],
-      sellprice: [this.editObj ? this.editObj.price : '', [Validators.required]],
+      sellprice: [this.editObj ? this.editObj.price : '', [Validators.required,Validators.pattern(this.Validation.numericWithdecimaluptotwoDigits)]],
       date: [this.editObj ? this.editObj.purchase_Sales_Date : '', [Validators.required]],
       onwordto: [this.editObj ? this.editObj.outwardTo : '', [Validators.required]],
       remark: [this.editObj ? this.editObj.remark : ''],

@@ -61,7 +61,7 @@ export class AddInwardItemComponent {
       "itemId": ['', Validators.required],
       "quantity": [this.editObj ? this.editObj.quantity : '', [Validators.required]],
       "purchase_Sales_Date": [this.editObj ? this.editObj.purchase_Sales_Date : '', Validators.required],
-      "price": [this.editObj ? this.editObj.price : '', [Validators.required]],
+      "price": [this.editObj ? this.editObj.price : '', [Validators.required,Validators.pattern(this.validationService.numericWithdecimaluptotwoDigits)]],
       "remark": [this.editObj ? this.editObj.remark : ''],
       "photo": [this.editObj ? this.editObj.photo : ''],
       "lan": this.webStorageS.languageFlag,

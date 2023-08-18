@@ -24,11 +24,19 @@ export class AddUpdateDesignationMasterComponent {
   formDisabled:boolean=true;
   obj = { id: 0, designationType: 'Other' ,m_DesignationType :'इतर'};
    
-  constructor(private masterService: MasterService, private fb: FormBuilder, private service: ApiService,
-    private commonMethod: CommonMethodsService, private errorHandler: ErrorsService,public webStorage : WebStorageService,
-    public validation :ValidationService, private ngxSpinner : NgxSpinnerService,
+  constructor(
+    private masterService: MasterService, 
+    private fb: FormBuilder, 
+    private service: ApiService,
+    private commonMethod: CommonMethodsService, 
+    private errorHandler: ErrorsService,
+    public webStorage : WebStorageService,
+    public validation :ValidationService, 
+    private ngxSpinner : NgxSpinnerService,
     public dialogRef: MatDialogRef<AddUpdateDesignationMasterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA)
+    public data: any
+    ){}
 
   ngOnInit() {
     this.formData();

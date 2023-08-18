@@ -139,6 +139,11 @@
                     <li *ngIf="selectedCenter" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
                         'Marathi' ?
                         selectedCenter?.m_Center :selectedCenter?.center }}</li>
+
+                        <li *ngIf="selectedVillage" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
+                            'Marathi' ?
+                            selectedVillage?.m_Village :selectedVillage?.village }}</li>
+
                     <li *ngIf="selectedShcool" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
                         'Marathi' ?
                         selectedShcool?.m_SchoolName :selectedShcool?.schoolName }}</li>
@@ -350,7 +355,8 @@
                                                     </ng-container>
                                                 </tbody>
                                             </table>
-                                            <div *ngIf="langSubList?.length ==0">
+                                            <div *ngIf="classwiseAsseTakenList?.length ==0">
+                                                <!-- <div *ngIf="langSubList?.length ==0"> -->
                                                 <div class="alert alert-danger text-center py-2 ">
                                                     {{'Labels.dataNotFound' | translate}}
                                                 </div>

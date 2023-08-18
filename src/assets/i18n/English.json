@@ -421,6 +421,7 @@
         "cctvregistrationList":"CCTV Location List",
         "Addcctvrlocation":"Add CCTV Location",
         "CCTVLocation":"CCTV Location",
+        "CCTVNameCCTVModel":"CCTV Name / CCTV Model",
         "CCTVName":"CCTV Name",
         "CCTVModel":"CCTV Model",
         "CloudID":"Cloud ID",

@@ -17,7 +17,7 @@ export class ValidationService {
   alphaNumericOnly = '^([ a-zA-Z])[- a-zA-Z0-9]+$';   //Valid - Manager 1, Manager / Invalid - 9865232     
   alphanumericMarathi = '^[\u0900-\u096F ]+$';
   valLandlineNo = '(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})';
-
+  numericWithdecimaluptotwoDigits='^[0-9][0-9]*[.]?[0-9]{0,2}$';
 
 
 
@@ -98,4 +98,9 @@ export class ValidationService {
     return maskSeperator.test(event.key);
   }
  
+  NumericWithDot(event: any) {
+    const maskSeperator = new RegExp('^([0-9.])', 'g');
+    return maskSeperator.test(event.key);
+  }
+
 }

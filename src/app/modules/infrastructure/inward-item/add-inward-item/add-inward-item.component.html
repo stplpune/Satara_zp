@@ -64,7 +64,8 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.PurchasePrice'| translate}}</mat-label>
                         <input matInput formControlName="price"
-                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.onlyDigits($event);">
+                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.NumericWithDot($event);">
+                                <mat-error *ngIf="f['price'].hasError('pattern')">Invalid Price</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">

@@ -1246,7 +1246,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     };
   }
   onStudentDetails(index: number, label: string) {
-    if (this.asessmwntLavel.value == '0') {
+    if (this.asessmwntLavel.value == '1') {
       let schoolId;
       if (label == 'topPerformance') {
         schoolId = this.tableDataTopPerformance[index].schoolId;
@@ -1257,9 +1257,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const formData = this.filterForm.value;
       const formValue = this.filterFormForBarGraph.value;
       this.SharingObject = {
-        groupId: this.asessmwntLavel.value == '0' ? this.selectedObj?.groupId | 0 : 0,
+        groupId: this.asessmwntLavel.value == '1' ? this.selectedObj?.groupId | 0 : 0,
         TalukaId: formData?.talukaId | 0,
         CenterId: formData?.centerId | 0,
+        VillageId: formData?.villageId | 0,
         SchoolId: schoolId,
         SubjectId: formValue?.subjectId | 0,
         ExamTypeId: formValue?.examId | 0,
@@ -1268,7 +1269,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         label: 'table',
         standardArray: [0],
         StandardId: 0,
-        questionId: formValue?.optionId | 0
+        questionId: formValue?.questionId | 0,
+        optionId: formValue?.optionId | 0
       }
       // questionId
 

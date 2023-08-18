@@ -1,15 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { AddUpdateDesignationMasterComponent } from './add-update-designation-master/add-update-designation-master.component';
+import { ValidationService } from 'src/app/core/services/validation.service';
+import { MasterService } from 'src/app/core/services/master.service';
 
 @Component({
   selector: 'app-designation-master',
@@ -17,6 +18,8 @@ import { AddUpdateDesignationMasterComponent } from './add-update-designation-ma
   styleUrls: ['./designation-master.component.scss']
 })
 export class DesignationMasterComponent implements OnInit {
+  DesiganationLevelData: any;
+  editFlag:any;
   pageNumber: number = 1;
   searchContent = new FormControl('');  
   DesiganationTypeArray:any;
@@ -30,11 +33,29 @@ export class DesignationMasterComponent implements OnInit {
   totalCount: number = 0;
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
-  constructor(private dialog: MatDialog, private apiService: ApiService, private errors: ErrorsService,
-    private commonMethod: CommonMethodsService, public webStorage : WebStorageService,
-    private errorHandler: ErrorsService ,private downloadFileService : DownloadPdfExcelService, public datepipe : DatePipe) { }
+  designationForm: any;
+  formDisabled: boolean = false;
+  ngxSpinner: any;
+  service: any;
+  dialogRef: any;
+  editData: any;
+  constructor(
+    private dialog: MatDialog, 
+    private apiService: ApiService, 
+    private errors: ErrorsService,
+    private commonMethod: CommonMethodsService, 
+    public webStorage : WebStorageService,
+    private errorHandler: ErrorsService ,
+    private downloadFileService : DownloadPdfExcelService, 
+    public datepipe : DatePipe,
+    public validation :ValidationService, 
+    private masterService: MasterService,
+    private fb: FormBuilder
+    ) { }
 
   ngOnInit() {
+    this.formData();
+    this.getDesiganationLevel();
     this.getIsWriteFunction();
     this.getTableData(); 
     this.webStorage.langNameOnChange.subscribe(lang => {
@@ -42,6 +63,22 @@ export class DesignationMasterComponent implements OnInit {
       this.getTableTranslatedData();
     });    
   }
+
+    //#region ----------------------------------Desiganation-Master Dropdown ------------------------------- //
+    getDesiganationLevel() {
+      let lan = '';
+      this.masterService.GetAllDesignationLevel(lan).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == '200' && res.responseData.length) {
+            this.DesiganationLevelData = res.responseData; 
+            this.editFlag ? ((this.designationForm.controls['designationLevelId'].setValue(this.editData.designationLevelId)), this.designationForm.controls['designationLevelId'].disable()) : '';
+          }
+        }), error: (error: any) => {
+          this.commonMethod.checkEmptyData(error.statusText) == false ? this.errorHandler.handelError(error.statusCode) : this.commonMethod.showPopup(error.statusText, 1);
+        }
+      })
+    }
+  
 
   getIsWriteFunction(){
     let print = this.webStorage?.getAllPageName().find((x: any) => {
@@ -128,7 +165,8 @@ getTableTranslatedData(){
         this.getTableData();
         break;
       case 'Edit':        
-        this.addUpdateAgency(obj);
+        // this.addUpdateAgency(obj);
+        this.onClickEdit(obj);
 
         break;
       // case 'Block':
@@ -210,6 +248,21 @@ getTableTranslatedData(){
       }
     })
   }
+
+    //#region  ------------------------------------- Desiganation-Master Edit ---------------------------------//
+    onClickEdit(obj: any) {
+      this.editFlag = true;
+      this.editData = obj;    
+      this.designationForm.patchValue({
+        id: obj.id,
+        designationType:obj.designationName,
+        m_DesignationType:obj.m_DesignationType,
+        designationLevelId : obj.designationLevelId
+      });
+      this.getDesiganationLevel();
+    }
+    //#endregion -------------------------------------End Desiganation-Master Edit ---------------------------------//
+  
 
   // getofficeReport(){
   //   let str = `pageno=${this.pageNumber}&pagesize=10&textSearch=${this.searchContent.value ? this.searchContent.value:''}&lan=${this.webStorage.languageFlag}`;
@@ -295,5 +348,82 @@ getTableTranslatedData(){
       this.getTableData();
     }
   }
+
+  clearDrop(formControlName: any) {
+    if (formControlName == 'designationLevelId') {
+      this.designationForm.controls['designationType'].setValue('');
+    }
+  }
+
+
+  //#region -------------------------------------- Desiganation-Master Formdata --------------------------//
+  formData() {
+    this.designationForm = this.fb.group({
+      "lan": [''],
+      "id": [0],
+      "designationType": ['',[Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
+      "m_DesignationType": ['',[Validators.required, Validators.pattern('^[-\u0900-\u096F ]+$')]],
+      "designationLevelId": ['', Validators.required]
+    })
+  }
+  //#endregion  ---------------------------- End Desiganation-Master Formdata ------------------------------- //
+
+  get f() { return this.designationForm.controls }
+
+   //#region ------------------------------------- Desiganation-Master Submit ---------------------------------// 
+   OnSubmit() {
+    if(this.designationForm.valid){
+      this.formDisabled = !this.formDisabled;
+      this.formDisabled ? 'disable' : 'enable';
+    if(this.editFlag) {
+        const disableValue = this.formDisabled ? 'disable' : 'enable';
+        Object.keys(this.designationForm.controls).forEach((designationLevelId) => {         
+            this.designationForm.controls[designationLevelId][disableValue]();
+        });
+      }
+      // let getFormVal = this.designationForm.value;
+      // let getDesignationLevelId: any = this.commonMethod.getkeyValueByArrayOfObj(this.DesiganationLevelData, 'designationLevel', getFormVal?.designationLevelId);
+      // this.designationForm.value.designationLevelId = getDesignationLevelId?.id;
+     
+      let formValue = this.designationForm.value;    
+      let  data = this.webStorage.createdByProps();    
+      
+      let postObj = {
+        "createdBy":  data.createdBy ,
+        "modifiedBy": data.modifiedBy,
+        "createdDate": data.createdDate,
+        "modifiedDate": data.modifiedDate,
+        "isDeleted": data.isDeleted,
+        "lan": this.webStorage.languageFlag,
+        "id": formValue.id,
+        "designationType":  formValue.designationType ,
+        "m_DesignationType": formValue.m_DesignationType,
+        "designationLevelId": formValue.designationLevelId,
+        "timestamp": new Date(),
+        "localId": 0,
+      }
+      this.ngxSpinner.show();
+      let url;
+      this.editFlag ? url = 'zp-satara/register-designation/UpdateRecord' : url = 'zp-satara/register-designation/AddDesignation'
+      this.service.setHttp(this.editFlag ? 'put' : 'post', url, false, postObj, false, 'baseUrl');
+      this.service.getHttp().subscribe({     
+        next: (res: any) => {
+          this.ngxSpinner.hide();
+          this.service.staticData.next('getRefreshStaticdata');
+          res.statusCode == 200 ? ( this.commonMethod.showPopup(res.statusMessage, 0)) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          res.statusCode == 200 ?  this.dialogRef.close('yes') :  this.ngxSpinner.hide();
+        },
+        error: ((error: any) => {
+          this.errorHandler.handelError(error.status);
+          this.commonMethod.checkEmptyData(error.status) == false ? this.errorHandler.handelError(error.status) : this.commonMethod.showPopup(error.status, 1);
+        })
+      })
+    }else{
+      this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
+      return;
+    }
+   
+  }
+  //#endregion -------------------------------------End Desiganation-Master Submit ---------------------------------//
 
 }

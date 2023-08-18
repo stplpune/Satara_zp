@@ -15,7 +15,7 @@
   <mat-card-header class="card-header">
     <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
       <div class="text-main fw-bold">
-        {{'Labels.tasksheetList' | translate}}
+        {{'Labels.tasksheetList' | translate}}<span *ngIf="attendanceSheetRes && attendanceSheetRes.length > 1">- {{attendanceSheetRes[1]}}</span>
       </div>
 
       <div class="d-flex flex-wrap justify-content-start align-items-center justify-content-lg-end gap-2">

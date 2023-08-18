@@ -42,6 +42,12 @@ input:-webkit-autofill:active {
     -webkit-text-fill-color: #000 !important;
 }
 
+.mdc-text-field--disabled .mdc-notched-outline__leading,
+.mdc-text-field--disabled .mdc-notched-outline__notch,
+.mdc-text-field--disabled .mdc-notched-outline__trailing {
+    border-color: rgb(153 148 148 / 45%) !important;
+}
+
 .mat-mdc-form-field-infix {
     min-height: 36px !important;
 }
@@ -210,6 +216,7 @@ input:-webkit-autofill:active {
 .mdc-dialog__title::before {
     display: unset !important;
 }
+
 /*----------------Media-query------------------*/
 
 @media only screen and (max-width: 478px) {

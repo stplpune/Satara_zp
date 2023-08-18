@@ -131,7 +131,7 @@
                     <li class="breadcrumb-item active" aria-current="page">{{'Labels.studentDetailsdashboard'|
                         translate}}</li>
                     <li class="breadcrumb-item active" aria-current="page">{{languageFlag == 'Marathi' ?
-                        'उस्मानाबाद':'Osmanabad'}}</li>
+                        'सातारा':'Satara'}}</li>
                     <li *ngIf="selectedTaluka && filterForm.value.talukaId !=0" class="breadcrumb-item active"
                         aria-current="page">{{languageFlag ==
                         'Marathi' ?
@@ -139,6 +139,11 @@
                     <li *ngIf="selectedCenter" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
                         'Marathi' ?
                         selectedCenter?.m_Center :selectedCenter?.center }}</li>
+
+                        <li *ngIf="selectedVillage" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
+                            'Marathi' ?
+                            selectedVillage?.m_Village :selectedVillage?.village }}</li>
+
                     <li *ngIf="selectedShcool" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
                         'Marathi' ?
                         selectedShcool?.m_SchoolName :selectedShcool?.schoolName }}</li>
@@ -172,7 +177,7 @@
                                                 <div class="flex-grow-1 ms-3">
                                                     <div class="d-flex align-items-center justify-content-between">
                                                         <h5 class="mb-0 fw-bold">{{ data?.header || '-' }}</h5> 
-                                                        <button mat-flat-button class="btn-main-light btn-icon" title="Download" [routerLink]="['/print-student-details']" >
+                                                        <button mat-flat-button class="btn-main-light btn-icon border" title="Download" [routerLink]="['/print-student-details']" >
                                                             <mat-icon class="text-main">download</mat-icon>
                                                         </button>
                                                     </div>
@@ -350,7 +355,8 @@
                                                     </ng-container>
                                                 </tbody>
                                             </table>
-                                            <div *ngIf="langSubList?.length ==0">
+                                            <div *ngIf="classwiseAsseTakenList?.length ==0">
+                                                <!-- <div *ngIf="langSubList?.length ==0"> -->
                                                 <div class="alert alert-danger text-center py-2 ">
                                                     {{'Labels.dataNotFound' | translate}}
                                                 </div>

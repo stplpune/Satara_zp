@@ -15,27 +15,25 @@
         {{'Labels.AttendanceReportList' | translate}}
       </div>
       <div class="d-flex flex-wrap justify-content-start align-items-center justify-content-lg-end gap-2">
-        <button mat-flat-button class="bg-danger btn-icon text-white"
-            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-            matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
-            <mat-icon>
-                description
-            </mat-icon>
+        <button mat-flat-button class="bg-danger btn-icon text-white" matTooltip="{{'Labels.DownloadPdf' | translate}}"
+          matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
+          <mat-icon>description</mat-icon>
         </button>
-        <button mat-flat-button class="bg-success btn-icon text-white" (click)="getTableData('excel')">
-            <mat-icon class="material-symbols-outlined">table</mat-icon>
+        <button mat-flat-button class="bg-success btn-icon text-white" matTooltip="{{'Labels.Downloadexcel' | translate}}"
+          matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('excel')">
+          <mat-icon class="material-symbols-outlined">table</mat-icon>
         </button>
-    </div>
+      </div>
     </div>
   </mat-card-header>
   <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
     <form [formGroup]="filterForm">
-      <div class="row">
-        <div class="col-sm">
+      <div class="row gx-2">
+        <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.taluka'| translate}}</mat-label>
             <mat-select formControlName="talukaId" (selectionChange)="onChangeDropD('taluka');getAllCenter();"
-            [class]="webStorageS.getUserTypeId() > 2 ? filterForm.controls['talukaId'].disable({ onlySelf: true }) : filterForm.controls['talukaId'].enable({ onlySelf: true })">          
+              [class]="webStorageS.getUserTypeId() > 2 ? filterForm.controls['talukaId'].disable({ onlySelf: true }) : filterForm.controls['talukaId'].enable({ onlySelf: true })">
               <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
                 'EN' ?
                 tal.taluka:tal.m_Taluka }}</mat-option>
@@ -43,7 +41,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm">
+        <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.kendra'| translate}}</mat-label>
             <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage()">
@@ -53,7 +51,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm">
+        <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.village'| translate}}</mat-label>
             <mat-select formControlName="villageId" (selectionChange)="onChangeDropD('village'); getAllSchools();">
@@ -63,7 +61,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm">
+        <div class="col-sm-4">
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
             <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
@@ -73,7 +71,7 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm">
+        <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{'Labels.selectDate'| translate}}</mat-label>
             <input matInput [matDatepicker]="dp" formControlName="date" readonly>
@@ -83,18 +81,20 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm">
-          <div class="d-flex gap-1">
-            <mat-form-field appearance="outline" class="w-25">
-              <mat-label>{{'Labels.teacherName'| translate}}</mat-label>
-              <input matInput formControlName="textSearch" maxlength="30"  (keypress)="validation.noFirstSpaceAllow($event)">
-            </mat-form-field>
-            <div class="mb-0 d-flex gap-1">
-              <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
-                translate}}</button>
-              <button mat-flat-button type="button" class="btn-second ms-2" (click)="formField();getTableData();getTaluka()">{{'Labels.clear'|
-                translate}}</button>
-            </div>
+        <div class="col-sm-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{'Labels.teacherName'| translate}}</mat-label>
+            <input matInput formControlName="textSearch" maxlength="30"
+              (keypress)="validation.noFirstSpaceAllow($event)">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-auto">
+          <div class="mb-0 d-flex gap-1">
+            <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+              translate}}</button>
+            <button mat-flat-button type="button" class="btn-second ms-2"
+              (click)="formField();getTableData();getTaluka()">{{'Labels.clear'|
+              translate}}</button>
           </div>
         </div>
       </div>

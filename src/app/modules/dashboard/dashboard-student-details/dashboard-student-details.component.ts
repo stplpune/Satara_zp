@@ -26,7 +26,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   dashboardObj: any
   talukaArr: any = []
   centerArr: any = []
-  villageArr = new Array();
+  villageArr: any = [];
   schoolArr: any = []
   standardArr: any = [];
   subjectArr: any = [];
@@ -50,6 +50,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   objData: any
   langChangeSub!: Subscription;
   selectedTaluka: any;
+  selectedVillage: any;
   selectedCenter: any;
   selectedShcool: any;
   selectedObj:any;
@@ -79,7 +80,6 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.dashboardObj = JSON.parse(localStorage.getItem('selectedBarchartObjData') || '');
-      
     this.educationYear=this.dashboardObj?this.dashboardObj?.EducationYearId:this.webService.getLoggedInLocalstorageData()?.educationYearId;
     this.assessmentLevelId = this.dashboardObj?.asessmwntLavel;
     this.formData();
@@ -215,17 +215,19 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     let StandardId = flag == 'filter' ? this.filterForm.value?.standardId : ((this.dashboardObj?.standardArray?.length >= 2) && (this.dashboardObj.asessmwntLavel == "0")) ? 0 : this.filterForm.value?.standardId;
     let SubjectId = flag == 'filter' ? this.filterForm.value?.subjectId : this.dashboardObj?.SubjectId;
     let AcademicYearId = flag == 'filter' ? this.filterForm.value?.acYearId : this.dashboardObj?.EducationYearId;
-    let AssessmentTypeId =  this.dashboardObj?.asessmwntLavel;
+    // let AssessmentTypeId =  this.dashboardObj?.asessmwntLavel;
     // let GroupId = flag == 'filter' ? this.filterForm.value?.groupByClass : this.dashboardObj?.groupId;
     // let examTypeId = this.dashboardObj?.ExamTypeId ? this.dashboardObj?.ExamTypeId : 0
     let examTypeId = flag == 'filter' ? this.filterForm.value?.examTypeId : this.dashboardObj?.ExamTypeId;
     let questionId = this.dashboardObj?.questionId ? this.dashboardObj?.questionId : 0;
+    let optionId = this.dashboardObj?.optionId || 0;
 
 
     if (this.dashboardObj?.label == "table") {
       this.getAllSchoolsByCenterId();
       let studentApi = 'GetDataForTopLowSchoolStudentList'
-      let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0)+'&StandardId='+(flag == 'filter' ? this.filterForm.value?.standardId : 0)+'&AssessmentTypeId='+(AssessmentTypeId == 0? 1: 2)  + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId +'&OptionId='+questionId;
+      // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0)+'&StandardId='+(flag == 'filter' ? this.filterForm.value?.standardId : 0)+'&AssessmentTypeId='+(AssessmentTypeId == 0? 1: 2)  + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId +'&OptionId='+questionId;
+      let basicStr = 'zp-satara/Dashboard/' + studentApi +  '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0) + '&TalukaId=' + TalukaId+'&CenterId=' + CenterId + '&VillageId=' + villageId + '&SchoolId=' + SchoolId + '&SubjectId=' + SubjectId + '&OptionId=' + optionId + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId + '&lan=' + this.languageFlag;
       
       this.apiService.setHttp('GET', basicStr, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -241,7 +243,10 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
             this.selectedObj = obj;
             this.dashboardObj.groupId = this.selectedObj.groupId;
             localStorage.setItem("selectedBarchartObjData",JSON.stringify(this.dashboardObj));
-            // (res.responseData.responseData1.length && this.assessmentLevelId == '1') ? this.loadClassWisetable() : '';
+            // *********************************************************
+            (res.responseData.responseData1.length && this.assessmentLevelId == '1') ? this.loadClassWisetable() : '';
+            // *********************************************************
+            
             this.getSubjectData();
             //this.getLineChartDetails();
           } else {
@@ -259,7 +264,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     else {
       // let studentApi = 'GetDashboardDataStudentListForCommon'
       // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) +'&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId=' + AcademicYearId + '&ExamTypeId=' + examTypeId + '&lan='
-      let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + questionId + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId + '&lan='
+      let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + questionId + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&AcademicYearId=' + AcademicYearId + '&lan='
 
       this.apiService.setHttp('GET',classStr, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -291,19 +296,29 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadClassWisetable(){
-    let standardId = this.filterForm.value?.standardId;     
+    let filterFormValue = this.filterForm.value;
+    let studentObj = this.selectedObj;
+
+    // let standardId = this.filterForm.value?.standardId;     
     // let AcademicYearId = flag == 'filter' ? this.filterForm.value?.acYearId : this.dashboardObj?.EducationYearId;
     // let examTypeId = flag == 'filter' ? this.filterForm.value.examTypeId : this.dashboardObj?.ExamTypeId; 
-    let AcademicYearId = this.filterForm.value?.acYearId 
-    let examTypeId =  this.filterForm.value.examTypeId
+    // let AcademicYearId = this.filterForm.value?.acYearId 
+    // let examTypeId =  this.filterForm.value.examTypeId
     // let chartApiTopLowstu = 'GetDataForTopLowSchoolStudentChart';
-    let chartAPI = 'GetDashboardDataClassWise_StudentChart';    
+    // let chartAPI = 'GetDashboardDataClassWise_StudentChart';    
+    // let tableAPI = 'GetDashboardDataClassWise_StudentList';
+ 
+    let chartAPI = 'GetDashboardDataClassWise_StudentChart?StudentId='+this.selectedObj?.studentId+'&StandardId='+filterFormValue?.standardId+'&AssesmentSubjectId='+0+'&IsInspection='+this.inspectionBy.value+'&ExamTypeId='+(filterFormValue?.examTypeId || 0) +'&EducationYearId='+filterFormValue?.acYearId+'&lan=' + this.languageFlag;
+
+    let tableAPI = 'GetDataForTopLowSchoolStudentChart?GroupId=' + studentObj?.groupId + '&StudentId=' + studentObj?.studentId + '&AssesmentSubjectId=' + studentObj?.assesmentSubjectId + '&IsInspection='+this.inspectionBy.value+'&ExamTypeId=' + (filterFormValue?.examTypeId || 0) + '&EducationYearId=' + studentObj?.academicYearId + '&lan=' + this.languageFlag;
+    
     // let str = 'zp-satara/Dashboard/'+(this.dashboardObj?.label == "table" ? chartApiTopLowstu : chartAPI)+'?StudentId='+this.selectedObj?.studentId+'&StandardId='+standardId+'&EducationYearId='+AcademicYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+examTypeId+'&IsInspection='+this.inspectionBy.value+'&lan='
-    let str = 'zp-satara/Dashboard/'+chartAPI+'?StudentId='+this.selectedObj?.studentId+'&StandardId='+standardId+'&EducationYearId='+AcademicYearId+'&AssesmentSubjectId='+0+'&ExamTypeId='+examTypeId+'&IsInspection='+this.inspectionBy.value+'&lan='
-    this.apiService.setHttp('GET', str, false, false, false, 'baseUrl');
+    let str = this.dashboardObj?.label == "table" ? tableAPI : chartAPI;
+    
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/'+ str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any)=>{
-        if (res.statusCode == 200){
+        if (res.statusCode == "200"){
           this.webService.classWiseDataStudentAssList = res;
           this.webService.inspectionByValue = this.inspectionBy.value;
           this.langSubList = res.responseData?.responseData1.filter((x:any)=>{
@@ -314,7 +329,10 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
            return x.subjectId == 3
           });
           this.totalMarksInSub = res.responseData?.responseData3[0];
-          this.classwiseAsseTakenList = res.responseData?.responseData2
+          this.classwiseAsseTakenList = res.responseData?.responseData2;
+        }
+        else{
+          this.totalMarksInSub = null;
         }
       }
     });
@@ -386,18 +404,28 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   }
 
   getVillage() {
+    this.selectedCenter = this.centerArr.find((res: any) => this.filterForm.value.centerId ? this.filterForm.value.centerId == res.id : this.dashboardObj?.CenterId == res.id);
+
     this.villageArr = [];
-    if(this.filterForm.controls['centerId'].value > 0){
-      this.masterService.getAllVillage('', (this.filterForm.controls['centerId'].value | 0)).subscribe((res : any)=>{
-        this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-        this.filterForm.controls['villageId'].patchValue(0);
-        this.getAllSchoolsByCenterId();
+    let centerId = this.filterForm.value.centerId;
+    if(centerId != 0){
+      this.masterService.getAllVillage('', centerId).subscribe({
+        next : (res : any)=>{
+          if(res.statusCode == "200"){
+            this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.filterForm.controls['villageId'].patchValue(0);
+            this.getAllSchoolsByCenterId();
+          } else{
+            this.villageArr = [];
+          }
+        },
+        error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
     }
   }
 
   getAllSchoolsByCenterId() {    
-    this.selectedCenter = this.centerArr.find((res: any) => this.filterForm.value.centerId ? this.filterForm.value.centerId == res.id : this.dashboardObj?.CenterId == res.id);
+    this.selectedVillage = this.villageArr.find((res: any) => this.filterForm.value.villageId ? this.filterForm.value.villageId == res.id : this.dashboardObj?.VillageId == res.id);
     this.schoolArr = [];
     let Tid = this.filterForm.value.talukaId;
     let Cid = this.filterForm.value.centerId;
@@ -429,7 +457,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         if (res.statusCode == 200) {
           this.groupByClassArray = res.responseData.responseData2;
           this.groupByClassArray.splice(0, 1);
-          (this.dashboardObj && this.assessmentLevelId == '0' ) ? (this.filterForm.controls['groupByClass'].setValue(this.dashboardObj?.groupId), this.getStandard(), this.getSubject()) : this.filterForm.controls['groupByClass'].setValue(0), this.getStandard();
+          // (this.dashboardObj && this.assessmentLevelId == '0' ) ? (this.filterForm.controls['groupByClass'].setValue(this.dashboardObj?.groupId), this.getStandard(), this.getSubject()) : this.filterForm.controls['groupByClass'].setValue(0), this.getStandard();
         } else {
           this.groupByClassArray = [];
         }
@@ -441,11 +469,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
 
   getStandard() {
     this.groupID = this.filterForm.value.groupByClass || 0;
-    let groupId = this.groupID ? this.groupID : this.dashboardObj.groupId;
-    console.log("groupId : ", groupId);
-    console.log("languagaeFlag : ", this.languageFlag);
-    
-    
+    // let groupId = this.groupID ? this.groupID : this.dashboardObj.groupId;
+
     this.masterService.getAllStandard(0, 0, this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

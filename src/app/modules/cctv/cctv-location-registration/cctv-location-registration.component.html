@@ -45,7 +45,7 @@
                     </mat-select>
                 </mat-form-field>
             </div> -->
-            <div class="col-sm">
+            <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                     <mat-select formControlName="TalukaId" (selectionChange)="getAllCenter();clearDependency('TalukaId')">
@@ -54,7 +54,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Center</mat-label>
                     <mat-select formControlName="centerId" (selectionChange)="getVillage();clearDependency('centerId')">
@@ -63,7 +63,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.village'| translate}}</mat-label>
                     <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId();clearDependency('villageId')">
@@ -73,7 +73,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.school'| translate}}</mat-label>
                     <mat-select formControlName="SchoolId">
@@ -82,7 +82,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.CCTVLocation'| translate}}</mat-label>
                     <mat-select formControlName="cctvLocation">
@@ -91,9 +91,9 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>CCTV Name / CCTV Model</mat-label>               
+                    <mat-label>{{'Labels.CCTVNameCCTVModel'| translate}}</mat-label>               
                         <input matInput formControlName="textSearch" (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)" maxlength="100">               
                 </mat-form-field>
             </div>

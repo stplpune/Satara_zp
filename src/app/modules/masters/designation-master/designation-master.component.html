@@ -14,19 +14,6 @@
         <div class="d-flex fw-bold justify-content-between align-items-center w-100 flex-wrap">
             <span class="text-main mb-0">{{'Labels.DesignationLists' | translate}}</span>
             <div class="d-flex gap-2">
-                <!-- <button mat-flat-button class="btn-main btn-icon" [matMenuTriggerFor]="menu">
-                    <mat-icon>
-                        download
-                    </mat-icon>
-                </button>
-                <mat-menu #menu="matMenu" xPosition="before">
-                    <button mat-menu-item (click)="downloadPdf()">
-                        <div class="d-flex align-items-center justify-content-between w-100">
-                            <span>PDF</span>
-                            <i class='bx bxs-file-pdf text-danger'></i>
-                        </div>
-                    </button>
-                </mat-menu> -->
                 <button mat-flat-button class="bg-danger btn-icon text-white"
                     matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
                     matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
@@ -37,38 +24,109 @@
                     matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
-                <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateAgency()">
+                <!-- <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateAgency()">
                     <mat-icon>add</mat-icon>
                     {{'Labels.AddDesignation'| translate}}
-                </button>
+                </button> -->
             </div>
         </div>
     </mat-card-header>
-    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
-        <div class="row gx-2 w-100">
-            <div class="col-sm-3">
-                <!-- <mat-form-field appearance="outline" class="w-100">
-                <mat-label>{{'Labels.SelectDesignation'| translate}}</mat-label>
-                <mat-select [formControl]="searchContent">
-                    <mat-option *ngFor="let designation of DesiganationTypeArray" [value]="designation.id">
-                        {{webStorage.getLangauge() == 'EN' ? designation.designationType : designation.m_DesignationType}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field> -->
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label> {{'Labels.Designation' | translate}}</mat-label>
-                    <input matInput [formControl]="searchContent" (keyup.enter)="getTableData()">
-                </mat-form-field>
+    <mat-card-content class="card-body p-0">
+        <div class="row">
+            <div class="col-sm-8 border-end">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
+                        <div class="row gx-2 w-100">
+                            <div class="col-sm-4">
+                                <!-- <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{'Labels.SelectDesignation'| translate}}</mat-label>
+                                <mat-select [formControl]="searchContent">
+                                    <mat-option *ngFor="let designation of DesiganationTypeArray" [value]="designation.id">
+                                        {{webStorage.getLangauge() == 'EN' ? designation.designationType : designation.m_DesignationType}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> -->
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label> {{'Labels.Designation' | translate}}</mat-label>
+                                    <input matInput [formControl]="searchContent" (keyup.enter)="getTableData()">
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-auto mb-lg-0 mb-2">
+                                <button (click)="getTableData('filter')" mat-flat-button
+                                    class="btn-main">{{'Labels.filter' |
+                                    translate}}</button>
+                                <button mat-flat-button class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear' |
+                                    translate}}</button>
+                            </div>
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content class="card-body pt-0 pe-0">
+                        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
+                    </mat-card-content>
+                </mat-card>
             </div>
-            <div class="col-sm-auto mb-lg-0 mb-2">
-                <button (click)="getTableData('filter')" mat-flat-button class="btn-main">{{'Labels.filter' |
-                    translate}}</button>
-                <button mat-flat-button class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear' |
-                    translate}}</button>
+            <div class="col-sm-4">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header border-bottom-0 ps-0">
+                        <h6 class="text-main fw-bold my-2">
+                            {{(editFlag?'Labels.UpdateDesignation':'Labels.registerDesignation')| translate}}
+                        </h6>
+                    </mat-card-header>
+                    <form [formGroup]="designationForm" (ngSubmit)="OnSubmit()">
+                        <mat-card-content class="card-body ps-0">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <mat-form-field appearance="outline" class="w-100 ">
+                                    <mat-label>{{'Labels.DesignationLevel' | translate}}</mat-label>
+                                    <mat-select formControlName="designationLevelId"
+                                        (selectionChange)="clearDrop('designationLevelId')">
+                                        <mat-option *ngFor="let designation of DesiganationLevelData"
+                                            [value]="designation.id">{{webStorage.getLangauge() == 'EN' ?
+                                            designation.designationLevel : designation.m_DesignationLevel}}</mat-option>
+                                    </mat-select>
+                                    <!-- <mat-error
+                                        *ngIf="f['designationLevelId'].hasError('required') || f['designationLevelId'].hasError('touched')">Company
+                                        {{'Labels.DesignationLevelReq' | translate}}</mat-error> -->
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field appearance="outline" class="w-100 ">
+                                    <mat-label>{{'Labels.Designation' | translate}}</mat-label>
+                                    <input matInput formControlName="designationType" maxlength="30"
+                                        (keypress)="validation.noFirstSpaceAllow($event)">
+                                    <!-- <mat-error
+                                        *ngIf="f['designationType'].hasError('required') || f['designationType'].hasError('touched')">
+                                        {{'Labels.DesignationTypeReq' | translate}}</mat-error> -->
+                                    <mat-error
+                                        *ngIf="f['designationType'].hasError('pattern') || f['designationType'].hasError('touched')">
+                                        {{'Labels.InvalidDesignation' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-sm-12">
+                                <mat-form-field appearance="outline" class="w-100 ">
+                                    <mat-label>{{'Labels.Designation(Marathi)' | translate}}</mat-label>
+                                    <input matInput formControlName="m_DesignationType" maxlength="30"
+                                        (keypress)="validation.noFirstSpaceAllow($event);validation.unicodeMarathiAlphanumberic($event)">
+                                    <mat-error *ngIf="f['m_DesignationType'].hasError('pattern') ">
+                                        {{'Labels.DesignationTypeMarathiReq' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </mat-card-content>
+
+                    <mat-card-footer class="card-footer">
+                        <div class="d-flex w-100 justify-content-end align-items-center">
+                            <button mat-dialog-close mat-flat-button class="btn-second me-2">{{'Labels.clear' |
+                                translate}}</button>
+                            <button type="submit" mat-flat-button class="btn-main"> {{editFlag ?( 'Labels.update' | translate)
+                                :('Labels.submit' |
+                                translate)}}</button>
+                        </div>
+                    </mat-card-footer>
+                </form>
+                </mat-card>
             </div>
         </div>
-    </mat-card-header>
-    <mat-card-content class="card-body pt-0">
-        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
     </mat-card-content>
+
 </mat-card>

@@ -278,7 +278,7 @@ export class OutwardItemComponent {
     let formData = this.filterForm.value;
     let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
 
-    let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&pageno=1&pagesize=${this.totalItem * 10}&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
+    let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=${this.totalItem * 10}&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
 
     this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?' + ((status == 'excel' || status == 'pdfFlag') ? excel : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

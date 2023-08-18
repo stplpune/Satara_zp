@@ -68,8 +68,9 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.SellPrice'| translate}}</mat-label>
-                        <input matInput formControlName="sellprice" (keypress)="Validation.noFirstSpaceAllow($event);Validation.onlyDigits($event)"
+                        <input matInput formControlName="sellprice" (keypress)="Validation.noFirstSpaceAllow($event);Validation.NumericWithDot($event)"
                         maxlength="20">
+                        <mat-error *ngIf="f['sellprice'].hasError('pattern')">Invalid Sell Price</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">

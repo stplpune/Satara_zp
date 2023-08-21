@@ -577,9 +577,11 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.filterForm.controls['acYearId'].patchValue(this.educationYear)
     this.dashboardObj = '';
     this.schoolArr = [];
+    this.villageArr = [];
     this.standardArr = [];
     this.subjectArr = [];
     this.selectedCenter = '';
+    this.selectedVillage = '';
     this.selectedTaluka = '';
     this.selectedShcool = '';
     this.getTaluka();
@@ -587,6 +589,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.filterForm.controls['groupByClass'].patchValue(1)
     this.filterForm.controls['examTypeId'].patchValue(0)
     this.filterForm.controls['StandardId'].patchValue(0)
+    this.filterForm.controls['villageId'].patchValue(0)
 
     // this.getTableData();
   }

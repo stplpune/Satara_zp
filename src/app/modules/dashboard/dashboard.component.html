@@ -524,7 +524,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of tableDataTopPerformance; let j=index" class="highlightedRow"
+                                    <tr *ngFor="let item of tableDataTopPerformance; let j=index"
                                         (click)="onStudentDetails(j, 'topPerformance')">
                                         <td><img class="table-img"
                                                 src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
@@ -539,7 +539,7 @@
                                                 [class]="item['passPercentage'] <= 50 ? 'table-cell bg-red' : (item['passPercentage'] > 50 && item['passPercentage'] <= 60) ? 'table-cell bg-orange' : (item['passPercentage'] > 60 && item['passPercentage'] <= 80) ? 'table-cell bg-dark-orange' :'table-cell bg-green'">{{item['passPercentage']}}%</span>
                                         </td>
                                     </tr>
-                                    <tr *ngIf="tableDataTopPerformance?.length ==0" class="highlightedRow">
+                                    <tr *ngIf="tableDataTopPerformance?.length ==0">
                                         <td colspan="12">
                                             <div class="alert alert-danger text-center py-2 mb-0 mt-1">
                                                 {{'Labels.dataNotFound' | translate}}

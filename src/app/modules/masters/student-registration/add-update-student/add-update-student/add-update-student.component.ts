@@ -357,10 +357,9 @@ export class AddUpdateStudentComponent {
       this.gardianModelArr[i].isHead = false;
       this.gardianModelArr[i].id == 0 ? this.gardianModelArr.splice(i, 1) : ''
     }
-    else{
+    else{    
       this.gardianModelArr.splice(i, 1);
     }
-   
     
   }
 
@@ -725,7 +724,10 @@ export class AddUpdateStudentComponent {
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
     
-    let isAtlstoneHead = this.gardianModelArr.some((item: any) => (item.isHead == true));
+    // let isAtlstoneHead = this.gardianModelArr.some((item: any) => (item.isHead == true)); //p
+
+
+
     // let isAtlstDeletFlag = this.gardianModelArr.some((item: any) => (item.isDeleted === false));
 
     if (this.stuRegistrationForm.invalid) {
@@ -735,10 +737,11 @@ export class AddUpdateStudentComponent {
       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
 
-    }else if(this.gardianModelArr.length > 0 && !isAtlstoneHead){
-      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please checkmark Atleast One Head In Gardian Details.' : 'कृपया पालक तपशीलांमध्ये किमान एक हेड चिन्हांकित करा', 1);
-      return
     }
+    // else if(this.gardianModelArr.length > 0 && !isAtlstoneHead){
+    //   this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please checkmark Atleast One Head In Gardian Details.' : 'कृपया पालक तपशीलांमध्ये किमान एक हेड चिन्हांकित करा', 1);
+    //   return
+    // }
      else {
       
       // if (!this.uploadAadhaar) { //!this.uploadImg || 

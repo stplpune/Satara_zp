@@ -32,7 +32,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   dashboardCountData = new Array();
   tableColumn = new Array();
   barChartData = new Array();
-  stackbarChartData = new Array();
   showBarChartF: boolean = false;
   selectedObj!: object | any;
   barChartByTalukaData = new Array();
@@ -1004,14 +1003,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
               const index = this.stackbarchartOptionsByClass.xaxis.subjects.findIndex((i: any) => (console.log(i), i == this.selectedbar));
               
-              const data = this.stackbarChartDataByClass.find((x: any) =>
-                (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
-                (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
+              // const data = this.stackbarChartDataByClass.find((x: any) =>
+              //   (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
+              //   (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
                 
-                console.log("datadata",data);
+              const data = this.stackbarChartDataByClass.find((x: any) =>
+              (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
+              (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
+              const examTypeId = this.stackbarchartOptionsByClass.xaxis.examSet[config?.dataPointIndex]
+
+                console.log("datadata",examTypeId);
                 
               this.selectedBarstatus = 'stack';
-              const examTypeId = 0;
               this.passingParameters(data, examTypeId)
             }
           }

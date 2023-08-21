@@ -47,9 +47,9 @@
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{'Labels.year' | translate}}</mat-label>
           <mat-select [formControl]="yearId">
-            <mat-option *ngFor="let data of year" [value]="data.id">
+            <mat-option *ngFor="let data of YearArr" [value]="data.year">
               {{webStorage.getLangauge() == 'EN' ?
-              data.year : data.Mname}}
+              data.year : data.m_Year}}
             </mat-option>
           </mat-select>
         </mat-form-field>

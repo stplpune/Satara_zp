@@ -20,7 +20,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class HoildayMasterComponent {
   displayedheadersEnglish = ['Sr. No.', 'Year', ' Holiday Name', 'Holiday Date', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'वर्ष', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
-  tableresp= new Array();
+  tableresp = new Array();
   viewStatus = 'Table';
   langTypeName: any;
   totalItem: any;
@@ -31,6 +31,7 @@ export class HoildayMasterComponent {
   totalCount: any;
   filterFlag: boolean = false;
   resultDownloadArr = new Array();
+  YearArr = new Array();
   constructor(public dialog: MatDialog,
     private errors: ErrorsService,
     private apiService: ApiService,
@@ -48,6 +49,7 @@ export class HoildayMasterComponent {
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.setTableData();
+      this.getAllYear();
     });
   }
 
@@ -57,6 +59,17 @@ export class HoildayMasterComponent {
     { id: 2025, year: '2025', Mname: '२०२५' },
     { id: 2026, year: '2026', Mname: '२०२६' },
   ]
+
+  getAllYear() {
+    this.apiService.setHttp('GET', 'zp-satara/master/GetAllYear', false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.YearArr = res.responseData;
+        }
+      }
+    });
+  }
 
   openDialog(data?: any) {
     const dialogRef = this['dialog'].open(AddHoildayMasterComponent, {
@@ -97,8 +110,8 @@ export class HoildayMasterComponent {
     let yearID = this.yearId.value;
     let textsearch = this.textsearch.value?.trim();
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
-    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
-    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan='+this.webStorage.languageFlag
+    let pdf = 'Year=' + (yearID || 0) + '&pageno=' + 1 + '&pagesize=' + this.totalCount + '&TextSearch=' + (textsearch || "") + '&lan=' + this.webStorage.languageFlag
+    let str = 'Year=' + (yearID || 0) + '&pageno=' + this.pageNumber + '&pagesize=10&TextSearch=' + (textsearch || "") + '&lan=' + this.webStorage.languageFlag
     this.apiService.setHttp('GET', 'zp-satara/HolidayMaster/GetAllHoliday?' + (status == 'pdf' ? pdf : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -113,7 +126,7 @@ export class HoildayMasterComponent {
           // status == 'pdf' ? this.pdfDownload(data) : '';
 
           let data: [] = (status == 'pdf' || status == 'excel') ? res.responseData.responseData1 : [];
-          status == 'pdf' ? this.pdfDownload(data,'pdf') : status == 'excel' ? this.pdfDownload(data,'excel') :'';  
+          status == 'pdf' ? this.pdfDownload(data, 'pdf') : status == 'excel' ? this.pdfDownload(data, 'excel') : '';
         } else {
           this.ngxSpinner.hide();
           this.tableresp = [];
@@ -127,7 +140,7 @@ export class HoildayMasterComponent {
 
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'year', this.langTypeName == 'English'?'holidayName':'m_HolidayName', 'holidayDate', 'action'];
+    let displayedColumns = ['srNo', 'year', this.langTypeName == 'English' ? 'holidayName' : 'm_HolidayName', 'holidayDate', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
@@ -138,7 +151,7 @@ export class HoildayMasterComponent {
       tableData: this.tableresp,
       tableSize: this.totalItem,
       edit: true, delete: true,
-      date:'holidayDate',
+      date: 'holidayDate',
       // tableHeaders: displayedColumnsReadMode,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
     };
@@ -192,13 +205,13 @@ export class HoildayMasterComponent {
     });
   }
 
-  pdfDownload(data: any,flag:any) {
+  pdfDownload(data: any, flag: any) {
     data.map((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
         "Year": ele.year,
         "Holiday Name": ele.holidayName,
-        "Holiday Date":this.datepipe.transform( ele.holidayDate, 'dd-MM-yyyy'),
+        "Holiday Date": this.datepipe.transform(ele.holidayDate, 'dd-MM-yyyy'),
       }
       this.resultDownloadArr.push(obj);
     });
@@ -214,7 +227,7 @@ export class HoildayMasterComponent {
     }
     let headerKeySize = [7, 15, 20, 30, 40,]
     // this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
-    flag == 'pdf' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+    flag == 'pdf' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
   }
 
   clearFilterData() {

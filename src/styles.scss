@@ -179,7 +179,7 @@ body {
 .dashboard-table button mat-icon {
   font-size: 18px !important;
 }
-
+.dashboard-table tbody tr:hover,
 .dashboard-table .mat-mdc-row:hover,
 .dashboard-table .highlightedRow {
   background-color: #eee !important;

@@ -168,7 +168,7 @@ export class OutwardItemComponent {
     // let Cid = this.filterForm.controls['centerId'].value || 0;
     let Tid = this.filterForm.value.talukaId;
     let Cid = this.filterForm.value.centerId || 0;
-    let Vid = 0;
+    let Vid = this.filterForm.value.villageId || 0;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

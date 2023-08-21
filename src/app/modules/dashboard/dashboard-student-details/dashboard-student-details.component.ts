@@ -471,7 +471,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.groupID = this.filterForm.value.groupByClass || 0;
     // let groupId = this.groupID ? this.groupID : this.dashboardObj.groupId;
 
-    this.masterService.getAllStandard(0, 0, this.languageFlag).subscribe({
+    this.masterService.getAllStandard(0, 0, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.standardArr = [];

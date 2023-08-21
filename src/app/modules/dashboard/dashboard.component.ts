@@ -364,7 +364,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       EducationYearId: formData?.acYearId | 0,
       asessmwntLavel: this.asessmwntLavel.value,
       StandardId: this.selectedObjByClass?.standardId,
-      ExamTypeId: this.asessmwntLavel.getRawValue()=='0'?examTypeId: formData?.examTypeId,
+      ExamTypeId: examTypeId,
       // ExamTypeId: examTypeId,//formData?.examTypeId,
       questionId: this.selectedBarstatus == "stack" ? data?.questionId : data?.questionId
     }
@@ -952,7 +952,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   constructStackBarChartByClass() {
     const subjectSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.question))];    //separte unique subjectlist
     const subjectSet_m = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
-    // const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
+    const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
     const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
         // this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
         this.graphSubjectDataByClass = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
@@ -976,10 +976,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       })
       dataArray.push(dataObjArray);
     }) 
-    this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet, this.selectedLang == 'English' ? subjectSet : subjectSet_m)
+    this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet, this.selectedLang == 'English' ? subjectSet : subjectSet_m, examIdSet)
   }
   /// --- stack bar for class level 
-  constructSatackChartByCLass(seriesData: any, categoryData: any, sub:any) {
+  constructSatackChartByCLass(seriesData: any, categoryData: any, sub:any, examIdSet: any) {
     this.stackbarchartOptionsByClass = {
       series: [...seriesData],
       chart: {
@@ -1046,6 +1046,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           show: true,
         },
         subjects:sub,
+        examSet: examIdSet,
         categories: categoryData,
         parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
       },

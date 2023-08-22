@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-// import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -23,11 +23,11 @@ export class ShareEventForAndroidComponent {
     private commonMethod: CommonMethodsService,
     private errors: ErrorsService,
     public webStorageS: WebStorageService,
-    // private router: Router,
+    private router: Router,
   ) {
-    // let queryparams = this.router.url.split('/')[2];
-    // let params: any = queryparams.split('&');
-    // this.data = params 
+    let queryparams = this.router.url.split('/')[2];
+    let params: any = queryparams.split('&');
+    this.data = params 
   }
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class ShareEventForAndroidComponent {
 
   getEventById() {
     this.ngxSpinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetEventById?EventId=' + 31, false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetEventById?EventId=' + this.data?.[0], false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         this.ngxSpinner.hide();

@@ -36,7 +36,7 @@ export class ShareEventForAndroidComponent {
 
   getEventById() {
     this.ngxSpinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetEventById?EventId=' + this.data?.[0], false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/SchoolEvent/GetEventById?EventId=' + this.data[0], false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         this.ngxSpinner.hide();

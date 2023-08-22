@@ -166,6 +166,7 @@ export class AddUpdateSchoolRegistrationComponent {
       next: (res: any) => {
         res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
         this.editFlag ? (this.f['talukaId'].setValue(this.data.talukaId), this.getBitOrCenter()) : '';
+        this.data?.isKendraSchool == true ? this.getVillage() : ''
       }
     });
   }
@@ -181,7 +182,8 @@ export class AddUpdateSchoolRegistrationComponent {
 
   getVillage() {
     let cId = this.schoolRegForm.value.centerId;
-    this.masterService.getAllVillage(this.webStorageS.languageFlag, cId).subscribe({
+    let tId = this.schoolRegForm.value.talukaId;
+    this.masterService.getAllVillage(this.webStorageS.languageFlag,this.isKendra ? tId : cId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
         this.editFlag ? (this.f['villageId'].setValue(this.data.villageId), this.getSchoolType()) : '';
@@ -389,6 +391,8 @@ export class AddUpdateSchoolRegistrationComponent {
 
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
   onEdit() {
+    console.log("data",this.data);
+    
     this.editFlag = true;
     this.docArray = [];
     this.schoolRegForm.controls['uploadImage'].setValue(this.data?.uploadImage);

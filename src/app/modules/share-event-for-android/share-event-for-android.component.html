@@ -50,11 +50,14 @@
                             <span class=" form-label pe-1">{{eventData?.[0].totalComment}}</span>
                         </div>
                     </div>
+                    <div class="text-end">
+                        <span class="small mb-0">- {{'Rahul Mistari'}}</span>
+                    </div>
                     <div class="row form-container gx-2 mt-2">
                         <div class="text-end" *ngIf="eventData?.[0].postedBy">
                             - {{eventData?.[0].postedBy}}
                         </div>
-                        <h6 class="text-main fw-bold mb-0">Description</h6>
+                        <!-- <h6 class="text-main fw-bold mb-0">Description</h6> -->
                         <div class="col-sm-12 col-12">
                             <p class="form-data">{{ eventData?.[0].description}}</p>
                         </div>

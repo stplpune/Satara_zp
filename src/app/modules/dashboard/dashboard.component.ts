@@ -441,7 +441,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   constructBarChart() {
     const filterData = this.barChartData.filter((x: any) => (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName) == this.subjectforBar.value)
-
     const barSubjectSet = [...new Set(filterData.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName))];
 
     const testSet = [...new Set(filterData.map((sub: any) => sub.examTypeId))];
@@ -1251,21 +1250,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   onStudentDetails(index: number, label: string) {
     if (this.asessmwntLavel.value == '1') {
-      let schoolId;
-      if (label == 'topPerformance') {
-        schoolId = this.tableDataTopPerformance[index].schoolId;
-      }
-      else if (label == 'lowPerformance') {
-        schoolId = this.tableDataLowPerformance[index].schoolId;
-      }
       const formData = this.filterForm.value;
       const formValue = this.filterFormForBarGraph.value;
       this.SharingObject = {
-        groupId: this.asessmwntLavel.value == '1' ? this.selectedObj?.groupId | 0 : 0,
-        TalukaId: formData?.talukaId | 0,
-        CenterId: formData?.centerId | 0,
-        VillageId: formData?.villageId | 0,
-        SchoolId: schoolId,
+        groupId: 0,
+        TalukaId: label == 'topPerformance' ? this.tableDataTopPerformance[index].talukaId : this.tableDataLowPerformance[index].talukaId,
+        CenterId: label == 'topPerformance' ? this.tableDataTopPerformance[index].centerId : this.tableDataLowPerformance[index].centerId,
+        VillageId: label == 'topPerformance' ? this.tableDataTopPerformance[index].villageId : this.tableDataLowPerformance[index].villageId,
+        SchoolId: label == 'topPerformance' ? this.tableDataTopPerformance[index].schoolId : this.tableDataLowPerformance[index].schoolId,
         SubjectId: formValue?.subjectId | 0,
         ExamTypeId: formValue?.examId | 0,
         EducationYearId: formData?.acYearId | 0,

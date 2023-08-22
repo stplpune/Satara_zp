@@ -161,51 +161,6 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
 
 
   getTableData(flag?: any) {
-    // this.ngxSpinner.show();
-    // this.pageNumber = flag == 'filter' ? 1 : this.pageNumber
-    // let TalukaId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.TalukaId;
-    // let CenterId = flag == 'filter' ? this.filterForm.value?.centerId : this.dashboardObj?.CenterId;
-    // let SchoolId = flag == 'filter' ? this.filterForm.value?.schoolId : this.dashboardObj?.SchoolId;    
-    // let StandardId = flag == 'filter' ? this.filterForm.value?.standardId : ((this.dashboardObj?.standardArray?.length >= 2) && (this.dashboardObj.asessmwntLavel == "0")) ? 0 : this.filterForm.value?.standardId;
-
-    // let SubjectId = flag == 'filter' ? this.filterForm.value?.subjectId : this.dashboardObj?.SubjectId;
-    // let AcademicYearId = flag == 'filter' ? this.filterForm.value?.acYearId : this.dashboardObj?.EducationYearId;
-    // // let lan = this.webService.languageFlag;
-    // let GroupId = this.groupID ? this.groupID : this.dashboardObj ? this.dashboardObj?.groupId : 1;
-    // // let examTypeId = this.dashboardObj?.ExamTypeId ? this.dashboardObj?.ExamTypeId : 0
-    // let examTypeId = flag == 'filter' ? this.filterForm.value?.examTypeId : this.dashboardObj?.ExamTypeId;
-    // let questionId = this.dashboardObj?.questionId ? this.dashboardObj?.questionId : 0;
-
-    // let studentApi = 'GetDashboardDataStudentListForCommon'    
-    // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined)  ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId='+AcademicYearId + '&ExamTypeId='+examTypeId+'&lan='
-    // let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId='+StandardId+'&SubjectId=' + (SubjectId || 0) + '&QuestionId='+questionId+'&OptionGrade=' + ((this.dashboardObj && flag == undefined)  ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId='+examTypeId+'&AcademicYearId='+AcademicYearId+'&lan='
-    
-    // this.apiService.setHttp('GET', (this.assessmentLevelId == '0') ? basicStr: classStr, false, false, false, 'baseUrl');
-    // this.apiService.getHttp().subscribe({
-    //   next: (res: any) => {
-    //     if (res.statusCode == 200 && res.responseData.responseData1.length) {
-    //       this.ngxSpinner.hide();
-    //       this.tableDataArray = res.responseData.responseData1;
-    //       this.totalCount = res.responseData?.responseData2?.pageCount || 0;
-          
-    //       let obj = this.tableDataArray[0];
-    //       obj.subjectId = flag == 'filter' ? this.filterForm.value.subjectId : this.dashboardObj?.SubjectId;
-    //       this.selectedObj = obj;          
-    //       (res.responseData.responseData1.length && this.assessmentLevelId == '1') ? this.loadClassWisetable() : '';
-    //       this.getSubjectData();
-    //       //this.getLineChartDetails();
-    //     } else {
-    //       this.ngxSpinner.hide();
-    //       this.tableDataArray = [];
-    //       this.totalCount = 0;
-    //       this.data = ''
-    //       this.selectedObj = '';
-    //     }
-    //     this.setTableData();
-    //   },
-    //   error: ((err: any) => { this.ngxSpinner.hide(); this.errors.handelError(err.statusCode) })
-    // });
-
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let TalukaId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.TalukaId;
@@ -227,7 +182,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
       this.getAllSchoolsByCenterId();
       let studentApi = 'GetDataForTopLowSchoolStudentList'
       // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0)+'&StandardId='+(flag == 'filter' ? this.filterForm.value?.standardId : 0)+'&AssessmentTypeId='+(AssessmentTypeId == 0? 1: 2)  + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId +'&OptionId='+questionId;
-      let basicStr = 'zp-satara/Dashboard/' + studentApi +  '?GroupId='+(flag == 'filter' ? this.filterForm.value?.groupByClass : 0) + '&TalukaId=' + TalukaId+'&CenterId=' + CenterId + '&VillageId=' + villageId + '&SchoolId=' + SchoolId + '&SubjectId=' + SubjectId + '&OptionId=' + optionId + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId + '&lan=' + this.languageFlag;
+      let basicStr = 'zp-satara/Dashboard/' + studentApi +  '?GroupId=0' + '&TalukaId=' + TalukaId+'&CenterId=' + CenterId + '&VillageId=' + villageId + '&SchoolId=' + SchoolId + '&SubjectId=' + SubjectId + '&OptionId=' + optionId + '&ExamTypeId=' + examTypeId + '&AcademicYearId=' + AcademicYearId + '&lan=' + this.languageFlag;
       
       this.apiService.setHttp('GET', basicStr, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({

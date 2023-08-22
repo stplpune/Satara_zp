@@ -46,7 +46,7 @@ export class AddTasksheetComponent {
       this.AttType = 1
     }else if (this.data.checkOutTime == null && this.data.checkInTime != null ){     
       this.AttType = 2
-    }else if(this.data.checkInTime == null &&  this.data.checkOutTime == null ){   
+    }else if((this.data.checkInTime == null &&  this.data.checkOutTime == null) || (this.data.checkInTime != null &&  this.data.checkOutTime != null ) ){   
       this.AttType = 3
     }
     

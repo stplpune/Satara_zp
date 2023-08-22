@@ -46,7 +46,7 @@ export class ShareEventForAndroidComponent {
           this.imgArray = []
           this.imgArray = this.eventData?.[0]?.eventImages.map((x: any) => {
             return x.docPath
-          })
+          });
           this.ngxSpinner.hide();
         }
         else {

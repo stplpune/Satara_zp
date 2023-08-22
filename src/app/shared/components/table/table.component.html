@@ -26,11 +26,12 @@
                         <ng-container *ngIf="tableInfo?.checkBox == columns">
                             <mat-checkbox [disabled]="tableInfo?.isWriteRight == false" id="checkbox2"
                                 [checked]="tableInfo.tableData[i]?.writeRight"
-                                (change)="action(element, 'checkBox', $event, 'writeCheck')"></mat-checkbox>
+                                (change)="action(element, 'checkBox', $event, 'writeCheck')"></mat-checkbox> {{tableInfo.tableData[i]?.writeRight}}
                             <label for="checkbox2" class="pb-0">W</label>
+
                             <mat-checkbox [disabled]="tableInfo?.isWriteRight == false" id="checkbox1"
-                                [checked]="tableInfo.tableData[i]?.readRight"
-                                (change)="action(element, 'checkBox', $event, 'readCheck')"></mat-checkbox>
+                                [checked]="tableInfo.tableData[i]?.readRight" 
+                                (change)="action(element, 'checkBox', $event, 'readCheck')"></mat-checkbox> {{tableInfo.tableData[i]?.readRight}}
                             <label for="checkbox1" class="pb-0">R</label>
                         </ng-container>
                     </div>

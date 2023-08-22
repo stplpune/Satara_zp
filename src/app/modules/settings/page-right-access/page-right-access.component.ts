@@ -150,7 +150,7 @@ export class PageRightAccessComponent {
     this.DesignationArr = [];
   }
 
-  childCompInfo(obj: any) {    
+  childCompInfo(obj: any) {        
     switch (obj.label) {
       case 'Pagination':
         this.pageNumber = obj.pageNumber;
@@ -162,8 +162,8 @@ export class PageRightAccessComponent {
           "id": obj.id,
           "userTypeId": this.userRightFrm.value.userType,
           "subUserTypeId": this.userRightFrm.value.subUserType,
-          "readRight": obj?.readRight != null  ? obj?.readRight : false,
-          "writeRight":obj?.writeRight != null ?  obj?.writeRight : false,
+          "readRight": obj?.readRight == null  ? false  : obj?.readRight,
+          "writeRight":obj?.writeRight == null ?  false :obj?.writeRight,
           "pageId": obj.pageId
         }]
         this.apiService.setHttp('post', 'api/UserPages/AddRecord', false, req, false, 'baseUrl');

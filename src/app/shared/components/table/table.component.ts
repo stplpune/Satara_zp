@@ -85,6 +85,7 @@ export class TableComponent implements OnInit {
 
   action(obj: any, label: string, i?: any, chkLabel?:any) { 
     label == 'checkBox' ? (chkLabel == 'readCheck' ? obj.readRight = i.checked : (i.checked == true ? (obj.writeRight = i.checked, obj.readRight = i.checked) : obj.writeRight = i.checked)) : this.highlightedRow = i;
+    // label == 'checkBox' ? (chkLabel == 'readCheck' ? (i.checked == true ? (obj.readRight = i.checked, obj.writeRight = false) : (obj.readRight = i.checked, obj.writeRight = false)) : (i.checked == true ? (obj.writeRight = i.checked, obj.readRight = i.checked) : obj.writeRight = i.checked)) : this.highlightedRow = i;
     obj.label = label;
     obj.pageNumber = (label == 'Edit' || label == 'Block' || label == 'View' ) ? this.pageNumber : obj.pageIndex + 1;
     this.pageIndex = obj.pageNumber;      

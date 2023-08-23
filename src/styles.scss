@@ -708,6 +708,15 @@ body {
     height: 65vh;
     width: 230px !important;
   }
+  #share-card img{
+    width: 100% !important;
+    height: 180px !important;
+  }
+  #share-card .carousel-control-prev-icon,
+  #share-card .carousel-control-next-icon{
+    width: 20px !important;
+    height: 20px !important;
+  }
 }
 
 

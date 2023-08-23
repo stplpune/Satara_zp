@@ -76,12 +76,13 @@
                        {{tableInfo.tableData[i]?.isApproved == 1 ? 'Approved' : 'Approve'}}
                     </button>
 
-                    <!-- <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.attendance != 'Absent' || this.submitFlag == true ? '':'btn-main ms-2'"
-                    [disabled]="tableInfo.tableData[i]?.attendance != 'Absent'  || this.submitFlag == true " (click)="action(element,'apply')">
+                    
+                    <!-- <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo?.isSubmitted == true || tableInfo.tableData[i].isManualCheckIn == 1 || tableInfo.tableData[i].isManualCheckOut == 1 ? '':'btn-main ms-2'"
+                    [disabled]="tableInfo?.isSubmitted == true || tableInfo.tableData[i].isManualCheckIn == 1 || tableInfo.tableData[i].isManualCheckOut == 1" (click)="action(element,'apply')">
                        {{'Labels.apply' | translate}}
                     </button> -->
-                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo?.isSubmitted == true || tableInfo.tableData[i].isManualCheckIn == 1 || tableInfo.tableData[i].isManualCheckOut == 1 ? '':'btn-main ms-2'"
-                    [disabled]="tableInfo?.isSubmitted == true || tableInfo.tableData[i].isManualCheckIn == 1 || tableInfo.tableData[i].isManualCheckOut == 1" (click)="action(element,'apply')">
+                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo?.isSubmitted == true  ? '':'btn-main ms-2'"
+                    [disabled]="tableInfo?.isSubmitted == true " (click)="action(element,'apply')">
                        {{'Labels.apply' | translate}}
                     </button>
                     

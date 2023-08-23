@@ -17,6 +17,7 @@
         "Present":"Present",
         "Absent":"Absent",
         "Updateattendence":"Update Attendence",
+        "applyattendence": "Apply Attendance", 
         "HolidayRegistration":"Holiday Registration",
         "apply":"Apply",
         "selectDate":"Select Date",

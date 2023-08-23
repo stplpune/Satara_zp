@@ -2,7 +2,6 @@
     <mat-drawer #drawer mode="over" position="end">
         <mat-card class="plain-card">
             <mat-card-header class="card-header pb-0">
-
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <h6 class="text-main mb-0 fw-bold">{{'Labels.filterclick' | translate}}</h6>
                     <button mat-icon-button class="btn-modal-close" mat-dialog-close
@@ -104,13 +103,12 @@
                         <!-- {{'Labels.dashboard' | translate}}  -->
                         <span class="mt-2">
                             {{(webStorage.languageFlag == 'EN'?'Dashboard':'डॅशबोर्ड')}} {{filterForm.value.talukaId ?
-                            (' / '+ (webStorage.languageFlag == 'EN'?'Osmanabad':'उस्मानाबाद')) : ''}}
+                            (' / '+ (webStorage.languageFlag == 'EN'?'Satara':'सातारा')) : ''}}
                             {{(f['talukaId'].value? (' > '+(webStorage.languageFlag ==
                             'EN'?selectedTaluka?.taluka:selectedTaluka?.m_Taluka)):'') +
                             (f['centerId'].value? (' > '+(webStorage.languageFlag ==
                             'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') + (f['schoolId'].value? (' >
-                            '+(webStorage.languageFlag ==
-                            'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + (f['examTypeId'].value?
+                            '+(webStorage.languageFlag == 'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + (f['examTypeId'].value?
                             (' > '+(webStorage.languageFlag ==
                             'EN'?selectedexamType?.examType:selectedexamType?.m_ExamType)): '')}}</span>
                         <div class="d-flex gap-2">

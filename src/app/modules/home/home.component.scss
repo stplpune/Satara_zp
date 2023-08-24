@@ -46,6 +46,7 @@ nav .navbar-nav .nav-link.active {
     align-items: center;
 }
 
+.ministers h1,
 .header h1 {
     font-size: 3rem;
     font-weight: 700;
@@ -63,29 +64,19 @@ nav .navbar-nav .nav-link.active {
     color: var(--main-color);
 }
 
-.ministers .card {
-    border-color: #fff;
-    background: rgb(245, 166, 58);
-    background: linear-gradient(180deg, rgba(245, 166, 58, 1) 45%, rgba(255, 255, 255, 1) 45%);
-    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+.ministers .plain-card {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
 }
 
-.ministers .card:hover {
-    box-shadow: none;
-    border-color: #bbb;
+.ministers .plain-card:hover {
+    border: 2px solid #586de6;
+    box-shadow:rgba(4, 9, 11, 0.338) 0px 2px 16px 0px !important;
+    transform: translateY(-2px);
+    cursor: pointer;
 }
 
 .ministers .card-body {
     text-align: center;
-    padding: 4rem 1rem 2rem 1rem;
-}
-
-.ministers .left {
-    border-radius: 8px 35px;
-}
-
-.ministers .right {
-    border-radius: 35px 8px;
 }
 
 .ministers .minister-img {
@@ -95,6 +86,7 @@ nav .navbar-nav .nav-link.active {
 
 .ministers h6 {
     font-weight: 700;
+    color: #1A1F25;
 }
 
 .ministers p {

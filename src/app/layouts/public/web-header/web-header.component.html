@@ -1,56 +1,78 @@
-<nav class="navbar mb-5 p-2  px-0 navbar-expand-lg shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <!-- <img src="../../../assets/images/home-page/Shikshan_Darpan_Logo.svg" class="logo"> -->
-            <img src="../../../assets/images/Zp-satara-home.svg" class="logo">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-            aria-controls="offcanvasNavbar">
-            Menu
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
-            aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title text-center" id="offcanvasNavbarLabel">Navigation Menu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body d-flex align-items-center">
-
-                <ul class="navbar-nav justify-content-start flex-grow-1  align-items-center ">
-                    <li class="nav-item ">
-                        <a class="nav-link" aria-current="page" routerLinkActive="active" routerLink="/home">Home</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" routerLinkActive="active" routerLink="/about-us">About Us</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" routerLinkActive="active" routerLink="/contact-us">Contact Us</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" routerLinkActive="active" routerLink="/help">Help</a>
-                    </li>
-                </ul>
-                <div class="d-flex right-logo gap-4 flex-column-sm">
-
-                    <!-- <div class="d-flex flex-column order-1 order-lg-0">
-                        <small style="font-size: 0.7rem;" class="mb-1">Sponsored By</small>
-                        <img src="../../../assets/images/sponseredby.png" style="width:150px">
-                    </div> -->
-                    <div class=" order-2 order-lg-1">
-                        <img src="../../../assets/images/home-page/azadi_amrut_mahotsav_1.png" class="azadi-logo">
-                    </div>
-                    <div class=" order-3 order-lg-2">
-                        <img src="../../../assets/images/home-page/Swachh_Bharat_Mission_Logo.png"
-                            class="swachh-bhara-logo ">
-                    </div>
-                    <div class="mb-0 order-0 order-lg-3">
-                        <button class="btn-login btn btn-main d-flex align-items-center" routerLink="../login">
-                            Login
-                        </button>
+<div class="header-topbar">
+    <div id="topbar" class="container-fluid">
+        <div class="container">
+            <div  class="row justify-content-end">
+                <div class="col-sm-auto text-end px-0">
+                    <div class="d-flex align-items-center justify-content-center w-100">
+                        <div class="top-content border-end">
+                            <a style="cursor: grab;">Skip to Main Content</a></div>
+                        <div class="top-content border-end">
+                            <button class="btn-color btn-main"></button>
+                            <button class="btn-color btn-blue"></button>
+                            <button class="btn-color btn-black"></button>
+                        </div>
+                        <div class="top-content">
+                            <div role="group" aria-label="Basic radio toggle button group" class="btn-group ms-2">
+                                <input type="radio" name="btnradio" id="btnEnglish" autocomplete="off" class="btn-check">
+                                <label for="btnEnglish" class="btn btn-outline-language">English</label>
+                                <input type="radio" name="btnradio" id="btnMarathi" autocomplete="off" class="btn-check">
+                                <label _ngcontent-fna-c13="" for="btnMarathi" class="btn btn-outline-language">Marathi</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</nav>
+    <nav class="navbar p-2 navbar-expand-lg shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="../../../../assets/images/ZpSatara-Logo.svg" width="80px" height="50px" class="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                Menu<span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title text-center" id="offcanvasNavbarLabel">Navigation Menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body d-flex align-items-center">
+                    <ul class="navbar-nav justify-content-center flex-grow-1  align-items-center ">
+                        <li class="nav-item ">
+                            <a class="nav-link" aria-current="page" routerLinkActive="active" routerLink="/home">Home</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" routerLinkActive="active" routerLink="/about-us">About Us</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" routerLinkActive="active" routerLink="/contact-us">Contact Us</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" routerLinkActive="active" routerLink="/help">Help</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex right-logo gap-4 flex-column-sm">
+                        <div class=" order-2 order-lg-1">
+                            <img src="../../../assets/images/home-page/azadi_amrut_mahotsav_1.png" class="azadi-logo">
+                        </div>
+                        <div class=" order-3 order-lg-2">
+                            <img src="../../../assets/images/home-page/Swachh_Bharat_Mission_Logo.png"
+                                class="swachh-bhara-logo ">
+                        </div>
+                        <div class="mb-0 order-0 order-lg-3">
+                            <button class="btn btn-login d-flex align-items-center" routerLink="../login">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+
+

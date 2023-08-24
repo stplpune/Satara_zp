@@ -22,6 +22,7 @@ export class SchoolReportComponent {
   $districts?: Observable<any>;
   talukaArr = new Array();
   centerArr = new Array();
+  villageArr = new Array();
   schoolArr = new Array();
   standardArr = new Array();
   academicYearsArr = new Array();
@@ -81,7 +82,7 @@ export class SchoolReportComponent {
       districtId: [],
       talukaId: [this.dashBordFilterFlag ? Number(this.dashBordObj[3]):0],
       centerId: [this.dashBordFilterFlag ? Number(this.dashBordObj[1]):0],
-      // AssessmentTypeId: [2],
+      villageId: [this.dashBordFilterFlag ? Number(this.dashBordObj[4]):0],
       schoolId: [this.dashBordFilterFlag ? Number(this.dashBordObj[2]):0],
       fromDate: [(new Date(new Date().setDate(new Date().getDate() - 30)))],
       toDate: [new Date()],
@@ -91,10 +92,11 @@ export class SchoolReportComponent {
     });
 
   }
+  get f(){return this.schoolReportForm.controls}
 
   getDistrict(){
     this.$districts = this.masterService.getAlllDistrict();
-    this.schoolReportForm.controls['districtId'].setValue(1);
+    this.f['districtId'].setValue(1);
     this.getTaluka();
 
   }
@@ -107,7 +109,7 @@ export class SchoolReportComponent {
           this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);
           // this.schoolReportForm.controls['talukaId'].setValue(0);
           let talukaObj = this.talukaArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[3]) });         
-          this.dashBordFilterFlag ? (this.schoolReportForm.controls['talukaId'].setValue(talukaObj[0].id),this.getAllCenter()):this.schoolReportForm.controls['talukaId'].setValue(0);
+          this.dashBordFilterFlag ? (this.f['talukaId'].setValue(talukaObj[0].id),this.getAllCenter()):this.f['talukaId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -120,15 +122,14 @@ export class SchoolReportComponent {
 
   getAllCenter() {
     this.centerArr = [];
-    let id = this.schoolReportForm.value.talukaId;
-    if (id != 0) {
-      this.masterService.getAllCenter('', id).subscribe({
+    let talukaid = this.schoolReportForm.value.talukaId;
+    if (talukaid != 0) {
+      this.masterService.getAllCenter('', talukaid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);
-            // this.schoolReportForm.controls['centerId'].setValue(0);
             let centerObj = this.centerArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[1]) }); 
-            this.dashBordFilterFlag ? (this.schoolReportForm.controls['centerId'].setValue(centerObj[0].id),this.getAllSchoolsByCenterId()):this.schoolReportForm.controls['centerId'].setValue(0);
+            this.dashBordFilterFlag ? (this.f['centerId'].setValue(centerObj[0].id),this.getAllSchoolsByCenterId()):this.f['centerId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -139,18 +140,38 @@ export class SchoolReportComponent {
     }
   }
 
+  getVillageDrop(){
+    this.villageArr = [];
+    let Cid = this.schoolReportForm.value.centerId;
+    // let Cid = 0;
+    if (Cid != 0) {
+      this.masterService.getAllVillage('', Cid).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.f['villageId'].setValue(0);
+          } else {
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.villageArr = [];
+          }
+        },
+      });
+    }
+
+  }
+
   getAllSchoolsByCenterId() {
     this.schoolArr = [];
     let Tid = this.schoolReportForm.value.talukaId
     let Cid = this.schoolReportForm.value.centerId || 0;
-    let Vid = 0;
+    let Vid = this.schoolReportForm.value.villageId;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);
           // this.schoolReportForm.controls['schoolId'].setValue(0);
           let schoolObj = this.schoolArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[2]) });
-          this.dashBordFilterFlag ? this.schoolReportForm.controls['schoolId'].setValue(schoolObj[0].id):this.schoolReportForm.controls['schoolId'].setValue(0);
+          this.dashBordFilterFlag ? this.f['schoolId'].setValue(schoolObj[0].id):this.f['schoolId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -167,7 +188,7 @@ export class SchoolReportComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.standardArr.push({ "id": 0, "standard": "All standard", "m_Standard": "सर्व इयत्ता" }, ...res.responseData);
-          this.schoolReportForm.controls['standardId'].setValue(0);
+          this.f['standardId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.standardArr = [];
@@ -193,7 +214,7 @@ export class SchoolReportComponent {
           "isDeleted": false,
           "timestamp": "0001-01-01T00:00:00"}, ...res.responseData)
           let academicYearObj = this.academicYearsArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[0]) });
-            this.dashBordFilterFlag ? this.schoolReportForm.controls['educationYearId'].setValue(academicYearObj[0].id):this.schoolReportForm.controls['educationYearId'].setValue(0); 
+            this.dashBordFilterFlag ? this.f['educationYearId'].setValue(academicYearObj[0].id):this.f['educationYearId'].setValue(0); 
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.academicYearsArr = [];
@@ -236,20 +257,37 @@ export class SchoolReportComponent {
   //   });
   // }
 
-  clearDropdown(flag?: string){
-    if (flag == 'talukaId'){
-      this.schoolReportForm.controls['centerId'].setValue(0);
-      this.schoolReportForm.controls['schoolId'].setValue(0);
-      this.schoolReportForm.controls['standardId'].setValue(0);
-      this.schoolArr = [];
-      this.standardArr = [];
+  clearDropdown(flag?: string) {
+    switch (flag) {
+      case 'talukaId':
+        this.f['centerId'].setValue(0);
+        this.f['villageId'].setValue(0)
+        this.f['schoolId'].setValue(0);
+        this.f['standardId'].setValue(0);
+        this.villageArr = [];
+        this.schoolArr = [];
+        this.standardArr = [];
+        break;
 
-    } else if (flag == 'centerId'){
-      this.schoolReportForm.controls['schoolId'].setValue(0);
+      case 'centerId':
+        this.f['villageId'].setValue(0);
+        this.f['schoolId'].setValue(0);
+        this.f['standardId'].setValue(0);
+        this.schoolArr = [];
+        this.standardArr = [];
+        break;
+
+      case 'villageId':
+      this.f['schoolId'].setValue(0);
+      this.f['standardId'].setValue(0);
       this.standardArr = [];
-    } else if (flag == 'schoolId') {
-      this.schoolReportForm.controls['standardId'].setValue(0);
-    }    
+        break;
+
+      case 'schoolId':
+        this.f['standardId'].setValue(0);
+        break
+    }
+    
   }
 
   searchAssessMent(flag? : any){
@@ -257,9 +295,9 @@ export class SchoolReportComponent {
     let formData = this.schoolReportForm.value;
     let fromDate = this.datepipe.transform(formData.fromDate, 'yyyy-MM-dd')
     let toDate = this.datepipe.transform(formData.toDate, 'yyyy-MM-dd')
-    let reportStr = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${1}&RowCount=0`;
-    this.pageNumber =   flag == 'filter'? 1 :this.pageNumber;
-    let str = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${this.pageNumber}&RowCount=10`;
+    let reportStr = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&VilllageId=${formData.villageId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${1}&RowCount=0`;
+    this.pageNumber =  flag == 'filter'? 1 :this.pageNumber;
+    let str = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&VilllageId=${formData.villageId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${this.pageNumber}&RowCount=10`;
     this.apiService.setHttp('GET', 'zp-satara/assessment-report/Download_AssessmentReport_SchoolWise?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -306,7 +344,7 @@ export class SchoolReportComponent {
 
   clearForm(){
     this.schoofilterData();
-    this.schoolReportForm.controls['districtId'].setValue(1);
+    this.f['districtId'].setValue(1);
     this.searchAssessMent();
 
   }

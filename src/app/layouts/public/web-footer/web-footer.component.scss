@@ -2,7 +2,7 @@ footer {
     background-color: #191E24;
     color: #fff;
     font-size: .85rem;
-    // padding-block: .7rem;
+    padding-block: 3rem;
 }
 
 .privacy-policy a {
@@ -16,7 +16,7 @@ footer {
 }
 
 footer .shikshan-darpan-logo {
-    width: 135px;
+    width: 80px;
 }
 
 footer .stpl-logo {
@@ -33,9 +33,10 @@ footer p {
     color: #ddd;
 }
 
-footer h4 {
+footer h4 ,
+footer h6 {
     margin-bottom: 1.5rem;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: 600;
 }
 

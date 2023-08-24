@@ -47,7 +47,6 @@ export class StudentReportComponent {
   allStdClassWise: any; //  for std dropdown classwise 
   subjectArr: any // for subject array when its classwise 
   classGroupID = 4;
-  subjectData: any;
   objeHedaer: any;
   newheaderArray = new Array();
   showTable:boolean=false;
@@ -88,18 +87,15 @@ export class StudentReportComponent {
       this.languageFlag = lang;
       this.languageChange();
     });
+    this.logInDetails = this.webService.getLoggedInLocalstorageData();
     this.pageUrl = this.router.url;
     this.formData();
     this.getDistrict();
     this.getExamType();
-    this.geAssessmentType();
     this.getAcademicYears();
-    this.getAllgroupClassDrop();
-    this.getStandard();
+    this.getClassWiseSubject();
     this.searchAssessMent();    
     
-    this.logInDetails = this.webService.getLoggedInLocalstorageData();
-    console.log("logInDetails : ", this.logInDetails);
   }
 
   languageChange() {
@@ -118,13 +114,13 @@ export class StudentReportComponent {
 
   formData() {
     this.studentReportForm = this.fb.group({
-      educationYearId: [0],
+      educationYearId: [1],
       districtId: [0],
-      talukaId: [0],
-      centerId: [0],
-      villageId: [0],
+      talukaId: [this.logInDetails?.talukaId ? this.logInDetails?.talukaId : 0],
+      centerId: [this.logInDetails?.centerId ? this.logInDetails?.centerId : 0],
+      villageId: [this.logInDetails?.villageId ? this.logInDetails?.villageId : 0],
       AssessmentTypeId: [2],
-      schoolId: [0],
+      schoolId: [this.logInDetails?.schoolId ? this.logInDetails?.schoolId : 0],
       start: [(new Date(new Date().setDate(today.getDate() - 30)))],
       end: [new Date()],
       groupId: [1],
@@ -133,23 +129,10 @@ export class StudentReportComponent {
       examTypeId: [0],
     });
   }
+  get f() { return this.studentReportForm.controls };
+
 
   getDistrict() {
-    // this.districtArr = [];
-    // this.masterService.getAllDistrict('').subscribe({
-    //   next: (res: any) => {
-    //     if (res.statusCode == 200) {
-    //       this.districtArr = res.responseData;
-    //       this.studentReportForm.controls['districtId'].setValue(1);
-    //       this.getTaluka();
-    //     } else {
-    //       this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-    //       this.districtArr = [];
-    //     }
-    //   },
-    //   error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
-    // });
-
     this.$districts = this.masterService.getAlllDistrict(this.languageFlag);
     this.studentReportForm.controls['districtId'].setValue(1);
     this.getTaluka();
@@ -172,15 +155,15 @@ export class StudentReportComponent {
     });
   }
 
-  getAllCenter() {
+  getAllCenter(flag?: string) {
     this.centerArr = [];
     let id = this.studentReportForm.value.talukaId;
-    if (id != 0) {
+    if(id != 0) {
       this.masterService.getAllCenter('', id).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.logInDetails ? this.studentReportForm.controls['centerId'].setValue(this.logInDetails?.centerId): this.studentReportForm.controls['centerId'].setValue(0), this.getVillage();
+            (this.logInDetails && flag == undefined) ? this.studentReportForm.controls['centerId'].setValue(this.logInDetails?.centerId): this.studentReportForm.controls['centerId'].setValue(0), this.getVillage();
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -191,7 +174,7 @@ export class StudentReportComponent {
     }
   }
 
-  getVillage() {
+  getVillage(flag?: any) {
     this.villageArr = [];
     let Cid = this.studentReportForm.value.centerId;
     // let Cid = 0;
@@ -200,7 +183,7 @@ export class StudentReportComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.logInDetails ? this.studentReportForm.controls['villageId'].setValue(this.logInDetails?.villageId): this.studentReportForm.controls['villageId'].setValue(0), this.getAllSchoolsByCenterId();
+            (this.logInDetails &&  flag == undefined) ? this.studentReportForm.controls['villageId'].setValue(this.logInDetails?.villageId): this.studentReportForm.controls['villageId'].setValue(0), this.getAllSchoolsByCenterId();
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -211,16 +194,17 @@ export class StudentReportComponent {
     }
   }
 
-  getAllSchoolsByCenterId() {
+  getAllSchoolsByCenterId(flag?: any) {
     this.schoolArr = [];
     let Tid = this.studentReportForm.value.talukaId || 0;
     let Cid = this.studentReportForm.value.centerId || 0;
     let Vid = this.studentReportForm.value.villageId || 0;
+    if (Vid != 0) {
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-          this.logInDetails ? this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId): this.studentReportForm.controls['schoolId'].setValue(0);
+          (this.logInDetails &&  flag == undefined) ? this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId): this.studentReportForm.controls['schoolId'].setValue(0), this.GetAllStandardClassWise();
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -229,41 +213,6 @@ export class StudentReportComponent {
       // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
-
-  getAllgroupClassDrop() {
-    let formData = this.studentReportForm.value;
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount_V2?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&SchoolId=' + (formData?.schoolId || 0), false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {          
-          this.groupByClassArray = res.responseData.responseData2;
-          this.groupByClassArray.splice(0, 1);
-          this.getStandard();
-        } else {
-          this.groupByClassArray = [];
-        }
-      },
-      // error: (err: any) => { this.errors.handelError(err.statusCode); }
-    });
-  }
-
-  getStandard() {
-    this.standardArr = [];
-    // let schoolId = this.studentReportForm.value.schoolId
-    let groupId = this.studentReportForm.value.groupId
-    this.masterService.getAllStandard(0, groupId || 0, '').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
-          this.studentReportForm.controls['standardId'].setValue(0);
-          this.studentReportForm.value.AssessmentTypeId == 2 ? this.getClassWiseSubject() : '';
-        } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-          this.standardArr = [];
-        }
-      },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
-    });
   }
 
   getClassWiseSubject() {
@@ -292,12 +241,7 @@ export class StudentReportComponent {
           this.academicYearsArr.push({"id": 0,
           "educationYearId": 0,
           "eductionYear": "All Year",
-          "eductionYear_M": "सर्व वर्ष",
-          "startDate": "2022-07-01T00:00:00",
-          "endDate": "2023-03-31T00:00:00",
-          "isCurrent": true,
-          "isDeleted": false,
-          "timestamp": "0001-01-01T00:00:00"}, ...res.responseData)
+          "eductionYear_M": "सर्व वर्ष"}, ...res.responseData)
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.academicYearsArr = [];
@@ -325,35 +269,25 @@ export class StudentReportComponent {
     });
   }
 
-  geAssessmentType() {
-    this.AssessmentTypeArr = [];
-    this.masterService.getAssementType('').subscribe({
+  
+
+  GetAllStandardClassWise() {
+    let schoolId= this.studentReportForm.value.schoolId;
+    this.allStdClassWise = [];
+    if(schoolId != 0){
+    this.masterService.GetStandardBySchool(schoolId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.AssessmentTypeArr = res.responseData;
-          this.GetAllStandardClassWise();
+          this.allStdClassWise.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
+          this.studentReportForm.controls['standardId'].setValue(this.allStdClassWise[0].id);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-          this.AssessmentTypeArr = [];
+          this.allStdClassWise = [];
         }
       },
       // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
-
-  GetAllStandardClassWise() {
-    this.masterService.GetAllStandardClassWise('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.allStdClassWise = res.responseData;
-          this.studentReportForm.controls['standardId'].setValue(1);
-        } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-          this.AssessmentTypeArr = [];
-        }
-      },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
-    });
   }
 
   onchangeStandardClasWise() {
@@ -363,7 +297,7 @@ export class StudentReportComponent {
   }
 
   onchangeAssesType() {
-    this.studentReportForm.value.AssessmentTypeId == 2 ? (this.GetAllStandardClassWise(), this.getClassWiseSubject()) : this.getAllgroupClassDrop();
+    this.studentReportForm.value.AssessmentTypeId == 2 ? (this.GetAllStandardClassWise(), this.getClassWiseSubject()):'';
   }
 
   searchAssessMent(flag?: string){
@@ -423,52 +357,12 @@ export class StudentReportComponent {
 
           // sorting parent header name 
           
-          if (this.studentReportForm.value.AssessmentTypeId == 1) {
-            this.subjectData = [];
-            this.newheaderArray = [];  
-            this.subjectData.push(
-              { subjectId: 122, subjectName: "Student Details", m_SubjectName: "विद्यार्थी तपशील", count: 14 });
-            this.subjectData.push(...res.responseData.responseData4);
-
-            for (let i = 0; i < this.subjectData.length; i++) {
-              this.newheaderArray.push(this.subjectData[i].subjectName);
-            }
-          }
-          else if(this.studentReportForm.value.AssessmentTypeId == 2){
-            this.subjectData = [];
-            this.newheaderArray = [];  
-            this.subjectData =  [{ subjectId: 122, subjectName: "Student Details", m_SubjectName: "विद्यार्थी तपशील", count: 22 }]
-            this.newheaderArray = ['Student Details']
-          }
         }
         else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
           this.tableDatasize = 0;
           this.tableDatasize == 0 && flag == 'pdfFlag' ? this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'No Record Found' : 'रेकॉर्ड उपलब्ध नाही', 1) : '';
-          if (this.studentReportForm.value.AssessmentTypeId == 1) {
-            this.subjectData = [];
-            this.newheaderArray = [];  
-            this.subjectData.push(
-              { subjectId: 122, subjectName: "Student Details", m_SubjectName: "विद्यार्थी तपशील", count: 14 });
-            this.subjectData.push(...res.responseData.responseData4);
-
-            for (let i = 0; i < this.subjectData.length; i++) {
-              this.newheaderArray.push(this.subjectData[i].subjectName);
-            }
-          }
-          else if(this.studentReportForm.value.AssessmentTypeId == 2){
-            this.subjectData = [];
-            this.newheaderArray = [];  
-            this.subjectData =  [{ subjectId: 122, subjectName: "Student Details", m_SubjectName: "विद्यार्थी तपशील", count: 24 }]
-            this.newheaderArray = ['Student Details']
-          }
-
-          // this.displayedColumnsEng = [];
-          // this.displayedheadersEnglish = [];
-          // this.displayedColumnMarathi = [];
-          // this.displayedheadersMarathi = [];
-
         }
         this.languageChange();
       },
@@ -539,25 +433,30 @@ export class StudentReportComponent {
 
   clearDropdown(name: any) {
     if (name == 'talukaId'){
-      this.studentReportForm.controls['centerId'].setValue(0);
-      this.studentReportForm.controls['schoolId'].setValue(0);
-      this.studentReportForm.controls['standardId'].setValue(0);
-      this.studentReportForm.controls['villageId'].setValue(0);
+      this.f['centerId'].setValue(0);
+      this.f['villageId'].setValue(0);
+      this.f['schoolId'].setValue(0);
+      this.f['standardId'].setValue(0);
+      this.centerArr = [];
       this.schoolArr = [];
-      // this.standardArr = [];
-      this.villageArr = [];
-      // this.groupByClassArray = [];
-      // this.AssessmentTypeArr = [];
-    } else if (name == 'centerId'){
-      this.studentReportForm.controls['schoolId'].setValue(0);
-      this.studentReportForm.controls['villageId'].setValue(0);
-      // this.studentReportForm.controls['standardId'].setValue(0);
       this.standardArr = [];
-    }else if (name == 'villageId'){
-      this.studentReportForm.controls['schoolId'].setValue(0);
+      this.villageArr = [];
+    } else if (name == 'centerId'){
+      this.f['villageId'].setValue(0);
+      this.f['schoolId'].setValue(0);
+      this.f['standardId'].setValue(0);
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.villageArr = [];    
+    }
+      else if (name == 'villageId'){
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.f['schoolId'].setValue(0);
+      this.f['standardId'].setValue(0);
     } else if (name == 'schoolId') {
-      this.studentReportForm.controls['groupId'].setValue(0);
-      // this.studentReportForm.controls['standardId'].setValue(0);
+      this.allStdClassWise = [];
+      this.f['standardId'].setValue(0);
     }
   }
 
@@ -565,6 +464,7 @@ export class StudentReportComponent {
   clearForm(){
     this.formData();
     this.studentReportForm.controls['districtId'].setValue(1);
+    this.studentReportForm.controls['subjectId'].setValue(this.subjectArr[0].id);
     this.searchAssessMent();
   }
 

@@ -16,6 +16,7 @@
         "AttendanceReportList":"हजेरी अहवाल यादी",
         "Present":"उपस्थित",
         "Absent":"अनुपस्थित",
+        "applyattendence": "उपस्थिती लागू करा", 
         "Updateattendence":"सुट्टीची अद्यतनित करा",
         "HolidayRegistration":"सुट्टी नोंदणी",
         "apply":"अर्ज करा",

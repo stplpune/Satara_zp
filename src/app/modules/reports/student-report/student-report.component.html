@@ -39,7 +39,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="clearDropdown('talukaId');getAllCenter();">
+                            (selectionChange)="clearDropdown('talukaId');getAllCenter('drpChnage');">
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
                         </mat-select>
@@ -50,7 +50,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
-                            (selectionChange)="clearDropdown('centerId');getVillage()">
+                            (selectionChange)="clearDropdown('centerId');getVillage('drpChnage')">
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                                 ?cen.center:cen.m_Center}}</mat-option>
                         </mat-select>
@@ -61,7 +61,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
-                            (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId()">
+                            (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId('drpChnage')">
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
                                 'English'
                                 ?village.village:village.m_Village}}</mat-option>
@@ -69,49 +69,26 @@
                         <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
                     </mat-form-field>
                 </div>
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100 ">
-                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                        <mat-select formControlName="schoolId" (selectionChange)="getAllgroupClassDrop();getStandard()">
-                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
-                                sch.schoolName:sch.m_SchoolName}}</mat-option>
-                        </mat-select>
-                        <!-- <mat-error *ngIf="fc['schoolId'].hasError('required')">  {{'Labels.pleaseSelectSchool'| translate }} </mat-error> -->
-                    </mat-form-field>
-                </div>
+                
                 <div class="col-sm-2">
-                    <mat-form-field appearance="outline" class="w-100">
+                    <!-- <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.AssessmentType' | translate}}</mat-label>
                         <mat-select formControlName="AssessmentTypeId" (selectionChange)="onchangeAssesType()">
                             <mat-option *ngFor="let access of AssessmentTypeArr" [value]="access.id">{{languageFlag ==
                                 'English' ?
                                 access.assessmentType:access. m_AssessmentType}}</mat-option>
                         </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-2" *ngIf="this.studentReportForm.value.AssessmentTypeId == 1">
-                    <!----hidden if base selected-->
+                    </mat-form-field> -->
                     <mat-form-field appearance="outline" class="w-100 ">
-                        <mat-label>{{'Labels.groupClass'| translate}}</mat-label>
-                        <mat-select formControlName="groupId"
-                            (selectionChange)="clearDropdown('grpClass');getStandard();">
-                            <mat-option *ngFor="let group of groupByClassArray" [value]="group.groupId">{{languageFlag
-                                == 'English'
-                                ?group.groupClass:group.m_GroupClass}}</mat-option>
+                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId" (selectionChange)="clearDropdown('schoolId');GetAllStandardClassWise()">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
+                                sch.schoolName:sch.m_SchoolName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-
-                <div class="col-sm-2" *ngIf="this.studentReportForm.value.AssessmentTypeId == 1">
-                    <!----show stand dropdown if base-->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.standard'| translate}}</mat-label>
-                        <mat-select formControlName="standardId">
-                            <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{languageFlag == 'English'
-                                ?stan.standard:stan.m_Standard}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+                
+                
                 <div class="col-sm-2" *ngIf="this.studentReportForm.value.AssessmentTypeId == 2">
                     <!----show stand dropdown if class-->
                     <mat-form-field appearance="outline" class="w-100">
@@ -208,13 +185,13 @@
                     </ng-container>
 
                     <!-- add parent header -->
-                    <ng-container *ngFor="let sub of subjectData; let i = index" [matColumnDef]="sub.subjectName">
+                    <!-- <ng-container *ngFor="let sub of subjectData; let i = index" [matColumnDef]="sub.subjectName">
                         <th mat-header-cell *matHeaderCellDef [attr.colspan]="sub.count">
                             <span [ngClass]="{'text-main': sub}">{{languageFlag == 'English' ? sub.subjectName :
                                 sub.m_SubjectName }}</span>
                         </th>
                     </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="this.newheaderArray"></tr>
+                    <tr mat-header-row *matHeaderRowDef="this.newheaderArray"></tr> -->
                     <!-- End parent header -->
 
                     <tr mat-header-row

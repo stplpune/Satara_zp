@@ -100,19 +100,23 @@ nav .navbar-nav .nav-link.active {
     margin-top: 100px;
     margin-inline: 50px;
 }
+.about-section ol {
+    padding-left: 25px;
+} 
 
 .about-section ol li {
     font-size: 1rem;
     justify-content: right;
 }
 
-.about-section ol {
-    padding-left: 25px;
-}
-
 .about-section h1 {
     font-size: 1.5rem;
     font-weight: 600;
+}
+.about-section p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.7;
 }
 
 .about-section .about-student-img {

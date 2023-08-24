@@ -61,7 +61,7 @@ export class AddCctvLocationComponent {
     this.cctvLocationForm = this.fb.group({
       ...this.webStorageS.createdByProps(),
       "id": [0],
-      "districtId": [this.data?.districtId || '', [Validators.required]],
+      "districtId": [this.data?.districtId || 1, [Validators.required]],
       "talukaId": ['',[Validators.required]],
       "centerId": ['',[Validators.required]],
       "villageId": ['',[Validators.required]],

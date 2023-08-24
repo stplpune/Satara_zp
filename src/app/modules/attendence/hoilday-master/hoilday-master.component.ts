@@ -18,8 +18,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./hoilday-master.component.scss']
 })
 export class HoildayMasterComponent {
-  displayedheadersEnglish = ['Sr. No.', 'Year', ' Holiday Name', 'Holiday Date', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'वर्ष', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', ' Holiday Name', 'Holiday Date', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
   tableresp = new Array();
   viewStatus = 'Table';
   langTypeName: any;
@@ -140,7 +140,7 @@ export class HoildayMasterComponent {
 
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'year', this.langTypeName == 'English' ? 'holidayName' : 'm_HolidayName', 'holidayDate', 'action'];
+    let displayedColumns = ['srNo', this.langTypeName == 'English' ? 'holidayName' : 'm_HolidayName', 'holidayDate', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
@@ -209,25 +209,26 @@ export class HoildayMasterComponent {
     data.map((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
-        "Year": ele.year,
-        "Holiday Name": ele.holidayName,
+        // "Year": ele.year,
+        "Holiday Name": flag == 'excel' ? this.langTypeName == 'English' ? ele.holidayName : ele.m_HolidayName : ele.holidayName,
         "Holiday Date": this.datepipe.transform(ele.holidayDate, 'dd-MM-yyyy'),
       }
       this.resultDownloadArr.push(obj);
     });
-    let keyPDFHeader = ['Sr.No.', 'Year', 'Holiday Name', 'Holiday Date'];
+    let keyPDFHeader = ['Sr.No.', 'Holiday Name', 'Holiday Date'];
+    let marathiExcelHeader = ['अनुक्रमांक', 'सुट्टीचे नाव', 'सुट्टीची तारीख']
     let ValueData =
       this.resultDownloadArr.reduce(
         (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
       );
 
     let objData: any = {
-      'topHedingName': 'Holiday List',
-      'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Holiday List' :'सुट्टीची यादी' : 'Holiday List',
+      'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
     }
     let headerKeySize = [7, 15, 20, 30, 40,]
     // this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData);
-    flag == 'pdf' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+    flag == 'pdf' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.excelpdfService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader: marathiExcelHeader, ValueData, objData, headerKeySize)
   }
 
   clearFilterData() {

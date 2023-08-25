@@ -43,11 +43,11 @@ export class SchoolRegistrationComponent implements OnInit {
   tableDatasize!: Number;
   tableData: any;
   isWriteRight!: boolean;
-  highLightFlag: boolean =true;
-  userId!:number;
+  highLightFlag: boolean = true;
+  userId!: number;
   displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'Kendra', 'Village', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
-  viewStatus='Table';
+  viewStatus = 'Table';
   constructor(private dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
@@ -57,8 +57,8 @@ export class SchoolRegistrationComponent implements OnInit {
     private downloadFileService: DownloadPdfExcelService,
     private ngxSpinner: NgxSpinnerService,
     public datepipe: DatePipe,
-    private router:Router,
-    private encryptdecrypt:AesencryptDecryptService,
+    private router: Router,
+    private encryptdecrypt: AesencryptDecryptService,
   ) { }
 
   ngOnInit() {
@@ -67,7 +67,7 @@ export class SchoolRegistrationComponent implements OnInit {
     this.getDistrict();
     // this.getofficeReport();
     this.userId = this.webStorageS.getUserTypeId();
-    
+
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
@@ -87,9 +87,9 @@ export class SchoolRegistrationComponent implements OnInit {
   // }
 
   //#region ------------------------------------------- School Registration Table Data start here ----------------------------------------// 
-  
+
   languageChange() {
-    this.highLightFlag=true;
+    this.highLightFlag = true;
     let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
     this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
     this.tableData = {
@@ -101,8 +101,8 @@ export class SchoolRegistrationComponent implements OnInit {
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
       edit: true
     };
-    this.highLightFlag?this.tableData.highlightedrow=true:this.tableData.highlightedrow=false,
-    this.apiService.tableData.next(this.tableData);
+    this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
+      this.apiService.tableData.next(this.tableData);
   }
 
   getTableData(flag?: string) {
@@ -127,7 +127,7 @@ export class SchoolRegistrationComponent implements OnInit {
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
-         flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';      
+          flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
         }
         else {
           this.ngxSpinner.hide();
@@ -146,44 +146,51 @@ export class SchoolRegistrationComponent implements OnInit {
 
   //convert number into marathi
 
-  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-  convertToMarathiNumber(number: number): string {
-    const englishNumberString = number.toString();
-    let marathiNumberString = '';
-    for (let i = 0; i < englishNumberString.length; i++) {
-      const digit = parseInt(englishNumberString[i], 10);
-      marathiNumberString += this.marathiDigits[digit];
-    }
-    return marathiNumberString;
-  }
+  // private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  // convertToMarathiNumber(number: number): string {
+  //   const englishNumberString = number.toString();
+  //   let marathiNumberString = '';
+  //   for (let i = 0; i < englishNumberString.length; i++) {
+  //     const digit = parseInt(englishNumberString[i], 10);
+  //     marathiNumberString += this.marathiDigits[digit];
+  //   }
+  //   return marathiNumberString;
+  // }
 
 
-  downloadPdf(data: any, flag?:string) {
-    console.log("flag",flag);
-    console.log("data",data);   
-    
+  downloadPdf(data: any, flag?: string) {
+    console.log("flag", flag);
+    console.log("data", data);
+
     this.resultDownloadArr = [];
     data.find((ele: any, i: any) => {
-      if(flag == 'excel'){
-        let obj = {
-          srNo: this.langTypeName == 'English' ? (i + 1) : this.convertToMarathiNumber(i+1),
-          schoolName: this.langTypeName == 'English' ? ele.schoolName : ele.m_SchoolName,
-          taluka:  this.langTypeName == 'English' ? ele.taluka : ele.m_Taluka,
-          center:this.langTypeName == 'English' ? ele.center : ele.m_Center,
-          village:this.langTypeName == 'English' ? ele.village : ele.m_Village,
-        }
-        this.resultDownloadArr.push(obj);
-      }else if( flag == 'pdfFlag'){
-        let obj = {
-          srNo: i + 1,
-          schoolName: ele.schoolName,
-          taluka: ele.taluka,
-          center: ele.center,
-          village: ele.village,
-        }
-        this.resultDownloadArr.push(obj);
+      let obj = {
+        srNo:  (i + 1),
+        schoolName: flag == 'excel' ? this.langTypeName == 'English' ? ele.schoolName : ele.m_SchoolName : ele.schoolName,
+        taluka: flag == 'excel' ? this.langTypeName == 'English' ? ele.taluka : ele.m_Taluka : ele.taluka,
+        center: flag == 'excel' ? this.langTypeName == 'English' ? ele.center : ele.m_Center : ele.center,
+        village: flag == 'excel' ? this.langTypeName == 'English' ? ele.village : ele.m_Village : ele.village,
       }
-      
+      // if(flag == 'excel'){
+      //   let obj = {
+      //     srNo: this.langTypeName == 'English' ? (i + 1) : this.convertToMarathiNumber(i+1),
+      //     schoolName: this.langTypeName == 'English' ? ele.schoolName : ele.m_SchoolName,
+      //     taluka:  this.langTypeName == 'English' ? ele.taluka : ele.m_Taluka,
+      //     center:this.langTypeName == 'English' ? ele.center : ele.m_Center,
+      //     village:this.langTypeName == 'English' ? ele.village : ele.m_Village,
+      //   }
+      //   this.resultDownloadArr.push(obj);
+      // }else if( flag == 'pdfFlag'){
+      //   let obj = {
+      //     srNo: i + 1,
+      //     schoolName: ele.schoolName,
+      //     taluka: ele.taluka,
+      //     center: ele.center,
+      //     village: ele.village,
+      //   }
+      this.resultDownloadArr.push(obj);
+      // }
+
     });
     // download pdf call
     if (this.resultDownloadArr?.length > 0) {
@@ -193,21 +200,26 @@ export class SchoolRegistrationComponent implements OnInit {
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-        let objData : any
-        if(flag == 'excel'){
-          objData = {
-            'topHedingName': this.langTypeName == 'English' ? 'School List' : 'शाळेची यादी',
-            'createdDate': this.langTypeName == 'English' ?'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') :  'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
-        }else if(flag == 'pdfFlag'){
-          objData = {
-            'topHedingName': 'School List',
-            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
-        }
-   
+      let objData: any
+      // if (flag == 'excel') {
+      //   objData = {
+      //     'topHedingName': this.langTypeName == 'English' ? 'School List' : 'शाळेची यादी',
+      //     'createdDate': this.langTypeName == 'English' ? 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      //   }
+      // } else if (flag == 'pdfFlag') {
+      //   objData = {
+      //     'topHedingName': 'School List',
+      //     'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      //   }
+      // }
+
+      objData= {
+        'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'School List' : 'शाळेची यादी' : 'School List',
+        'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+
       let headerKeySize = [7, 40, 15, 15, 15,];
-      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader :marathikeyHeader, ValueData, objData, headerKeySize);
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader : marathikeyHeader, ValueData, objData, headerKeySize);
     }
   }
   //#endregion ---------------------------------------------- PDF Download end here ----------------------------------------// 
@@ -222,7 +234,7 @@ export class SchoolRegistrationComponent implements OnInit {
           this.districtId.setValue(this.districtArr[0].id);
           this.getTaluka();
         }
-        else{
+        else {
           this.districtArr = [];
         }
       },
@@ -236,7 +248,7 @@ export class SchoolRegistrationComponent implements OnInit {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
         }
-        else{
+        else {
           this.talukaArr = [];
         }
       }
@@ -252,7 +264,7 @@ export class SchoolRegistrationComponent implements OnInit {
           this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
           this.centerId.setValue(0);
         }
-        else{
+        else {
           this.centerArr = [];
         }
       }
@@ -271,7 +283,7 @@ export class SchoolRegistrationComponent implements OnInit {
           this.villageArr.unshift(obj)
           this.villageId.setValue(0);
         }
-        else{
+        else {
           this.villageArr = [];
         }
       }
@@ -323,7 +335,7 @@ export class SchoolRegistrationComponent implements OnInit {
       // autoFocus: false
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-      if (result == 'yes' && obj) {        
+      if (result == 'yes' && obj) {
         this.onClear();
         this.getDistrict();
         this.getTableData();
@@ -335,7 +347,7 @@ export class SchoolRegistrationComponent implements OnInit {
         this.onClear();
         this.pageNumber = 1;
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     });
   }
@@ -358,16 +370,16 @@ export class SchoolRegistrationComponent implements OnInit {
       if (result == 'yes') {
         this.onClickDelete();
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     })
   }
 
   openDetailsDialog(obj: any) {
     let eventId: any = this.encryptdecrypt.encrypt(`${obj?.id}`);
-    this.router.navigate(['/view-profile-school'],{
+    this.router.navigate(['/view-profile-school'], {
       queryParams: {
-        id:eventId
+        id: eventId
       },
     })
     return;
@@ -392,7 +404,7 @@ export class SchoolRegistrationComponent implements OnInit {
       if (result == 'yes') {
         this.getTableData();
       }
-      this.highLightFlag=false;
+      this.highLightFlag = false;
       this.languageChange();
     });
   }
@@ -437,7 +449,7 @@ export class SchoolRegistrationComponent implements OnInit {
   //#endregion ---------------------------------------------- Delete Record Logic end here ----------------------------------------//  
 
   selectGrid(label: string) {
-    this.viewStatus=label;
+    this.viewStatus = label;
     if (label == 'Table') {
       this.cardViewFlag = false;
       this.pageNumber = 1;
@@ -453,7 +465,7 @@ export class SchoolRegistrationComponent implements OnInit {
       this.centerId.setValue(0);
       this.villageArr = [];
       this.centerArr = [];
-    }else if(dropdown == 'centerId'){
+    } else if (dropdown == 'centerId') {
       this.villageId.setValue(0);
     }
   }

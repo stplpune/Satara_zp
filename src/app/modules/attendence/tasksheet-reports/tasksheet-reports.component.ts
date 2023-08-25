@@ -246,7 +246,7 @@ export class TasksheetReportsComponent {
   }
 
   childCompInfo(obj: any) {
-    let teacherDetail = obj.userId + '.' + obj.teacherName + '.' + moment(this.f['date'].value).format('YYYY-MM');
+    let teacherDetail = obj.userId + '.' + (this.langTypeName == 'English' ? obj.teacherName : obj.m_TeacherName) + '.' + moment(this.f['date'].value).format('YYYY-MM');
     switch (obj.label) {
       case 'Pagination':
         this.pageNumber = obj.pageNumber;
@@ -296,7 +296,7 @@ export class TasksheetReportsComponent {
       let obj = {
               "Sr.No": i + 1,
               "Teacher Code": ele.teacherCode,
-              "Teacher Name": ele.teacherName,
+              "Teacher Name":flag=='excel'? this.langTypeName == 'English'?ele.teacherName:ele.m_TeacherName:ele.teacherName,
               "Mobile No": ele.mobileNo,
               "Present Days": ele.totalPresentDays,
               "Absent Days": ele.totalAbsentDays,
@@ -306,16 +306,21 @@ export class TasksheetReportsComponent {
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days'];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-        let objData: any = {
-          'topHedingName': 'Attendance Report List',
-          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        // let objData: any = {
+        //   'topHedingName': 'Attendance Report List',
+        //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        // }
+       let objData= {
+          'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Attendance Report List' : 'उपस्थिती अहवाल यादी' : 'Attendance Report List',
+          'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
         let headerKeySize = [7, 30, 20, 15, 15]
-        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+        flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(this.langTypeName == 'English'?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
 

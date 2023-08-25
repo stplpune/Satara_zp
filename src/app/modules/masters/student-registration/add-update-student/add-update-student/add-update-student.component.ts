@@ -127,7 +127,7 @@ export class AddUpdateStudentComponent {
       casteId: ['', Validators.required],
       casteCategoryId:['', Validators.required],
       saralId: ['', [Validators.maxLength(19), Validators.minLength(19)]],
-      mobileNo: [''],
+      mobileNo: ['',  [Validators.maxLength(10), Validators.minLength(10), Validators.pattern(this.validators.mobile_No)]],
       fatherFullName: [''],
       // m_FatherFullName: ['', Validators.required],
       motherName: [''],

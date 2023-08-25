@@ -39,8 +39,8 @@ export class TeacherRegistrationComponent implements OnInit {
   toggleControl = new FormControl(false);
   cardViewFlag: boolean = false;
   langChnge!: Subscription;
-  displayedheadersEnglish = ['Sr. No.', '', 'Teacher Name','Teacher ID', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
-  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव','शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', '', 'Teacher Name', 'Teacher ID', 'Mobile No.', 'Email ID', 'Taluka', 'Cluster', 'Unblock/Block', 'action'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव', 'शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक', 'कृती'];
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
   talukaArray = new Array();
@@ -84,8 +84,8 @@ export class TeacherRegistrationComponent implements OnInit {
     // this.webStorageS.langNameOnChange.subscribe(lang => {
     //   this.langTypeName = lang;
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name','teacherCode', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center'];
-    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name','teacherCode', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', 'isBlock', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'teacherCode', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center'];
+    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'name' : 'm_Name', 'teacherCode', 'mobileNo', 'emailId', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', 'isBlock', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'uploadImage', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "defaultUserImg",
@@ -127,13 +127,13 @@ export class TeacherRegistrationComponent implements OnInit {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-                   
+
           // this.tableDataArray = res.responseData.responseData1;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
-          flag == 'pdfFlag' ? this.downloadPdf(data,'pdfFlag') : flag == 'excel' ? this.downloadPdf(data,'excel') :'';   
+          flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
         } else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
@@ -205,72 +205,86 @@ export class TeacherRegistrationComponent implements OnInit {
   }
 
   //#endregion ---------------------------------------------- PDF Download start here ----------------------------------------// 
-// convert number in marathi
+  // convert number in marathi
 
-private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-convertToMarathiNumber(number: number): string {
-  const englishNumberString = number.toString();
-  let marathiNumberString = '';
-  for (let i = 0; i < englishNumberString.length; i++) {
-    const digit = parseInt(englishNumberString[i], 10);
-    marathiNumberString += this.marathiDigits[digit];
+  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  convertToMarathiNumber(number: number): string {
+    const englishNumberString = number.toString();
+    let marathiNumberString = '';
+    for (let i = 0; i < englishNumberString.length; i++) {
+      const digit = parseInt(englishNumberString[i], 10);
+      marathiNumberString += this.marathiDigits[digit];
+    }
+    return marathiNumberString;
   }
-  return marathiNumberString;
-}
 
 
-  downloadPdf(data: any, flag?:string) {
+  downloadPdf(data: any, flag?: string) {
     this.resultDownloadArr = [];
     data.map((ele: any, i: any) => {
-      if(flag == 'excel'){
-        let obj = {
-          "Sr.No":this.langTypeName == 'English' ?(i + 1):this.convertToMarathiNumber(i+1),
-          "Name":this.langTypeName == 'English'? ele.name :ele.m_Name,
-          "Teacher ID" :ele.teacherCode ,
-          "Contact No.": ele.mobileNo,
-          "Email ID": ele.emailId,
-          "Taluka":this.langTypeName == 'English'? ele.taluka : ele.m_Taluka,
-          "Cluster":this.langTypeName == 'English'?  ele.center : ele.m_Center
-        }
-        this.resultDownloadArr.push(obj);
-      }else if(flag == 'pdfFlag'){
-        let obj = {
-          "Sr.No": i + 1,
-          "Name": ele.name,
-          "Teacher ID" : ele.teacherCode,
-          "Contact No.": ele.mobileNo,
-          "Email ID": ele.emailId,
-          "Taluka": ele.taluka,
-          "Cluster": ele.center
-        }
-        this.resultDownloadArr.push(obj);
+      let obj = {
+        "Sr.No": (i + 1),
+        "Name": flag == 'excel' ? this.langTypeName == 'English' ? ele.name : ele.m_Name : ele.name,
+        "Teacher ID": ele.teacherCode,
+        "Contact No.": ele.mobileNo,
+        "Email ID": ele.emailId,
+        "Taluka": flag == 'excel' ?this.langTypeName == 'English' ? ele.taluka : ele.m_Taluka:ele.taluka,
+        "Cluster":flag == 'excel' ? this.langTypeName == 'English' ? ele.center : ele.m_Center: ele.center
       }
-    
+      // if(flag == 'excel'){
+      //   let obj = {
+      //     "Sr.No":this.langTypeName == 'English' ?(i + 1):this.convertToMarathiNumber(i+1),
+      //     "Name":this.langTypeName == 'English'? ele.name :ele.m_Name,
+      //     "Teacher ID" :ele.teacherCode ,
+      //     "Contact No.": ele.mobileNo,
+      //     "Email ID": ele.emailId,
+      //     "Taluka":this.langTypeName == 'English'? ele.taluka : ele.m_Taluka,
+      //     "Cluster":this.langTypeName == 'English'?  ele.center : ele.m_Center
+      //   }
+      //   this.resultDownloadArr.push(obj);
+      // }else if(flag == 'pdfFlag'){
+      //   let obj = {
+      //     "Sr.No": i + 1,
+      //     "Name": ele.name,
+      //     "Teacher ID" : ele.teacherCode,
+      //     "Contact No.": ele.mobileNo,
+      //     "Email ID": ele.emailId,
+      //     "Taluka": ele.taluka,
+      //     "Cluster": ele.center
+      //   }
+      this.resultDownloadArr.push(obj);
+      // }
+
     });
     // download pdf call
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ["Sr.No ", "Teacher Name","Teacher ID" ,"Mobile No.", "Email ID", "Taluka", "Cluster"];
-      let marathiKeyHeader =['अनुक्रमांक', 'शिक्षकाचे नाव','शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक'];
+      let keyPDFHeader = ["Sr.No ", "Teacher Name", "Teacher ID", "Mobile No.", "Email ID", "Taluka", "Cluster"];
+      let marathiKeyHeader = ['अनुक्रमांक', 'शिक्षकाचे नाव', 'शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
 
-        let objData :any;
-        if(flag == 'excel'){
-          objData = {
-            'topHedingName':this.langTypeName == 'English'? 'Teacher List' : 'शिक्षकांची यादी',
-            'createdDate': this.langTypeName == 'English'? 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a'):'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
-        }else if(flag == 'pdfFlag'){
-          objData= {
-            'topHedingName': 'Teacher List',
-            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
-        }
+      let objData: any;
+      // if (flag == 'excel') {
+      //   objData = {
+      //     'topHedingName': this.langTypeName == 'English' ? 'Teacher List' : 'शिक्षकांची यादी',
+      //     'createdDate': this.langTypeName == 'English' ? 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      //   }
+      // } else if (flag == 'pdfFlag') {
+      //   objData = {
+      //     'topHedingName': 'Teacher List',
+      //     'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      //   }
+      // }
+
+      objData= {
+        'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Teacher List' : 'शिक्षकांची यादी' : 'Teacher List',
+        'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
 
       let headerKeySize = [15, 15, 10, 15, 20, 20];
-      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.langTypeName == 'English'?keyPDFHeader :marathiKeyHeader, ValueData, objData, headerKeySize);
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader : marathiKeyHeader, ValueData, objData, headerKeySize);
     }
   }
   //#endregion ---------------------------------------------- PDF Download end here ----------------------------------------// 
@@ -468,8 +482,8 @@ convertToMarathiNumber(number: number): string {
       headerImage: obj.uploadImage,
       header: this.webStorageS.languageFlag == 'EN' ? obj.name : obj.m_Name,
       subheader: this.webStorageS.languageFlag == 'EN' ? obj.gender : obj.m_Gender,
-      labelHeader: this.webStorageS.languageFlag == 'EN' ? ['Mobile No.', 'Email ID', 'Village', 'Taluka','UserName','Password'] : ['मोबाईल क्र.', 'ई-मेल आयडी ', 'गाव', 'तालुका', 'वापरकर्तानाव', 'पासवर्ड'],
-      labelKey: this.webStorageS.languageFlag == 'EN' ? ['mobileNo', 'emailId', 'village', 'taluka','userName','password'] : ['mobileNo', 'emailId', 'village', 'taluka' , 'userName','password'],
+      labelHeader: this.webStorageS.languageFlag == 'EN' ? ['Mobile No.', 'Email ID', 'Village', 'Taluka', 'UserName', 'Password'] : ['मोबाईल क्र.', 'ई-मेल आयडी ', 'गाव', 'तालुका', 'वापरकर्तानाव', 'पासवर्ड'],
+      labelKey: this.webStorageS.languageFlag == 'EN' ? ['mobileNo', 'emailId', 'village', 'taluka', 'userName', 'password'] : ['mobileNo', 'emailId', 'village', 'taluka', 'userName', 'password'],
       Obj: obj,
       chart: false,
       checkbox: this.webStorageS.languageFlag == 'EN' ? 'Subject' : 'विषय',

@@ -54,7 +54,7 @@
 // }
 
 .navbar {
-    // background-color: #586DE6;
+    background-color: var(--navbar-scroll);
     position: sticky;
     width: 100%;
     z-index: 999999 !important;

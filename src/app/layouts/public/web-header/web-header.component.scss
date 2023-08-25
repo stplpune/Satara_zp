@@ -1,7 +1,8 @@
 .header-topbar {
     position: fixed;
     top: 0px;
-    width: 100%;
+    left: 0px;
+    right: 0px;
     z-index: 9999;
 }
 
@@ -53,10 +54,11 @@
 // }
 
 .navbar {
-    background-color: #586DE6;
+    // background-color: #586DE6;
     position: sticky;
     width: 100%;
     z-index: 999999 !important;
+    box-shadow: none !important;
 }
 
 .navbar li a {

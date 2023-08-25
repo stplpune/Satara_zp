@@ -130,29 +130,36 @@ export class StudentRegistrationComponent {
       let obj = {
         srNo: i + 1,
         id: ele.id,
-        fullName: ele.fullName,
-        gender: ele.gender,
-        mobileNo: ele.parentMobileNo,
+        fullName: flag == 'excel' ? this.languageFlag == 'English'?ele.fullName:ele.m_FullName:ele.fullName,
+        gender: flag == 'excel' ? this.languageFlag == 'English'? ele.gender:ele.m_Gender:ele.gender,
+        mobileNo: ele.mobileNo,
         standard: ele.standard,
-        schoolName: ele.schoolName,
-        caste: ele.caste,
-        taluka: ele.taluka,
-        center: ele.center,
+        schoolName: flag == 'excel' ? this.languageFlag == 'English'?ele.schoolName:ele.m_SchoolName:ele.schoolName,
+        caste: flag == 'excel' ? this.languageFlag == 'English'?ele.caste:ele.m_Caste:ele.caste,
+        taluka: flag == 'excel' ? this.languageFlag == 'English'?ele.taluka:ele.m_Taluka:ele.taluka,
+        center:flag == 'excel' ? this.languageFlag == 'English'? ele.center:ele.m_Center:ele.center,
       }
       this.studentData.push(obj);
     });
     if (this.studentData.length > 0) {
       let keyPDFHeader = ['SrNo', "ID", "Full Name", "Gender", "Contact No.", "Standard", "School Name", "Caste", "Taluka", "Center"];
+      let MarathikeyPDFHeader = ['अनुक्रमांक','आयडी', 'विद्यार्थ्याचे नाव','लिंग', 'मोबाईल क्र.','मानक','शाळेचे नाव','जात','तालुका','केंद्र' ];
+  
       let ValueData =
         this.studentData.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );// Value Name           
-      let objData: any = {
-        'topHedingName': 'Student List',
-        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      // let objData: any = {
+      //   'topHedingName': 'Student List',
+      //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      // }
+
+      let objData= {
+        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'Student List' : 'विद्यार्थी यादी' : 'Student List',
+        'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
       let headerKeySize = [7, 7, 30, 10, 10, 10, 30, 10, 10, 10];
-      flag == 'pdfFlag' ? this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadPdfservice.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+      flag == 'pdfFlag' ? this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadPdfservice.allGenerateExcel(this.languageFlag == 'English' ?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize);
     } 
   }
   

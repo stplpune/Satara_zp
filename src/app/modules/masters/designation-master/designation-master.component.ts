@@ -269,21 +269,26 @@ export class DesignationMasterComponent implements OnInit {
   downloadPdf(data: any, flag?: string) {
     this.resultDownloadArr = [];
     data.map((ele: any, i: any) => {
-      if (flag == 'excel') {
-        let obj = {
-          "Sr.No": this.langTypeName == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
-          "Designation Name": this.langTypeName == 'English' ? ele.designationName : ele.m_DesignationType,
-          "Designation Level": this.langTypeName == 'English' ? ele.designationLevel : ele.m_DesignationLevel,
-        }
-        this.resultDownloadArr.push(obj);
-      } else if (flag == 'pdfFlag') {
-        let obj = {
-          "Sr.No": i + 1,
-          "Designation Name": ele.designationName,
-          "Designation Level": ele.designationLevel
-        }
-        this.resultDownloadArr.push(obj);
+      let obj = {
+        "Sr.No": this.langTypeName == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
+        "Designation Name": flag=='excel'?this.langTypeName == 'English' ? ele.designationName : ele.m_DesignationType:ele.designationName,
+        "Designation Level":flag=='excel'? this.langTypeName == 'English' ? ele.designationLevel : ele.m_DesignationLevel:ele.designationLevel,
       }
+      // if (flag == 'excel') {
+      //   let obj = {
+      //     "Sr.No": this.langTypeName == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
+      //     "Designation Name": this.langTypeName == 'English' ? ele.designationName : ele.m_DesignationType,
+      //     "Designation Level": this.langTypeName == 'English' ? ele.designationLevel : ele.m_DesignationLevel,
+      //   }
+      //   this.resultDownloadArr.push(obj);
+      // } else if (flag == 'pdfFlag') {
+      //   let obj = {
+      //     "Sr.No": i + 1,
+      //     "Designation Name": ele.designationName,
+      //     "Designation Level": ele.designationLevel
+      //   }
+        this.resultDownloadArr.push(obj);
+      // }
 
     });
 
@@ -296,16 +301,21 @@ export class DesignationMasterComponent implements OnInit {
         );// Value Name
 
       let objData: any
-      if (flag == 'excel') {
-        objData = {
-          'topHedingName': this.langTypeName == 'English' ? 'Designation List' : 'पदनाम यादी',
-          'createdDate': this.langTypeName == 'English' ? 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-        }
-      } else if (flag == 'pdfFlag') {
-        objData = {
-          'topHedingName': 'Designation List',
-          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-        }
+      // if (flag == 'excel') {
+      //   objData = {
+      //     'topHedingName': this.langTypeName == 'English' ? 'Designation List' : 'पदनाम यादी',
+      //     'createdDate': this.langTypeName == 'English' ? 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      //   }
+      // } else if (flag == 'pdfFlag') {
+      //   objData = {
+      //     'topHedingName': 'Designation List',
+      //     'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      //   }
+      // }
+
+      objData= {
+        'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Designation List' : 'पदनाम यादी' : 'Designation List',
+        'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
 
       let headerKeySize = [7, 15, 20];

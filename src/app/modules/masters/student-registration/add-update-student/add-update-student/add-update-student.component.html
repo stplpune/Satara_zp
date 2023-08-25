@@ -311,7 +311,7 @@
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.agencyMobileNo.' | translate}}</mat-label>
-                            <input matInput formControlName="mobileNo" maxlength="10" (change)="searchMobileNo()" (keypress)="validators.noFirstSpaceAllow($event); validators.onlyDigits($event);">
+                            <input matInput formControlName="mobileNo" maxlength="10" (keypress)="validators.noFirstSpaceAllow($event); validators.onlyDigits($event);">
                         </mat-form-field>
                     </div>
                  

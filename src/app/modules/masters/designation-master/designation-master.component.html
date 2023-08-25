@@ -24,10 +24,6 @@
                     matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
-                <!-- <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="addUpdateAgency()">
-                    <mat-icon>add</mat-icon>
-                    {{'Labels.AddDesignation'| translate}}
-                </button> -->
             </div>
         </div>
     </mat-card-header>
@@ -55,7 +51,7 @@
                                 <button (click)="getTableData('filter')" mat-flat-button
                                     class="btn-main">{{'Labels.filter' |
                                     translate}}</button>
-                                <button mat-flat-button class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear' |
+                                <button mat-flat-button class="btn-second ms-2" (click)="clearFilterData()">{{'Labels.clear' |
                                     translate}}</button>
                             </div>
                         </div>
@@ -72,14 +68,15 @@
                             {{(editFlag?'Labels.UpdateDesignation':'Labels.registerDesignation')| translate}}
                         </h6>
                     </mat-card-header>
-                    <form [formGroup]="designationForm" (ngSubmit)="OnSubmit()">
+                    <form [formGroup]="designationForm" (ngSubmit)="OnSubmit()" #formDirective="ngForm">
                         <mat-card-content class="card-body ps-0">
                         <div class="row">
                             <div class="col-sm-12">
                                 <mat-form-field appearance="outline" class="w-100 ">
                                     <mat-label>{{'Labels.DesignationLevel' | translate}}</mat-label>
                                     <mat-select formControlName="designationLevelId"
-                                        (selectionChange)="clearDrop('designationLevelId')">
+                                        (selectionChange)="clearDrop('designationLevelId')"
+                                        [class]="editFlag ? designationForm.controls['designationLevelId'].disable({ onlySelf: true }) : designationForm.controls['designationLevelId'].enable({ onlySelf: true })">
                                         <mat-option *ngFor="let designation of DesiganationLevelData"
                                             [value]="designation.id">{{webStorage.getLangauge() == 'EN' ?
                                             designation.designationLevel : designation.m_DesignationLevel}}</mat-option>
@@ -116,7 +113,7 @@
 
                     <mat-card-footer class="card-footer">
                         <div class="d-flex w-100 justify-content-end align-items-center">
-                            <button mat-dialog-close mat-flat-button class="btn-second me-2">{{'Labels.clear' |
+                            <button mat-dialog-close mat-flat-button class="btn-second me-2" (click)="clearFormData()">{{'Labels.clear' |
                                 translate}}</button>
                             <button type="submit" mat-flat-button class="btn-main"> {{editFlag ?( 'Labels.update' | translate)
                                 :('Labels.submit' |

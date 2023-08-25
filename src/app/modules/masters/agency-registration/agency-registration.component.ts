@@ -107,25 +107,27 @@ export class AgencyRegistrationComponent implements OnInit {
     data.map((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
-        "Name": ele.agency_Name,
+        "Name":flag=='excel'?this.langTypeName == 'English' ? ele.agency_Name:ele.m_Agency_Name:ele.agency_Name,
         "Contact No": ele.contact_No,
         "Email ID": ele.agency_EmailId,
       }
       this.agencyReport.push(obj);
     });
-    if (this.agencyReport.length) {
+    if (this.agencyReport.length>0) {
       let keyPDFHeader = ['Sr.No.', "Name", "Mobile No.", "Email ID"];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'नाव', 'मोबाईल क्र.', 'ई-मेल आयडी'];
       let ValueData =
         this.agencyReport.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
+     
 
-      let objData: any = {
-        'topHedingName': 'Other Registration List',
-        'createdDate':'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+     let objData= {
+        'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Other Registration List' : 'इतर नोंदणी यादी' : 'Other Registration List',
+        'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
       let headerKeySize = [7, 25, 20, 30];
-      flag == 'pdfFlag' ? this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadPdfservice.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
+      flag == 'pdfFlag' ? this.downloadPdfservice.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadPdfservice.allGenerateExcel(this.langTypeName == 'English' ?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
     else {
       this.common.showPopup('No Record Found', 1)

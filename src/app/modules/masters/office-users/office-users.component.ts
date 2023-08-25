@@ -105,9 +105,9 @@ export class OfficeUsersComponent implements OnInit {
     data.find((ele: any, i: any) => {
       let obj = {
         "Sr.No": i + 1,
-        "name": ele.officeName,
-        "designation": ele.designation,
-        "taluka": ele.taluka,
+        "name": flag=='excel'?this.langTypeName == 'English' ?ele.officeName:ele.m_OfficeName:ele.officeName,
+        "designation": flag=='excel'?this.langTypeName == 'English' ?ele.designation:ele.m_Designation:ele.designation,
+        "taluka": flag=='excel'?this.langTypeName == 'English' ?ele.taluka:ele.m_Taluka:ele.taluka,
         "mobileNo": ele.mobileNo,
         "emailId": ele.emailId,
       }
@@ -115,16 +115,22 @@ export class OfficeUsersComponent implements OnInit {
     });
     if (this.resultDownloadArr.length > 0) {
       let keyPDFHeader = ['Sr. No.', "Office User Name", "Designation", 'Taluka', "Mobile No.", "Email ID"];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'ऑफिस युजर नावे', 'पदनाम', 'तालुका', 'मोबाईल क्र.', 'ई-मेल आयडी'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
         );
-      let objData: any = {
-        'topHedingName': 'Office User List',
-        'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      // let objData: any = {
+      //   'topHedingName': 'Office User List',
+      //   'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      // }
+
+     let objData= {
+        'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Office User List' : 'ऑफिस वापरकर्ता यादी' : 'Office User List',
+        'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
       let headerKeySize = [7, 15, 10, 10, 10, 15];
-      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize);
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.downloadFileService.allGenerateExcel(this.langTypeName == 'English'?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize);
     }
   }
   

@@ -79,7 +79,7 @@ export class ChangePasswordComponent {
               clear.resetForm();
               this.router.navigate(['/login']);
             } else {
-              this.common.snackBar(res.responseData, 1);
+              this.common.snackBar(res.statusMessage, 1);
             }
           },
           error: (error: any) => {

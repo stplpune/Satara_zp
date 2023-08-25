@@ -231,16 +231,16 @@ export class CctvLocationRegistrationComponent {
   }
 
 
-  private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-  convertToMarathiNumber(number: number): string {
-    const englishNumberString = number.toString();
-    let marathiNumberString = '';
-    for (let i = 0; i < englishNumberString.length; i++) {
-      const digit = parseInt(englishNumberString[i], 10);
-      marathiNumberString += this.marathiDigits[digit];
-    }
-    return marathiNumberString;
-  }
+  // private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+  // convertToMarathiNumber(number: number): string {
+  //   const englishNumberString = number.toString();
+  //   let marathiNumberString = '';
+  //   for (let i = 0; i < englishNumberString.length; i++) {
+  //     const digit = parseInt(englishNumberString[i], 10);
+  //     marathiNumberString += this.marathiDigits[digit];
+  //   }
+  //   return marathiNumberString;
+  // }
 
   childTableCompInfo(obj: any) {
     switch (obj.label) {
@@ -265,27 +265,34 @@ export class CctvLocationRegistrationComponent {
     this.resultDownloadArr = [];
     data.find((ele: any, i: any) => {    
 
-      let obj: any;
-      if (flag == 'excel') {
-        obj = {
-          srNo: this.languageFlag == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
-          cctvName: ele.cctvName,
-          cctvLocation: this.languageFlag == 'English' ? ele.cctvLocation : ele.m_CCTVLocation,
-          registrationDate: ele.registrationDate,
-          cctvModel: ele.cctvModel,
-          remark : ele.remark
-        }
-
-      } else if (flag == 'pdfFlag') {
-        obj = {
-          srNo: i + 1,
-          cctvName: ele.cctvName,
-          cctvLocation: ele.cctvLocation,
-          itemName: ele.registrationDate,
-          registrationDate: ele.cctvModel,
-          remark : ele.remark
-        }
+     let obj = {
+        srNo:(i + 1),
+        cctvName: ele.cctvName,
+        cctvLocation: this.languageFlag == 'English' ? ele.cctvLocation : ele.m_CCTVLocation,
+        registrationDate: ele.registrationDate,
+        cctvModel: ele.cctvModel,
+        remark : ele.remark
       }
+      // if (flag == 'excel') {
+      //   obj = {
+      //     srNo: this.languageFlag == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
+      //     cctvName: ele.cctvName,
+      //     cctvLocation: this.languageFlag == 'English' ? ele.cctvLocation : ele.m_CCTVLocation,
+      //     registrationDate: ele.registrationDate,
+      //     cctvModel: ele.cctvModel,
+      //     remark : ele.remark
+      //   }
+
+      // } else if (flag == 'pdfFlag') {
+      //   obj = {
+      //     srNo: i + 1,
+      //     cctvName: ele.cctvName,
+      //     cctvLocation: ele.cctvLocation,
+      //     itemName: ele.registrationDate,
+      //     registrationDate: ele.cctvModel,
+      //     remark : ele.remark
+      //   }
+      // }
       this.resultDownloadArr.push(obj);
     });
 

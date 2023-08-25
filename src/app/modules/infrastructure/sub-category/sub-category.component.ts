@@ -210,24 +210,32 @@ export class SubCategoryComponent {
   pdfDownload(data?: any,flag?:string) {   
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
-      let obj:any;
-      if(flag=='excel'){
-        obj = {
-          srNo: this.langTypeName == 'English'?(i + 1):this.convertToMarathiNumber(i+1),
-          category: this.langTypeName == 'English'?ele.category:ele.m_Category,
-          subCategory:this.langTypeName == 'English'?ele.subCategory:ele.m_SubCategory,
-          itemName: ele.itemName,
-          description: ele.description,
-        }
-      }else if(flag=='pdfFlag'){
-        obj = {
-          srNo: i + 1,
-          category: ele.category,
-          subCategory: ele.subCategory,
-          itemName: ele.itemName,
-          description: ele.description,
-        }
-      }
+     let obj = {
+            srNo: this.langTypeName == 'English'?(i + 1):this.convertToMarathiNumber(i+1),
+            category: flag == 'excel'?this.langTypeName == 'English'?ele.category:ele.m_Category:ele.category,
+            subCategory: flag == 'excel'?this.langTypeName == 'English'?ele.subCategory:ele.m_SubCategory:ele.subCategory,
+            itemName: ele.itemName,
+            description: ele.description,
+          }
+
+    
+      // if(flag=='excel'){
+      //   obj = {
+      //     srNo: this.langTypeName == 'English'?(i + 1):this.convertToMarathiNumber(i+1),
+      //     category: this.langTypeName == 'English'?ele.category:ele.m_Category,
+      //     subCategory:this.langTypeName == 'English'?ele.subCategory:ele.m_SubCategory,
+      //     itemName: ele.itemName,
+      //     description: ele.description,
+      //   }
+      // }else if(flag=='pdfFlag'){
+      //   obj = {
+      //     srNo: i + 1,
+      //     category: ele.category,
+      //     subCategory: ele.subCategory,
+      //     itemName: ele.itemName,
+      //     description: ele.description,
+      //   }
+      // }
       this.resultDownloadArr.push(obj);
     });
 
@@ -240,16 +248,21 @@ export class SubCategoryComponent {
         );
 
         let objData: any 
-        if(flag=='excel'){
-          objData = {
-            'topHedingName':this.langTypeName == 'English'? 'Sub-Category List':'उप-वर्ग सूची',
-            'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
-        }else if(flag=='pdfFlag'){
-           objData = {
-            'topHedingName': 'Sub-Category List',
-            'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-          }
+        // if(flag=='excel'){
+        //   objData = {
+        //     'topHedingName':this.langTypeName == 'English'? 'Sub-Category List':'उप-वर्ग सूची',
+        //     'createdDate':this.langTypeName == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        //   }
+        // }else if(flag=='pdfFlag'){
+        //    objData = {
+        //     'topHedingName': 'Sub-Category List',
+        //     'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+        //   }
+        // }
+
+        objData= {
+          'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Sub-Category List' : 'उप-वर्ग सूची' : 'Sub-Category List',
+          'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
        
         let headerKeySize = [7, 15, 20, 30, 40,]

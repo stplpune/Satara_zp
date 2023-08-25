@@ -99,14 +99,14 @@ export class AddUpdateDesignationMasterComponent {
   //#region ------------------------------------- Desiganation-Master Submit ---------------------------------// 
   OnSubmit() {
     if(this.designationForm.valid){
-      this.formDisabled = !this.formDisabled;
-      this.formDisabled ? 'disable' : 'enable';
-    if(this.editFlag) {
-        const disableValue = this.formDisabled ? 'disable' : 'enable';
-        Object.keys(this.designationForm.controls).forEach((designationLevelId) => {         
-            this.designationForm.controls[designationLevelId][disableValue]();
-        });
-      }
+    //   this.formDisabled = !this.formDisabled;
+    //   this.formDisabled ? 'disable' : 'enable';
+    // if(this.editFlag) {
+    //     const disableValue = this.formDisabled ? 'disable' : 'enable';
+    //     Object.keys(this.designationForm.controls).forEach((designationLevelId) => {         
+    //         this.designationForm.controls[designationLevelId][disableValue]();
+    //     });
+    //   }
       // let getFormVal = this.designationForm.value;
       // let getDesignationLevelId: any = this.commonMethod.getkeyValueByArrayOfObj(this.DesiganationLevelData, 'designationLevel', getFormVal?.designationLevelId);
       // this.designationForm.value.designationLevelId = getDesignationLevelId?.id;

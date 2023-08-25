@@ -45,16 +45,28 @@ nav .navbar-nav .nav-link.active {
     display: flex;
     align-items: center;
 }
-.about-section h1,
+
+.header h1 ,
+.ministers-information h1,
 .ministers h1,
-.header h1 {
+.about-section h1{
     font-size: 2.5rem;
     font-weight: 600;
 }
 
 .header {
-    padding-top: 120px;
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("../../../assets/images/home-page/Home-image.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
 
 .header .header-discription {
     font-size: 1.1rem;
@@ -66,13 +78,6 @@ nav .navbar-nav .nav-link.active {
 
 .ministers .plain-card {
     box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
-}
-
-.ministers .plain-card:hover {
-    border: 2px solid #586de6;
-    box-shadow:rgba(4, 9, 11, 0.338) 0px 2px 16px 0px !important;
-    transform: translateY(-2px);
-    cursor: pointer;
 }
 
 .ministers .card-body {
@@ -95,11 +100,13 @@ nav .navbar-nav .nav-link.active {
     margin-bottom: 0;
 }
 
+.ministers,
 .about-section,
+.ministers-information,
 .testimonials-section {
-    margin-top: 100px;
-    margin-inline: 50px;
+    padding-block: 40px;
 }
+
 .about-section ol {
     padding-left: 25px;
 } 

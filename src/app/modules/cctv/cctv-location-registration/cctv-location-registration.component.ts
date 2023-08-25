@@ -268,7 +268,7 @@ export class CctvLocationRegistrationComponent {
      let obj = {
         srNo:(i + 1),
         cctvName: ele.cctvName,
-        cctvLocation: this.languageFlag == 'English' ? ele.cctvLocation : ele.m_CCTVLocation,
+        cctvLocation:ele.cctvLocation ,
         registrationDate: ele.registrationDate,
         cctvModel: ele.cctvModel,
         remark : ele.remark

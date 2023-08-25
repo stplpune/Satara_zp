@@ -229,19 +229,7 @@ export class CctvLocationRegistrationComponent {
     this.highLightFlag ? tableData.highlightedrow = true : tableData.highlightedrow = false,
       this.apiService.tableData.next(tableData);
   }
-
-
-  // private marathiDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-  // convertToMarathiNumber(number: number): string {
-  //   const englishNumberString = number.toString();
-  //   let marathiNumberString = '';
-  //   for (let i = 0; i < englishNumberString.length; i++) {
-  //     const digit = parseInt(englishNumberString[i], 10);
-  //     marathiNumberString += this.marathiDigits[digit];
-  //   }
-  //   return marathiNumberString;
-  // }
-
+ 
   childTableCompInfo(obj: any) {
     switch (obj.label) {
       case 'Pagination':
@@ -273,26 +261,7 @@ export class CctvLocationRegistrationComponent {
         cctvModel: ele.cctvModel,
         remark : ele.remark
       }
-      // if (flag == 'excel') {
-      //   obj = {
-      //     srNo: this.languageFlag == 'English' ? (i + 1) : this.convertToMarathiNumber(i + 1),
-      //     cctvName: ele.cctvName,
-      //     cctvLocation: this.languageFlag == 'English' ? ele.cctvLocation : ele.m_CCTVLocation,
-      //     registrationDate: ele.registrationDate,
-      //     cctvModel: ele.cctvModel,
-      //     remark : ele.remark
-      //   }
-
-      // } else if (flag == 'pdfFlag') {
-      //   obj = {
-      //     srNo: i + 1,
-      //     cctvName: ele.cctvName,
-      //     cctvLocation: ele.cctvLocation,
-      //     itemName: ele.registrationDate,
-      //     registrationDate: ele.cctvModel,
-      //     remark : ele.remark
-      //   }
-      // }
+    
       this.resultDownloadArr.push(obj);
     });
 
@@ -305,17 +274,11 @@ export class CctvLocationRegistrationComponent {
         );
 
       let objData: any
-      if (flag == 'excel') {
-        objData = {
-          'topHedingName':this.languageFlag == 'English' ? 'CCTV Location List':'सीसीटीव्ही स्थान सूची',
-          'createdDate':this.languageFlag == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-        }
-      } else if (flag == 'pdfFlag') {
-        objData = {
-          'topHedingName': 'CCTV Location List',
-          'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
-        }
+      objData= {
+        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'CCTV Location List' : 'सीसीटीव्ही स्थान सूची' : 'CCTV Location List',
+        'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
+      
       let headerKeySize = [7, 15, 20, 30, 40,]
       flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.languageFlag == 'English' ?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }

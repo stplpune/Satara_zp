@@ -8,6 +8,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -37,11 +38,14 @@ export class PageStatisticsComponent implements OnInit {
   constructor(private apiService: ApiService,
     private ngxSpinner: NgxSpinnerService,
     public webStorage: WebStorageService,
-    private errors: ErrorsService){
+    private errors: ErrorsService,
+    private router : Router){
 
   }
 
   ngOnInit(): void {
+    console.log("router",this.router.url );
+    
     this.getStatisticsDetails();
     this.apiService.staticData.subscribe((res: any) => {
       if(res){

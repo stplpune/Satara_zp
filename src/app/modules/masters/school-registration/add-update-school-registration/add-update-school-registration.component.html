@@ -1,4 +1,4 @@
-<ng-container *ngIf="userId != 4">
+<ng-container *ngIf="this.data?.flag == 'school'">
     <div mat-dialog-title class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">{{editFlag ?( 'Labels.updateSchool' | translate)
@@ -307,7 +307,7 @@
 
 
 <!-- Event form start here  -->
-<ng-container *ngIf="userId == 4">
+<ng-container *ngIf="this.data?.flag == 'event'">
     <div mat-dialog-title class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">{{editFlag ? ( 'Labels.UpdateEventDetails' | translate ) : ('Labels.EventRegistration' | translate )}}</h6>

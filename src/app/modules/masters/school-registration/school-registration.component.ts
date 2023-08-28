@@ -298,7 +298,7 @@ export class SchoolRegistrationComponent implements OnInit {
         this.getTableData();
         break;
       case 'Edit':
-        this.addUpdateSchool(obj);
+        this.addUpdateSchool(obj, 'school');
         break;
       case 'Delete':
         this.globalDialogOpen(obj);
@@ -327,10 +327,14 @@ export class SchoolRegistrationComponent implements OnInit {
     }
   }
   //#region ------------------------------------------- Open Dialog Box Function start here ----------------------------------------// 
-  addUpdateSchool(obj?: any) {
+  addUpdateSchool(obj?: any, flag?: any) {
+    let data = {
+      flag : flag,
+      obj : obj
+    }
     const dialogRef = this.dialog.open(AddUpdateSchoolRegistrationComponent, {
       width: '850px',
-      data: obj,
+      data: data,
       disableClose: true,
       // autoFocus: false
     });

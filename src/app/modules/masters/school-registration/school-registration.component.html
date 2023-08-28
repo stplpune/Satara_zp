@@ -29,12 +29,12 @@
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
                 <button *ngIf="isWriteRight === true" class="btn-main d-flex align-items-center justify-content-between"
-                    mat-flat-button (click)="addUpdateSchool()">
+                    mat-flat-button (click)="addUpdateSchool(null,'school')">
                     <mat-icon>add</mat-icon>
                     <span>{{'Labels.addSchool' | translate}}</span>
                 </button>
-                <button *ngIf="userId !== 1" class="btn-main d-flex align-items-center justify-content-between"
-                    mat-flat-button (click)="addUpdateSchool()">
+                <button *ngIf="userId == 4" class="btn-main d-flex align-items-center justify-content-between"
+                    mat-flat-button (click)="addUpdateSchool(null,'event')">
                     <mat-icon>add</mat-icon>
                     <span>{{'Labels.AddEvent' | translate}}</span>
                 </button>

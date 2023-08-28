@@ -217,23 +217,29 @@
                         'Standard' : 'इयत्ता'}}</th>
                 </ng-container>
 
-                <ng-container matColumnDef="assBaseLevelStudentCount">
+                <!-- <ng-container matColumnDef="assBaseLevelStudentCount">
                     <th mat-header-cell *matHeaderCellDef class="text-center"> {{this.languageFlag == 'English' ? 'Base
                         Level' : '
                         पायाभूत स्तर'}} </th>
                     <td mat-cell *matCellDef="let element"> {{element.assBaseLevelStudentCount}} </td>
-                </ng-container>
+                </ng-container> -->
 
                 <ng-container matColumnDef="assClassWiseStudentCount">
-                    <th mat-header-cell *matHeaderCellDef class="text-center"> {{this.languageFlag == 'English' ? 'Class
+                    <th mat-header-cell *matHeaderCellDef class="text-center" [ngStyle]="{'display': 'none'}"> {{this.languageFlag == 'English' ? 'Class
                         Level' : 'इयत्ता निहाय'}} </th>
                     <td mat-cell *matCellDef="let element"> {{element.assClassWiseStudentCount}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="header-row-second-group">
-                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="text-center"> {{this.languageFlag ==
+                    <th mat-header-cell *matHeaderCellDef  [attr.rowspan]="2" class="text-center"> {{this.languageFlag ==
                         'English' ? 'Assessed Student Count' : 'मुल्यांकित विद्यार्थी संख्या'}}</th>
+                        <td mat-cell *matCellDef="let element"> {{element.assClassWiseStudentCount}} </td>
                 </ng-container>
+                <ng-container matColumnDef="header-row-second-group1">
+                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">{{this.languageFlag == 'English' ?
+                        'Standard' : 'इयत्ता'}}</th>
+                </ng-container>
+
 
                 <ng-container matColumnDef="totalStudentCount">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> totalStudentCount </th>

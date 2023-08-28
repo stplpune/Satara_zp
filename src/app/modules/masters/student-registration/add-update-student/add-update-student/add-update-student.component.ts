@@ -627,62 +627,7 @@ export class AddUpdateStudentComponent {
     
     let obj = this.stuRegistrationForm.value;
     let dateWithTime = this.datePipe.transform(obj.dob, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
-
    let gardianObj = this.gardianModelArr.filter((res:any)=>{return res.isHead == true}) 
-   
-
-    // let postObj = {
-    //   ... this.webService.createdByProps(),
-    //   "id": this.editObj ? this.editObj.id : 0,
-    //   "gaurdianId": this.editObj ? this.editObj.gaurdianId : 0,
-    //   "fName": obj.fName?.trim(),
-    //   "f_MName": obj.f_MName?.trim(),
-    //   "mName": obj.mName?.trim(),
-    //   "m_MName": obj.m_MName?.trim(),
-    //   "lName": obj.lName?.trim(),
-    //   "l_MName": obj.l_MName?.trim(),
-    //   "stateId": obj.stateId || 1,
-    //   "districtId": obj.districtId,
-    //   "talukaId": obj.talukaId,
-    //   "centerId": obj.centerId,
-    //   "villageId": obj.villageId,
-    //   "schoolId": obj.schoolId,
-    //   "standard": obj.standard,
-    //   "saralId": obj.saralId,
-    //   "gender": obj.gender,
-    //   "dob": dateWithTime,
-    //   "religionId": obj.religionId,
-    //   "castId": obj.castId,
-    //   "aadharNo": obj.aadharNo,
-    //   "isCastCertificate": true,
-    //   "isParentsAlive": true,
-    //   "isOnlyFatherAlive": true,
-    //   "isOnlyMotherAlive": true,
-    //   "isHandicaped": false,   //obj.physicallyDisabled == 1 ? true : false,
-    //   "isHandicapedCertificate": true,
-    //   "timestamp": new Date(),
-    //   "localId": 0,
-    //   "fatherFullName": obj.fatherFullName?.trim(),
-    //   "motherName": obj.motherName?.trim(),
-    //   "mobileNo": obj.mobileNo,
-    //   "gaurdianModel": {
-    //     ... this.webService.createdByProps(),
-    //     "id": this.editObj ? this.editObj.gaurdianId : 0,
-    //     "fatherFullName": obj.fatherFullName?.trim(),
-    //     "m_FatherFullName": '',
-    //     "motherName": obj.motherName?.trim(),
-    //     "m_MotherName": '',
-    //     "mobileNo": obj.mobileNo,
-    //     "timestamp": new Date(),
-    //     "localId": 0
-    //   },
-    //   "documentModel": this.imageArray,
-    //   "lan": this.languageFlag,
-    //   "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
-    // }
-
-
-
     let postObj = {
       ... this.webService.createdByProps(),
       "id": this.editObj ? this.editObj.id : 0,

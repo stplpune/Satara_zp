@@ -250,6 +250,7 @@ export class TasksheetComponent {
       tableSize: this.totalItem,
       apply:true,
       isSubmitted: this.submitFlag,
+      attendanceStatus: 'attendance',
       // edit: true, delete: true,
       // date:'holidayDate',
       // tableHeaders: displayedColumnsReadMode,

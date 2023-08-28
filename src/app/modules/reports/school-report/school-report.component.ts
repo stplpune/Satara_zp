@@ -328,7 +328,7 @@ export class SchoolReportComponent {
 
   getTableTranslatedData(){
     this.highLightFlag=true;
-    this.displayedColumns = ['srNo', 'taluka' ,'center','schoolName','standard','assBaseLevelStudentCount','assClassWiseStudentCount','totalStudentCount'];
+    this.displayedColumns = ['srNo', 'taluka' ,'center','schoolName','standard','assClassWiseStudentCount','totalStudentCount'];
     // this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'taluka' : 'm_Taluka', this.languageFlag == 'English' ?'center':'m_Center', this.languageFlag == 'English' ?'schoolName':'m_SchoolName',this.languageFlag == 'English' ?'standard':'m_Standard','assBaseLevelStudentCount','assClassWiseStudentCount','totalStudentCount'];
       this.tableData = {
         pageNumber: this.pageNumber,

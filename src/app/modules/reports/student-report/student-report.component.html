@@ -39,6 +39,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
+                        [class]="this.logInDetails?.talukaId ? studentReportForm.controls['talukaId'].disable({ onlySelf: true }) : studentReportForm.controls['talukaId'].enable({ onlySelf: true })"
                             (selectionChange)="clearDropdown('talukaId');getAllCenter('drpChnage');">
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
@@ -50,6 +51,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
+                        [class]="this.logInDetails?.centerId ? studentReportForm.controls['centerId'].disable({ onlySelf: true}) :studentReportForm.controls['centerId'].enable({ onlySelf: true})"
                             (selectionChange)="clearDropdown('centerId');getVillage('drpChnage')">
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                                 ?cen.center:cen.m_Center}}</mat-option>
@@ -61,6 +63,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
+                        [class]="this.logInDetails?.villageId ? studentReportForm.controls['villageId'].disable({ onlySelf: true}) : studentReportForm.controls['villageId'].enable({ onlySelf: true}) "
                             (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId('drpChnage')">
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
                                 'English'
@@ -70,7 +73,7 @@
                     </mat-form-field>
                 </div>
                 
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <!-- <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.AssessmentType' | translate}}</mat-label>
                         <mat-select formControlName="AssessmentTypeId" (selectionChange)="onchangeAssesType()">
@@ -81,7 +84,8 @@
                     </mat-form-field> -->
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                        <mat-select formControlName="schoolId" (selectionChange)="clearDropdown('schoolId');GetAllStandardClassWise()">
+                        <mat-select formControlName="schoolId" (selectionChange)="clearDropdown('schoolId');GetAllStandardClassWise()"
+                        [class]="this.logInDetails?.schoolId ? studentReportForm.controls['schoolId'].disable({ onlySelf: true}) : studentReportForm.controls['schoolId'].enable({ onlySelf: true}) ">
                             <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
                                 sch.schoolName:sch.m_SchoolName}}</mat-option>
                         </mat-select>

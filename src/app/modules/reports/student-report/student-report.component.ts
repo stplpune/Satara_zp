@@ -157,7 +157,7 @@ export class StudentReportComponent {
 
   getAllCenter(flag?: string) {
     this.centerArr = [];
-    let id = this.studentReportForm.value.talukaId;
+    let id = this.studentReportForm.getRawValue().talukaId;
     if(id != 0) {
       this.masterService.getAllCenter('', id).subscribe({
         next: (res: any) => {
@@ -176,7 +176,7 @@ export class StudentReportComponent {
 
   getVillage(flag?: any) {
     this.villageArr = [];
-    let Cid = this.studentReportForm.value.centerId;
+    let Cid = this.studentReportForm.getRawValue().centerId;
     // let Cid = 0;
     if (Cid != 0) {
       this.masterService.getAllVillage('', Cid).subscribe({
@@ -195,10 +195,12 @@ export class StudentReportComponent {
   }
 
   getAllSchoolsByCenterId(flag?: any) {
+    let formData = this.studentReportForm.getRawValue();
+
     this.schoolArr = [];
-    let Tid = this.studentReportForm.value.talukaId || 0;
-    let Cid = this.studentReportForm.value.centerId || 0;
-    let Vid = this.studentReportForm.value.villageId || 0;
+    let Tid = formData.talukaId || 0;
+    let Cid = formData.centerId || 0;
+    let Vid = formData.villageId || 0;
     if (Vid != 0) {
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
@@ -272,7 +274,7 @@ export class StudentReportComponent {
   
 
   GetAllStandardClassWise() {
-    let schoolId= this.studentReportForm.value.schoolId;
+    let schoolId= this.studentReportForm.getRawValue().schoolId;
     this.allStdClassWise = [];
     if(schoolId != 0){
     this.masterService.GetStandardBySchool(schoolId, '').subscribe({
@@ -302,6 +304,7 @@ export class StudentReportComponent {
 
   searchAssessMent(flag?: string){
     // this.tableDataArray =[];
+    let formData = this.studentReportForm.getRawValue();
     this.tableData.tableData = []
     let subjectId = this.studentReportForm.value.AssessmentTypeId == 1 ? 0 : this.studentReportForm.value.subjectId
     let start = this.datepipe.transform(this.studentReportForm.value.start, 'yyyy-MM-dd');
@@ -311,11 +314,11 @@ export class StudentReportComponent {
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     // let str = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${this.studentReportForm.value.talukaId}&CenterId=${this.studentReportForm.value.centerId}&VillageId=${this.studentReportForm.value.villageId}&SchoolId=${this.studentReportForm.value.schoolId}&GroupId=${this.studentReportForm.value.groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${this.studentReportForm.value.subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${'2021-01-01'}&ToDate=${'2023-10-01'}&PageNo=${1}&RowCount=${10}&lan=${this.webService.languageFlag}`;
 
-    let reportStrStudent = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${this.studentReportForm.value.talukaId}&CenterId=${this.studentReportForm.value.centerId}&VillageId=${this.studentReportForm.value.villageId}&SchoolId=${this.studentReportForm.value.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&pageno=${1}&RowCount=${0}&lan=${this.webService.languageFlag}`;
-    let strStudent = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${this.studentReportForm.value.talukaId}&CenterId=${this.studentReportForm.value.centerId}&VillageId=${this.studentReportForm.value.villageId}&SchoolId=${this.studentReportForm.value.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&PageNo=${this.pageNumber}&RowCount=${10}&lan=${this.webService.languageFlag}`;
+    let reportStrStudent = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${formData.talukaId}&CenterId=${formData.centerId}&VillageId=${formData.villageId}&SchoolId=${formData.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&pageno=${1}&RowCount=${0}&lan=${this.webService.languageFlag}`;
+    let strStudent = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${formData.talukaId}&CenterId=${formData.centerId}&VillageId=${formData.villageId}&SchoolId=${formData.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&PageNo=${this.pageNumber}&RowCount=${10}&lan=${this.webService.languageFlag}`;
 
-    let reportStrOfficer = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${this.studentReportForm.value.talukaId}&CenterId=${this.studentReportForm.value.centerId}&VillageId=${this.studentReportForm.value.villageId}&SchoolId=${this.studentReportForm.value.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&pageno=${1}&RowCount=${0}&IsInspection=${1}&Teacher_OfficeId=${0}&lan=${this.webService.languageFlag}`;
-    let strOfficer = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${this.studentReportForm.value.talukaId}&CenterId=${this.studentReportForm.value.centerId}&VillageId=${this.studentReportForm.value.villageId}&SchoolId=${this.studentReportForm.value.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&PageNo=${this.pageNumber}&RowCount=${10}&IsInspection=${1}&Teacher_OfficeId=${0}&lan=${this.webService.languageFlag}`;
+    let reportStrOfficer = `?EducationYearId=${formData.educationYearId}&TalukaId=${formData.talukaId}&CenterId=${formData.centerId}&VillageId=${formData.villageId}&SchoolId=${formData.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&pageno=${1}&RowCount=${0}&IsInspection=${1}&Teacher_OfficeId=${0}&lan=${this.webService.languageFlag}`;
+    let strOfficer = `?EducationYearId=${this.studentReportForm.value.educationYearId}&TalukaId=${formData.talukaId}&CenterId=${formData.centerId}&VillageId=${formData.villageId}&SchoolId=${formData.schoolId}&GroupId=${groupId}&StandardId=${this.studentReportForm.value.standardId}&SubjectId=${subjectId}&ExamTypeId=${this.studentReportForm.value.examTypeId}&FromDate=${start}&ToDate=${end?end:this.datepipe.transform(new Date(), 'yyyy-MM-dd')}&PageNo=${this.pageNumber}&RowCount=${10}&IsInspection=${1}&Teacher_OfficeId=${0}&lan=${this.webService.languageFlag}`;
 
     let StudentAPI = (this.studentReportForm.value.AssessmentTypeId == 1) ? 'Download_AssessmentReport' : 'Download_AssReport_ClassWise_Student'
     let OfficerAPI = (this.studentReportForm.value.AssessmentTypeId == 1) ? 'Download_AssessmentReport_Officer_V2' : 'Download_AssReport_ClassWise_Officer'
@@ -376,7 +379,7 @@ export class StudentReportComponent {
   }
 
   downloadExcel(data?: any) {    
-    
+    let formData = this.studentReportForm.getRawValue()
     if (this.pageUrl == '/officer-report') {
       this.sheetNameEng = 'Officer Report'
       this.sheetNameMar = 'अधिकारी अहवाल'
@@ -390,8 +393,8 @@ export class StudentReportComponent {
     let classWiseLabel = this.languageFlag == 'English' ? 'Class Wise Assessment Report' : 'वर्ग निहाय मूल्यांकन अहवाल'
     let En = this.languageFlag == 'English';
     // for filter in download excel sheet 
-    let village = this.villageArr.length ? this.villageArr.find((x:any)=>{if(x.id == this.studentReportForm.value.villageId){ return x} }) : { "id": 0, "village": "All village", "m_Village": "सर्व गाव" };
-    let schoolList = this.schoolArr.length ? this.schoolArr.find((x:any)=>{if(x.id == this.studentReportForm.value.schoolId){return x}}) : { "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" };
+    let village = this.villageArr.length ? this.villageArr.find((x:any)=>{if(x.id == formData.villageId){ return x} }) : { "id": 0, "village": "All village", "m_Village": "सर्व गाव" };
+    let schoolList = this.schoolArr.length ? this.schoolArr.find((x:any)=>{if(x.id == formData.schoolId){return x}}) : { "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" };
     let assessmentType = this.AssessmentTypeArr.find((x:any)=>{if(x.id == this.studentReportForm.value.AssessmentTypeId){return x}})    
     // show only base assessmnet 
     let groupClass = (this.studentReportForm.value.AssessmentTypeId == 1) ? this.groupByClassArray.find((x:any)=>{if(x.groupId == this.studentReportForm.value.groupId){return x} }): ''
@@ -402,10 +405,10 @@ export class StudentReportComponent {
     let Base_filter  = `${ En ? 'Group of Class : '+ groupClass.groupClass+', ': 'वर्ग गट: ' +   groupClass.m_GroupClass+', ' } ${ En ? 'Standard: '+ data[0].standard+', ' : 'इयत्ता: '+ data[0].m_Standard+', ' }`;
     let FrmDate = this.datepipe.transform(this.studentReportForm.value.start, 'dd/MM/yyyy');
     let endDate = this.studentReportForm.value.end ? this.datepipe.transform(this.studentReportForm.value.end, 'dd/MM/yyyy'): this.datepipe.transform(new Date(), 'dd/MM/yyyy');
-    let talukaEng = this.studentReportForm.value.talukaId > 0 ? data[0].taluka : 'All Taluka'
-    let talukaMar = this.studentReportForm.value.talukaId > 0 ? data[0].m_Taluka : 'सर्व तालुके'
-    let kendraEng = this.studentReportForm.value.centerId > 0 ? data[0].taluka : 'All Center'
-    let kendraMar = this.studentReportForm.value.centerId > 0 ? data[0].m_Taluka : 'सर्व केंद्र'
+    let talukaEng = formData.talukaId > 0 ? data[0].taluka : 'All Taluka'
+    let talukaMar = formData.talukaId > 0 ? data[0].m_Taluka : 'सर्व तालुके'
+    let kendraEng = formData.centerId > 0 ? data[0].taluka : 'All Center'
+    let kendraMar = formData.centerId > 0 ? data[0].m_Taluka : 'सर्व केंद्र'
     let para = `${En ? 'District: ' + data[0].district+', ' : 'जिल्हा: '+ data[0].m_District+', ' } ${En ? 'Taluka: '+ talukaEng +', ': 'तालुका: '+talukaMar+', '}  ${En ? 'Center: '+ kendraEng+', ': 'केंद्र: '+ kendraMar+', '}  ${En ? 'Village: ' + village?.village+', ' : 'गाव: '+ village?.m_Village+', ' }  ${En ? 'School Name: '+ schoolList.schoolName+', ': 'शाळेचे नाव: '+ schoolList.m_SchoolName+', '} ${En ? 'Assessment Type: '+ assessmentType.assessmentType+', ' : 'मूल्यांकन प्रकार: '+ assessmentType.m_AssessmentType+', '} ${this.studentReportForm.value.AssessmentTypeId == 1 ? Base_filter+', ' : class_filter+', '} ${En ?'Exam Type: ' +data[0].examType+', ' : 'परीक्षेचा प्रकार: '+data[0].m_ExamType+', '} ${En ?'Academic Year: ' +AcademicyearList.eductionYear+'\n'+' ' : 'शैक्षणिक वर्ष: '+AcademicyearList.eductionYear_M+'\n'}${En ? 'Date: '+FrmDate+' - ' +endDate : 'तारीख:'+ FrmDate+' - ' +endDate }`;
  // done filter in download excel sheet 
     let nameArr = [{

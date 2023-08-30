@@ -66,44 +66,66 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CCTVName'| translate}}</mat-label>
-                    <input matInput formControlName="cctvName"
-                        (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
-                        maxlength="100">
-                </mat-form-field>
-            </div>
-            <div class="col-sm-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CCTVModel'| translate}}</mat-label>
-                    <input matInput formControlName="cctvModel"
-                        (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
-                        maxlength="100">
-                </mat-form-field>
-            </div>
-            <div class="col-sm-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CloudID'| translate}}</mat-label>
-                    <input matInput formControlName="cloudId"
-                        (keypress)="validators.noFirstSpaceAllow($event);validators.onlyDigits($event)" maxlength="100">
-                </mat-form-field>
-            </div>
-            <div class="col-sm-6">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.RegistrationDate'| translate}}</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="registrationDate" (click)="picker.open()">
-                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-6">
-                <button mat-flat-button class="btn-main">
-                    <mat-icon>add</mat-icon>
-                    {{'Labels.addStudent'| translate}}
-                </button>
-            </div>
-            <div class="col-sm-12">
+            
+
+            <form [formGroup]="cameraDetailsForm">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.CCTVName'| translate}}</mat-label>
+                            <input matInput formControlName="cctvName"
+                                (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
+                                maxlength="100">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.CCTVModel'| translate}}</mat-label>
+                            <input matInput formControlName="cctvModel"
+                                (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
+                                maxlength="100">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.DeviceId'| translate}}</mat-label>
+                            <input matInput formControlName="deviceId"
+                                (keypress)="validators.noFirstSpaceAllow($event);validators.onlyDigits($event)" maxlength="100">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.RegistrationDate'| translate}}</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="registerDate" (click)="picker.open()">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.userName'| translate}}</mat-label>
+                            <input matInput formControlName="userName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.password'| translate}}</mat-label>
+                            <input matInput formControlName="password"
+                                (keypress)="validators.noFirstSpaceAllow($event);" maxlength="100">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6">
+                        <button mat-flat-button type="button" class="btn-main" (click)="onSubmitCameraDetails()">
+                            <mat-icon>add</mat-icon>
+                            <!-- {{'Labels.addStudent'| translate}} --> Add Camera Details
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+
+
+            <div class="col-sm-12 mt-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label> {{'Labels.Description'| translate}}</mat-label>
                     <textarea matInput formControlName="remark" (keypress)="validators.noFirstSpaceAllow($event)"
@@ -112,7 +134,30 @@
             </div>
             <div class="col-sm-12">
                 <div class="table-responsive">
-                    
+                    <table class="dashboard-table" *ngIf="cameraDetailsArr.length>0">
+                        <thead>
+                            <tr>
+                                <th scope="col">{{this.languageFlag == "English" ? 'Sr.No.' : 'अनु. क्र'}}  </th>                                        
+                                <th scope="col">{{this.languageFlag == "English" ? 'CCTV Name' : 'सीसीटीव्हीचे नाव'}}</th>
+                                <th scope="col"> {{this.languageFlag == "English" ? 'CCTV Model' : 'सीसीटीव्ही मॉडेल'}}</th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'Device Id' : 'डिव्हाइस आयडी'}}</th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'Registration Date' : 'नोंदणी दिनांक'}}  </th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'User Name' : 'युजर नेम'}}  </th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'Password' : 'पासवर्ड'}}  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cctv of cameraDetailsArr; let i = index">
+                                <td>{{i+1}}</td>                                        
+                                <td>{{cctv.cctvName}}</td>
+                                <td>{{cctv.cctvModel}}</td>
+                                <td>{{cctv.deviceId}}</td>
+                                <td>{{cctv.registerDate  | date:'dd-MM-yyyy'}}</td>
+                                <td>{{cctv.userName}}</td>
+                                <td>{{cctv.password}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

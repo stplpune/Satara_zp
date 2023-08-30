@@ -18,6 +18,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 export class AddCctvLocationComponent {
  
   cctvLocationForm !: FormGroup;
+  cameraDetailsForm !: FormGroup;
   languageFlag!:string;
   $districts?: Observable<any>;
   talukaArr = new Array();
@@ -26,8 +27,7 @@ export class AddCctvLocationComponent {
   schoolArr = new Array();
   CCTVLocation = new Array();
   editFlag : boolean = false;
-
-
+  cameraDetailsArr = new Array();
 
   constructor(public webService: WebStorageService,
     private fb: FormBuilder,
@@ -40,10 +40,7 @@ export class AddCctvLocationComponent {
     public validators: ValidationService,
      private webStorageS :WebStorageService,
     public dialogRef: MatDialogRef<AddCctvLocationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-
-     ) {}
-
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {
     this.data ? this.editFlag = true : this.editFlag= false
@@ -51,11 +48,10 @@ export class AddCctvLocationComponent {
       this.languageFlag = lang;    
     });
     this.filterFormData();
+    this.cameraFormData();
     this.getTaluka();
     this.getCCTVLocation();
- 
   }
-
 
   filterFormData() {
     this.cctvLocationForm = this.fb.group({
@@ -67,15 +63,29 @@ export class AddCctvLocationComponent {
       "villageId": ['',[Validators.required]],
       "schoolId": ['',[Validators.required]],
       "cctvLocationId": ['',[Validators.required]],
-      "cctvName": [this.data?.cctvName || '',[Validators.required]],
-      "cctvModel": [this.data?.cctvModel || '',[Validators.required]],
-      "cloudId": [this.data?.cloudId || '',[Validators.required]],
-      "registrationDate": [this.data?.registrationDate || '',[Validators.required]],
+      // "cctvName": [this.data?.cctvName || '',[Validators.required]],
+      // "cctvModel": [this.data?.cctvModel || '',[Validators.required]],
+      // "cloudId": [this.data?.cloudId || '',[Validators.required]],
+      // "registrationDate": [this.data?.registrationDate || '',[Validators.required]],
       "remark": [this.data?.remark || ''],
-      "lan": ['']    
+      "lan": [''],
+      "cctvDetailModel" : []    
     });
   }
 
+  cameraFormData(){
+    this.cameraDetailsForm = this.fb.group({
+      ...this.webStorageS.createdByProps(),
+      "id": [0],
+      "cctvRegisterId": [0],
+      "cctvName": [''],
+      "cctvModel": [''],
+      "registerDate": new Date(),
+      "deviceId": [''],
+      "userName": [''],
+      "password": ['']
+    })
+  }
 
   // getDistrict() {
   //   this.$districts = this.masterService.getAlllDistrict(this.languageFlag);   
@@ -170,8 +180,16 @@ export class AddCctvLocationComponent {
       });
     }
 
+    onSubmitCameraDetails(){
+      let formValue = this.cameraDetailsForm.value;
+      this.cameraDetailsArr.push(formValue);
+      this.cameraFormData();
+    }
+
     onSubmit(){ 
       let postData = this.cctvLocationForm.value;
+      postData.cctvDetailModel = this.cameraDetailsArr;
+      
       if(this.cctvLocationForm.invalid){
         return;
       }else{

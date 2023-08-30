@@ -8,11 +8,13 @@ footer {
 .privacy-policy a {
     text-decoration: none;
     color: #fff;
-    margin-inline: 10px;
+    margin-inline: 7px;
 }
 
 .privacy-policy a:hover {
-    color: var(--main-color);
+    box-shadow: -1px 1px 8px 4px rgba(20, 20, 20, 0.252);
+    border: 1.2px solid #ffffff;
+    border-radius: 50%;
 }
 
 footer .shikshan-darpan-logo {

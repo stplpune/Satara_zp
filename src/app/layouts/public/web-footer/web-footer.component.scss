@@ -92,6 +92,13 @@ footer .input-group button {
     font-size: 1.4rem;
 }
 
+.sub-footer{
+    display: flex;
+    padding-top:10px;
+    justify-content: space-between;
+    border-top: 1px solid #35373781;
+}
+
 @media screen and (max-width: 480px) {
     .header {
         padding-top: 60px;

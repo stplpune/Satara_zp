@@ -296,7 +296,7 @@ export class CctvLocationRegistrationComponent {
 
   openDialog(obj?:any) {
     const dialogRef = this.dialog.open(AddCctvLocationComponent,{
-      width: '500px',
+      width: '650px',
       disableClose: true,
       autoFocus: false,
       data :obj

@@ -362,7 +362,7 @@ export class DesignationMasterComponent implements OnInit {
       //     this.designationForm.controls[designationLevelId][disableValue]();
       //   });
       // }
-      let formValue = this.designationForm.value;
+      let formValue = this.designationForm.getRawValue();
       let data = this.webStorage.createdByProps();
 
       let postObj = {
@@ -389,7 +389,7 @@ export class DesignationMasterComponent implements OnInit {
         next: (res: any) => {
           this.ngxSpinner.hide();
           // this.service.staticData.next('getRefreshStaticdata');
-          res.statusCode == 200 ? (this.commonMethod.showPopup(res.statusMessage, 0), this.getTableData()) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          res.statusCode == 200 ? (this.commonMethod.showPopup(res.statusMessage, 0),this.formDirective.resetForm(),  this.editFlag = false, this.getTableData()) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           res.statusCode == 200 ? '' : this.ngxSpinner.hide();
         },
         error: ((error: any) => {

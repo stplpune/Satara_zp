@@ -45,6 +45,7 @@ export class AddUpdateSchoolRegistrationComponent {
   tableDatasize!: number;
   editEventObj: any;
   textSearch = new FormControl('');
+  imgValidation: boolean = false;
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(private masterService: MasterService,
@@ -277,6 +278,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
+          this.imgValidation = false;
           this.uploadMultipleImg = res.responseData;
           this.commonMethod.showPopup(res.statusMessage, 0);
           // multiple image 
@@ -507,9 +509,12 @@ export class AddUpdateSchoolRegistrationComponent {
   onSubmitEvent() {
     let formValue = this.eventForm.value;
     formValue.eventImages = this.imgArray;
+    console.log("this.imgArray", this.imgArray);
+    
+    (this.imgArray.length) == 0 ? this.imgValidation = true : '';
 
     let url = this.editEventObj ? 'UpdateEvent' : 'AddEvent'
-    if (!this.eventForm.valid) {
+    if (!this.eventForm.valid || this.imgValidation == true) {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }

@@ -16,7 +16,7 @@ export class CctvComponent {
   viewStatus = 'Table';
   pageNumber: number = 1;
   displayedheadersEnglish = ['Sr. No.', 'cctvLocation', 'cctvName', 'cctvModel', 'Register Date', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'cctv स्थान', 'cctv नाव', 'cctv मॉडेल', 'नोंदणी तारीख','कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'cctv स्थान', 'cctv नाव', 'cctv मॉडेल', 'नोंदणी तारीख', 'कृती'];
   filterForm!: FormGroup;
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   tableDataArray = new Array();
@@ -35,17 +35,17 @@ export class CctvComponent {
     return this.filterForm.controls
   }
   CCTVLocationArr = new Array();
-  constructor(private ngxSpinner : NgxSpinnerService,
+  constructor(private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
     private commonMethodS: CommonMethodsService,
     private errors: ErrorsService,
     public webStorageS: WebStorageService,
-    private fb : FormBuilder,
+    private fb: FormBuilder,
     private masterService: MasterService,
-    ){
+  ) {
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
@@ -56,7 +56,7 @@ export class CctvComponent {
     this.getTableData();
   }
 
-  filterFormData(){
+  filterFormData() {
     this.filterForm = this.fb.group({
       talukaId: [''],
       centerId: [''],
@@ -66,13 +66,15 @@ export class CctvComponent {
       textSearch: [''],
     })
   }
+  // Get Taluka Dropdown By district
 
-  getTalukaDropByDis(){
+  getTalukaDropByDis() {
     this.talukaArr = [];
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          this.f['talukaId'].setValue(0);
           this.filterForm?.value.talukaId ? this.getCenterDropByTaluka() : '';
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
@@ -82,7 +84,9 @@ export class CctvComponent {
     });
   }
 
-  getCenterDropByTaluka(){
+  // Get Center Dropdown
+
+  getCenterDropByTaluka() {
     this.centerArr = [];
     let id = this.f['talukaId'].value;
     if (id != 0) {
@@ -100,7 +104,9 @@ export class CctvComponent {
     }
 
   }
-  getVillageDropByCenter(){
+
+  // Get Village Dropdown
+  getVillageDropByCenter() {
     this.villageArr = [];
     let Cid = this.f['centerId'].value;
     if (Cid != 0) {
@@ -119,7 +125,8 @@ export class CctvComponent {
 
   }
 
-  getSchoolDropByFilter(){
+  // getSchool Drop 
+  getSchoolDropByFilter() {
     this.schoolArr = [];
     let Tid = this.f['talukaId'].value;
     let Cid = this.f['centerId'].value || 0;
@@ -136,18 +143,18 @@ export class CctvComponent {
     });
   }
 
-  getAllCCTVLocation(){
+  // load cctv Location Dropdown
+  getAllCCTVLocation() {
     this.CCTVLocationArr = [];
     this.masterService.getCCTVLocation('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.CCTVLocationArr =res.responseData         
+          this.CCTVLocationArr = res.responseData
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.CCTVLocationArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -178,8 +185,8 @@ export class CctvComponent {
       error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
   }
-  
-  languageChange(){
+
+  languageChange() {
     this.highLightFlag = true;
     this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'cctvLocation' : 'm_CCTVLocation', this.langTypeName == 'English' ? 'cctvName' : 'cctvName', this.langTypeName == 'English' ? 'cctvModel' : 'cctvModel', 'registerDate'];
     this.tableData = {
@@ -197,16 +204,17 @@ export class CctvComponent {
 
   }
 
-  childCompInfo(obj?: any){
-  if(obj.label == 'View'){
-    this.selectedCCTV = obj
-    console.log(obj);
+  // Click table row 
+  childCompInfo(obj?: any) {
+    if (obj.label == 'View') {
+      this.selectedCCTV = obj
+      console.log(obj);
+    }
   }
-  }
-  
+
 
   // clear dropdown 
-  onChangeDropD(flag?: string){
+  onChangeDropD(flag?: string) {
     console.log(flag);
     switch (flag) {
       case 'taluka':
@@ -222,11 +230,12 @@ export class CctvComponent {
       case 'village':
         this.f['schoolId'].setValue(0);
         break;
-     
+
     }
 
   }
 
+  // clear button func
   clearForm() {
     this.filterForm.reset();
     this.villageArr = [];
@@ -236,5 +245,5 @@ export class CctvComponent {
     this.getTableData();
   }
 
-  
+
 }

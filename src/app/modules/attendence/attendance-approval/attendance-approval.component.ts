@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./attendance-approval.component.scss']
 })
 export class AttendanceApprovalComponent {
+  viewStatus = 'Table';
 
 }

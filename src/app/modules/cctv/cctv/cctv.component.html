@@ -15,49 +15,55 @@
             <div class="text-main fw-bold">
                 {{'Labels.cctvlist' | translate}}
             </div>
-            <!-- <div class="d-flex align-items-center gap-2">
-                <button mat-flat-button class="bg-danger btn-icon text-white"
-                    matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-                    matTooltipClass="tooltip">
-                    <mat-icon>description </mat-icon>
-                </button>
-                <button mat-flat-button class="bg-success btn-icon text-white">
-                    <mat-icon class="material-symbols-outlined">table</mat-icon>
-                </button>
-            </div> -->
+            
         </div>
     </mat-card-header>
+    <!-- Start filter -->
     <mat-card-header class="card-header pb-0 border-bottom-0">
+        <form [formGroup]="filterForm">
         <div class="row gx-2">
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.district'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.village'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
             <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.school'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                    <mat-select formControlName="talukaId"
+                        (selectionChange)="onChangeDropD('taluka');getCenterDropByTaluka();">
+                        <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
+                            'EN' ?
+                            tal.taluka:tal.m_Taluka }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+                    <mat-select formControlName="centerId"
+                        (selectionChange)="onChangeDropD('center'); getVillageDropByCenter()">
+                        <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
+                            'EN' ? cen.center:cen.m_Center}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm">
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.village'| translate}}</mat-label>
+                    <mat-select formControlName="villageId"
+                        (selectionChange)="onChangeDropD('village'); getSchoolDropByFilter();">
+                        <mat-option *ngFor="let village of villageArr"
+                            [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
+                            village.village:village.m_Village}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-4">
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                    <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
+                        <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() ==
+                            'EN' ?
+                            sch.schoolName:sch.m_SchoolName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -78,7 +84,9 @@
                 </div>
             </div>
         </div>
+    </form>
     </mat-card-header>
+    <!-- filter End here  -->
     <mat-card-content class="card-body">
         <div class="row">
             <div class="col-sm-9">
@@ -175,64 +183,7 @@
                         <p class="text-main fw-bold mb-0">List of CCTV</p>
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
-                        <!-- <ul class="list-group border-0">
-                            <li class="list-group-item d-flex justify-content-between w-100">
-                                <span>ZP-satara school</span>
-                                <video controls preload="metadata" width="150px" height="80px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>ZP-satara school</span>
-                                <video controls preload="metadata" width="150px" height="80px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>ZP-satara school</span>
-                                <video controls preload="metadata" width="150px" height="80px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>ZP-satara school</span>
-                                <video controls preload="metadata" width="150px" height="80px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </li>
-                          </ul> -->
-                       <!-- <div class="table-responsive table-height-sm">
-                        <table mat-table [dataSource]="dataSource" class="dashboard-table">
-
-                            <ng-container matColumnDef="position">
-                              <th mat-header-cell *matHeaderCellDef></th>
-                              <td mat-cell *matCellDef="let element">
-                                <video controls preload="metadata" width="150px" height="80px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                              </td>
-                            </ng-container>
-                          
-                            <!-- Name Column --
-                            <ng-container matColumnDef="name">
-                              <th mat-header-cell *matHeaderCellDef> School Name </th>
-                              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                          </table>
-                       </div> -->
+                        
                     </mat-card-content>
                 </mat-card>
             </div>

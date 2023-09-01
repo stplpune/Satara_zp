@@ -210,7 +210,7 @@ export class OfficeUsersComponent implements OnInit {
       header: this.langTypeName == 'English' ? userEng+' Office User' : 'ऑफिस वापरकर्ता '+userMara+' करा',
       title: this.langTypeName == 'English' ? 'Do You Want To '+userEng+' The Selected Office User?' : 'तुम्ही निवडलेल्या ऑफिस वापरकर्त्याला '+userMara+' करू इच्छिता?',
       cancelButton: this.langTypeName == 'English' ? 'Cancel' : 'रद्द करा',
-      okButton: this.langTypeName == 'English' ? 'Ok' : 'ओके'
+      okButton: this.langTypeName == 'English' ? 'OK' : 'ओके'
     }
     const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
       width: '320px',

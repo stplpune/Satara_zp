@@ -428,6 +428,7 @@
         "CloudID":"Cloud ID",
         "RegistrationDate":"Registration Date",
         "teacherId":"Teacher ID",
+        "PhotoIsRequired":"Photo Is Required",
 
         "cctv":"CCTV",
         "cctvlist":"CCTV List",
@@ -438,6 +439,10 @@
         "AssetManagement":"Asset Management",
         "StockReport":"Stock Report",
         "selectQuestion": "Select Question",
-        "selectOption": "Select Option"
+        "selectOption": "Select Option",
+
+        "AttendanceApproval":"Attendance Approval",
+        "AttendanceApprovalList":"Attendance Approval List",
+        "AddAttendance":"Add Attendance"
     }
 }

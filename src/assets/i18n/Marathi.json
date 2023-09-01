@@ -440,6 +440,11 @@
         "AssetManagement":"मालमत्ता व्यवस्थापन",
         "StockReport":"स्टॉक अहवाल",
         "selectQuestion": "प्रश्न निवडा",
-        "selectOption": "पर्याय निवडा"
+        "selectOption": "पर्याय निवडा",
+        "PhotoIsRequired":"फोटो आवश्यक आहे",
+
+        "AttendanceApproval":"हजेरी मंजूर",
+        "AttendanceApprovalList":"हजेरी मंजुर यादी",
+        "AddAttendance":"हजेरी जोडा"
     }
 }

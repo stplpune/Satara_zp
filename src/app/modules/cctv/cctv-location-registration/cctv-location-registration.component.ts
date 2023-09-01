@@ -36,6 +36,7 @@ export class CctvLocationRegistrationComponent {
   schoolArr = new Array();
   CCTVLocation = new Array();
   deleteObj: any;
+  totalDetailRows: number = 0;
 
   displayedheaders = ['Sr. No.', 'CCTV Name', 'CCTV Location', 'Registration Date', 'CCTV Model','Remark', 'action'];
   marathiDisplayedheaders = ['अनुक्रमांक', 'सीसीटीव्हीचे नाव', 'सीसीटीव्ही स्थान','नोंदणी दिनांक', 'सीसीटीव्ही मॉडेल', 'वर्णन', 'कृती'];

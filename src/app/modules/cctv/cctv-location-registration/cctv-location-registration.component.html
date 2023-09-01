@@ -107,6 +107,54 @@
     </mat-card-header>
 </form>
     <mat-card-content class="card-body mt-0">
-        <app-table (recObjToChild)="childTableCompInfo($event)"></app-table>
+        <!-- <app-table (recObjToChild)="childTableCompInfo($event)"></app-table> -->
+
+
+        <div class="table-width-full"> 
+            <table class="table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>CCTV Location</th>
+                        <th>CCTV Name</th>
+                        <th>CCTV Model</th>
+                        <th>Device Id</th>
+                        <th>Registration Date</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Remark</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody *ngFor="let data of tableDataArray; let i=index;">
+                    <tr>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{i+1}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.cctvLocation}}</td>
+                    </tr>
+                    <tr *ngFor="let detail of data.cctvDetailsModelResponse; let i=index;">
+                        <td>{{detail?.cctvName}}</td>
+                        <td>{{detail?.cctvModel}}</td>
+                        <td>{{detail?.deviceId}}</td>
+                        <td>{{detail?.registerDate | date:'dd-MM-yyyy'}}</td>
+                        <td>{{detail?.userName}}</td>
+                        <td>{{detail?.password}}</td>
+                        <!-- <td [attr.rowspan]="data.cctvDetailsModelResponse?.length">{{data?.remark}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length">8</td> -->
+                    </tr>
+                    <tr>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.remark}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">Action</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+
+
     </mat-card-content>
 </mat-card>

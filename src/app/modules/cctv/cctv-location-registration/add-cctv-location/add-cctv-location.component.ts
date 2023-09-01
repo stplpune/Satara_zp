@@ -31,6 +31,7 @@ export class AddCctvLocationComponent {
   isDelete: boolean = false;
   cameraDetailsArr = new Array();
   editCctvObj: any;
+  editObj: any;
   get cf() { return this.cameraDetailsForm.controls };
 
   constructor(public webService: WebStorageService,
@@ -61,18 +62,14 @@ export class AddCctvLocationComponent {
   filterFormData() {
     this.cctvLocationForm = this.fb.group({
       ...this.webStorageS.createdByProps(),
-      "id": [this.data ? this.data.id : 0],
-      "districtId": [this.data?.districtId || 1, [Validators.required]],
+      "id": [this.editObj ? this.editObj.id : 0],
+      "districtId": [this.editObj?.districtId || 1, [Validators.required]],
       "talukaId": ['', [Validators.required]],
       "centerId": ['', [Validators.required]],
       "villageId": ['', [Validators.required]],
       "schoolId": ['', [Validators.required]],
       "cctvLocationId": ['', [Validators.required]],
-      // "cctvName": [this.data?.cctvName || '',[Validators.required]],
-      // "cctvModel": [this.data?.cctvModel || '',[Validators.required]],
-      // "cloudId": [this.data?.cloudId || '',[Validators.required]],
-      // "registrationDate": [this.data?.registrationDate || '',[Validators.required]],
-      "remark": [this.data?.remark || ''],
+      "remark": [this.editObj?.remark || ''],
       "lan": [''],
       "cctvDetailModel": []
     });
@@ -107,7 +104,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;
-          this.data && this.editFlag ? (this.cctvLocationForm.controls['talukaId'].setValue(this.data?.talukaId), this.getAllCenter()) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getAllCenter()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -125,7 +122,7 @@ export class AddCctvLocationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr = res.responseData;
-            this.data && this.editFlag ? (this.cctvLocationForm.controls['centerId'].setValue(this.data?.centerId), this.getVillage()) : '';
+            this.editObj && this.editFlag ? (this.cctvLocationForm.controls['centerId'].setValue(this.editObj?.centerId), this.getVillage()) : '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -143,7 +140,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
-          this.data && this.editFlag ? (this.cctvLocationForm.controls['villageId'].setValue(this.data?.villageId), this.getAllSchoolsByCenterId()) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['villageId'].setValue(this.editObj?.villageId), this.getAllSchoolsByCenterId()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.villageArr = [];
@@ -162,7 +159,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr = res.responseData;
-          this.data && this.editFlag ? (this.cctvLocationForm.controls['schoolId'].setValue(this.data?.schoolId)) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['schoolId'].setValue(this.editObj?.schoolId)) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -178,7 +175,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.CCTVLocation = res.responseData;
-          this.data && this.editFlag ? (this.cctvLocationForm.controls['cctvLocationId'].setValue(this.data?.cctvLocationId)) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['cctvLocationId'].setValue(this.editObj?.cctvLocationId)) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.CCTVLocation = [];
@@ -235,20 +232,16 @@ export class AddCctvLocationComponent {
     if (this.cameraDetailsForm.invalid) {
       return
     } else {
-
       if (this.data) {
         this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
-
         this.cameraDetailsArr.unshift(obj);
         this.cameraDetailsArr = [...this.cameraDetailsArr];
       }
       else {
         this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
-
         this.cameraDetailsArr.push(obj);
         this.cameraDetailsArr = [...this.cameraDetailsArr];
       }
-
       this.cameraFormData();
       this.addValidations();
     }
@@ -285,55 +278,64 @@ export class AddCctvLocationComponent {
     }
   }
 
-  onEdit(data: any) {
-    data.cctvDetailsModelResponse?.forEach((res: any) => {
-      let obj = {
-        "id": res?.id,
-        "cctvRegisterId": res?.cctvRegisterId,
-        "cctvName": res?.cctvName,
-        "cctvModel": res?.cctvModel,
-        "registerDate": res?.registerDate,
-        "deviceId": res?.deviceId,
-        "userName": res?.userName,
-        "password": res?.password
+  onEdit(id: number) {
+    this.apiService.setHttp('GET', 'zp-satara/CCTVLocation/GetById?Id=' + id, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.editObj = res.responseData;
+          this.filterFormData();
+          this.editObj.cctvDetailsModelResponse?.forEach((res: any) => {
+            let obj = {
+              "id": res?.id,
+              "cctvRegisterId": res?.cctvRegisterId,
+              "cctvName": res?.cctvName,
+              "cctvModel": res?.cctvModel,
+              "registerDate": res?.registerDate,
+              "deviceId": res?.deviceId,
+              "userName": res?.userName,
+              "password": res?.password
+            }
+            this.cameraDetailsArr.push(obj);
+          });
+        }
+        else{
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+        }
       }
-      this.cameraDetailsArr.push(obj);
     });
   }
 
-
-
   deleteCctvDetail(data: any, i: any) {
-
     // var arrDelete = this.cameraDetailsArr.filter((x: any) => x.isDeleted == false);
     // if (arrDelete?.length) {
-      let dialoObj = {
-        img: 'assets/images/trash.gif',
-        header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-        title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Details?' : 'तुम्हाला सीसीटीव्हीचे तपशील हटवायचे आहेत का?',
-        cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
-        okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
-      }
+    let dialoObj = {
+      img: 'assets/images/trash.gif',
+      header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
+      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Details?' : 'तुम्हाला सीसीटीव्हीचे तपशील हटवायचे आहेत का?',
+      cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
 
-      const dialogRef = this.dialog.open(GlobalDialogComponent, {
-        width: '320px',
-        data: dialoObj,
-        disableClose: true,
-        autoFocus: false
-      });
+    const dialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    });
 
-      dialogRef.afterClosed().subscribe(res => {
-        if (res == 'Yes') {
-          if (this.cameraDetailsArr[i]?.id != 0) {
-            data.isDelete = true;
-            this.isDelete = true;
-          }
-          else {
-            this.isDelete = true;
-            this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x != data);
-          }
+    dialogRef.afterClosed().subscribe(res => {
+      if (res == 'yes') {
+        if (this.cameraDetailsArr[i]?.id != 0) {
+          data.isDelete = true;
+          this.isDelete = true;
         }
-      });
+        else {
+          this.isDelete = true;
+          this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x != data);
+        }
+      }
+    });
     // }
   }
 
@@ -354,7 +356,6 @@ export class AddCctvLocationComponent {
     } else if (flag == 'villageId') {
       this.cctvLocationForm.controls['schoolId'].setValue('');
       this.schoolArr = [];
-
     }
   }
 

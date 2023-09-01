@@ -339,14 +339,13 @@ export class CctvLocationRegistrationComponent {
         this.onDelete();
       }
       this.highLightFlag = false;
-
-    })
+    });
   }
 
   onDelete(){
     let deleteObj = {
       "id": this.deleteObj.id,
-      "deletedBy": false,
+      "deletedBy": this.webService.getUserId() || 0,
       "modifiedDate": new Date(),
       "lan": this.languageFlag
     }

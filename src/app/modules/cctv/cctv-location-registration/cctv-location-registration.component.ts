@@ -191,7 +191,16 @@ export class CctvLocationRegistrationComponent {
         if (res.statusCode == 200) {
           this.ngxSpinner.hide();
           (flag != 'pdfFlag' && flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
-        
+          this.tableDataArray = this.convertKeys(); // Rename key name in the array
+           //  shift 1st array index into object
+          this.tableDataArray.map((x: any) => {
+            let obj: any
+            if (x.cctvDetailsModelResponse.length) {
+              obj = x.cctvDetailsModelResponse.shift();
+            }
+            Object.assign(x, obj);
+          })     
+          
           // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
           this.tableDatasize = res.responseData.responseData2.pageCount
           console.log(res.responseData.responseData2);
@@ -379,5 +388,23 @@ export class CctvLocationRegistrationComponent {
       this.schoolArr = [];
     }
   }
+
+  convertKeys() {
+    this.tableDataArray.map((x: any) => {
+      if (x.cctvDetailsModelResponse.length) {
+        x.cctvDetailsModelResponse = x.cctvDetailsModelResponse.map((obj: any) => {
+          return Object.keys(obj).reduce(function (r: any, key: any) {
+            var k = key.concat('E');
+            r[k] = obj[key];
+            return r;
+          }, {})
+        })
+      } else {
+        x.cctvDetailsModelResponse = []
+      }
+    })
+    return this.tableDataArray
+  }
+
  
 }

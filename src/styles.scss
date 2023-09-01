@@ -769,3 +769,16 @@ textarea {
 .timepicker-backdrop-overlay {
   z-index: 99999 !important;
 }
+//----sweet alert css------//
+.swal2-container.swal2-center>.swal2-popup {
+  width: 350px;
+  padding-block: 5px;
+}
+.swal2-html-container{
+  margin-block: 5px !important;
+}
+.swal2-actions,
+.swal2-icon.swal2-success,
+.swal2-icon.swal2-warning {
+ margin-top: 10px !important;
+}

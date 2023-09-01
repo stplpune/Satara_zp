@@ -20,7 +20,7 @@
     </mat-card-header>
     <!-- Start filter -->
     <mat-card-header class="card-header pb-0 border-bottom-0">
-        <form [formGroup]="filterForm">
+        <form [formGroup]="filterForm" (ngSubmit)="getTableData()">
         <div class="row gx-2">
             <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100 ">
@@ -67,21 +67,20 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm">
+            <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.location'| translate}}</mat-label>
-                    <mat-select>
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="cCTVLocationId">
+                        <mat-option *ngFor="let loc of CCTVLocationArr" [value]="loc.id">{{webStorageS.getLangauge() =='EN'  ?
+                            loc.cctvLocation:loc.m_CCTVLocation}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-12 mb-2 mb-lg-0">
-                <div class="d-flex justify-content-end">
-                    <button mat-flat-button class="btn-main">{{'Labels.filter' |
-                        translate}}</button>
-                    <button mat-flat-button class="btn-second ms-2">{{'Labels.clear'
+            <div class="col-sm-2">
+                <button type="submit" mat-flat-button class="btn-main">{{'Labels.filter' |
+                    translate}}</button>
+                    <button type="button" (click)="clearForm()" mat-flat-button class="btn-second ms-2">{{'Labels.clear'
                         |translate}}</button>
-                </div>
             </div>
         </div>
     </form>

@@ -33,6 +33,7 @@ export class CctvComponent {
   get f() {
     return this.filterForm.controls
   }
+  CCTVLocationArr = new Array();
   constructor(private ngxSpinner : NgxSpinnerService,
     private apiService: ApiService,
     private commonMethodS: CommonMethodsService,
@@ -46,6 +47,7 @@ export class CctvComponent {
   ngOnInit(){
     this.filterFormData();
     this.getTalukaDropByDis();
+    this.getAllCCTVLocation();
     this.getTableData();
   }
 
@@ -129,6 +131,21 @@ export class CctvComponent {
     });
   }
 
+  getAllCCTVLocation(){
+    this.CCTVLocationArr = [];
+    this.masterService.getCCTVLocation('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.CCTVLocationArr =res.responseData         
+        } else {
+          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+          this.CCTVLocationArr = [];
+        }
+      },
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
   getTableData(flag?: any) {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
@@ -180,5 +197,15 @@ export class CctvComponent {
     }
 
   }
+
+  clearForm() {
+    this.filterForm.reset();
+    this.villageArr = [];
+    this.centerArr = [];
+    this.schoolArr = [];
+    this.CCTVLocationArr = [];
+    this.getTableData();
+  }
+
   
 }

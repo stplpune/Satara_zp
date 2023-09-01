@@ -202,11 +202,7 @@ export class CctvLocationRegistrationComponent {
           })     
           
           // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
-          this.tableDatasize = res.responseData.responseData2.pageCount
-          console.log(res.responseData.responseData2);
-          
-          console.log("this.tableDatasize",this.tableDatasize);
-          
+          this.tableDatasize = res.responseData.responseData2.pageCount;
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
           flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
         } else {
@@ -302,19 +298,17 @@ export class CctvLocationRegistrationComponent {
     this.getTableData();
   }
 
-
-
-  openDialog(obj?:any) {
+  openDialog(id?:any) {
     const dialogRef = this.dialog.open(AddCctvLocationComponent,{
       width: '900px',
       disableClose: true,
       autoFocus: false,
-      data :obj
+      data :id
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result == 'yes' && obj) {
-        this.pageNumber = obj.pageNumber;
+      if (result == 'yes' && id) {
+        this.pageNumber = this.pageNumber;
         this.getTableData();
       } else if (result == 'yes') {
         this.pageNumber = 1;
@@ -352,7 +346,7 @@ export class CctvLocationRegistrationComponent {
   onDelete(){
     let deleteObj = {
       "id": this.deleteObj.id,
-      "deletedBy": true,
+      "deletedBy": false,
       "modifiedDate": new Date(),
       "lan": this.languageFlag
     }

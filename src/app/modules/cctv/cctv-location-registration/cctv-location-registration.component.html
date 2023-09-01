@@ -138,9 +138,14 @@
                         <td>{{data?.passwordE}}</td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.remark}}</td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
-                            <button>
-                                <mat-icon class="material-symbols-rounded  icon-padding">
-                                    edit_square
+                            <button mat-icon-button matTooltip="{{'Labels.edit' | translate}}" (click)="openDialog(data.id)">
+                                <mat-icon class="text-danger">
+                                    edit
+                                </mat-icon>
+                            </button>
+                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" (click)="globalDialogOpen(data)">
+                                <mat-icon class="text-danger">
+                                    delete
                                 </mat-icon>
                             </button>
                         </td>

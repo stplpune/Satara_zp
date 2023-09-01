@@ -103,4 +103,11 @@ export class ValidationService {
     return maskSeperator.test(event.key);
   }
 
+  alphaNumericWithoutSpaces(event: any) {
+    // alphaNumeric With Spaces but first Space Not Allow
+    this.noFirstSpaceAllow(event);
+    const maskSeperator = new RegExp('^([a-zA-Z0-9(,)+-_@#$])', 'g');
+    return maskSeperator.test(event.key);
+  }
+
 }

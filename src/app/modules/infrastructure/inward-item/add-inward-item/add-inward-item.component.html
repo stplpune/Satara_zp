@@ -65,7 +65,7 @@
                         <mat-label> {{'Labels.PurchasePrice'| translate}}</mat-label>
                         <input matInput formControlName="price"
                             (keypress)="validationService.noFirstSpaceAllow($event); validationService.NumericWithDot($event);">
-                                <mat-error *ngIf="f['price'].hasError('pattern')">Invalid Price</mat-error>
+                        <mat-error *ngIf="f['price'].hasError('pattern')">Invalid Price</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
@@ -93,22 +93,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- <div class="action-btn" *ngIf="uploadImg">
-                            <button mat-icon-button class="btn-icon text-primary" type="button"
-                                 matTooltip="{{'Labels.View' | translate}}"
-                                matTooltipPosition="below" matTooltipClass="tooltip" (click)="viewImg()">
-                                <mat-icon>visibility</mat-icon>
-                            </button>
-                            <button mat-icon-button class="btn-icon text-danger" type="button"
-                                 matTooltip="{{'Labels.delete' | translate}}"
-                                matTooltipPosition="below" matTooltipClass="tooltip" (click)="clearImg()">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div> -->
                     </div>
                     <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
-                        Photo Is Required
+                        {{'Labels.PhotoIsRequired'| translate}}
                     </mat-error>
                 </div>
 
@@ -116,8 +103,8 @@
                 <div class="d-flex flex-wrap gap-4 mb-3">
                     <ng-container *ngFor="let item of imgArray; let i = index">
                         <div class="gallery position-relative">
-                            <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo"
-                                 class="gallery-img" (click)="onViewDoc(i)">
+                            <img [src]="item.docFlag ? 'assets/images/pdf-image.png' : item.photo" class="gallery-img"
+                                (click)="onViewDoc(i)">
                             <span class="position-absolute" style="top:-17px;right:-17px;">
                                 <button type="button" mat-icon-button
                                     class="bg-danger bg-opacity-25 text-danger material-icons"

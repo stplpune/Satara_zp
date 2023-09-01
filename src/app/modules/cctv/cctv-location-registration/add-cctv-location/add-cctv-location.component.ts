@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -9,6 +9,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-add-cctv-location',
@@ -27,8 +28,9 @@ export class AddCctvLocationComponent {
   schoolArr = new Array();
   CCTVLocation = new Array();
   editFlag: boolean = false;
-  isDelete : boolean = false;
+  isDelete: boolean = false;
   cameraDetailsArr = new Array();
+  editCctvObj: any;
   get cf() { return this.cameraDetailsForm.controls };
 
   constructor(public webService: WebStorageService,
@@ -41,12 +43,11 @@ export class AddCctvLocationComponent {
     private masterService: MasterService,
     public validators: ValidationService,
     private webStorageS: WebStorageService,
+    private dialog: MatDialog,
     public dialogRef: MatDialogRef<AddCctvLocationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    console.log("onEdit : ", this.data);
-
     this.data ? (this.editFlag = true, this.onEdit(this.data)) : this.editFlag = false;
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
@@ -60,7 +61,7 @@ export class AddCctvLocationComponent {
   filterFormData() {
     this.cctvLocationForm = this.fb.group({
       ...this.webStorageS.createdByProps(),
-      "id": [0],
+      "id": [this.data ? this.data.id : 0],
       "districtId": [this.data?.districtId || 1, [Validators.required]],
       "talukaId": ['', [Validators.required]],
       "centerId": ['', [Validators.required]],
@@ -84,15 +85,15 @@ export class AddCctvLocationComponent {
       "createdDate": new Date(),
       "modifiedDate": new Date(),
       "isDeleted": false,
-      "id": [0],
-      "cctvRegisterId": [0],
-      "cctvName": ['',],
-      "cctvModel": ['',],
-      "registerDate": [''],
-      "deviceId": ['',],
-      "userName": ['',],
-      "password": ['',]
-    })
+      "id": [this.editCctvObj ? this.editCctvObj.id : 0],
+      "cctvRegisterId": [this.editCctvObj ? this.editCctvObj.cctvRegisterId : 0],
+      "cctvName": [this.editCctvObj ? this.editCctvObj.cctvName : '',],
+      "cctvModel": [this.editCctvObj ? this.editCctvObj.cctvModel : '',],
+      "registerDate": [this.editCctvObj ? this.editCctvObj.registerDate : ''],
+      "deviceId": [this.editCctvObj ? this.editCctvObj.deviceId : '',],
+      "userName": [this.editCctvObj ? this.editCctvObj.userName : '',],
+      "password": [this.editCctvObj ? this.editCctvObj.password : '',]
+    });
   }
 
   // getDistrict() {
@@ -214,8 +215,6 @@ export class AddCctvLocationComponent {
   onSubmitCameraDetails() {
     this.addValidations(true);
     let formValue = this.cameraDetailsForm.value;
-    console.log("formValue : ", formValue, this.cameraDetailsForm.invalid);
-    // return
 
     let obj = {
       "createdBy": this.webService.getUserId() || 0,
@@ -237,21 +236,27 @@ export class AddCctvLocationComponent {
       return
     } else {
 
-      if(this.data){
+      if (this.data) {
+        this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
+
         this.cameraDetailsArr.unshift(obj);
         this.cameraDetailsArr = [...this.cameraDetailsArr];
       }
-      else{
+      else {
+        this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
+
         this.cameraDetailsArr.push(obj);
         this.cameraDetailsArr = [...this.cameraDetailsArr];
       }
 
       this.cameraFormData();
       this.addValidations();
-
-
-
     }
+  }
+
+  onEditCctv(data: any) {
+    this.editCctvObj = data;
+    this.cameraFormData();
   }
 
   onSubmit() {
@@ -296,9 +301,40 @@ export class AddCctvLocationComponent {
     });
   }
 
-  deleteCctvDetail(index: any) {
-    console.log("index : ", index);
-    this.isDelete = true;
+
+
+  deleteCctvDetail(data: any, i: any) {
+
+    // var arrDelete = this.cameraDetailsArr.filter((x: any) => x.isDeleted == false);
+    // if (arrDelete?.length) {
+      let dialoObj = {
+        img: 'assets/images/trash.gif',
+        header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
+        title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Details?' : 'तुम्हाला सीसीटीव्हीचे तपशील हटवायचे आहेत का?',
+        cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+        okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
+      }
+
+      const dialogRef = this.dialog.open(GlobalDialogComponent, {
+        width: '320px',
+        data: dialoObj,
+        disableClose: true,
+        autoFocus: false
+      });
+
+      dialogRef.afterClosed().subscribe(res => {
+        if (res == 'Yes') {
+          if (this.cameraDetailsArr[i]?.id != 0) {
+            data.isDelete = true;
+            this.isDelete = true;
+          }
+          else {
+            this.isDelete = true;
+            this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x != data);
+          }
+        }
+      });
+    // }
   }
 
   clearDependency(flag: any) {

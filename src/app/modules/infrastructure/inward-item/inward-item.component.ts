@@ -269,7 +269,7 @@ export class InwardItemComponent {
     this.schoolArr = [];
     let Tid = this.f['talukaId'].value;
     let Cid = this.f['centerId'].value || 0;
-    let Vid = 0;
+    let Vid = this.f['villageId'].value || 0;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

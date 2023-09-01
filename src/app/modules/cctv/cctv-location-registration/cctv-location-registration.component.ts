@@ -296,7 +296,7 @@ export class CctvLocationRegistrationComponent {
 
   openDialog(obj?:any) {
     const dialogRef = this.dialog.open(AddCctvLocationComponent,{
-      width: '800px',
+      width: '900px',
       disableClose: true,
       autoFocus: false,
       data :obj
@@ -342,9 +342,9 @@ export class CctvLocationRegistrationComponent {
   onDelete(){
     let deleteObj = {
       "id": this.deleteObj.id,
-      "modifiedBy": 0,
+      "deletedBy": true,
       "modifiedDate": new Date(),
-      "lan": "EN"
+      "lan": this.languageFlag
     }
     this.apiService.setHttp('DELETE', 'zp-satara/CCTVLocation/DeleteCCTVLocation', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

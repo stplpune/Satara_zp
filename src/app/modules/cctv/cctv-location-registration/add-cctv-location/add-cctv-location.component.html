@@ -67,6 +67,14 @@
                 </mat-form-field>
             </div>
 
+            <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label> {{'Labels.Description'| translate}}</mat-label>
+                    <textarea matInput formControlName="remark" (keypress)="validators.noFirstSpaceAllow($event)"
+                        maxlength="500"></textarea>
+                </mat-form-field>
+            </div>
+
 
             <form [formGroup]="cameraDetailsForm">
                 <div class="row">
@@ -106,34 +114,27 @@
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.userName'| translate}}</mat-label>
-                            <input matInput formControlName="userName">
+                            <input matInput formControlName="userName" (keypress)="validators.noFirstSpaceAllow($event); validators.alphaNumericWithoutSpaces($event);" maxlength="50">
                         </mat-form-field>
                     </div>
                     <div class="col-sm-6">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.password'| translate}}</mat-label>
                             <input matInput formControlName="password"
-                                (keypress)="validators.noFirstSpaceAllow($event);" maxlength="100">
+                                (keypress)="validators.noFirstSpaceAllow($event);" maxlength="10" minlength="8">
+                                <mat-error *ngIf="cf['password'].hasError('pattern')">Please Enter Valid Password</mat-error>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-6">
                         <button mat-flat-button type="submit" class="btn-main" (click)="onSubmitCameraDetails()">
                             <mat-icon>add</mat-icon>
-                            <!-- {{'Labels.addStudent'| translate}} --> Add Camera Details
+                            <!-- {{'Labels.addStudent'| translate}} --> {{editCctvObj ? 'Update CCTV Details' : 'Add CCTV Details'}}
                         </button>
                     </div>
 
                 </div>
             </form>
-
-
-            <div class="col-sm-12 mt-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label> {{'Labels.Description'| translate}}</mat-label>
-                    <textarea matInput formControlName="remark" (keypress)="validators.noFirstSpaceAllow($event)"
-                        maxlength="500"></textarea>
-                </mat-form-field>
-            </div>
+            
             <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="dashboard-table" *ngIf="cameraDetailsArr.length>0">
@@ -163,12 +164,13 @@
                                 <td>{{cctv.password}}</td>
                                 <td>
                                     <button mat-icon-button matTooltip="{{'Labels.edit' | translate}}"
-                                        matTooltipPosition="right" matTooltipClass="tooltip" type="button">
+                                        matTooltipPosition="right" matTooltipClass="tooltip" type="button" 
+                                        (click)="onEditCctv(cctv)" [disabled]="cameraDetailsArr[i].isDeleted">
                                         <mat-icon class="text-danger"> edit</mat-icon>
                                     </button>
                                     <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
                                         matTooltipPosition="right" matTooltipClass="tooltip" type="button"
-                                        (click)="deleteCctvDetail(i)">
+                                        (click)="deleteCctvDetail(cctv, i)" [disabled]="cameraDetailsArr[i].isDeleted">
                                         <mat-icon class="text-danger"> delete</mat-icon>
                                     </button>
                                 </td>

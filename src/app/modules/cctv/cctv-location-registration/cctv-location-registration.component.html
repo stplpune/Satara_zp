@@ -130,20 +130,28 @@
                     <tr>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{i+1}}</td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.cctvLocation}}</td>
+                        <td>{{data?.cctvNameE}}</td>
+                        <td>{{data?.cctvModelE}}</td>
+                        <td>{{data?.deviceIdE}}</td>
+                        <td>{{data?.registerDateE | date:'dd-MM-yyyy'}}</td>
+                        <td>{{data?.userNameE}}</td>
+                        <td>{{data?.passwordE}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.remark}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
+                            <button>
+                                <mat-icon class="material-symbols-rounded  icon-padding">
+                                    edit_square
+                                </mat-icon>
+                            </button>
+                        </td>
                     </tr>
                     <tr *ngFor="let detail of data.cctvDetailsModelResponse; let i=index;">
-                        <td>{{detail?.cctvName}}</td>
-                        <td>{{detail?.cctvModel}}</td>
-                        <td>{{detail?.deviceId}}</td>
-                        <td>{{detail?.registerDate | date:'dd-MM-yyyy'}}</td>
-                        <td>{{detail?.userName}}</td>
-                        <td>{{detail?.password}}</td>
-                        <!-- <td [attr.rowspan]="data.cctvDetailsModelResponse?.length">{{data?.remark}}</td>
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length">8</td> -->
-                    </tr>
-                    <tr>
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.remark}}</td>
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">Action</td>
+                        <td>{{detail?.cctvNameE}}</td>
+                        <td>{{detail?.cctvModelE}}</td>
+                        <td>{{detail?.deviceIdE}}</td>
+                        <td>{{detail?.registerDateE | date:'dd-MM-yyyy'}}</td>
+                        <td>{{detail?.userNameE}}</td>
+                        <td>{{detail?.passwordE}}</td>
                     </tr>
                 </tbody>
             </table>

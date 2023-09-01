@@ -428,6 +428,7 @@
         "CloudID":"Cloud ID",
         "RegistrationDate":"Registration Date",
         "teacherId":"Teacher ID",
+        "PhotoIsRequired":"Photo Is Required",
 
         "cctv":"CCTV",
         "cctvlist":"CCTV List",

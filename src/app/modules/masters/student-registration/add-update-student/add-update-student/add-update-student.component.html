@@ -304,7 +304,7 @@
 
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>name (Marathi)</mat-label>
+                            <mat-label>{{'Labels.agencyName(Marathi)' | translate }}</mat-label>
                             <input matInput formControlName="m_Name" 
                             (keypress)="validators.noFirstSpaceAllow($event); validators.unicodeMarathiValidation($event);">
                         </mat-form-field>

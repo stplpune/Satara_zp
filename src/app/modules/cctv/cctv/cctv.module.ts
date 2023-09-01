@@ -23,6 +23,7 @@ import { GlobalImgComponent } from 'src/app/shared/components/global-img/global-
 import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view.component';
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { DashPipe } from 'src/app/core/pipes/dash.pipe';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    DashPipe
   ]
   
 })

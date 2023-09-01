@@ -15,80 +15,87 @@
             <div class="text-main fw-bold">
                 {{'Labels.cctvlist' | translate}}
             </div>
-            
+
         </div>
     </mat-card-header>
     <!-- Start filter -->
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <form [formGroup]="filterForm" (ngSubmit)="getTableData()">
-        <div class="row gx-2">
-            <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                    <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select formControlName="talukaId"
-                        (selectionChange)="onChangeDropD('taluka');getCenterDropByTaluka();">
-                        <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
-                            'EN' ?
-                            tal.taluka:tal.m_Taluka }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+            <div class="row gx-2">
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="onChangeDropD('taluka');getCenterDropByTaluka();">
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
+                                'EN' ?
+                                tal.taluka:tal.m_Taluka }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-            <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                    <mat-label>{{'Labels.kendra'| translate}}</mat-label>
-                    <mat-select formControlName="centerId"
-                        (selectionChange)="onChangeDropD('center'); getVillageDropByCenter()">
-                        <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
-                            'EN' ? cen.center:cen.m_Center}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+                        <mat-select formControlName="centerId"
+                            (selectionChange)="onChangeDropD('center'); getVillageDropByCenter()">
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
+                                'EN' ? cen.center:cen.m_Center}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-            <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100 ">
-                    <mat-label>{{'Labels.village'| translate}}</mat-label>
-                    <mat-select formControlName="villageId"
-                        (selectionChange)="onChangeDropD('village'); getSchoolDropByFilter();">
-                        <mat-option *ngFor="let village of villageArr"
-                            [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
-                            village.village:village.m_Village}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.village'| translate}}</mat-label>
+                        <mat-select formControlName="villageId"
+                            (selectionChange)="onChangeDropD('village'); getSchoolDropByFilter();">
+                            <mat-option *ngFor="let village of villageArr"
+                                [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
+                                village.village:village.m_Village}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-            <div class="col-sm-4">
-                <mat-form-field appearance="outline" class="w-100 ">
-                    <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                    <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
-                        <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() ==
-                            'EN' ?
-                            sch.schoolName:sch.m_SchoolName}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.location'| translate}}</mat-label>
-                    <mat-select formControlName="cCTVLocationId">
-                        <mat-option *ngFor="let loc of CCTVLocationArr" [value]="loc.id">{{webStorageS.getLangauge() =='EN'  ?
-                            loc.cctvLocation:loc.m_CCTVLocation}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-2">
-                <button type="submit" mat-flat-button class="btn-main">{{'Labels.filter' |
-                    translate}}</button>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() ==
+                                'EN' ?
+                                sch.schoolName:sch.m_SchoolName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.location'| translate}}</mat-label>
+                        <mat-select formControlName="cCTVLocationId">
+                            <mat-option *ngFor="let loc of CCTVLocationArr" [value]="loc.id">{{webStorageS.getLangauge()
+                                =='EN' ?
+                                loc.cctvLocation:loc.m_CCTVLocation}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                     <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.searchCCTV'| translate}}</mat-label>
+                            <input matInput formControlName="textSearch" maxlength="30">
+                        </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" mat-flat-button class="btn-main">{{'Labels.filter' |
+                        translate}}</button>
                     <button type="button" (click)="clearForm()" mat-flat-button class="btn-second ms-2">{{'Labels.clear'
                         |translate}}</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
     </mat-card-header>
     <!-- filter End here  -->
     <mat-card-content class="card-body">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-6" *ngIf="selectedCCTV">
                 <div class="row gy-3">
                     <div class="col-sm-4">
                         <mat-card class="plain-card">
@@ -176,13 +183,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <mat-card class="plain-card p-0">
                     <mat-card-header class="card-header p-0">
                         <p class="text-main fw-bold mb-0">List of CCTV</p>
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
-                        
+                        <app-table (recObjToChild)="childCompInfo($event)"></app-table>
                     </mat-card-content>
                 </mat-card>
             </div>

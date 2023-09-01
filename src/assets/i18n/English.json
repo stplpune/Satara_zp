@@ -38,6 +38,7 @@
         "EventName":"Event Name",
         "SearchTeacherName":"Search Teacher Name",
         "searchItem":"search Item",
+        "searchCCTV": "Search CCTV",
         "Openingstock":"Opening Stock",
         "SellPrice":"Sell Price",
         "SellDate":"Sell Date",

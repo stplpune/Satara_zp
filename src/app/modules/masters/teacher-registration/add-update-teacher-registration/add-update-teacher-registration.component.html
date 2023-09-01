@@ -35,13 +35,13 @@
                             {{'Labels.pleaseEnterValidTeacherNameMarathi' | translate}}</mat-error>
                     </mat-form-field>
                 </div>
-                        <div class="col-sm">
-                            <mat-form-field appearance="outline" class="w-100 ">
-                                <mat-label>{{'Labels.teacherId'| translate}}</mat-label>
-                                <input matInput formControlName="teacherCode" maxlength="5"
-                                    (keypress)="validation.noFirstSpaceAllow($event);validation.onlyDigits($event)">
-                            </mat-form-field>
-                        </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.teacherId'| translate}}</mat-label>
+                        <input matInput formControlName="teacherCode" maxlength="5"
+                            (keypress)="validation.noFirstSpaceAllow($event);validation.onlyDigits($event)">
+                    </mat-form-field>
+                </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.gender'| translate}}</mat-label>
@@ -71,6 +71,17 @@
                             maxlength="50">
                         <mat-error *ngIf="f['emailId'].hasError('pattern') ">{{'Labels.pleaseEnterValidEmailId' |
                             translate }}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.birthDate'| translate}}</mat-label>
+                        <input matInput [matDatepicker]="picker" [max]="maxDate" (click)="picker.open()" readonly
+                            (dateChange)="CalculateAge()" formControlName="birthDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <!-- <mat-error *ngIf="f['birthDate'].hasError('required') ">
+                            Birth Date Is Required</mat-error> -->
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
@@ -111,17 +122,7 @@
                         </span> -->
                     <!-- </mat-form-field> -->
                 </div>
-                <div class="col-12 col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.birthDate'| translate}}</mat-label>
-                        <input matInput [matDatepicker]="picker" [max]="maxDate" (click)="picker.open()" readonly
-                            (dateChange)="CalculateAge()" formControlName="birthDate">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                        <!-- <mat-error *ngIf="f['birthDate'].hasError('required') ">
-                            Birth Date Is Required</mat-error> -->
-                    </mat-form-field>
-                </div>
+                
                 <div class="col-12 col-sm-2">
                     <ng-container *ngIf="teacherRegForm.value.birthDate">
                         <div class="age-show" *ngIf="teacherRegForm.value.age > 0">
@@ -329,8 +330,7 @@
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.village'| translate}}</mat-label>
-                            <mat-select formControlName="villageId"
-                                (selectionChange)="getAllSchool()">
+                            <mat-select formControlName="villageId" (selectionChange)="getAllSchool()">
                                 <mat-option *ngFor="let village of teacherDetailsVillageArray"
                                     [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
                                     village.village : village.m_Village}}</mat-option>

@@ -8,11 +8,9 @@
         <li class="breadcrumb-item active" aria-current="page">{{'Labels.Category' |translate}}</li>
     </ol>
 </nav>
-
 <app-page-statistics></app-page-statistics>
-
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
-    <mat-card-header class="card-header">
+    <mat-card-header class="card-header border-bottom-0 mb-0">
         <div class="d-flex flex-wrap align-items-center justify-content-between w-100">
             <div class="text-main fw-bold mb-2 mb-lg-0">{{'Labels.categoryList' |translate}} ({{'Labels.total'|
                 translate }} - {{totalItem}})</div>

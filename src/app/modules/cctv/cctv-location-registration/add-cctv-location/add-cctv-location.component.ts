@@ -294,7 +294,8 @@ export class AddCctvLocationComponent {
               "registerDate": res?.registerDate,
               "deviceId": res?.deviceId,
               "userName": res?.userName,
-              "password": res?.password
+              "password": res?.password,
+              "isDeleted": res?.isDeleted
             }
             this.cameraDetailsArr.push(obj);
           });

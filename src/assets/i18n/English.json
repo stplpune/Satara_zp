@@ -444,6 +444,9 @@
 
         "AttendanceApproval":"Attendance Approval",
         "AttendanceApprovalList":"Attendance Approval List",
-        "AddAttendance":"Add Attendance"
+        "AddAttendance":"Add Attendance",
+        "checkIn":"check In",
+        "checkOut":"check Out",
+        "Task":"Task"
     }
 }

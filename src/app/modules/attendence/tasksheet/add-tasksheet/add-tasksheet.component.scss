@@ -1,0 +1,12 @@
+.card-body .input-group {
+    flex-wrap: nowrap !important;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+    margin-bottom: 20px!important;
+}
+.card-body .input-group input {
+    border: none !important;
+    font-size: 0.85rem !important;
+    padding: 0px 5px;
+}

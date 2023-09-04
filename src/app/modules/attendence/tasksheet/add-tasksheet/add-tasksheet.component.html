@@ -8,34 +8,36 @@
     </div>
 </div>
 <form [formGroup]="attendenceForm" (ngSubmit)="onSubmit()">
-    <mat-dialog-content class="card-body scrollbar">
+    <mat-dialog-content class="card-body scrollbar pt-0">
         <div class="row">
-            <div class="col-sm-12 mb-2">
+            <div class="col-sm-12">
                 <mat-radio-group aria-label="Select an option" formControlName="isPresent">
-                    <mat-radio-button [value] = "1">{{'Labels.Present' | translate}}</mat-radio-button>
+                    <mat-radio-button [value]="1">{{'Labels.Present' | translate}}</mat-radio-button>
                     <!-- <mat-radio-button [value] = "0">{{'Labels.Absent' | translate}}</mat-radio-button> -->
                 </mat-radio-group>
             </div>
-            <div class="col-sm-6 mb-2">
-                <mat-label>check In</mat-label >
-                <input [ngxTimepicker]="picker" formControlName="inTime"
-                [class]="(data?.checkInTime) ? attendenceForm.controls['inTime'].disable({ onlySelf: true }) : attendenceForm.controls['inTime'].enable({ onlySelf: true })">
-                <ngx-material-timepicker-toggle [for]="picker" ></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #picker></ngx-material-timepicker>
+            <div class="col-sm-6">
+                <mat-label>check In</mat-label>
+                <div class="input-group">
+                    <input [ngxTimepicker]="picker" formControlName="inTime"
+                        [class]="(data?.checkInTime) ? attendenceForm.controls['inTime'].disable({ onlySelf: true }) : attendenceForm.controls['inTime'].enable({ onlySelf: true })">
+                    <ngx-material-timepicker-toggle [for]="picker"></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #picker></ngx-material-timepicker>
+                </div>
             </div>
-
-            <div class="col-sm-6 mb-2">
-                <mat-label>check Out</mat-label>                
-                <input [ngxTimepicker]="picker1" formControlName="OutTime"
-                [class]="(data?.checkOutTime || !data?.checkOutTime == null) ? attendenceForm.controls['OutTime'].disable({ onlySelf: true }) : attendenceForm.controls['OutTime'].enable({ onlySelf: true })">
-               <ngx-material-timepicker-toggle [for]="picker1" ></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #picker1></ngx-material-timepicker>
+            <div class="col-sm-6">
+                <mat-label>check Out</mat-label>
+                <div class="input-group">
+                    <input [ngxTimepicker]="picker1" formControlName="OutTime"
+                        [class]="(data?.checkOutTime || !data?.checkOutTime == null) ? attendenceForm.controls['OutTime'].disable({ onlySelf: true }) : attendenceForm.controls['OutTime'].enable({ onlySelf: true })">
+                    <ngx-material-timepicker-toggle [for]="picker1"></ngx-material-timepicker-toggle>
+                    <ngx-material-timepicker #picker1></ngx-material-timepicker>
+                </div>
             </div>
-
             <div class="col-sm-12">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Task</mat-label>
-                    <textarea matInput formControlName="remark" ></textarea>
+                    <textarea matInput formControlName="remark"></textarea>
                 </mat-form-field>
             </div>
         </div>

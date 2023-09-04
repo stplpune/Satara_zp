@@ -40,8 +40,8 @@ export class StoreMasterComponent {
   
   displayedColumns = [ 'srNo','category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock','action'];
   marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'description', 'action'];
-  displayedheaders = ['Sr. No.',' Category', 'Type', 'Item Name', 'Total Inward','Total Outward','Available Stock','action'];
-  marathiDisplayedheaders = ['अनुक्रमांक','श्रेणी', 'प्रकार', 'वस्तू', 'एकूण आवक','एकूण जावक','उपलब्ध साठा', 'कृती'];
+  displayedheaders = ['Sr. No.',' Category', 'Sub-Category', 'Item Name', 'Total Inward','Total Outward','Available Stock','action'];
+  marathiDisplayedheaders = ['अनुक्रमांक','श्रेणी', 'उप-श्रेणी', 'वस्तूचे नाव', 'एकूण आवक','एकूण जावक','उपलब्ध साठा', 'कृती'];
  
 
 

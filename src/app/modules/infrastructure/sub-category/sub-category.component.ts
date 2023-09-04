@@ -40,7 +40,7 @@ export class SubCategoryComponent {
   // displayedheadersEnglish = ['Sr. No.', ' Category Name','Sub Category Name', 'Inactive/Active','Action'];
   // displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव',  'निष्क्रिय/सक्रिय', 'कृती'];
   displayedheadersEnglish = ['Sr. No.', ' Category','Sub Category','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उपवर्गाचे नाव', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणीचे नाव','उप-श्रेणीचे नाव', 'कृती'];
   @ViewChild('formDirective')
   private formDirective!: NgForm;
   constructor(public dialog: MatDialog,
@@ -241,7 +241,7 @@ export class SubCategoryComponent {
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ['Sr. No.','Category','Sub Category'];
-      let MarathikeyPDFHeader = ['अनुक्रमांक', 'श्रेणीचे नाव', 'उपवर्गाचे नाव']
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'श्रेणीचे नाव', 'उप-श्रेणीचे नाव']
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -261,7 +261,7 @@ export class SubCategoryComponent {
         // }
 
         objData= {
-          'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Sub-Category List' : 'उप-वर्ग सूची' : 'Sub-Category List',
+          'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Sub-Category List' : 'उप-श्रेणी सूची' : 'Sub-Category List',
           'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
        

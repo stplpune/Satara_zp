@@ -9,161 +9,185 @@
   </ol>
 </nav>
 
-<mat-card class="plain-card form-container">
-  <mat-card-header class="card-header ">
-    <div class="row w-100">
+<mat-card class="plain-card ">
+  <mat-card-header class="card-heade">
+    <div class="row form-container w-100">
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
           <div class="form-label">School</div>
-          <div class="form-data">:{{languageFlag == 'English' ?
+          <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.schoolName:cardHeaderData[0]?.m_SchoolName}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
           <div class="form-label">Category</div>
-          <div class="form-data">:{{languageFlag == 'English' ?
+          <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.category:cardHeaderData[0]?.m_Category}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
           <div class="form-label">SubCategory</div>
-          <div class="form-data">:{{languageFlag == 'English' ?
+          <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.subCategory:cardHeaderData[0]?.m_SubCategory}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
           <div class="form-label">Item</div>
-          <div class="form-data">:{{languageFlag == 'English' ?
+          <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.itemName:cardHeaderData[0]?.m_ItemName}}</div>
         </div>
       </div>
     </div>
   </mat-card-header>
   <mat-card-content class="card-body">
-    <div class="row gx-2 gy-2">
+    <div class="row gx-3 gy-2">
       <div class="col-sm-6">
         <h6 class="text-main fw-bold my-2">Inward</h6>
-        <div class="card mb-2" *ngFor="let cardInward of cardInwardData; let i = index">
-          <div class="card-body">
-            <div class="row gy-2">
-              <div class="col-sm-8">
-                <div class="d-flex">
-                  <div class="form-label">Username</div>
-                  <div class="form-data">:- {{cardInward.intwardUserName}}</div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="d-flex">
-                  <div class="form-label">Date</div>
-                  <div class="form-data">:- {{cardInward.inwardDate}}</div>
-                </div>
-              </div>
-              <div class="col-sm-8">
-                <div class="d-flex">
-                  <div class="form-label">Unit</div>
-                  <div class="form-data">:- {{cardInward.inwardQuantity}}</div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="d-flex">
-                  <div class="form-label">Price</div>
-                  <div class="form-data">:- {{cardInward.inwardPrice}}</div>
-                </div>
-              </div>
+        <mat-card class="plain-card border mb-3" *ngFor="let cardInward of cardInwardData; let i = index">
+          <mat-card-header class="card-header border-bottom-0 mb-0">
+            <div class="row form-container w-100">
               <div class="col-sm-6">
-                <div class="d-flex ">
-                  <div class="form-label">Remark</div>
-                  <div class="form-data">:- {{cardInward.inwardRemark}}</div>
-                </div>
-              </div>
-              <div class="col-sm-12">
-                <div class="d-flex flex-column gap-1 mb-2">
-                  <div class="form-label">Photo :</div>
-                  <div class="row">
-                    <div class="col-sm-3" *ngFor="let cardDoc of showImage[i]?.imgData;let j= index">
-                      <img src="{{cardDoc.photo}}" alt="" height="60px" width="60px" (click)="viewImages(i,j,'inward')">
-                    </div>
+                <div class="row g-2">
+                  <div class="col-sm-5">
+                    <p class="form-label mb-0">Username</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardInward.intwardUserName}}</p>
+                  </div>
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Unit</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardInward.inwardQuantity}}</p>
+                  </div>
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Remark</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardInward.inwardRemark}}</p>
                   </div>
                 </div>
               </div>
-
-              <div class="col-sm-12">
-                <div class="d-flex flex-column gap-1 mb-2">
-                  <div class="form-label">Document :</div>
-                  <div *ngFor="let cardDoc of showPdf[i]?.pdfData;let j= index">
-                    <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px"
-                      width="60px" (click)="viewDocument(i,j,'inward')">
+              <div class="col-sm-6">
+                <div class="row g-2">
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Date</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="form-data  mb-0">:- {{cardInward.inwardDate}}</p>
+                  </div>
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Price</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="form-data  mb-0">:- {{cardInward.inwardPrice}}</p>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </mat-card-header>
+          <mat-card-content class="card-body">
+            <div class="row gx-2 gy-2 form-container">
+              <div class="col-sm-6">
+                <div class="d-flex flex-column mb-2">
+                  <div class="form-label">Photo :</div>
+                  <div class="row g-2">
+                    <div class="col-sm-4" *ngFor="let cardDoc of showImage[i]?.imgData;let j= index">
+                      <img src="{{cardDoc.photo}}" width="100%" class="img-fluid object-fit-cover border rounded" (click)="viewImages(i,j,'inward')">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="d-flex flex-column mb-2">
+                  <div class="form-label">Document :</div>
+                  <div class="row g-2">
+                    <div class="col-sm-4" *ngFor="let cardDoc of showPdf[i]?.pdfData;let j= index">
+                      <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo"
+                        width="100%" class="img-fluid object-fit-cover border rounded" (click)="viewDocument(i,j,'inward')">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
       <div class="col-sm-6">
         <h6 class="text-main fw-bold my-2">Outward</h6>
-        <div class="card mb-2" *ngFor=" let cardOutWard of cardOutwardData; let i = index">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-sm-8">
-                <div class="d-flex">
-                  <div class="form-label">Username</div>
-                  <div class="form-data">:- {{cardOutWard.outwardUserName}}</div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="d-flex">
-                  <div class="form-label">Date</div>
-                  <div class="form-data">:- {{cardOutWard.outwardDate}}</div>
-                </div>
-              </div>
-              <div class="col-sm-8">
-                <div class="d-flex">
-                  <div class="form-label">Unit</div>
-                  <div class="form-data">:- {{cardOutWard.outwardQuantity}}</div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <div class="d-flex">
-                  <div class="form-label">Price</div>
-                  <div class="form-data">:- {{cardOutWard.outwardPrice}}</div>
+        <mat-card class="plain-card border mb-3" *ngFor="let cardOutWard of cardOutwardData; let i = index">
+          <mat-card-header class="card-header border-bottom-0 mb-0">
+            <div class="row form-container w-100">
+              <div class="col-sm-6">
+                <div class="row g-2">
+                  <div class="col-sm-5">
+                    <p class="form-label mb-0">Username</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardUserName}}</p>
+                  </div>
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Unit</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardQuantity}}</p>
+                  </div>
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Remark</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardRemark}}</p>
+                  </div>
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="d-flex ">
-                  <div class="form-label">Remark</div>
-                  <div class="form-data">:- {{cardOutWard.outwardRemark}}</div>
+                <div class="row g-2">
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Date</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardDate}}</p>
+                  </div>
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">Price</p>
+                  </div>
+                  <div class="col-sm-6">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardPrice}}</p>
+                  </div>
                 </div>
               </div>
-              <div class="col-sm-12">
-                <div class="d-flex flex-column gap-1 mb-2">
+            </div>
+          </mat-card-header>
+          <mat-card-content class="card-body">
+            <div class="row gx-2 gy-2 form-container">
+              <div class="col-sm-6">
+                <div class="d-flex flex-column mb-2">
                   <div class="form-label">Photo:</div>
-                  <div class="row gy-2">
-                    <div class="col-sm-3" *ngFor="let cardDoc of outwardShowImage[i]?.imgData;let j= index">
-                      <img class="img-fluid object-fit-cover w-100 " src="{{cardDoc.photo}}" alt=""
-                        (click)="viewImages(i,j,'outward')" style="height: 100px;width: 100px;">
+                  <div class="row g-2">
+                    <div class="col-sm-4" *ngFor="let cardDoc of outwardShowImage[i]?.imgData;let j= index">
+                      <img class="img-fluid object-fit-cover border rounded" src="{{cardDoc.photo}}" alt=""
+                        (click)="viewImages(i,j,'outward')" width="100%">
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="col-sm-12">
-                <div class="d-flex flex-column gap-1 mb-2">
+              <div class="col-sm-6">
+                <div class="d-flex flex-column mb-2">
                   <div class="form-label">Documents:</div>
                   <div class="row">
-                    <div class="col-sm-3" *ngFor="let cardDoc of outwardShowPdf[i]?.pdfData;let j= index">
-                      <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" alt="" height="60px"
-                        width="60px" (click)="viewDocument(i,j,'outward')">
+                    <div class="col-sm-4" *ngFor="let cardDoc of outwardShowPdf[i]?.pdfData;let j= index">
+                      <img class="img-fluid object-fit-cover border rounded" [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo"
+                        width="100%" (click)="viewDocument(i,j,'outward')">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+          </mat-card-content>
+        </mat-card>
       </div>
     </div>
   </mat-card-content>

@@ -131,13 +131,11 @@
                             <!-- {{'Labels.addStudent'| translate}} --> {{editCctvObj ? 'Update CCTV Details' : 'Add CCTV Details'}}
                         </button>
                     </div>
-
                 </div>
             </form>
-            
             <div class="col-sm-12">
                 <div class="table-responsive">
-                    <table class="dashboard-table" *ngIf="cameraDetailsArr.length>0">
+                    <table class="table dashboard-table" *ngIf="cameraDetailsArr.length>0">
                         <thead>
                             <tr>
                                 <th scope="col">{{this.languageFlag == "English" ? 'Sr.No.' : 'अनु. क्र'}} </th>
@@ -146,8 +144,7 @@
                                 <th scope="col"> {{this.languageFlag == "English" ? 'CCTV Model' : 'सीसीटीव्ही मॉडेल'}}
                                 </th>
                                 <th scope="col">{{this.languageFlag == "English" ? 'Device Id' : 'डिव्हाइस आयडी'}}</th>
-                                <th scope="col">{{this.languageFlag == "English" ? 'Registration Date' : 'नोंदणी
-                                    दिनांक'}} </th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'Registration Date' : 'नोंदण दिनांक'}} </th>
                                 <th scope="col">{{this.languageFlag == "English" ? 'User Name' : 'युजर नेम'}} </th>
                                 <th scope="col">{{this.languageFlag == "English" ? 'Password' : 'पासवर्ड'}} </th>
                                 <th scope="col">{{this.languageFlag == "English" ? 'Action' : 'कृती'}} </th>

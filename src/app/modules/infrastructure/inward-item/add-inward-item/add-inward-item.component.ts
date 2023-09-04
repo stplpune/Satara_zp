@@ -32,6 +32,7 @@ export class AddInwardItemComponent {
   imgArray = new Array();
   get f() { return this.itemForm.controls };
   currentDate = new Date();
+  loginData: any;
 
   constructor(private fb: FormBuilder,
     private commonMethodS: CommonMethodsService,
@@ -42,11 +43,13 @@ export class AddInwardItemComponent {
     private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
     private datePipe:DatePipe,
+    
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddUpdateSchoolRegistrationComponent>,
     public validationService: ValidationService) { }
 
   ngOnInit() {
+    this.loginData = this.webStorageS.getLoggedInLocalstorageData();
     this.formFeild();
     this.getCategoryDrop();
     this.data ? this.onEdit() : '';
@@ -55,7 +58,7 @@ export class AddInwardItemComponent {
   formFeild() {
     this.itemForm = this.fb.group({
       "id": [this.editObj ? this.editObj.id : 0],
-      "schoolId": [this.editObj ? this.editObj.schoolId : 2104],
+      "schoolId": [this.editObj ? this.editObj.schoolId : this.loginData?.schoolId],
       "categoryId": ['', Validators.required],
       "subCategoryId": ['', Validators.required],
       "itemId": ['', Validators.required],

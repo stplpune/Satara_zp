@@ -29,7 +29,6 @@ export class AddOutwardItemComponent {
   openingStock: number = 0;
   uploadMultipleImg: any;
   currentDate = new Date();
-  openingStockFlag: boolean = false;
   imgValidation: boolean = true;
   get f() { return this.itemForm.controls };
 
@@ -52,6 +51,7 @@ export class AddOutwardItemComponent {
   }
 
   defaultForm() {
+    let localSchoolId = this.webStorage.getLoggedInLocalstorageData();
     this.itemForm = this.fb.group({
       categoryId: ['', [Validators.required]],
       subcategoryId: ['', [Validators.required]],
@@ -62,7 +62,7 @@ export class AddOutwardItemComponent {
       onwordto: [this.editObj ? this.editObj.outwardTo : '', [Validators.required]],
       remark: [this.editObj ? this.editObj.remark : ''],
       photo: [''],
-      schoolId: [this.editObj ? this.editObj.schoolId : 2104],
+      schoolId: [this.editObj ? this.editObj.schoolId : localSchoolId.schoolId],
     })
   }
 
@@ -189,7 +189,6 @@ export class AddOutwardItemComponent {
   getUnitByQty() {
     let unit = Number(this.itemForm.value.unit);
     if ((unit) > (this.openingStock)) {
-      this.openingStockFlag = true;
       this.f['unit'].setValue('');
       this.commonMethod.snackBar(this.webStorage.languageFlag == 'EN' ? 'Unit Should Be Less Than Opening Stock' : 'युनिट ओपनिंग स्टॉकपेक्षा कमी असावे', 1);
       return;
@@ -210,7 +209,7 @@ export class AddOutwardItemComponent {
     let formData = this.itemForm.getRawValue();
     let fromDate = this.datePipe.transform(formData.date, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
     !this.imgArray.length ? this.imgValidation = false : '';
-    if (this.itemForm.invalid || this.openingStockFlag == true || this.imgValidation == false || formData.subcategoryId == 0 || formData.itemId == 0) {
+    if (this.itemForm.invalid || this.imgValidation == false || formData.subcategoryId == 0 || formData.itemId == 0) {
       this.commonMethod.showPopup(this.webStorage.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     }
@@ -221,11 +220,12 @@ export class AddOutwardItemComponent {
     // }
     else {
       let data = this.webStorage.createdByProps();
+      let localSchoolId = this.webStorage.getLoggedInLocalstorageData();
 
 
       let obj = {
         "id": this.editObj ? this.editObj.id : 0,
-        "schoolId": this.editObj ? this.editObj.schoolId : 2104,
+        "schoolId": this.editObj ? this.editObj.schoolId : localSchoolId.schoolId,
         "categoryId": formData.categoryId,
         "subCategoryId": formData.subcategoryId,
         "itemId": formData.itemId,

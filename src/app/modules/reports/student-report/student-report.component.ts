@@ -115,7 +115,7 @@ export class StudentReportComponent {
   formData() {
     this.studentReportForm = this.fb.group({
       educationYearId: [1],
-      districtId: [0],
+      districtId: [1],
       talukaId: [this.logInDetails?.talukaId ? this.logInDetails?.talukaId : 0],
       centerId: [this.logInDetails?.centerId ? this.logInDetails?.centerId : 0],
       villageId: [this.logInDetails?.villageId ? this.logInDetails?.villageId : 0],

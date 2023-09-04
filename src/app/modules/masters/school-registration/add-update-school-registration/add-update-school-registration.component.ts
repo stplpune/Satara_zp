@@ -73,7 +73,7 @@ export class AddUpdateSchoolRegistrationComponent {
       this.getLowestGroupClass();
     }
     this.userId = this.webStorageS.getUserTypeId();
-    this.userId == 4 ? (this.getTableData(), this.eventFormFeild()) : '';
+    (this.userId == 4 && this.data?.flag == 'event') ? (this.getTableData(), this.eventFormFeild()) : '';
   }
 
   get f() {

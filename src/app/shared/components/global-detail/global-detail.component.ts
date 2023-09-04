@@ -46,6 +46,8 @@ export class GlobalDetailComponent {
   }
 
   ngOnInit() {
+    console.log("data", this.data);
+    
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
     });

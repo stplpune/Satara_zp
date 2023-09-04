@@ -126,7 +126,6 @@ export class OutwardItemComponent {
 
   getAllCenter() {
     this.centerArr = [];
-    // let id = this.filterForm.controls['talukaId'].value;
     let id = this.filterForm.value.talukaId
     if (id != 0) {
       this.masterService.getAllCenter('', id).subscribe({
@@ -146,11 +145,11 @@ export class OutwardItemComponent {
   getVillage() {
     this.villageArr = [];
     // let Cid = this.filterForm.controls['centerId'].value;
-    let Cid = this.filterForm.value.centerId
+    let Cid = this.filterForm.value.centerId;
     if (Cid != 0) {
       this.masterService.getAllVillage('', Cid).subscribe({
         next: (res: any) => {
-          if (res.statusCode == 200) {
+          if (res.statusCode == "200") {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
             this.filterForm?.value.villageId ? this.getAllSchools() : '';
           } else {
@@ -169,17 +168,19 @@ export class OutwardItemComponent {
     let Tid = this.filterForm.value.talukaId;
     let Cid = this.filterForm.value.centerId || 0;
     let Vid = this.filterForm.value.villageId || 0;
+    if (Vid != 0) {
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-          this.f['schoolId'].setValue(this.loginData.schoolId);
+          // this.filterForm?.value.villageId  ? this.f['schoolId'].setValue(this.loginData.schoolId) :'';
         } else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
         }
       }
     });
+  }
   }
 
   getCategory() {
@@ -199,13 +200,13 @@ export class OutwardItemComponent {
   }
 
   getSubCategory() {
+    this.subcategoryresp = [];
     let catId = this.filterForm.value.CategoryId
     this.masterService.GetAssetSubCateByCateId(catId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subcategoryresp.push({ "id": 0, "subCategory": "All", "m_SubCategory": "सर्व" }, ...res.responseData);
         } else {
-          this.subcategoryresp = [];
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.subcategoryresp = [];
         }
@@ -214,6 +215,7 @@ export class OutwardItemComponent {
   }
 
   getItem() {
+    this.itemresp = [];
     let subCatId = this.filterForm.value.SubCategoryId
     this.apiService.setHttp('GET', 'zp-satara/master/GetAllItem?SubCategoryId=' + subCatId + '&flag_lang=e', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -221,7 +223,7 @@ export class OutwardItemComponent {
         if (res.statusCode == "200") {
           this.itemresp.push({ "id": 0, "itemName": "All", "m_ItemName": "सर्व" }, ...res.responseData);
         } else {
-          this.tableresp = [];
+          this.itemresp = [];
         }
       },
       // error: ((err: any) => { this.errors.handelError(err) })
@@ -257,7 +259,8 @@ export class OutwardItemComponent {
       Obj: obj,
       chart: false,
       multipleImage: true,
-      pdf: true
+      pdf: true,
+      item: 'Outward',
     }
     const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
       width: '900px',
@@ -277,24 +280,16 @@ export class OutwardItemComponent {
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.filterForm.value;
     let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
-
     let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=${this.totalItem * 10}&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
 
     this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?' + ((status == 'excel' || status == 'pdfFlag') ? excel : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-
         if (res.statusCode == "200") {
           this.ngxSipnner.hide();
           status != 'excel'&& status != 'pdfFlag' ? this.tableresp = res.responseData.responseData1 : this.tableresp = this.tableresp;
           this.totalItem = res.responseData.responseData2.pageCount;
-          console.log("totalItem",this.totalItem);
-          
-          // this.totalCount = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
-          // let data: [] = res.responseData.responseData1;
-          // status == 'excel' ? this.pdfDownload(data) : '';
-
           let data: [] = (status == 'pdfFlag' || status == 'excel') ? res.responseData.responseData1 : [];
           status == 'pdfFlag' ? this.pdfDownload(data,'pdfFlag') : status == 'excel' ? this.pdfDownload(data,'excel') :'';  
         } else {
@@ -332,11 +327,12 @@ export class OutwardItemComponent {
   onChangeDropD(label: string) {
     switch (label) {
       case 'taluka':
-        this.filterForm.controls['centerId']?.setValue(0);
-        this.filterForm.controls['villageId']?.setValue(0);
-        this.filterForm.controls['categoryId']?.setValue(0);
-        this.filterForm.controls['subCategoryId']?.setValue(0);
-        this.filterForm.controls['itemsId']?.setValue(0);
+        this.f['centerId']?.setValue(0);
+        this.f['villageId']?.setValue(0);
+        this.f['schoolId']?.setValue(0);
+        this.f['categoryId']?.setValue(0);
+        this.f['subCategoryId']?.setValue(0);
+        this.f['itemsId']?.setValue(0);
         this.villageArr = [];
         this.categoryresp = [];
         this.subcategoryresp = [];
@@ -344,44 +340,46 @@ export class OutwardItemComponent {
         this.schoolArr = [];
         break;
       case 'center':
-        this.filterForm.controls['villageId']?.setValue(0);
-        this.filterForm.controls['categoryId']?.setValue(0);
-        this.filterForm.controls['subCategoryId']?.setValue(0);
-        this.filterForm.controls['itemsId']?.setValue(0);
+        this.f['villageId']?.setValue(0);
+        this.f['schoolId']?.setValue(0);
+        this.f['categoryId']?.setValue(0);
+        this.f['subCategoryId']?.setValue(0);
+        this.f['itemsId']?.setValue(0);
         this.categoryresp = [];
         this.subcategoryresp = [];
         this.itemresp = [];
         this.schoolArr = [];
         break;
       case 'village':
-        this.filterForm.controls['categoryId']?.setValue(0);
-        this.filterForm.controls['subCategoryId']?.setValue(0);
-        this.filterForm.controls['itemsId']?.setValue(0);
-        this.filterForm.controls['schoolId']?.setValue(0);
+        this.f['schoolId']?.setValue(0);
+        this.f['categoryId']?.setValue(0);
+        this.f['subCategoryId']?.setValue(0);
+        this.f['itemsId']?.setValue(0);
         this.categoryresp = [];
         this.subcategoryresp = [];
         this.itemresp = [];
         break;
       case 'school':
-        this.filterForm.controls['categoryId']?.setValue(0);
-        this.filterForm.controls['subCategoryId']?.setValue(0);
-        this.filterForm.controls['itemsId']?.setValue(0);
+        this.f['categoryId']?.setValue(0);
+        this.f['subCategoryId']?.setValue(0);
+        this.f['itemsId']?.setValue(0);
         this.subcategoryresp = [];
         this.itemresp = [];
         break;
       case 'category':
         this.itemresp = [];
-        this.filterForm.controls['subCategoryId']?.setValue(0);
-        this.filterForm.controls['itemsId']?.setValue(0);
+        this.f['subCategoryId']?.setValue(0);
+        this.f['itemsId']?.setValue(0);
         break;
       case 'subCategory':
-        this.filterForm.controls['itemsId']?.setValue(0);
+        this.f['itemsId']?.setValue(0);
         break;
     }
   }
 
   clearFilterData() {
-    this.filterForm.reset();
+    // this.filterForm.reset();
+    this.filterFormData();
     this.pageNumber = 1;
     this.getTableData();
   }

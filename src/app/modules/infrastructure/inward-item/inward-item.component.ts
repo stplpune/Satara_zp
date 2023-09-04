@@ -169,7 +169,8 @@ export class InwardItemComponent {
       Obj: obj,
       chart: false,
       multipleImage: true,
-      pdf: true
+      pdf: true,
+      item: 'Inward',
     }
     const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
       width: '900px',
@@ -198,13 +199,13 @@ export class InwardItemComponent {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 'yes' && obj) {
         this.onClear();
-        this.getCategoryDrop();
-        this.getTableData();
+        // this.getCategoryDrop();
+        // this.getTableData();
         this.pageNumber = obj.pageNumber;
       }
       else if (result == 'yes') {
-        this.getCategoryDrop();
-        this.getTableData();
+        // this.getCategoryDrop();
+        // this.getTableData();
         this.onClear();
         this.pageNumber = 1;
       }
@@ -373,17 +374,14 @@ export class InwardItemComponent {
 
   onClear() {
     // this.filterFormData();
-    this.centerArr = [];
-    this.villageArr = [];
-    this.subCategoryArr = [];
-    this.schoolArr = [];
-    this.itemArr = [];
-    this.f['talukaId'].setValue(0);
-    this.f['categoryId'].setValue(0);
-    this.f['subCategoryId'].setValue(0);
-    this.f['centerId'].setValue(0);
-    this.f['schoolId'].setValue(0);
-    this.f['villageId'].setValue(0);
+    // this.centerArr = [];
+    // this.villageArr = [];
+    // this.subCategoryArr = [];
+    // this.schoolArr = [];
+    // this.itemArr = [];
+    this.filterFormData()
+    this.getTaluka();
+    this.getCategoryDrop();
     this.getTableData();
 
   }
@@ -393,11 +391,13 @@ export class InwardItemComponent {
       case 'taluka':
         this.f['centerId'].setValue(0);
         this.f['villageId'].setValue(0);
+        this.f['schoolId'].setValue(0);
         this.villageArr = [];
         this.schoolArr = [];
         break;
       case 'center':
         this.f['villageId'].setValue(0);
+        this.f['schoolId'].setValue(0);
         this.schoolArr = [];
         break;
       case 'village':

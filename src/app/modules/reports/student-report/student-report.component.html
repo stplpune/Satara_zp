@@ -27,7 +27,7 @@
 
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
-                        <mat-select formControlName="districtId" [disabled]="studentReportForm.value.districtId == 1">
+                        <mat-select formControlName="districtId" [class]="studentReportForm.controls['districtId'].disable({ onlySelf: true })">
                             <mat-option *ngFor="let dist of $districts | async" [value]="dist.id">{{languageFlag ==
                                 'English' ?
                                 dist.district : dist.m_District}}</mat-option>

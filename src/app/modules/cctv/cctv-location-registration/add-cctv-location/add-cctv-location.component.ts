@@ -28,7 +28,6 @@ export class AddCctvLocationComponent {
   schoolArr = new Array();
   CCTVLocation = new Array();
   editFlag: boolean = false;
-  isDelete: boolean = false;
   cameraDetailsArr = new Array();
   editCctvObj: any;
   editObj: any;
@@ -218,7 +217,7 @@ export class AddCctvLocationComponent {
       "modifiedBy": this.webService.getUserId() || 0,
       "createdDate": new Date(),
       "modifiedDate": new Date(),
-      "isDeleted": this.isDelete,
+      "isDeleted": formValue.isDeleted,
       "id": formValue.id,
       "cctvRegisterId": formValue.cctvRegisterId,
       "cctvName": formValue.cctvName,
@@ -328,11 +327,9 @@ export class AddCctvLocationComponent {
     dialogRef.afterClosed().subscribe(res => {
       if (res == 'yes') {
         if (this.cameraDetailsArr[i]?.id != 0) {
-          data.isDelete = true;
-          this.isDelete = true;
+          data.isDeleted = true;
         }
         else {
-          this.isDelete = true;
           this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x != data);
         }
       }

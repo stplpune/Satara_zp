@@ -39,7 +39,7 @@ export class ItemRegistrationComponent {
   displayedColumns = ['srNo', 'category', 'subCategory', 'itemName', 'description', 'action'];
   marathiDisplayedColumns = ['srNo', 'm_Category', 'm_SubCategory', 'm_ItemName', 'description', 'action'];
   displayedheaders = ['Sr. No.', ' Category', 'Sub Category', 'Item', 'Description', 'action'];
-  marathiDisplayedheaders = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'वर्णन', 'कृती'];
+  marathiDisplayedheaders = ['अनुक्रमांक', 'श्रेणी', 'उप-श्रेणी', 'वस्तूचे नाव', 'वर्णन', 'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,

@@ -42,7 +42,7 @@ export class OutwardItemComponent {
   isWriteRight!: boolean;
   get f() { return this.filterForm.controls }
   displayedheadersEnglish = ['Sr. No.', 'Category', 'Sub Category', 'Item', 'Unit', 'Sell Date', 'Sell Price', 'Assign To', 'Remark', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप श्रेणी', 'वस्तू', 'युनिट', 'विक्री दिनांक', 'विक्री किंमत', 'असाइन करा', 'शेरा', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'श्रेणी', 'उप-श्रेणी', 'वस्तूचे नाव', 'युनिट', 'विक्री दिनांक', 'विक्री किंमत', 'असाइन करा', 'शेरा', 'कृती'];
 
   constructor(private fb: FormBuilder,
     public dialog: MatDialog,

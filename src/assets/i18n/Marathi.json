@@ -446,6 +446,9 @@
 
         "AttendanceApproval":"हजेरी मंजूर",
         "AttendanceApprovalList":"हजेरी मंजुर यादी",
-        "AddAttendance":"हजेरी जोडा"
+        "AddAttendance":"हजेरी जोडा",
+        "checkIn":"चेक-इन करा",
+        "checkOut":"चेक-आउट करा",
+        "Task":"टास्क"
     }
 }

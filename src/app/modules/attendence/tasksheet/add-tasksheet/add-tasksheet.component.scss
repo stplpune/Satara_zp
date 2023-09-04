@@ -1,7 +1,7 @@
 .card-body .input-group {
     flex-wrap: nowrap !important;
     width: 100%;
-    border: 1px solid gray;
+    outline: 1px solid gray;
     border-radius: 4px;
     margin-bottom: 20px!important;
 }
@@ -9,4 +9,8 @@
     border: none !important;
     font-size: 0.85rem !important;
     padding: 0px 5px;
+}
+.card-body .input-group input:focus-visible {
+    border: none !important;
+    outline: none !important;
 }

@@ -257,6 +257,9 @@ export class AddCctvLocationComponent {
 
     if (this.cctvLocationForm.invalid) {
       return;
+    }
+    else if(!this.cameraDetailsArr.length){
+      this.commonMethods.showPopup(this.languageFlag == "English" ? 'Please Enter Add Atleast One camera Details' : 'कृपया किमान एक कॅमेरा तपशील जोडा' , 1);
     } else {
       this.ngxSpinner.show();
       let url = this.data ? 'UpdateCCTVLocation' : 'AddCCTVLocation'

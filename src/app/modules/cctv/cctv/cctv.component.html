@@ -18,7 +18,9 @@
 
         </div>
     </mat-card-header>
-    <!-- Start filter -->
+
+    <!-- Start filter From here -->
+
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <form [formGroup]="filterForm" (ngSubmit)="getTableData()">
             <div class="row gx-2">
@@ -78,10 +80,10 @@
                     </mat-form-field>
                 </div>
                 <div class="col-sm-2">
-                     <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>{{'Labels.searchCCTV'| translate}}</mat-label>
-                            <input matInput formControlName="textSearch" maxlength="30">
-                        </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.searchCCTV'| translate}}</mat-label>
+                        <input matInput formControlName="textSearch" maxlength="30">
+                    </mat-form-field>
                 </div>
                 <div class="col-sm-2">
                     <button type="submit" mat-flat-button class="btn-main">{{'Labels.filter' |
@@ -93,9 +95,12 @@
         </form>
     </mat-card-header>
     <!-- filter End here  -->
+
+
     <mat-card-content class="card-body">
         <div class="row">
             <div class="col-sm-6" *ngIf="selectedCCTV">
+                <!--CCTV LIVE streaming  -->
                 <div class="row gy-3">
                     <div class="col-sm-4">
                         <mat-card class="plain-card">
@@ -196,3 +201,38 @@
         </div>
     </mat-card-content>
 </mat-card>
+
+
+<div class="mt-5">
+    <span>Device Id：</span>
+    <input type="text" id="dev_id" value="">
+    <span>Username</span>
+    <input type="text" id="user" value="admin">
+    <span>Password：</span>
+    <input type="text" id="pwd" value="">
+    <select id="streamtype" style="width:100px">
+        <option value=0>Main Stream</option>
+        <option value=1 selected>Substream</option>
+    </select>
+    <select id="channel" style="width:100px">
+        <option value=0>Channel 1</option>
+        <option value=1>Channel 2</option>
+        <option value=2>Channel 3</option>
+        <option value=3>Channel 4</option>
+    </select>
+    <br />
+    <button (click)="connect()" style="width:100px">Connect</button>
+    <button (click)="disconnect()" style="width:100px">Disconnect</button>
+    <button (click)="openvideo()" style="width:100px">Play</button>
+    <button (click)="closevideo()" style="width:100px">Close</button>
+    <table style="border:0px; width:720px">
+        <tr>
+            <td>
+                <canvas id="canvas1" width="702" height="576"></canvas>
+            </td>
+        </tr>
+        <div class="grid-box" id="gridBox" onmousedown="getStartPoint()" onmouseup="getEndPoint()">
+            <div class="area" id="area"></div>
+        </div>
+    </table>
+</div>

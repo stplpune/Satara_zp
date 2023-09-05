@@ -1,1 +1,28 @@
-<p>attendance-permission works!</p>
+<div mat-dialog-title class="card-header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <h6 class="text-main mb-0 fw-bold">{{editFlag ? ( 'Labels.Updateattendence' | translate ) :
+            ('Labels.AttendanceApproval' | translate )}}</h6>
+        <button mat-icon-button mat-dialog-close class="btn-modal-close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+<mat-dialog-content class="card-body scrollbar">
+    <div class="row">
+        <div class="col-sm-12 pt-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{'Labels.remark' | translate}}</mat-label>
+                <textarea matInput></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="card-footer">
+    <div class="d-flex w-100 align-items-center justify-content-end">
+        <button mat-flat-button mat-dialog-close class="btn-second me-2" type="button">{{'Labels.cancel' |
+            translate}}</button>
+        <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate)
+            :('Labels.submit' |
+            translate)}}</button>
+    </div>
+</mat-dialog-actions>

@@ -4,6 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "noImplicitAny": false, // added by sj
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,

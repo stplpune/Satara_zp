@@ -4,7 +4,8 @@
 .student-details img{
     width: 130px;
     height: 130px;
-    border-radius: 1rem;
+    border-radius: 10px;
+    border: 1px solid #276bc6;
 }
 .student-details .lang-badge{
    background-color: var(--main-light-color);

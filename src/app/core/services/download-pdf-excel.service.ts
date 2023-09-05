@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Workbook } from 'exceljs';
 import { jsPDF } from "jspdf";
 import 'jspdf-autotable';
-var FileSaver = require('file-saver');
-
+import * as FileSaver from 'file-saver';
 
 @Injectable({
   providedIn: 'root'

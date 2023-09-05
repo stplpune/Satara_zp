@@ -1,6 +1,11 @@
 {
     "Labels": {
         "year":"वर्ष",
+        "Date":"दिनांक",
+        "Unit":"युनिट",
+        "Price":"किंमत",
+        "Photo":"फोटो",
+        "Document":"दस्तऐवज",
         "documnentphotos":"दस्तऐवज फोटो",
         "HolidayName":"सुट्टीचे नाव",
         "HolidayNameMarathi":"सुट्टीचे नाव",
@@ -449,6 +454,11 @@
         "AddAttendance":"हजेरी जोडा",
         "checkIn":"चेक-इन करा",
         "checkOut":"चेक-आउट करा",
-        "Task":"टास्क"
+        "Task":"टास्क",
+
+        "ViewStockReportPage":"स्टॉक रिपोर्ट पेज पहा",
+        "Inward":"आवक",
+        "Outward":"जावक",
+        "Username":"वापरकर्ता नाव"
     }
 }

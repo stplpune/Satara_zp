@@ -295,8 +295,7 @@ export class CctvLocationRegistrationComponent {
   downloadExcel(data: any){
     let apiKeys = ['srNo', 'cctvLocation', 'remark'];
     let keyCenterNo = "";
-    let keyCNo = String.fromCharCode(Math.ceil(apiKeys.length) + 64);
-    console.log("keyCNo", keyCNo);
+    // let keyCNo = String.fromCharCode(Math.ceil(apiKeys.length) + 64);
 
     if(apiKeys.length == 4){
       keyCenterNo = "D"
@@ -309,10 +308,13 @@ export class CctvLocationRegistrationComponent {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Zp-Satara');
 
-    worksheet.mergeCells('A' + '1:' + keyCNo + '1');
-    worksheet.getCell(keyCNo + '1').value = 'CCTV Location List';
-    worksheet.getCell(keyCNo + '1').alignment = { vertical: 'bottom', horizontal: 'center' };
-    worksheet.getCell(keyCNo + '1').font = { size: 12, color: { argb: '000000' } };
+    worksheet.getCell('C4').value = 'CCTV Location List';
+    worksheet.getCell('C4').alignment = { vertical: 'bottom' };
+    worksheet.getCell('C4').font = { size: 12, bold: true, color: { argb: '000000',  } };
+
+    worksheet.getCell('E5').value = 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a');
+    worksheet.getCell('E5').alignment = { vertical: 'bottom' };
+    worksheet.getCell('E5').font = { size: 12, bold: true, color: { argb: '000000',  } };
 
     let resObject: any = []; let resData: any = [];
     data.map((res: any, i:any)=> {
@@ -344,10 +346,13 @@ export class CctvLocationRegistrationComponent {
         {name: 'Remark'},
       ], 
       rows: resData,
+      style: {
+        theme: 'TableStyleLight11',
+      },
     });
 
     var headerSize;
-    headerSize = [7, 15, 15, 15, 15, 15, 15, 15, 15];
+    headerSize = [7, 15, 15, 15, 15, 20, 15, 15, 15];
     for(var i = 0; i < headerSize.length; i++){
       worksheet.getColumn(i + 1).width = headerSize[i];
     }
@@ -358,6 +363,7 @@ export class CctvLocationRegistrationComponent {
       });
       FileSaver.saveAs(blob, 'CCTV Location');
     });
+    this.getTableData();
   }
 
   clearForm() {

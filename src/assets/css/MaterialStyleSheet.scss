@@ -230,3 +230,20 @@ input:-webkit-autofill:active {
     //     height: 495px !important;
     // }
 }
+/*-----ngx-material-timepicker-css------*/
+.timepicker .clock-face{
+    width: 165px !important;
+    height: 165px !important;
+    padding: 5px !important;
+    border: 2px solid blue !important;
+    background-color:none !important;
+}
+
+.timepicker .clock-face .clock-face__number--outer{
+    height: calc(290px / 2 - 70px)!important;
+}
+
+.timepicker .clock-face .clock-face__clock-hand{
+    height: 71px;
+    top: calc(50% - 70px)!important;
+}

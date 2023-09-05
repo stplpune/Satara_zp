@@ -1,6 +1,11 @@
 {
     "Labels": {
         "year":"Year",
+        "Date":"Date",
+        "Unit":"Unit",
+        "Price":"Price",
+        "Photo":"Photo",
+        "Document":"Document",
         "HolidayNameMarathi":"Holiday Name(Marathi)",
         "holidayNameMarathiIsRequired":" Please Enter Valid Holiday Name(Marathi)",
         "documnentphotos":"Document Photos",
@@ -447,6 +452,11 @@
         "AddAttendance":"Add Attendance",
         "checkIn":"Check In",
         "checkOut":"Check Out",
-        "Task":"Task"
+        "Task":"Task",
+
+        "ViewStockReportPage":"View Stock Report Page",
+        "Inward":"Inward",
+        "Outward":"Outward",
+        "Username":"Username"
     }
 }

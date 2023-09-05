@@ -4,8 +4,8 @@
       <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
         <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
     </li>
-    <li class="breadcrumb-item" aria-current="page">Asset Management</li>
-    <li class="breadcrumb-item active" aria-current="page">View Stock Report Page</li>
+    <li class="breadcrumb-item" aria-current="page">{{'Labels.AssetManagement' |translate}}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{'Labels.ViewStockReportPage' | translate}}</li>
   </ol>
 </nav>
 
@@ -14,28 +14,28 @@
     <div class="row form-container w-100">
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
-          <div class="form-label">School</div>
+          <div class="form-label">{{'Labels.SchoolName' | translate}}</div>
           <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.schoolName:cardHeaderData[0]?.m_SchoolName}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
-          <div class="form-label">Category</div>
+          <div class="form-label">{{'Labels.CategoryName' | translate}}</div>
           <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.category:cardHeaderData[0]?.m_Category}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
-          <div class="form-label">SubCategory</div>
+          <div class="form-label">{{'Labels.subcategoryname' | translate}}</div>
           <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.subCategory:cardHeaderData[0]?.m_SubCategory}}</div>
         </div>
       </div>
       <div class="col-sm-3">
         <div class="d-flex align-items-center gap-2">
-          <div class="form-label">Item</div>
+          <div class="form-label">{{'Labels.itemName' | translate}}</div>
           <div class="form-data">: {{languageFlag == 'English' ?
             cardHeaderData[0]?.itemName:cardHeaderData[0]?.m_ItemName}}</div>
         </div>
@@ -44,46 +44,59 @@
   </mat-card-header>
   <mat-card-content class="card-body">
     <div class="row gx-3 gy-2">
+      <!-----Inward------>
       <div class="col-sm-6">
-        <h6 class="text-main fw-bold my-2">Inward</h6>
+        <h6 class="text-main fw-bold my-2">{{'Labels.Inward' | translate}}</h6>
         <mat-card class="plain-card border mb-3" *ngFor="let cardInward of cardInwardData; let i = index">
           <mat-card-header class="card-header border-bottom-0 mb-0">
-            <div class="row form-container w-100">
+            <div class="row gx-2 gy-2 form-container">
               <div class="col-sm-6">
-                <div class="row g-2">
+                <div class="row">
                   <div class="col-sm-5">
-                    <p class="form-label mb-0">Username</p>
+                    <p class="form-label mb-0">{{'Labels.Username' | translate}}</p>
                   </div>
                   <div class="col-sm-7">
                     <p class="form-data  mb-0">:- {{cardInward.intwardUserName}}</p>
                   </div>
-                  <div class="col-sm-5">
-                    <p class="form-label  mb-0">Unit</p>
-                  </div>
-                  <div class="col-sm-7">
-                    <p class="form-data  mb-0">:- {{cardInward.inwardQuantity}}</p>
-                  </div>
-                  <div class="col-sm-5">
-                    <p class="form-label  mb-0">Remark</p>
-                  </div>
-                  <div class="col-sm-7">
-                    <p class="form-data  mb-0">:- {{cardInward.inwardRemark}}</p>
-                  </div>
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="row g-2">
+                <div class="row">
                   <div class="col-sm-5">
-                    <p class="form-label  mb-0">Date</p>
+                    <p class="form-label  mb-0"> {{'Labels.Date' | translate}}</p>
                   </div>
                   <div class="col-sm-6">
                     <p class="form-data  mb-0">:- {{cardInward.inwardDate}}</p>
                   </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
                   <div class="col-sm-5">
-                    <p class="form-label  mb-0">Price</p>
+                    <p class="form-label  mb-0"> {{'Labels.Unit' | translate}}</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardInward.inwardQuantity}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">{{'Labels.Price' | translate}}</p>
                   </div>
                   <div class="col-sm-6">
                     <p class="form-data  mb-0">:- {{cardInward.inwardPrice}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">{{'Labels.remark' | translate}}</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardInward.inwardRemark}}</p>
                   </div>
                 </div>
               </div>
@@ -93,21 +106,22 @@
             <div class="row gx-2 gy-2 form-container">
               <div class="col-sm-6">
                 <div class="d-flex flex-column mb-2">
-                  <div class="form-label">Photo :</div>
+                  <div class="form-label">{{'Labels.Photo' | translate}} :</div>
                   <div class="row g-2">
                     <div class="col-sm-4" *ngFor="let cardDoc of showImage[i]?.imgData;let j= index">
-                      <img src="{{cardDoc.photo}}" width="100%" class="img-fluid object-fit-cover border rounded" (click)="viewImages(i,j,'inward')">
+                      <img src="{{cardDoc.photo}}" width="100%" class="img-fluid object-fit-cover border rounded"
+                        (click)="viewImages(i,j,'inward')">
                     </div>
                   </div>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="d-flex flex-column mb-2">
-                  <div class="form-label">Document :</div>
+                  <div class="form-label">{{'Labels.Document' | translate}} :</div>
                   <div class="row g-2">
                     <div class="col-sm-4" *ngFor="let cardDoc of showPdf[i]?.pdfData;let j= index">
-                      <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo"
-                        width="100%" class="img-fluid object-fit-cover border rounded" (click)="viewDocument(i,j,'inward')">
+                      <img [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" width="100%"
+                        class="img-fluid object-fit-cover border rounded" (click)="viewDocument(i,j,'inward')">
                     </div>
                   </div>
                 </div>
@@ -116,46 +130,60 @@
           </mat-card-content>
         </mat-card>
       </div>
+
+      <!-----Outward------>
       <div class="col-sm-6">
-        <h6 class="text-main fw-bold my-2">Outward</h6>
+        <h6 class="text-main fw-bold my-2">{{'Labels.Outward' | translate}}</h6>
         <mat-card class="plain-card border mb-3" *ngFor="let cardOutWard of cardOutwardData; let i = index">
           <mat-card-header class="card-header border-bottom-0 mb-0">
-            <div class="row form-container w-100">
+            <div class="row gx-2 gy-2 form-container">
               <div class="col-sm-6">
-                <div class="row g-2">
+                <div class="row">
                   <div class="col-sm-5">
-                    <p class="form-label mb-0">Username</p>
+                    <p class="form-label mb-0">{{'Labels.Username' | translate}}</p>
                   </div>
                   <div class="col-sm-7">
                     <p class="form-data  mb-0">:- {{cardOutWard.outwardUserName}}</p>
                   </div>
-                  <div class="col-sm-5">
-                    <p class="form-label  mb-0">Unit</p>
-                  </div>
-                  <div class="col-sm-7">
-                    <p class="form-data  mb-0">:- {{cardOutWard.outwardQuantity}}</p>
-                  </div>
-                  <div class="col-sm-5">
-                    <p class="form-label  mb-0">Remark</p>
-                  </div>
-                  <div class="col-sm-7">
-                    <p class="form-data  mb-0">:- {{cardOutWard.outwardRemark}}</p>
-                  </div>
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="row g-2">
+                <div class="row">
                   <div class="col-sm-5">
-                    <p class="form-label  mb-0">Date</p>
+                    <p class="form-label  mb-0"> {{'Labels.Date' | translate}}</p>
                   </div>
                   <div class="col-sm-6">
                     <p class="form-data  mb-0">:- {{cardOutWard.outwardDate}}</p>
                   </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
                   <div class="col-sm-5">
-                    <p class="form-label  mb-0">Price</p>
+                    <p class="form-label  mb-0"> {{'Labels.Unit' | translate}}</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardQuantity}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">{{'Labels.Price' | translate}}</p>
                   </div>
                   <div class="col-sm-6">
                     <p class="form-data  mb-0">:- {{cardOutWard.outwardPrice}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-5">
+                    <p class="form-label  mb-0">{{'Labels.remark' | translate}}</p>
+                  </div>
+                  <div class="col-sm-7">
+                    <p class="form-data  mb-0">:- {{cardOutWard.outwardRemark}}</p>
                   </div>
                 </div>
               </div>
@@ -165,7 +193,7 @@
             <div class="row gx-2 gy-2 form-container">
               <div class="col-sm-6">
                 <div class="d-flex flex-column mb-2">
-                  <div class="form-label">Photo:</div>
+                  <div class="form-label">{{'Labels.Photo' | translate}} :</div>
                   <div class="row g-2">
                     <div class="col-sm-4" *ngFor="let cardDoc of outwardShowImage[i]?.imgData;let j= index">
                       <img class="img-fluid object-fit-cover border rounded" src="{{cardDoc.photo}}" alt=""
@@ -176,11 +204,12 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex flex-column mb-2">
-                  <div class="form-label">Documents:</div>
+                  <div class="form-label">{{'Labels.Document' | translate}} :</div>
                   <div class="row">
                     <div class="col-sm-4" *ngFor="let cardDoc of outwardShowPdf[i]?.pdfData;let j= index">
-                      <img class="img-fluid object-fit-cover border rounded" [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo"
-                        width="100%" (click)="viewDocument(i,j,'outward')">
+                      <img class="img-fluid object-fit-cover border rounded"
+                        [src]="cardDoc.docFlag ? 'assets/images/pdf-image.png' : cardDoc.photo" width="100%"
+                        (click)="viewDocument(i,j,'outward')">
                     </div>
                   </div>
                 </div>

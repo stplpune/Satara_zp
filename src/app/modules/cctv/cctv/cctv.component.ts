@@ -7,7 +7,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 declare var Player: any;
-import * as Player from '../../../../assets/js/cctv_js/play.js';
+// import * as Player from '../../../../assets/js/cctv_js/play.js';
 
 
 @Component({
@@ -47,26 +47,8 @@ export class CctvComponent {
     private fb: FormBuilder,
     private masterService: MasterService,
   ) {
-    // for cctv
-    let node = document.createElement('script');
-    node.src = "assets/js/cctv_js/jadecoder.js";//Change to your js file
-    document.getElementsByTagName('head')[0].appendChild(node);
 
-    let node1 = document.createElement('script');
-    node1.src = "assets/js/cctv_js/hevcdec.js";//Change to your js file
-    document.getElementsByTagName('head')[0].appendChild(node1);
 
-    let node2 = document.createElement('script');
-    node2.src = "assets/js/cctv_js/glutils.js";//Change to your js file
-    document.getElementsByTagName('head')[0].appendChild(node2);
-
-    let node3 = document.createElement('script');
-    node3.src = "assets/js/cctv_js/connector.js";//Change to your js file
-    document.getElementsByTagName('head')[0].appendChild(node3);
-
-    let node4 = document.createElement('script');
-    node4.src = "assets/js/cctv_js/play.js";//Change to your js file
-    document.getElementsByTagName('head')[0].appendChild(node4);
   }
 
 
@@ -79,8 +61,37 @@ export class CctvComponent {
     this.getTalukaDropByDis();
     this.getAllCCTVLocation();
     this.getTableData();
+
+  //For cctv 
+  }
+
+  ngAfterViewInit(){
+        // for cctv
+        // let node = document.createElement('script');
+        // node.src = "assets/js/cctv_js/jadecoder.js";//Change to your js file
+        // document.getElementsByTagName('head')[0].appendChild(node);
     
-    this?.init(); //For cctv 
+        // let node1 = document.createElement('script');
+        // node1.src = "assets/js/cctv_js/hevcdec.js";//Change to your js file
+        // document.getElementsByTagName('head')[0].appendChild(node1);
+    
+        // let node2 = document.createElement('script');
+        // node2.src = "assets/js/cctv_js/glutils.js";//Change to your js file
+        // document.getElementsByTagName('head')[0].appendChild(node2);
+    
+        // let node3 = document.createElement('script');
+        // node3.src = "assets/js/cctv_js/connector.js";//Change to your js file
+        // document.getElementsByTagName('head')[0].appendChild(node3);
+    
+        // let node4 = document.createElement('script');
+        // node4.src = "assets/js/cctv_js/play.js";//Change to your js file
+        // document.getElementsByTagName('head')[0].appendChild(node4);
+        // node4.onload = () => {
+        //   this?.init(); 
+        // };
+
+        
+        this?.init(); 
   }
 
   filterFormData() {
@@ -93,7 +104,7 @@ export class CctvComponent {
       textSearch: [''],
     })
   }
-  
+
   // Get Taluka Dropdown By district
 
   getTalukaDropByDis() {
@@ -284,12 +295,12 @@ export class CctvComponent {
     var pwd: any = document.getElementById("pwd");
     var streamid: any = document.getElementById("streamtype");
     var channel: any = document.getElementById("channel");
-    Player.ConnectDevice(devid?.value, '', user?.value, pwd?.value, 0, 80, 0, +channel?.value, +streamid?.value)
+    Player?.ConnectDevice(devid?.value, '', user?.value, pwd?.value, 0, 80, 0, +channel?.value, +streamid?.value)
   }
 
   disconnect() {
     var devid: any = document.getElementById("dev_id");
-    Player.DisConnectDevice(devid?.value)
+    Player?.DisConnectDevice(devid?.value)
   }
 
   openvideo() {
@@ -297,11 +308,11 @@ export class CctvComponent {
     var channel: any = document.getElementById("channel");
     // document.getElementById("channel").disabled = true;
     var devid: any = document.getElementById("dev_id");
-    Player.OpenStream(devid?.value, '', +channel?.value, +streamid?.value, 0);
+    Player?.OpenStream(devid?.value, '', +channel?.value, +streamid?.value, 0);
   }
 
   closevideo() {
-    Player.CloseStream(0)
+    Player?.CloseStream(0)
   }
 }
 

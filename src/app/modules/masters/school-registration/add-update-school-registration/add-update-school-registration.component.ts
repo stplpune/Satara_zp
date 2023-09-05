@@ -570,6 +570,7 @@ export class AddUpdateSchoolRegistrationComponent {
   //#region --------------------------------------------------- Event Delete method start here -------------------------------------------------//
   globalDialogOpen(id: number) {
     let dialoObj = {
+      img: 'assets/images/trash.gif',
       header: 'Delete',
       title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete Event record?' : 'तुम्हाला कार्यक्रमचा रेकॉर्ड हटवायचा आहे का?',
       cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',

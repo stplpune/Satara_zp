@@ -31,6 +31,7 @@ export class AddCctvLocationComponent {
   cameraDetailsArr = new Array();
   editCctvObj: any;
   editObj: any;
+  currentDate = new Date();
   get cf() { return this.cameraDetailsForm.controls };
 
   constructor(public webService: WebStorageService,

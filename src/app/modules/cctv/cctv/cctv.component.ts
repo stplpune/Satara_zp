@@ -287,14 +287,29 @@ export class CctvComponent {
     let channel = 0;
     var devid: any = '5625617245';
     let canvas:any;
-    for (let i = 0; i < 5; i++) {
+    let array: any  =[]
+    for (let i = 0; i < this.tableDataArray.length; i++) {
         canvas = document.getElementById("canvas" + i);
-        Player?.init([canvas]);
-        Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
+        console.log("canvasIDDDD",canvas);
+        array.push(canvas)
       }
-       setTimeout(() => {
-        Player?.OpenStream(devid, '', +channel, +streamid, 0)
-      }, 2000);
+      Player?.init(array);
+
+      Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', 1, 80, 0, +channel, +streamid);
+
+      setTimeout(() => {
+      Player?.OpenStream(devid, '', +channel, +streamid, 1)
+      }, 5000);
+
+      //   for (let i = 0; i < 5; i++) {
+
+      //     setTimeout(() => {
+      //     Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
+      //   }, 1000);
+      //   setTimeout(() => {
+      //   Player?.OpenStream(devid, '', +channel, +streamid, i)
+      // }, 5000);
+      // }
   }
 
   disconnect() {

@@ -2,8 +2,8 @@
     <mat-card-header class="card-header">
         <div class="d-flex justify-content-between align-items-center w-100">
             <h6 class="mb-0 text-main fw-bold">{{'Labels.profile'| translate}}</h6>
-            <button type="button" mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeDialog()">
-                <mat-icon class="fs-6 pt-1"> close </mat-icon>
+            <button mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeDialog()">
+                <mat-icon>close</mat-icon>
             </button>
         </div>
     </mat-card-header>
@@ -112,18 +112,20 @@
         </div>
         <div class="row g-3">
             <div class="col-sm-6" *ngIf="data?.multipleImage == true && items.length > 0">
-                <mat-label>{{data.item == 'Outward' ? 'Outword Photos' : 'Inward Photos'}} </mat-label>
-                <div class="row gy-2 gx-2" >
-                    <div class="col-sm-4" *ngFor="let item of items; index as i">
-                        <img [lightbox]="i" [src]="item.data.src" class="gallery-img img-fluid">
+                <!-- <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? 'Outword Photos' : 'Inward Photos'}} </p> -->
+                <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? ('Labels.OutwordPhotos'| translate) : ('Labels.InwardPhotos'| translate)}}</p>
+                <div class="row g-2" >
+                    <div class="col-sm-6" *ngFor="let item of items; index as i">
+                        <img [lightbox]="i" [src]="item.data.src" width="100px" height="100px" class="border rounded object-fit-cover">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6" *ngIf="data?.pdf == true && pdfArr.length > 0">
-                <mat-label>{{data.item == 'Outward' ? 'Outword Documents' : 'Inward Documents'}} </mat-label>
-                <div class="row gy-2 gx-2">
-                    <div class=" col-sm-4" *ngFor="let pdf of pdfArr; index as i">
-                        <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" class="img-fluid border"
+                <!-- <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? 'Outword Documents' : 'Inward Documents'}} </p> -->
+                <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? ('Labels.OutwordDocuments'| translate) : ('Labels.InwardDocuments'| translate)}}</p>
+                <div class="row g-2">
+                    <div class="col-sm-6" *ngFor="let pdf of pdfArr; index as i">
+                        <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" width="100px" height="100px" class="border rounded object-fit-cover"
                             (click)="onViewDoc(i)">
                     </div>
                 </div>
@@ -134,10 +136,5 @@
         <div *ngIf="data?.chart && data.Obj.isAssessment">
             <progressChartLine></progressChartLine>
         </div>
-
-
-      
-
-
     </mat-card-content>
 </mat-card>

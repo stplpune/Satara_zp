@@ -263,7 +263,7 @@ export class OutwardItemComponent {
       item: 'Outward',
     }
     const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
-      width: '900px',
+      width: '500px',
       data: data,
       disableClose: true,
       autoFocus: false

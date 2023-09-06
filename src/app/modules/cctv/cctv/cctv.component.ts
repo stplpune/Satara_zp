@@ -36,6 +36,8 @@ export class CctvComponent {
   selectedCCTV: any;
   cctvFlag: boolean = false;
   canvas = new Array();
+  timer: any;
+  i:number = 0;
   get f() {
     return this.filterForm.controls
   }
@@ -295,21 +297,26 @@ export class CctvComponent {
       }
       Player?.init(array);
 
-      Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', 1, 80, 0, +channel, +streamid);
+      for (let i = 0; i < this.tableDataArray.length; i++) {
+        Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
+      }
+      
+      this.callOpenStreamMethod();
+  }
 
-      setTimeout(() => {
-      Player?.OpenStream(devid, '', +channel, +streamid, 1)
-      }, 5000);
-
-      //   for (let i = 0; i < 5; i++) {
-
-      //     setTimeout(() => {
-      //     Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
-      //   }, 1000);
-      //   setTimeout(() => {
-      //   Player?.OpenStream(devid, '', +channel, +streamid, i)
-      // }, 5000);
-      // }
+  callOpenStreamMethod(){
+    this.timer = setInterval(() => {
+      if (this.tableDataArray.length == this.i) {
+        clearInterval(this.timer);
+      } else {
+        let streamid = 1;
+        let channel = 0;
+        console.log('sham')
+        var devid: any = '5625617245';
+        Player?.OpenStream(devid, '', +channel, +streamid, this.i)
+        this.i++;
+      }
+    }, 5000);
   }
 
   disconnect() {

@@ -129,7 +129,7 @@ export class StoreMasterComponent {
   setTableData(){
     this.highLightFlag =true;
     let displayedColumns  = [ 'srNo','category', 'subCategory', 'itemName', 'totalInward','totalOutward','availableStock'];;
-    let marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'totalInward','totalOutward','availableStock'];
+    let marathiDisplayedColumns = ['Sr.No.','m_Category', 'm_SubCategory','m_ItemName', 'totalInward','totalOutward','availableStock'];
     let tableData = {
       highlightedrow:true,
       pageNumber: this.pageNumber,
@@ -219,7 +219,7 @@ export class StoreMasterComponent {
 
 
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = [ 'SrNo','Category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock'];
+      let keyPDFHeader = [ 'Sr.No.','Category', 'Type', 'Item', 'Total Inward','Total Outward','Available Stock'];
       let MarathikeyPDFHeader =['अनुक्रमांक','श्रेणी', 'प्रकार', 'वस्तू', 'एकूण आवक','एकूण जावक','उपलब्ध साठा'];
       let ValueData =
         this.resultDownloadArr.reduce(

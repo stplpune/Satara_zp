@@ -103,7 +103,7 @@
                         <div class="upload-btn-wrapper">
                             <button class="upload-btn" type="button"
                                 matTooltip="{{uploadImg ? uploadImg.split('/').pop() :''}}" matTooltipPosition="below"
-                                matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhotodocument' |
+                                matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.uploadPhotoBill' |
                                 translate}}</button>
                             <!-- <input type="file" name="myfile"  [disabled]="uploadImg" multiple accept=".png, .jpg, .jpeg"
                                  #uploadImage (change)="multipleImgUpload($event)"/> -->
@@ -115,7 +115,7 @@
                                 </mat-error>
 
                         </div>
-                       
+
                         <!-- <div class="action-btn" *ngIf="uploadImg">
                             <button mat-icon-button class="btn-icon text-primary" type="button"
                                  matTooltip="{{'Labels.View' | translate}}"
@@ -129,6 +129,7 @@
                             </button>
                         </div> -->
                     </div>
+                    <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImagePdfFormat' | translate}}</p>
                 </div>
 
               

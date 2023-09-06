@@ -230,44 +230,52 @@ input:-webkit-autofill:active {
     //     height: 495px !important;
     // }
 }
-/*-----ngx-material-timepicker-css------*/
 
-.timepicker{
+/*-----ngx-material-timepicker-css------*/
+.timepicker-backdrop-overlay,
+.timepicker-overlay {
+    z-index: 99999 !important;
+    pointer-events: none;
+}
+
+.timepicker {
+    z-index: 99999 !important;
     border-radius: 6px !important;
     overflow: hidden !important;
 }
 
-.timepicker .timepicker__header{
+.timepicker .timepicker__header {
     padding: 10px !important;
     background-color: #00bfff;
 }
-.timepicker__header .timepicker-dial__time{
+
+.timepicker__header .timepicker-dial__time {
     font-size: 2.4rem !important;
 }
 
-.timepicker__header .timepicker-dial__time .timepicker-dial__control{
+.timepicker__header .timepicker-dial__time .timepicker-dial__control {
     font-size: 2rem;
     width: 35px;
 }
 
-.timepicker__header .timepicker-period .timepicker-period__btn{
+.timepicker__header .timepicker-period .timepicker-period__btn {
     padding: 0px;
     font-size: 16px;
 }
 
-.timepicker .clock-face{
+.timepicker .clock-face {
     width: 165px !important;
     height: 165px !important;
     padding: 5px !important;
     border: 2px solid #586de6 !important;
-    background-color:transparent !important;
+    background-color: transparent !important;
 }
 
-.timepicker .clock-face .clock-face__number--outer{
-    height: calc(290px / 2 - 70px)!important;
+.timepicker .clock-face .clock-face__number--outer {
+    height: calc(290px / 2 - 70px) !important;
 }
 
-.timepicker .clock-face .clock-face__clock-hand{
+.timepicker .clock-face .clock-face__clock-hand {
     height: 71px;
-    top: calc(50% - 70px)!important;
+    top: calc(50% - 70px) !important;
 }

@@ -11,10 +11,10 @@ let remoteDeviceData= {//远处设置返回存储
 /**
  * ConnectApi p2p连接控制对象，通过配置回调方法接收p2p回调数据
  * 
- * kp2pPlayer 播放器构造函数，传入canvas元素创建播放器
- * 参数1 canvas 用于显示画面的画布
- * 参数2 直接指定为false即可
- * 参数3 用于回调的上下文，从0开始，每创建一个都需要加1
+ * kp2pPlayer 播放器构造函数，传入canvas元素创建播放器 Player constructor, pass in the canvas element to create the player
+ * 参数1 canvas 用于显示画面的画布 Canvas for displaying screens
+ * 参数2 直接指定为false即可 Parameter 2 can be directly specified as false.
+ * 参数3 用于回调的上下文，从0开始，每创建一个都需要加1 The context used for the callback, starting from 0 and adding 1 for each creation
  */
 const Player = {};
 /**
@@ -115,7 +115,7 @@ function getRecordList(params) {
  * @param {number} height 		画面高
  */
 ConnectApi.onrecvframeex = function (api_conn, frametype, data, datalen, channel, width, height, enc, fps, timestamp) {
-	debugger;
+	// debugger;
 	// console.log('1111111111111111111111111');
 	//窗口已经被关闭
 	if (api_conn.streamlist[channel].winindex == -1) {
@@ -282,7 +282,7 @@ ConnectApi.ondisconnect = function (api_conn, code) {
  * @param {number} result 登录状态码
  */
 ConnectApi.onopenstream = function (api_conn, channel, streamid, result, cam_desc) {
-	console.log(api_conn.deviceid + '打开码流成功,通道' + channel + '码流' + streamid);
+	console.log("play.js file",api_conn.deviceid + '打开码流成功,通道' + channel + '码流' + streamid);
 	// console.log(cam_desc);
 	// console.log(result);
 	if (result != 0) {
@@ -459,15 +459,15 @@ Player.init = function (playerArr) {
  * 注:ID和IP至少要有一个，优先使用ID连接，有IP则port必传
  */
 Player.ConnectDevice = function (devid, ip, user, pwd, winindex, port, connectType, channel, streamid, wss, cb) {
-	debugger;
 	//ID连接
 	if (devid) {
+		debugger
 		let session = GetSessionById(devid);
 		let bConnect = false;
 		//初始化连接对象
 		if (session == null) {
 			session = ConnectApi.create(winindex, CryptoJS);
-			console.log(ConnectApi);
+			console.log("connectDevice",ConnectApi);
 			session.refs = 0;
 			session.logined = false;
 			session.user = user;
@@ -493,7 +493,7 @@ Player.ConnectDevice = function (devid, ip, user, pwd, winindex, port, connectTy
 		}
 
 		if (bConnect) {
-			debugger;
+			// debugger;
 			if(wss == "wss"){
 				useHttps = true;
 			}
@@ -555,7 +555,7 @@ Player.ConnectDevice = function (devid, ip, user, pwd, winindex, port, connectTy
  * @param {number} winindex 窗体索引
  */
 Player.OpenStream = function (deviceid, ip, channel, streamid, winindex) {
-	debugger;
+	
 	let session = null;
 	if (deviceid) {
 		session = GetSessionById(deviceid);

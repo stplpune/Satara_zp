@@ -193,7 +193,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     })
     this.masterService.getAllTaluka('').subscribe((res: any) => {
       this.talukaData.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-      this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
+      // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
       this.getCenters();
     })
   }

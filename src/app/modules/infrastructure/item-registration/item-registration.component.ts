@@ -186,7 +186,7 @@ export class ItemRegistrationComponent {
       let objData: any
       if (flag == 'excel') {
         objData = {
-          'topHedingName':this.languageFlag == 'English' ? 'Item List':'आयटम सूची',
+          'topHedingName':this.languageFlag == 'English' ? 'Item List':'वस्तू सूची',
           'createdDate':this.languageFlag == 'English'?'Created on:'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a') : 'रोजी तयार केले :'+this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
         }
       } else if (flag == 'pdfFlag') {

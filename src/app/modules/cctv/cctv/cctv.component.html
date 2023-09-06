@@ -116,11 +116,10 @@
                             selectedCCTV?.m_SchoolName }}</p>
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
-                        <ng-container *ngFor="let player of  tableDataArray; let i = index">
-                            <canvas id='{{player.canvas}}' width="180px" height="100vh" class="border m-1"></canvas>
-                            <!-- <canvas id ='canvas{{i}}' width="180px" height="100vh" class="border m-1"></canvas> -->
+                        <ng-container *ngFor="let player of  tableDataArray">
+                            <canvas id='{{player?.canvas}}' width="180px" height="100vh" class="border m-1"></canvas>
                         </ng-container>
-                        
+                        <!-- <canvas id ='canvas0'   width="180px" height="100vh" class="border m-2"></canvas> -->
                         <!-- <button type="button" onclick="showLoader()">Show</button>
                         <button type="button" onclick="hideLoader()">Hide</button>
                         <span id="myname">
@@ -128,7 +127,7 @@
                         </span> -->
                 
                     </mat-card-content>
-                    <!-- <button (click)="closevideo()" style="width:100px">Close</button> -->
+                    <!-- <button (click)="openvideo();openvideo();openvideo();openvideo();openvideo();" style="width:100px">Close</button> -->
                 
                 </mat-card>
             </div>

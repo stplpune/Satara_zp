@@ -33,7 +33,7 @@ export class AddTasksheetComponent {
 
   defaultForm() {
     this.attendenceForm = this.fb.group({
-      isPresent: [1],
+      isPresent: [0],
       remark: [this.data?.remark || '', [Validators.required]],
       inTime:[this.data?.checkInTime || ''],
       OutTime:[this.data?.checkOutTime || '']

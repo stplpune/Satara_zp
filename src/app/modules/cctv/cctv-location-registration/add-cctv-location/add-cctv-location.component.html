@@ -106,7 +106,7 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.RegistrationDate'| translate}}</mat-label>
                             <input matInput [matDatepicker]="picker" formControlName="registerDate"
-                                (click)="picker.open()">
+                                (click)="picker.open()" [max]="currentDate">
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>

@@ -29,7 +29,7 @@
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.name' | translate}}</mat-label>
-                    <input matInput formControlName="name" [readonly]="this.userType.subUserType == 'Admin'">
+                    <input matInput formControlName="name" [readonly]="this.userType.subUserType == 'Admin'" (keypress)="validation.noFirstSpaceAllow($event); validation.alphabetsWithSpaces($event)">
                 </mat-form-field>
             </div>
             <!-- <div class="col-sm-6">
@@ -54,7 +54,7 @@
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.emailID' | translate}}</mat-label>
-                    <input matInput formControlName="emailId" maxlength="50" (keypress)="validation.noFirstSpaceAllow($event)" [readonly]="this.userType.subUserType == 'Admin'">
+                    <input matInput formControlName="emailId" maxlength="50" (keypress)="validation.noFirstSpaceAllow($event); validation.emailRegex($event)" [readonly]="this.userType.subUserType == 'Admin'">
                     <mat-error *ngIf="fc['emailId'].hasError('pattern')">{{'Labels.pleaseEnterValidEmailId' | translate}}</mat-error>
                 </mat-form-field>
             </div>

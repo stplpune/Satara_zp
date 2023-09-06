@@ -84,6 +84,13 @@
                             Birth Date Is Required</mat-error> -->
                     </mat-form-field>
                 </div>
+                <div class="col-12 col-sm-2">
+                    <ng-container *ngIf="teacherRegForm.value.birthDate">
+                        <div class="age-show" *ngIf="teacherRegForm.value.age > 0">
+                            <span class="me-1">{{age}}</span><span>Years</span>
+                        </div>
+                    </ng-container>
+                </div>
                 <div class="col-sm-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -121,14 +128,6 @@
                             <mat-icon class="text-success" *ngIf="showAddRemImg" (click)="viewImg()">check_circle_outline</mat-icon>
                         </span> -->
                     <!-- </mat-form-field> -->
-                </div>
-                
-                <div class="col-12 col-sm-2">
-                    <ng-container *ngIf="teacherRegForm.value.birthDate">
-                        <div class="age-show" *ngIf="teacherRegForm.value.age > 0">
-                            <span class="me-1">{{age}}</span><span>Years</span>
-                        </div>
-                    </ng-container>
                 </div>
             </div>
             <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.AddressDetails'| translate}}</mat-card-subtitle>

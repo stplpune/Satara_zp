@@ -241,9 +241,10 @@ export class CategoryComponent {
       // "Category": flag == 'excel' ? this.langTypeName == 'English' ? ele.category : ele.m_Category : ele.category,
      
       let obj = {
-            "Sr.No":this.langTypeName == 'English' ? (i+1) : this.convertToMarathiNumber(i+1),
+            "Sr.No":this.langTypeName == 'English' || flag != 'excel' ? (i+1) : this.convertToMarathiNumber(i+1),
             "category":flag == 'excel' ?this.langTypeName == 'English' ? ele.category : ele.m_Category:ele.category,
           }
+          
       // if(flag == 'excel'){
       //   let obj = {
       //     "Sr.No":this.langTypeName == 'English' ? (i+1) : this.convertToMarathiNumber(i+1),

@@ -211,7 +211,7 @@ export class SubCategoryComponent {
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
      let obj = {
-            srNo: this.langTypeName == 'English'?(i + 1):this.convertToMarathiNumber(i+1),
+            srNo: this.langTypeName == 'English' || flag != 'excel' ? (i + 1) : this.convertToMarathiNumber(i+1),
             category: flag == 'excel'?this.langTypeName == 'English'?ele.category:ele.m_Category:ele.category,
             subCategory: flag == 'excel'?this.langTypeName == 'English'?ele.subCategory:ele.m_SubCategory:ele.subCategory,
             itemName: ele.itemName,

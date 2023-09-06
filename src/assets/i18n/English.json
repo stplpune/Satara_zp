@@ -455,6 +455,10 @@
         "Task":"Task",
 
         "ViewStockReportPage":"View Stock Report Page",
+        "InwardPhotos":"Inward Photos",
+        "OutwordPhotos":"Outword Photos",
+        "InwardDocuments":"Inward Documents",
+        "OutwordDocuments":"Outword Documents",
         "Inward":"Inward",
         "Outward":"Outward",
         "Username":"Username"

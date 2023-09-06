@@ -35,7 +35,9 @@ export class CctvComponent {
   schoolArr = new Array();
   selectedCCTV: any;
   cctvFlag: boolean = false;
-  canvas= new Array();
+  canvas = new Array();
+  timer: any;
+  i:number = 0;
   get f() {
     return this.filterForm.controls
   }
@@ -47,7 +49,7 @@ export class CctvComponent {
     public webStorageS: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
-    
+
   ) {
 
 
@@ -65,11 +67,9 @@ export class CctvComponent {
     this.getTableData();
 
     //For cctv 
-
+    
 
   }
-
-
 
   //loader.style.display = 'none';
 
@@ -84,34 +84,6 @@ export class CctvComponent {
     var loadershow: any = document.getElementById("myname");
     console.log("clicked");
     loadershow.style.display = 'none';
-  }
-
-  ngAfterViewInit() {
-    // for cctv
-    // let node = document.createElement('script');
-    // node.src = "assets/js/cctv_js/jadecoder.js";//Change to your js file
-    // document.getElementsByTagName('head')[0].appendChild(node);
-
-    // let node1 = document.createElement('script');
-    // node1.src = "assets/js/cctv_js/hevcdec.js";//Change to your js file
-    // document.getElementsByTagName('head')[0].appendChild(node1);
-
-    // let node2 = document.createElement('script');
-    // node2.src = "assets/js/cctv_js/glutils.js";//Change to your js file
-    // document.getElementsByTagName('head')[0].appendChild(node2);
-
-    // let node3 = document.createElement('script');
-    // node3.src = "assets/js/cctv_js/connector.js";//Change to your js file
-    // document.getElementsByTagName('head')[0].appendChild(node3);
-
-    // let node4 = document.createElement('script');
-    // node4.src = "assets/js/cctv_js/play.js";//Change to your js file
-    // document.getElementsByTagName('head')[0].appendChild(node4);
-    // node4.onload = () => {
-    //   this?.init(); 
-    // };
-
-
   }
 
   filterFormData() {
@@ -233,12 +205,13 @@ export class CctvComponent {
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.selectedCCTV = this.tableDataArray[0]; // bydefault patch first CCTV camera
-          this.tableDataArray.map((x: any, i: any)=>{
-            x.canvas = 'canvas'+i
+          this.tableDataArray.map((x: any, i: any) => {
+            x.canvas = 'canvas' + i
           })
-          console.log("this.tableDataArray", this.tableDataArray);
-          
-          this?.init();
+          setTimeout(() => {
+            this.init();
+          }, 100);
+
         }
         else {
           this.ngxSpinner.hide();
@@ -273,13 +246,8 @@ export class CctvComponent {
   childCompInfo(obj?: any) {
     if (obj.label == 'View') {
       this.selectedCCTV = obj;
-      console.log("call view ");
-
-      this.connect(obj);
-
     }
     else {
-
     }
   }
 
@@ -317,48 +285,45 @@ export class CctvComponent {
   }
 
   init() {
-    for(let i = 0; i < this.tableDataArray.length; i++){
-      // this.canvas.push(document.getElementById('canvas'+i));
-    // this.canvas.push(document.getElementById(this.tableDataArray[i].canvas));
-    this.canvas.push('canvas#'+this.tableDataArray[i].canvas)
-    console.log([this.canvas]);
-    
-    
-     
-    }
-    // document.getElementById("canvas1")
-    Player?.init(this.canvas);
-    this.connect();
+    let streamid = 1;
+    let channel = 0;
+    var devid: any = '5625617245';
+    let canvas:any;
+    let array: any  =[]
+    for (let i = 0; i < this.tableDataArray.length; i++) {
+        canvas = document.getElementById("canvas" + i);
+        console.log("canvasIDDDD",canvas);
+        array.push(canvas)
+      }
+      Player?.init(array);
+
+      for (let i = 0; i < this.tableDataArray.length; i++) {
+        Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
+      }
+      
+      this.callOpenStreamMethod();
   }
 
-  connect(_obj?: any) {
-    for(let i = 0; i < this.tableDataArray.length; i++){
-      this.ngxSpinner.show();
-      let streamid = 1;
-      let channel = 0;
-      Player?.ConnectDevice('5625617245', '', 'admin', '87be!01cd4', 0, 80, 0, +channel, +streamid)
-
-      // document.getElementById("channel").disabled = true;
-      var devid: any ="5625617245";
-      Player?.OpenStream(devid?.value, '', +channel, +streamid, 0);
-      this.ngxSpinner.hide();
-      // setTimeout(() => { this.openvideo() }, 0);
-      // Player?.ConnectDevice(obj?.deviceId, '', obj?.userName, obj?.password, 0, 80, 0, +channel?.value, +streamid?.value)
-    
-    }
-
-   }
+  callOpenStreamMethod(){
+    this.timer = setInterval(() => {
+      if (this.tableDataArray.length == this.i) {
+        clearInterval(this.timer);
+      } else {
+        let streamid = 1;
+        let channel = 0;
+        console.log('sham')
+        var devid: any = '5625617245';
+        Player?.OpenStream(devid, '', +channel, +streamid, this.i)
+        this.i++;
+      }
+    }, 5000);
+  }
 
   disconnect() {
-    debugger;
     var devid: any = document.getElementById("dev_id");
     Player?.DisConnectDevice(devid?.value)
   }
 
-  openvideo() {
-    debugger;
-
-  }
 
   closevideo() {
     Player?.CloseStream(0)

@@ -157,8 +157,8 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved','action'];
-    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'isManualAtt', 'isSubmitted', 'isApproved', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved'];
+    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'isManualAtt', 'isSubmitted', 'isApproved'];
 
     this.tableData = {
       pageNumber: this.pageNumber,
@@ -168,7 +168,7 @@ export class TasksheetReportsComponent {
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-      edit: false, delete: false, approve :true,
+      edit: false, delete: false,   // approve :true,
       isManual: 'isManualAtt',
       isManSubmit: 'isSubmitted',
       isManualAppr: 'isApproved',

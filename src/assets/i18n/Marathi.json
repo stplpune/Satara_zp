@@ -440,6 +440,9 @@
         "teacherId":"शिक्षक आयडी",
 
         "cctv":"CCTV",
+        "cctvdetails":"CCTV तपशील",
+        "UpdateCCTVDetails":"CCTV तपशील अपडेट करा",
+        "AddCCTVDetails":"CCTV तपशील जोडा",
         "cctvlist":"CCTV यादी",
         "location":"शाळेचे स्थान",
         "AllRightsReserved":"जि.प. सातारा, सर्व हक्क राखीव.",

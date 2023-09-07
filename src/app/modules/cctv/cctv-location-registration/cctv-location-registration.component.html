@@ -56,7 +56,7 @@
             </div>
             <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Center</mat-label>
+                    <mat-label>{{'Labels.center'| translate}}</mat-label>
                     <mat-select formControlName="centerId" (selectionChange)="getVillage();clearDependency('centerId')">
                         <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                             ?cen.center:cen.m_Center}}</mat-option>
@@ -141,14 +141,10 @@
                         </td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
                             <button mat-icon-button matTooltip="{{'Labels.edit' | translate}}" (click)="openDialog(data.id)">
-                                <mat-icon class="text-danger">
-                                    edit
-                                </mat-icon>
+                                <mat-icon class="text-main">edit</mat-icon>
                             </button>
                             <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" (click)="globalDialogOpen(data)">
-                                <mat-icon class="text-danger">
-                                    delete
-                                </mat-icon>
+                                <mat-icon class="text-main">delete</mat-icon>
                             </button>
                         </td>
                     </tr>

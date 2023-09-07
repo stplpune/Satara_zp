@@ -109,6 +109,7 @@ body {
   // cursor: pointer
 }
 
+// table-css
 .text-ellipsis-150-L2,
 .text-ellipsis-200-L2,
 .text-ellipsis-250-L2 {
@@ -159,7 +160,8 @@ body {
   height: 42px !important;
 }
 
-.dashboard-table .mat-mdc-icon-button.mat-mdc-button-base {
+.dashboard-table .mat-mdc-icon-button.mat-mdc-button-base,
+.inner-table .mat-mdc-icon-button.mat-mdc-button-base {
   height: 34px !important;
   width: 34px !important;
   padding: 8px 5px !important;
@@ -168,9 +170,11 @@ body {
   margin: 2px;
 }
 
-.dashboard-table button mat-icon {
+.dashboard-table button mat-icon,
+.inner-table button mat-icon {
   font-size: 18px !important;
 }
+
 .dashboard-table tbody tr:hover,
 .dashboard-table .mat-mdc-row:hover,
 .dashboard-table .highlightedRow {
@@ -196,6 +200,39 @@ body {
   margin-block: 5px;
   border-radius: 50%;
   border: 1px solid #276bc6;
+}
+
+// inner-table-css 
+.inner-table {
+  border: solid 2px var(--main-light-color);
+  font-size: 0.85rem;
+}
+
+.inner-table thead th {
+  background-color: var(--main-light-color);
+  width: 300px !important;
+}
+
+.inner-table thead th,
+.inner-table tbody td {
+  vertical-align: top;
+}
+
+.inner-table tbody td {
+  text-align: center;
+}
+
+.inner-table thead tr th:first-child,
+.inner-table tbody tr td:first-child {
+  width: 10rem !important;
+  vertical-align: middle;
+  text-align: left !important;
+}
+
+.inner-table .table-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .plain-card {
@@ -414,38 +451,6 @@ body {
   width: 1.2em;
   height: 1.2em;
   margin-top: 0em;
-}
-
-.inner-table {
-  border: solid 2px var(--main-light-color);
-  font-size: 0.85rem;
-}
-
-.inner-table thead th {
-  background-color: var(--main-light-color);
-  width: 300px !important;
-}
-
-.inner-table thead th,
-.inner-table tbody td {
-  vertical-align: top;
-}
-
-.inner-table tbody td {
-  text-align: center;
-}
-
-.inner-table thead tr th:first-child,
-.inner-table tbody tr td:first-child {
-  width: 10rem !important;
-  vertical-align: middle;
-  text-align: left !important;
-}
-
-.inner-table .table-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
 }
 
 .data-container .data-label {
@@ -715,14 +720,6 @@ body {
 .chart-container .apexcharts-tooltip {
   font-size: 0.85rem !important;
   left: 20px !important;
-}
-
-.text-emphasis-oneline {
-  overflow: hidden;
-  height: 22px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
 }
 
 textarea {

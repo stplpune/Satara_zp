@@ -3,8 +3,7 @@
         <mat-card-header class="card-header">
             <div class="d-flex align-items-center justify-content-between w-100">
                 <h6 class="text-main mb-0 fw-bold">{{editFlag ? ('Labels.UpdatedInwardItems'|
-                    translate):('Labels.InwardItmes'|
-                    translate)}}</h6>
+                    translate):('Labels.addInwardItems'| translate)}}</h6>
                 <button mat-icon-button mat-dialog-close class="btn-modal-close">
                     <mat-icon>
                         close
@@ -85,7 +84,7 @@
                                     <button class="upload-btn" type="button"
                                         matTooltip="{{uploadImg ? uploadImg.split('/').pop() :''}}"
                                         matTooltipPosition="below" matTooltipClass="tooltip"
-                                        (click)="uploadImage.click()">{{'Labels.uploadPhotoBill' |
+                                        (click)="uploadImage.click()">{{'Labels.uploadPhotodocument' |
                                         translate}}</button>
                                     <input type="file" name="myfile" [disabled]="uploadImg"
                                         accept=".png, .jpg, .jpeg, .pdf, .doc, .txt" multiple #uploadImage
@@ -94,6 +93,7 @@
                             </div>
                         </div>
                     </div>
+                    <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImagePdfFormat' | translate}}</p>
                     <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
                         {{'Labels.PhotoIsRequired'| translate}}
                     </mat-error>

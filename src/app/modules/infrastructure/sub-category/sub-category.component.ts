@@ -58,6 +58,7 @@ export class SubCategoryComponent {
   ngOnInit() {
     this.getIsWriteFunction();
     this.getTableData();
+    this.langTypeName = this.webStorage.languageFlag;
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.getTableTranslatedData();
@@ -87,7 +88,7 @@ export class SubCategoryComponent {
  
   getCategory() {
     this.categoryresp = [];
-    this.masterService.GetAllAssetCategory(this.webStorage.languageFlag).subscribe({
+    this.masterService.GetAllAssetCategory(this.langTypeName).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.categoryresp = res.responseData;
@@ -211,7 +212,7 @@ export class SubCategoryComponent {
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
      let obj = {
-            srNo: this.langTypeName == 'English'?(i + 1):this.convertToMarathiNumber(i+1),
+            srNo: this.langTypeName == 'English' || flag != 'excel' ? (i + 1) : this.convertToMarathiNumber(i+1),
             category: flag == 'excel'?this.langTypeName == 'English'?ele.category:ele.m_Category:ele.category,
             subCategory: flag == 'excel'?this.langTypeName == 'English'?ele.subCategory:ele.m_SubCategory:ele.subCategory,
             itemName: ele.itemName,

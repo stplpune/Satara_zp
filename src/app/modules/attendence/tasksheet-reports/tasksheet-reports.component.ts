@@ -119,7 +119,9 @@ export class TasksheetReportsComponent {
     let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
     let reportStr = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
 
-    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl'); 
+    // this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl'); 
+    this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceReport?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl'); 
+
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -155,8 +157,8 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved','action'];
-    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'isManualAtt', 'isSubmitted', 'isApproved', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved'];
+    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'isManualAtt', 'isSubmitted', 'isApproved'];
 
     this.tableData = {
       pageNumber: this.pageNumber,
@@ -166,7 +168,7 @@ export class TasksheetReportsComponent {
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-      edit: false, delete: false, approve :true,
+      edit: false, delete: false,   // approve :true,
       isManual: 'isManualAtt',
       isManSubmit: 'isSubmitted',
       isManualAppr: 'isApproved',

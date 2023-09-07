@@ -13,6 +13,8 @@ import { Observable } from 'rxjs';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { Workbook } from 'exceljs';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'app-cctv-location-registration',
@@ -204,7 +206,7 @@ export class CctvLocationRegistrationComponent {
           // (flag != 'excel') ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray; 
           this.tableDatasize = res.responseData.responseData2.pageCount;
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
-          flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
+          flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadExcel(data) : '';
         } else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
@@ -288,6 +290,80 @@ export class CctvLocationRegistrationComponent {
       let headerKeySize = [7, 15, 20, 30, 40,]
       flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.languageFlag == 'English' ?keyPDFHeader:MarathikeyPDFHeader, ValueData, objData, headerKeySize)
     }
+  }
+
+  downloadExcel(data: any){
+    let apiKeys = ['srNo', 'cctvLocation', 'remark'];
+    let keyCenterNo = "";
+    // let keyCNo = String.fromCharCode(Math.ceil(apiKeys.length) + 64);
+
+    if(apiKeys.length == 4){
+      keyCenterNo = "D"
+    }
+    else{
+      keyCenterNo = String.fromCharCode(Math.ceil(apiKeys.length / 2) + 64);
+      keyCenterNo = keyCenterNo;
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Zp-Satara');
+
+    worksheet.getCell('C4').value = 'CCTV Location List';
+    worksheet.getCell('C4').alignment = { vertical: 'bottom' };
+    worksheet.getCell('C4').font = { size: 12, bold: true, color: { argb: '000000',  } };
+
+    worksheet.getCell('E5').value = 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a');
+    worksheet.getCell('E5').alignment = { vertical: 'bottom' };
+    worksheet.getCell('E5').font = { size: 12, bold: true, color: { argb: '000000',  } };
+
+    let resObject: any = []; let resData: any = [];
+    data.map((res: any, i:any)=> {
+      resObject.push((i+1), res.cctvLocation, '', '', '', '', '', '',res.remark);
+      resData.push(resObject);
+      resObject = [];
+    if(res.cctvDetailsModelResponse){
+      res.cctvDetailsModelResponse.map((ele: any)=>{
+        ele.registerDate = this.datepipe.transform(ele.registerDate, 'dd/MM/yyyy');
+        resObject.push('', '', ele.cctvName, ele.cctvModel, ele.deviceId, ele.registerDate, ele.userName, ele.password);
+        resData.push(resObject);
+        resObject = [];
+      });
+    }
+    });
+
+    worksheet.addTable({
+      name:'CCTV Location',
+      ref: 'A7',
+      columns: [
+        {name: 'Sr. No'},
+        {name: 'CCTV Location'},
+        {name: 'CCTV Name'},
+        {name: 'CCTV Model'},
+        {name: 'Device Id'},
+        {name: 'Registration Date'},
+        {name: 'Username'},
+        {name: 'Password'},
+        {name: 'Remark'},
+      ], 
+      rows: resData,
+      style: {
+        theme: 'TableStyleLight11',
+      },
+    });
+
+    var headerSize;
+    headerSize = [7, 15, 15, 15, 15, 20, 15, 15, 15];
+    for(var i = 0; i < headerSize.length; i++){
+      worksheet.getColumn(i + 1).width = headerSize[i];
+    }
+
+    workbook.xlsx.writeBuffer().then((data: any)=>{
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      FileSaver.saveAs(blob, 'CCTV Location');
+    });
+    this.getTableData();
   }
 
   clearForm() {

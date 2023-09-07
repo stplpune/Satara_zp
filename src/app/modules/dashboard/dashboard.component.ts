@@ -193,7 +193,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     })
     this.masterService.getAllTaluka('').subscribe((res: any) => {
       this.talukaData.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-      this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
+      // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
       this.getCenters();
     })
   }
@@ -804,10 +804,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
 
-  setAssessment() {
-    this.initialApiCall('initial');
-    this.asessmwntLavel.value == "1" ? (this.getSubjectDropForClass(), this.getRefstandardTableArrayCount(), this.getdashboardCount('initial')) : '';
-  }
+  // setAssessment() {
+  //   this.initialApiCall('initial');
+  //   this.asessmwntLavel.value == "1" ? (this.getSubjectDropForClass(), this.getRefstandardTableArrayCount(), this.getdashboardCount('initial')) : '';
+  // }
 
   chnageClasswiseSubjectDrp() {
     this.getRefstandardTableArrayCount();
@@ -848,6 +848,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getRefstandardTableArrayCount() {
+    console.log("onchnage subject :");
+    
     const formData = this.filterForm.value;
     this.spinner.show();
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
@@ -877,6 +879,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getstandardTableArrayCount(val: any) {
+    console.log("count classwise std ", val )
     const formData = this.filterForm.value;
     val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
     this.spinner.show();

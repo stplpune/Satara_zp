@@ -33,7 +33,7 @@ export class AddTasksheetComponent {
 
   defaultForm() {
     this.attendenceForm = this.fb.group({
-      isPresent: [1],
+      isPresent: [0],
       remark: [this.data?.remark || '', [Validators.required]],
       inTime:[this.data?.checkInTime || ''],
       OutTime:[this.data?.checkOutTime || '']
@@ -42,18 +42,27 @@ export class AddTasksheetComponent {
 
   onSubmit() {
     let formValue = this.attendenceForm.getRawValue();
+    // if(this.data.checkInTime == null &&  this.data.checkOutTime != null){    
+    //   this.AttType = 1
+    // }else if (this.data.checkOutTime == null && this.data.checkInTime != null ){     
+    //   this.AttType = 2
+    // }else if(this.data.checkInTime == null &&  this.data.checkOutTime == null){   
+    //   this.AttType = 3
+    // }else if((this.data.checkInTime != null &&  this.data.checkOutTime != null )){
+    //   this.AttType = 4
+    // }
+
     if(this.data.checkInTime == null &&  this.data.checkOutTime != null){    
       this.AttType = 1
     }else if (this.data.checkOutTime == null && this.data.checkInTime != null ){     
-      this.AttType = 2
+      this.AttType = 1
     }else if(this.data.checkInTime == null &&  this.data.checkOutTime == null){   
+      this.AttType = 2
+    }else if(this.data.remark == null ){
       this.AttType = 3
-    }else if((this.data.checkInTime != null &&  this.data.checkOutTime != null )){
-      this.AttType = 4
     }
     
     this.data.date = this.datePipe.transform(this.data.date, 'yyyy-MM-dd');
-
 
     if (this.attendenceForm.invalid) {
       return;

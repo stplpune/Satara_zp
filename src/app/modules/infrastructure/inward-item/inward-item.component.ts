@@ -173,7 +173,7 @@ export class InwardItemComponent {
       item: 'Inward',
     }
     const viewDialogRef = this.dialog.open(GlobalDetailComponent, {
-      width: '900px',
+      width: '500px',
       data: data,
       disableClose: true,
       autoFocus: false

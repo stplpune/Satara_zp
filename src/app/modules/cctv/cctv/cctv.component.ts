@@ -6,6 +6,9 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
+declare var Player: any;
+// import * as Player from '../../../../assets/js/cctv_js/play.js';
+
 
 @Component({
   selector: 'app-cctv',
@@ -31,6 +34,10 @@ export class CctvComponent {
   villageArr = new Array();
   schoolArr = new Array();
   selectedCCTV: any;
+  cctvFlag: boolean = false;
+  canvas = new Array();
+  timer: any;
+  i:number = 0;
   get f() {
     return this.filterForm.controls
   }
@@ -42,8 +49,12 @@ export class CctvComponent {
     public webStorageS: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
+
   ) {
+
+
   }
+
 
   ngOnInit() {
     this.webStorageS.langNameOnChange.subscribe(lang => {
@@ -54,6 +65,25 @@ export class CctvComponent {
     this.getTalukaDropByDis();
     this.getAllCCTVLocation();
     this.getTableData();
+
+    //For cctv 
+    
+
+  }
+
+  //loader.style.display = 'none';
+
+  showLoader() {
+    let loadershow: any = document.getElementById("myname");
+    console.log("clicked");
+    loadershow.style.display = 'block';
+
+  }
+
+  hideLoader() {
+    var loadershow: any = document.getElementById("myname");
+    console.log("clicked");
+    loadershow.style.display = 'none';
   }
 
   filterFormData() {
@@ -66,6 +96,7 @@ export class CctvComponent {
       textSearch: [''],
     })
   }
+
   // Get Taluka Dropdown By district
 
   getTalukaDropByDis() {
@@ -174,6 +205,13 @@ export class CctvComponent {
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.selectedCCTV = this.tableDataArray[0]; // bydefault patch first CCTV camera
+          this.tableDataArray.map((x: any, i: any) => {
+            x.canvas = 'canvas' + i
+          })
+          setTimeout(() => {
+            this.init();
+          }, 100);
+
         }
         else {
           this.ngxSpinner.hide();
@@ -207,8 +245,9 @@ export class CctvComponent {
   // Click table row 
   childCompInfo(obj?: any) {
     if (obj.label == 'View') {
-      this.selectedCCTV = obj
-      console.log(obj);
+      this.selectedCCTV = obj;
+    }
+    else {
     }
   }
 
@@ -245,5 +284,49 @@ export class CctvComponent {
     this.getTableData();
   }
 
+  init() {
+    let streamid = 1;
+    let channel = 0;
+    var devid: any = '5625617245';
+    let canvas:any;
+    let array: any  =[]
+    for (let i = 0; i < this.tableDataArray.length; i++) {
+        canvas = document.getElementById("canvas" + i);
+        console.log("canvasIDDDD",canvas);
+        array.push(canvas)
+      }
+      Player?.init(array);
 
+      for (let i = 0; i < this.tableDataArray.length; i++) {
+        Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
+      }
+      
+      this.callOpenStreamMethod();
+  }
+
+  callOpenStreamMethod(){
+    this.timer = setInterval(() => {
+      if (this.tableDataArray.length == this.i) {
+        clearInterval(this.timer);
+      } else {
+        let streamid = 1;
+        let channel = 0;
+        console.log('sham')
+        var devid: any = '5625617245';
+        Player?.OpenStream(devid, '', +channel, +streamid, this.i)
+        this.i++;
+      }
+    }, 5000);
+  }
+
+  disconnect() {
+    var devid: any = document.getElementById("dev_id");
+    Player?.DisConnectDevice(devid?.value)
+  }
+
+
+  closevideo() {
+    Player?.CloseStream(0)
+  }
 }
+

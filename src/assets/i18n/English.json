@@ -432,7 +432,7 @@
         "CCTVNameCCTVModel":"CCTV Name / CCTV Model",
         "CCTVName":"CCTV Name",
         "CCTVModel":"CCTV Model",
-        "DeviceId":"Device Id",
+        "DeviceId":"Device ID",
         "CloudID":"Cloud ID",
         "RegistrationDate":"Registration Date",
         "teacherId":"Teacher ID",

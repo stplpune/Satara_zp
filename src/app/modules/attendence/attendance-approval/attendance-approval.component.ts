@@ -89,7 +89,7 @@ export class AttendanceApprovalComponent {
     this.approvalForm = this.fb.group({
       date : [moment()],
       typeId: [0],
-      textSeach : ['']
+      textSearch : ['']
     });
   }
 
@@ -99,8 +99,8 @@ export class AttendanceApprovalComponent {
 
     let formValue = this.approvalForm?.value;
     let yearMonth = moment(formValue.date).format('YYYY-MM');
-    let str = `MonthYear=${yearMonth}&UserId=${this.webStorageS.getUserId()}&Type=${formValue?.typeId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`
-    let reportStr = `MonthYear=${yearMonth}&UserId=${this.webStorageS.getUserId()}&Type=${formValue?.typeId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`
+    let str = `MonthYear=${yearMonth}&UserId=${this.webStorageS.getUserId()}&Type=${formValue?.typeId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`
+    let reportStr = `MonthYear=${yearMonth}&UserId=${this.webStorageS.getUserId()}&Type=${formValue?.typeId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`
 
     this.apiService.setHttp('post', 'zp-satara/Attendance/GetAttendanceForApproval?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl')
     this.apiService.getHttp().subscribe({
@@ -149,14 +149,18 @@ export class AttendanceApprovalComponent {
     datepicker.close();
   }
 
-  openDialog() {
+  openDialog(obj: any) {
     const dialogRef = this.dialog.open(AttendancePermissionComponent, {
       width: '400px',
       disableClose: true,
-      autoFocus: false
+      autoFocus: false,
+      data: obj
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if(result == 'yes'){
+        this.getTableData();
+      }
+      this.highLightFlag = false;
     });
   }
 
@@ -168,7 +172,7 @@ export class AttendanceApprovalComponent {
         break;
 
         case 'Approve':
-          this.openDialog();
+          this.openDialog(obj);
           break;
     }
   }

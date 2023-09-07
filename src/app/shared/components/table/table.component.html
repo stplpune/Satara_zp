@@ -72,8 +72,8 @@
                         </mat-icon>
                     </button>
 
-                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false ? '':'btn-main ms-2'"
-                      [disabled]="tableInfo.tableData[i]?.isAppr == false" (click)="action(element,'Approve')">
+                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg != 1 ? '':'btn-main ms-2'"
+                      [disabled]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg != 1" (click)="action(element,'Approve')">
                        {{tableInfo.tableData[i]?.isApproved == 1 ? 'Approved' : 'Approve'}}
                     </button>
 

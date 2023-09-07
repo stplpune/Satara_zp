@@ -463,6 +463,7 @@
         "Outward":"Outward",
         "Username":"Username",
         "approve":"Approve",
-        "reject": "Reject"
+        "reject": "Reject",
+        "approvalStatus": "Approval Status"
     }
 }

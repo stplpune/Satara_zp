@@ -17,11 +17,11 @@
         </div>
         <div class="d-flex align-items-center gap-2">
           <button mat-flat-button class="bg-danger btn-icon text-white" matTooltip="{{'Labels.DownloadPdf' | translate}}"
-            matTooltipPosition="below" matTooltipClass="tooltip">
+            matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
             <mat-icon>description </mat-icon>
           </button>
           <button mat-flat-button class="bg-success btn-icon text-white" matTooltip="{{'Labels.Downloadexcel' | translate}}"
-            matTooltipPosition="below" matTooltipClass="tooltip">
+            matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('excel')">
             <mat-icon class="material-symbols-outlined">table</mat-icon>
           </button>
           <!-- <button mat-flat-button class="btn-main" (click)="openDialog()">
@@ -45,18 +45,29 @@
                 </mat-datepicker>
               </mat-form-field>
             </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="w-100 ">
+                <mat-label>{{'Labels.approvalStatus'| translate}}</mat-label>
+                <mat-select formControlName="typeId">
+                    <mat-option *ngFor="let type of typeArr" [value]="type.id">{{webStorageS.getLangauge() ==
+                        'EN' ?
+                        type.type : type.m_type }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
       
             <div class="col-sm-3">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>{{'Labels.filter' |translate}}</mat-label>
-                <input matInput maxlength="50" formControlName="textSeach">
+                <input matInput maxlength="50" formControlName="textSeach" (keypress)="validators.noFirstSpaceAllow($event);">
               </mat-form-field>
             </div>
   
             <div class="col-sm-auto mb-lg-0 mb-2">
-              <button type="button" mat-flat-button class="btn-main" >{{'Labels.filter'|
+              <button type="button" mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter'|
                 translate}}</button>
-              <button type="button" mat-flat-button class="btn-second ms-2">{{'Labels.clear'
+              <button type="button" mat-flat-button class="btn-second ms-2" (click)="onClear()">{{'Labels.clear'
                 |translate}}</button>
             </div>
           </div>

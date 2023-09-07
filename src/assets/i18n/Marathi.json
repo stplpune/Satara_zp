@@ -465,6 +465,7 @@
         "Outward":"जावक",
         "Username":"वापरकर्ता नाव",
         "approve":"मंजूर करा",
-        "reject": "नकार द्या"
+        "reject": "नकार द्या",
+        "approvalStatus": "मंजुरीची स्थिती"
     }
 }

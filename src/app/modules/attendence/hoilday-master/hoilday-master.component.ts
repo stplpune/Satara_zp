@@ -18,8 +18,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./hoilday-master.component.scss']
 })
 export class HoildayMasterComponent {
-  displayedheadersEnglish = ['Sr. No.', ' Holiday Name', 'Holiday Date', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'सुट्टीचे नाव', 'सुट्टीची तारीख', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Holiday Date', ' Holiday Name', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'सुट्टीची तारीख', 'सुट्टीचे नाव', 'कृती'];
   tableresp = new Array();
   viewStatus = 'Table';
   langTypeName: any;
@@ -140,7 +140,7 @@ export class HoildayMasterComponent {
 
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', this.langTypeName == 'English' ? 'holidayName' : 'm_HolidayName', 'holidayDate', 'action'];
+    let displayedColumns = ['srNo', 'holidayDate', this.langTypeName == 'English' ? 'holidayName' : 'm_HolidayName',  'action'];
     let tableData = {
       pageNumber: this.pageNumber,
       img: '',
@@ -210,8 +210,8 @@ export class HoildayMasterComponent {
       let obj = {
         "Sr.No": i + 1,
         // "Year": ele.year,
-        "Holiday Name": flag == 'excel' ? this.langTypeName == 'English' ? ele.holidayName : ele.m_HolidayName : ele.holidayName,
         "Holiday Date": this.datepipe.transform(ele.holidayDate, 'dd-MM-yyyy'),
+        "Holiday Name": flag == 'excel' ? this.langTypeName == 'English' ? ele.holidayName : ele.m_HolidayName : ele.holidayName,
       }
       this.resultDownloadArr.push(obj);
     });

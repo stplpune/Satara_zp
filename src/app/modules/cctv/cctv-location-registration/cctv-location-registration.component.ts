@@ -275,7 +275,7 @@ export class CctvLocationRegistrationComponent {
 
     if (this.resultDownloadArr?.length > 0) {
       let keyPDFHeader = ['Sr. No.', 'CCTV Name', 'CCTV Location', 'Registration Date', 'CCTV Model','Remark'];;
-      let MarathikeyPDFHeader = ['अनुक्रमांक', 'सीसीटीव्हीचे नाव', 'सीसीटीव्ही स्थान','नोंदणी दिनांक', 'सीसीटीव्ही मॉडेल', 'वर्णन'];
+      let MarathikeyPDFHeader = ['अनुक्रमांक', 'CCTV नाव', 'CCTV स्थान','नोंदणी दिनांक', 'CCTV मॉडेल', 'वर्णन'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -283,7 +283,7 @@ export class CctvLocationRegistrationComponent {
 
       let objData: any
       objData= {
-        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'CCTV Location List' : 'सीसीटीव्ही स्थान सूची' : 'CCTV Location List',
+        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'CCTV Location List' : 'CCTV स्थान सूची' : 'CCTV Location List',
         'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
       
@@ -400,7 +400,7 @@ export class CctvLocationRegistrationComponent {
     let dialoObj = {
       img: 'assets/images/trash.gif',
       header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Location?' : 'तुम्हाला सीसीटीव्ही स्थान हटवायचे आहे का?',
+      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Location?' : 'तुम्हाला CCTV स्थान हटवायचे आहे का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

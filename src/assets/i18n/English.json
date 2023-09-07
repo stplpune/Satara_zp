@@ -439,6 +439,9 @@
         "PhotoIsRequired":"Photo Is Required",
 
         "cctv":"CCTV",
+        "cctvdetails":"CCTV Details",
+        "UpdateCCTVDetails":"Update CCTV Details",
+        "AddCCTVDetails":"Add CCTV Details",
         "cctvlist":"CCTV List",
         "location":"School Location",
         "AllRightsReserved":"ZP Satara, All Rights Reserved.",

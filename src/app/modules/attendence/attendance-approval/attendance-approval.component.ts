@@ -210,7 +210,7 @@ export class AttendanceApprovalComponent {
         'topHedingName': flag == 'excel' ? this.langTypeName == 'English' ? 'Attendance Approval List' : 'उपस्थिती मान्यता यादी' : 'Attendance Approval List',
         'createdDate': (flag == 'excel' ? this.langTypeName == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
-      let headerKeySize = [7, 15, 20, 20, 10, 20, 15, 20]
+      let headerKeySize = [10, 15, 20, 20, 20, 20, 15, 30]
       flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.excelpdfService.allGenerateExcel(this.langTypeName == 'English' ? keyPDFHeader : MarathikeyPDFHeader, ValueData, objData, headerKeySize);    
     }
   }

@@ -99,95 +99,6 @@
 
     <mat-card-content class="card-body">
         <div class="row">
-            <div class="col-sm-6" *ngIf="selectedCCTV">
-                <!--CCTV LIVE streaming  -->
-                <div class="row gy-3">
-                    <div class="col-sm-4">
-                        <mat-card class="plain-card">
-                            <mat-card-header class="card-header p-0">
-                                <p class="text-main fw-bold mb-0">ZP-satara school</p>
-                            </mat-card-header>
-                            <mat-card-content class="card-body p-0">
-                                <video controls preload="metadata" width="100%" height="160px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-card class="plain-card">
-                            <mat-card-header class="card-header p-0">
-                                <p class="text-main fw-bold mb-0">ZP-satara school</p>
-                            </mat-card-header>
-                            <mat-card-content class="card-body p-0">
-                                <video controls preload="metadata" width="100%" height="160px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-card class="plain-card">
-                            <mat-card-header class="card-header p-0">
-                                <p class="text-main fw-bold mb-0">ZP-satara school</p>
-                            </mat-card-header>
-                            <mat-card-content class="card-body p-0">
-                                <video controls preload="metadata" width="100%" height="160px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-card class="plain-card">
-                            <mat-card-header class="card-header p-0">
-                                <p class="text-main fw-bold mb-0">ZP-satara school</p>
-                            </mat-card-header>
-                            <mat-card-content class="card-body p-0">
-                                <video controls preload="metadata" width="100%" height="160px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-card class="plain-card">
-                            <mat-card-header class="card-header p-0">
-                                <p class="text-main fw-bold mb-0">ZP-satara school</p>
-                            </mat-card-header>
-                            <mat-card-content class="card-body p-0">
-                                <video controls preload="metadata" width="100%" height="160px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-sm-4">
-                        <mat-card class="plain-card">
-                            <mat-card-header class="card-header p-0">
-                                <p class="text-main fw-bold mb-0">ZP-satara school</p>
-                            </mat-card-header>
-                            <mat-card-content class="card-body p-0">
-                                <video controls preload="metadata" width="100%" height="160px" class="rounded">
-                                    <source src="video/chrome.webm" type="video/webm" />
-                                    <source src="video/chrome.mp4" type="video/mp4" />
-                                    <p>This browser does not support the video element.</p>
-                                </video>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                </div>
-            </div>
             <div class="col-sm-6">
                 <mat-card class="plain-card p-0">
                     <mat-card-header class="card-header p-0">
@@ -198,18 +109,34 @@
                     </mat-card-content>
                 </mat-card>
             </div>
+            <div class="col-sm-6">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header p-0">
+                        <p class="text-main fw-bold mb-0">{{ langTypeName == 'English' ? selectedCCTV?.schoolName :
+                            selectedCCTV?.m_SchoolName }}</p>
+                    </mat-card-header>
+                    <mat-card-content class="card-body p-0">
+                        <ng-container *ngFor="let player of  tableDataArray">
+                            <canvas id='{{player?.canvas}}' width="180px" height="100vh" class="border m-1"></canvas>
+                        </ng-container>
+                        <!-- <canvas id ='canvas0'   width="180px" height="100vh" class="border m-2"></canvas> -->
+                        <!-- <button type="button" onclick="showLoader()">Show</button>
+                        <button type="button" onclick="hideLoader()">Hide</button>
+                        <span id="myname">
+                            <span class="loader"></span>
+                        </span> -->
+                
+                    </mat-card-content>
+                    <!-- <button (click)="openvideo();openvideo();openvideo();openvideo();openvideo();" style="width:100px">Close</button> -->
+                
+                </mat-card>
+            </div>
         </div>
     </mat-card-content>
 </mat-card>
 
 
-<div class="mt-5">
-    <span>Device Id：</span>
-    <input type="text" id="dev_id" value="">
-    <span>Username</span>
-    <input type="text" id="user" value="admin">
-    <span>Password：</span>
-    <input type="text" id="pwd" value="">
+<!-- <div>
     <select id="streamtype" style="width:100px">
         <option value=0>Main Stream</option>
         <option value=1 selected>Substream</option>
@@ -220,19 +147,19 @@
         <option value=2>Channel 3</option>
         <option value=3>Channel 4</option>
     </select>
-    <br />
-    <button (click)="connect()" style="width:100px">Connect</button>
     <button (click)="disconnect()" style="width:100px">Disconnect</button>
     <button (click)="openvideo()" style="width:100px">Play</button>
     <button (click)="closevideo()" style="width:100px">Close</button>
     <table style="border:0px; width:720px">
         <tr>
             <td>
-                <canvas id="canvas1" width="702" height="576"></canvas>
+                <canvas id="canvas1"></canvas>
             </td>
         </tr>
         <div class="grid-box" id="gridBox" onmousedown="getStartPoint()" onmouseup="getEndPoint()">
             <div class="area" id="area"></div>
         </div>
     </table>
-</div>
+</div> -->
+
+

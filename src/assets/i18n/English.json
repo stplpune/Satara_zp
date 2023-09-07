@@ -463,6 +463,9 @@
         "OutwordDocuments":"Outword Documents",
         "Inward":"Inward",
         "Outward":"Outward",
-        "Username":"Username"
+        "Username":"Username",
+        "approve":"Approve",
+        "reject": "Reject",
+        "approvalStatus": "Approval Status"
     }
 }

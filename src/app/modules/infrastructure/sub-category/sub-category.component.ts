@@ -58,6 +58,7 @@ export class SubCategoryComponent {
   ngOnInit() {
     this.getIsWriteFunction();
     this.getTableData();
+    this.langTypeName = this.webStorage.languageFlag;
     this.webStorage.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.getTableTranslatedData();
@@ -87,7 +88,7 @@ export class SubCategoryComponent {
  
   getCategory() {
     this.categoryresp = [];
-    this.masterService.GetAllAssetCategory(this.webStorage.languageFlag).subscribe({
+    this.masterService.GetAllAssetCategory(this.langTypeName).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.categoryresp = res.responseData;

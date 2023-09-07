@@ -304,8 +304,8 @@ export class OutwardItemComponent {
   }
 
   setTableData() {
-    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_Item', 'quantity', 'purchase_Sales_Date', 'price', 'outwardTo', 'remark'];
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_Item', 'quantity', 'purchase_Sales_Date', 'price', 'outwardTo', 'remark', 'action'];
+    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'outwardTo', 'remark'];
+    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', this.langTypeName == 'English' ? 'itemName' : 'm_ItemName', 'quantity', 'purchase_Sales_Date', 'price', 'outwardTo', 'remark', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'photo',

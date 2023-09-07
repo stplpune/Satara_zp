@@ -112,16 +112,16 @@
             <table class="table dashboard-table">
                 <thead>
                     <tr>
-                        <th>Sr. No.</th>
-                        <th>CCTV Location</th>
-                        <th>CCTV Name</th>
-                        <th>CCTV Model</th>
-                        <th>Device Id</th>
-                        <th>Registration Date</th>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Remark</th>
-                        <th>Action</th>
+                        <th>{{'Labels.SrNo'| translate}}</th>
+                        <th>{{'Labels.CCTVLocation'| translate}}</th>
+                        <th>{{'Labels.CCTVName'| translate}}</th>
+                        <th>{{'Labels.CCTVModel'| translate}}</th>
+                        <th>{{'Labels.DeviceId'| translate}}</th>
+                        <th>{{'Labels.RegistrationDate'| translate}}</th>
+                        <th>{{'Labels.Username'| translate}}</th>
+                        <th>{{'Labels.Password'| translate}}</th>
+                        <th>{{'Labels.remark'| translate}}</th>
+                        <th>{{'Labels.action'| translate}}</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let data of tableDataArray; let i=index;">
@@ -134,7 +134,11 @@
                         <td>{{data?.registerDateE | date:'dd-MM-yyyy'}}</td>
                         <td>{{data?.userNameE}}</td>
                         <td>{{data?.passwordE}}</td>
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.remark}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
+                            <span class="text-ellipsis-150-L2">
+                                {{data?.remark}}
+                            </span>
+                        </td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
                             <button mat-icon-button matTooltip="{{'Labels.edit' | translate}}" (click)="openDialog(data.id)">
                                 <mat-icon class="text-danger">

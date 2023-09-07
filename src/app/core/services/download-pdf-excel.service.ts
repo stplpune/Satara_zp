@@ -213,8 +213,6 @@ export class DownloadPdfExcelService {
 
   generateExcelSchool(keyData: any, apiKeys: any, data: any, name: any) {        
     // Create workbook and worksheet
-    console.log("nameArr",data);
-    
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(name[0].sheet_name);
 

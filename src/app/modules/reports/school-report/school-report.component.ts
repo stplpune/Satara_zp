@@ -35,8 +35,8 @@ export class SchoolReportComponent {
   tableDatasize!: Number;
   tableData: any;
   totalCount: number = 0;
-  displayedheaders = ['Sr.No.','Taluka', 'Center', 'School Name', 'Standard', 'Assessed BaseLevel Student Count','Assessed ClassWise Student Count', 'Total Student Count'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'तालुका', 'केंद्र', 'शाळेचे नाव', 'इयत्ता','मूल्यांकन बेस लेव्हल विद्यार्थी संख्या', 'मूल्यांकन वर्गनिहाय विद्यार्थी संख्या','एकूण विद्यार्थी संख्या' ];
+  displayedheaders = ['Sr.No.','Taluka', 'Center', 'School Name', 'Standard', 'Assessed ClassWise Student Count', 'Total Student Count'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'तालुका', 'केंद्र', 'शाळेचे नाव', 'इयत्ता','मूल्यांकन वर्गनिहाय विद्यार्थी संख्या','एकूण विद्यार्थी संख्या' ];
   displayedColumns = new Array();
   highLightFlag: boolean =true;
   resultDownloadArr = new Array();
@@ -305,7 +305,6 @@ export class SchoolReportComponent {
           this.ngxSpinner.hide();
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.tableDatasize = res.responseData.responseData2[0].totalCount;
-          console.log("tableDatasize", this.tableDatasize);
           
           this.totalCount = res.responseData.responseData2.totalCount;
           this.resultDownloadArr = [];
@@ -363,8 +362,6 @@ export class SchoolReportComponent {
 }
 
 downloadPdf(data?: any){
-  console.log("centerId",data);
-  
   let talukaEng = this.schoolReportForm.value.talukaId > 0 ? data[0].taluka : 'All Taluka'
   let talukaMar = this.schoolReportForm.value.talukaId > 0 ? data[0].m_Taluka : 'सर्व तालुके'
   let kendraEng = this.schoolReportForm.value.centerId > 0 ? data[0].center : 'All Center'

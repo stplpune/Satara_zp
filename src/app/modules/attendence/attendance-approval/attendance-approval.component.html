@@ -17,48 +17,64 @@
         </div>
         <div class="d-flex align-items-center gap-2">
           <button mat-flat-button class="bg-danger btn-icon text-white" matTooltip="{{'Labels.DownloadPdf' | translate}}"
-            matTooltipPosition="below" matTooltipClass="tooltip">
+            matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('pdfFlag')">
             <mat-icon>description </mat-icon>
           </button>
           <button mat-flat-button class="bg-success btn-icon text-white" matTooltip="{{'Labels.Downloadexcel' | translate}}"
-            matTooltipPosition="below" matTooltipClass="tooltip">
+            matTooltipPosition="below" matTooltipClass="tooltip" (click)="getTableData('excel')">
             <mat-icon class="material-symbols-outlined">table</mat-icon>
           </button>
-          <button mat-flat-button class="btn-main" (click)="openDialog()">
+          <!-- <button mat-flat-button class="btn-main" (click)="openDialog()">
             <mat-icon>add</mat-icon>
             {{'Labels.AddAttendance'| translate}}
-          </button>
+          </button> -->
         </div>
       </div>
     </mat-card-header>
-    <mat-card-content class="card-body pt-0">
-        <div class="row gx-2 w-100 my-2">
-          <div class="col-sm-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>{{'Labels.year' | translate}}</mat-label>
-              <mat-select>
-                <mat-option >Option-1</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
     
-          <div class="col-sm-3">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>{{'Labels.filter' |translate}}</mat-label>
-              <input matInput maxlength="50" >
-            </mat-form-field>
-          </div>
+    <mat-card-content class="card-body pt-0">
+        <form [formGroup]="approvalForm">
+          <div class="row gx-2 w-100 my-2">
 
-          <div class="col-sm-auto mb-lg-0 mb-2">
-            <button type="button" mat-flat-button class="btn-main" >{{'Labels.filter'|
-              translate}}</button>
-            <button type="button" mat-flat-button class="btn-second ms-2">{{'Labels.clear'
-              |translate}}</button>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{'Labels.selectDate'| translate}}</mat-label>
+                <input matInput [matDatepicker]="dp" formControlName="date" readonly>
+                <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp startView="multi-year" (monthSelected)="setMonthAndYear($event, dp)">
+                </mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="w-100 ">
+                <mat-label>{{'Labels.approvalStatus'| translate}}</mat-label>
+                <mat-select formControlName="typeId">
+                    <mat-option *ngFor="let type of typeArr" [value]="type.id">{{webStorageS.getLangauge() ==
+                        'EN' ?
+                        type.type : type.m_type }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+      
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{'Labels.filter' |translate}}</mat-label>
+                <input matInput maxlength="50" formControlName="textSearch" (keypress)="validators.noFirstSpaceAllow($event);">
+              </mat-form-field>
+            </div>
+  
+            <div class="col-sm-auto mb-lg-0 mb-2">
+              <button type="button" mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter'|
+                translate}}</button>
+              <button type="button" mat-flat-button class="btn-second ms-2" (click)="onClear()">{{'Labels.clear'
+                |translate}}</button>
+            </div>
           </div>
-        </div>
+        </form>
 
         <div class="table-responsive">
-            <p>Table</p>
+          <app-table (recObjToChild)="childCompInfo($event)"></app-table>
         </div>
       </mat-card-content>
 </mat-card>

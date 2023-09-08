@@ -5,6 +5,7 @@
         "Unit":"Unit",
         "Price":"Price",
         "Photo":"Photo",
+        "Password":"Password",
         "Document":"Document",
         "HolidayNameMarathi":"Holiday Name(Marathi)",
         "holidayNameMarathiIsRequired":" Please Enter Valid Holiday Name(Marathi)",
@@ -57,7 +58,7 @@
         "Units":"Units",
         "addSubcategory":"Add Sub Category",
         "updateSubcategory":"Update Sub Category",
-        "InwardItmes":"Item Inward",
+        "InwardItmes":"Inward Item",
         "addInwardItems":"Add Inward Items",
         "addoutwardItems":"Add Outward Items",
         "InwardItmesList":"Item Inward List",
@@ -431,19 +432,23 @@
         "CCTVNameCCTVModel":"CCTV Name / CCTV Model",
         "CCTVName":"CCTV Name",
         "CCTVModel":"CCTV Model",
+        "DeviceId":"Device ID",
         "CloudID":"Cloud ID",
         "RegistrationDate":"Registration Date",
         "teacherId":"Teacher ID",
         "PhotoIsRequired":"Photo Is Required",
 
         "cctv":"CCTV",
+        "cctvdetails":"CCTV Details",
+        "UpdateCCTVDetails":"Update CCTV Details",
+        "AddCCTVDetails":"Add CCTV Details",
         "cctvlist":"CCTV List",
         "location":"School Location",
         "AllRightsReserved":"ZP Satara, All Rights Reserved.",
         "PoweredBy":"Powered By",
         "AttendanceDetails":"Attendance Details",
         "AssetManagement":"Asset Management",
-        "StockReport":"Stock Report",
+        "StockReport":"Store Stock Report",
         "selectQuestion": "Select Question",
         "selectOption": "Select Option",
 
@@ -461,6 +466,9 @@
         "OutwordDocuments":"Outword Documents",
         "Inward":"Inward",
         "Outward":"Outward",
-        "Username":"Username"
+        "Username":"Username",
+        "approve":"Approve",
+        "reject": "Reject",
+        "approvalStatus": "Approval Status"
     }
 }

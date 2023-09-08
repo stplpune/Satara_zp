@@ -118,7 +118,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   initialApiCall(val: any) {
+    console.log("asessmwntLavel.value : ", this.asessmwntLavel.value);
+    
     if (val == 'initial') {
+      console.log("initial");
+      
       this.createFilterForm();
       this.getPieChart();
       this.getTalukas();
@@ -815,12 +819,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getSubjectDropForClass() {
+    console.log("first api....", this.subjectforBarByCLass.value);
+    
     const formData = this.filterForm.value;
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.subjectArrayByClass = res.responseData.responseData2
+          this.subjectArrayByClass = res.responseData.responseData2;
           this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
         }
       },
@@ -848,6 +854,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getRefstandardTableArrayCount() {
+    console.log("second api...", this.subjectforBarByCLass.value);
+    
     console.log("onchnage subject :");
     
     const formData = this.filterForm.value;
@@ -879,7 +887,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getstandardTableArrayCount(val: any) {
+    console.log("third api call...", this.subjectforBarByCLass.value);
+    console.log("subjectArrayByClass : ", this.subjectArrayByClass);
+    
     console.log("count classwise std ", val )
+    
     const formData = this.filterForm.value;
     val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
     this.spinner.show();
@@ -890,6 +902,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.totalStudentSurveyDataByCLass = res.responseData.responseData1;
           this.subjectArrayByClass = res.responseData.responseData2;
           this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
+          
+        console.log("this.subjectforBarByCLass : ", this.subjectforBarByCLass.value);
           this.totalStudentSurveyDataByCLass.map((x: any) => {
             x.status = false;
             x.ischeckboxShow = true;

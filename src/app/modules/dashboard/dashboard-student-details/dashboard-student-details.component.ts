@@ -33,10 +33,10 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   groupByClassArray: any = [];
   lineChartOptions: any;
   grapbhDetailsArray = new Array();
-  displayedColumns = ['profilePhoto', 'srNo', 'fullName', 'subjectName'];   //, 'actualGrade'
-  marathiDisplayedColumns = ['profilePhoto', 'srNo', 'm_FullName', 'm_SubjectName']; //, 'actualGrade'
-  displayedheaders = ['', 'Sr. No.', 'Name', 'Subject' ]; //,'Status'
-  marathiDisplayedheaders = ['', 'अ.क्र.', 'नाव', 'विषय']; //, 'स्तर',
+  displayedColumns = ['srNo', 'profilePhoto','fullName', 'subjectName'];   //, 'actualGrade'
+  marathiDisplayedColumns = ['srNo', 'profilePhoto', 'm_FullName', 'm_SubjectName']; //, 'actualGrade'
+  displayedheaders = ['Sr. No.', '', 'Name', 'Subject' ]; //,'Status'
+  marathiDisplayedheaders = ['अ.क्र.', '', 'नाव', 'विषय']; //, 'स्तर',
   displayedheadersClass:any=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Subject","m_label":"विषय"},{'label':"Grade","m_label":"स्तर"},{'label':"Marks","m_label":"गुण"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"},{'label':"Expected level","m_label":"अपेक्षित स्तर"}, {'label':"Obtained Grade","m_label":"प्राप्त स्तर"}]
   displayedheadersClassAsseTakenBy:any=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Name","m_label":"नाव"},{'label':"Designation","m_label":"पद"},{'label':"Assessment Date","m_label":"मूल्यांकन तारीख"} ]
 

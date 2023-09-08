@@ -8,7 +8,7 @@
         </div>
     </mat-card-header>
     <mat-card-content class="card-body card-height-full scrollbar">
-        <div class="row mb-3">
+        <div class="row mb-3" *ngIf="!data?.multipleImage">
             <div class="col-sm-12">
                 <div class="student-details">
                     <div class="d-flex">
@@ -18,7 +18,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="mb-1 fw-bold text-break">{{ data?.header }}</h5>
-                            <p *ngIf="data?.subheader || data?.Obj.village" class="text-muted mb-0" style="height:32px;">({{ data?.subheader || data?.Obj.village }})
+                            <p *ngIf="data?.subheader || data?.Obj?.village" class="text-muted mb-0" style="height:32px;">({{ data?.subheader || data?.Obj.village }})
                             </p>
 
                             <div class="data-container">
@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        <div *ngIf="data?.chart && data.Obj.isAssessment">
+        <div *ngIf="data?.chart && data?.Obj?.isAssessment">
             <progressChartLine></progressChartLine>
         </div>
     </mat-card-content>

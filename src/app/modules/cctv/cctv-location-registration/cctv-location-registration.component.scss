@@ -8,3 +8,7 @@
     padding: 0 8px !important;
     border: 1px solid rgb(210 228 226);
 }
+.dashboard-table thead tr th:last-child {
+    min-width: 95px;
+    width: 95px;
+}

@@ -129,7 +129,7 @@ export class StoreMasterComponent {
   setTableData(){
     this.highLightFlag =true;
     let displayedColumns  = [ 'srNo','category', 'subCategory', 'itemName', 'totalInward','totalOutward','availableStock'];;
-    let marathiDisplayedColumns = ['Sr.No.','m_Category', 'm_SubCategory','m_ItemName', 'totalInward','totalOutward','availableStock'];
+    let marathiDisplayedColumns = ['srNo','m_Category', 'm_SubCategory','m_ItemName', 'totalInward','totalOutward','availableStock'];
     let tableData = {
       highlightedrow:true,
       pageNumber: this.pageNumber,
@@ -184,7 +184,7 @@ export class StoreMasterComponent {
     this.resultDownloadArr=[];  
     data.find((ele: any, i: any) => {
       let  obj = {
-        srNo: this.languageFlag == 'English' ? (i + 1):this.convertToMarathiNumber(i+1),
+        srNo: this.languageFlag == 'English' || flag != 'excel' ? (i + 1):this.convertToMarathiNumber(i+1),
         category:  flag == 'excel' ?this.languageFlag == 'English' ? ele.category:ele.m_Category:ele.category,
         type: flag == 'excel'?this.languageFlag == 'English' ?ele.subCategory:ele.m_SubCategory:ele.subCategory,
         itemName:flag == 'excel'?this.languageFlag == 'English' ? ele.itemName:ele.m_ItemName:ele.itemName,

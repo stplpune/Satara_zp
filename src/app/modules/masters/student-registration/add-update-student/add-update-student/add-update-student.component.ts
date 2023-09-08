@@ -681,7 +681,7 @@ export class AddUpdateStudentComponent {
 
     }
     else if(this.gardianModelArr.length > 0 && !isAtlstoneHead){
-      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Checkmark Atleast One Head In Gardian Details.' : 'कृपया पालक तपशीलांमध्ये किमान एक हेड चिन्हांकित करा', 1);
+      this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Checkmark Atleast One Head In Guardian Details.' : 'कृपया पालक तपशीलांमध्ये किमान एक हेड चिन्हांकित करा', 1);
       return
     }
      else {

@@ -146,10 +146,10 @@
                             translate}}</button>
                         <button mat-flat-button class="btn-second" (click)="clearForm()">{{'Labels.clear'|
                             translate}}</button>
-                        <button mat-flat-button class="bg-danger btn-icon text-white" type="button"
-                            matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below"
-                            matTooltipClass="tooltip" (click)="searchAssessMent('pdfFlag')"> <mat-icon>description
-                            </mat-icon>
+                        <button mat-flat-button class="bg-success btn-icon text-white" type="button"
+                            matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                            matTooltipClass="tooltip"  (click)="searchAssessMent('pdfFlag')"> 
+                            <mat-icon class="material-symbols-outlined">table</mat-icon>
                         </button>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
             <table mat-table [dataSource]="tableData?.tableData" class="dashboard-table">
                 <ng-container matColumnDef="srNo">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Sr. No.</th>
-                    <td mat-cell *matCellDef="let element;let i=index"> {{element.srNo}} </td>
+                    <td mat-cell *matCellDef="let element;let i=index " class="text-center"> {{element.srNo}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="No">
@@ -201,7 +201,7 @@
                 <ng-container matColumnDef="standard">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> {{this.languageFlag ==
                         'English' ? 'standard' : 'इयत्ता'}} </th>
-                    <td mat-cell *matCellDef="let element;"> {{this.languageFlag == 'English' ? element.standard:
+                    <td mat-cell *matCellDef="let element;" class="text-center"> {{this.languageFlag == 'English' ? element.standard:
                         element.m_Standard}} </td>
                 </ng-container>
 
@@ -219,13 +219,13 @@
 
                 <ng-container matColumnDef="assClassWiseStudentCount">
                     <th mat-header-cell *matHeaderCellDef class="text-center" [ngStyle]="{'display': 'none'}"> {{this.languageFlag == 'English' ? 'Class Level' : 'इयत्ता निहाय'}} </th>
-                    <td mat-cell *matCellDef="let element"> {{element.assClassWiseStudentCount}} </td>
+                    <td mat-cell *matCellDef="let element" class="text-center"> {{element.assClassWiseStudentCount}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="header-row-second-group">
                     <th mat-header-cell *matHeaderCellDef  [attr.rowspan]="2" class="text-center"> {{this.languageFlag ==
                         'English' ? 'Assessed Student Count' : 'मुल्यांकित विद्यार्थी संख्या'}}</th>
-                        <td mat-cell *matCellDef="let element"> {{element.assClassWiseStudentCount}} </td>
+                        <td mat-cell *matCellDef="let element" class="text-center"> {{element.assClassWiseStudentCount}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="header-row-second-group1">
@@ -235,7 +235,7 @@
 
                 <ng-container matColumnDef="totalStudentCount">
                     <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> totalStudentCount </th>
-                    <td mat-cell *matCellDef="let element;"> {{element.totalStudentCount}} </td>
+                    <td mat-cell *matCellDef="let element;" class="text-center"> {{element.totalStudentCount}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="totalStudentCount1">

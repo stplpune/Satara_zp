@@ -260,7 +260,7 @@ export class AddCctvLocationComponent {
       return;
     }
     else if(!this.cameraDetailsArr.length){
-      this.commonMethods.showPopup(this.languageFlag == "English" ? 'Please Enter Add Atleast One camera Details' : 'कृपया किमान एक कॅमेरा तपशील जोडा' , 1);
+      this.commonMethods.showPopup(this.languageFlag == "English" ? 'Please Enter Add Atleast One Camera Details' : 'कृपया किमान एक कॅमेरा तपशील जोडा' , 1);
     } else {
       this.ngxSpinner.show();
       let url = this.data ? 'UpdateCCTVLocation' : 'AddCCTVLocation'
@@ -316,7 +316,7 @@ export class AddCctvLocationComponent {
     let dialoObj = {
       img: 'assets/images/trash.gif',
       header: this.webService.languageFlag == 'EN' ? 'Delete' : 'हटवा',
-      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Details?' : 'तुम्हाला सीसीटीव्हीचे तपशील हटवायचे आहेत का?',
+      title: this.webService.languageFlag == 'EN' ? 'Do You Want To Delete CCTV Details?' : 'तुम्हाला CCTV चे तपशील हटवायचे आहेत का?',
       cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
       okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
     }

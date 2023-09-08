@@ -48,7 +48,7 @@
                     <ng-container *ngIf="tableInfo?.email == columns">
                         <span [ngClass]="{'text-primary':element[columns]}">{{element[columns] | dash}}</span>
                     </ng-container>
-                    <ng-container *ngIf="tableInfo?.attendanceStatus == columns"><span  [ngClass]="{ 'text-success': tableInfo.tableData[i]?.attendance == 'Present', 'text-primary': tableInfo.tableData[i]?.attendance == 'Week Off', 'text-danger': tableInfo.tableData[i]?.attendance == 'Absent', 'text-warning': tableInfo.tableData[i]?.attendance == 'Holiday' }">{{element[columns]}}</span></ng-container>
+                    <ng-container *ngIf="tableInfo?.attendanceStatus == columns"><span  [ngClass]="{ 'text-success': tableInfo.tableData[i]?.attendance == 'Present', 'text-primary': tableInfo.tableData[i]?.attendance == 'Week Off', 'text-danger': tableInfo.tableData[i]?.attendance == 'Absent', 'text-warning': tableInfo.tableData[i]?.attendance != 'Present' && tableInfo.tableData[i]?.attendance != 'Week Off' && tableInfo.tableData[i]?.attendance != 'Absent' }">{{element[columns]}}</span></ng-container>
                     <ng-container *ngIf="tableInfo?.date == columns">{{(element[columns] |
                         date:'dd-MM-yyyy')}}</ng-container>
                     <ng-container *ngIf="tableInfo?.isManual == columns">{{(element[columns] == 0) ? webStorageService.languageFlag =='EN' ? 'No' : 'नाही' : webStorageService.languageFlag =='EN'? 'Yes' : 'होय'}}</ng-container>
@@ -72,9 +72,9 @@
                         </mat-icon>
                     </button>
 
-                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false ? '':'btn-main ms-2'"
-                      [disabled]="tableInfo.tableData[i]?.isAppr == false" (click)="action(element,'Approve')">
-                       {{tableInfo.tableData[i]?.isApproved == 1 ? 'Approved' : 'Approve'}}
+                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg == 2 ? '':'btn-main ms-2'"
+                      [disabled]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg == 2" (click)="action(element,'Approve')">
+                       {{tableInfo.tableData[i]?.isApproved == 1 || tableInfo.tableData[i]?.statusFlg == 2 ? 'Approved' : 'Approve'}}
                     </button>
 
                     

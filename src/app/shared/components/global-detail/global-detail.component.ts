@@ -46,15 +46,13 @@ export class GlobalDetailComponent {
   }
 
   ngOnInit() {
-    console.log("data", this.data);
-    
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
     });
     if (this.data.headerImage != '') {
       this.showImg = true;
     }
-    this.dataArray = this.data.Obj.inwardOutwardDocs;
+    this.dataArray = this.data?.Obj?.inwardOutwardDocs;
 
     this.dataArray?.map((x: any) => {
       let imgPath = x.photo;
@@ -84,7 +82,7 @@ export class GlobalDetailComponent {
   }
 
   getLineChartDetails(obj: any) {
-    obj.Obj.studentId = obj.Obj.id;
+    obj.Obj.studentId = obj?.Obj?.id;
     this.objData = {
       objData: obj.Obj,
       groupId: obj.Obj.standardId <= 2 ? 1 : obj.Obj.standardId <= 5 ? 2 : 3,

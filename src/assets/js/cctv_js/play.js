@@ -443,31 +443,15 @@ Player.init = function (playerArr) {
 		playerList.push(player)
 	}
 }
-/**
- * 连接设备
- * @method ConnectDevice
- * @param {string} devid 设备ID
- * @param {string} ip 设备ip
- * @param {string} user 设备用户名
- * @param {string} pwd 设备密码
- * @param {number} winindex 窗体索引
- * @param {number} port ip端口
- * @param {number} connectType 连接方式 0：预连接 1：连接并打开码流
- * @param {number} channel 通道
- * @param {number} streamid 码流类型，连接方式为1时有效
- * 
- * 注:ID和IP至少要有一个，优先使用ID连接，有IP则port必传
- */
-Player.ConnectDevice = function (devid, ip, user, pwd, winindex, port, connectType, channel, streamid, wss, cb) {
+ Player.ConnectDevice = function (devid, ip, user, pwd, winindex, port, connectType, channel, streamid, wss, cb) {
 	//ID连接
+	console.log("connection device call ", devid, ip, user, pwd)
 	if (devid) {
-		debugger
 		let session = GetSessionById(devid);
 		let bConnect = false;
 		//初始化连接对象
 		if (session == null) {
 			session = ConnectApi.create(winindex, CryptoJS);
-			console.log("connectDevice",ConnectApi);
 			session.refs = 0;
 			session.logined = false;
 			session.user = user;
@@ -555,7 +539,7 @@ Player.ConnectDevice = function (devid, ip, user, pwd, winindex, port, connectTy
  * @param {number} winindex 窗体索引
  */
 Player.OpenStream = function (deviceid, ip, channel, streamid, winindex) {
-	
+	console.log("openstream call ", deviceid )
 	let session = null;
 	if (deviceid) {
 		session = GetSessionById(deviceid);
@@ -608,7 +592,7 @@ Player.CloseStream = function (keyindex) {
  * @param {string} ip 设备IP
  * 注:ID和IP至少要有一个
  */
-Player.DisConnectDevice = function (deviceid, ip) {
+ Player.DisConnectDevice = function (deviceid, ip) {
 	if (deviceid) {
 		let session = GetSessionById(deviceid);
 		if (session) {

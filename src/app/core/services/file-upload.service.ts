@@ -25,8 +25,8 @@ export class FileUploadService {
       if (allowedDocTypes.match(docExt)) {
         if (event.target.files && event.target.files[0]) {
           const file = event.target.files[0];
-          // if ( isPdf == -1 ?  file.size > 2000000 : file.size > 10485760) {
-            if ( isPdf == -1 ?  file.size > 2000 : file.size > 2000) {
+          if ( isPdf == -1 ?  file.size > 2000000 : file.size > 10485760) {
+            // if ( isPdf == -1 ?  file.size > 20000 : file.size > 20000) {
             // isPdf == -1 ? obj.error("Required file size should be between 200 kb to 300 kb"): obj.error("Required file size should be less than " + 10 + " MB.");
             isPdf == -1 ?  this.commonService.snackBar("Required file size should be less than 2 MB", 1): this.commonService.snackBar("Required file size should be less than " + 2 + " MB.", 1);
           }
@@ -75,8 +75,8 @@ export class FileUploadService {
       const formData = new FormData();
       const selResult1 = event.target.value.split('.');
       const docExt1 = selResult1.pop().toLowerCase();
-      // let size = docExt1 == 'pdf' ? 500485760 : 10485760;
-      let size = docExt1 == 'pdf' ? 2000 : 2000;
+      let size = docExt1 == 'pdf' ? 500485760 : 10485760;
+      // let size = docExt1 == 'pdf' ? 20000 : 20000;
 
 
       if (event.target.files && event.target.files[0]) {

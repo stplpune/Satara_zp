@@ -48,7 +48,7 @@ export class AttendancePermissionComponent {
       this.applyValidation();
     }
     else {
-      let date = this.dateFormat(new Date());
+      let date = this.dateFormat(this.data?.date);
       let isApproved = flag == 'reject' ? 0 : 1;
       this.ngxSpinner.show();
       let str = `TeacherId=${this.data?.teacherId}&Date=${date}&IsApproved=${isApproved}&ApprovalRemark=${(formValue.remark || '')}&UserId=${this.webStorageS.getUserId()}&lan=${this.webStorageS.languageFlag}`;

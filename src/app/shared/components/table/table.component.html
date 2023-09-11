@@ -72,7 +72,7 @@
                         </mat-icon>
                     </button>
 
-                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg == 2 ? '':'btn-main ms-2'"
+                    <button *ngIf="tableInfo?.approve"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg == 2 ? '':'btn-main'"
                       [disabled]="tableInfo.tableData[i]?.isAppr == false || tableInfo.tableData[i]?.statusFlg == 2" (click)="action(element,'Approve')">
                        {{tableInfo.tableData[i]?.isApproved == 1 || tableInfo.tableData[i]?.statusFlg == 2 ? 'Approved' : 'Approve'}}
                     </button>
@@ -82,7 +82,7 @@
                     [disabled]="tableInfo?.isSubmitted == true || tableInfo.tableData[i].isManualCheckIn == 1 || tableInfo.tableData[i].isManualCheckOut == 1" (click)="action(element,'apply')">
                        {{'Labels.apply' | translate}}
                     </button> -->
-                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == true || tableInfo?.isSubmitted == true  ? '':'btn-main ms-2'"
+                    <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == true || tableInfo?.isSubmitted == true  ? '':'btn-main'"
                     [disabled]="tableInfo.tableData[i]?.isApproved == true || tableInfo?.isSubmitted == true " (click)="action(element,'apply')">
                        {{'Labels.apply' | translate}}
                     </button>

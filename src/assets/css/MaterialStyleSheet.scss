@@ -120,8 +120,15 @@ input:-webkit-autofill:active {
 .mat-mdc-tooltip-panel-right {
     transform: translateX(2px) !important;
 }
+.mat-mdc-tooltip-panel-left {
+    transform: translateX(-2px) !important;
+}
 
 .mat-mdc-tooltip-panel-below {
+    transform: translateY(2px) !important;
+}
+
+.mat-mdc-tooltip-panel-above {
     transform: translateY(2px) !important;
 }
 
@@ -130,7 +137,9 @@ input:-webkit-autofill:active {
 }
 
 .mat-mdc-tooltip-panel-right .mat-mdc-tooltip::after,
-.mat-mdc-tooltip-panel-below .mat-mdc-tooltip::after {
+.mat-mdc-tooltip-panel-left .mat-mdc-tooltip::after ,
+.mat-mdc-tooltip-panel-below .mat-mdc-tooltip::after,
+.mat-mdc-tooltip-panel-above .mat-mdc-tooltip::after {
     content: "";
     position: absolute !important;
     width: 9px !important;
@@ -146,6 +155,12 @@ input:-webkit-autofill:active {
     left: -7.5px !important;
     top: 8px !important;
     border-right-color: #616161 !important;
+}
+
+.mat-mdc-tooltip-panel-left .mat-mdc-tooltip::after {
+    right: -9px !important;
+    top: 8px !important;
+    border-left-color: #616161 !important;
 
 }
 
@@ -153,6 +168,11 @@ input:-webkit-autofill:active {
     left: calc(50% - 8px) !important;
     top: -8px !important;
     border-bottom-color: #616161 !important;
+}
+.mat-mdc-tooltip-panel-above .mat-mdc-tooltip::after {
+    left: calc(50% - 8px) !important;
+    bottom: -8px !important;
+    border-top-color: #616161 !important;
 }
 
 .mat-drawer-container {

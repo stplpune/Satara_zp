@@ -4,14 +4,12 @@
             <h6 class="text-main mb-0 fw-bold">{{editFlag ?( 'Labels.updateSchool' | translate)
                 :('Labels.registerSchool' | translate)}}</h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
-                <mat-icon>
-                    close
-                </mat-icon>
+                <mat-icon>close</mat-icon>
             </button>
         </div>
     </div>
-    <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()">
-        <mat-dialog-content class="card-body card-height-sm scrollbar">
+    <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()" class="form-container">
+        <mat-dialog-content class="card-body scrollbar">
             <div class="row gx-2 gy-0">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
@@ -46,20 +44,13 @@
                 <!-- New Changes -->
                 <div class="col-sm-4">
                     <div class="d-flex mt-2 gap-2">
-                        <!-- <mat-form-field appearance="outline" class="w-100"> -->
                         <mat-label>{{'Labels.SchoolIsKendra' | translate}}</mat-label>
-                        <!-- <mat-select formControlName="isKendraSchool"> -->
-                        <!-- <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
-                                    formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
-                                    [class.disabled]="editObj?.isKendraSchool == true || !schoolRegForm.value.talukaId" />Yes -->
                         <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
-                            formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
-                            [class.disabled]="editObj" />Yes
-                        <!-- </mat-select> -->
-                        <!-- </mat-form-field> -->
+                        formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
+                        [class.disabled]="editObj" />
+                        <span class="small form-label">{{'Labels.Yes' | translate}}</span>
                     </div>
                 </div>
-
 
                 <ng-container *ngIf="schoolRegForm.value.isKendraSchool == false">
                     <div class="col-sm-4">

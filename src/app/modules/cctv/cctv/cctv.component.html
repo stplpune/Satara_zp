@@ -9,13 +9,11 @@
     </ol>
 </nav>
 <!-- <app-page-statistics></app-page-statistics> -->
+
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
     <mat-card-header class="card-header">
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <div class="text-main fw-bold">
-                {{'Labels.cctvlist' | translate}}
-            </div>
-
+        <div class="text-main fw-bold">
+            {{'Labels.cctvlist' | translate}}
         </div>
     </mat-card-header>
 
@@ -24,7 +22,7 @@
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <form [formGroup]="filterForm" (ngSubmit)="getTableData()">
             <div class="row gx-2">
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
@@ -36,7 +34,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
@@ -47,7 +45,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
@@ -79,7 +77,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.searchCCTV'| translate}}</mat-label>
                         <input matInput formControlName="textSearch" maxlength="30">
@@ -94,15 +92,16 @@
             </div>
         </form>
     </mat-card-header>
-    <!-- filter End here  -->
 
+    <!-- filter End here  -->
 
     <mat-card-content class="card-body">
         <div class="row">
             <div class="col-sm-6">
                 <mat-card class="plain-card p-0">
                     <mat-card-header class="card-header p-0">
-                        <p class="text-main fw-bold mb-0">List of CCTV</p>
+                        <p class="text-main fw-bold mb-0">{{'Labels.ListofCCTV' |
+                            translate}}</p>
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
                         <app-table (recObjToChild)="childCompInfo($event)"></app-table>
@@ -117,18 +116,38 @@
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
                         <ng-container>
-                            <canvas id="canvas1" width="600px" height="300px" class="border m-1"></canvas>
+                            <canvas id="canvas1" width="600px" height="300px" class="border-0 rounded m-0"></canvas>
                         </ng-container>
-                       <ng-container>
-                        <button (click)="openVideo()">Play</button>
-                        <button (click)="closeVideo()">stop</button>
-                        <button  (window:mouseup)="ptz_ctrl_stop()"  (window:mousedown)="ptz_ctrl_up()" style="width:100px">up</button>
-                        <button (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_down()" style="width:100px">down</button>
-                        <button (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_left()" style="width:100px">left</button>
-                        <button (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_right()" style="width:100px">right</button>
+                        <ng-container>
+                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                <button type="button" mat-icon-button class="btn-second"
+                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_up()">
+                                    <mat-icon class="text-main">arrow_upward</mat-icon>
+                                </button>
 
-                       </ng-container>
-                    </mat-card-content>                
+                                <button type="button" mat-icon-button class="btn-second"
+                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_left()">
+                                    <mat-icon class="text-main">arrow_back</mat-icon>
+                                </button>
+
+                                <button type="button" mat-icon-button class="btn-second" (click)="openVideo()">
+                                    <mat-icon class="text-main">play_arrow</mat-icon>
+                                </button>
+                                <button type="button" mat-icon-button class="btn-second " (click)="closeVideo()">
+                                    <mat-icon class="text-main">stop</mat-icon>
+                                </button>
+
+                                <button type="button" mat-icon-button class="btn-second"
+                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_right()">
+                                    <mat-icon class="text-main">arrow_forward</mat-icon>
+                                </button>
+                                <button type="button" mat-icon-button class="btn-second"
+                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_down()">
+                                    <mat-icon class="text-main">arrow_downward</mat-icon>
+                                </button>
+                            </div>
+                        </ng-container>
+                    </mat-card-content>
                 </mat-card>
             </div>
         </div>
@@ -161,5 +180,3 @@
         </div>
     </table>
 </div> -->
-
-

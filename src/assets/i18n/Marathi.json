@@ -443,6 +443,7 @@
         "teacherId":"शिक्षक आयडी",
 
         "cctv":"CCTV",
+        "ListofCCTV":"CCTV ची यादी",
         "cctvdetails":"CCTV तपशील",
         "UpdateCCTVDetails":"CCTV तपशील अपडेट करा",
         "AddCCTVDetails":"CCTV तपशील जोडा",

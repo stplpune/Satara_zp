@@ -442,6 +442,7 @@
         "PhotoIsRequired":"Photo Is Required",
 
         "cctv":"CCTV",
+        "ListofCCTV":"List Of CCTV",
         "cctvdetails":"CCTV Details",
         "UpdateCCTVDetails":"Update CCTV Details",
         "AddCCTVDetails":"Add CCTV Details",

@@ -63,10 +63,9 @@ export class AddTasksheetComponent {
       this.AttType = 2
     }else if(this.data.remark == null ){
       this.AttType = 3
+    }else{
+      this.AttType = 3
     }
-    // else{
-    //   this.AttType = 2
-    // }
     
     this.data.date = this.datePipe.transform(this.data.date, 'yyyy-MM-dd');
 

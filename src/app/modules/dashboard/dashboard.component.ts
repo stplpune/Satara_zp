@@ -118,11 +118,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   initialApiCall(val: any) {
-    console.log("asessmwntLavel.value : ", this.asessmwntLavel.value);
-    
     if (val == 'initial') {
-      console.log("initial");
-      
       this.createFilterForm();
       this.getPieChart();
       this.getTalukas();
@@ -224,7 +220,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.masterService.getAllVillage('', (this.f['centerId'].value | 0)).subscribe((res : any)=>{
         this.villageData.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
         this.f['villageId'].patchValue(0);
-        console.log(this.filterForm.value.villageId);
       });
     }
   }
@@ -586,15 +581,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // --------- ----------------------- selected bar chart value for click event -----------------------------//
   selectedBar(selectedbar: any, selectedIndex?: any) {
-    console.log("selectedbar", selectedbar, selectedIndex);
-    
     this.selectedbar = selectedbar;
     this.selectedBarIndex = selectedIndex;
   }
   // ---------------------------------- bar chart by taluka/ center -------------------------------------------//
   getbarChartByTaluka() {
-    console.log("selectedObj: ", this.selectedObj);
-    
     this.showBarChartS = false;
     const filterformData = this.filterForm.value;
     const formDatafilterbyTaluka = this.filterFormForBarGraph.value;
@@ -821,8 +812,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getSubjectDropForClass() {
-    console.log("first api....", this.subjectforBarByCLass.value);
-    
     const formData = this.filterForm.value;
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -856,10 +845,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getRefstandardTableArrayCount() {
-    console.log("second api...", this.subjectforBarByCLass.value);
-    
-    console.log("onchnage subject :");
-    
     const formData = this.filterForm.value;
     this.spinner.show();
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
@@ -874,6 +859,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }); // for standard row 
           this.totalStudentSurveyDataByCLass[0].ischeckboxShow = false; // for uncheck total radio btn
           this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex].status = true; // for check selected button 
+          this.checkDataByClass(1, this.totalStudentSurveyDataByCLass[1]);
         }
         else {
           this.totalStudentSurveyDataByCLass = [];
@@ -889,11 +875,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getstandardTableArrayCount(val: any) {
-    console.log("third api call...", this.subjectforBarByCLass.value);
-    console.log("subjectArrayByClass : ", this.subjectArrayByClass);
-    
-    console.log("count classwise std ", val )
-    
     const formData = this.filterForm.value;
     val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
     this.spinner.show();
@@ -905,7 +886,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.subjectArrayByClass = res.responseData.responseData2;
           this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
           
-        console.log("this.subjectforBarByCLass : ", this.subjectforBarByCLass.value);
           this.totalStudentSurveyDataByCLass.map((x: any) => {
             x.status = false;
             x.ischeckboxShow = true;
@@ -1019,7 +999,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             if (config.seriesIndex >= 0) {
               this.optionalSubjectindex = config.seriesIndex; // index of bar 
 
-              const index = this.stackbarchartOptionsByClass.xaxis.subjects.findIndex((i: any) => (console.log(i), i == this.selectedbar));
+              const index = this.stackbarchartOptionsByClass.xaxis.subjects.findIndex((i: any) => (i == this.selectedbar));
               
               // const data = this.stackbarChartDataByClass.find((x: any) =>
               //   (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
@@ -1030,8 +1010,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
               const examTypeId = this.stackbarchartOptionsByClass.xaxis.examSet[config?.dataPointIndex]
 
-                console.log("datadata",examTypeId);
-                
               this.selectedBarstatus = 'stack';
               this.passingParameters(data, examTypeId)
             }
@@ -1129,9 +1107,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // -----------------------------------------  bar chart by class ------------------------------------------------//
 
   constructBarChartByClass() {
-    const filterData = this.barChartDataByClass.filter((x: any) => x.subjectId == this.subjectforBarByCLass.value)
-    console.log("filterData", filterData);
-    
+    const filterData = this.barChartDataByClass.filter((x: any) => x.subjectId == this.subjectforBarByCLass.value);
     const barSubjectSet = [...new Set(filterData.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName))];
     const testSet = [...new Set(filterData.map((sub: any) => sub.examTypeId))];
     let dataArray: any[] = [];
@@ -1161,8 +1137,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   createBarchartByClass(SeriesArray: any, barSubjectSet: any, sub: any) {
     // createBarchartByClass(SeriesArray:any, barSubjectSet:any, sub:any){
-      console.log(barSubjectSet);
-      
     this.barChaOptionHeight = 350;
     const length = barSubjectSet.length;
     let width = this.subjectforBarByCLass.getRawValue()==1?(length < 2 ? 200 : length < 3 ? 300 : 600) :1200 //length < 5 ? 600 : length < 8 ? 500 : 500

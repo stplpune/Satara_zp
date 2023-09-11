@@ -29,11 +29,13 @@ export class AddTasksheetComponent {
 
   ngOnInit() {
     this.defaultForm(); 
+    console.log("onApply : ", this.data);
+    
   }
 
   defaultForm() {
     this.attendenceForm = this.fb.group({
-      isPresent: [0],
+      isPresent: [this.data ? this.data.attendance == 'Present' ? 1 : 0 : 0],
       remark: [this.data?.remark || '', [Validators.required]],
       inTime:[this.data?.checkInTime || ''],
       OutTime:[this.data?.checkOutTime || '']
@@ -42,6 +44,7 @@ export class AddTasksheetComponent {
 
   onSubmit() {
     let formValue = this.attendenceForm.getRawValue();
+    
     // if(this.data.checkInTime == null &&  this.data.checkOutTime != null){    
     //   this.AttType = 1
     // }else if (this.data.checkOutTime == null && this.data.checkInTime != null ){     
@@ -61,6 +64,9 @@ export class AddTasksheetComponent {
     }else if(this.data.remark == null ){
       this.AttType = 3
     }
+    // else{
+    //   this.AttType = 2
+    // }
     
     this.data.date = this.datePipe.transform(this.data.date, 'yyyy-MM-dd');
 

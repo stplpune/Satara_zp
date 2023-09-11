@@ -55,8 +55,8 @@ export class TasksheetComponent {
   resultDownloadArr = new Array();
   submitFlag : boolean = false;
   pageNumber: number = 1;
-  displayedheadersEnglish = ['Sr. No.', ' Day', 'Check-In Time', 'Check-Out Time', 'Attendance', 'Task', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक-इन वेळ', 'चेक-आउट वेळ', 'उपस्थिती', 'कार्य', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', ' Day', 'Check-In Time', 'Check-Out Time', 'Attendance', 'Task', 'Approval Remark','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक-इन वेळ', 'चेक-आउट वेळ', 'उपस्थिती', 'कार्य', 'मंजूरी शेरा','कृती'];
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   dataSource: any;
   viewStatus = 'Table';
@@ -236,8 +236,8 @@ export class TasksheetComponent {
 
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark', 'action'];
-    let displayedColNavigateReport = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark'];
+    let displayedColumns = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark', 'approvalRemark','action'];
+    let displayedColNavigateReport = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance','remark','approvalRemark'];
 
     let tableData = {
       pageNumber: this.pageNumber,

@@ -16,7 +16,7 @@ export class FileUploadService {
               private commonService: CommonMethodsService ) { }
 
   // uploadDocuments(event: any, folderName?: any, allowedDocTypes?: any, minsize?: any, maxsize?: any){
-  uploadDocuments(event: any, folderName?: any, allowedDocTypes?: any)  {
+  uploadDocuments(event: any, folderName?: any, allowedDocTypes?: any, flag?: any)  {
     return new Observable(obj => {
       const selResult = event.target.value.split('.');
       const docExt = selResult.pop();
@@ -25,9 +25,11 @@ export class FileUploadService {
       if (allowedDocTypes.match(docExt)) {
         if (event.target.files && event.target.files[0]) {
           const file = event.target.files[0];
-          if ( isPdf == -1 ?  file.size > 2000000 : file.size > 10485760) {
-            // if ( isPdf == -1 ?  file.size > 20000 : file.size > 20000) {
-            // isPdf == -1 ? obj.error("Required file size should be between 200 kb to 300 kb"): obj.error("Required file size should be less than " + 10 + " MB.");
+
+          if(flag == 'schoolRegistration' && isPdf == -1 ?  file.size > 20000 : file.size > 20000){
+              isPdf == -1 ?  this.commonService.snackBar("Required file size should be less than 2 MB", 1): this.commonService.snackBar("Required file size should be less than " + 2 + " MB.", 1);
+          }
+          else if ( flag != 'schoolRegistration' && isPdf == -1 ?  file.size > 2000000 : file.size > 10485760) {
             isPdf == -1 ?  this.commonService.snackBar("Required file size should be less than 2 MB", 1): this.commonService.snackBar("Required file size should be less than " + 10 + " MB.", 1);
           }
           else {

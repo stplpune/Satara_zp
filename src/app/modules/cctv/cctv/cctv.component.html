@@ -130,10 +130,13 @@
                                     <mat-icon class="text-main">arrow_back</mat-icon>
                                 </button>
 
-                                <button type="button" mat-icon-button class="btn-second" (click)="openVideo()">
-                                    <mat-icon class="text-main">play_arrow</mat-icon>
-                                </button>
-                                <button type="button" mat-icon-button class="btn-second " (click)="closeVideo()">
+                                <ng-container *ngIf="playStopFlag == false">
+                                    <button type="button" mat-icon-button class="btn-second" (click)="openVideo()">
+                                        <mat-icon class="text-main">play_arrow</mat-icon>
+                                    </button>
+                                </ng-container>
+
+                                <button *ngIf="playStopFlag == true"  type="button" mat-icon-button class="btn-second " (click)="closeVideo()">
                                     <mat-icon class="text-main">stop</mat-icon>
                                 </button>
 

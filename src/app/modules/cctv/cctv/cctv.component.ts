@@ -35,6 +35,7 @@ export class CctvComponent {
   schoolArr = new Array();
   selectedCCTV: any;
   cctvFlag: boolean = false;
+  playStopFlag: boolean = true;
   timer: any;
   i:number = 0;
   get f() {
@@ -74,14 +75,12 @@ export class CctvComponent {
 
   showLoader() {
     let loadershow: any = document.getElementById("myname");
-    console.log("clicked");
     loadershow.style.display = 'block';
 
   }
 
   hideLoader() {
     var loadershow: any = document.getElementById("myname");
-    console.log("clicked");
     loadershow.style.display = 'none';
   }
 
@@ -253,7 +252,6 @@ export class CctvComponent {
 
   // clear dropdown 
   onChangeDropD(flag?: string) {
-    console.log(flag);
     switch (flag) {
       case 'taluka':
         this.f['centerId'].setValue(0);
@@ -309,7 +307,6 @@ export class CctvComponent {
       } else {
         let streamid = 1;
         let channel = 0;
-        console.log('sham')
         var devid: any = '5625617245';
         Player?.OpenStream(devid, '', +channel, +streamid, this.i)
         this.i++;
@@ -334,7 +331,8 @@ export class CctvComponent {
 
 
   closeVideo() {
-    Player?.CloseStream(0)
+    Player?.CloseStream(0);
+    this.playStopFlag = false;
   }
 
   openVideo(_selectedCCTV?: any){
@@ -342,6 +340,7 @@ export class CctvComponent {
     let streamid = 1;
     let channel = 0;
     Player.OpenStream(devid, '', channel, streamid, 0);
+    this.playStopFlag = true;
   }
 
    ptz_ctrl_up() {
@@ -365,12 +364,9 @@ export class CctvComponent {
 		Player.ptz_ctrl(devid, '', channel, 5, 6)
 	}
 	 ptz_ctrl_stop() {
-		console.log(2222);
 		let devid: any = '5625617245';
     let channel = 0;
 		Player.ptz_ctrl(devid, '', channel, 0, 0)
 	}
-
-  
 }
 

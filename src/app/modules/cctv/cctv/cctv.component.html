@@ -116,19 +116,19 @@
                             selectedCCTV?.m_SchoolName }}</p>
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
-                        <ng-container *ngFor="let player of  tableDataArray">
-                            <canvas id='{{player?.canvas}}' width="180px" height="100vh" class="border m-1"></canvas>
+                        <ng-container>
+                            <canvas id="canvas1" width="600px" height="300px" class="border m-1"></canvas>
                         </ng-container>
-                        <!-- <canvas id ='canvas0'   width="180px" height="100vh" class="border m-2"></canvas> -->
-                        <!-- <button type="button" onclick="showLoader()">Show</button>
-                        <button type="button" onclick="hideLoader()">Hide</button>
-                        <span id="myname">
-                            <span class="loader"></span>
-                        </span> -->
-                
-                    </mat-card-content>
-                    <!-- <button (click)="openvideo();openvideo();openvideo();openvideo();openvideo();" style="width:100px">Close</button> -->
-                
+                       <ng-container>
+                        <button (click)="openVideo()">Play</button>
+                        <button (click)="closeVideo()">stop</button>
+                        <button  (window:mouseup)="ptz_ctrl_stop()"  (window:mousedown)="ptz_ctrl_up()" style="width:100px">up</button>
+                        <button (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_down()" style="width:100px">down</button>
+                        <button (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_left()" style="width:100px">left</button>
+                        <button (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_right()" style="width:100px">right</button>
+
+                       </ng-container>
+                    </mat-card-content>                
                 </mat-card>
             </div>
         </div>

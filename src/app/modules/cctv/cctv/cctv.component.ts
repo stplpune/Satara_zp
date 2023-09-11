@@ -35,7 +35,6 @@ export class CctvComponent {
   schoolArr = new Array();
   selectedCCTV: any;
   cctvFlag: boolean = false;
-  canvas = new Array();
   timer: any;
   i:number = 0;
   get f() {
@@ -205,12 +204,12 @@ export class CctvComponent {
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           this.selectedCCTV = this.tableDataArray[0]; // bydefault patch first CCTV camera
-          this.tableDataArray.map((x: any, i: any) => {
-            x.canvas = 'canvas' + i
-          })
+          // this.tableDataArray.map((x: any, i: any) => {
+          //   x.canvas = 'canvas' + i
+          // })
           setTimeout(() => {
             this.init();
-          }, 100);
+          }, 1000);
 
         }
         else {
@@ -288,23 +287,22 @@ export class CctvComponent {
     let streamid = 1;
     let channel = 0;
     var devid: any = '5625617245';
-    let canvas:any;
-    let array: any  =[]
-    for (let i = 0; i < this.tableDataArray.length; i++) {
-        canvas = document.getElementById("canvas" + i);
-        console.log("canvasIDDDD",canvas);
-        array.push(canvas)
-      }
-      Player?.init(array);
-
-      for (let i = 0; i < this.tableDataArray.length; i++) {
-        Player?.ConnectDevice(devid, '', 'admin', '87be!01cd4', i, 80, 0, +channel, +streamid);
-      }
-      
-      this.callOpenStreamMethod();
+    let username = 'admin';
+    let pwd = '87be!01cd4';
+    let element:any;
+    // let array: any  =[]
+    element = document.getElementById("canvas1");
+    Player?.init([element]);
+    Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
+    
+    setTimeout(() => {
+      Player.OpenStream(devid, '', channel, streamid, 0);
+    }, 15000);
   }
 
-  callOpenStreamMethod(){
+  
+
+  callOpenStreamMethod1(){
     this.timer = setInterval(() => {
       if (this.tableDataArray.length == this.i) {
         clearInterval(this.timer);
@@ -319,14 +317,60 @@ export class CctvComponent {
     }, 5000);
   }
 
+  callOpenStreamMethod(_deviceID,_channel,_streamid, i){
+    return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
+      }, 10000);
+      resolve
+    })
+   
+  }
+
   disconnect() {
     var devid: any = document.getElementById("dev_id");
-    Player?.DisConnectDevice(devid?.value)
+    Player?.DisConnectDevice(devid?.value);
   }
 
 
-  closevideo() {
+  closeVideo() {
     Player?.CloseStream(0)
   }
+
+  openVideo(_selectedCCTV?: any){
+    let devid: any = '5625617245';
+    let streamid = 1;
+    let channel = 0;
+    Player.OpenStream(devid, '', channel, streamid, 0);
+  }
+
+   ptz_ctrl_up() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 2, 6)
+	}
+	 ptz_ctrl_down() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 3, 6)
+	}
+	 ptz_ctrl_left() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 4, 6)
+	}
+	 ptz_ctrl_right() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 5, 6)
+	}
+	 ptz_ctrl_stop() {
+		console.log(2222);
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 0, 0)
+	}
+
+  
 }
 

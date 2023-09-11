@@ -109,48 +109,58 @@
                 </mat-card>
             </div>
             <div class="col-sm-6">
-                <mat-card class="plain-card">
-                    <mat-card-header class="card-header p-0">
+                <mat-card class="plain-card border">
+                    <mat-card-header class="card-header">
                         <p class="text-main fw-bold mb-0">{{ langTypeName == 'English' ? selectedCCTV?.schoolName :
                             selectedCCTV?.m_SchoolName }}</p>
                     </mat-card-header>
                     <mat-card-content class="card-body p-0">
                         <ng-container>
-                            <canvas id="canvas1" width="600px" height="300px" class="border-0 rounded m-0"></canvas>
-                        </ng-container>
-                        <ng-container>
-                            <div class="d-flex justify-content-center align-items-center gap-2">
-                                <button type="button" mat-icon-button class="btn-second"
-                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_up()">
-                                    <mat-icon class="text-main">arrow_upward</mat-icon>
-                                </button>
-
-                                <button type="button" mat-icon-button class="btn-second"
-                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_left()">
-                                    <mat-icon class="text-main">arrow_back</mat-icon>
-                                </button>
-
-                                <ng-container *ngIf="playStopFlag == false">
-                                    <button type="button" mat-icon-button class="btn-second" (click)="openVideo()">
-                                        <mat-icon class="text-main">play_arrow</mat-icon>
-                                    </button>
-                                </ng-container>
-
-                                <button *ngIf="playStopFlag == true"  type="button" mat-icon-button class="btn-second " (click)="closeVideo()">
-                                    <mat-icon class="text-main">stop</mat-icon>
-                                </button>
-
-                                <button type="button" mat-icon-button class="btn-second"
-                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_right()">
-                                    <mat-icon class="text-main">arrow_forward</mat-icon>
-                                </button>
-                                <button type="button" mat-icon-button class="btn-second"
-                                    (window:mouseup)="ptz_ctrl_stop()" (window:mousedown)="ptz_ctrl_down()">
-                                    <mat-icon class="text-main">arrow_downward</mat-icon>
-                                </button>
-                            </div>
+                            <canvas id="canvas1" width="606px" height="300px" class="border-0"></canvas>
                         </ng-container>
                     </mat-card-content>
+                    <mat-card-footer class="card-footer border-top-0 pt-0">
+                        <div class="d-flex justify-content-center align-items-center gap-2">
+                            <button type="button" mat-icon-button class="btn btn-second"
+                                matTooltip="{{'Labels.upward' | translate}}" matTooltipPosition="left"
+                                matTooltipClass="tooltip" (window:mouseup)="ptz_ctrl_stop()"
+                                (window:mousedown)="ptz_ctrl_up()">
+                                <mat-icon class="text-main">arrow_upward</mat-icon>
+                            </button>
+
+                            <button type="button" mat-icon-button class="btn-second" (window:mouseup)="ptz_ctrl_stop()"
+                                matTooltip="{{'Labels.left' | translate}}" matTooltipPosition="below"
+                                matTooltipClass="tooltip" (window:mousedown)="ptz_ctrl_left()">
+                                <mat-icon class="text-main">arrow_back</mat-icon>
+                            </button>
+
+                            <ng-container *ngIf="playStopFlag == false">
+                                <button type="button" mat-icon-button class="btn-second"
+                                    matTooltip="{{'Labels.play' | translate}}" matTooltipPosition="below"
+                                    matTooltipClass="tooltip" (click)="openVideo()">
+                                    <mat-icon class="text-main">play_arrow</mat-icon>
+                                </button>
+                            </ng-container>
+
+                            <button *ngIf="playStopFlag == true" type="button" mat-icon-button class="btn-second"
+                                matTooltip="{{'Labels.stop' | translate}}" matTooltipPosition="below"
+                                matTooltipClass="tooltip" (click)="closeVideo()">
+                                <mat-icon class="text-main">stop</mat-icon>
+                            </button>
+
+                            <button type="button" mat-icon-button class="btn-second" (window:mouseup)="ptz_ctrl_stop()"
+                                matTooltip="{{'Labels.right' | translate}}" matTooltipPosition="below"
+                                matTooltipClass="tooltip" (window:mousedown)="ptz_ctrl_right()">
+                                <mat-icon class="text-main">arrow_forward</mat-icon>
+                            </button>
+
+                            <button type="button" mat-icon-button class="btn-second" (window:mouseup)="ptz_ctrl_stop()"
+                                (window:mousedown)="ptz_ctrl_down()" matTooltip="{{'Labels.downward' | translate}}"
+                                matTooltipPosition="right" matTooltipClass="tooltip">
+                                <mat-icon class="text-main">arrow_downward</mat-icon>
+                            </button>
+                        </div>
+                    </mat-card-footer>
                 </mat-card>
             </div>
         </div>

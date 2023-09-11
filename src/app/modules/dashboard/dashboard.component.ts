@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     } else if (val == 'mapClick') {
       this.getCenters();
       this.getdashboardCount(val);
-      this.asessmwntLavel.value == '1' ? (this.getbarChartByTaluka(), this.getstandardTableArrayCount(val)) : '';
+      this.asessmwntLavel.value == '1' ? (this.getTabledataByTaluka(), this.getstandardTableArrayCount(val)) : '';
     } else if (val == 'languageChange') {
       this.showSvgMap(this.commonMethods.mapRegions());
       this.getPieChartData();
@@ -593,12 +593,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
   // ---------------------------------- bar chart by taluka/ center -------------------------------------------//
   getbarChartByTaluka() {
+    console.log("selectedObj: ", this.selectedObj);
+    
     this.showBarChartS = false;
     const filterformData = this.filterForm.value;
     const formDatafilterbyTaluka = this.filterFormForBarGraph.value;
     this.spinner.show();
     this.selectedTalukaId = filterformData?.talukaId ? filterformData?.talukaId : formDatafilterbyTaluka?.filtertalukaId;
-    const str = this.selectedTalukaId ? (this.selectedObj.groupId == 1 ? 'GetDataFor1st2ndStdByCenter' : 'GetDataFor3rdAboveStdByCenter') : (this.selectedObj?.groupId == 1 ? 'GetDataFor1st2ndStdByTaluka' : 'GetDataFor3rdAboveStdByTaluka');
+    const str = this.selectedTalukaId ? (this.selectedObj?.groupId == 1 ? 'GetDataFor1st2ndStdByCenter' : 'GetDataFor3rdAboveStdByCenter') : (this.selectedObj?.groupId == 1 ? 'GetDataFor1st2ndStdByTaluka' : 'GetDataFor3rdAboveStdByTaluka');
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/' + str + '?TalukaId=' + (this.selectedTalukaId || 0) + (this.selectedTalukaId ? '&CenterId=' + (formDatafilterbyTaluka?.filtercenterId || 0) : '') + '&groupId=' + this.selectedObj?.groupId + '&SubjectId=' + (formDatafilterbyTaluka.filtersubjectId | 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

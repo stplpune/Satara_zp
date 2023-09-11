@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -31,6 +31,7 @@ export class AddOutwardItemComponent {
   currentDate = new Date();
   imgValidation: boolean = true;
   get f() { return this.itemForm.controls };
+  @ViewChild('uploadImgDoc') imgDocFile!: ElementRef;
 
   constructor(private masterService: MasterService,
     public webStorage: WebStorageService,
@@ -125,6 +126,22 @@ export class AddOutwardItemComponent {
   //   });
   // }
 
+  // viewImg() {
+  //   if (this.editFlag == true) {
+  //     let viewImg = this.editObj.photo;
+  //     this.uploadImg ? window.open(this.uploadImg, 'blank') : window.open(viewImg, 'blank')
+  //   }
+  //   else {
+  //     window.open(this.uploadImg, 'blank');
+  //   }
+  // }
+
+  // clearImg() {
+  //   this.uploadImg = '';
+  //   this.itemForm.value.photo = '';
+  //   this.itemForm.controls['photo'].setValue('');
+  // }
+
   multipleImgUpload(event: any) {
     this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt').subscribe({
       next: (res: any) => {
@@ -147,7 +164,8 @@ export class AddOutwardItemComponent {
           }
         }
         else {
-          return
+          this.uploadMultipleImg = '';
+          this.imgDocFile.nativeElement.value = '';
         }
         this.imgArray.map((x: any) => {
           let imgPath = x.photo;
@@ -160,22 +178,6 @@ export class AddOutwardItemComponent {
       //  error: ((err: any) => {  err.statusCode ? this.errors.handelError(err.statusCode):this.commonMethod.showPopup(err, 1) })
     });
   }
-
-  // viewImg() {
-  //   if (this.editFlag == true) {
-  //     let viewImg = this.editObj.photo;
-  //     this.uploadImg ? window.open(this.uploadImg, 'blank') : window.open(viewImg, 'blank')
-  //   }
-  //   else {
-  //     window.open(this.uploadImg, 'blank');
-  //   }
-  // }
-
-  // clearImg() {
-  //   this.uploadImg = '';
-  //   this.itemForm.value.photo = '';
-  //   this.itemForm.controls['photo'].setValue('');
-  // }
 
   getOpeningStock() {
     let formValue = this.itemForm.value;
@@ -198,7 +200,8 @@ export class AddOutwardItemComponent {
   clearMultipleImg(index: any) {
     this.imgArray.splice(index, 1);
     !this.imgArray.length ? this.imgValidation = false : '';
-
+    this.uploadMultipleImg = '';
+    this.imgDocFile.nativeElement.value = '';
   }
 
   onViewDoc(index: any) {

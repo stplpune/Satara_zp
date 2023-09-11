@@ -109,11 +109,10 @@
                                  #uploadImage (change)="multipleImgUpload($event)"/> -->
 
                             <input type="file" name="myfile" formControlName="photo" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
-                                #uploadImage (change)="multipleImgUpload($event)" />
+                                #uploadImage (change)="multipleImgUpload($event)" #uploadImgDoc/>
                                 <mat-error *ngIf="imgValidation == false && (uploadImg == '' || uploadImg == undefined)">
                                     Photo Is Required
                                 </mat-error>
-
                         </div>
 
                         <!-- <div class="action-btn" *ngIf="uploadImg">
@@ -131,9 +130,6 @@
                     </div>
                     <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
                 </div>
-
-              
-
 
                 <div class="col-sm-12 mt-3">
                     <div class="d-flex flex-wrap gap-4">

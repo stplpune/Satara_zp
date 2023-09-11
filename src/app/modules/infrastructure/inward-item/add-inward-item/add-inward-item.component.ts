@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -33,6 +33,7 @@ export class AddInwardItemComponent {
   get f() { return this.itemForm.controls };
   currentDate = new Date();
   loginData: any;
+  @ViewChild('uploadImgDoc') imgDocFile!: ElementRef;
 
   constructor(private fb: FormBuilder,
     private commonMethodS: CommonMethodsService,
@@ -155,7 +156,8 @@ export class AddInwardItemComponent {
           }
         }
         else {
-          return
+          this.uploadMultipleImg = '';
+          this.imgDocFile.nativeElement.value = '';
         }
 
         this.imgArray.map((x: any) => {
@@ -209,6 +211,8 @@ export class AddInwardItemComponent {
   clearMultipleImg(index: any) {
     this.imgArray.splice(index, 1);
     !this.imgArray.length ? this.imgValidation = false : '';
+    this.uploadMultipleImg = '';
+    this.imgDocFile.nativeElement.value = '';
   }
 
   getOpeningStock() {

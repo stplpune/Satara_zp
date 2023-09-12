@@ -378,7 +378,6 @@ export class TeacherRegistrationComponent implements OnInit {
     // let obj: any;
     const dialogRef = this.dialog.open(AddUpdateTeacherRegistrationComponent, {
       width: '900px',
-      height: '90vh',
       data: obj,
       disableClose: true,
       autoFocus: false

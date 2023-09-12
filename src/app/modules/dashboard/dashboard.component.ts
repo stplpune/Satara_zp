@@ -911,6 +911,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkDataByClass(index: number, obj: any) {
+    console.log("calling....");
+    
     this.selectedObjByClass = obj;    
     // this.totalStudentSurveyDataByCLass.map((x: any) => {
     //   x.status = false;
@@ -919,7 +921,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.totalStudentSurveyDataByCLass[index].status = true;
     this.getSubject(obj?.groupId);
     this.selectedSurveyData = this.selectedObjByClass?.assessmentCount + '/' + this.selectedObjByClass?.studentCount;
-    this.getchartDataByCLass();
+    this.subjectforBarByCLass.value == 1 ? this.getchartDataByCLass() : '';
   }
 
   getchartDataByCLass() {

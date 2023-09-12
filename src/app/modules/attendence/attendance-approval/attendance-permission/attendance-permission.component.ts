@@ -58,6 +58,7 @@ export class AttendancePermissionComponent {
           this.ngxSpinner.hide();
           if (res.statusCode == "200") {
             this.dialogRef.close('yes');
+            isApproved == 0 ? this.commonMethodS.showPopup('Rejected', 3)  : this.commonMethodS.showPopup('Approved', 0);
           }
           else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);

@@ -35,7 +35,7 @@ export class CommonMethodsService {
 
   // show message and error    https://sweetalert2.github.io/ and https://www.positronx.io/angular-popup-notification-with-sweetalert2-example/
   showPopup(msg: any, status: number) {
-    let popupClassArr: any = ['success', 'warning', 'info'];
+    let popupClassArr: any = ['success', 'warning', 'info', 'error'];
     Swal.fire({
       allowOutsideClick: false,
       text: msg,

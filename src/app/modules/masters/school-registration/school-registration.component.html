@@ -8,10 +8,11 @@
         <li class="breadcrumb-item active" aria-current="page">{{'Labels.schoolRegistration' | translate}}</li>
     </ol>
 </nav>
+
 <app-page-statistics></app-page-statistics>
 
 <mat-card class="plain-card" [class.bg-transparent]="viewStatus == 'Card'">
-    <mat-card-header class="card-header">
+    <mat-card-header class="card-header border-bottom-0 mb-0">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
             <div class="text-main fw-bold">
                 {{'Labels.schoolList' | translate}} ({{'Labels.total' | translate }} -
@@ -41,7 +42,8 @@
             </div>
         </div>
     </mat-card-header>
-    <mat-card-header class="card-header pb-0 border-bottom-0">
+
+    <mat-card-header class="card-header border-bottom-0 pb-0">
         <div class="row gx-2 w-100">
             <!-- <div class="col-sm-2">
                 <mat-form-field appearance="outline" class="w-100">

@@ -34,9 +34,9 @@
         </div>
     </mat-card-header>
     <form [formGroup]="filterForm">
-    <mat-card-header class="card-header pb-0 border-bottom-0">
-        <div class="row gx-2">
-            <!-- <div class="col-sm">
+        <mat-card-header class="card-header pb-0 border-bottom-0">
+            <div class="row gx-2">
+                <!-- <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.district'| translate}}</mat-label>
                     <mat-select formControlName="districtId" (selectionChange)="getTaluka()">
@@ -45,70 +45,77 @@
                     </mat-select>
                 </mat-form-field>
             </div> -->
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select formControlName="TalukaId" (selectionChange)="getAllCenter();clearDependency('TalukaId')">
-                        <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
-                            tal.taluka:tal.m_Taluka }}</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                        <mat-select formControlName="TalukaId"
+                            (selectionChange)="getAllCenter();clearDependency('TalukaId')">
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
+                                tal.taluka:tal.m_Taluka }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.center'| translate}}</mat-label>
+                        <mat-select formControlName="centerId"
+                            (selectionChange)="getVillage();clearDependency('centerId')">
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
+                                ?cen.center:cen.m_Center}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.village'| translate}}</mat-label>
+                        <mat-select formControlName="villageId"
+                            (selectionChange)="getAllSchoolsByCenterId();clearDependency('villageId')">
+                            <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
+                                'English'
+                                ?village.village:village.m_Village}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.school'| translate}}</mat-label>
+                        <mat-select formControlName="SchoolId">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
+                                sch.schoolName:sch.m_SchoolName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.CCTVLocation'| translate}}</mat-label>
+                        <mat-select formControlName="cctvLocation">
+                            <mat-option *ngFor="let cctvLoc of CCTVLocation" [value]="cctvLoc.id">{{languageFlag ==
+                                'English' ?
+                                cctvLoc.cctvLocation:cctvLoc.m_CCTVLocation}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.CCTVNameCCTVModel'| translate}}</mat-label>
+                        <input matInput formControlName="textSearch"
+                            (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
+                            maxlength="100">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-auto mb-2 mb-lg-0">
+                    <button mat-flat-button class="btn-main" type="submit"
+                        (click)="getTableData('filter')">{{'Labels.filter' |
+                        translate}}</button>
+                    <button mat-flat-button class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear'
+                        |translate}}</button>
+                </div>
             </div>
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.center'| translate}}</mat-label>
-                    <mat-select formControlName="centerId" (selectionChange)="getVillage();clearDependency('centerId')">
-                        <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
-                            ?cen.center:cen.m_Center}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.village'| translate}}</mat-label>
-                    <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId();clearDependency('villageId')">
-                        <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
-                            'English'
-                            ?village.village:village.m_Village}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-4">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.school'| translate}}</mat-label>
-                    <mat-select formControlName="SchoolId">
-                        <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
-                            sch.schoolName:sch.m_SchoolName}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-2">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CCTVLocation'| translate}}</mat-label>
-                    <mat-select formControlName="cctvLocation">
-                        <mat-option  *ngFor="let cctvLoc of CCTVLocation" [value]="cctvLoc.id">{{languageFlag == 'English' ?
-                            cctvLoc.cctvLocation:cctvLoc.m_CCTVLocation}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-sm-4">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.CCTVNameCCTVModel'| translate}}</mat-label>               
-                        <input matInput formControlName="textSearch" (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)" maxlength="100">               
-                </mat-form-field>
-            </div>
-            <div class="col-sm-auto mb-2 mb-lg-0">
-                <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter' |
-                    translate}}</button>
-                <button mat-flat-button class="btn-second ms-2"  (click)="clearForm()">{{'Labels.clear'
-                    |translate}}</button>
-            </div>
-        </div>
-    </mat-card-header>
-</form>
+        </mat-card-header>
+    </form>
     <mat-card-content class="card-body mt-0">
         <!-- <app-table (recObjToChild)="childTableCompInfo($event)"></app-table> -->
-        <div class="table-responsive"> 
+        <div class="table-responsive">
             <table class="table dashboard-table">
                 <thead>
                     <tr>
@@ -140,11 +147,15 @@
                             </span>
                         </td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
-                            <button mat-icon-button matTooltip="{{'Labels.edit' | translate}}" (click)="openDialog(data.id)">
+                            <button mat-icon-button 
+                                matTooltip="{{'Labels.edit' | translate}}"
+                                matTooltipPosition="left" matTooltipClass="tooltip" (click)="openDialog(data.id)">
                                 <mat-icon class="text-main">edit</mat-icon>
                             </button>
-                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}" (click)="globalDialogOpen(data)">
-                                <mat-icon class="text-main">delete</mat-icon>
+                            <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"
+                                matTooltipPosition="left" matTooltipClass="tooltip"
+                                (click)="globalDialogOpen(data)">
+                                <mat-icon class="text-danger">delete</mat-icon>
                             </button>
                         </td>
                     </tr>

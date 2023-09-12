@@ -9,6 +9,7 @@
         </div>
     </div>
     <form [formGroup]="schoolRegForm" (ngSubmit)="onSubmit()" class="form-container">
+        
         <mat-dialog-content class="card-body scrollbar">
             <div class="row gx-2 gy-0">
                 <div class="col-sm-4">
@@ -275,6 +276,7 @@
                 </div>
             </div>
         </mat-dialog-content>
+
         <mat-dialog-actions align="end" class="card-footer">
             <div class="d-flex w-100 justify-content-end align-items-center">
                 <button mat-dialog-close mat-flat-button class="btn-second me-2" type="button">{{'Labels.cancel' | translate}}</button>
@@ -284,8 +286,8 @@
     </form>
 </ng-container>
 
-
 <!-- Event form start here  -->
+
 <ng-container *ngIf="this.data?.flag == 'event'">
     <div mat-dialog-title class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">

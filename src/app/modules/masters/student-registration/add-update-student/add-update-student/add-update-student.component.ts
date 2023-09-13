@@ -719,7 +719,7 @@ export class AddUpdateStudentComponent {
   //#region ------------------------------------------- Image Logic Start Here -----------------------------------------------------------------
   fileUpload(event: any, photoName: string) {
     let type = photoName == 'img' ? 'jpg, jpeg, png' : 'jpg, jpeg, png, pdf';
-    this.fileUpl.uploadDocuments(event, 'Upload', type, 'schoolRegistration').subscribe({
+    this.fileUpl.uploadStudentDocuments(event, 'Upload', type).subscribe({
       next: (res: any) => {   
         if (res.statusCode == 200) {
           if (this.imageFile.nativeElement.value == this.aadharFile.nativeElement.value) {

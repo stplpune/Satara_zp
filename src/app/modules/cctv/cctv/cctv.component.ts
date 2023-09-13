@@ -202,13 +202,8 @@ export class CctvComponent {
           flag != 'excel' && flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
-          this.selectedCCTV = this.tableDataArray[0]; // bydefault patch first CCTV camera
-          // this.tableDataArray.map((x: any, i: any) => {
-          //   x.canvas = 'canvas' + i
-          // })
-          setTimeout(() => {
-            this.init();
-          }, 1000);
+          // this.selectedCCTV = this.tableDataArray[0]; // bydefault patch first CCTV camera
+         
 
         }
         else {
@@ -243,7 +238,12 @@ export class CctvComponent {
   // Click table row 
   childCompInfo(obj?: any) {
     if (obj.label == 'View') {
-      this.selectedCCTV = obj;
+      // this.selectedCCTV = obj;
+      this.closeVideo();
+      // setTimeout(() => {
+      //   this.init();
+      // }, 1000);
+
     }
     else {
     }
@@ -325,14 +325,16 @@ export class CctvComponent {
   }
 
   disconnect() {
-    var devid: any = document.getElementById("dev_id");
-    Player?.DisConnectDevice(devid?.value);
+    Player?.DisConnectDevice('5625617245');
   }
 
 
   closeVideo() {
+    console.log("close exist live stream");
+    Player.DisConnectDevice('5625617245')
     Player?.CloseStream(0);
     this.playStopFlag = false;
+    this.init();
   }
 
   openVideo(_selectedCCTV?: any){

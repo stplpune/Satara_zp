@@ -29,17 +29,15 @@ export class AddTasksheetComponent {
 
   ngOnInit() {
     this.defaultForm(); 
-    console.log("onApply : ", this.data);
-    
   }
 
   defaultForm() {
     this.attendenceForm = this.fb.group({
-      isPresent: [this.data ? this.data.attendance == 'Present' ? 1 : 0 : 0],
+      isPresent: [1],
       remark: [this.data?.remark || '', [Validators.required]],
-      inTime:[this.data?.checkInTime || ''],
-      OutTime:[this.data?.checkOutTime || '']
-    })
+      inTime:[this.data?.checkInTime || '', [Validators.required]],
+      OutTime:[this.data?.checkOutTime || '', [Validators.required]]
+    });
   }
 
   onSubmit() {
@@ -69,10 +67,10 @@ export class AddTasksheetComponent {
     
     this.data.date = this.datePipe.transform(this.data.date, 'yyyy-MM-dd');
 
-    if (this.attendenceForm.invalid) {
+    if (this.attendenceForm.invalid || formValue.isPresent == 0) {
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     } else {
-      // this.apiService.setHttp('POST', 'zp-satara/Attendance/SaveManualAttendance?UserId=' + this.webStorageS.getUserId() + '&Attendance=' + formValue.isPresent + '&Date=' + this.data.date + '&Remark=' + formValue.remark + '&lan=' + this.webStorageS.languageFlag, false, false, false, 'baseUrl');
       this.apiService.setHttp('POST', `zp-satara/Attendance/SaveManualAttendance?UserId=${this.webStorageS.getUserId()}&Date=${this.data.date }&Attendance=${formValue.isPresent}&AttType=${this.AttType}&InTime=${formValue.inTime}&OutTime=${formValue.OutTime}&Remark=${formValue.remark}&lan=${this.webStorageS.languageFlag}`, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {

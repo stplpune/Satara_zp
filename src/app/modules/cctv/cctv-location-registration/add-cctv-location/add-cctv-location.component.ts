@@ -332,9 +332,13 @@ export class AddCctvLocationComponent {
       if (res == 'yes') {
         if (this.cameraDetailsArr[i]?.id != 0) {
           data.isDeleted = true;
+          this.editCctvObj = null;
+          this.cameraFormData();
         }
         else {
           this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x != data);
+          this.editCctvObj = null;
+          this.cameraFormData();
         }
       }
     });

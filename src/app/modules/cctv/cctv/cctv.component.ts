@@ -239,10 +239,10 @@ export class CctvComponent {
   childCompInfo(obj?: any) {
     if (obj.label == 'View') {
       // this.selectedCCTV = obj;
-      this.closeVideo();
-      // setTimeout(() => {
-      //   this.init();
-      // }, 1000);
+      // this.closeVideo();
+      this.init();
+      // this.disconnect();
+      
 
     }
     else {
@@ -326,15 +326,24 @@ export class CctvComponent {
 
   disconnect() {
     Player?.DisConnectDevice('5625617245');
+    const promiseOne = new Promise((resolve)=>{
+      this.closeVideo();
+      resolve('resolved')
+    });
+
+    promiseOne.then((value) => {
+      console.log(value);
+      this.init();
+    });
+    
   }
 
 
   closeVideo() {
     console.log("close exist live stream");
-    Player.DisConnectDevice('5625617245')
+    // Player.DisConnectDevice('5625617245')
     Player?.CloseStream(0);
     this.playStopFlag = false;
-    this.init();
   }
 
   openVideo(_selectedCCTV?: any){

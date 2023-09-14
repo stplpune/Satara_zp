@@ -208,6 +208,7 @@ ConnectApi.onconnect = function (api_conn, code) {
 
 		ConnectApi.login(api_conn, api_conn.user, api_conn.pwd);
 	} else {
+		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + 'Connection failed  ' + 'Error code' + code);
 		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + '连接失败 ' + '错误码：' + code);
 
 	}
@@ -566,6 +567,7 @@ Player.CloseStream = function (keyindex) {
 	if (session != null) {
 		let channel = GetChannelByWinindex(keyindex);
 		if (channel >= 0) {
+			debugger
 			ConnectApi.close_stream(session, channel, session.streamlist[channel].streamid);
 			playerList[keyindex].close()
 			// player1.close()
@@ -606,7 +608,6 @@ Player.CloseStream = function (keyindex) {
 				}
 
 			}
-
 		}
 	} else if (ip) {
 		let session = GetSessionByIp(ip);
@@ -893,7 +894,7 @@ Player.StopPlayBack = function (id, ip, channel) {
 		// console.log("停止回放02");
 
 		ConnectApi.replay_stop(session)
-		playerList[session.streamlist[channel].winindex].close()
+		playerList[session.streamlist[channel].winindex].close();
 		// player1.close()
 		session.streamlist[channel].firstFrame = false
 		session.streamlist[channel].isSound = false

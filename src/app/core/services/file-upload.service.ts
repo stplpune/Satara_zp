@@ -135,7 +135,7 @@ export class FileUploadService {
         if (event.target.files && event.target.files[0]) {
           const file = event.target.files[0];
 
-          if(isPdf == -1 ?  file.size > 2000 : file.size > 2000){
+          if(isPdf == -1 ?  file.size > 2000000 : file.size > 2000000){
             isPdf == -1 ?  this.commonService.snackBar("Required file size should be less than 2 MB", 1): this.commonService.snackBar("Required file size should be less than " + 2 + " MB.", 1);
           }
           else {

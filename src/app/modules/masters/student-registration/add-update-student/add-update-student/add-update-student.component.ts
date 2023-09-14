@@ -282,18 +282,20 @@ export class AddUpdateStudentComponent {
   // }
   addValidations(status: any){
     if(status){
-      this.gf['name'].setValidators([Validators.required,Validators.pattern(this.validators.name)])
-      this.gf['mobileNo'].setValidators([Validators.required,Validators.pattern(this.validators.mobile_No)])
-      this.gf['relationId'].setValidators([Validators.required])
+      this.gf['name'].setValidators([Validators.required,Validators.pattern(this.validators.name)]);
+      this.gf['m_Name'].setValidators([Validators.required]);
+      this.gf['mobileNo'].setValidators([Validators.required,Validators.pattern(this.validators.mobile_No)]);
+      this.gf['relationId'].setValidators([Validators.required]);
     }else{
-      this.gf['name'].clearValidators()
-      this.gf['mobileNo'].clearValidators()
-      this.gf['relationId'].clearValidators()
+      this.gf['name'].clearValidators();
+      this.gf['m_Name'].clearValidators();
+      this.gf['mobileNo'].clearValidators();
+      this.gf['relationId'].clearValidators();
     }
-    this.gf['name'].updateValueAndValidity()
-    this.gf['mobileNo'].updateValueAndValidity()
-    this.gf['relationId'].updateValueAndValidity()
-
+    this.gf['name'].updateValueAndValidity();
+    this.gf['m_Name'].updateValueAndValidity();
+    this.gf['mobileNo'].updateValueAndValidity();
+    this.gf['relationId'].updateValueAndValidity();
   }
 
   addGardianList(){

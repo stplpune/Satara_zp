@@ -149,7 +149,7 @@ export class AddUpdateTeacherRegistrationComponent {
       "id": [this.data ? this.data?.id : 0],
       "name": [this.data ? this.data?.name : '', [Validators.required, Validators.pattern(this.validation.fullName)]],
       "m_Name": [this.data ? this.data?.m_Name : '', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
-      "teacherCode":[this.data ? this.data?.teacherCode : ''],
+      "teacherCode":[this.data ? this.data?.teacherCode : '', Validators.required],
       "address": [''],
       "stateId": [0],
       "districtId": [''],

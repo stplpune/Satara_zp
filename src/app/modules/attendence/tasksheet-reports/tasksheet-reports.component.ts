@@ -63,8 +63,8 @@ export class TasksheetReportsComponent {
   isWriteRight!: boolean;
   loginData :any;
   get f() { return this.filterForm.controls };
-  displayedheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Manual Att.', 'Submitted Att', 'Manual Att. Approved', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा सुट्टी','मॅन्युअल उपस्थिती','सादर केलेली उपस्थिती','मॅन्युअल उपस्थिती मंजूर', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Teacher ID','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Manual Att.', 'Submitted Att', 'Manual Att. Approved', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक आयडी', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा सुट्टी','मॅन्युअल उपस्थिती','सादर केलेली उपस्थिती','मॅन्युअल उपस्थिती मंजूर', 'कृती'];
 
   constructor(private router: Router,
     private apiService: ApiService,

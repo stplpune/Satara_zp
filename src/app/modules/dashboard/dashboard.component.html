@@ -107,10 +107,7 @@
                             {{(f['talukaId'].value? (' > '+(webStorage.languageFlag ==
                             'EN'?selectedTaluka?.taluka:selectedTaluka?.m_Taluka)):'') +
                             (f['centerId'].value? (' > '+(webStorage.languageFlag ==
-                            'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') + (f['schoolId'].value? (' >
-                            '+(webStorage.languageFlag == 'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + (f['examTypeId'].value?
-                            (' > '+(webStorage.languageFlag ==
-                            'EN'?selectedexamType?.examType:selectedexamType?.m_ExamType)): '')}}</span>
+                            'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') + (f['schoolId'].value? (' > '+(webStorage.languageFlag == 'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + (f['examTypeId'].value? (' > '+(webStorage.languageFlag == 'EN'?selectedexamType?.examType:selectedexamType?.m_ExamType)): '')}} </span>
                         <div class="d-flex gap-2">
                             <!-- academicYear year dropdown -->
                             <div class="row justify-content-between align-items-center">
@@ -314,7 +311,6 @@
                                                                     </label>
                                                                 </div>
                                                             </div>
-
                                                         </div>
                                                     </div>
                                                 </th>
@@ -332,8 +328,9 @@
                             </div>
                             <!-- starting stack bar here  -->
                             <div class="col-sm-12">
-                                <div class="d-flex w-100" [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass?.series.length >3}"  >
-                                    <div class="text-start mx-2" 
+                                <!-- <div class="d-flex w-100 chart-container scrollbar" [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass?.series.length >3}"  > -->
+                                <div class="d-flex w-100 chart-container scrollbar">
+                                    <div class="text-start mx-3" 
                                         *ngFor="let bar of stackbarchartOptionsByClass?.series; let i=index">
                                         <p class="fw-bold  mb-4">{{graphSubjectDataByClass[i]}}</p>
                                         <apx-chart [series]="bar"  [chart]="stackbarchartOptionsByClass.chart"
@@ -416,7 +413,6 @@
             </div>
         </div>
 
-
         <mat-card class="plain-card h-100">
             <mat-card-header class="card-header border-bottom-0 pb-0">
                 <div class="row align-items-center justify-content-between w-100 g-0">
@@ -429,7 +425,6 @@
 
                         <form [formGroup]="filterFormForBarGraph" class="w-100">
                             <div class="row w-100 gx-2  justify-content-start">
-
                                 <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
@@ -489,11 +484,8 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-
-                                
                             </div>
                         </form>
-                        
                     </div>
                 </div>
             </mat-card-header>
@@ -545,10 +537,8 @@
                                     </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
-
 
                     <div class="col-sm-6 border-right">
                         <div class="d-flex justify-content-between">
@@ -596,14 +586,10 @@
                                     </tr>
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
-
                 </div>
             </mat-card-content>
         </mat-card>
-
-
     </mat-drawer-content>
 </mat-drawer-container>

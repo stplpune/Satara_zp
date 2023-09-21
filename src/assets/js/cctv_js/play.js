@@ -10,6 +10,7 @@ let remoteDeviceData= {//远处设置返回存储
 }
 /**
  * ConnectApi p2p连接控制对象，通过配置回调方法接收p2p回调数据
+ * The p2p connection control object receives p2p callback data by configuring the callback method.
  * 
  * kp2pPlayer 播放器构造函数，传入canvas元素创建播放器 Player constructor, pass in the canvas element to create the player
  * 参数1 canvas 用于显示画面的画布 Canvas for displaying screens
@@ -201,16 +202,15 @@ ConnectApi.onrecvrecframe = function (api_conn, frametype, data, datalen, channe
  * @param {number} code 连接状态码 0:成功， 其他：失败
  */
 ConnectApi.onconnect = function (api_conn, code) {
+	console.log("connection ", api_conn, code)
 	// console.log(code);
 	// console.log(api_conn);
 	if (code == 0) {
-		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + '连接成功');
+		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + 'connection succeeded');
 
 		ConnectApi.login(api_conn, api_conn.user, api_conn.pwd);
 	} else {
 		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + 'Connection failed  ' + 'Error code' + code);
-		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + '连接失败 ' + '错误码：' + code);
-
 	}
 };
 /**
@@ -567,7 +567,6 @@ Player.CloseStream = function (keyindex) {
 	if (session != null) {
 		let channel = GetChannelByWinindex(keyindex);
 		if (channel >= 0) {
-			debugger
 			ConnectApi.close_stream(session, channel, session.streamlist[channel].streamid);
 			playerList[keyindex].close()
 			// player1.close()

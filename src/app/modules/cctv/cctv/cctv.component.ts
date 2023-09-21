@@ -293,11 +293,12 @@ export class CctvComponent {
     Player?.init([element]);
     Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
     
+      Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
+    
     setTimeout(() => {
       Player.OpenStream(devid, '', channel, streamid, 0);
     }, 15000);
   }
-
   
 
   callOpenStreamMethod1(){

@@ -169,6 +169,12 @@
                     </tr>
                 </tbody>
             </table>
+            
+        </div>
+        <div *ngIf="tableDataArray?.length == 0">
+            <div class="alert alert-danger text-center me-2  mt-1 py-2 ">
+                <span>{{webService.languageFlag =='EN' ? 'Data not available' :'डेटा उपलब्ध नाही'}}</span>
+            </div>
         </div>
     </mat-card-content>
 </mat-card>

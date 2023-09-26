@@ -15,6 +15,7 @@
         "right": "Right",
         "Password": "Password",
         "Document": "Document",
+        "YearFromTo":"Year From To",
         "HolidayNameMarathi": "Holiday Name(Marathi)",
         "holidayNameMarathiIsRequired": " Please Enter Valid Holiday Name(Marathi)",
         "documnentphotos": "Document Photos",

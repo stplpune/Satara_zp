@@ -10,7 +10,7 @@
     <mat-card-content class="card-body card-height-full scrollbar">
         <div class="row mb-3" *ngIf="!data?.multipleImage">
             <div class="col-sm-12">
-                <div class="student-details">
+                <div class="student-details px-0">
                     <div class="d-flex">
                         <div class="flex-shrink-0" *ngIf="showImg">
                             <img [src]="data?.headerImage ? data?.headerImage : 'assets/images/user.png'"
@@ -18,18 +18,18 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5 class="mb-1 fw-bold text-break">{{ data?.header }}</h5>
-                            <p *ngIf="data?.subheader || data?.Obj?.village" class="text-muted mb-0" style="height:32px;">({{ data?.subheader || data?.Obj.village }})
+                            <p *ngIf="data?.subheader || data?.Obj?.village" class="text-muted mb-0"
+                                style="height:32px;">({{ data?.subheader || data?.Obj.village }})
                             </p>
-
                             <div class="data-container">
                                 <div class="row g-2">
                                     <div class="col-sm-6" *ngFor="let head of data.labelHeader; let j=index">
                                         <div class="row g-0">
-                                            <div class="col-6 col-sm-5">
+                                            <div class="col-6 col-sm-4">
                                                 <span class="data-label text-break"
                                                     *ngIf="data?.checkbox != head">{{head}}</span>
                                             </div>
-                                            <div class="col-6 col-sm-7">
+                                            <div class="col-6 col-sm-8">
                                                 <div class="data-text text-break" *ngIf="data?.checkbox != head">
                                                     : {{data?.Obj[data?.labelKey[j]] || '-'}}
                                                 </div>
@@ -39,10 +39,10 @@
 
                                     <div class="col-sm-6">
                                         <div *ngIf="data?.schoolName" class="row">
-                                            <div class="col-sm-5 col-6">
+                                            <div class="col-sm-4 col-6">
                                                 <span class="data-label">{{'Labels.school'| translate}}</span>
                                             </div>
-                                            <div class="data-text p-0 col-6 col-sm-7 d-flex flex-wrap">
+                                            <div class="col-sm-8 col-6 data-text d-flex flex-wrap p-0">
                                                 : {{webStorage.languageFlag == 'EN' ?
                                                 data?.Obj?.teacherDetails.schoolName :
                                                 data?.Obj?.teacherDetails.m_SchoolName || '-'}}
@@ -75,7 +75,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- <div class="data-text d-flex flex-wrap">
                                             <div *ngFor="let assign of data?.Obj?.assignSubject" class="lang-badge">
                                                 {{webStorage.languageFlag == 'EN' ? assign.subjectName :assign.m_SubjectName || '-'}}
@@ -91,7 +90,6 @@
                                                     *ngIf="data?.checkbox == 'Center' || data?.checkbox == 'केंद्र'">{{data?.checkbox}}
                                                 </span>
                                             </div>
-
                                             <div class=" col-6 col-sm-10 ">
                                                 <div class="data-text ms-4  d-flex flex-wrap">
                                                     <div *ngFor="let assign of data?.Obj?.officeCenterSchoolResponseModel"
@@ -113,26 +111,28 @@
         <div class="row g-3">
             <div class="col-sm-6" *ngIf="data?.multipleImage == true && items.length > 0">
                 <!-- <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? 'Outword Photos' : 'Inward Photos'}} </p> -->
-                <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? ('Labels.OutwordPhotos'| translate) : ('Labels.InwardPhotos'| translate)}}</p>
-                <div class="row g-2" >
+                <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? ('Labels.OutwordPhotos'| translate) :
+                    ('Labels.InwardPhotos'| translate)}}</p>
+                <div class="row g-2">
                     <div class="col-sm-6" *ngFor="let item of items; index as i">
-                        <img [lightbox]="i" [src]="item.data.src" width="100px" height="100px" class="border rounded object-fit-cover">
+                        <img [lightbox]="i" [src]="item.data.src" width="100px" height="100px"
+                            class="border rounded object-fit-cover">
                     </div>
                 </div>
             </div>
             <div class="col-sm-6" *ngIf="data?.pdf == true && pdfArr.length > 0">
                 <!-- <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? 'Outword Documents' : 'Inward Documents'}} </p> -->
-                <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? ('Labels.OutwordDocuments'| translate) : ('Labels.InwardDocuments'| translate)}}</p>
+                <p class="text-main fw-bold mb-0">{{data.item == 'Outward' ? ('Labels.OutwordDocuments'| translate) :
+                    ('Labels.InwardDocuments'| translate)}}</p>
                 <div class="row g-2">
                     <div class="col-sm-6" *ngFor="let pdf of pdfArr; index as i">
-                        <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" width="100px" height="100px" class="border rounded object-fit-cover"
-                            (click)="onViewDoc(i)">
+                        <img [src]="pdf.docFlag ? 'assets/images/pdf-image.png' : pdf.photo" width="100px"
+                            height="100px" class="border rounded object-fit-cover" (click)="onViewDoc(i)">
                     </div>
                 </div>
                 <!-- (click)="onViewDoc(i)" -->
             </div>
         </div>
-
         <div *ngIf="data?.chart && data?.Obj?.isAssessment">
             <progressChartLine></progressChartLine>
         </div>

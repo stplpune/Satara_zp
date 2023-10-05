@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -11,6 +11,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-student-report',
@@ -38,6 +39,8 @@ export class StudentReportComponent {
   // displayedColumnMarathi = new Array();
   // displayedheadersEnglish = new Array();
   // displayedheadersMarathi = new Array();
+
+
   $districts?: Observable<any>;
   pageUrl: any;
   sheetNameEng: any;
@@ -46,7 +49,7 @@ export class StudentReportComponent {
   excelNameMar: any;
   allStdClassWise: any; //  for std dropdown classwise 
   subjectArr: any // for subject array when its classwise 
-  classGroupID = 4;
+  classGroupID = 0;
   objeHedaer: any;
   newheaderArray = new Array();
   showTable:boolean=false;
@@ -57,6 +60,8 @@ export class StudentReportComponent {
   displayedColumnsEng = ['srNo', 'district', 'taluka', 'center', 'schoolCode', 'schoolName', 'fullName', 'studentGender', 'standard', 'examType', 'assessmentDate', 'management_desc', 'teacherName'];
   displayedColumnMarathi = ['srNo', 'm_District', 'm_Taluka', 'm_Center', 'schoolCode', 'm_SchoolName', 'm_FullName', 'm_StudentGender', 'm_Standard', 'm_ExamType', 'assessmentDate', 'm_Management_desc', 'teacherName'];
   tableData: any;
+  @ViewChild(MatPaginator) paginator: MatPaginator | any;
+
   campaignOne = new FormGroup({
     start: new FormControl(new Date(year, month)),
     end: new FormControl(new Date(year, month)),
@@ -94,7 +99,9 @@ export class StudentReportComponent {
     this.getExamType();
     this.getAcademicYears();
     this.getClassWiseSubject();
-    this.searchAssessMent();    
+    setTimeout(() => {
+      this.searchAssessMent();    
+    }, 1000);
     
   }
 
@@ -114,17 +121,31 @@ export class StudentReportComponent {
 
   formData() {
     this.studentReportForm = this.fb.group({
+      // educationYearId: [1],
+      // districtId: [1],
+      // talukaId: [this.logInDetails?.talukaId ? this.logInDetails?.talukaId : 0],
+      // centerId: [this.logInDetails?.centerId ? this.logInDetails?.centerId : 0],
+      // villageId: [this.logInDetails?.villageId ? this.logInDetails?.villageId : 0],
+      // AssessmentTypeId: [2],
+      // schoolId: [this.logInDetails?.schoolId ? this.logInDetails?.schoolId : 0],
+      // start: [(new Date(new Date().setDate(today.getDate() - 30)))],
+      // end: [new Date()],
+      // groupId: [1],
+      // standardId: [1],
+      // subjectId: [0],
+      // examTypeId: [0],
+
       educationYearId: [1],
       districtId: [1],
-      talukaId: [this.logInDetails?.talukaId ? this.logInDetails?.talukaId : 0],
-      centerId: [this.logInDetails?.centerId ? this.logInDetails?.centerId : 0],
-      villageId: [this.logInDetails?.villageId ? this.logInDetails?.villageId : 0],
+      talukaId: [0],
+      centerId: [0],
+      villageId: [0],
       AssessmentTypeId: [2],
-      schoolId: [this.logInDetails?.schoolId ? this.logInDetails?.schoolId : 0],
+      schoolId: [0],
       start: [(new Date(new Date().setDate(today.getDate() - 30)))],
       end: [new Date()],
       groupId: [1],
-      standardId: [1],
+      standardId: [0],
       subjectId: [0],
       examTypeId: [0],
     });
@@ -298,9 +319,9 @@ export class StudentReportComponent {
     this.classGroupID = standRow.groupId;
   }
 
-  onchangeAssesType() {
-    this.studentReportForm.value.AssessmentTypeId == 2 ? (this.GetAllStandardClassWise(), this.getClassWiseSubject()):'';
-  }
+  // onchangeAssesType() {
+  //   this.studentReportForm.value.AssessmentTypeId == 2 ? (this.GetAllStandardClassWise(), this.getClassWiseSubject()):'';
+  // }
 
   searchAssessMent(flag?: string){
     // this.tableDataArray =[];
@@ -334,6 +355,7 @@ export class StudentReportComponent {
           this.showTable=true;
           // return
           flag != 'pdfFlag' ? this.tableDataArray = res.responseData.responseData2 : this.tableDataArray = this.tableDataArray;
+          (this.paginator?._pageIndex != 0 &&  flag == 'filter')  ? this.paginator?.firstPage() : '';
           let officeteacherEng = this.pageUrl == '/officer-report' ? 'Officer Name ' : 'Teacher Name'
           let officeteacherMar = this.pageUrl == '/officer-report' ? 'अधिकाऱ्याचे नाव' : 'शिक्षकाचे नाव'
           this.displayedColumnsEng = ['srNo', 'district', 'taluka', 'center', 'schoolCode', 'schoolName', 'fullName','examNo', 'studentGender', 'standard', 'examType', 'assessmentDate', 'management_desc', 'teacherName'];

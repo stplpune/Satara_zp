@@ -252,19 +252,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedExamType() {
     this.selectedexamType = this.ExamTypeArray.find((x: any) => x.id == this.f['examTypeId'].value);
   }
-  getSubject(groupId: any) {
-    this.subjectdataFilter = [];
-    this.masterService.GetAllSubjectsByGroupClassId('', groupId).subscribe((res: any) => {
-      this.subjectData = res.responseData;
-      this.subjectdataFilter.push({ "id": 0, "subjectName": "All", "m_SubjectName": "सर्व" }, ...res.responseData);
-
-      this.fBgraph['filtersubjectId'].patchValue(this.subjectData[0].id);
-      setTimeout(() => {
-        this.getbarChartByTaluka();
-      }, 100)
-
-    })
-  }
+ 
   //--------------------------- pie/bar Chart declaration -----------------------------------//
   getPieChart() {
     this.piechartOptions = {
@@ -558,7 +546,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       stroke: {
         colors: ["transparent"],
-        width: 10
+        width: 0
       },
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
@@ -778,7 +766,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
 
 
-    // ----------------------------- map click event --------------------------------------------------------//
+    // ----------------------------- Map click event --------------------------------------------------------//
     $(document).on('click', '#mapsvg  path', (e: any) => {
       let getClickedId = e.currentTarget;
       let talId = $(getClickedId).attr('data-name').split(" ")[0];
@@ -787,7 +775,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.svgMapAddOrRemoveClass();
         this.initialApiCall('mapClick');
       }
-
     })
   }
 
@@ -808,7 +795,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   chnageClasswiseSubjectDrp() {
     this.getRefstandardTableArrayCount();
-    this.getchartDataByCLass();
+    // this.getchartDataByCLass();
   }
 
   getSubjectDropForClass() {
@@ -852,14 +839,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.totalStudentSurveyDataByCLass = res.responseData.responseData1;
-          this.subjectArrayByClass = res.responseData.responseData2;
           this.totalStudentSurveyDataByCLass.map((x: any) => {
             x.status = false;
             x.ischeckboxShow = true;
           }); // for standard row 
           this.totalStudentSurveyDataByCLass[0].ischeckboxShow = false; // for uncheck total radio btn
-          this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex].status = true; // for check selected button 
-          this.checkDataByClass(1, this.totalStudentSurveyDataByCLass[1]);
+          // this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex].status = true; // for check selected button 
+          this.checkDataByClass(this.selectedGroupIdindex, this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex]);
         }
         else {
           this.totalStudentSurveyDataByCLass = [];
@@ -911,7 +897,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkDataByClass(index: number, obj: any) {
-    console.log("calling....");
+    console.log("calling.... radio btn click", index);
     
     this.selectedObjByClass = obj;    
     // this.totalStudentSurveyDataByCLass.map((x: any) => {
@@ -919,9 +905,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // })
     this.selectedGroupIdindex = index;
     this.totalStudentSurveyDataByCLass[index].status = true;
-    this.getSubject(obj?.groupId);
     this.selectedSurveyData = this.selectedObjByClass?.assessmentCount + '/' + this.selectedObjByClass?.studentCount;
-    this.subjectforBarByCLass.value == 1 ? this.getchartDataByCLass() : '';
+    // this.subjectforBarByCLass.value == 1 ? this.getchartDataByCLass() : '';
+    this.getchartDataByCLass();
+
   }
 
   getchartDataByCLass() {
@@ -1048,6 +1035,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         categories: categoryData,
         parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
       },
+      
 
       grid: {
         show: false,      // you can either change hear to disable all grids
@@ -1226,7 +1214,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       stroke: {
         colors: ["transparent"],
-        width: 10
+        width: 5
       },
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {          

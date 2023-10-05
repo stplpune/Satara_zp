@@ -302,7 +302,7 @@
                                                                     <input class="form-check-input" type="radio"
                                                                         id="header.label" name="std"
                                                                         value="header.status"
-                                                                        (change)="checkDataByClass(i, header )"
+                                                                        (change)="checkDataByClass(i, header)"
                                                                         [checked]="header.status">
                                                                     <label class="form-check-label"
                                                                         for="flexCheckDefault">
@@ -406,7 +406,7 @@
                             [xaxis]="barchartOptionsByClass?.xaxis" [fill]="barchartOptionsByClass?.fill"
                             [grid]="barchartOptionsByClass.grid" [legend]="barchartOptionsByClass.legend"
                             [colors]="barchartOptionsByClass.colors" [title]="barchartOptionsByClass.title"
-                            [tooltip]="barchartOptionsByClass.tooltip"></apx-chart>
+                            [tooltip]="barchartOptionsByClass.tooltip"  [stroke]="barchartOptionsByClass.stroke"></apx-chart>
                     </mat-card-content>
 
                 </mat-card>

@@ -282,7 +282,8 @@ export class StoreMasterComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);   
-          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
+          // this.filterForm?.value.talukaId ? this.getAllCenter() : '';
+          this.loginData?.talukaId ? (this.f['talukaId'].setValue(this.loginData?.talukaId),this.getAllCenter()) : '' 
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -301,7 +302,8 @@ export class StoreMasterComponent {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);    
             // this.filterForm.controls['centerId'].setValue(0); 
-            this.filterForm?.value.centerId ? this.getVillage():'';
+            // this.filterForm?.value.centerId ? this.getVillage():'';
+            this.loginData?.centerId ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillage()):''
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -323,6 +325,7 @@ export class StoreMasterComponent {
             this.villageArr.push({ "id": 0, "village": "All village", "m_Village": "सर्व गाव" }, ...res.responseData);     
             // this.filterForm.controls['villageId'].setValue(0); 
             this.filterForm?.value.villageId ? this.getAllSchoolsByCenterId():'';
+            
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];

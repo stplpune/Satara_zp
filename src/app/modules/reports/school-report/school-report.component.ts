@@ -98,7 +98,6 @@ export class SchoolReportComponent {
     this.$districts = this.masterService.getAlllDistrict();
     this.f['districtId'].setValue(1);
     this.getTaluka();
-
   }
 
   getTaluka(){
@@ -117,7 +116,6 @@ export class SchoolReportComponent {
       },
       error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
-
   }
 
   getAllCenter() {

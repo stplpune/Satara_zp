@@ -32,6 +32,7 @@ export class AddCctvLocationComponent {
   editCctvObj: any;
   editObj: any;
   currentDate = new Date();
+  public loginData: any;
   get cf() { return this.cameraDetailsForm.controls };
 
   constructor(public webService: WebStorageService,
@@ -46,7 +47,12 @@ export class AddCctvLocationComponent {
     private webStorageS: WebStorageService,
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<AddCctvLocationComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+      this.loginData = this.webService.getLoggedInLocalstorageData();
+      console.log("this.loginData", this.loginData);
+      
+     }
 
   ngOnInit() {
     this.data ? (this.editFlag = true, this.onEdit(this.data)) : this.editFlag = false;
@@ -104,7 +110,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;
-          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getAllCenter()) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getAllCenter()) : this.loginData?.talukaId ? (this.cctvLocationForm.controls['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter()):'';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -122,7 +128,7 @@ export class AddCctvLocationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr = res.responseData;
-            this.editObj && this.editFlag ? (this.cctvLocationForm.controls['centerId'].setValue(this.editObj?.centerId), this.getVillage()) : '';
+            this.editObj && this.editFlag ? (this.cctvLocationForm.controls['centerId'].setValue(this.editObj?.centerId), this.getVillage()) : this.loginData?.centerId ? (this.cctvLocationForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -140,7 +146,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
-          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['villageId'].setValue(this.editObj?.villageId), this.getAllSchoolsByCenterId()) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['villageId'].setValue(this.editObj?.villageId), this.getAllSchoolsByCenterId()) : this.loginData?.villageId ? (this.cctvLocationForm.controls['villageId'].setValue(this.loginData.villageId),this.getAllSchoolsByCenterId()):'';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.villageArr = [];
@@ -159,7 +165,7 @@ export class AddCctvLocationComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr = res.responseData;
-          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['schoolId'].setValue(this.editObj?.schoolId)) : '';
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['schoolId'].setValue(this.editObj?.schoolId)) : this.loginData?.schoolId ? this.cctvLocationForm.controls['schoolId'].setValue(this.loginData?.schoolId):'';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

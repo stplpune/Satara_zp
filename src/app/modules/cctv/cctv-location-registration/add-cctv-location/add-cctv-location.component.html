@@ -8,7 +8,7 @@
 </div>
 <form [formGroup]="cctvLocationForm" (ngSubmit)="onSubmit()">
     <mat-dialog-content class="card-body card-height-sm scrollbar">
-        <div class="row gx-2 gy-0">
+        <div class="row gx-3">
             <!-- 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100">
@@ -78,9 +78,10 @@
                 </mat-form-field>
             </div>
         </div>
+
         <mat-card-subtitle class="mb-3 fw-bold">{{'Labels.cctvdetails'| translate}}</mat-card-subtitle>
         <form [formGroup]="cameraDetailsForm">
-            <div class="row gx-2 gy-0 mb-3">
+            <div class="row gx-3 mb-3">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.CCTVName'| translate}}</mat-label>
@@ -189,7 +190,6 @@
                 </div>
             </div>
         </div>
-
     </mat-dialog-content>
     <mat-dialog-actions align="end" class="card-footer">
         <div class="d-flex w-100 align-items-center justify-content-end">

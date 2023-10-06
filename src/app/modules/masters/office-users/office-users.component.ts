@@ -154,8 +154,7 @@ export class OfficeUsersComponent implements OnInit {
 
   addUpdateOffice(obj?: any) {
     const dialogRef = this.dialog.open(AddUpdateOfficeUsersComponent, {
-      width: '900px',
-      // height: '300px',
+      width: '600px',
       data: obj,
       disableClose: true,
       autoFocus: false

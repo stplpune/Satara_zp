@@ -69,10 +69,13 @@ export class StoreMasterComponent {
       this.setTableData();
     });
     this.filterFormData();
-    this.getTableData();
-
     this.getTaluka();
     this.getAllCategory();
+    setTimeout(() => {
+      this.getTableData();
+    }, 1000);
+  
+
     
   }
 
@@ -283,7 +286,7 @@ export class StoreMasterComponent {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);   
           // this.filterForm?.value.talukaId ? this.getAllCenter() : '';
-          this.loginData?.talukaId ? (this.f['talukaId'].setValue(this.loginData?.talukaId),this.getAllCenter()) : '' 
+          this.loginData?.talukaId ? (this.f['talukaId'].setValue(this.loginData?.talukaId),this.getAllCenter()) : this.f['talukaId'].setValue(0) 
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -303,7 +306,7 @@ export class StoreMasterComponent {
             this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);    
             // this.filterForm.controls['centerId'].setValue(0); 
             // this.filterForm?.value.centerId ? this.getVillage():'';
-            this.loginData?.centerId ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillage()):''
+            this.loginData?.centerId ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillage()) : this.f['centerId'].setValue(0)
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -325,7 +328,7 @@ export class StoreMasterComponent {
             this.villageArr.push({ "id": 0, "village": "All village", "m_Village": "सर्व गाव" }, ...res.responseData);     
             // this.filterForm.controls['villageId'].setValue(0); 
             // this.filterForm?.value.villageId ? this.getAllSchoolsByCenterId():'';
-            this.loginData?.villageId ? (this.f['villageId'].setValue(this.loginData?.villageId),this.getAllSchoolsByCenterId()) :''
+            this.loginData?.villageId ? (this.f['villageId'].setValue(this.loginData?.villageId),this.getAllSchoolsByCenterId()) : this.f['villageId'].setValue(0)
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -345,7 +348,7 @@ export class StoreMasterComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);   
-          this.loginData?.schoolId ? this.f['schoolId'].setValue(this.loginData?.schoolId):''
+          this.loginData?.schoolId ? this.f['schoolId'].setValue(this.loginData?.schoolId):this.f['schoolId'].setValue(0)
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

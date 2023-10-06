@@ -1315,7 +1315,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   navigateToReport(){
     if(this.dashboardCountData[0]?.assessmentSchoolsCount){
     let filterObj = this.filterForm.value;
-    let id:any = filterObj.acYearId+'.'+filterObj.centerId+'.'+filterObj.schoolId+'.'+filterObj.talukaId;
+    let id:any = filterObj.acYearId+'.'+filterObj.centerId+'.'+filterObj.schoolId+'.'+filterObj.talukaId+'.'+filterObj.villageId;
     let formdata:any = this.encDec.encrypt(`${id}`);
      this.router.navigate(['/school-report'], {
        queryParams: { id: formdata },

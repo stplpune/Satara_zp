@@ -42,7 +42,7 @@ export class SchoolReportComponent {
   resultDownloadArr = new Array();
   dashBordObj:any;
   dashBordFilterFlag!:boolean;
-
+  loginData = this.webService.getLoggedInLocalstorageData();
   maxDate = new Date();
   constructor(private fb: FormBuilder,
     private masterService: MasterService,
@@ -73,7 +73,9 @@ export class SchoolReportComponent {
     this.getExamType();
     // this.geAssessmentType();
     this.getAcademicYears();
-    this.searchAssessMent();
+    setTimeout(() => {
+      this.searchAssessMent();
+    }, 1000);
   }
 
   schoofilterData(){
@@ -108,7 +110,7 @@ export class SchoolReportComponent {
           this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);
           // this.schoolReportForm.controls['talukaId'].setValue(0);
           let talukaObj = this.talukaArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[3]) });         
-          this.dashBordFilterFlag ? (this.f['talukaId'].setValue(talukaObj[0].id),this.getAllCenter()):this.f['talukaId'].setValue(0);
+          this.dashBordFilterFlag ? (this.f['talukaId'].setValue(talukaObj[0].id),this.getAllCenter()): this.loginData?.talukaId ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter()) : this.f['talukaId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -125,9 +127,8 @@ export class SchoolReportComponent {
       this.masterService.getAllCenter('', talukaid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);
-            let centerObj = this.centerArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[1]) }); 
-            this.dashBordFilterFlag ? (this.f['centerId'].setValue(centerObj[0].id),this.getAllSchoolsByCenterId()):this.f['centerId'].setValue(0);
+            this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);           
+            this.dashBordFilterFlag ? (this.f['centerId'].setValue(Number(this.dashBordObj[1])),this.getVillageDrop()):this.loginData?.centerId ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDrop()) : this.f['centerId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -147,7 +148,9 @@ export class SchoolReportComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.f['villageId'].setValue(0);
+            this.dashBordFilterFlag ? (this.f['villageId'].setValue(Number(this.dashBordObj[4])),this.getAllSchoolsByCenterId()):this.loginData?.villageId ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getAllSchoolsByCenterId()) : this.f['villageId'].setValue(0);
+
+            // this.f['villageId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -168,8 +171,10 @@ export class SchoolReportComponent {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);
           // this.schoolReportForm.controls['schoolId'].setValue(0);
-          let schoolObj = this.schoolArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[2]) });
-          this.dashBordFilterFlag ? this.f['schoolId'].setValue(schoolObj[0].id):this.f['schoolId'].setValue(0);
+          // let schoolObj = this.schoolArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[2]) });
+          this.dashBordFilterFlag ? (this.f['schoolId'].setValue(Number(this.dashBordObj[2]))):this.loginData?.schoolId ? (this.f['schoolId'].setValue(this.loginData?.schoolId)) : this.f['schoolId'].setValue(0);
+
+          // this.dashBordFilterFlag ? this.f['schoolId'].setValue(schoolObj[0].id):this.f['schoolId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

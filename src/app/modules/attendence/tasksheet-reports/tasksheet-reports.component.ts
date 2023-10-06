@@ -63,8 +63,10 @@ export class TasksheetReportsComponent {
   isWriteRight!: boolean;
   loginData :any;
   get f() { return this.filterForm.controls };
-  displayedheadersEnglish = ['Sr. No.', 'Teacher ID','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Manual Att.', 'Submitted Att', 'Manual Att. Approved', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक आयडी', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा सुट्टी','मॅन्युअल उपस्थिती','सादर केलेली उपस्थिती','मॅन्युअल उपस्थिती मंजूर', 'कृती'];
+  // displayedheadersEnglish = ['Sr. No.', 'Teacher ID','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days','Total Holiday','Total Week Offs', 'Manual Att.', 'Submitted Att', 'Manual Att. Approved', 'Action'];
+  // displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक आयडी', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस','एकूण सुट्टी','एकूण आठवडा सुट्टी','मॅन्युअल उपस्थिती','सादर केलेली उपस्थिती','मॅन्युअल उपस्थिती मंजूर', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Teacher ID','Teacher Name', 'Mobile No', 'Present Days', 'Absent Days'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'शिक्षक आयडी', 'शिक्षकाचे नाव', 'मोबाईल क्र', 'उपस्थित दिवस', 'अनुपस्थित दिवस'];
 
   constructor(private router: Router,
     private apiService: ApiService,
@@ -157,14 +159,15 @@ export class TasksheetReportsComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved'];
-    this.displayedColumns = ['srNo', 'teacherCode', 'teacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs', 'isManualAtt', 'isSubmitted', 'isApproved'];
+    // let displayedColumnsReadMode = ['srNo', 'teacherCode',this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays','totalHolidays','totalWeekOffs','isManualAtt', 'isSubmitted', 'isApproved'];
+    this.displayedColumns = ['srNo', 'teacherCode', this.langTypeName == 'English'? 'teacherName': 'm_TeacherName', 'mobileNo', 'totalPresentDays', 'totalAbsentDays'];
 
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
       date: '',
-      displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
+      // displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
+      displayedColumns: this.displayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,

@@ -324,8 +324,8 @@ export class StoreMasterComponent {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All village", "m_Village": "सर्व गाव" }, ...res.responseData);     
             // this.filterForm.controls['villageId'].setValue(0); 
-            this.filterForm?.value.villageId ? this.getAllSchoolsByCenterId():'';
-            
+            // this.filterForm?.value.villageId ? this.getAllSchoolsByCenterId():'';
+            this.loginData?.villageId ? (this.f['villageId'].setValue(this.loginData?.villageId),this.getAllSchoolsByCenterId()) :''
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -345,7 +345,7 @@ export class StoreMasterComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);   
-          
+          this.loginData?.schoolId ? this.f['schoolId'].setValue(this.loginData?.schoolId):''
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

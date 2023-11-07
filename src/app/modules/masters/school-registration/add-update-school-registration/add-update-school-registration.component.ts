@@ -18,6 +18,7 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
 })
 export class AddUpdateSchoolRegistrationComponent {
 
+  stateArr = new Array();
   districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
@@ -68,7 +69,7 @@ export class AddUpdateSchoolRegistrationComponent {
       (this.editObj = this.data?.obj, this.isKendra = this.data?.obj.isKendraSchool)
       this.onEdit();
     } else {
-      this.getDistrict();
+      this.getState();
       this.getSchoolType();
       this.getLowestGroupClass();
     }
@@ -86,7 +87,7 @@ export class AddUpdateSchoolRegistrationComponent {
       "schoolCode": [this.data?.obj ? this.data?.obj.schoolCode : '', [Validators.required]],
       "schoolName": [this.data?.obj ? this.data?.obj.schoolName : '', [Validators.required, Validators.pattern('^[.,\n() a-zA-Z0-9]+$')]],
       "m_SchoolName": [this.data?.obj ? this.data?.obj.m_SchoolName : '', [Validators.required, Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
-      "stateId": 0,
+      "stateId": [''],
       "districtId": ['', Validators.required],
       "talukaId": ['', Validators.required],
       "villageId": ['', Validators.required],
@@ -153,11 +154,18 @@ export class AddUpdateSchoolRegistrationComponent {
   }
 
   //#region ---------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
+  getState(){
+    this.stateArr = [
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+    this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+  }
+  
   getDistrict() {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
-        this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : this.getTaluka();
+        this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : '';
       }
     });
   }
@@ -438,9 +446,22 @@ export class AddUpdateSchoolRegistrationComponent {
   //#region ------------------------------------------------- Clear dropdown on change start here --------------------------------------------//
   clearDropdown(dropdown: string) {
     this.editFlag = false;
-    if (dropdown == 'Taluka') {
+    if (dropdown == 'State') {
+      this.f['districtId'].setValue('');
+      this.f['talukaId'].setValue('');
+      this.f['centerId'].setValue('');
+      this.f['villageId'].setValue('');
+      this.talukaArr = [];
       this.centerArr = [];
-      // this.f['centerId'].setValue(null);
+      this.villageArr = [];
+    }else if (dropdown == 'District') {
+      this.f['talukaId'].setValue('');
+      this.f['centerId'].setValue('');
+      this.f['villageId'].setValue('');
+      this.centerArr = [];
+      this.villageArr = [];
+    }else if (dropdown == 'Taluka') {
+      this.f['centerId'].setValue('');
       this.f['villageId'].setValue('');
       this.villageArr = [];
     }

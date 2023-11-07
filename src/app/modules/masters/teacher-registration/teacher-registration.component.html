@@ -54,6 +54,16 @@
         <div class="row gx-2 w-100">
             <div class="col-sm-auto">
                 <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.district' | translate}}</mat-label>
+                    <mat-select [formControl]="districtId" (selectionChange)="onChangeFilter('district'); getAllTaluka();">
+                        <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                            {{webStorageS.languageFlag =='mr-IN' ? district.m_District: district.district}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-auto">
+                <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                     <mat-select [formControl]="talukaId" (selectionChange)="onChangeFilter('taluka'); getCluster();">
                         <mat-option *ngFor="let talukaObj of talukaArray" [value]="talukaObj.id">

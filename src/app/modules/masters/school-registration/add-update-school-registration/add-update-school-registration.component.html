@@ -15,7 +15,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.district' | translate}}</mat-label>
-                        <mat-select formControlName="districtId" [disabled]="schoolRegForm.value.districtId == 1">
+                        <mat-select formControlName="districtId">    
                             <mat-option *ngFor="let district of districtArr" [value]="district.id">
                                 {{webStorageS.getLangauge() == 'EN' ?
                                 district.district : district.m_District}}

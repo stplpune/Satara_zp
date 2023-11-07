@@ -24,7 +24,7 @@ export class SchoolRegistrationComponent implements OnInit {
   pageNumber: number = 1;
   tableDataArray = new Array();
   // searchContent = new FormControl('');
-  districtId = new FormControl(null);
+  districtId = new FormControl(0);
   talukaId = new FormControl(0);
   centerId = new FormControl(0);
   villageId = new FormControl(0);
@@ -230,8 +230,8 @@ export class SchoolRegistrationComponent implements OnInit {
     this.masterService.getAllDistrict('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.districtArr = res.responseData;
-          this.districtId.setValue(this.districtArr[0].id);
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData) // this.districtArr = res.responseData;
+          // this.districtId.setValue(this.districtArr[0].id);
           this.getTaluka();
         }
         else {
@@ -243,6 +243,7 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   getTaluka() {
+    // let districtId = this.districtId.value;
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -416,10 +417,12 @@ export class SchoolRegistrationComponent implements OnInit {
 
   onClear() {
     if (this.districtId.value || this.talukaId.value || this.villageId.value) {
+      this.districtId.setValue(0);
       this.talukaId.setValue(0);
       this.centerId.setValue(0);
       this.villageId.setValue(0);
       this.searchContent.setValue('');
+      // this.talukaArr = [];
       this.villageArr = [];
       this.centerArr = [];
       this.getTableData();

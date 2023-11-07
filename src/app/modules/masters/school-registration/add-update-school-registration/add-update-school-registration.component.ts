@@ -156,13 +156,14 @@ export class AddUpdateSchoolRegistrationComponent {
   getDistrict() {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
-        res.statusCode == "200" ? (this.districtArr = res.responseData, this.schoolRegForm.controls['districtId'].setValue(1)) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
+        res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
         this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : this.getTaluka();
       }
     });
   }
 
   getTaluka() {
+    // let districtId = this.schoolRegForm.value.districtId;
     this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);

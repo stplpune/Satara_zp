@@ -32,6 +32,7 @@ export class StudentRegistrationComponent {
   studentData = new Array();
   languageFlag!: string;
   tableDatasize!: number;
+  districtArr: any = [];
   talukaArr: any = [];
   centerArr: any = [];
   villageArr: any = [];
@@ -63,7 +64,7 @@ export class StudentRegistrationComponent {
   ngOnInit() {
     this.languageFlag = this.webService.languageFlag;
     this.filterFormData();
-    this.getTaluka();
+    this.getDistrict();
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
       this.setTableData();
@@ -81,6 +82,7 @@ export class StudentRegistrationComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
+      districtId: [0],
       talukaId: [''],
       centerId: [''],
       villageId: [''],
@@ -272,10 +274,11 @@ export class StudentRegistrationComponent {
 
   clearForm() {
     this.filterForm.reset();
+    this.talukaArr = [];
     this.centerArr = [];
     this.schoolArr = [];
     this.villageArr = [];
-    this.getTaluka();
+    this.filterFormData();
     this.getTableData();
   }
 
@@ -369,14 +372,27 @@ export class StudentRegistrationComponent {
   //   this.getTableData('reportFlag');
   // }
 
+  getDistrict() {
+    this.masterService.getAllDistrict('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+      error: ((err: any) => { this.commonMethods.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusText, 1); })
+    });
+  }
+
   getTaluka() {
     this.talukaArr = [];
+    // let districtId = this.filterForm.value.districtId;
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.filterForm.controls['talukaId'].setValue(0);
-          // this.talukaArr = res.responseData;
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -442,12 +458,27 @@ export class StudentRegistrationComponent {
     });
   }
 
-  clearDropdown(name?: any) {
-    this.filterForm.controls['textSearch'].setValue('');
-    if (name == 'talukaId') {
+  clearDropdown(flag?: any) {
+    if (flag == 'districtId') {
+      this.filterForm.controls['talukaId'].setValue('');
       this.filterForm.controls['centerId'].setValue('');
+      this.filterForm.controls['villageId'].setValue('');
       this.filterForm.controls['schoolId'].setValue('');
-    } else if (name == 'centerId') {
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if (flag == 'talukaId') {
+      this.filterForm.controls['centerId'].setValue('');
+      this.filterForm.controls['villageId'].setValue('');
+      this.filterForm.controls['schoolId'].setValue('');
+      this.villageArr = [];
+      this.schoolArr = [];
+    } else if (flag == 'centerId') {
+      this.filterForm.controls['villageId'].setValue('');
+      this.filterForm.controls['schoolId'].setValue('');
+      this.schoolArr = [];
+    }
+    else{
       this.filterForm.controls['schoolId'].setValue('');
     }
   }

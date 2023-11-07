@@ -52,7 +52,7 @@
     </mat-card-header>
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <div class="row gx-2 w-100">
-            <div class="col-sm-auto">
+            <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.district' | translate}}</mat-label>
                     <mat-select [formControl]="districtId" (selectionChange)="onChangeFilter('district'); getAllTaluka();">
@@ -62,7 +62,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-auto">
+            <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                     <mat-select [formControl]="talukaId" (selectionChange)="onChangeFilter('taluka'); getCluster();">
@@ -95,7 +95,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-sm">
+            <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.searchbyNameContactEmailTeacher'| translate}}</mat-label>
                     <input matInput [formControl]="searchContent" (keypress)="validation.noFirstSpaceAllow($event)"

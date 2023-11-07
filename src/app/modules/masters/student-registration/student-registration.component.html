@@ -55,8 +55,18 @@
       <div class="row mb-0 w-100 gx-2">
         <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.state'| translate}}</mat-label>
+            <mat-select formControlName="stateId" (selectionChange)="clearDropdown('stateId'); getDistrict();">
+              <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                {{languageFlag == 'English' ? state.state : state.m_State}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.district'| translate}}</mat-label>
-            <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId');getTaluka();">
+            <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId'); getTaluka();">
               <mat-option *ngFor="let district of districtArr" [value]="district.id">
                 {{languageFlag == 'English' ? district.district : district.m_District}}
               </mat-option>

@@ -232,7 +232,6 @@ export class SchoolRegistrationComponent implements OnInit {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData) // this.districtArr = res.responseData;
           // this.districtId.setValue(this.districtArr[0].id);
-          this.getTaluka();
         }
         else {
           this.districtArr = [];
@@ -422,7 +421,7 @@ export class SchoolRegistrationComponent implements OnInit {
       this.centerId.setValue(0);
       this.villageId.setValue(0);
       this.searchContent.setValue('');
-      // this.talukaArr = [];
+      this.talukaArr = [];
       this.villageArr = [];
       this.centerArr = [];
       this.getTableData();
@@ -467,7 +466,14 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   clearDropdown(dropdown: string) {
-    if (dropdown == 'Taluka') {
+    if (dropdown == 'District') {
+      this.talukaId.setValue(0);
+      this.villageId.setValue(0);
+      this.centerId.setValue(0);
+      this.villageArr = [];
+      this.centerArr = [];
+    }
+    else if (dropdown == 'Taluka') {
       this.villageId.setValue(0);
       this.centerId.setValue(0);
       this.villageArr = [];

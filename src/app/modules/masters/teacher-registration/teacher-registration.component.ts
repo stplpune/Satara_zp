@@ -164,7 +164,7 @@ export class TeacherRegistrationComponent implements OnInit {
     this.masterService.getAllDistrict('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData) // this.districtArr = res.responseData;
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
           // this.districtId.setValue(this.districtArr[0].id);
         }
         else {

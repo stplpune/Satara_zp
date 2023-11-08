@@ -29,6 +29,28 @@
   <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
     <form [formGroup]="filterForm">
       <div class="row gx-2">
+
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.state'| translate}}</mat-label>
+            <mat-select formControlName="stateId" (selectionChange)="onChangeDropD('state'); getDistrict();">
+              <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.district'| translate}}</mat-label>
+            <mat-select formControlName="districtId" (selectionChange)="onChangeDropD('district'); getTaluka();">
+              <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                {{webStorageS.getLangauge() == 'EN'? district.district : district.m_District}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
         <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.taluka'| translate}}</mat-label>
@@ -93,7 +115,7 @@
             <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
               translate}}</button>
             <button mat-flat-button type="button" class="btn-second ms-2"
-              (click)="formField();getTableData();getTaluka()">{{'Labels.clear'|
+              (click)="onClear()">{{'Labels.clear'|
               translate}}</button>
           </div>
         </div>

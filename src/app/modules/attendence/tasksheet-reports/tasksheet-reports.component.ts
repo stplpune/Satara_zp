@@ -47,6 +47,8 @@ export const MY_FORMATS = {
 export class TasksheetReportsComponent {
   viewStatus = 'Table';
   filterForm !: FormGroup;
+  districtArr = new Array();
+  stateArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -89,7 +91,7 @@ export class TasksheetReportsComponent {
       this.langTypeName = lang;
       this.languageChange();
     });
-    this.getTaluka();
+    this.getState();
     this.formField();
     this.getTableData();    
   }
@@ -100,6 +102,8 @@ export class TasksheetReportsComponent {
 
   formField() {
     this.filterForm = this.fb.group({
+      stateId: [0],
+      districtId: [0],
       talukaId: [this.loginData?.talukaId  == '' ? 0 :  this.loginData?.talukaId ],
       centerId: [this.loginData?.centerId == '' ? 0 : this.loginData?.centerId],
       villageId: [this.loginData?.villageId == '' ? 0 : this.loginData?.villageId],
@@ -178,6 +182,30 @@ export class TasksheetReportsComponent {
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);
+  }
+
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
+
+  getDistrict() {
+    this.districtArr = [];
+    // let stateId = this.filterForm.value.stateId;
+    this.masterService.getAllDistrict('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+          this.filterForm.controls['districtId'].setValue(0);
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+    });
   }
 
   getTaluka() {
@@ -279,6 +307,24 @@ export class TasksheetReportsComponent {
 
   onChangeDropD(label: string) {
     switch (label) {
+      case 'state':
+        this.f['districtId'].setValue(0);
+        this.f['talukaId'].setValue(0);
+        this.f['centerId'].setValue(0);
+        this.f['villageId'].setValue(0);
+        this.talukaArr = [];
+        this.centerArr = [];
+        this.villageArr = [];
+        this.schoolArr = [];
+        break;
+        case 'district':
+          this.f['talukaId'].setValue(0);
+          this.f['centerId'].setValue(0);
+          this.f['villageId'].setValue(0);
+          this.centerArr = [];
+          this.villageArr = [];
+          this.schoolArr = [];
+          break;
       case 'taluka':
         this.f['centerId'].setValue(0);
         this.f['villageId'].setValue(0);
@@ -367,9 +413,17 @@ export class TasksheetReportsComponent {
       },
       error: ((err: any) => { this.errors.handelError(err) })
     });
-  
+  }
 
-
+  onClear(){
+    this.formField();
+    this.getTableData();
+    this.getTaluka();
+    // this.districtArr = [];
+    this.talukaArr = [];
+    this.centerArr = [];
+    this.villageArr = [];
+    this.schoolArr = [];
   }
   
 

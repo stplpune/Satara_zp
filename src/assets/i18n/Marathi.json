@@ -487,8 +487,10 @@
         "approvalStatus": "मंजुरीची स्थिती",
         "AssessmentSubject":"मूल्यांकन विषय",
         "addAssessmentSubject":"मूल्यांकन विषय जोडा",
+        "updateAssessmentSubject":"अद्ययावत मूल्यांकन विषय",
         "ExamMaster":"परीक्षा मास्टर",
         "addExamMaster":"परीक्षा मास्टर जोडा",
+        "updateExamMaster":"अद्ययावत परीक्षा मास्टर",
         "SubjectMarathi":"विषय (मराठी)"
     }
 }

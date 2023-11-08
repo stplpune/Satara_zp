@@ -383,8 +383,8 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.districtArray = res.responseData;
-          this.teacherRegForm.controls['districtId'].setValue(1)
-          this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : this.getTaluka();
+          // this.teacherRegForm.controls['districtId'].setValue(1);
+          this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : '';
         } else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArray = [];
@@ -523,8 +523,8 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.districtArrayTeacherDeatails = res.responseData;
-          this.td['districtId'].setValue(1)
-          this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : !this.editFlag ? (this.getAllTalukaTeacherDeatails()) : '';
+          // this.td['districtId'].setValue(1);
+          this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : '';
 
         } else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
@@ -810,7 +810,15 @@ export class AddUpdateTeacherRegistrationComponent {
     if (dropdown == 'Taluka') {
       this.f['villageId'].setValue(0);
       this.villageArray = [];
-    } else if (dropdown == 'talukaTeacherDetails') {
+    } else if (dropdown == 'districtTeacherDetails') {
+      this.td['talukaId'].setValue('');
+      this.td['clusterId'].setValue('');
+      this.td['schoolId'].setValue('');
+      this.td['villageId'].setValue('');
+      this.clusterArray = [];
+      this.schoolArray = [];
+      this.teacherDetailsVillageArray =[]
+    }else if (dropdown == 'talukaTeacherDetails') {
       this.td['clusterId'].setValue('');
       this.td['schoolId'].setValue('');
       this.td['villageId'].setValue('');

@@ -20,11 +20,12 @@ import { AddCastComponent } from '../../add-cast/add-cast.component';
   styleUrls: ['./add-update-student.component.scss']
 })
 export class AddUpdateStudentComponent {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','Action'];
- 
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Action'];
+
   stuRegistrationForm!: FormGroup;
   addGardianForm!: FormGroup
   isCheck = new FormControl();
+  stateArr = new Array();
   districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
@@ -50,16 +51,16 @@ export class AddUpdateStudentComponent {
   imgFlag: boolean = false;
   aadhaarFlag: boolean = false;
   readOnlyFlag: boolean = false;
-  loginData :any;
-  relationArr= new Array();
-  gaurdianModel!:FormArray
+  loginData: any;
+  relationArr = new Array();
+  gaurdianModel!: FormArray
   data: any;
-  studentId!:number;
+  studentId!: number;
   gardianModelArr = new Array();
   // headerFlag:boolean = false;
-  checkDisable:boolean = false
-  searchMobieNoObj:any;
-  get f(){ return this.addGardianForm.controls };
+  checkDisable: boolean = false
+  searchMobieNoObj: any;
+  get f() { return this.addGardianForm.controls };
 
   @ViewChild('uploadImage') imageFile!: ElementRef;
   @ViewChild('uploadAadhar') aadharFile!: ElementRef;
@@ -71,23 +72,23 @@ export class AddUpdateStudentComponent {
     private fileUpl: FileUploadService, private apiService: ApiService,
     private webService: WebStorageService, private datePipe: DatePipe,
     private commonMethods: CommonMethodsService, public validators: ValidationService, private ngxSpinner: NgxSpinnerService,
-    private activatedRoute :ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private encDec: AesencryptDecryptService,
-    private router : Router
-    ) { 
-     this.loginData = this.webService.getLoggedInLocalstorageData();   
-     let studentObj: any;    
-     this.activatedRoute.queryParams.subscribe((queryParams: any) => { studentObj = queryParams['id'] });
-     this.studentId = +this.encDec.decrypt(`${decodeURIComponent(studentObj)}`);
-    }
+    private router: Router
+  ) {
+    this.loginData = this.webService.getLoggedInLocalstorageData();
+    let studentObj: any;
+    this.activatedRoute.queryParams.subscribe((queryParams: any) => { studentObj = queryParams['id'] });
+    this.studentId = +this.encDec.decrypt(`${decodeURIComponent(studentObj)}`);
+  }
 
-    getGardianList(): FormArray {
-      return this.stuRegistrationForm.get('gaurdianModel') as FormArray;
-    }
+  getGardianList(): FormArray {
+    return this.stuRegistrationForm.get('gaurdianModel') as FormArray;
+  }
 
-    get formArrayControls() {
-      return (this.stuRegistrationForm.get("gaurdianModel") as FormArray).controls;
-    }
+  get formArrayControls() {
+    return (this.stuRegistrationForm.get("gaurdianModel") as FormArray).controls;
+  }
 
   ngOnInit() {
     this.webService.langNameOnChange.subscribe(lang => {
@@ -97,18 +98,19 @@ export class AddUpdateStudentComponent {
     this.formData();
     this.gardianFormData()
     // this.data ? (this.editObj = JSON.parse(this.data), this.patchValue()) : this.allDropdownMethods();
-    this.studentId ? ( this.onEdit(this.studentId)) : this.allDropdownMethods();
+    this.studentId ? (this.onEdit(this.studentId)) : this.allDropdownMethods();
   }
-  
+
   allDropdownMethods() {
-    this.getDistrict(),
-    this.getGender()
+    this.getState(),
+      this.getGender()
     this.getReligion();
     this.getRelation();
   }
 
   formData() {
     this.stuRegistrationForm = this.fb.group({
+      stateId: [''],
       districtId: [''],
       talukaId: ['', Validators.required],
       centerId: ['', Validators.required],
@@ -125,109 +127,106 @@ export class AddUpdateStudentComponent {
       gender: ['', Validators.required],
       religionId: ['', Validators.required],
       casteId: ['', Validators.required],
-      casteCategoryId:['', Validators.required],
+      casteCategoryId: ['', Validators.required],
       saralId: ['', [Validators.maxLength(19), Validators.minLength(19)]],
-      mobileNo: ['',  [Validators.maxLength(10), Validators.minLength(10), Validators.pattern(this.validators.mobile_No)]],
+      mobileNo: ['', [Validators.maxLength(10), Validators.minLength(10), Validators.pattern(this.validators.mobile_No)]],
       fatherFullName: [''],
       // m_FatherFullName: ['', Validators.required],
       motherName: [''],
       // m_MotherName: ['', Validators.required],
       aadharNo: ['', [Validators.pattern(this.validators.aadhar_card)]],
-      gaurdianModel:[]  
- 
-    
+      gaurdianModel: []
+
+
       // physicallyDisabled: ['', Validators.required]
     })
   }
 
   get fc() { return this.stuRegistrationForm.controls }
 
-  gardianFormData(){
+  gardianFormData() {
     this.addGardianForm = this.fb.group({
       createdBy: 0,
       modifiedBy: 0,
       createdDate: new Date(),
       modifiedDate: new Date(),
       isDeleted: false,
-      id: 0,      
-      name: ['',[Validators.pattern(this.validators.name)]],
-      m_Name: ['',[Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],     
-      mobileNo: ['',[ Validators.pattern(this.validators.mobile_No)]],
-      relationId: ['',[]],
+      id: 0,
+      name: ['', [Validators.pattern(this.validators.name)]],
+      m_Name: ['', [Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
+      mobileNo: ['', [Validators.pattern(this.validators.mobile_No)]],
+      relationId: ['', []],
       relation: [''],
-      isHead: false ,
+      isHead: false,
       headerId: 0,
       timestamp: new Date(),
-      localId: 0   
+      localId: 0
     })
   }
-  get gf(){
+  get gf() {
     return this.addGardianForm.controls;
   }
 
   //#region ---------------------------- Dropdown start here -----------------------------------------------
 
-  addGardian(){
+  addGardian() {
     debugger;
-    this.relationArr.map((x:any)=>{
-      if(x.id == this.addGardianForm.value.relationId){
+    this.relationArr.map((x: any) => {
+      if (x.id == this.addGardianForm.value.relationId) {
         this.f['relation'].setValue(x.relation);
       }
     });
 
-    let formvalue = this.addGardianForm.value;   
+    let formvalue = this.addGardianForm.value;
     // if(this.updategardianFlag == true){
     //   this.gardianModelArr[this.updategardianIndex] = formvalue;
     //   this.updategardianFlag = false;
     // }
-    
-    if(this.f['name'].value == '' && this.f['m_Name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '' && this.gardianModelArr.length == 0){
+
+    if (this.f['name'].value == '' && this.f['m_Name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '' && this.gardianModelArr.length == 0) {
       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Required at least one Gardian Details' : 'किमान एक गार्डियन तपशील आवश्यक आहे', 1);
       return;
     }
-    else if(this.gardianModelArr.length == 0){
+    else if (this.gardianModelArr.length == 0) {
       this.gardianModelArr.push(formvalue);
-    
+
       // this.gardianFormData()
-      
-    }else{
-      if(this.f['name'].value == '' && this.f['m_Name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == ''){
+
+    } else {
+      if (this.f['name'].value == '' && this.f['m_Name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '') {
         return
       }
-      else{
-        this.gardianModelArr.forEach((res:any)=>{
-          if(res.name == formvalue.name){
+      else {
+        this.gardianModelArr.forEach((res: any) => {
+          if (res.name == formvalue.name) {
             this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
             return;
-          }else if(res.m_Name == formvalue.m_Name){
+          } else if (res.m_Name == formvalue.m_Name) {
             this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name (Marathi) Already Exist' : 'पालकाचे नाव (मराठी) आधीपासून अस्तित्वात आहे', 1);
             return;
           }
-          else if(res.mobileNo == formvalue.mobileNo){
+          else if (res.mobileNo == formvalue.mobileNo) {
             this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
             return;
           }
         })
       }
-    
-    } 
 
-   
-    this.f['name'].setValue('');    
+    }
+
+    this.f['name'].setValue('');
     this.f['mobileNo'].setValue('');
     this.f['relationId'].setValue('');
     this.f['isHead'].setValue(false);
- 
+
     // this.gardianModelArr.forEach((res:any)=>{
     //   if(res.isHead == true){ 
     //     this.checkDisable = true;
     //   }
     // })
- 
+
     // console.log("gardianModelArr",this.gardianModelArr);
   }
-
-
   // newGardianDetails() { 
   //  return this.fb.group({   
   //       createdBy: 0,
@@ -245,10 +244,10 @@ export class AddUpdateStudentComponent {
   //       timestamp: new Date(),
   //       localId: 0        
   //     });  
- 
+
   // }
 
-  
+
   // addGardian() { 
   //   let gardianArr = this.getGardianList().value 
   //   let gardianObj = this.formArrayControls[0]?.get('name')?.value
@@ -267,26 +266,26 @@ export class AddUpdateStudentComponent {
   //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Mobile No. Already Exist' : 'पालकांचा मोबाईल क्रमांक आधीपासून अस्तित्वात आहे', 1);
   //         return;
   //       }
-        
+
   //     })
   //   }
-   
-    
+
+
   //   if (this.getGardianList().invalid) {
   //     this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Fill Guardian Details First' : 'कृपया प्रथम पालकांचे तपशील भरा', 1);
   //     return;
   //   } else {
   //     this.getGardianList().push(this.newGardianDetails());
   //   }
-     
+
   // }
-  addValidations(status: any){
-    if(status){
-      this.gf['name'].setValidators([Validators.required,Validators.pattern(this.validators.name)]);
+  addValidations(status: any) {
+    if (status) {
+      this.gf['name'].setValidators([Validators.required, Validators.pattern(this.validators.name)]);
       this.gf['m_Name'].setValidators([Validators.required]);
-      this.gf['mobileNo'].setValidators([Validators.required,Validators.pattern(this.validators.mobile_No)]);
+      this.gf['mobileNo'].setValidators([Validators.required, Validators.pattern(this.validators.mobile_No)]);
       this.gf['relationId'].setValidators([Validators.required]);
-    }else{
+    } else {
       this.gf['name'].clearValidators();
       this.gf['m_Name'].clearValidators();
       this.gf['mobileNo'].clearValidators();
@@ -298,36 +297,36 @@ export class AddUpdateStudentComponent {
     this.gf['relationId'].updateValueAndValidity();
   }
 
-  addGardianList(){
+  addGardianList() {
     this.addValidations(true);
-    this.relationArr.map((x:any)=>{
-      if(x.id == this.addGardianForm.value.relationId){
+    this.relationArr.map((x: any) => {
+      if (x.id == this.addGardianForm.value.relationId) {
         this.f['relation'].setValue(x.relation);
       }
     });
 
-    let formvalue = this.addGardianForm.value;   
+    let formvalue = this.addGardianForm.value;
     // this.f['name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '' && this.gardianModelArr.length == 0
-    if(this.addGardianForm.invalid){
+    if (this.addGardianForm.invalid) {
       // this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Required at least one Gardian Details' : 'किमान एक गार्डियन तपशील आवश्यक आहे', 1);
       return;
     }
-    else{
-      if(this.f['name'].value == '' && this.f['m_Name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == ''){
+    else {
+      if (this.f['name'].value == '' && this.f['m_Name'].value == '' && this.f['mobileNo'].value == '' && this.f['relation'].value == '') {
         return
       }
       else {
-//         if(!this.gardianModelArr.find((res) => res.name === formvalue.name)) {
-//           this.gardianModelArr.push(formvalue);
-//         }else{
-//           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
-//           return;
-// }
+        //         if(!this.gardianModelArr.find((res) => res.name === formvalue.name)) {
+        //           this.gardianModelArr.push(formvalue);
+        //         }else{
+        //           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
+        //           return;
+        // }
         if (this.gardianModelArr.find((res) => res.name === formvalue.name)) {
           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name Already Exist' : 'पालकाचे नाव आधीपासून अस्तित्वात आहे', 1);
           return;
         }
-        else if(this.gardianModelArr.find((res) => res.m_Name === formvalue.m_Name)){
+        else if (this.gardianModelArr.find((res) => res.m_Name === formvalue.m_Name)) {
           this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Gardian Name (Marathi) Already Exist' : 'पालकाचे नाव (मराठी) आधीपासून अस्तित्वात आहे', 1);
           return;
         } else {
@@ -337,13 +336,12 @@ export class AddUpdateStudentComponent {
           }
           else {
             this.gardianModelArr.push(formvalue);
-            
-    this.addValidations(false);
+
+            this.addValidations(false);
           }
+        }
       }
-    } 
-    
-    } 
+    }
     this.f['name'].setValue('');
     this.f['m_Name'].setValue('');
     this.f['mobileNo'].setValue('');
@@ -353,28 +351,32 @@ export class AddUpdateStudentComponent {
 
 
   deleteGardian(i: any) {
-  
-    if(this.editFlag == true){
+
+    if (this.editFlag == true) {
       this.gardianModelArr[i].isDeleted = true;
       this.gardianModelArr[i].isHead = false;
       this.gardianModelArr[i].id == 0 ? this.gardianModelArr.splice(i, 1) : ''
     }
-    else{    
+    else {
       this.gardianModelArr.splice(i, 1);
     }
-    
   }
 
-  changeCheckBox(event: any, i: any){  
-      if(event.checked == true){
-        this.gardianModelArr.map((res: any)=>{
-          res.isHead = false
-        });
-        this.gardianModelArr[i].isHead = true;
-      
-      }    
-      
-      
+  changeCheckBox(event: any, i: any) {
+    if (event.checked == true) {
+      this.gardianModelArr.map((res: any) => {
+        res.isHead = false
+      });
+      this.gardianModelArr[i].isHead = true;
+
+    }
+  }
+
+  getState(){
+    this.stateArr = [
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+    this.editFlag ? (this.stuRegistrationForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
   }
 
   getDistrict() {
@@ -383,8 +385,8 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.districtArr = res.responseData;
-          this.stuRegistrationForm.controls['districtId'].setValue(1);
-          this.getTaluka();
+          // this.stuRegistrationForm.controls['districtId'].setValue(1);
+          this.editFlag ? (this.stuRegistrationForm.controls['districtId'].setValue(this.editObj.districtId), this.getTaluka()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.districtArr = [];
@@ -396,11 +398,12 @@ export class AddUpdateStudentComponent {
 
   getTaluka() {
     this.talukaArr = [];
+    // let districtId = this.stuRegistrationForm.value.districtId;
     this.masterService.getAllTaluka('').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;
-          this.editFlag ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.editObj.talukaId), this.getAllCenter()) :this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.loginData.talukaId),this.getAllCenter()) : '';
+          this.editFlag ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.editObj.talukaId), this.getAllCenter()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -417,7 +420,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.centerArr = res.responseData;
-          this.editFlag ? (this.stuRegistrationForm.controls['centerId'].setValue(this.editObj.centerId),this.getVillage()) : this.loginData.userTypeId == 4 ?  (this.stuRegistrationForm.controls['centerId'].setValue(this.loginData.centerId),this.getVillage()): '';
+          this.editFlag ? (this.stuRegistrationForm.controls['centerId'].setValue(this.editObj.centerId), this.getVillage()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.centerArr = [];
@@ -434,7 +437,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
-          this.editFlag ? (this.stuRegistrationForm.controls['villageId'].setValue(this.editObj.villageId),this.getAllSchoolsByCenterId()) : this.loginData.userTypeId == 4 ? ( this.stuRegistrationForm.controls['villageId'].setValue(this.loginData.villageId),this.getAllSchoolsByCenterId()):'';
+          this.editFlag ? (this.stuRegistrationForm.controls['villageId'].setValue(this.editObj.villageId), this.getAllSchoolsByCenterId()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['villageId'].setValue(this.loginData.villageId), this.getAllSchoolsByCenterId()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.villageArr = [];
@@ -453,7 +456,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr = res.responseData;
-          this.editFlag ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.editObj.schoolId),this.getStandard()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.loginData.schoolId), this.getStandard()):'';
+          this.editFlag ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.editObj.schoolId), this.getStandard()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.loginData.schoolId), this.getStandard()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -466,7 +469,7 @@ export class AddUpdateStudentComponent {
   getStandard() {
     this.standardArr = [];
     let schoolId = this.stuRegistrationForm.value.schoolId
-    this.masterService.GetStandardBySchool(schoolId,'').subscribe({
+    this.masterService.GetStandardBySchool(schoolId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.standardArr = res.responseData;
@@ -515,11 +518,11 @@ export class AddUpdateStudentComponent {
   getCatogory() {
     this.catogoryArr = [];
     let id = this.stuRegistrationForm.value.religionId;
-    this.masterService.GetAllCasteCategory(id,'').subscribe({
+    this.masterService.GetAllCasteCategory(id, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.catogoryArr = res.responseData;
-          this.editFlag ? (this.stuRegistrationForm.controls['casteCategoryId'].setValue(this.editObj?.casteCategoryId),this.getCaste()) : '';
+          this.editFlag ? (this.stuRegistrationForm.controls['casteCategoryId'].setValue(this.editObj?.casteCategoryId), this.getCaste()) : '';
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.catogoryArr = [];
@@ -532,7 +535,7 @@ export class AddUpdateStudentComponent {
   getCaste() {
     this.casteArr = [];
     let id = this.stuRegistrationForm.value.casteCategoryId;
-    this.masterService.getAllCaste(id,'').subscribe({
+    this.masterService.getAllCaste(id, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.casteArr = res.responseData;
@@ -547,32 +550,32 @@ export class AddUpdateStudentComponent {
   }
 
 
-  getRelation() {   
+  getRelation() {
     this.relationArr = [];
     this.apiService.setHttp('get', 'zp-satara/master/GetAllRelation?flag_lang=', false, false, false, 'baseUrl');
-      this.apiService.getHttp().subscribe({
-        next: (res: any) => {
-          if (res.statusCode == 200) {
-            this.relationArr = res.responseData;
-            this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue( this.searchMobieNoObj?.[0]?.relationId)):'';
-          } else {
-            this.relationArr=[] 
-          }
-        },
-        error: ((err: any) => { this.ngxSpinner.hide(); this.errors.handelError(err.statusCode) })
-      });
-    
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.relationArr = res.responseData;
+          this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue(this.searchMobieNoObj?.[0]?.relationId)) : '';
+        } else {
+          this.relationArr = []
+        }
+      },
+      error: ((err: any) => { this.ngxSpinner.hide(); this.errors.handelError(err.statusCode) })
+    });
+
   }
 
   //#endregion  ---------------------------------- Dropdown End here -----------------------------------------------
 
-  onEdit(studentId:any){
-    this.apiService.setHttp( 'get', 'zp-satara/Student/GetById?Id='+studentId+'&lan=', false, false, false, 'baseUrl');
+  onEdit(studentId: any) {
+    this.apiService.setHttp('get', 'zp-satara/Student/GetById?Id=' + studentId + '&lan=', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {         
+        if (res.statusCode == 200) {
           this.editObj = res.responseData;
-          this. patchValue();
+          this.patchValue();
         } else {
           this.ngxSpinner.hide();
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
@@ -582,7 +585,7 @@ export class AddUpdateStudentComponent {
     });
   }
 
-  patchValue() { 
+  patchValue() {
     this.readOnlyFlag = true;
     this.editFlag = true;
     this.stuRegistrationForm.patchValue({
@@ -618,17 +621,17 @@ export class AddUpdateStudentComponent {
     this.allDropdownMethods();
   }
 
-  
- 
-  
+
+
+
   //#region  ----------------------------------------------- Submit logic Start here ------------------------------------------------
 
   onSubmit() {
     // this.ngxSpinner.show();
-   
+
     let obj = this.stuRegistrationForm.value;
     let dateWithTime = this.datePipe.transform(obj.dob, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
-   let gardianObj = this.gardianModelArr.filter((res:any)=>{return res.isHead == true}) 
+    let gardianObj = this.gardianModelArr.filter((res: any) => { return res.isHead == true })
     let postObj = {
       ... this.webService.createdByProps(),
       "id": this.editObj ? this.editObj.id : 0,
@@ -650,7 +653,7 @@ export class AddUpdateStudentComponent {
       "gender": obj.gender,
       "dob": dateWithTime,
       "religionId": obj.religionId,
-      "casteCategoryId":obj.casteCategoryId,
+      "casteCategoryId": obj.casteCategoryId,
       "casteId": obj.casteId,
       "aadharNo": obj.aadharNo,
       "isCastCertificate": true,
@@ -664,12 +667,12 @@ export class AddUpdateStudentComponent {
       "fatherFullName": obj.fatherFullName?.trim(),
       "motherName": obj.motherName?.trim(),
       "mobileNo": gardianObj[0]?.mobileNo || '',
-      "gaurdianModel":this.gardianModelArr,
+      "gaurdianModel": this.gardianModelArr,
       "documentModel": this.imageArray,
       "lan": '',
       "eductionYearId": this.webService.getLoggedInLocalstorageData().educationYearId
     }
-    
+
     let isAtlstoneHead = this.gardianModelArr.some((item: any) => (item.isHead == true)); //p
 
     // let isAtlstDeletFlag = this.gardianModelArr.some((item: any) => (item.isDeleted === false));
@@ -682,20 +685,20 @@ export class AddUpdateStudentComponent {
       return
 
     }
-    else if(this.gardianModelArr.length > 0 && !isAtlstoneHead){
+    else if (this.gardianModelArr.length > 0 && !isAtlstoneHead) {
       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Checkmark Atleast One Head In Guardian Details.' : 'कृपया पालक तपशीलांमध्ये किमान एक हेड चिन्हांकित करा', 1);
       return
     }
-     else {
-      
+    else {
+
       // if (!this.uploadAadhaar) { //!this.uploadImg || 
       //   this.ngxSpinner.hide();
       //   // if (!this.uploadImg) { this.imgFlag = true, this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1); };
       //   if (!this.uploadAadhaar) { this.aadhaarFlag = true, this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1); };
       //   return
       // }
-      
-    
+
+
       let url = this.editObj ? 'UpdateStudent' : 'AddStudent'
       this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Student/' + url, false, postObj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -722,7 +725,7 @@ export class AddUpdateStudentComponent {
   fileUpload(event: any, photoName: string) {
     let type = photoName == 'img' ? 'jpg, jpeg, png' : 'jpg, jpeg, png, pdf';
     this.fileUpl.uploadStudentDocuments(event, 'Upload', type).subscribe({
-      next: (res: any) => {   
+      next: (res: any) => {
         if (res.statusCode == 200) {
           if (this.imageFile.nativeElement.value == this.aadharFile.nativeElement.value) {
             let msg = this.languageFlag == 'English' ? photoName == 'img' ? 'Upload different profile photo' : 'Upload different Aadhaar card' : photoName == 'img' ? 'भिन्न प्रोफाइल फोटो अपलोड करा' : 'वेगवेगळे आधार कार्ड अपलोड करा';
@@ -772,30 +775,55 @@ export class AddUpdateStudentComponent {
     }
   }
   //#region ------------------------------------------- Image Logic End Here -----------------------------------------------------------------
- 
+
   clearDropdown(name: any) {
     this.editFlag = false;
-    if (name == 'talukaId') {
+    if (name == 'stateId') {
+      this.stuRegistrationForm.controls['districtId'].setValue('');
+      this.stuRegistrationForm.controls['talukaId'].setValue('');
       this.stuRegistrationForm.controls['centerId'].setValue('');
       this.stuRegistrationForm.controls['schoolId'].setValue('');
       this.stuRegistrationForm.controls['standard'].setValue('');
       this.stuRegistrationForm.controls['villageId'].setValue('');
-      this.schoolArr=[];
-      this.standardArr=[];
-      this.villageArr =[]
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.villageArr = [];
+    }else if (name == 'districtId') {
+      this.stuRegistrationForm.controls['talukaId'].setValue('');
+      this.stuRegistrationForm.controls['centerId'].setValue('');
+      this.stuRegistrationForm.controls['schoolId'].setValue('');
+      this.stuRegistrationForm.controls['standard'].setValue('');
+      this.stuRegistrationForm.controls['villageId'].setValue('');
+      this.centerArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.villageArr = [];
+    } else if (name == 'talukaId') {
+      this.stuRegistrationForm.controls['centerId'].setValue('');
+      this.stuRegistrationForm.controls['schoolId'].setValue('');
+      this.stuRegistrationForm.controls['standard'].setValue('');
+      this.stuRegistrationForm.controls['villageId'].setValue('');
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.villageArr = [];
     } else if (name == 'centerId') {
       this.stuRegistrationForm.controls['schoolId'].setValue('');
       this.stuRegistrationForm.controls['standard'].setValue('');
-      this.standardArr=[];
+      this.standardArr = [];
     } else if (name == 'schoolId') {
       this.stuRegistrationForm.controls['standard'].setValue('');
     }
-     else if (name == 'religionId') {
+    else if (name == 'religionId') {
       this.stuRegistrationForm.controls['casteCategoryId'].setValue('');
-      this.stuRegistrationForm.controls['casteId'].setValue('');     
-      this.casteArr = [];
-    }else if(name =='casteCategoryId'){
       this.stuRegistrationForm.controls['casteId'].setValue('');
+      this.casteArr = [];
+    } else if (name == 'casteCategoryId') {
+      this.stuRegistrationForm.controls['casteId'].setValue('');
+    }
+    else {
+      this.stuRegistrationForm.controls['schoolId'].setValue('');
     }
   }
 
@@ -807,9 +835,9 @@ export class AddUpdateStudentComponent {
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.searchMobieNoObj =res.responseData
+            this.searchMobieNoObj = res.responseData
             this.readOnlyFlag = true;
-            this.addGardianForm.controls['name'].setValue( this.searchMobieNoObj[0]?.name);
+            this.addGardianForm.controls['name'].setValue(this.searchMobieNoObj[0]?.name);
             this.getRelation();
           } else {
             this.readOnlyFlag = false;
@@ -817,24 +845,26 @@ export class AddUpdateStudentComponent {
             this.fc['motherName'].setValue('');
           }
         },
-        error: ((err: any) => {this.errors.handelError(err.statusCode) })
+        error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
     }
   }
 
   openDialog() {
-    let formValue =this.stuRegistrationForm.value;
-    let obj ={religionId: formValue.religionId,
-    casteCategoryId: formValue.casteCategoryId}
+    let formValue = this.stuRegistrationForm.value;
+    let obj = {
+      religionId: formValue.religionId,
+      casteCategoryId: formValue.casteCategoryId
+    }
     const dialogRef = this.dialog.open(AddCastComponent, {
-      width: '400px',  
-      data : obj,
+      width: '400px',
+      data: obj,
       disableClose: true,
       autoFocus: false
     });
     dialogRef.afterClosed().subscribe((result: any) => {
-     result == 'yes' ? this.getCaste() :'';
+      result == 'yes' ? this.getCaste() : '';
     });
-  
-}
+
+  }
 }

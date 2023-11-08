@@ -24,6 +24,7 @@ import { MasterService } from 'src/app/core/services/master.service';
 export class TeacherRegistrationComponent implements OnInit {
   pageNumber: number = 1;
   searchContent = new FormControl('');
+  districtId = new FormControl(0);
   talukaId = new FormControl(0);
   clusterId = new FormControl(0);
   villageId = new FormControl(0);
@@ -43,6 +44,7 @@ export class TeacherRegistrationComponent implements OnInit {
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव', 'शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक', 'कृती'];
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
+  districtArr = new Array();
   talukaArray = new Array();
   clusterArray = new Array();
   villageArray = new Array();
@@ -60,7 +62,8 @@ export class TeacherRegistrationComponent implements OnInit {
     });
     this.getIsWriteFunction();
     this.getTableData();
-    this.getAllTaluka();
+    this.getDistrict();
+    // this.getAllTaluka();
 
     this.toggleControl.valueChanges.subscribe((darkMode) => {
       const darkClassName = 'darkMode';
@@ -157,8 +160,24 @@ export class TeacherRegistrationComponent implements OnInit {
     });
   }
 
+  getDistrict() {
+    this.masterService.getAllDistrict('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+          // this.districtId.setValue(this.districtArr[0].id);
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+    });
+  }
+
   getAllTaluka() {
     this.talukaArray = [];
+    // let districtId = this.districtId.value;
     this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
       next: ((res: any) => {
         if (res.statusCode == "200" && res.responseData.length) {
@@ -447,6 +466,8 @@ export class TeacherRegistrationComponent implements OnInit {
   clearFilterData() {
     if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value) {
       this.searchContent.setValue('');
+      this.districtId.setValue(0);
+      this.talukaArray = [];
       this.clusterArray = [];
       this.villageArray = [];
       this.talukaId.setValue(0);
@@ -505,6 +526,12 @@ export class TeacherRegistrationComponent implements OnInit {
 
   onChangeFilter(label: string) {
     switch (label) {
+      case 'district':
+        this.talukaId.setValue(0);
+        this.clusterId.setValue(0);
+        this.villageId.setValue(0);
+        this.villageArray = [];
+        break;
       case 'taluka':
         this.clusterId.setValue(0);
         this.villageId.setValue(0);

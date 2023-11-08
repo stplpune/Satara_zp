@@ -25,12 +25,16 @@ export class OfficeUsersComponent implements OnInit {
   resultDownloadArr = new Array();
   totalCount: number = 0;
   searchContent = new FormControl('');
-  talukaId = new FormControl('');
+  stateId = new FormControl(0);
+  districtId = new FormControl(0);
+  talukaId = new FormControl(0);
   langTypeName: any;
   tableData: any;
   tableDataArray = new Array();
   tableDatasize!: Number;
   displayedColumns = new Array();
+  stateArr = new Array();
+  districtArr = new Array();
   talukaArray = new Array();
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
@@ -43,7 +47,7 @@ export class OfficeUsersComponent implements OnInit {
 
   ngOnInit() {
     this.getIsWriteFunction();
-    this.getAllTaluka();
+    this.getState();
     this.getTableData();
     // this.getofficeReport();
     this.webStorageService.langNameOnChange.subscribe(lang => {
@@ -166,12 +170,33 @@ export class OfficeUsersComponent implements OnInit {
     });
   }
 
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
+
+  getDistrict() {
+    this.masterService.getAllDistrict('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+      error: ((err: any) => { this.commonService.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonService.showPopup(err.statusText, 1); })
+    });
+  }
+
   getAllTaluka() {
     this.talukaArray = [];
     this.masterService.getAllTaluka(this.langTypeName).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
-          this.talukaArray = res.responseData;
+          this.talukaArray.push({"id": 0, "taluka": "All", "m_Taluka": "सर्व"}, ...res.responseData);
         } else {
           this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
           this.talukaArray = [];
@@ -300,8 +325,12 @@ export class OfficeUsersComponent implements OnInit {
   clearFilterData() {
     if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value) {
       this.searchContent.setValue('');
-      this.talukaId.setValue('');
+      this.stateId.setValue(0);
+      this.districtId.setValue(0);
+      this.talukaId.setValue(0);
       this.getTableData();
+      this.districtArr = [];
+      this.talukaArray = [];
     }
   }
 

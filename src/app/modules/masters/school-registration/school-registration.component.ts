@@ -24,12 +24,14 @@ export class SchoolRegistrationComponent implements OnInit {
   pageNumber: number = 1;
   tableDataArray = new Array();
   // searchContent = new FormControl('');
-  districtId = new FormControl(null);
+  stateId = new FormControl(0);
+  districtId = new FormControl(0);
   talukaId = new FormControl(0);
   centerId = new FormControl(0);
   villageId = new FormControl(0);
   searchContent = new FormControl('');
   resultDownloadArr = new Array();
+  stateArr = new Array();
   districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
@@ -64,7 +66,7 @@ export class SchoolRegistrationComponent implements OnInit {
   ngOnInit() {
     this.getIsWriteFunction();
     this.getTableData();
-    this.getDistrict();
+    this.getState();
     // this.getofficeReport();
     this.userId = this.webStorageS.getUserTypeId();
 
@@ -226,33 +228,45 @@ export class SchoolRegistrationComponent implements OnInit {
 
 
   //#region ---------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
+
   getDistrict() {
-    this.masterService.getAllDistrict('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.districtArr = res.responseData;
-          this.districtId.setValue(this.districtArr[0].id);
-          this.getTaluka();
-        }
-        else {
-          this.districtArr = [];
-        }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
-    });
+    let stateId = this.stateId.value || 0;
+    if(stateId > 0){
+      this.masterService.getAllDistrict('').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.districtId.setValue(this.districtArr[0].id);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+        error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+      });
+    }
   }
 
   getTaluka() {
-    this.masterService.getAllTaluka('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+    let districtId = this.districtId.value || 0;
+    if(districtId > 0){
+      this.masterService.getAllTaluka('').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          }
+          else {
+            this.talukaArr = [];
+          }
         }
-        else {
-          this.talukaArr = [];
-        }
-      }
-    });
+      });
+    }
   }
 
   getCenter() {
@@ -416,10 +430,14 @@ export class SchoolRegistrationComponent implements OnInit {
 
   onClear() {
     if (this.districtId.value || this.talukaId.value || this.villageId.value) {
+      this.stateId.setValue(0);
+      this.districtId.setValue(0);
       this.talukaId.setValue(0);
       this.centerId.setValue(0);
       this.villageId.setValue(0);
       this.searchContent.setValue('');
+      this.districtArr = [];
+      this.talukaArr = [];
       this.villageArr = [];
       this.centerArr = [];
       this.getTableData();
@@ -464,7 +482,22 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   clearDropdown(dropdown: string) {
-    if (dropdown == 'Taluka') {
+    if (dropdown == 'State') {
+      this.districtId.setValue(0);
+      this.talukaId.setValue(0);
+      this.villageId.setValue(0);
+      this.centerId.setValue(0);
+      this.talukaArr = [];
+      this.villageArr = [];
+      this.centerArr = [];
+    }else if (dropdown == 'District') {
+      this.talukaId.setValue(0);
+      this.villageId.setValue(0);
+      this.centerId.setValue(0);
+      this.villageArr = [];
+      this.centerArr = [];
+    }
+    else if (dropdown == 'Taluka') {
       this.villageId.setValue(0);
       this.centerId.setValue(0);
       this.villageArr = [];

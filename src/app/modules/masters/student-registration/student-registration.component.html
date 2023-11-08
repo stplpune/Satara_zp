@@ -55,6 +55,26 @@
       <div class="row mb-0 w-100 gx-2">
         <div class="col-sm-2">
           <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.state'| translate}}</mat-label>
+            <mat-select formControlName="stateId" (selectionChange)="clearDropdown('stateId'); getDistrict();">
+              <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                {{languageFlag == 'English' ? state.state : state.m_State}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" class="w-100 ">
+            <mat-label>{{'Labels.district'| translate}}</mat-label>
+            <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId'); getTaluka();">
+              <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                {{languageFlag == 'English' ? district.district : district.m_District}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2">
+          <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.taluka'| translate}}</mat-label>
             <mat-select formControlName="talukaId" (selectionChange)="clearDropdown('talukaId');getAllCenter();">
               <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
@@ -75,7 +95,7 @@
           <mat-form-field appearance="outline" class="w-100 ">
             <mat-label>{{'Labels.village'| translate}}</mat-label>
             <mat-select formControlName="villageId"
-              (selectionChange)="clearDropdown('centerId');getAllSchoolsByCenterId()">
+              (selectionChange)="clearDropdown('villageId');getAllSchoolsByCenterId()">
               <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag == 'English'
                 ?village.village:village.m_Village}}</mat-option>
             </mat-select>
@@ -91,20 +111,21 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{'Labels.searchByNameContactNo'| translate}}</mat-label>
             <input matInput formControlName="textSearch" maxlength="30"
               (keypress)="validators.noFirstSpaceAllow($event)">
           </mat-form-field>
         </div>
-
-      </div>
-      <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
-        <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
-          translate}}</button>
-        <button mat-flat-button type="button" class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear'|
-          translate}}</button>
+        <div class="col-sm-auto">
+          <div class="mb-0 d-flex justify-content-lg-end justify-content-start">
+            <button mat-flat-button class="btn-main" type="submit" (click)="getTableData('filter')">{{'Labels.filter'|
+              translate}}</button>
+            <button mat-flat-button type="button" class="btn-second ms-2" (click)="clearForm()">{{'Labels.clear'|
+              translate}}</button>
+          </div>
+        </div>
       </div>
     </form>
   </mat-card-header>

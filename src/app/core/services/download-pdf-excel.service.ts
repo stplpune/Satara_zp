@@ -51,6 +51,12 @@ export class DownloadPdfExcelService {
   }
 
   generateExcel(keyData: any, apiKeys: any, data: any, name: any, headerKeySize?: any) {    
+    console.log("keyData: ", keyData);
+    console.log("apiKeys: ", apiKeys);
+    console.log("data: ", data);
+    console.log("name: ", name);
+    console.log("headerKeySize: ", headerKeySize);
+    
     // Create workbook and worksheet
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(name[0].sheet_name);
@@ -297,6 +303,11 @@ export class DownloadPdfExcelService {
 
   // common excel function 
   async allGenerateExcel(keyData: any, ValueData: any, objData: any,headerKeySize?: any) {
+    console.log("keyData: ", keyData);
+    console.log("ValueData: ", ValueData);
+    console.log("objData: ", objData);
+    console.log("headerKeySize: ", headerKeySize);
+    
     // 1:keyHeader,2:values,3:Data-heading time date ,4:column size width
      // Create workbook and worksheet
      const workbook = new Workbook();

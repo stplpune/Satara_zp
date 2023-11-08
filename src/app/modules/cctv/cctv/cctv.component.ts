@@ -65,10 +65,6 @@ export class CctvComponent {
     this.getTalukaDropByDis();
     this.getAllCCTVLocation();
     this.getTableData();
-
-    //For cctv 
-    
-
   }
 
   //loader.style.display = 'none';
@@ -76,7 +72,6 @@ export class CctvComponent {
   showLoader() {
     let loadershow: any = document.getElementById("myname");
     loadershow.style.display = 'block';
-
   }
 
   hideLoader() {
@@ -238,12 +233,7 @@ export class CctvComponent {
   // Click table row 
   childCompInfo(obj?: any) {
     if (obj.label == 'View') {
-      // this.selectedCCTV = obj;
-      // this.closeVideo();
-      this.init();
-      // this.disconnect();
-      
-
+      this.init();    
     }
     else {
     }
@@ -266,7 +256,6 @@ export class CctvComponent {
       case 'village':
         this.f['schoolId'].setValue(0);
         break;
-
     }
 
   }

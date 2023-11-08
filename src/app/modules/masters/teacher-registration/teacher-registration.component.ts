@@ -24,6 +24,7 @@ import { MasterService } from 'src/app/core/services/master.service';
 export class TeacherRegistrationComponent implements OnInit {
   pageNumber: number = 1;
   searchContent = new FormControl('');
+  stateId = new FormControl(0);
   districtId = new FormControl(0);
   talukaId = new FormControl(0);
   clusterId = new FormControl(0);
@@ -44,6 +45,7 @@ export class TeacherRegistrationComponent implements OnInit {
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शिक्षकाचे नाव', 'शिक्षक आयडी', 'मोबाईल क्र.', 'ई-मेल आयडी ', 'तालुका', 'केंद्र', 'अनब्लॉक/ब्लॉक', 'कृती'];
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
+  stateArr = new Array();
   districtArr = new Array();
   talukaArray = new Array();
   clusterArray = new Array();
@@ -62,7 +64,8 @@ export class TeacherRegistrationComponent implements OnInit {
     });
     this.getIsWriteFunction();
     this.getTableData();
-    this.getDistrict();
+    this.getState();
+    // this.getDistrict();
     // this.getAllTaluka();
 
     this.toggleControl.valueChanges.subscribe((darkMode) => {
@@ -158,6 +161,13 @@ export class TeacherRegistrationComponent implements OnInit {
       error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
       // error: ((err: any) => { this.errors.handelError(err) })
     });
+  }
+
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
   }
 
   getDistrict() {
@@ -466,7 +476,9 @@ export class TeacherRegistrationComponent implements OnInit {
   clearFilterData() {
     if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value) {
       this.searchContent.setValue('');
+      this.stateId.setValue(0);
       this.districtId.setValue(0);
+      this.districtArr = [];
       this.talukaArray = [];
       this.clusterArray = [];
       this.villageArray = [];
@@ -526,10 +538,20 @@ export class TeacherRegistrationComponent implements OnInit {
 
   onChangeFilter(label: string) {
     switch (label) {
+      case 'state':
+        this.districtId.setValue(0);
+        this.talukaId.setValue(0);
+        this.clusterId.setValue(0);
+        this.villageId.setValue(0);
+        this.talukaArray = [];
+        this.clusterArray = [];
+        this.villageArray = [];
+        break;
       case 'district':
         this.talukaId.setValue(0);
         this.clusterId.setValue(0);
         this.villageId.setValue(0);
+        this.clusterArray = [];
         this.villageArray = [];
         break;
       case 'taluka':

@@ -476,6 +476,7 @@
         "Username": "Username",
         "approve": "Approve",
         "reject": "Reject",
-        "approvalStatus": "Approval Status"
+        "approvalStatus": "Approval Status",
+        "AssessmentSubject":"Assessment Subject"
     }
 }

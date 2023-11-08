@@ -62,7 +62,6 @@
                         <span class="small form-label">{{'Labels.Yes' | translate}}</span>
                     </div>
                 </div>
-
                 <ng-container *ngIf="schoolRegForm.value.isKendraSchool == false">
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
@@ -97,9 +96,7 @@
                     </div>
                 </ng-container>
 
-
                 <!-- New Changes -->
-
 
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
@@ -115,6 +112,7 @@
                                 </mat-error> -->
                     </mat-form-field>
                 </div>
+
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.schoolTypeDescription' | translate}}</mat-label>
@@ -129,7 +127,9 @@
                                 </mat-error> -->
                     </mat-form-field>
                 </div>
-
+            </div>
+            
+            <div class="row gx-2">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.school' | translate}}</mat-label>

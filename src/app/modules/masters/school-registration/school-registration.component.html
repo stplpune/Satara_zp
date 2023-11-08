@@ -45,7 +45,7 @@
 
     <mat-card-header class="card-header border-bottom-0 pb-0">
         <div class="row gx-2 w-100">
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label> {{'Labels.state' | translate}}</mat-label>
                     <mat-select [formControl]="stateId" (selectionChange)="clearDropdown('State'); getDistrict();">
@@ -55,7 +55,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label> {{'Labels.district' | translate}}</mat-label>
                     <mat-select [formControl]="districtId" (selectionChange)="clearDropdown('District'); getTaluka();">
@@ -65,7 +65,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.taluka' | translate}}</mat-label>
                     <mat-select [formControl]="talukaId" (selectionChange)="clearDropdown('Taluka'); getCenter()">
@@ -76,7 +76,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                     <mat-select [formControl]="centerId" (selectionChange)="clearDropdown('centerId'); getVillage()">
@@ -85,7 +85,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.village' | translate}}</mat-label>
                     <mat-select [formControl]="villageId">
@@ -96,7 +96,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label> {{'Labels.school' | translate}}</mat-label>
                     <input matInput [formControl]="searchContent" (keyup.enter)="getTableData()">

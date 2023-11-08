@@ -14,8 +14,28 @@
             <div class="row gx-2">
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.state'| translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="clearDropdown('state'); getDistrict();">
+                          <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                            {{languageFlag == 'English' ? state.state : state.m_State}}
+                          </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.district'| translate}}</mat-label>
+            <mat-select formControlName="districtId" (selectionChange)="clearDropdown('district'); getTaluka();">
+              <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                {{languageFlag == 'English' ? district.district : district.m_District}}
+              </mat-option>
+            </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                        <mat-select formControlName="talukaId" (selectionChange)="getAllCenter()">
+                        <mat-select formControlName="talukaId" (selectionChange)="clearDropdown('taluka'); getAllCenter();">
                             <!-- <mat-option *ngFor="let taluka of ">Option-1 </mat-option> -->
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
@@ -25,7 +45,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
-                        <mat-select formControlName="centerId" (selectionChange)="getVillage()">
+                        <mat-select formControlName="centerId" (selectionChange)="clearDropdown('kendra'); getVillage()">
                             <!-- <mat-option>Option-1 </mat-option> -->
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                                 ?cen.center:cen.m_Center}}</mat-option>
@@ -35,7 +55,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
-                        <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
+                        <mat-select formControlName="villageId" (selectionChange)="clearDropdown('village'); getAllSchoolsByCenterId()">
                             <!-- <mat-option>Option-1 </mat-option> -->
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag
                                 =='English'
@@ -56,7 +76,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.Category'| translate}}</mat-label>
-                        <mat-select formControlName="CategoryId" (selectionChange)="getAllSubCategory()">
+                        <mat-select formControlName="CategoryId" (selectionChange)="clearDropdown('category'); getAllSubCategory()">
                             <!-- <mat-option>Option-1 </mat-option> -->
                             <mat-option *ngFor="let category of categoryArr" [value]="category.id">{{languageFlag ==
                                 'English' ?
@@ -67,7 +87,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.subcategoryname'| translate}}</mat-label>
-                        <mat-select formControlName="SubCategoryId" (selectionChange)="getItemDrop()">
+                        <mat-select formControlName="SubCategoryId" (selectionChange)="clearDropdown('subcategory'); getItemDrop()">
                             <!-- <mat-option>Option-1 </mat-option> -->
                             <mat-option *ngFor="let subCategory of subCategoryArr"
                                 [value]="subCategory.id">{{languageFlag == 'English' ?
@@ -98,7 +118,7 @@
                                 (click)="getTableData('filter')">{{'Labels.filter'|
                                 translate}}</button>
                             <button mat-flat-button type="button" class="btn-second"
-                                (click)="filterForm.reset();getTableData()">{{'Labels.clear'|
+                                (click)="onClear()">{{'Labels.clear'|
                                 translate}}</button>
                         </div>
                         <div class="d-flex justify-content-start gap-2">

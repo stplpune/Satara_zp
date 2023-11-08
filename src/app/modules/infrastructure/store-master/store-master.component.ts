@@ -28,6 +28,8 @@ export class StoreMasterComponent {
   resultDownloadArr= new Array();
   highLightFlag !: boolean;
   isWriteRight !: boolean;
+  stateArr = new Array();
+  districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -69,7 +71,7 @@ export class StoreMasterComponent {
       this.setTableData();
     });
     this.filterFormData();
-    this.getTaluka();
+    this.getState();
     this.getAllCategory();
     setTimeout(() => {
       this.getTableData();
@@ -85,11 +87,13 @@ export class StoreMasterComponent {
       // centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
       // villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
       // schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
+      stateId: [0],
+      districtId: [0],
       talukaId :[''],
       centerId:[''],
       villageId:[''],
       schoolId:[''],
-      CategoryId: [''],
+      CategoryId: [0],
       SubCategoryId: [''],     
       ItemsId: [''],
       textSearch: ['']
@@ -279,6 +283,30 @@ export class StoreMasterComponent {
        });   
   }
 
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
+
+  getDistrict() {
+    this.districtArr = [];
+    // let stateId = this.filterForm.value.stateId;
+    this.masterService.getAllDistrict('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+          this.filterForm.controls['districtId'].setValue(0);
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+      error: ((err: any) => { this.commonMethods.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusText, 1); })
+    });
+  }
+
   getTaluka() {
     this.talukaArr = [];
     this.masterService.getAllTaluka('').subscribe({
@@ -405,6 +433,58 @@ export class StoreMasterComponent {
         }
       }
     });
+  }
+
+  clearDropdown(flag: any){
+    if(flag == 'state'){
+      this.filterForm.controls['districtId'].setValue(0);
+      this.filterForm.controls['talukaId'].setValue(0);
+      this.filterForm.controls['centerId'].setValue(0);
+      this.filterForm.controls['villageId'].setValue(0);
+      this.filterForm.controls['schoolId'].setValue(0);
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if(flag == 'district'){
+      this.filterForm.controls['talukaId'].setValue(0);
+      this.filterForm.controls['centerId'].setValue(0);
+      this.filterForm.controls['villageId'].setValue(0);
+      this.filterForm.controls['schoolId'].setValue(0);
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if(flag == 'taluka'){
+      this.filterForm.controls['centerId'].setValue(0);
+      this.filterForm.controls['villageId'].setValue(0);
+      this.filterForm.controls['schoolId'].setValue(0);
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if(flag == 'kendra'){
+      this.filterForm.controls['villageId'].setValue(0);
+      this.filterForm.controls['schoolId'].setValue(0);
+      this.schoolArr = [];
+    }else if(flag == 'village'){
+      this.filterForm.controls['schoolId'].setValue(0);
+    }else if(flag == 'category'){
+      this.filterForm.controls['SubCategoryId'].setValue(0);
+      this.filterForm.controls['ItemsId'].setValue(0);
+      this.itemArr = [];
+    }else if(flag == 'subcategory'){
+      this.filterForm.controls['ItemsId'].setValue(0);
+    }
+  }
+
+  onClear(){
+    this.filterFormData();
+    this.getTableData();
+    this.districtArr = [];
+    this.talukaArr = [];
+    this.centerArr = [];
+    this.villageArr = [];
+    this.schoolArr = [];
+    this.subCategoryArr = [];
+    this.itemArr = [];
   }
 
   

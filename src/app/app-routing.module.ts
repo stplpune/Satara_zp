@@ -23,6 +23,7 @@ const routes: Routes = [
   { path: 'school-report', loadChildren: () => import('./modules/reports/school-report/school-report.module').then(m => m.SchoolReportModule) },
   { path: 'share/:id', loadChildren: () => import('./modules/share-event-for-android/share-event-for-android.module').then(m => m.ShareEventForAndroidModule) },
   
+  
  
   
   

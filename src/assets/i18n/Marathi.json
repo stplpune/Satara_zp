@@ -491,6 +491,8 @@
         "ExamMaster":"परीक्षा मास्टर",
         "addExamMaster":"परीक्षा मास्टर जोडा",
         "updateExamMaster":"अद्ययावत परीक्षा मास्टर",
-        "SubjectMarathi":"विषय (मराठी)"
+        "SubjectMarathi":"विषय (मराठी)",
+        "examName": "परीक्षा नाव",
+        "examNameMarathi": "परीक्षा नाव (मराठी)"
     }
 }

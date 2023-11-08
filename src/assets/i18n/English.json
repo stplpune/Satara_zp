@@ -483,7 +483,9 @@
         "ExamMaster":"Exam Master",
         "addExamMaster":"Add Exam Master",
         "updateExamMaster":"Update Exam Master",
-        "SubjectMarathi":"Subject (Marathi)"
+        "SubjectMarathi":"Subject (Marathi)",
+        "examName": "Exam Name",
+        "examNameMarathi": "Exam Name (Marathi)"
 
     }
 }

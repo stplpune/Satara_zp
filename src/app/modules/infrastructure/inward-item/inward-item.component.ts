@@ -31,6 +31,8 @@ export class InwardItemComponent {
   highLightFlag: boolean = true;
   displayedColumns = new Array();
   langTypeName: any;
+  stateArr = new Array();
+  districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -65,7 +67,7 @@ export class InwardItemComponent {
       this.langTypeName = lang;
       this.languageChange();
     });
-    this.getTaluka();
+    this.getState();
     this.getCategoryDrop();
   }
 
@@ -78,10 +80,12 @@ export class InwardItemComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      talukaId: [this.loginData.userTypeId > 2 ? this.loginData.talukaId : ''],
-      centerId: [this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
-      villageId: [this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
-      schoolId: [this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
+      stateId: [0],
+      districtId: [0],
+      talukaId: [this.loginData.userTypeId > 2 ? this.loginData.talukaId : 0],
+      centerId: [this.loginData.userTypeId > 2 ? this.loginData.centerId : 0],
+      villageId: [this.loginData.userTypeId > 2 ? this.loginData.villageId : 0],
+      schoolId: [this.loginData.userTypeId > 2 ? this.loginData.schoolId : 0],
       categoryId: [''],
       subCategoryId: [''],
       itemsId: [''],
@@ -211,6 +215,30 @@ export class InwardItemComponent {
       }
       this.highLightFlag = false;
       this.languageChange();
+    });
+  }
+
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
+
+  getDistrict() {
+    this.districtArr = [];
+    // let stateId = this.filterForm.value.stateId;
+    this.masterService.getAllDistrict('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+          this.filterForm.controls['districtId'].setValue(0);
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
   }
 

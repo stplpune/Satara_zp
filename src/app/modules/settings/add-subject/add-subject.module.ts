@@ -45,7 +45,8 @@ import { AddAssessmentSubjectComponent } from './add-assessment-subject/add-asse
     ReactiveFormsModule,
     FormsModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    TableComponent,
   ]
 })
 export class AddSubjectModule { }

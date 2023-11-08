@@ -1,1 +1,56 @@
-<p>add-assessment-subject works!</p>
+<mat-card class="plain-card">
+    <mat-card-header class="card-header">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h6 class="text-main mb-0 fw-bold">
+                {{editData ? ('Labels.updateAgency' | translate): 'Labels.addAssessmentSubject' | translate}}
+            </h6>
+            <button mat-icon-button mat-dialog-close class="btn-modal-close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </mat-card-header>
+    <form>
+        <mat-card-content class="card-body card-height-mid scrollbar">
+            <div class="row gx-2">
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.state' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.district' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.SubjectMarathi' | translate}}</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+            </div>
+
+        </mat-card-content>
+        <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
+            <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
+                translate}}</button>
+            <!-- <button type="submit" mat-flat-button class="btn-main ">{{data ? ('Labels.update' | translate) :
+                ('Labels.submit' | translate)}}</button> -->
+            <button type="submit" mat-flat-button class="btn-main ">{{ 'Labels.submit' | translate}} </button>
+        </mat-card-footer>
+    </form>
+</mat-card>

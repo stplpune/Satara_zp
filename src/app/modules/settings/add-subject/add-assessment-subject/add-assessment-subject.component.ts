@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-assessment-subject.component.scss']
 })
 export class AddAssessmentSubjectComponent {
-
+  editData: any;
 }

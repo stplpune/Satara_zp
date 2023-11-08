@@ -48,6 +48,11 @@
     color: var(--main-color);
 }
 
+.home-banner .home-discription, 
+.home-banner .home-discription h1 {
+    color: #fff !important;
+}
+
 .home-banner .home-discription .btn-login {
     background-color: var(--main-color);
     border-radius: 30px;

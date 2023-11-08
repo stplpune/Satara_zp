@@ -18,11 +18,13 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import {MatTableModule} from '@angular/material/table';
+import { AddAssessmentSubjectComponent } from './add-assessment-subject/add-assessment-subject.component';
 
 
 @NgModule({
   declarations: [
-    AddSubjectComponent
+    AddSubjectComponent,
+    AddAssessmentSubjectComponent
   ],
   imports: [
     CommonModule,

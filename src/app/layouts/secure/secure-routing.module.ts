@@ -50,7 +50,7 @@ const routes: Routes = [
 
   //------setting-routing--------//
 
-  { path: 'assessment-subject', loadChildren: () => import('../../modules/settings/add-subject/add-subject.module').then(m => m.AddSubjectModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Subject', m_title: 'मूल्यमापन विषय', active: true }] }    },
+  { path: 'assessment-subject', loadChildren: () => import('../../modules/settings/add-subject/add-subject.module').then(m => m.AddSubjectModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Subject', m_title: 'मूल्यांकन विषय', active: true }] }    },
   { path: 'exam-master', loadChildren: () => import('../../modules/settings/add-test/add-test.module').then(m => m.AddTestModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Exam Master', m_title: 'परीक्षा मास्टर', active: true }] }    },
 ]
   

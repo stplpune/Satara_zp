@@ -477,6 +477,10 @@
         "approve": "Approve",
         "reject": "Reject",
         "approvalStatus": "Approval Status",
-        "AssessmentSubject":"Assessment Subject"
+        "AssessmentSubject":"Assessment Subject",
+        "ExamMaster":"Exam Master",
+        "addExamMaster":"Add Exam Master",
+        "SubjectMarathi":"Subject (Marathi)"
+
     }
 }

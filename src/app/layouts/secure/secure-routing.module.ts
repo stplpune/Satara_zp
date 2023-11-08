@@ -47,6 +47,11 @@ const routes: Routes = [
   { path: 'holiday-master', loadChildren: () => import('../../modules/attendence/hoilday-master/hoilday-master.module').then(m => m.HoildayMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Hoilday Master', m_title: 'हॉलिडे मास्टर', active: true }] }  },
   { path: 'cctv-location-registration', loadChildren: () => import('../../modules/cctv/cctv-location-registration/cctv-location-registration.module').then(m => m.CctvLocationRegistrationModule) ,canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV Location Registration', m_title: 'CCTV स्थान नोंदणी', active: true }] }  },
   { path: 'cctv', loadChildren: () => import('../../modules/cctv/cctv/cctv.module').then(m => m.CctvModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV', m_title: 'CCTV स्थान', active: true }] }   },
+
+  //------setting-routing--------//
+
+  { path: 'add-subject', loadChildren: () => import('../../modules/settings/add-subject/add-subject.module').then(m => m.AddSubjectModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Add Subject', m_title: 'विषय जोडा', active: true }] }    },
+  { path: 'add-test', loadChildren: () => import('../../modules/settings/add-test/add-test.module').then(m => m.AddTestModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Add Test', m_title: 'चाचणी जोडा', active: true }] }    },
 ]
   
 

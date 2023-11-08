@@ -24,6 +24,7 @@ export class AddUpdateTeacherRegistrationComponent {
   uploadImghtml: string = '';
   showAddRemImg: boolean = false;
   genderArray = new Array();
+  stateArray = new Array();
   districtArray = new Array();
   talukaArray = new Array();
   villageArray = new Array();
@@ -41,6 +42,7 @@ export class AddUpdateTeacherRegistrationComponent {
   castCategoryArray = new Array();
   interDistrictTransferTypeArray = new Array();
   assignClassArray = new Array();
+  stateArrayTeacherDeatails = new Array();
   districtArrayTeacherDeatails = new Array();
   talukaArrayTeacherDetails = new Array();
   img: boolean = false;
@@ -173,6 +175,7 @@ export class AddUpdateTeacherRegistrationComponent {
         ...this.webStorageS.createdByProps(),
         "id": 0,
         "teacherId": 0,
+        "stateId": [''],
         "districtId": [''],
         "talukaId": ['', Validators.required],
         "villageId": ['',Validators.required],
@@ -365,7 +368,7 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.genderArray = res.responseData;
-          this.editFlag == true ? (this.teacherRegForm.controls['genderId'].setValue(this.editObj?.genderID), this.getDistrict(), this.getRole()) : (this.editFlag == false) ? (this.getDistrict(), this.getAllDistrictTeacherDetails(), this.getEducationQualification(), this.getRole()) : ''
+          this.editFlag == true ? (this.teacherRegForm.controls['genderId'].setValue(this.editObj?.genderID), this.getState(), this.getRole()) : (this.editFlag == false) ? (this.getState(), this.getStateTeacherDetails(), this.getEducationQualification(), this.getRole()) : ''
         }
         else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
@@ -377,6 +380,14 @@ export class AddUpdateTeacherRegistrationComponent {
       // }
     })
   }
+
+  getState(){
+    this.stateArray = [
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+    this.editFlag ? (this.teacherRegForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+  }
+
   getDistrict() {
     this.districtArray = [];
     this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
@@ -505,7 +516,7 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.profesionalQualificationArray = res.responseData;
-          this.editFlag ? (this.td['professionalQualificationId'].setValue(this.editObj.teacherDetails?.professionalQualificationId), this.getAllDistrictTeacherDetails()) : '';
+          this.editFlag ? (this.td['professionalQualificationId'].setValue(this.editObj.teacherDetails?.professionalQualificationId), this.getStateTeacherDetails()) : '';
         } else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.profesionalQualificationArray = [];
@@ -515,6 +526,13 @@ export class AddUpdateTeacherRegistrationComponent {
       //   this.errorHandler.handelError(error.statusCode)
       // }
     })
+  }
+
+  getStateTeacherDetails(){
+    this.stateArrayTeacherDeatails = [
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+    this.editFlag ? (this.td['stateId'].setValue(this.editObj.teacherDetails?.stateId), this.getAllDistrictTeacherDetails()) : '';
   }
 
   getAllDistrictTeacherDetails() {
@@ -810,7 +828,17 @@ export class AddUpdateTeacherRegistrationComponent {
     if (dropdown == 'Taluka') {
       this.f['villageId'].setValue(0);
       this.villageArray = [];
-    } else if (dropdown == 'districtTeacherDetails') {
+    } else if (dropdown == 'stateTeacherDetails') {
+      this.td['districtId'].setValue('');
+      this.td['talukaId'].setValue('');
+      this.td['clusterId'].setValue('');
+      this.td['schoolId'].setValue('');
+      this.td['villageId'].setValue('');
+      this.talukaArrayTeacherDetails = [];
+      this.clusterArray = [];
+      this.schoolArray = [];
+      this.teacherDetailsVillageArray =[]
+    }else if (dropdown == 'districtTeacherDetails') {
       this.td['talukaId'].setValue('');
       this.td['clusterId'].setValue('');
       this.td['schoolId'].setValue('');

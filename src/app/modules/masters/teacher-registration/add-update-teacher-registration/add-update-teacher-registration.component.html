@@ -133,6 +133,17 @@
         <div class="row gx-2">
             <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.state'| translate}}</mat-label>
+                    <mat-select formControlName="stateId" (selectionChange)="clearDropdown('State'); getDistrict();">
+                        <mat-option *ngFor="let state of stateArray" [value]="state.id">
+                            {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
+                          </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="f['districtId'].hasError('required')">{{'Labels.districtIsRequired'| translate}}</mat-error> -->
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.district'| translate}}</mat-label>
                     <mat-select formControlName="districtId" (selectionChange)="clearDropdown('District'); getTaluka();">
                         <mat-option *ngFor="let distric of districtArray"
@@ -286,8 +297,18 @@
                 </mat-card-subtitle>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.state'| translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="clearDropdown('stateTeacherDetails'); getAllDistrictTeacherDetails()">
+                            <mat-option *ngFor="let state of stateArrayTeacherDeatails" [value]="state.id">
+                                {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
+                              </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
-                        <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtTeacherDetails');getAllTalukaTeacherDeatails()">
+                        <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtTeacherDetails'); getAllTalukaTeacherDeatails()">
                             <mat-option *ngFor="let districtObj of districtArrayTeacherDeatails"
                                 [value]="districtObj.id">{{webStorageS.getLangauge() == 'EN' ?
                                 districtObj.district : districtObj.m_District}}</mat-option>

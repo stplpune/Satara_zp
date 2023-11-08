@@ -20,6 +20,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 export class SchoolReportComponent { 
   schoolReportForm!: FormGroup;
   $districts?: Observable<any>;
+  stateArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -69,7 +70,7 @@ export class SchoolReportComponent {
       this.getTableTranslatedData();
     });
     this.schoofilterData();
-    this.getDistrict();
+    this.getState();
     this.getExamType();
     // this.geAssessmentType();
     this.getAcademicYears();
@@ -81,7 +82,8 @@ export class SchoolReportComponent {
   schoofilterData(){
     this.schoolReportForm = this.fb.group({
       educationYearId: [this.dashBordFilterFlag ? Number(this.dashBordObj[0]) : 0],
-      districtId: [],
+      stateId: [0],
+      districtId: [0],
       talukaId: [this.dashBordFilterFlag ? Number(this.dashBordObj[3]):0],
       centerId: [this.dashBordFilterFlag ? Number(this.dashBordObj[1]):0],
       villageId: [this.dashBordFilterFlag ? Number(this.dashBordObj[4]):0],
@@ -95,6 +97,13 @@ export class SchoolReportComponent {
 
   }
   get f(){return this.schoolReportForm.controls}
+
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
 
   getDistrict(){
     this.$districts = this.masterService.getAlllDistrict();
@@ -262,6 +271,30 @@ export class SchoolReportComponent {
 
   clearDropdown(flag?: string) {
     switch (flag) {
+      case 'stateId':
+        this.f['districtId'].setValue(0);
+        this.f['talukaId'].setValue(0);
+        this.f['centerId'].setValue(0);
+        this.f['villageId'].setValue(0)
+        this.f['schoolId'].setValue(0);
+        this.f['standardId'].setValue(0);
+        this.talukaArr = [];
+        this.centerArr = [];
+        this.villageArr = [];
+        this.schoolArr = [];
+        this.standardArr = [];
+        break;
+        case 'districtId':
+          this.f['talukaId'].setValue(0);
+          this.f['centerId'].setValue(0);
+          this.f['villageId'].setValue(0)
+          this.f['schoolId'].setValue(0);
+          this.f['standardId'].setValue(0);
+          this.centerArr = [];
+          this.villageArr = [];
+          this.schoolArr = [];
+          this.standardArr = [];
+          break;
       case 'talukaId':
         this.f['centerId'].setValue(0);
         this.f['villageId'].setValue(0)

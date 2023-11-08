@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { AddAssessmentSubjectComponent } from './add-assessment-subject/add-assessment-subject.component';
 
 @Component({
   selector: 'app-add-subject',
@@ -13,6 +15,17 @@ export class AddSubjectComponent {
   states: state[] = [
     {value: 'State', viewValue: 'Maharashtra'},
   ];
+
+  constructor(public dialog: MatDialog) { }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(AddAssessmentSubjectComponent, {
+      width: '500px',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }
 export interface PeriodicElement {
   name: string;

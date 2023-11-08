@@ -20,6 +20,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class StudentReportComponent {
   studentReportForm!: FormGroup;
+  stateArr = new Array();
   districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
@@ -95,7 +96,8 @@ export class StudentReportComponent {
     this.logInDetails = this.webService.getLoggedInLocalstorageData();
     this.pageUrl = this.router.url;
     this.formData();
-    this.getDistrict();
+    // this.getDistrict();
+    this.getState();
     this.getExamType();
     this.getAcademicYears();
     this.getClassWiseSubject();
@@ -136,7 +138,8 @@ export class StudentReportComponent {
       // examTypeId: [0],
 
       educationYearId: [1],
-      districtId: [1],
+      stateId: [0],
+      districtId: [0],
       talukaId: [0],
       centerId: [0],
       villageId: [0],
@@ -152,10 +155,16 @@ export class StudentReportComponent {
   }
   get f() { return this.studentReportForm.controls };
 
+  getState(){
+    this.stateArr = [
+      {"id": 0, "state": "All", "m_State": "सर्व"},
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
 
   getDistrict() {
     this.$districts = this.masterService.getAlllDistrict(this.languageFlag);
-    this.studentReportForm.controls['districtId'].setValue(1);
+    // this.studentReportForm.controls['districtId'].setValue(1);
     this.getTaluka();
   }
 
@@ -457,7 +466,29 @@ export class StudentReportComponent {
   }
 
   clearDropdown(name: any) {
-    if (name == 'talukaId'){
+    if (name == 'stateId'){
+      this.f['districtId'].setValue(0);
+      this.f['talukaId'].setValue(0);
+      this.f['centerId'].setValue(0);
+      this.f['villageId'].setValue(0);
+      this.f['schoolId'].setValue(0);
+      this.f['standardId'].setValue(0);
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.villageArr = [];
+    }else if (name == 'districtId'){
+      this.f['talukaId'].setValue(0);
+      this.f['centerId'].setValue(0);
+      this.f['villageId'].setValue(0);
+      this.f['schoolId'].setValue(0);
+      this.f['standardId'].setValue(0);
+      this.centerArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+      this.villageArr = [];
+    }else if (name == 'talukaId'){
       this.f['centerId'].setValue(0);
       this.f['villageId'].setValue(0);
       this.f['schoolId'].setValue(0);

@@ -16,37 +16,41 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
                         <mat-select formControlName="stateId" (selectionChange)="clearDropdown(); getDistrict();">
-                          <mat-option *ngFor="let state of stateArr" [value]="state.id">
-                            {{languageFlag == 'English' ? state.state : state.m_State}}
-                          </mat-option>
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                                {{languageFlag == 'English' ? state.state : state.m_State}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
-            <mat-select formControlName="districtId">
-              <mat-option *ngFor="let district of districtArr" [value]="district.id">
-                {{languageFlag == 'English' ? district.district : district.m_District}}
-              </mat-option>
-            </mat-select>
+                        <mat-select formControlName="districtId">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                                {{languageFlag == 'English' ? district.district : district.m_District}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                        <input matInput formControlName="subjectName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericWithSpaces($event);" maxlength="50">
+                        <input matInput formControlName="subjectName"
+                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericWithSpaces($event);"
+                            maxlength="50">
                         <mat-error *ngIf="f['subjectName'].hasError('pattern')">
-                            Please Enter Valid Subject Name
+                           {{'Labels.PleaseEnterValidSubjectName'| translate}}
                         </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.SubjectMarathi' | translate}}</mat-label>
-                        <input matInput formControlName="m_SubjectName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.unicodeMarathiAlphanumberic($event);" maxlength="50">
+                        <input matInput formControlName="m_SubjectName"
+                            (keypress)="validationService.noFirstSpaceAllow($event); validationService.unicodeMarathiAlphanumberic($event);"
+                            maxlength="50">
                         <mat-error *ngIf="f['m_SubjectName'].hasError('pattern')">
-                            Please Enter Valid Subject Name (Marathi)
+                           {{'Labels.PleaseEnterValidSubjectNameMarathi'| translate}}
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -56,10 +60,9 @@
         <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
             <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
                 translate}}</button>
-                <button type="submit" mat-flat-button class="btn-main ">{{data ? ('Labels.update' | translate) :
+            <button type="submit" mat-flat-button class="btn-main ">{{data ? ('Labels.update' | translate) :
                 ('Labels.submit' | translate)}}</button>
             <!-- <button type="submit" mat-flat-button class="btn-main ">{{ 'Labels.submit' | translate}} </button> -->
-
         </mat-card-footer>
     </form>
 </mat-card>

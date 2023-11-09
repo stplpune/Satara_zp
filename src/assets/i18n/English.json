@@ -485,7 +485,9 @@
         "updateExamMaster":"Update Exam Master",
         "SubjectMarathi":"Subject (Marathi)",
         "examName": "Exam Name",
-        "examNameMarathi": "Exam Name (Marathi)"
+        "examNameMarathi": "Exam Name (Marathi)",
+        "PleaseEnterValidSubjectName":"Please Enter Valid Subject Name",
+        "PleaseEnterValidSubjectNameMarathi":" Please Enter Valid Subject Name (Marathi)"
 
     }
 }

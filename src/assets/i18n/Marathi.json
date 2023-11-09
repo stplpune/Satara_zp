@@ -493,6 +493,8 @@
         "updateExamMaster":"परीक्षा मास्टर अपडेट करा",
         "SubjectMarathi":"विषय (मराठी)",
         "examName": "परीक्षा नाव",
-        "examNameMarathi": "परीक्षा नाव (मराठी)"
+        "examNameMarathi": "परीक्षा नाव (मराठी)",
+        "PleaseEnterValidSubjectName":"कृपया वैध विषयाचे नाव टाका",
+        "PleaseEnterValidSubjectNameMarathi":"कृपया वैध विषयाचे नाव टाका (मराठी)"
     }
 }

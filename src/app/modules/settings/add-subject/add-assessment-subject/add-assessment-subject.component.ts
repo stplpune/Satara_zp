@@ -15,7 +15,6 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-assessment-subject.component.scss']
 })
 export class AddAssessmentSubjectComponent {
-  editData: any;
   subjectForm!: FormGroup;
   stateArr = new Array();
   districtArr = new Array();

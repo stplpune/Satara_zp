@@ -11,6 +11,7 @@ import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-exce
 import { DatePipe } from '@angular/common';
 import { MasterService } from 'src/app/core/services/master.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { ValidationService } from 'src/app/core/services/validation.service';
 
 @Component({
   selector: 'app-add-subject',
@@ -41,7 +42,8 @@ export class AddSubjectComponent {
     private errors: ErrorsService,
     private downloadFileService: DownloadPdfExcelService,
     private datepipe: DatePipe,
-    private masterService: MasterService) { }
+    private masterService: MasterService,
+    public validationService: ValidationService) { }
 
     ngOnInit(){
       this.languageFlag = this.webService.languageFlag;
@@ -166,7 +168,6 @@ export class AddSubjectComponent {
           this.districtArr = [];
         }
       },
-      error: ((err: any) => { this.commonMethods.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusText, 1); })
     });
   }
 

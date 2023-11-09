@@ -56,7 +56,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                        <input matInput formControlName="textSearch">
+                        <input matInput formControlName="textSearch" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericWithSpaces($event);">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-auto">

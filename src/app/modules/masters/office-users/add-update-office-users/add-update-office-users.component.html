@@ -43,8 +43,21 @@
                 <div class="col-sm-6"
                     *ngIf=" officeForm.value.designationLevelId != 6 && officeForm.value.designationLevelId != 7">
                     <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.state' | translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="clearDropDown('State'); getDistrictDrop()">
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                                {{webStorageService.languageFlag =='mr-IN' ? state.m_State : state.state}}
+                              </mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['districtId'].hasError('required')">{{'Labels.districtIsRequired' | translate}}</mat-error> -->
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6"
+                    *ngIf=" officeForm.value.designationLevelId != 6 && officeForm.value.designationLevelId != 7">
+                    <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district' | translate}}</mat-label>
-                        <mat-select formControlName="districtId" (selectionChange)="getTalukaDrop()">
+                        <mat-select formControlName="districtId" (selectionChange)="clearDropDown('District'); getTalukaDrop()">
                             <mat-option [value]="dist.id"
                                 *ngFor="let dist of districts">{{webStorageService.languageFlag =='mr-IN' ?
                                 dist.m_District: dist.district}}</mat-option>

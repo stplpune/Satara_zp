@@ -10,6 +10,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
 import { MasterService } from 'src/app/core/services/master.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-add-subject',
@@ -25,7 +26,7 @@ export class AddSubjectComponent {
   tableDatasize!: number;
   highLightFlag: any;
   displayedColumns = new Array();
-  isWriteRight!: boolean;
+  // isWriteRight!: boolean;
   districtArr = new Array();
   stateArr = new Array();
   displayedheaders = ['Sr. No.', 'State', 'District', 'Subject', 'action'];
@@ -95,15 +96,16 @@ export class AddSubjectComponent {
 
   setTableData() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName'];
+    // let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName'];
     this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', 'action'];
     let tableData = {
       highlightedrow: true,
       edit: true,
-      delete: false,
+      delete: true,
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-      displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
+      // displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
+      displayedColumns: this.displayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders
@@ -178,25 +180,78 @@ export class AddSubjectComponent {
       case 'Edit':
         this.openDialog(obj);
         break;
-      // case 'Delete':
-      //   this.deteleDialogOpen(obj);
-      //   break;
-      // case 'View':
-      //   this.openDetailsDialog(obj);
-      //   break;
+      case 'Delete':
+        this.globalDialogOpen(obj);
+        break;
     }
   }
 
   openDialog(obj?: any) {
-    console.log("obj: ", obj);
-    
     const dialogRef = this.dialog.open(AddAssessmentSubjectComponent, {
       width: '500px',
+      data: obj,
+      disableClose: true
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      this.getTableData();
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if(result == 'yes' && obj){
+        this.onClear();
+        this.getState();
+        this.getTableData();
+        this.pageNumber = obj.pageNumber;
+      }
+      else if(result == 'yes'){
+        this.getState();
+        this.getTableData();
+        this.onClear();
+        this.pageNumber = 1;
+      }
+      this.highLightFlag = false;
+      this.setTableData();
     });
+  }
+
+  globalDialogOpen(obj: any) {
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Subject record?' : 'तुम्हाला विषयाचा रेकॉर्ड हटवायचा आहे का?',
+      cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onClickDelete(obj);
+      }
+      this.highLightFlag = false;
+      this.setTableData();
+    })
+  }
+
+  onClickDelete(obj: any){
+    let webStorageMethod = this.webService.createdByProps();
+    let deleteObj = {
+      "id": obj.id,
+      "deletedBy": this.webService.getUserId(),
+      "modifiedDate": webStorageMethod.modifiedDate,
+      "lan": this.webService.languageFlag
+    }
+    this.apiService.setHttp('delete', 'zp-satara/AssessmentSubject/DeleteAssessmentSubject', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.commonMethods.showPopup(res.statusMessage, 0);
+          this.getTableData();
+        }
+      },
+      error: (error: any) => {
+        this.commonMethods.checkEmptyData(error.statusText) == false ? this.errors.handelError(error.statusCode) : this.commonMethods.showPopup(error.statusText, 1);
+      }
+    })
   }
 
   onClear(){

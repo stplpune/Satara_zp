@@ -35,13 +35,19 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                        <input matInput formControlName="subjectName">
+                        <input matInput formControlName="subjectName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericWithSpaces($event);" maxlength="50">
+                        <mat-error *ngIf="f['subjectName'].hasError('pattern')">
+                            Please Enter Valid Subject Name
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.SubjectMarathi' | translate}}</mat-label>
-                        <input matInput formControlName="m_SubjectName">
+                        <input matInput formControlName="m_SubjectName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.unicodeMarathiAlphanumberic($event);" maxlength="50">
+                        <mat-error *ngIf="f['m_SubjectName'].hasError('pattern')">
+                            Please Enter Valid Subject Name (Marathi)
+                        </mat-error>
                     </mat-form-field>
                 </div>
             </div>

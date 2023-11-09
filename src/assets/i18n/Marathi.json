@@ -492,7 +492,9 @@
         "addExamMaster":"परीक्षा मास्टर जोडा",
         "updateExamMaster":"परीक्षा मास्टर अपडेट करा",
         "SubjectMarathi":"विषय (मराठी)",
-        "examName": "परीक्षा नाव",
-        "examNameMarathi": "परीक्षा नाव (मराठी)"
+        "examName": "चाचणी",
+        "examNameMarathi": "चाचणी (मराठी)",
+        "PleaseEnterValidSubjectName":"कृपया वैध विषयाचे नाव टाका",
+        "PleaseEnterValidSubjectNameMarathi":"कृपया वैध विषयाचे नाव टाका (मराठी)"
     }
 }

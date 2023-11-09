@@ -487,10 +487,10 @@
         "approvalStatus": "मंजुरीची स्थिती",
         "AssessmentSubject":"मूल्यांकन विषय",
         "addAssessmentSubject":"मूल्यांकन विषय जोडा",
-        "updateAssessmentSubjected":"अद्ययावत मूल्यांकन विषय",
+        "updateAssessmentSubjected":"मूल्यांकन विषय अपडेट करा",
         "ExamMaster":"परीक्षा मास्टर",
         "addExamMaster":"परीक्षा मास्टर जोडा",
-        "updateExamMaster":"अद्ययावत परीक्षा मास्टर",
+        "updateExamMaster":"परीक्षा मास्टर अपडेट करा",
         "SubjectMarathi":"विषय (मराठी)",
         "examName": "परीक्षा नाव",
         "examNameMarathi": "परीक्षा नाव (मराठी)"

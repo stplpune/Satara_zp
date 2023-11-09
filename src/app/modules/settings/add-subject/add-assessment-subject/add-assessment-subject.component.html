@@ -2,7 +2,7 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">
-                {{editData ? ('Labels.updateAgency' | translate): 'Labels.addAssessmentSubject' | translate}}
+                {{editData ? ('Labels.updateAssessmentSubjected' | translate) : 'Labels.addAssessmentSubject' | translate}}
             </h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
                 <mat-icon>close</mat-icon>
@@ -56,7 +56,10 @@
         <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
             <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
                 translate}}</button>
-            <button type="submit" mat-flat-button class="btn-main ">{{ 'Labels.submit' | translate}} </button>
+                <button type="submit" mat-flat-button class="btn-main ">{{data ? ('Labels.update' | translate) :
+                ('Labels.submit' | translate)}}</button>
+            <!-- <button type="submit" mat-flat-button class="btn-main ">{{ 'Labels.submit' | translate}} </button> -->
+
         </mat-card-footer>
     </form>
 </mat-card>

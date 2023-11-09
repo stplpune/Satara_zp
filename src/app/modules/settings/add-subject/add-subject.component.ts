@@ -119,10 +119,9 @@ export class AddSubjectComponent {
     data.find((ele: any, i: any) => {
       let obj = {
         srNo:  (i + 1),
-        schoolName: flag == 'excel' ? this.languageFlag == 'English' ? ele.schoolName : ele.m_SchoolName : ele.schoolName,
-        taluka: flag == 'excel' ? this.languageFlag == 'English' ? ele.taluka : ele.m_Taluka : ele.taluka,
-        center: flag == 'excel' ? this.languageFlag == 'English' ? ele.center : ele.m_Center : ele.center,
-        village: flag == 'excel' ? this.languageFlag == 'English' ? ele.village : ele.m_Village : ele.village,
+        state: flag == 'excel' ? this.languageFlag == 'English' ? ele.state : ele.m_State : ele.state,
+        district: flag == 'excel' ? this.languageFlag == 'English' ? ele.district : ele.m_District : ele.district,
+        subject: flag == 'excel' ? this.languageFlag == 'English' ? ele.subjectName : ele.m_SubjectName : ele.subjectName,
       }
       resultDownloadArr.push(obj);
 

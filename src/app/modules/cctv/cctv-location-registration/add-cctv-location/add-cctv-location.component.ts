@@ -33,6 +33,7 @@ export class AddCctvLocationComponent {
   editObj: any;
   currentDate = new Date();
   public loginData: any;
+  cctvCameraTypeArr = new Array();
   get cf() { return this.cameraDetailsForm.controls };
 
   constructor(public webService: WebStorageService,
@@ -63,6 +64,7 @@ export class AddCctvLocationComponent {
     this.cameraFormData();
     this.getTaluka();
     this.getCCTVLocation();
+    this.getCameraType()
   }
 
   filterFormData() {
@@ -77,7 +79,7 @@ export class AddCctvLocationComponent {
       "cctvLocationId": ['', [Validators.required]],
       "remark": [this.editObj?.remark || ''],
       "lan": [''],
-      "cctvDetailModel": []
+      "cctvDetailModel": [],
     });
   }
 
@@ -90,12 +92,16 @@ export class AddCctvLocationComponent {
       "isDeleted": false,
       "id": [this.editCctvObj ? this.editCctvObj.id : 0],
       "cctvRegisterId": [this.editCctvObj ? this.editCctvObj.cctvRegisterId : 0],
+      "cctvTypeId": [''],
+      "ipAddress": [""],
       "cctvName": [this.editCctvObj ? this.editCctvObj.cctvName : '',],
       "cctvModel": [this.editCctvObj ? this.editCctvObj.cctvModel : '',],
       "registerDate": [this.editCctvObj ? this.editCctvObj.registerDate : ''],
       "deviceId": [this.editCctvObj ? this.editCctvObj.deviceId : '',],
       "userName": [this.editCctvObj ? this.editCctvObj.userName : '',],
-      "password": [this.editCctvObj ? this.editCctvObj.password : '',]
+      "password": [this.editCctvObj ? this.editCctvObj.password : '',],
+      "link": [""]
+
     });
   }
 
@@ -190,6 +196,22 @@ export class AddCctvLocationComponent {
       // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
     });
   }
+
+  getCameraType(){
+    this.cctvCameraTypeArr = [];
+    this.masterService.getCCTVType('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == 200) {
+          this.cctvCameraTypeArr = res.responseData;
+          // this.editObj && this.editFlag ? (this.cctvLocationForm.controls['cctvLocationId'].setValue(this.editObj?.cctvLocationId)) : '';
+        } else {
+          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+          this.cctvCameraTypeArr = [];
+        }
+      },
+      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+    }
 
   addValidations(status?: any) {
     if (status) {

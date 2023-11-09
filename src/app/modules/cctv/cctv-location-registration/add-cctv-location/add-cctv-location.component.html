@@ -84,6 +84,25 @@
             <div class="row gx-3 mb-3">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.CCTVLocation'| translate}}</mat-label>
+                        <mat-select formControlName="cctvTypeId">
+                            <mat-option *ngFor="let cctvLoc of cctvCameraTypeArr" [value]="cctvLoc.id">{{languageFlag ==
+                                'English' ?
+                                cctvLoc.cctvType:cctvLoc.m_CCTVType}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6" *ngIf="cameraDetailsForm.value.cctvTypeId == 1">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.ipAddress'| translate}}</mat-label>
+                        <input matInput formControlName="ipAddress"
+                            (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
+                            maxlength="100">
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.CCTVName'| translate}}</mat-label>
                         <input matInput formControlName="cctvName"
                             (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
@@ -130,6 +149,15 @@
                             maxlength="10" minlength="8">
                         <mat-error *ngIf="cf['password'].hasError('pattern')">Please Enter Valid
                             Password</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.link'| translate}}</mat-label>
+                        <input matInput formControlName="link" (keypress)="validators.noFirstSpaceAllow($event);"
+                            maxlength="10" minlength="8">
+                        <mat-error *ngIf="cf['link'].hasError('pattern')">Please Enter Valid
+                            Link</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm text-end">

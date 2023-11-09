@@ -479,13 +479,15 @@
         "approvalStatus": "Approval Status",
         "AssessmentSubject":"Assessment Subject",
         "addAssessmentSubject":"Add Assessment Subject",
-        "updateAssessmentSubject":"Update Assessment Subject",
+        "updateAssessmentSubjected":"Update Assessment Subject",
         "ExamMaster":"Exam Master",
         "addExamMaster":"Add Exam Master",
         "updateExamMaster":"Update Exam Master",
         "SubjectMarathi":"Subject (Marathi)",
-        "examName": "Exam Name",
-        "examNameMarathi": "Exam Name (Marathi)"
+        "examName": "Test",
+        "examNameMarathi": "Test (Marathi)",
+        "PleaseEnterValidSubjectName":"Please Enter Valid Subject Name",
+        "PleaseEnterValidSubjectNameMarathi":" Please Enter Valid Subject Name (Marathi)"
 
     }
 }

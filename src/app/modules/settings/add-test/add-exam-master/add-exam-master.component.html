@@ -2,30 +2,32 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">
-                {{editData ? ('Labels.updateAgency' | translate): 'Labels.addExamMaster' | translate}}
+                {{data ? ('Labels.updateAgency' | translate): 'Labels.addExamMaster' | translate}}
             </h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
                 <mat-icon>close</mat-icon>
             </button>
         </div>
     </mat-card-header>
-    <form>
+    <form [formGroup]="examForm" (ngSubmit)="onSubmit()">   
         <mat-card-content class="card-body card-height-mid scrollbar">
             <div class="row gx-2">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.state' | translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1
+                        <mat-label>{{'Labels.state'| translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="clearDropdown(); getDistrict();">
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                                {{languageFlag == 'English' ? state.state : state.m_State}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.district' | translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1
+                        <mat-label>{{'Labels.district'| translate}}</mat-label>
+                        <mat-select formControlName="districtId">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                                {{languageFlag == 'English' ? district.district : district.m_District}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -33,13 +35,31 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.examName' | translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="examType" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericWithSpaces($event);" maxlength="50">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.examNameMarathi' | translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="m_ExamType" (keypress)="validationService.noFirstSpaceAllow($event); validationService.unicodeMarathiAlphanumberic($event);" maxlength="50">
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>Month Range From</mat-label>
+                        <input matInput [matDatepicker]="dp1" [formControl]="dateFrom" readonly>
+                <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
+                <mat-datepicker #dp1 startView="multi-year" (monthSelected)="setMonthAndYear($event, dp1)">
+                </mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>Month Range To</mat-label>
+                        <input matInput [matDatepicker]="dp2" [formControl]="dateTo" readonly>
+                <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
+                <mat-datepicker #dp2 startView="multi-year" (monthSelected)="setMonthAndYear($event, dp2)">
+                </mat-datepicker>
                     </mat-form-field>
                 </div>
             </div>

@@ -58,8 +58,18 @@
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.state' | translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="getAllDistricts();">
+                            <mat-option *ngFor="let state of stateData" [value]="state.id">
+                                {{webStorageService.languageFlag=='mr-IN' ? state.m_State : state.state}}
+                              </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.district' | translate}}</mat-label>
-                        <mat-select formControlName="districtId">
+                        <mat-select formControlName="districtId" (selectionChange)="getAllTalukas();">
                             <mat-option *ngFor="let data of districtData"
                                 [value]="data.id">{{webStorageService.languageFlag=='mr-IN' ? data.m_District
                                 :data.district}}</mat-option>

@@ -18,6 +18,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   levels = new Array();
   designations = new Array();
   officeForm!: FormGroup;
+  stateArr = new Array();
   districts = new Array();
   talukas = new Array();
   centers = new Array();
@@ -42,8 +43,10 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   ngOnInit() {
     this.defaultForm();
-    this.getDistrictDrop();
-    (!this.data) ? (this.getLevelDrop()) : '';    
+    this.getStateDrop();
+    (!this.data) ? (this.getLevelDrop()) : '';   
+    console.log("this.data", this.data);
+     
   }
 
   defaultForm() {
@@ -60,8 +63,8 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "schoolId": [this.data ? this.data.schoolId : null],
         "designationId": [this.data ? this.data.designationId : null, [Validators.required]],
         "designationLevelId": [this.data ? this.data.designationLevelId : null,[Validators.required]],
-        "stateId": [this.data ? 0 : 0],
-        "districtId": [{ value: this.data ? this.data.districtId :1 , disabled: true } , Validators.required ],
+        "stateId": [{ value: this.data ? this.data.stateId : null }],
+        "districtId": [{ value: this.data ? this.data.districtId : null } , Validators.required ],
         "talukaId": [this.data ? this.data.talukaId : null, Validators.required ],
         "userTypeId": [this.webStorageService.getUserTypeId()],
         "subUserTypeId": [this.data ? 0 : 0],
@@ -79,7 +82,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "userId": [this.data ? this.data.userId : 0], 
         "officeCenterSchoolModel":[]
       })
-    this.data ? (this.data, this.getLevelDrop(), this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(), this.getAgencyDrop(), this.getBitDrop(),this.onEdit()) : ''
+    this.data ? (this.data, this.getLevelDrop(), this.getStateDrop(), this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(), this.getAgencyDrop(), this.getBitDrop(),this.onEdit()) : ''
   }
 
   get fc() { return this.officeForm.controls }
@@ -132,7 +135,15 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   // }
   // }
 
+  getStateDrop(){
+    this.stateArr = [
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+  }
+
   getDistrictDrop() {
+    console.log("calling.. district");
+    
     this.masterService.getAllDistrict(this.webStorageService.languageFlag).subscribe({
       next: (resp: any) => {
         resp.statusCode == "200" ? this.districts = resp.responseData : this.districts = [];
@@ -401,6 +412,34 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       this.fc['beoMobileNo'].setValue('');
       this.fc['kendraEmailId'].setValue('');
       this.fc['kendraMobileNo'].setValue('');
+    }
+    else if (label == 'State') {
+      ( this.officeForm.value.designationLevelId == 7) ? this.fc['designationId'].setValue(0) : this.fc['designationId'].setValue(null);
+      this.designations = [];
+      this.bits = [];
+      this.talukas = [];
+      this.fc['districtId'].setValue('');
+      this.fc['talukaId'].setValue('');
+      this.fc['beoEmailId'].setValue('');
+      this.fc['beoMobileNo'].setValue('');
+      this.fc['kendraEmailId'].setValue('');
+      this.fc['kendraMobileNo'].setValue('');
+      this.fc['centerId'].setValue(null);
+      this.fc['schoolId'].setValue(null);
+      this.fc['bitId'].setValue(null);
+    }
+    else if (label == 'District') {
+      ( this.officeForm.value.designationLevelId == 7) ? this.fc['designationId'].setValue(0) : this.fc['designationId'].setValue(null);
+      this.designations = [];
+      this.bits = [];
+      this.fc['talukaId'].setValue('');
+      this.fc['beoEmailId'].setValue('');
+      this.fc['beoMobileNo'].setValue('');
+      this.fc['kendraEmailId'].setValue('');
+      this.fc['kendraMobileNo'].setValue('');
+      this.fc['centerId'].setValue(null);
+      this.fc['schoolId'].setValue(null);
+      this.fc['bitId'].setValue(null);
     }
     else if (label == 'Taluka') {
       ( this.officeForm.value.designationLevelId == 7) ? this.fc['designationId'].setValue(0) : this.fc['designationId'].setValue(null);

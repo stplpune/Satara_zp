@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
+import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 
 @Component({
@@ -14,12 +15,11 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-assessment-subject.component.scss']
 })
 export class AddAssessmentSubjectComponent {
-  editData: any;
   subjectForm!: FormGroup;
   stateArr = new Array();
   districtArr = new Array();
   languageFlag: any;
-  editObj: any;
+  get f() { return this.subjectForm.controls }
 
   constructor(private masterService: MasterService,
     private commonMethods: CommonMethodsService,
@@ -28,6 +28,8 @@ export class AddAssessmentSubjectComponent {
     private webService: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
+    public validationService: ValidationService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<AddAssessmentSubjectComponent>){}
 
   ngOnInit(){
@@ -41,19 +43,28 @@ export class AddAssessmentSubjectComponent {
 
   formField(){
     this.subjectForm = this.fb.group({
-      id: 0,
-      stateId: [0],
-      districtId: [0],
-      subjectName: [''],
-      m_SubjectName: [''],
+      id: [this.data ? this.data.id : 0],
+      stateId: ['', Validators.required],
+      districtId: ['', Validators.required],
+      subjectName: [this.data ? this.data.subjectName : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericOnly)]],
+      m_SubjectName: [this.data ? this.data.m_SubjectName : '', [Validators.required, Validators.pattern(this.validationService.alphanumericMarathi)]],
       lan: this.languageFlag
     })
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr = res.responseData;
+          this.data ? (this.f['stateId'].setValue(this.data?.stateId), this.getDistrict())  : '';
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
@@ -63,13 +74,12 @@ export class AddAssessmentSubjectComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr = res.responseData;
-          // this.subjectForm.controls['districtId'].setValue(0);
+          this.data ? (this.f['districtId'].setValue(this.data?.stateId))  : '';
         }
         else {
           this.districtArr = [];
         }
-      },
-      error: ((err: any) => { this.commonMethods.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusText, 1); })
+      }
     });
   }
 
@@ -77,13 +87,13 @@ export class AddAssessmentSubjectComponent {
     let formValue = this.subjectForm.value;
     console.log("formValue: ", formValue);
 
-    let url = this.editObj ? 'UpdateAssessmentSubject' : 'AddAssessmentSubject';
-    if(!this.subjectForm.valid){
+    let url = this.data ? 'UpdateAssessmentSubject' : 'AddAssessmentSubject';
+    if(!this.subjectForm.valid && formValue.districtId == 0){
       this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }else{
       this.ngxSpinner.show();
-      this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/AssessmentSubject/' + url, false, formValue, false, 'baseUrl');
+      this.apiService.setHttp(this.data ? 'put' : 'post', 'zp-satara/AssessmentSubject/' + url, false, formValue, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           res.statusCode == "200" ? (this.commonMethods.showPopup(res.statusMessage, 0), this.dialogRef.close('yes')) : this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
@@ -93,10 +103,8 @@ export class AddAssessmentSubjectComponent {
           this.ngxSpinner.hide();
           this.commonMethods.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusMessage, 1);
         })
-      })
-
+      });
     }
-    
   }
 
   clearDropdown(){

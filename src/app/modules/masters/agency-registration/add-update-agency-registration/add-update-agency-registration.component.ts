@@ -16,6 +16,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 })
 export class AddUpdateAgencyRegistrationComponent {
   agencyRegisterForm!: FormGroup;
+  stateData = new Array();
   districtData = new Array();
   talukaData = new Array();
   editData: any;
@@ -26,8 +27,10 @@ export class AddUpdateAgencyRegistrationComponent {
   ngOnInit() {
     this.editData = this.data
     this.defaultForm(this.editData);
-    this.getAllDistricts();
-    this.getAllTalukas();
+    this.getState();
+    // this.getAllDistricts();
+    // this.getAllTalukas();
+    console.log("editData", this.editData);
   }
 
   defaultForm(data?: any) {
@@ -43,20 +46,29 @@ export class AddUpdateAgencyRegistrationComponent {
       "agency_EmailId": [data ? data.agency_EmailId : "", [Validators.required, Validators.pattern(this.validation.email)]],
       "address": [data ? data.address : "", [Validators.required]],
       "agency_Address": [data ? data.agency_Address : "", [Validators.required]],
-      "districtId": [{ value: 1, disabled: true }],
+      "stateId ": [{ value: this.data ? this.data.stateId : null }],
+      "districtId": [{ value: this.data ? this.data.districtId : null }],
       "talukaId": ["", Validators.required],
       "lan": this.webStorageService.languageFlag,
       "localID": 0,
       "timestamp": new Date()
     })
-    data ? this.getAllTalukas() : ''
+    data ? (this.getState()) : ''
   }
 
   get fc() { return this.agencyRegisterForm.controls }
 
+  getState(){
+    this.stateData = [
+      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
+    ];
+    this.editData ? (this.fc['stateId'].setValue(this.editData.stateId), this.getAllDistricts()) : '';
+  }
+
   getAllDistricts() {
     this.master.getAllDistrict(this.webStorageService.languageFlag).subscribe((res: any) => {
       res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
+      this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : '';
     })
   }
 

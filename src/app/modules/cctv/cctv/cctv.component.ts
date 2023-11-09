@@ -6,7 +6,9 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
-declare var Player: any;
+declare var init_api: any;
+//import { init_api } from '../../../../assets/js/player-min.js';
+
 // import * as Player from '../../../../assets/js/cctv_js/play.js';
 
 
@@ -49,7 +51,6 @@ export class CctvComponent {
     public webStorageS: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
-
   ) {
 
 
@@ -57,6 +58,7 @@ export class CctvComponent {
 
 
   ngOnInit() {
+    init_api();
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
@@ -233,7 +235,7 @@ export class CctvComponent {
   // Click table row 
   childCompInfo(obj?: any) {
     if (obj.label == 'View') {
-      this.init();    
+      // this.init();    
     }
     else {
     }
@@ -257,7 +259,6 @@ export class CctvComponent {
         this.f['schoolId'].setValue(0);
         break;
     }
-
   }
 
   // clear button func
@@ -270,104 +271,103 @@ export class CctvComponent {
     this.getTableData();
   }
 
-  init() {
-    let streamid = 1;
-    let channel = 0;
-    var devid: any = '5625617245';
-    let username = 'admin';
-    let pwd = '87be!01cd4';
-    let element:any;
-    // let array: any  =[]
-    element = document.getElementById("canvas1");
-    Player?.init([element]);
-    Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
+  // init() {
+  //   let streamid = 1;
+  //   let channel = 0;
+  //   var devid: any = '5625617245';
+  //   let username = 'admin';
+  //   let pwd = '87be!01cd4';
+  //   let element:any;
+  //   // let array: any  =[]
+  //   element = document.getElementById("canvas1");
+  //   Player?.init([element]);
+  //   Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
     
-      Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
+  //     Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
     
-    setTimeout(() => {
-      Player.OpenStream(devid, '', channel, streamid, 0);
-    }, 15000);
-  }
+  //   setTimeout(() => {
+  //     Player.OpenStream(devid, '', channel, streamid, 0);
+  //   }, 15000);
+  // }
   
 
-  callOpenStreamMethod1(){
-    this.timer = setInterval(() => {
-      if (this.tableDataArray.length == this.i) {
-        clearInterval(this.timer);
-      } else {
-        let streamid = 1;
-        let channel = 0;
-        var devid: any = '5625617245';
-        Player?.OpenStream(devid, '', +channel, +streamid, this.i)
-        this.i++;
-      }
-    }, 5000);
-  }
+  // callOpenStreamMethod1(){
+  //   this.timer = setInterval(() => {
+  //     if (this.tableDataArray.length == this.i) {
+  //       clearInterval(this.timer);
+  //     } else {
+  //       let streamid = 1;
+  //       let channel = 0;
+  //       var devid: any = '5625617245';
+  //       Player?.OpenStream(devid, '', +channel, +streamid, this.i)
+  //       this.i++;
+  //     }
+  //   }, 5000);
+  // }
 
-  callOpenStreamMethod(_deviceID,_channel,_streamid, i){
-    return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
-      }, 10000);
-      resolve
-    })
+  // callOpenStreamMethod(_deviceID,_channel,_streamid, i){
+  //   return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
+  //     }, 10000);
+  //     resolve
+  //   })
    
-  }
+  // }
 
-  disconnect() {
-    Player?.DisConnectDevice('5625617245');
-    const promiseOne = new Promise((resolve)=>{
-      this.closeVideo();
-      resolve('resolved')
-    });
+  // disconnect() {
+  //   Player?.DisConnectDevice('5625617245');
+  //   const promiseOne = new Promise((resolve)=>{
+  //     this.closeVideo();
+  //     resolve('resolved')
+  //   });
 
-    promiseOne.then((value) => {
-      console.log(value);
-      this.init();
-    });
+  //   promiseOne.then((value) => {
+  //     console.log(value);
+  //     this.init();
+  //   });
     
-  }
+  // }
 
 
-  closeVideo() {
-    console.log("close exist live stream");
-    // Player.DisConnectDevice('5625617245')
-    Player?.CloseStream(0);
-    this.playStopFlag = false;
-  }
+  // closeVideo() {
+  //   console.log("close exist live stream");
+  //   // Player.DisConnectDevice('5625617245')
+  //   Player?.CloseStream(0);
+  //   this.playStopFlag = false;
+  // }
 
-  openVideo(_selectedCCTV?: any){
-    let devid: any = '5625617245';
-    let streamid = 1;
-    let channel = 0;
-    Player.OpenStream(devid, '', channel, streamid, 0);
-    this.playStopFlag = true;
-  }
+  // openVideo(_selectedCCTV?: any){
+  //   let devid: any = '5625617245';
+  //   let streamid = 1;
+  //   let channel = 0;
+  //   Player.OpenStream(devid, '', channel, streamid, 0);
+  //   this.playStopFlag = true;
+  // }
 
-   ptz_ctrl_up() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 2, 6)
-	}
-	 ptz_ctrl_down() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 3, 6)
-	}
-	 ptz_ctrl_left() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 4, 6)
-	}
-	 ptz_ctrl_right() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 5, 6)
-	}
-	 ptz_ctrl_stop() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 0, 0)
-	}
+  //  ptz_ctrl_up() {
+	// 	let devid: any = '5625617245';
+  //   let channel = 0;
+	// 	Player.ptz_ctrl(devid, '', channel, 2, 6)
+	// }
+	//  ptz_ctrl_down() {
+	// 	let devid: any = '5625617245';
+  //   let channel = 0;
+	// 	Player.ptz_ctrl(devid, '', channel, 3, 6)
+	// }
+	//  ptz_ctrl_left() {
+	// 	let devid: any = '5625617245';
+  //   let channel = 0;
+	// 	Player.ptz_ctrl(devid, '', channel, 4, 6)
+	// }
+	//  ptz_ctrl_right() {
+	// 	let devid: any = '5625617245';
+  //   let channel = 0;
+	// 	Player.ptz_ctrl(devid, '', channel, 5, 6)
+	// }
+	//  ptz_ctrl_stop() {
+	// 	let devid: any = '5625617245';
+  //   let channel = 0;
+	// 	Player.ptz_ctrl(devid, '', channel, 0, 0)
+	// }
 }
-

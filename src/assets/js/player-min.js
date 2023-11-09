@@ -11,7 +11,7 @@ function init_api() {
     //Connect to WCS server over websockets
     session = Flashphoner.createSession({
         urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
-    }).on(SESSION_STATUS.ESTABLISHED, function (session) {
+    }).on(SESSION_STATUS.ESTABLISHED, function(session) {
         console.log("ESTABLISHED");
     });
 
@@ -39,10 +39,8 @@ function playClick() {
 function playStream() {
     session.createStream({
         name: "rtsp://103.204.39.9:1026/avstream/channel=1/stream=0.sdp", //specify the RTSP stream address
-        // name: "rtsp://admin:abcd1234@103.204.39.9:1029/cam/realmonitor?channel=1&subtype=00&authbasic=YmlwaW46YmlwaW44NDE2", //specify the RTSP stream address
-        // name: "rtsp://9763451891:admin@123@103.204.39.9:1029/cam/realmonitor?channel=1&subtype=00&authbasic=YmlwaW46YmlwaW44NDE2", //specify the RTSP stream address
-        // name: "rtsp://user:abcd1234@192.168.10.102:554/Streaming/Channels/101",
         display: document.getElementById("play"),
+        show:document.getElementById("play").classList.add("myClass")
     }).play();
 }
 

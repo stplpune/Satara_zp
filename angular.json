@@ -58,7 +58,9 @@
               "src/assets/mapSVG.css",
               "node_modules/sweetalert2/src/sweetalert2.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/player-min.js"
+            ]
           },
           "configurations": {
             "production": {

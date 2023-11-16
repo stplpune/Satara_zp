@@ -438,6 +438,7 @@
         "cctvregistrationList": "CCTV Location List",
         "Addcctvrlocation": "Add CCTV Location",
         "CCTVLocation": "CCTV Location",
+        "CCTVType": "CCTV Type",
         "CCTVNameCCTVModel": "CCTV Name / CCTV Model",
         "CCTVName": "CCTV Name",
         "CCTVModel": "CCTV Model",
@@ -487,7 +488,9 @@
         "examName": "Test",
         "examNameMarathi": "Test (Marathi)",
         "PleaseEnterValidSubjectName":"Please Enter Valid Subject Name",
-        "PleaseEnterValidSubjectNameMarathi":" Please Enter Valid Subject Name (Marathi)"
+        "PleaseEnterValidSubjectNameMarathi":" Please Enter Valid Subject Name (Marathi)",
+        "ipAddress": "IP Address",
+        "urlLink":"URL Link"
 
     }
 }

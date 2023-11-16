@@ -84,7 +84,7 @@
             <div class="row gx-3 mb-3">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.CCTVLocation'| translate}}</mat-label>
+                        <mat-label>{{'Labels.CCTVType'| translate}}</mat-label>
                         <mat-select formControlName="cctvTypeId">
                             <mat-option *ngFor="let cctvLoc of cctvCameraTypeArr" [value]="cctvLoc.id">{{languageFlag ==
                                 'English' ?
@@ -96,8 +96,10 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.ipAddress'| translate}}</mat-label>
                         <input matInput formControlName="ipAddress"
-                            (keypress)="validators.noFirstSpaceAllow($event);validators.alphaNumericWithSpaces($event)"
-                            maxlength="100">
+                            (keypress)="validators.noFirstSpaceAllow($event);validators.NumericWithDot($event)"
+                            maxlength="50">
+                            <mat-error *ngIf="cf['ipAddress'].hasError('pattern')">Please Enter Valid
+                                IP address </mat-error>
                     </mat-form-field>
                 </div>
                 
@@ -153,7 +155,7 @@
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.link'| translate}}</mat-label>
+                        <mat-label>{{'Labels.urlLink'| translate}}</mat-label>
                         <input matInput formControlName="link" (keypress)="validators.noFirstSpaceAllow($event);"
                             maxlength="10" minlength="8">
                         <mat-error *ngIf="cf['link'].hasError('pattern')">Please Enter Valid
@@ -175,6 +177,8 @@
                         <thead>
                             <tr>
                                 <th scope="col">{{this.languageFlag == "English" ? 'Sr.No.' : 'अ.क्र'}}</th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'CCTV Type' : 'CCTV प्रकार'}}</th>
+                                <th scope="col">{{this.languageFlag == "English" ? 'IP Address' : 'IP पत्ता'}}</th>
                                 <th scope="col">{{this.languageFlag == "English" ? 'CCTV Name' : 'CCTV नाव'}}</th>
                                 <th scope="col"> {{this.languageFlag == "English" ? 'CCTV Model' : 'CCTV मॉडेल'}}</th>
                                 <th scope="col">{{this.languageFlag == "English" ? 'Device Id' : 'डिव्हाइस ID'}}</th>
@@ -190,6 +194,8 @@
                             <tr *ngFor="let cctv of cameraDetailsArr; let i = index"
                                 [ngStyle]="(cctv.isDeleted == true ) ? {backgroundcolor:'#C6C6C6', opacity:'0.4'} : { }">
                                 <td>{{i+1}}</td>
+                                <td>{{cctv.cctvTypeName}}</td>
+                                <td>{{cctv.ipAddress}}</td>
                                 <td>
                                     <span class="text-ellipsis-150-L2">{{cctv.cctvName}}</span>
                                 </td>
@@ -223,7 +229,7 @@
         <div class="d-flex w-100 align-items-center justify-content-end">
             <button mat-flat-button mat-dialog-close class="btn-second me-2" type="button">{{'Labels.cancel' |
                 translate}}</button>
-            <button mat-flat-button class="btn-main" type="submit">{{data ?( 'Labels.update' | translate)
+            <button mat-flat-button class="btn-main" type="submit">{{data ? ( 'Labels.update' | translate)
                 :('Labels.submit' |
                 translate)}}</button>
         </div>

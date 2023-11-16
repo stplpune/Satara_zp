@@ -92,16 +92,15 @@ export class AddCctvLocationComponent {
       "isDeleted": false,
       "id": [this.editCctvObj ? this.editCctvObj.id : 0],
       "cctvRegisterId": [this.editCctvObj ? this.editCctvObj.cctvRegisterId : 0],
-      "cctvTypeId": [''],
-      "ipAddress": [""],
+      "cctvTypeId": [this.editCctvObj ? this.editCctvObj.cctvTypeId : '',],
+      "ipAddress": [this.editCctvObj? this.editCctvObj.ipAddress:""],
       "cctvName": [this.editCctvObj ? this.editCctvObj.cctvName : '',],
       "cctvModel": [this.editCctvObj ? this.editCctvObj.cctvModel : '',],
       "registerDate": [this.editCctvObj ? this.editCctvObj.registerDate : ''],
       "deviceId": [this.editCctvObj ? this.editCctvObj.deviceId : '',],
       "userName": [this.editCctvObj ? this.editCctvObj.userName : '',],
       "password": [this.editCctvObj ? this.editCctvObj.password : '',],
-      "link": [""]
-
+      "link": [this.editCctvObj ? this.editCctvObj.link : ""]
     });
   }
 
@@ -215,6 +214,8 @@ export class AddCctvLocationComponent {
 
   addValidations(status?: any) {
     if (status) {
+      this.cf['cctvTypeId'].setValidators([Validators.required]);
+      this.cf['cctvTypeId'].value == 1 ? this.cf['ipAddress'].setValidators([Validators.required, Validators.pattern(this.validators.IpAddress)]): this.cf['ipAddress'].clearValidators();
       this.cf['cctvName'].setValidators([Validators.required]);
       this.cf['cctvModel'].setValidators([Validators.required]);
       this.cf['deviceId'].setValidators([Validators.required]);
@@ -222,6 +223,8 @@ export class AddCctvLocationComponent {
       this.cf['userName'].setValidators([Validators.required]);
       this.cf['password'].setValidators([Validators.required, Validators.pattern(this.validators.valPassword)]);
     } else {
+      this.cf['cctvTypeId'].clearValidators();
+      this.cf['ipAddress'].clearValidators();
       this.cf['cctvName'].clearValidators();
       this.cf['cctvModel'].clearValidators();
       this.cf['deviceId'].clearValidators();
@@ -229,6 +232,8 @@ export class AddCctvLocationComponent {
       this.cf['userName'].clearValidators();
       this.cf['password'].clearValidators();
     }
+    this.cf['cctvTypeId'].updateValueAndValidity();
+    this.cf['ipAddress'].updateValueAndValidity()
     this.cf['cctvName'].updateValueAndValidity();
     this.cf['cctvModel'].updateValueAndValidity();
     this.cf['deviceId'].updateValueAndValidity();
@@ -241,25 +246,31 @@ export class AddCctvLocationComponent {
     this.addValidations(true);
     let formValue = this.cameraDetailsForm.value;
 
-    let obj = {
-      "createdBy": this.webService.getUserId() || 0,
-      "modifiedBy": this.webService.getUserId() || 0,
-      "createdDate": new Date(),
-      "modifiedDate": new Date(),
-      "isDeleted": formValue.isDeleted,
-      "id": formValue.id,
-      "cctvRegisterId": formValue.cctvRegisterId,
-      "cctvName": formValue.cctvName,
-      "cctvModel": formValue.cctvModel,
-      "registerDate": formValue.registerDate,
-      "deviceId": formValue.deviceId,
-      "userName": formValue.userName,
-      "password": formValue.password
-    }
+    let cctyTypeName = this.cctvCameraTypeArr.find((cctv:any)=>cctv.id == formValue.cctvTypeId )
+    
 
     if (this.cameraDetailsForm.invalid) {
       return
     } else {
+      let obj = {
+        "createdBy": this.webService.getUserId() || 0,
+        "modifiedBy": this.webService.getUserId() || 0,
+        "createdDate": new Date(),
+        "modifiedDate": new Date(),
+        "isDeleted": formValue.isDeleted,
+        "id": formValue.id,
+        "cctvRegisterId": formValue.cctvRegisterId,
+        "cctvTypeId": formValue.cctvTypeId,
+        "cctvTypeName": cctyTypeName.cctvType,
+        "ipAddress":formValue.ipAddress,
+        "cctvName": formValue.cctvName,
+        "cctvModel": formValue.cctvModel,
+        "registerDate": formValue.registerDate,
+        "deviceId": formValue.deviceId,
+        "userName": formValue.userName,
+        "password": formValue.password,
+        "link":formValue.link
+      }
       if (this.data) {
         this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
         this.cameraDetailsArr.unshift(obj);

@@ -443,6 +443,7 @@
         "cctvregistrationList":"CCTV स्थान यादी",
         "Addcctvrlocation":"CCTV स्थान जोडा",
         "CCTVLocation":"CCTV स्थान",
+        "CCTVType": "CCTV प्रकार",
         "CCTVNameCCTVModel":"CCTV चे नाव / CCTV मॉडेल",
         "CCTVName":"CCTV नाव",
         "CCTVModel":"CCTV मॉडेल",
@@ -495,6 +496,8 @@
         "examName": "चाचणी",
         "examNameMarathi": "चाचणी (मराठी)",
         "PleaseEnterValidSubjectName":"कृपया वैध विषयाचे नाव टाका",
-        "PleaseEnterValidSubjectNameMarathi":"कृपया वैध विषयाचे नाव टाका (मराठी)"
+        "PleaseEnterValidSubjectNameMarathi":"कृपया वैध विषयाचे नाव टाका (मराठी)",
+        "ipAddress": "आयपी पत्ता",
+        "urlLink":"URL लिंक"
     }
 }

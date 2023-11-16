@@ -18,7 +18,8 @@ export class ValidationService {
   alphanumericMarathi = '^[\u0900-\u096F ]+$';
   valLandlineNo = '(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})';
   numericWithdecimaluptotwoDigits='^[0-9][0-9]*[.]?[0-9]{0,2}$';
-
+  numericWithDotVal = '[+-]?([0-9]*[.])?[0-9]+';
+  IpAddress = '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
 
 
   alphabetsWithSpaces(event: any) {

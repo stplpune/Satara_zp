@@ -118,7 +118,7 @@ export class AddExamMasterComponent {
     onSubmit(){
       let formValue = this.examForm.value;
       let url = this.data ? 'UpdateExamType' : 'AddExamType';
-      if(!this.examForm.valid && formValue.districtId == 0){
+      if(!this.examForm.valid){
         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
         return
       }else{

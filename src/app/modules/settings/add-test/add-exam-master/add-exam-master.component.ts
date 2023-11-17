@@ -101,8 +101,8 @@ export class AddExamMasterComponent {
   
     getDistrict() {
       this.districtArr = [];
-      // let stateId = this.subjectForm.value.stateId;
-      this.masterService.getAllDistrict('').subscribe({
+      let stateId = this.examForm.value.stateId;
+      this.masterService.getAllDistrict('', stateId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr = res.responseData;
@@ -141,15 +141,17 @@ export class AddExamMasterComponent {
       this.examForm.controls['districtId'].setValue(0);
     }
 
-    setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<Moment>) {
-      if(this.examForm.value.fromMonth){
+    setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<Moment>, flag? : string) {
+      console.log("normalizedMonthAndYear", datepicker);
+      
+      if(this.examForm.value.fromMonth && flag == 'fromDate'){        
         const ctrlValue = this.dateFrom.value!;
         ctrlValue.month(normalizedMonthAndYear.month());
         ctrlValue.year(normalizedMonthAndYear.year());
         this.dateFrom.setValue(ctrlValue);
         datepicker.close();
       }
-      else if(this.examForm.value.toMonth){
+      else if(this.examForm.value.toMonth && flag == 'todate'){
         const ctrlValue = this.dateTo.value!;
         ctrlValue.month(normalizedMonthAndYear.month());
         ctrlValue.year(normalizedMonthAndYear.year());

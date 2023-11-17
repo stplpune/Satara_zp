@@ -27,9 +27,9 @@ export class MasterService {
     });
   }
 
-  getAllDistrict(langFlag?: string) {
+  getAllDistrict(langFlag?: string, stateId?: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllDistrict?flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllDistrict?flag_lang=' + langFlag+'&StateId='+stateId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }

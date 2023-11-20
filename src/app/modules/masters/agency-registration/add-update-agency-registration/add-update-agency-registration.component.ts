@@ -46,8 +46,8 @@ export class AddUpdateAgencyRegistrationComponent {
       "agency_EmailId": [data ? data.agency_EmailId : "", [Validators.required, Validators.pattern(this.validation.email)]],
       "address": [data ? data.address : "", [Validators.required]],
       "agency_Address": [data ? data.agency_Address : "", [Validators.required]],
-      "stateId ": [{ value: this.data ? this.data.stateId : null }],
-      "districtId": [{ value: this.data ? this.data.districtId : null }],
+      "stateId": [{ value: this.data ? this.data.stateId : 0 }],
+      "districtId": [{ value: this.data ? this.data.districtId : 0 }],
       "talukaId": ["", Validators.required],
       "lan": this.webStorageService.languageFlag,
       "localID": 0,
@@ -59,21 +59,30 @@ export class AddUpdateAgencyRegistrationComponent {
   get fc() { return this.agencyRegisterForm.controls }
 
   getState(){
-    this.stateData = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
-    this.editData ? (this.fc['stateId'].setValue(this.editData.stateId), this.getAllDistricts()) : '';
+    this.master.getAllState('').subscribe({
+    next: (res: any) => {
+      if(res.statusCode == "200"){
+        this.stateData = res.responseData;
+        this.editData ? (this.fc['stateId'].setValue(this.editData.stateId), this.getAllDistricts()) : '';
+      }
+      else{
+        this.stateData = [];
+      }
+    }
+  });
   }
 
   getAllDistricts() {
-    this.master.getAllDistrict(this.webStorageService.languageFlag).subscribe((res: any) => {
+    let stateId = this.agencyRegisterForm.value.stateId;
+    this.master.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe((res: any) => {
       res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
       this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : '';
     })
   }
 
   getAllTalukas() {
-    this.master.getAllTaluka(this.webStorageService.languageFlag).subscribe((res: any) => {
+    let districtId = this.agencyRegisterForm.value.districtId;
+    this.master.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe((res: any) => {
       res.statusCode == 200 ? (this.talukaData = res.responseData, this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : '') : this.talukaData = [];
     })
   }

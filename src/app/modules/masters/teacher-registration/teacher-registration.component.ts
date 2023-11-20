@@ -122,7 +122,7 @@ export class TeacherRegistrationComponent implements OnInit {
     // let tableDatasize!: Number;
     let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;
 
-    let str = `pageno=${pageNo}&pagesize=10&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
+    let str = `pageno=${pageNo}&pagesize=10&textSearch=${this.searchContent.value}&StateId=${this.stateId.value || 0}&DistrictId=${this.districtId.value || 0}&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
     let reportStr = `pageno=${pageNo}&pagesize=${this.totalCount * 10}&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
 
     this.apiService.setHttp('GET', 'zp-satara/Teacher/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
@@ -164,14 +164,23 @@ export class TeacherRegistrationComponent implements OnInit {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
-    this.masterService.getAllDistrict('').subscribe({
+    let stateId = this.stateId.value || 0;
+    if(stateId > 0){
+    this.masterService.getAllDistrict('', stateId).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
@@ -183,12 +192,13 @@ export class TeacherRegistrationComponent implements OnInit {
       },
       error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
+    }
   }
 
   getAllTaluka() {
     this.talukaArray = [];
-    // let districtId = this.districtId.value;
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
+    let districtId = this.districtId.value || 0;
+    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == "200" && res.responseData.length) {
           this.talukaArray.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);

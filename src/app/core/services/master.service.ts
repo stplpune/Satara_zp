@@ -43,9 +43,9 @@ export class MasterService {
   }
 
 
-  getAllTaluka(langFlag?: string) {
+  getAllTaluka(langFlag?: string, districtId?: number) {
     return new Observable((obj) => {
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllTaluka?flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllTaluka?flag_lang=' + langFlag +'&DistrictId='+districtId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
         error: (e: any) => { obj.error(e) }

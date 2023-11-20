@@ -78,8 +78,8 @@ export class OfficeUsersComponent implements OnInit {
     //   return
     // }
 
-    let reportStr = `?textSearch=${this.searchContent.value}&pageno=${1}&pagesize=${(this.totalCount * 10)}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
-    let str = `?textSearch=${this.searchContent.value}&pageno=${this.pageNumber}&pagesize=10&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
+    let reportStr = `?textSearch=${this.searchContent.value}&pageno=${1}&pagesize=${(this.totalCount * 10)}&StateId=${this.stateId.value || 0}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
+    let str = `?textSearch=${this.searchContent.value}&pageno=${this.pageNumber}&pagesize=10&StateId=${this.stateId.value || 0}&DistrictId=${this.districtId.value || 0}&TalukaId=${this.talukaId.value || 0}&lan=${this.webStorageService.languageFlag}`;
     this.apiService.setHttp('GET', 'zp-satara/Office/GetAllOffice' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -171,14 +171,23 @@ export class OfficeUsersComponent implements OnInit {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
-    this.masterService.getAllDistrict('').subscribe({
+    let stateId = this.stateId.value || 0;
+    if(stateId > 0){
+    this.masterService.getAllDistrict('', stateId).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
@@ -190,10 +199,12 @@ export class OfficeUsersComponent implements OnInit {
       error: ((err: any) => { this.commonService.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonService.showPopup(err.statusText, 1); })
     });
   }
+  }
 
   getAllTaluka() {
+    let districtId = this.districtId.value || 0;
     this.talukaArray = [];
-    this.masterService.getAllTaluka(this.langTypeName).subscribe({
+    this.masterService.getAllTaluka(this.langTypeName, districtId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.talukaArray.push({"id": 0, "taluka": "All", "m_Taluka": "सर्व"}, ...res.responseData);

@@ -18,13 +18,13 @@ const moment = _rollupMoment || _moment;
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'YYYY-MM',
+    dateInput: 'MM/YYYY',
   },
   display: {
-    dateInput: 'YYYY-MM',
-    monthYearLabel: 'YYYY-MM',
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY-MM',
+    monthYearA11yLabel: 'MMMM YYYY',
   },
 };
 
@@ -48,6 +48,7 @@ export class AddExamMasterComponent {
   languageFlag: any;
   dateFrom = new FormControl(moment());
   dateTo = new FormControl(moment());
+  minVal: any;
   get f() { return this.examForm.controls }
 
   constructor(private masterService: MasterService,
@@ -149,6 +150,7 @@ export class AddExamMasterComponent {
         ctrlValue.month(normalizedMonthAndYear.month());
         ctrlValue.year(normalizedMonthAndYear.year());
         this.dateFrom.setValue(ctrlValue);
+        this.minVal = ctrlValue
         datepicker.close();
       }
       else if(this.examForm.value.toMonth && flag == 'todate'){

@@ -1,1 +1,129 @@
-<p>assessment-configuration works!</p>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb align-items-center">
+        <li aria-current="page">
+            <button mat-stroked-button class="btn-main btn-icon me-2" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button>
+        </li>
+        <li class="breadcrumb-item" aria-current="page">{{'Labels.setting' | translate}}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{'Labels.AssessmentConfiguration' | translate}}</li>
+    </ol>
+</nav>
+<mat-card class="plain-card">
+    <mat-card-header class="card-header">
+        <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
+            <div class="text-main fw-bold">
+                {{'Labels.QuestionType' | translate}}
+            </div>
+            <button mat-flat-button class="btn-main" (click)="openDialog()">
+                <mat-icon>add</mat-icon>
+                {{'Labels.AddQuestionType'| translate}}
+            </button>
+        </div>
+    </mat-card-header>
+    <mat-card-header class="card-header">
+        <form class="w-100">
+            <div class="row gx-2">
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.district' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.SelectClass' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.EducationalYear' | translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>Option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-auto mb-2">
+                    <button mat-stroked-button class="btn-main">{{'Labels.filter' | translate}}</button>
+                    <button type="button" mat-stroked-button class="btn-second ms-2">{{'Labels.clear'|
+                        translate}}</button>
+                </div>
+            </div>
+        </form>
+    </mat-card-header>
+    <mat-card-content class="card-body pt-0">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" class="dashboard-table">
+                <!-- Position Column -->
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Standard/Group</th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="QuestionType">
+                    <th mat-header-cell *matHeaderCellDef> Question Type</th>
+                    <td mat-cell *matCellDef="let element"> {{element.QuestionType}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="AssementType">
+                    <th mat-header-cell *matHeaderCellDef> Assement Type </th>
+                    <td mat-cell *matCellDef="let element"> {{element.AssementType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="EducationalYear">
+                    <th mat-header-cell *matHeaderCellDef>Educational Year</th>
+                    <td mat-cell *matCellDef="let element"> {{element.EducationalYear}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button id="tooltip" matTooltip="{{'Labels.edit' | translate}}"
+                            matTooltipPosition="right" matTooltipClass="tooltip">
+                            <mat-icon class="text-main">edit</mat-icon>
+                        </button>
+
+                        <ng-container>
+                            <button mat-icon-button id="tooltip"
+                                matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
+                                matTooltipClass="tooltip">
+                                <mat-icon class="text-danger">delete</mat-icon>
+                            </button>
+                        </ng-container>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

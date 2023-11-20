@@ -490,7 +490,15 @@
         "PleaseEnterValidSubjectName":"Please Enter Valid Subject Name",
         "PleaseEnterValidSubjectNameMarathi":" Please Enter Valid Subject Name (Marathi)",
         "ipAddress": "IP Address",
-        "urlLink":"URL Link"
+        "urlLink":"URL Link",
+        "AssessmentConfiguration":"Assessment Configuration",
+        "QuestionType":"Question Type",
+        "AddQuestionType":"Add Question Type",
+        "UpdateAddQuestionType":"Update Question Type",
+        "SelectClass":"Select Assesment Type",
+        "EducationalYear":"Educational Year",
+        "AssesmentCriteria":"Assesment Criteria",
+        "UploadPhotoDocument":"Upload Photo / Document"
 
     }
 }

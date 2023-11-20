@@ -498,6 +498,14 @@
         "PleaseEnterValidSubjectName":"कृपया वैध विषयाचे नाव टाका",
         "PleaseEnterValidSubjectNameMarathi":"कृपया वैध विषयाचे नाव टाका (मराठी)",
         "ipAddress": "आयपी पत्ता",
-        "urlLink":"URL लिंक"
+        "urlLink":"URL लिंक",
+        "AssessmentConfiguration":"मूल्यमापन संरचना",
+        "QuestionType":"प्रश्न प्रकार",
+        "AddQuestionType":"प्रश्न प्रकार जोडा",
+        "UpdateAddQuestionType":"प्रश्न प्रकार अपडेट करा",
+        "SelectClass":"मूल्यांकन प्रकार निवडा",
+        "EducationalYear":"शैक्षणिक वर्ष",
+        "AssesmentCriteria":"मूल्यांकन निकष",
+        "UploadPhotoDocument":"फोटो / कागदपत्र अपलोड करा"
     }
 }

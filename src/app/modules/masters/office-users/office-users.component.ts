@@ -64,7 +64,7 @@ export class OfficeUsersComponent implements OnInit {
     });
     (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
-
+  
   onPagintion(pageNo: number) {
     this.pageNumber = pageNo;
     this.getTableData();

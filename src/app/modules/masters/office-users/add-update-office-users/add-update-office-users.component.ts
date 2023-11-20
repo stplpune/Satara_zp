@@ -175,9 +175,8 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   }
 
   onchangeTaluka(){
-    this.officeForm.value.designationLevelId == 5 ? this.getBitDrop(): '';
+    this.officeForm.value.designationId == 10 ? this.getBitDrop(): '';
     this.getDesignationByLevelId();
-
   }
 
   getBitDrop(){

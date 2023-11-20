@@ -88,7 +88,7 @@ export class AddAssessmentSubjectComponent {
     console.log("formValue: ", formValue);
 
     let url = this.data ? 'UpdateAssessmentSubject' : 'AddAssessmentSubject';
-    if(!this.subjectForm.valid && formValue.districtId == 0){
+    if(!this.subjectForm.valid){
       this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return
     }else{

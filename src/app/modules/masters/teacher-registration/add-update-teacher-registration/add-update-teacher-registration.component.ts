@@ -382,15 +382,24 @@ export class AddUpdateTeacherRegistrationComponent {
   }
 
   getState(){
-    this.stateArray = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArray = res.responseData;
+          this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+        }
+        else{
+          this.stateArray = [];
+        }
+      }
+    });
     this.editFlag ? (this.teacherRegForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
   }
 
   getDistrict() {
     this.districtArray = [];
-    this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
+    let stateId = this.teacherRegForm.value.stateId;
+    this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.districtArray = res.responseData;
@@ -408,7 +417,8 @@ export class AddUpdateTeacherRegistrationComponent {
   }
   getTaluka() {
     this.talukaArray = [];
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
+    let districtId = this.teacherRegForm.value.districtId;
+    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.talukaArray = res.responseData;
@@ -529,15 +539,23 @@ export class AddUpdateTeacherRegistrationComponent {
   }
 
   getStateTeacherDetails(){
-    this.stateArrayTeacherDeatails = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
-    this.editFlag ? (this.td['stateId'].setValue(this.editObj.teacherDetails?.stateId), this.getAllDistrictTeacherDetails()) : '';
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArrayTeacherDeatails = res.responseData;
+          this.editFlag ? (this.td['stateId'].setValue(this.editObj.teacherDetails?.stateId), this.getAllDistrictTeacherDetails()) : '';
+        }
+        else{
+          this.stateArrayTeacherDeatails = [];
+        }
+      }
+    });
   }
 
   getAllDistrictTeacherDetails() {
     this.districtArrayTeacherDeatails = [];
-    this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
+    let stateId = this.teacherRegForm.value.teacherDetails.stateId;
+    this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.districtArrayTeacherDeatails = res.responseData;
@@ -557,7 +575,8 @@ export class AddUpdateTeacherRegistrationComponent {
 
   getAllTalukaTeacherDeatails() {
     this.talukaArrayTeacherDetails = [];
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
+    let districtId = this.teacherRegForm.value.teacherDetails.districtId;
+    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.talukaArrayTeacherDetails = res.responseData;

@@ -280,6 +280,8 @@ export class AddCctvLocationComponent {
         this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
         this.cameraDetailsArr.push(obj);
         this.cameraDetailsArr = [...this.cameraDetailsArr];
+        console.log("this.cameraDetailsArr");
+        
       }
       this.cameraFormData();
       this.addValidations();

@@ -82,7 +82,7 @@
         <mat-card-subtitle class="mb-3 fw-bold">{{'Labels.cctvdetails'| translate}}</mat-card-subtitle>
         <form [formGroup]="cameraDetailsForm">
             <div class="row gx-3 mb-3">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.CCTVType'| translate}}</mat-label>
                         <mat-select formControlName="cctvTypeId">
@@ -92,7 +92,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6" *ngIf="cameraDetailsForm.value.cctvTypeId == 1">
+                <div class="col-sm-4" *ngIf="cameraDetailsForm.value.cctvTypeId == 1">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.ipAddress'| translate}}</mat-label>
                         <input matInput formControlName="ipAddress"
@@ -103,7 +103,7 @@
                     </mat-form-field>
                 </div>
                 
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.CCTVName'| translate}}</mat-label>
                         <input matInput formControlName="cctvName"
@@ -111,7 +111,7 @@
                             maxlength="100">
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.CCTVModel'| translate}}</mat-label>
                         <input matInput formControlName="cctvModel"
@@ -119,15 +119,7 @@
                             maxlength="100">
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.DeviceId'| translate}}</mat-label>
-                        <input matInput formControlName="deviceId"
-                            (keypress)="validators.noFirstSpaceAllow($event);validators.onlyDigits($event)"
-                            maxlength="100">
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.RegistrationDate'| translate}}</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="registerDate" (click)="picker.open()"
@@ -136,7 +128,16 @@
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.DeviceId'| translate}}</mat-label>
+                        <input matInput formControlName="deviceId"
+                            (keypress)="validators.noFirstSpaceAllow($event);validators.onlyDigits($event)"
+                            maxlength="100">
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.Username'| translate}}</mat-label>
                         <input matInput formControlName="userName"
@@ -144,7 +145,7 @@
                             maxlength="50">
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.Password'| translate}}</mat-label>
                         <input matInput formControlName="password" (keypress)="validators.noFirstSpaceAllow($event);"
@@ -153,7 +154,7 @@
                             Password</mat-error>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.urlLink'| translate}}</mat-label>
                         <input matInput formControlName="link" (keypress)="validators.noFirstSpaceAllow($event);"

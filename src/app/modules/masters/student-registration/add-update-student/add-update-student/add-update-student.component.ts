@@ -381,7 +381,8 @@ export class AddUpdateStudentComponent {
 
   getDistrict() {
     this.districtArr = [];
-    this.masterService.getAllDistrict('').subscribe({
+    let stateId = this.stuRegistrationForm.value.stateId
+    this.masterService.getAllDistrict('', stateId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.districtArr = res.responseData;
@@ -451,7 +452,7 @@ export class AddUpdateStudentComponent {
     this.schoolArr = [];
     let Tid = this.stuRegistrationForm.value.talukaId
     let Cid = this.stuRegistrationForm.value.centerId || 0;
-    let Vid = 0;
+    let Vid = this.stuRegistrationForm.value.villageId || 0;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

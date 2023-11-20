@@ -478,6 +478,16 @@ export class MasterService {
     });
   }
 
+  getAllQuestionType(langFlag?: string) {
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllQuestionType?flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
   getAssementType(langFlag?: string) {
     return new Observable((obj) => {
       this.apiService.setHttp('GET', 'zp-satara/master/GetAssessmentTypeMaster?flag_lang=' + langFlag, false, false, false, 'baseUrl');

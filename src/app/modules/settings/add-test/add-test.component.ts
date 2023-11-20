@@ -164,17 +164,19 @@ export class AddTestComponent {
     getDistrict() {
       this.districtArr = [];
       let stateId = this.filterForm.value.stateId;
-      this.masterService.getAllDistrict('', stateId).subscribe({
-        next: (res: any) => {
-          if (res.statusCode == "200") {
-            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-            this.filterForm.controls['districtId'].setValue(0);
-          }
-          else {
-            this.districtArr = [];
-          }
-        },
-      });
+      if(stateId != 0){
+        this.masterService.getAllDistrict('', stateId).subscribe({
+          next: (res: any) => {
+            if (res.statusCode == "200") {
+              this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+              this.filterForm.controls['districtId'].setValue(0);
+            }
+            else {
+              this.districtArr = [];
+            }
+          },
+        });  
+      }
     }
 
     childTableCompInfo(obj: any) {
@@ -264,6 +266,13 @@ export class AddTestComponent {
     this.districtArr = [];
     this.formField();
     this.getTableData();
+  }
+
+  clearDropdown(flag?: string){
+    if(flag == 'state' ){
+      this.filterForm.controls['districtId']?.setValue('');
+      this.districtArr = [];
+    }
   }
 }
 

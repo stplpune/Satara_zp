@@ -163,8 +163,8 @@ export class AddTestComponent {
   
     getDistrict() {
       this.districtArr = [];
-      // let stateId = this.filterForm.value.stateId;
-      this.masterService.getAllDistrict('').subscribe({
+      let stateId = this.filterForm.value.stateId;
+      this.masterService.getAllDistrict('', stateId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);

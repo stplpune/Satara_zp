@@ -139,7 +139,7 @@ export class AddExamMasterComponent {
     }
 
     clearDropdown(){
-      this.examForm.controls['districtId'].setValue(0);
+      this.examForm.controls['districtId'].setValue('');
     }
 
     setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<Moment>, flag? : string) {

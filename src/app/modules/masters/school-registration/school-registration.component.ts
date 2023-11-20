@@ -229,16 +229,23 @@ export class SchoolRegistrationComponent implements OnInit {
 
   //#region ---------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
     let stateId = this.stateId.value || 0;
     if(stateId > 0){
-      this.masterService.getAllDistrict('').subscribe({
+      this.masterService.getAllDistrict('', stateId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
@@ -256,7 +263,7 @@ export class SchoolRegistrationComponent implements OnInit {
   getTaluka() {
     let districtId = this.districtId.value || 0;
     if(districtId > 0){
-      this.masterService.getAllTaluka('').subscribe({
+      this.masterService.getAllTaluka('', districtId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);

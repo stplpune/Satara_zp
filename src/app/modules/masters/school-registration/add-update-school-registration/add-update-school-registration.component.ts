@@ -75,6 +75,8 @@ export class AddUpdateSchoolRegistrationComponent {
     }
     this.userId = this.webStorageS.getUserTypeId();
     (this.userId == 4 && this.data?.flag == 'event') ? (this.getTableData(), this.eventFormFeild()) : '';
+    console.log("this.editObj: ", this.editObj);
+    
   }
 
   get f() {
@@ -155,14 +157,22 @@ export class AddUpdateSchoolRegistrationComponent {
 
   //#region ---------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
   getState(){
-    this.stateArr = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
-    this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr = res.responseData;
+          this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
   
   getDistrict() {
-    this.masterService.getAllDistrict(this.webStorageS.languageFlag).subscribe({
+    let stateId = this.schoolRegForm.value.stateId;
+    this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
         this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : '';
@@ -171,8 +181,8 @@ export class AddUpdateSchoolRegistrationComponent {
   }
 
   getTaluka() {
-    // let districtId = this.schoolRegForm.value.districtId;
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag).subscribe({
+    let districtId = this.schoolRegForm.value.districtId;
+    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
         this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), this.getBitOrCenter()) : '';
@@ -422,7 +432,7 @@ export class AddUpdateSchoolRegistrationComponent {
       };
       this.docArray.push(schoolDocumentObj);
     })
-    this.getDistrict();
+    this.getState();
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 

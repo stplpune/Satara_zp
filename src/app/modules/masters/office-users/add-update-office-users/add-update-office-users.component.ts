@@ -102,7 +102,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   onchangeLevel() {
     // this.getDistrictDrop();
-    this.getTalukaDrop();
+    this.getStateDrop();
     // this.getDesignationByLevelId();
     this.officeForm.value.designationLevelId == 7 ? this.getAgencyDrop(): ''
   }
@@ -136,15 +136,23 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   // }
 
   getStateDrop(){
-    this.stateArr = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr = res.responseData;
+          // this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrictDrop()) : '';
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrictDrop() {
     console.log("calling.. district");
-    
-    this.masterService.getAllDistrict(this.webStorageService.languageFlag).subscribe({
+    let stateId = this.officeForm.value.stateId;
+    this.masterService.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe({
       next: (resp: any) => {
         resp.statusCode == "200" ? this.districts = resp.responseData : this.districts = [];
       },
@@ -155,7 +163,8 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   }
 
   getTalukaDrop() {
-    this.masterService.getAllTaluka(this.webStorageService.languageFlag).subscribe({
+    let districtId = this.officeForm.value.districtId;
+    this.masterService.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe({
       next: (resp: any) => {
         resp.statusCode == "200" ? (this.talukas = resp.responseData) : this.talukas = [];
       },

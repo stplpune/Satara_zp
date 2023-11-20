@@ -20,6 +20,26 @@
                     </mat-select>
                 </mat-form-field>
             </div> -->
+            <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                    <mat-label>{{'Labels.state' | translate}}</mat-label>
+                    <mat-select formControlName="stateId" (selectionChange)="getDistrict(); clearDependency('state');">
+                        <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                          {{languageFlag == 'English' ? state.state : state.m_State}}
+                        </mat-option>
+                      </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+                <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                    <mat-label>{{'Labels.district' | translate}}</mat-label>
+                    <mat-select formControlName="districtId" (selectionChange)="getTaluka(); clearDependency('district')">
+                        <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                          {{languageFlag == 'English' ? district.district : district.m_District}}
+                        </mat-option>
+                      </mat-select>
+                </mat-form-field>
+            </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100">

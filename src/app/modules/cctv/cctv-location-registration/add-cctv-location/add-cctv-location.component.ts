@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
@@ -21,7 +20,8 @@ export class AddCctvLocationComponent {
   cctvLocationForm !: FormGroup;
   cameraDetailsForm !: FormGroup;
   languageFlag!: string;
-  $districts?: Observable<any>;
+  stateArr = new Array();
+  districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -62,7 +62,8 @@ export class AddCctvLocationComponent {
     });
     this.filterFormData();
     this.cameraFormData();
-    this.getTaluka();
+    this.getState();
+    // this.getTaluka();
     this.getCCTVLocation();
     this.getCameraType()
   }
@@ -71,7 +72,8 @@ export class AddCctvLocationComponent {
     this.cctvLocationForm = this.fb.group({
       ...this.webStorageS.createdByProps(),
       "id": [this.editObj ? this.editObj.id : 0],
-      "districtId": [this.editObj?.districtId || 1, [Validators.required]],
+      "stateId": [this.editObj ? this.editObj?.stateId : '', [Validators.required]],
+      "districtId": [this.editObj ? this.editObj?.districtId : '', [Validators.required]],
       "talukaId": ['', [Validators.required]],
       "centerId": ['', [Validators.required]],
       "villageId": ['', [Validators.required]],
@@ -104,14 +106,41 @@ export class AddCctvLocationComponent {
     });
   }
 
-  // getDistrict() {
-  //   this.$districts = this.masterService.getAlllDistrict(this.languageFlag);   
-  //   this.getTaluka();
-  // }
+  getState(){
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr= res.responseData;
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['stateId'].setValue(this.editObj?.stateId), this.getDistrict()) : this.loginData?.stateId ? (this.cctvLocationForm.controls['stateId'].setValue(this.loginData?.stateId), this.getDistrict()):'';
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    })
+  }
+
+  getDistrict() {
+    this.districtArr = [];
+    let stateId = this.cctvLocationForm.value.stateId;
+    this.masterService.getAllDistrict('', stateId).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.districtArr =res.responseData;
+          this.editObj && this.editFlag ? (this.cctvLocationForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : this.loginData?.districtId ? (this.cctvLocationForm.controls['districtId'].setValue(this.loginData?.districtId), this.getTaluka()):'';
+        }
+        else {
+          this.districtArr = [];
+        }
+      },
+    });
+  }
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
+    let districtId = this.cctvLocationForm.value.districtId;
+    this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;
@@ -277,7 +306,7 @@ export class AddCctvLocationComponent {
         this.cameraDetailsArr = [...this.cameraDetailsArr];
       }
       else {
-        this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
+        // this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
         this.cameraDetailsArr.push(obj);
         // this.cameraDetailsArr = [...this.cameraDetailsArr];
         console.log("this.cameraDetailsArr", this.cameraDetailsArr);
@@ -388,7 +417,29 @@ export class AddCctvLocationComponent {
 
   clearDependency(flag: any) {
     this.editFlag = false
-    if (flag == 'taluka') {
+    if(flag == 'state'){
+      this.cctvLocationForm.controls['districtId'].setValue('');
+      this.cctvLocationForm.controls['talukaId'].setValue('')
+      this.cctvLocationForm.controls['centerId'].setValue('');
+      this.cctvLocationForm.controls['villageId'].setValue('');
+      this.cctvLocationForm.controls['schoolId'].setValue('');
+      this.districtArr= [];
+      this.talukaArr = []
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+    }
+    else if(flag == 'district'){
+      this.cctvLocationForm.controls['talukaId'].setValue('')
+      this.cctvLocationForm.controls['centerId'].setValue('');
+      this.cctvLocationForm.controls['villageId'].setValue('');
+      this.cctvLocationForm.controls['schoolId'].setValue('');
+      this.talukaArr = []
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+    }
+    else if (flag == 'taluka') {
       this.cctvLocationForm.controls['centerId'].setValue('');
       this.cctvLocationForm.controls['villageId'].setValue('');
       this.cctvLocationForm.controls['schoolId'].setValue('');

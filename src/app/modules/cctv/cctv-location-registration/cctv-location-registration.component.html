@@ -36,15 +36,27 @@
     <form [formGroup]="filterForm">
         <mat-card-header class="card-header pb-0 border-bottom-0">
             <div class="row gx-2">
-                <!-- <div class="col-sm">
-                <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>{{'Labels.district'| translate}}</mat-label>
-                    <mat-select formControlName="districtId" (selectionChange)="getTaluka()">
-                        <mat-option *ngFor="let dist of $districts | async" [value]="dist.id">{{languageFlag =='English' ?
-                            dist.district : dist.m_District}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div> -->
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.state'| translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="clearDependency('state'); getDistrict();">
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                                {{languageFlag == 'English' ? state.state : state.m_State}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.district'| translate}}</mat-label>
+                        <mat-select formControlName="districtId" (selectionChange)="clearDependency('district'); getTaluka()">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                                {{languageFlag == 'English' ? district.district : district.m_District}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
@@ -121,6 +133,8 @@
                     <tr>
                         <th>{{'Labels.SrNo'| translate}}</th>
                         <th>{{'Labels.CCTVLocation'| translate}}</th>
+                        <th>{{'Labels.CCTVType'| translate}}</th>
+                        <th>{{'Labels.ipAddress'| translate}}</th>
                         <th>{{'Labels.CCTVName'| translate}}</th>
                         <th>{{'Labels.CCTVModel'| translate}}</th>
                         <th>{{'Labels.DeviceId'| translate}}</th>
@@ -135,6 +149,8 @@
                     <tr>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{i+1}}</td>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.cctvLocation}}</td>
+                        <td>{{data?.cctvTypeE}}</td>
+                        <td>{{data?.ipAddressE | dash}}</td>
                         <td>{{data?.cctvNameE}}</td>
                         <td>{{data?.cctvModelE}}</td>
                         <td>{{data?.deviceIdE}}</td>
@@ -160,7 +176,9 @@
                         </td>
                     </tr>
                     <tr *ngFor="let detail of data.cctvDetailsModelResponse; let i=index;">
+                        <td>{{detail?.cctvTypeE}}</td>
                         <td>{{detail?.cctvNameE}}</td>
+                        <td>{{detail?.ipAddressE  | dash}}</td>
                         <td>{{detail?.cctvModelE}}</td>
                         <td>{{detail?.deviceIdE}}</td>
                         <td>{{detail?.registerDateE | date:'dd-MM-yyyy'}}</td>

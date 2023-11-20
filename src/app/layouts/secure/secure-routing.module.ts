@@ -45,13 +45,15 @@ const routes: Routes = [
   { path: 'attendance-approval', loadChildren: () => import('../../modules/attendence/attendance-approval/attendance-approval.module').then(m => m.AttendanceApprovalModule) },
   { path: 'attendance-report', loadChildren: () => import('../../modules/attendence/tasksheet-reports/tasksheet-reports.module').then(m => m.TasksheetReportsModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Tasksheet Report', m_title: 'टास्कशीट अहवाल', active: true }] } },
   { path: 'holiday-master', loadChildren: () => import('../../modules/attendence/hoilday-master/hoilday-master.module').then(m => m.HoildayMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Hoilday Master', m_title: 'हॉलिडे मास्टर', active: true }] }  },
-  { path: 'cctv-location-registration', loadChildren: () => import('../../modules/cctv/cctv-location-registration/cctv-location-registration.module').then(m => m.CctvLocationRegistrationModule) ,canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV Location Registration', m_title: 'CCTV स्थान नोंदणी', active: true }] }  },
+  { path: 'cctv-location-registration', loadChildren: () => import('../../modules/cctv/cctv-location-registration/cctv-location-registration.module').then(m => m.CctvLocationRegistrationModule) ,canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV Location Registration', m_title: 'CCTV स्थान नोंदणी', active: true }]}},
   { path: 'cctv', loadChildren: () => import('../../modules/cctv/cctv/cctv.module').then(m => m.CctvModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV', m_title: 'CCTV स्थान', active: true }] }   },
 
   //------setting-routing--------//
 
   { path: 'assessment-subject', loadChildren: () => import('../../modules/settings/add-subject/add-subject.module').then(m => m.AddSubjectModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Subject', m_title: 'मूल्यांकन विषय', active: true }] }    },
   { path: 'exam-master', loadChildren: () => import('../../modules/settings/add-test/add-test.module').then(m => m.AddTestModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Exam Master', m_title: 'परीक्षा मास्टर', active: true }] }    },
+  { path: 'assessment-configuration', loadChildren: () => import('../../modules/settings/assessment-configuration/assessment-configuration.module').then(m => m.AssessmentConfigurationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Configuration', m_title: 'मूल्यमापन संरचना', active: true }]}},
+  
 ]
   
 

@@ -399,8 +399,8 @@ export class AddUpdateStudentComponent {
 
   getTaluka() {
     this.talukaArr = [];
-    // let districtId = this.stuRegistrationForm.value.districtId;
-    this.masterService.getAllTaluka('').subscribe({
+    let districtId = this.stuRegistrationForm.value.districtId;
+    this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr = res.responseData;

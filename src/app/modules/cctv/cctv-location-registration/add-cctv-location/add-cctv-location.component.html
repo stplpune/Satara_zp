@@ -215,7 +215,7 @@
                             <tr *ngFor="let cctv of cameraDetailsArr; let i = index"
                                 [ngStyle]="(cctv.isDeleted == true ) ? {backgroundcolor:'#C6C6C6', opacity:'0.4'} : { }">
                                 <td>{{i+1}}</td>
-                                <td>{{cctv.cctvTypeName}}</td>
+                                <td>{{cctv.cctvType}}</td>
                                 <td>{{cctv.ipAddress}}</td>
                                 <td>
                                     <span class="text-ellipsis-150-L2">{{cctv.cctvName}}</span>

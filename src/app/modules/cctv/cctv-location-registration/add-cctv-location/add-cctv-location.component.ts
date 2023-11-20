@@ -290,7 +290,7 @@ export class AddCctvLocationComponent {
         "id": formValue.id,
         "cctvRegisterId": formValue.cctvRegisterId,
         "cctvTypeId": formValue.cctvTypeId,
-        "cctvTypeName": cctyTypeName.cctvType,
+        "cctvType": cctyTypeName.cctvType,
         "ipAddress":formValue.ipAddress,
         "cctvName": formValue.cctvName,
         "cctvModel": formValue.cctvModel,
@@ -362,15 +362,21 @@ export class AddCctvLocationComponent {
             let obj = {
               "id": res?.id,
               "cctvRegisterId": res?.cctvRegisterId,
+              "cctvTypeId": res.cctvTypeId,
+              "cctvType": res.cctvType,
+              "ipAddress":res.ipAddress,
               "cctvName": res?.cctvName,
               "cctvModel": res?.cctvModel,
               "registerDate": res?.registerDate,
               "deviceId": res?.deviceId,
               "userName": res?.userName,
               "password": res?.password,
-              "isDeleted": res?.isDeleted
-            }
+              "isDeleted": res?.isDeleted,
+              "link":res?.link
+            }    
             this.cameraDetailsArr.push(obj);
+            console.log("this.cameraDetailsArr whle EDIT ", this.cameraDetailsArr);
+            
           });
         }
         else{

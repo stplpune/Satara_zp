@@ -9,75 +9,144 @@
             </button>
         </div>
     </mat-card-header>
-    <form>
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
         <mat-card-content class="card-body card-height-mid scrollbar">
             <div class="row gx-2">
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.district'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-label>{{'Labels.state'| translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="getDistrict();">
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                                {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
+                              </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.EducationalYear'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>
-                                <mat-option>Option-1</mat-option>
+                        <mat-label>{{'Labels.district'| translate}}</mat-label>
+                        <mat-select formControlName="districtId">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                district.district : district.m_District}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.EducationalYear'| translate}}</mat-label>
+                        <mat-select formControlName="educationYearId">
+                            <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
+                                {{webStorageS.getLangauge() == 'EN' ? educationYear.eductionYear : educationYear.eductionYear_M}}
+                              </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.SelectClass'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="assessmentTypeId">
+                            <mat-option *ngFor="let class of assessmentTypeArr" [value]="class.id">
+                                {{webStorageS.getLangauge() == 'EN' ? class.assessmentType : class.m_AssessmentType}}
+                              </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>Option-1</mat-option>
+                        <mat-select formControlName="assesmentSubjectId">
+                            <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
+                                {{webStorageS.getLangauge() == 'EN' ? sub.subject : sub.m_Subject}}
+                              </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
-                        <mat-select>
-                            <mat-option> Option-1</mat-option>
+                        <mat-select >
+                            <mat-option *ngFor="let que of questionArr" [value]="que.id">
+                                {{webStorageS.getLangauge() == 'EN' ? que.questionType : que.m_QuestionType}}
+                              </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.AssesmentCriteria' | translate}}</mat-label>
-                        <textarea matInput></textarea>
+                        <textarea matInput formControlName="question"></textarea>
                     </mat-form-field>
                 </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.AssesmentCriteriaMarathi' | translate}}</mat-label>
+                        <textarea matInput formControlName="m_Question"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <form [formGroup]="paramterForm">
+                    <div class="col-sm-12">
+                        <!-- *ngIf="addAssesmentFrm.value.questionTypeId ==1 || addAssesmentFrm.value.questionTypeId ==2" -->
+                        <div class="row gx-2">
+                            <div class="col-md-6 d-flex gap-2">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{'Labels.Parameter'| translate}}</mat-label>
+                                    <input matInput formControlName="optionName" maxlength="100"
+                                        (keypress)="validation.noFirstSpaceAllow($event)">
+                                </mat-form-field>
+                            </div>
+        
+                            <div class="col-md-6 d-flex gap-2">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{'Labels.ParameterMarathi'| translate}}</mat-label>
+                                    <input matInput formControlName="m_OptionName" maxlength="100"
+                                        (keypress)="validation.noFirstSpaceAllow($event);validation.unicodeMarathiAlphanumberic($event)">
+                                </mat-form-field>
+                                <button mat-flat-button type="submit" (click)="addParametereData()" class="btn-main btn-icon">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="col-sm-4 mb-2">
+                                <mat-chip-listbox>
+                                    <mat-chip *ngFor="let data of paramterArray ,let i=index">
+                                        {{data.optionName}}/{{data.m_OptionName}}
+                                        <button matChipRemove (click)="removeAddData(i)">
+                                            <mat-icon class="material-symbols-rounded">cancel</mat-icon>
+                                        </button>
+                                    </mat-chip>
+                                </mat-chip-listbox>
+
+                                <!-- <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                                    @for (movie of movies; track movie) {
+                                      <div class="example-box" cdkDrag>{{movie}}</div>
+                                    }
+                                  </div> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                
                 <div class="col-sm-6 mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="upload-btn-wrapper">
                             <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
                                 matTooltipClass="tooltip" (click)="uploadImage.click()">{{'Labels.UploadPhotoDocument' | translate}}</button>
-                            <input type="file" name="myfile" formControlName="images" multiple
-                                accept=".png, .jpg, .jpeg, .pdf, .doc, .txt" #uploadImage />
+                            <input type="file" name="myfile" formControlName="imgPath" multiple
+                                accept=".png, .jpg, .jpeg, .pdf, .doc, .txt" (change)="multipleImgUpload($event)" #uploadImage />
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 mt-3">
                     <div class="d-flex flex-wrap gap-4">
-                        <ng-container>
+                        <ng-container *ngFor="let data of imgArray; let i = index">
                             <div class="gallery position-relative">
-                                <img src="assets/images/pdf-image.png" height="110px"
+                                <img [src]="data.docFlag ? 'assets/images/pdf-image.png' : data.docPath" height="110px"
                                     width="110px" class="border">
                                 <span class="position-absolute" style="top:-17px;right:-17px;">
-                                    <button type="button" mat-icon-button
+                                    <button type="button" mat-icon-button (click)="clearMultipleImg(i)" 
                                         class="bg-danger bg-opacity-25 text-danger material-icons" matTooltip="{{'Labels.delete' | translate}}"
                                         matTooltipPosition="right" matTooltipClass="tooltip">
                                         <mat-icon>delete</mat-icon>

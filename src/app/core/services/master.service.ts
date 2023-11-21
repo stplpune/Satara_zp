@@ -53,15 +53,15 @@ export class MasterService {
     });
   }
 
-  // getAllVillage(langFlag?: string, talukaId?: any) {
-  //   return new Observable((obj) => {
-  //     this.apiService.setHttp('GET', 'zp-satara/master/GetAllVillageByTalukaId?flag_lang=' + langFlag + '&TalukaId=' + talukaId, false, false, false, 'baseUrl');
-  //     this.apiService.getHttp().subscribe({
-  //       next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
-  //       error: (e: any) => { obj.error(e) }
-  //     });
-  //   });
-  // }
+  getAllVillageByTaluka(langFlag?: string, talukaId?: any) {
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllVillageByTalukaId?flag_lang=' + langFlag + '&TalukaId=' + talukaId, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") {obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
 
   getAllVillage(langFlag?: string, centerId?: any) {
     return new Observable((obj) => {

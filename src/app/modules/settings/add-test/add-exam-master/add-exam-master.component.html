@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>Month Range From</mat-label>
+                        <mat-label>{{'Labels.MonthRangeFrom' | translate}}</mat-label>
                         <input matInput [matDatepicker]="dp1" [formControl]="dateFrom" readonly>
                 <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
                 <mat-datepicker #dp1 startView="multi-year" (monthSelected)="setMonthAndYear($event, dp1, 'fromDate')">
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>Month Range To</mat-label>
+                        <mat-label>{{'Labels.MonthRangeTo' | translate}}</mat-label>
                         <input matInput [matDatepicker]="dp2" [formControl]="dateTo" readonly  [min]="minVal" >
                 <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
                 <mat-datepicker #dp2 startView="multi-year" (monthSelected)="setMonthAndYear($event, dp2, 'todate')">

@@ -20,7 +20,7 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatTableModule,
     TableComponent,
-    MatTooltipModule
+    MatTooltipModule,
+    MatChipsModule,
   ]
 })
 export class AssessmentConfigurationModule { }

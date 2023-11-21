@@ -176,6 +176,7 @@ export class OfficeUsersComponent implements OnInit {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.stateId.setValue(0);
         }
         else{
           this.stateArr = [];
@@ -185,12 +186,14 @@ export class OfficeUsersComponent implements OnInit {
   }
 
   getDistrict() {
+    this.districtArr = [];
     let stateId = this.stateId.value || 0;
-    if(stateId > 0){
+    if(stateId != 0){
     this.masterService.getAllDistrict('', stateId).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+          this.districtId.setValue(0);
         }
         else {
           this.districtArr = [];
@@ -204,18 +207,21 @@ export class OfficeUsersComponent implements OnInit {
   getAllTaluka() {
     let districtId = this.districtId.value || 0;
     this.talukaArray = [];
-    this.masterService.getAllTaluka(this.langTypeName, districtId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-          this.talukaArray.push({"id": 0, "taluka": "All", "m_Taluka": "सर्व"}, ...res.responseData);
-        } else {
-          this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
-          this.talukaArray = [];
+    if(districtId != 0){
+      this.masterService.getAllTaluka(this.langTypeName, districtId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == 200 && res.responseData.length) {
+            this.talukaArray.push({"id": 0, "taluka": "All", "m_Taluka": "सर्व"}, ...res.responseData);
+            this.talukaId.setValue(0);
+          } else {
+            this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
+            this.talukaArray = [];
+          }
+        }), error: (error: any) => {
+          this.errors.handelError(error.statusCode)
         }
-      }), error: (error: any) => {
-        this.errors.handelError(error.statusCode)
-      }
-    })
+      })  
+    }
   }
 
   childCompInfo(obj: any) {
@@ -408,6 +414,17 @@ export class OfficeUsersComponent implements OnInit {
       this.highLightFlag=false;
       this.languageChange();
     });
+  }
+
+  clearDropDown(flag?: string){
+    if(flag == 'state'){
+      this.districtId.setValue(null);
+      this.talukaId.setValue(null);
+      this.talukaArray = [];
+    }
+    else if(flag == 'district'){
+      this.talukaId.setValue(null);
+    }
   }
 
 }

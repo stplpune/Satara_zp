@@ -56,7 +56,7 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.MonthRangeTo' | translate}}</mat-label>
-                        <input matInput [matDatepicker]="dp2" [formControl]="dateTo" readonly  [min]="minVal" >
+                        <input matInput [matDatepicker]="dp2" [formControl]="dateTo" readonly >
                 <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
                 <mat-datepicker #dp2 startView="multi-year" (monthSelected)="setMonthAndYear($event, dp2, 'todate')">
                 </mat-datepicker>

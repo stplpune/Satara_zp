@@ -34,6 +34,17 @@
                 </div>
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.EducationalYear' | translate}}</mat-label>
+                        <mat-select formControlName="educationYearId">
+                            <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
+                                {{languageFlag == 'English' ? educationYear.eductionYear : educationYear.eductionYear_M}}
+                              </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.examName' | translate}}</mat-label>
                         <input matInput formControlName="examType" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericWithSpaces($event);" maxlength="50">
                     </mat-form-field>

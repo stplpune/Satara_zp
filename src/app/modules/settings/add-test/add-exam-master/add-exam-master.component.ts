@@ -45,6 +45,7 @@ export class AddExamMasterComponent {
   examForm!: FormGroup;
   stateArr = new Array();
   districtArr = new Array();
+  educationYearArr = new Array();
   languageFlag: any;
   dateFrom = new FormControl(moment());
   dateTo = new FormControl(moment());
@@ -69,19 +70,25 @@ export class AddExamMasterComponent {
         this.languageFlag = lang;
       });
       this.getState();
+      this.getEducatioYear();
       this.formField();
     }
     
     formField(){
+    
       this.examForm = this.fb.group({
         id: [this.data ? this.data.id : 0],
         stateId: ['', Validators.required],
         districtId: ['', Validators.required],
+        educationYearId: ['', Validators.required],
+        shortForm: [],
+        "createdBy": [this.webService.getUserId() || 0],
+        "modifiedBy": [this.webService.getUserId() || 0],      
         examType: [this.data ? this.data.examType : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericOnly)]],
         m_ExamType: [this.data ? this.data.m_ExamType : '', [Validators.required, Validators.pattern(this.validationService.alphanumericMarathi)]],
         fromMonth:  [this.data ? moment(this.data.fromMonth) : moment()],
         toMonth:  [this.data ? moment(this.data.toMonth) : moment()],
-        lan: this.languageFlag
+        lan: this.languageFlag,
       })
     
       this.data ?  (this.dateFrom.setValue(moment(this.data.fromMonth)),this.dateTo.setValue(moment(this.data.toMonth))) :''
@@ -117,6 +124,23 @@ export class AddExamMasterComponent {
         }
       });
     }
+
+    getEducatioYear() {
+      this.educationYearArr = [];
+      this.masterService.getAcademicYears(this.webService.languageFlag).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.educationYearArr=res.responseData;
+            this.data ? (this.f['educationYearId'].setValue(this.data?.educationYearId))  : '';
+
+          }
+          else {
+            this.educationYearArr = [];
+          }
+        },
+      });
+    }
+
 
     onSubmit(){
       let formValue = this.examForm.value;

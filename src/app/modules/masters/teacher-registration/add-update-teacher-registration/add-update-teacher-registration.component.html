@@ -175,6 +175,9 @@
                     <!-- <mat-error *ngIf="f['villageId'].hasError('required')">{{'Labels.villageIsRequired'| translate}}</mat-error> -->
                 </mat-form-field>
             </div>
+            
+        </div>
+        <div class="row gx-2">
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.currentAddress'| translate}}</mat-label>
@@ -193,7 +196,7 @@
                     <!-- <mat-error *ngIf="f['permentAddress'].hasError('required') ">
                             Permanent Address Is Required</mat-error> -->
                 </mat-form-field>
-                <div class="Current-Address">
+                <div class="Current-Address pt-0">
                     <input type="checkbox" name="check" id="check1" [checked]="checked"
                         [disabled]="!f['currentAddress'].value" (change)="addSameAddress($event)" />
                     <label for="check1" class="small ms-1 mt-1">{{'Labels.SameCurrentAddress' | translate}}</label>

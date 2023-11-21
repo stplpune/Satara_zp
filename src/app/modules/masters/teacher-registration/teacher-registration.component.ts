@@ -178,69 +178,79 @@ export class TeacherRegistrationComponent implements OnInit {
   }
 
   getDistrict() {
-    let stateId = this.stateId.value || 0;
+    let stateId: any = this.stateId.value;
     if(stateId > 0){
     this.masterService.getAllDistrict('', stateId).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-          // this.districtId.setValue(this.districtArr[0].id);
         }
         else {
           this.districtArr = [];
         }
       },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
+    }
+    else{
+      this.districtArr = [];
     }
   }
 
   getAllTaluka() {
     this.talukaArray = [];
-    let districtId = this.districtId.value || 0;
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.talukaArray.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-        } else {
-          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
-          this.talukaArray = [];
-        }
+    let districtId: any = this.districtId.value;
+    if(districtId > 0){
+      this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.talukaArray.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+          } else {
+            this.talukaArray = [];
+          }
+        })
       })
-    })
+    }
+    else{
+      this.talukaArray = [];
+    }
   }
 
   getCluster() {
     this.clusterArray = [];
-    let talukaFilterId = this.talukaId.value;
-
-    this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaFilterId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.clusterArray.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-        } else {
-          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
-          this.clusterArray = [];
-        }
-      })
-    });
+    let talukaFilterId: any = this.talukaId.value;
+    if(talukaFilterId > 0){
+      this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaFilterId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.clusterArray.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+          } else {
+            this.clusterArray = [];
+          }
+        })
+      });
+    }
+    else{
+      this.clusterArray = [];
+    }
   }
 
   getVillage() {
     this.villageArray = [];
-    let centerId = this.clusterId.value;
-    console.log("centerId : ", centerId);
-
-    this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.villageArray.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-        } else {
-          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
-          this.clusterArray = [];
-        }
+    let centerId: any = this.clusterId.value;
+    if(centerId > 0){
+      this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.villageArray.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+          } else {
+            this.villageArray = [];
+          }
+        })
       })
-    })
+    }
+    else{
+      this.villageArray = [];
+    }
   }
 
   //#endregion ---------------------------------------------- PDF Download start here ----------------------------------------// 

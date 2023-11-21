@@ -373,10 +373,17 @@ export class AddUpdateStudentComponent {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
-    this.editFlag ? (this.stuRegistrationForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr = res.responseData;
+          this.editFlag ? (this.stuRegistrationForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
@@ -384,16 +391,13 @@ export class AddUpdateStudentComponent {
     let stateId = this.stuRegistrationForm.value.stateId
     this.masterService.getAllDistrict('', stateId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.districtArr = res.responseData;
-          // this.stuRegistrationForm.controls['districtId'].setValue(1);
           this.editFlag ? (this.stuRegistrationForm.controls['districtId'].setValue(this.editObj.districtId), this.getTaluka()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.districtArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -402,15 +406,13 @@ export class AddUpdateStudentComponent {
     let districtId = this.stuRegistrationForm.value.districtId;
     this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.talukaArr = res.responseData;
           this.editFlag ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.editObj.talukaId), this.getAllCenter()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -419,32 +421,27 @@ export class AddUpdateStudentComponent {
     let id = this.stuRegistrationForm.value.talukaId;
     this.masterService.getAllCenter('', id).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.centerArr = res.responseData;
           this.editFlag ? (this.stuRegistrationForm.controls['centerId'].setValue(this.editObj.centerId), this.getVillage()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.centerArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
   getVillage() {
     let cId = this.stuRegistrationForm.value.centerId;
-    // let Cid = 0;
     this.masterService.getAllVillage('', cId).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.villageArr = res.responseData;
           this.editFlag ? (this.stuRegistrationForm.controls['villageId'].setValue(this.editObj.villageId), this.getAllSchoolsByCenterId()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['villageId'].setValue(this.loginData.villageId), this.getAllSchoolsByCenterId()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.villageArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -455,15 +452,13 @@ export class AddUpdateStudentComponent {
     let Vid = this.stuRegistrationForm.value.villageId || 0;
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.schoolArr = res.responseData;
           this.editFlag ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.editObj.schoolId), this.getStandard()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.loginData.schoolId), this.getStandard()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -472,15 +467,13 @@ export class AddUpdateStudentComponent {
     let schoolId = this.stuRegistrationForm.value.schoolId
     this.masterService.GetStandardBySchool(schoolId, '').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.standardArr = res.responseData;
           this.editFlag ? this.stuRegistrationForm.controls['standard'].setValue(this.editObj.standardId) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.standardArr = [];
         }
       },
-      // error: ((err: any) => {this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -488,15 +481,13 @@ export class AddUpdateStudentComponent {
     this.genderArr = [];
     this.masterService.getAllStudentGender('').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.genderArr = res.responseData;
           this.editFlag ? this.stuRegistrationForm.controls['gender'].setValue(this.editObj.genderId) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.genderArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -504,15 +495,13 @@ export class AddUpdateStudentComponent {
     this.religionArr = [];
     this.masterService.getAllReligion('').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.religionArr = res.responseData;
           this.editFlag ? (this.stuRegistrationForm.controls['religionId'].setValue(this.editObj?.religionId), this.getCatogory()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.religionArr = [];
         }
       },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
     });
   }
 
@@ -521,15 +510,13 @@ export class AddUpdateStudentComponent {
     let id = this.stuRegistrationForm.value.religionId;
     this.masterService.GetAllCasteCategory(id, '').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.catogoryArr = res.responseData;
           this.editFlag ? (this.stuRegistrationForm.controls['casteCategoryId'].setValue(this.editObj?.casteCategoryId), this.getCaste()) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.catogoryArr = [];
         }
       },
-      // error: ((err: any) => {this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -538,15 +525,13 @@ export class AddUpdateStudentComponent {
     let id = this.stuRegistrationForm.value.casteCategoryId;
     this.masterService.getAllCaste(id, '').subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.casteArr = res.responseData;
           this.editFlag ? this.stuRegistrationForm.controls['casteId'].setValue(this.editObj?.casteId) : '';
         } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.casteArr = [];
         }
       },
-      // error: ((err: any) => {this.errors.handelError(err.statusCode || err.status) })
     });
   }
 
@@ -556,25 +541,23 @@ export class AddUpdateStudentComponent {
     this.apiService.setHttp('get', 'zp-satara/master/GetAllRelation?flag_lang=', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.relationArr = res.responseData;
           this.readOnlyFlag ? (this.addGardianForm.controls['relationId'].setValue(this.searchMobieNoObj?.[0]?.relationId)) : '';
         } else {
           this.relationArr = []
         }
       },
-      error: ((err: any) => { this.ngxSpinner.hide(); this.errors.handelError(err.statusCode) })
     });
 
   }
-
   //#endregion  ---------------------------------- Dropdown End here -----------------------------------------------
 
   onEdit(studentId: any) {
     this.apiService.setHttp('get', 'zp-satara/Student/GetById?Id=' + studentId + '&lan=', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           this.editObj = res.responseData;
           this.patchValue();
         } else {
@@ -704,7 +687,7 @@ export class AddUpdateStudentComponent {
       this.apiService.setHttp(this.editObj ? 'put' : 'post', 'zp-satara/Student/' + url, false, postObj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
-          if (res.statusCode == 200) {
+          if (res.statusCode == "200") {
             this.ngxSpinner.hide();
             this.apiService.staticData.next('getRefreshStaticdata');
             this.commonMethods.showPopup(res.statusMessage, 0);
@@ -727,7 +710,7 @@ export class AddUpdateStudentComponent {
     let type = photoName == 'img' ? 'jpg, jpeg, png' : 'jpg, jpeg, png, pdf';
     this.fileUpl.uploadStudentDocuments(event, 'Upload', type).subscribe({
       next: (res: any) => {
-        if (res.statusCode == 200) {
+        if (res.statusCode == "200") {
           if (this.imageFile.nativeElement.value == this.aadharFile.nativeElement.value) {
             let msg = this.languageFlag == 'English' ? photoName == 'img' ? 'Upload different profile photo' : 'Upload different Aadhaar card' : photoName == 'img' ? 'भिन्न प्रोफाइल फोटो अपलोड करा' : 'वेगवेगळे आधार कार्ड अपलोड करा';
             this.commonMethods.showPopup(msg, 1);
@@ -835,7 +818,7 @@ export class AddUpdateStudentComponent {
       this.apiService.setHttp('get', 'zp-satara/Student/GetGaurdianByMobileNo?MobileNo=' + mobileNo + '&lan=', false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
-          if (res.statusCode == 200) {
+          if (res.statusCode == "200") {
             this.searchMobieNoObj = res.responseData
             this.readOnlyFlag = true;
             this.addGardianForm.controls['name'].setValue(this.searchMobieNoObj[0]?.name);

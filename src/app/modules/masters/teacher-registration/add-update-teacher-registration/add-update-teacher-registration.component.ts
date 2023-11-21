@@ -406,7 +406,6 @@ export class AddUpdateTeacherRegistrationComponent {
           // this.teacherRegForm.controls['districtId'].setValue(1);
           this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArray = [];
         }
       }),
@@ -424,7 +423,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.talukaArray = res.responseData;
           this.editFlag ? (this.teacherRegForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getVillage()) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArray = [];
         }
       }),
@@ -435,14 +434,15 @@ export class AddUpdateTeacherRegistrationComponent {
   }
   getVillage() {
     this.villageArray = [];
-    let talukaId = this.teacherRegForm.value.talukaId
+    let talukaId = this.teacherRegForm.value.talukaId;
+    
     this.masterService.getAllVillage(this.webStorageS.languageFlag, talukaId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.villageArray = res.responseData;
           this.editFlag ? (this.teacherRegForm.controls['villageId'].setValue(this.editObj?.villageId), this.getEducationQualification()) : this.getEducationQualification();
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArrayTeacherDeatails = [];
         }
       }),
@@ -459,7 +459,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.educationQualificationArray = res.responseData;  
           this.editFlag ? (this.td['educationalQualificationId'].setValue(this.editObj.teacherDetails?.educationalQualificationId), this.getTwelveBranch()) : this.getTwelveBranch();
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.educationQualificationArray = [];
         }
       }),
@@ -475,7 +475,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.twelveBranchArray = res.responseData;
           this.editFlag ? (this.td['branchId12th'].setValue(this.editObj.teacherDetails?.branchId12th), this.getOptionalSubject()) : this.getOptionalSubject();
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.twelveBranchArray = [];
         }
       }), 
@@ -492,7 +492,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.optionalSubjectArray = res.responseData;
           this.editFlag ? (this.td['degreeOptionalSubjectsId'].setValue(this.editObj.teacherDetails?.degreeOptionalSubjectsId), this.getDegreeUniversity()) : this.getDegreeUniversity();
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.optionalSubjectArray = [];
         }
       }),
@@ -510,7 +510,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.degreeUniversityArray = res.responseData;
           this.editFlag ? (this.td['degreeUniversityId'].setValue(this.editObj.teacherDetails?.degreeUniversityId), this.getProfesionalQualification()) : this.getProfesionalQualification();
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.degreeUniversityArray = [];
         }
       }),
@@ -528,7 +528,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.profesionalQualificationArray = res.responseData;
           this.editFlag ? (this.td['professionalQualificationId'].setValue(this.editObj.teacherDetails?.professionalQualificationId), this.getStateTeacherDetails()) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.profesionalQualificationArray = [];
         }
       }), 
@@ -559,11 +559,10 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.districtArrayTeacherDeatails = res.responseData;
-          // this.td['districtId'].setValue(1);
           this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : '';
 
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArrayTeacherDeatails = [];
         }
       }), 
@@ -582,7 +581,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.talukaArrayTeacherDetails = res.responseData;
           this.editFlag ? (this.td['talukaId'].setValue(this.editObj.teacherDetails?.talukaId), this.getCluster()) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArrayTeacherDetails = [];
         }
       }),
@@ -601,7 +600,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.clusterArray = res.responseData;
           this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllVillageTeacherDeatails()) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
         }
       }), 
@@ -620,7 +619,7 @@ export class AddUpdateTeacherRegistrationComponent {
          this.teacherDetailsVillageArray = res.responseData;
           this.editFlag ? (this.td['villageId'].setValue(this.editObj.teacherDetails?.villageId),this.getAllSchool()) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
         }
       }), 
@@ -642,7 +641,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.schoolArray = res.responseData;
           this.editFlag ? (this.td['schoolId'].setValue(this.editObj.teacherDetails?.schoolId)) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.schoolArray = [];
         }
       }), 
@@ -659,7 +658,7 @@ export class AddUpdateTeacherRegistrationComponent {
           this.teacherRoleArray = res.responseData;     
           this.editFlag ? (this.td['roleId'].setValue(this.editObj.teacherDetails?.roleId)) : '';
         } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.teacherRoleArray = [];
         }
       }), 

@@ -483,7 +483,7 @@
         "updateAssessmentSubjected":"Update Assessment Subject",
         "ExamMaster":"Exam Master",
         "addExamMaster":"Add Exam Master",
-        "updateExamMaster":"Update Exam Master",
+        "updateExamMaster":"Update Exam",
         "SubjectMarathi":"Subject (Marathi)",
         "examName": "Test",
         "examNameMarathi": "Test (Marathi)",
@@ -498,8 +498,10 @@
         "SelectClass":"Select Assesment Type",
         "EducationalYear":"Educational Year",
         "AssesmentCriteria":"Assesment Criteria",
-        "AssesmentCriteriaMarathi":"Assesment Criteria (Marathi)",
-        "UploadPhotoDocument":"Upload Photo / Document"
+        "UploadPhotoDocument":"Upload Photo / Document",
+        "MonthRangeFrom":"Month Range From",
+        "MonthRangeTo":"Month Range To",
+        "AssesmentCriteriaMarathi":"Assesment Criteria (Marathi)"
 
     }
 }

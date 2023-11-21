@@ -81,13 +81,24 @@
                     </mat-form-field>
                 </div>
                 <!-- End taluka dropdown -->
-
+                <!-- village dropdown -->
+                <div class="col-sm-6" *ngIf="officeForm.value.designationLevelId == 5">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.village'| translate}}</mat-label>
+                        <mat-select formControlName="villageId" (selectionChange)="clearDropDown('villageId');">
+                            <mat-option *ngFor="let village of villageArr" [value]="village.id">{{webStorageService.languageFlag == 'mr-IN'
+                                ? village.m_Village:village.village}}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.pleaseSelectCenter'| translate }} </mat-error> -->
+                    </mat-form-field>
+                </div>
+                <!-- End Village dropdown -->
                 <!-- designation Dropdown -->
                 <div class="col-sm-6"
                     *ngIf="officeForm.value.designationLevelId != 6 && officeForm.value.designationLevelId != 7">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.designation' | translate}}</mat-label>
-                        <mat-select formControlName="designationId"
+                        <mat-select formControlName="designationId" 
                             (selectionChange)="getCenterDrop(); onchangeValidation($event, 'Designation'); clearDropDown('Designation');">
                             <mat-option [value]="desig.id"
                                 *ngFor="let desig of designations">{{webStorageService.languageFlag =='mr-IN' ?

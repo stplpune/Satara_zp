@@ -29,8 +29,8 @@ export class AddTestComponent {
   // isWriteRight!: boolean;
   districtArr = new Array();
   stateArr = new Array();
-  displayedheaders = ['Sr. No.', 'State', 'District', 'Exam', 'action'];
-  marathiDisplayedheaders = ['अनुक्रमांक', 'राज्य', 'जिल्हा', 'परीक्षा', 'कृती'];
+  displayedheaders = ['Sr. No.', 'State', 'District', 'Exam', 'From Month' , 'To Month','action'];
+  marathiDisplayedheaders = ['अनुक्रमांक', 'राज्य', 'जिल्हा', 'परीक्षा', 'महिन्यापासून', 'महिन्यापर्यंत', 'कृती'];
 
   constructor(public dialog: MatDialog,
     private fb: FormBuilder,
@@ -98,7 +98,7 @@ export class AddTestComponent {
     setTableData() {
       this.highLightFlag = true;
       // let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'examType' : 'm_ExamType'];
-      this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'examType' : 'm_ExamType', 'action'];
+      this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'examType' : 'm_ExamType', 'fromMonthFormatdate', 'toMonthFormatdate',  'action'];
       let tableData = {
         highlightedrow: true,
         edit: true,
@@ -164,17 +164,19 @@ export class AddTestComponent {
     getDistrict() {
       this.districtArr = [];
       let stateId = this.filterForm.value.stateId;
-      this.masterService.getAllDistrict('', stateId).subscribe({
-        next: (res: any) => {
-          if (res.statusCode == "200") {
-            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-            this.filterForm.controls['districtId'].setValue(0);
-          }
-          else {
-            this.districtArr = [];
-          }
-        },
-      });
+      if(stateId != 0){
+        this.masterService.getAllDistrict('', stateId).subscribe({
+          next: (res: any) => {
+            if (res.statusCode == "200") {
+              this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+              this.filterForm.controls['districtId'].setValue(0);
+            }
+            else {
+              this.districtArr = [];
+            }
+          },
+        });  
+      }
     }
 
     childTableCompInfo(obj: any) {
@@ -264,6 +266,13 @@ export class AddTestComponent {
     this.districtArr = [];
     this.formField();
     this.getTableData();
+  }
+
+  clearDropdown(flag?: string){
+    if(flag == 'state' ){
+      this.filterForm.controls['districtId']?.setValue('');
+      this.districtArr = [];
+    }
   }
 }
 

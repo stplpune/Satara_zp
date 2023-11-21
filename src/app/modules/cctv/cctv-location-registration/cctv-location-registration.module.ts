@@ -25,6 +25,7 @@ import { GridViewComponent } from 'src/app/shared/components/grid-view/grid-view
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { AddCctvLocationComponent } from './add-cctv-location/add-cctv-location.component';
+import { DashPipe } from 'src/app/core/pipes/dash.pipe';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { AddCctvLocationComponent } from './add-cctv-location/add-cctv-location.
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    DashPipe
   ]
 })
 export class CctvLocationRegistrationModule { }

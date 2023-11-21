@@ -9,7 +9,6 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
@@ -31,7 +30,8 @@ export class CctvLocationRegistrationComponent {
   resultDownloadArr = new Array();
   highLightFlag: boolean = true;
   isWriteRight!: boolean;
-  $districts?: Observable<any>;
+  stateArr = new Array();
+  districtArr = new Array();
   talukaArr = new Array();
   villageArr = new Array();
   centerArr = new Array();
@@ -40,8 +40,8 @@ export class CctvLocationRegistrationComponent {
   deleteObj: any;
   totalDetailRows: number = 0;
 
-  displayedheaders = ['Sr. No.', 'CCTV Name', 'CCTV Location', 'Registration Date', 'CCTV Model','Remark', 'action'];
-  marathiDisplayedheaders = ['अनुक्रमांक', 'सीसीटीव्हीचे नाव', 'सीसीटीव्ही स्थान','नोंदणी दिनांक', 'सीसीटीव्ही मॉडेल', 'वर्णन', 'कृती'];
+  displayedheaders = ['Sr. No.', 'CCTV Type', 'CCTV Name', 'CCTV Location', 'Registration Date', 'CCTV Model','Remark', 'action'];
+  marathiDisplayedheaders = ['अनुक्रमांक', 'सीसीटीव्हीचा प्रकार', 'सीसीटीव्हीचे नाव', 'सीसीटीव्ही स्थान','नोंदणी दिनांक', 'सीसीटीव्ही मॉडेल', 'वर्णन', 'कृती'];
 
   constructor(public dialog: MatDialog,
     public webService: WebStorageService,
@@ -66,7 +66,7 @@ export class CctvLocationRegistrationComponent {
     });
     this.filterFormData();
     this.getTableData();    
-    this.getTaluka();;
+    this.getState();;
     this.getCCTVLocation();
   }
 
@@ -79,6 +79,8 @@ export class CctvLocationRegistrationComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({  
+      stateId: [''],
+      districtId: [''],
       centerId : [''],
       TalukaId: [''],
       villageId: [''],  
@@ -88,30 +90,65 @@ export class CctvLocationRegistrationComponent {
     
     });
   }
+  
+  getState(){
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    })
+  }
+
+  getDistrict() {
+    this.districtArr = [];
+    let stateId = this.filterForm.value.stateId;
+    if(stateId != 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.filterForm.controls['districtId'].setValue(0);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+      });
+  
+    }
+  }
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          // this.logInDetails ? this.studentReportForm.controls['talukaId'].setValue(this.logInDetails?.talukaId): this.studentReportForm.controls['talukaId'].setValue(0), this.getAllCenter();
-        } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-          this.talukaArr = [];
-        }
-      },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
-    });
+    let districtId = this.filterForm.value.districtId;
+    if(districtId != 0){
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            // this.logInDetails ? this.studentReportForm.controls['talukaId'].setValue(this.logInDetails?.talukaId): this.studentReportForm.controls['talukaId'].setValue(0), this.getAllCenter();
+          } else {
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+      });
+  
+    }
   }
 
   getAllCenter() {
     this.centerArr = [];
-    let id = this.filterForm.value.TalukaId;
-    
-    
-    if (id != 0) {
-      this.masterService.getAllCenter('', id).subscribe({
+    let talukaId = this.filterForm.value.TalukaId;
+    if (talukaId != 0) {
+      this.masterService.getAllCenter('', talukaId).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);            
@@ -130,6 +167,7 @@ export class CctvLocationRegistrationComponent {
   getVillage() {
     this.villageArr = [];
     let Cid = this.filterForm.value.centerId;
+    if(Cid != 0){
       this.masterService.getAllVillage('', Cid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
@@ -143,24 +181,28 @@ export class CctvLocationRegistrationComponent {
         // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
       });
     }
+    }
 
     getAllSchoolsByCenterId() {
       this.schoolArr = [];
       let Tid = this.filterForm.value.talukaId || 0;
       let Cid = this.filterForm.value.centerId || 0;
       let Vid = this.filterForm.value.villageId || 0;
-      this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
-        next: (res: any) => {
-          if (res.statusCode == 200) {
-            this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-            // this.logInDetails ? this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId): this.studentReportForm.controls['schoolId'].setValue(0);
-          } else {
-            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-            this.schoolArr = [];
-          }
-        },
-        // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
-      });
+      if(Vid != 0){
+        this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
+          next: (res: any) => {
+            if (res.statusCode == 200) {
+              this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+              // this.logInDetails ? this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId): this.studentReportForm.controls['schoolId'].setValue(0);
+            } else {
+              this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+              this.schoolArr = [];
+            }
+          },
+          // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+        });
+  
+      }
     }
 
     getCCTVLocation(){
@@ -440,7 +482,29 @@ export class CctvLocationRegistrationComponent {
   }
 
   clearDependency(flag : any){
-    if(flag == 'TalukaId'){
+    if(flag == 'state'){
+      this.filterForm.controls['districtId']?.setValue('');
+      this.filterForm.controls['TalukaId']?.setValue('');
+      this.filterForm.controls['centerId']?.setValue('');
+      this.filterForm.controls['villageId']?.setValue('');
+      this.filterForm.controls['SchoolId']?.setValue('');   
+      this.districtArr = [];
+      this.talukaArr = [];
+      this.centerArr = [];  
+      this.villageArr = [];
+      this.schoolArr = [];
+    }
+    else if(flag == 'district'){
+      this.filterForm.controls['TalukaId']?.setValue('');
+      this.filterForm.controls['centerId']?.setValue('');
+      this.filterForm.controls['villageId']?.setValue('');
+      this.filterForm.controls['SchoolId']?.setValue('');   
+      this.talukaArr = [];
+      this.centerArr = [];  
+      this.villageArr = [];
+      this.schoolArr = [];
+    }
+    else if(flag == 'TalukaId'){
       this.filterForm.controls['centerId']?.setValue(0);
       this.filterForm.controls['villageId']?.setValue('');
       this.filterForm.controls['SchoolId']?.setValue('');   

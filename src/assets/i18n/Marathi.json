@@ -491,7 +491,7 @@
         "updateAssessmentSubjected":"मूल्यांकन विषय अपडेट करा",
         "ExamMaster":"परीक्षा मास्टर",
         "addExamMaster":"परीक्षा मास्टर जोडा",
-        "updateExamMaster":"परीक्षा मास्टर अपडेट करा",
+        "updateExamMaster":"परीक्षा अपडेट करा",
         "SubjectMarathi":"विषय (मराठी)",
         "examName": "चाचणी",
         "examNameMarathi": "चाचणी (मराठी)",
@@ -506,6 +506,8 @@
         "SelectClass":"मूल्यांकन प्रकार निवडा",
         "EducationalYear":"शैक्षणिक वर्ष",
         "AssesmentCriteria":"मूल्यांकन निकष",
-        "UploadPhotoDocument":"फोटो / कागदपत्र अपलोड करा"
+        "UploadPhotoDocument":"फोटो / कागदपत्र अपलोड करा",
+        "MonthRangeFrom":"महिन्याची श्रेणी पासून",
+        "MonthRangeTo":"महिन्याची श्रेणी पर्यंत"
     }
 }

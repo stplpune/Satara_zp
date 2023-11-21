@@ -243,7 +243,7 @@ export class SchoolRegistrationComponent implements OnInit {
   }
 
   getDistrict() {
-    let stateId = this.stateId.value || 0;
+    let stateId: any = this.stateId.value;
     if(stateId > 0){
       this.masterService.getAllDistrict('', stateId).subscribe({
         next: (res: any) => {
@@ -255,13 +255,15 @@ export class SchoolRegistrationComponent implements OnInit {
             this.districtArr = [];
           }
         },
-        error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
       });
+    }
+    else{
+      this.districtArr = [];
     }
   }
 
   getTaluka() {
-    let districtId = this.districtId.value || 0;
+    let districtId: any = this.districtId.value;
     if(districtId > 0){
       this.masterService.getAllTaluka('', districtId).subscribe({
         next: (res: any) => {
@@ -274,41 +276,54 @@ export class SchoolRegistrationComponent implements OnInit {
         }
       });
     }
+    else{
+      this.talukaArr = [];
+    }
   }
 
   getCenter() {
     this.centerArr = [];
     let talukaId: any = this.talukaId.value;
-    this.masterService.getAllCenter('', talukaId).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-          this.centerId.setValue(0);
+    if(talukaId > 0){
+      this.masterService.getAllCenter('', talukaId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+            this.centerId.setValue(0);
+          }
+          else {
+            this.centerArr = [];
+          }
         }
-        else {
-          this.centerArr = [];
-        }
-      }
-    });
+      });
+    }
+    else{
+      this.centerArr = [];
+    }
   }
 
 
   getVillage() {
     this.villageArr = []
-    let centerId = this.centerId.value;
-    this.masterService.getAllVillage('', centerId).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.villageArr = res.responseData;
-          let obj = { id: 0, village: 'All', m_Village: 'सर्व' }
-          this.villageArr.unshift(obj)
-          this.villageId.setValue(0);
+    let centerId: any = this.centerId.value;
+    if(centerId > 0){
+      this.masterService.getAllVillage('', centerId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.villageArr = res.responseData;
+            let obj = { id: 0, village: 'All', m_Village: 'सर्व' }
+            this.villageArr.unshift(obj)
+            this.villageId.setValue(0);
+          }
+          else {
+            this.villageArr = [];
+          }
         }
-        else {
-          this.villageArr = [];
-        }
-      }
-    });
+      });
+    }
+    else{
+      this.villageArr = [];
+    }
   }
   //#endregion ------------------------------------------- School Registration Dropdown start here ----------------------------------------// 
 

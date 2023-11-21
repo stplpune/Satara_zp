@@ -79,10 +79,12 @@ export class AddExamMasterComponent {
         districtId: ['', Validators.required],
         examType: [this.data ? this.data.examType : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericOnly)]],
         m_ExamType: [this.data ? this.data.m_ExamType : '', [Validators.required, Validators.pattern(this.validationService.alphanumericMarathi)]],
-        toMonth:  new FormControl(moment()),
-        fromMonth:  new FormControl(moment()),
+        fromMonth:  [this.data ? moment(this.data.fromMonth) : moment()],
+        toMonth:  [this.data ? moment(this.data.toMonth) : moment()],
         lan: this.languageFlag
       })
+    
+      this.data ?  (this.dateFrom.setValue(moment(this.data.fromMonth)),this.dateTo.setValue(moment(this.data.toMonth))) :''
     }
   
     getState(){
@@ -118,20 +120,23 @@ export class AddExamMasterComponent {
 
     onSubmit(){
       let formValue = this.examForm.value;
+      // formValue.toMonth = this.dateFrom;
+      // formValue.fromMonth = this.dateTo;
       let url = this.data ? 'UpdateExamType' : 'AddExamType';
       if(!this.examForm.valid){
         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
         return
       }else{
+
         this.ngxSpinner.show();
-        this.apiService.setHttp(this.data ? 'put' : 'post', 'zp-satara/ExamType/' + url, false, formValue, false, 'baseUrl');
+        this.apiService.setHttp(this.data ? 'put' : 'post', 'zp-satara/ExamType/'+ url, false, formValue, false, 'baseUrl');
         this.apiService.getHttp().subscribe({
-          next: (res: any) => {
+          next: (res: any) => {            
             res.statusCode == "200" ? (this.commonMethods.showPopup(res.statusMessage, 0), this.dialogRef.close('yes')) : this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.ngxSpinner.hide();
           },
           error: ((err: any) => {
-            this.ngxSpinner.hide();
+            this.ngxSpinner.hide();            
             this.commonMethods.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusMessage, 1);
           })
         });
@@ -142,22 +147,26 @@ export class AddExamMasterComponent {
       this.examForm.controls['districtId'].setValue('');
     }
 
-    setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<Moment>, flag? : string) {
-      console.log("normalizedMonthAndYear", datepicker);
-      
+    setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<Moment>, flag? : string) {      
       if(this.examForm.value.fromMonth && flag == 'fromDate'){        
+        // if(this.dateFrom && flag == 'fromDate'){        
         const ctrlValue = this.dateFrom.value!;
         ctrlValue.month(normalizedMonthAndYear.month());
         ctrlValue.year(normalizedMonthAndYear.year());
         this.dateFrom.setValue(ctrlValue);
+        this.examForm.value.fromMonth=ctrlValue;
+        console.log("ctrlValue", ctrlValue);
+        
         this.minVal = ctrlValue
         datepicker.close();
       }
       else if(this.examForm.value.toMonth && flag == 'todate'){
+        // else if(this.dateTo && flag == 'todate'){
         const ctrlValue = this.dateTo.value!;
         ctrlValue.month(normalizedMonthAndYear.month());
         ctrlValue.year(normalizedMonthAndYear.year());
         this.dateTo.setValue(ctrlValue);
+        this.examForm.value.toMonth=ctrlValue;
         datepicker.close();
       }
     }

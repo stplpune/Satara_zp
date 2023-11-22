@@ -51,8 +51,6 @@ export class AddCctvLocationComponent {
     
     @Inject(MAT_DIALOG_DATA) public data: any) {
       this.loginData = this.webService.getLoggedInLocalstorageData();
-      console.log("this.loginData", this.loginData);
-      
      }
 
   ngOnInit() {
@@ -274,10 +272,7 @@ export class AddCctvLocationComponent {
   onSubmitCameraDetails() {
     this.addValidations(true);
     let formValue = this.cameraDetailsForm.value;
-
     let cctyTypeName = this.cctvCameraTypeArr.find((cctv:any)=>cctv.id == formValue.cctvTypeId )
-    
-
     if (this.cameraDetailsForm.invalid) {
       return
     } else {

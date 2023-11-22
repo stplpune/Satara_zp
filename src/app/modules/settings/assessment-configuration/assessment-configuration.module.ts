@@ -20,7 +20,9 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
+import { CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,9 @@ import {MatChipsModule} from '@angular/material/chips';
     TableComponent,
     MatTooltipModule,
     MatChipsModule,
+    CdkDropList,
+    CdkDrag,
+    MatCheckboxModule
   ]
 })
 export class AssessmentConfigurationModule { }

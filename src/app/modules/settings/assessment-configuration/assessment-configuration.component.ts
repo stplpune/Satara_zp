@@ -17,8 +17,6 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
   styleUrls: ['./assessment-configuration.component.scss']
 })
 export class AssessmentConfigurationComponent {
-  displayedColumns: string[] = ['position', 'name', 'QuestionType', 'AssementType','EducationalYear','Action'];
-  dataSource = ELEMENT_DATA;
   filterForm!: FormGroup;
   languageFlag: any;
   pageNumber: number = 1;
@@ -36,8 +34,8 @@ export class AssessmentConfigurationComponent {
   subjectArr = new Array();
   questionArr = new Array();
   educationYearArr = new Array();
-  displayedheadersEnglish = ['Sr. No.', 'Standard/Group', 'Question Type', 'Assessment Type', 'Educational Year', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता/गट', 'प्रश्नाचा प्रकार', 'मूल्यांकन प्रकार', 'शैक्षणिक वर्ष', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Question Type', 'Educational Year', 'Block/Unblock','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'ब्लॉक/अनब्लॉक', 'कृती'];
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(public dialog: MatDialog,
@@ -73,7 +71,7 @@ export class AssessmentConfigurationComponent {
       })
     }
 
-    //#region ------------------------------------------- School Registration Table Data start here ----------------------------------------// 
+    //#region ------------------------------------------- Assessment Table Data start here ----------------------------------------// 
   getTableData(flag?: string) {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
@@ -109,13 +107,13 @@ export class AssessmentConfigurationComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    // let displayedColumnsReadMode = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'assessmentType' : 'm_AssessmentType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
-    this.displayedColumns = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'assessmentType' : 'm_AssessmentType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'action'];
+    // let displayedColumnsReadMode = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
+    let displayedColumns = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
     this.tableData = {
       pageNumber: this.pageNumber,
-      img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
-      // displayedColumns: this.isWriteRight === true ? this.displayedColumns : displayedColumnsReadMode,
-      displayedColumns: this.displayedColumns,
+      img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
+      // displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode,
+      displayedColumns: displayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
@@ -124,9 +122,11 @@ export class AssessmentConfigurationComponent {
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);
   }
-  //#endregion ------------------------------------------- School Registration Table Data end here ----------------------------------------//
+  //#endregion ------------------------------------------- Assessment Table Data end here ----------------------------------------//
 
+  //#region ---------------------------------------------- Filter Dropdown start here ----------------------------------------------
     getState(){
+      this.stateArr = [];
       this.masterService.getAllState('').subscribe({
           next: (res: any) => {
             if(res.statusCode == "200"){
@@ -247,6 +247,7 @@ export class AssessmentConfigurationComponent {
         },
       });
     }
+  //#endregion ---------------------------------------------- Filter Dropdown end here ----------------------------------------------
 
     childCompInfo(obj: any) {
       switch (obj.label) {
@@ -260,19 +261,18 @@ export class AssessmentConfigurationComponent {
         case 'Delete':
           this.globalDialogOpen(obj);
           break;
+        case 'Block':
+        this.openBlockDialog(obj);
       }
     }
 
   openDialog(obj?: any) {
-    console.log("obj:", obj);
-    
     const dialogRef = this.dialog.open(AddAssessmentConfigurationComponent,{
       width: '600px',
-      data: obj,
+      data: obj?.id,
       disableClose: true
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
       if(result == 'yes' && obj){
         this.pageNumber = obj.pageNumber
       }
@@ -281,7 +281,6 @@ export class AssessmentConfigurationComponent {
       }
         this.clearFilterForm();
         this.getState();
-        this.getTableData();
         this.languageChange();
     });
   }
@@ -317,7 +316,7 @@ export class AssessmentConfigurationComponent {
       "modifiedDate": webStorageMethod.modifiedDate,
       "lan": this.webService.languageFlag
     }
-    this.apiService.setHttp('delete', 'zp-satara/AssessmentConfiguration/DeleteQuestionMaster', false, deleteObj, false, 'baseUrl');
+    this.apiService.setHttp('delete', 'zp-satara/AssessmentConfiguration/DeleteCriteria', false, deleteObj, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -339,20 +338,49 @@ export class AssessmentConfigurationComponent {
     this.pageNumber = 1;
     this.districtArr = [];
   }
-}
-  export interface PeriodicElement {
-    name: any;
-    position: any;
-    QuestionType: any;
-    AssementType: any;
-    EducationalYear:any;
-    Action:any;
+
+  //#region ------------------------------------------------- Block/Unblock start here -----------------------------------------------------
+  openBlockDialog(obj?: any){
+    let userEng = obj.isBlock == false ?'Block' : 'Unblock';
+    let userMara = obj.isBlock == false ?'ब्लॉक' : 'अनब्लॉक';
+    let dialoObj = {
+      header: this.languageFlag == 'English' ? userEng + ' Question Type' : userMara + ' प्रश्नाचा प्रकार',
+      title: this.languageFlag == 'English' ? 'Do You Want To '+userEng+' Question Type?' : 'आपण प्रश्न प्रकार '+userMara+' करू इच्छिता?',
+      cancelButton: this.languageFlag == 'English' ? 'Cancel' : 'रद्द करा',
+      okButton: this.languageFlag == 'English' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      result == 'yes' ? this.blockOffice(obj) : this.getTableData();
+      this.highLightFlag=false;
+      this.languageChange();
+    })
   }
-  
-  const ELEMENT_DATA: PeriodicElement[] = [
-    {position:1, name:'1st - 2nd',QuestionType:'Single Select',AssementType:'BaseWise',EducationalYear:'2022-2023',Action:''},
-    {position:2, name:'1st - 2nd',QuestionType:'Single Select',AssementType:'BaseWise',EducationalYear:'2022-2023',Action:''},
-    {position:3, name:'1st - 2nd',QuestionType:'Single Select',AssementType:'BaseWise',EducationalYear:'2022-2023',Action:''},
-    {position:4, name:'1st - 2nd',QuestionType:'Single Select',AssementType:'BaseWise',EducationalYear:'2022-2023',Action:''},
-    {position:5, name:'1st - 2nd',QuestionType:'Single Select',AssementType:'BaseWise',EducationalYear:'2022-2023',Action:''},
-  ];
+
+  blockOffice(obj: any) {
+    let blockObj = {
+      "id": obj.id,
+      "isBlock": !obj.isBlock,
+      "blockBy": this.webService.getUserId(),
+      "blockDate": this.webService.createdByProps().modifiedDate,
+      "lan": this.languageFlag
+    }
+    this.apiService.setHttp('put', 'zp-satara/AssessmentConfiguration/BlockUnblockCriteria', false, blockObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        res.statusCode == "200" ? (this.commonMethodS.showPopup(res.statusMessage, 0), this.getTableData()) : this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.snackBar(res.statusMessage, 1);
+      },
+      error: (error: any) => {
+        this.errors.handelError(error.status);
+        this.commonMethodS.checkEmptyData(error.status) == false ? this.errors.handelError(error.status) : this.commonMethodS.snackBar(error.status, 1);
+      }
+    });
+  }
+  //#endregion ---------------------------------------------- Block/Unblock end here -------------------------------------------------------
+}
+

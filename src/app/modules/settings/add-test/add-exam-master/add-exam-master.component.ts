@@ -52,7 +52,7 @@ export class AddExamMasterComponent {
   languageFlag: any;
   dateFrom = new FormControl(moment());
   dateTo = new FormControl(moment());
-  // minVal: any;
+  minVal: any;
   get f() { return this.examForm.controls }
 
   constructor(private masterService: MasterService,
@@ -182,7 +182,7 @@ export class AddExamMasterComponent {
         ctrlValue.year(normalizedMonthAndYear.year());
         this.dateFrom.setValue(ctrlValue);
         this.examForm.value.fromMonth=ctrlValue;
-        // this.minVal = ctrlValue
+        this.minVal = ctrlValue
         datepicker.close();
       }
       else if(this.examForm.value.toMonth && flag == 'todate'){

@@ -196,7 +196,7 @@ export class AddTestComponent {
 
   openDialog(obj?: any) {
     const dialogRef = this.dialog.open(AddExamMasterComponent, {
-      width: '500px',
+      width: '800px',
       data: obj,
       disableClose: true
     });

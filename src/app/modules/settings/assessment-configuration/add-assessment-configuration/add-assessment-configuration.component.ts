@@ -1,11 +1,15 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { ErrorsService } from 'src/app/core/services/errors.service';
 import { FileUploadService } from 'src/app/core/services/file-upload.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-add-assessment-configuration',
@@ -19,10 +23,18 @@ export class AddAssessmentConfigurationComponent {
   districtArr = new Array();
   educationYearArr = new Array();
   assessmentTypeArr = new Array();
+  standardArr = new Array();
   subjectArr = new Array();
   questionArr = new Array();
   imgArray = new Array();
   paramterArray = new Array();
+  editObj: any;
+  checked: any;
+  get f() { return this.questionForm.controls }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.paramterArray, event.previousIndex, event.currentIndex);
+  }
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
@@ -30,78 +42,64 @@ export class AddAssessmentConfigurationComponent {
     private masterService: MasterService,
     private fileUpload: FileUploadService,
     private commonMethod: CommonMethodsService,
-    public validation: ValidationService) { }
+    public validation: ValidationService,
+    private ngxSpinner: NgxSpinnerService,
+    private apiService: ApiService,
+    private dialogRef: MatDialogRef<AddAssessmentConfigurationComponent>,
+    private errors: ErrorsService) { }
 
   ngOnInit() {
     this.formField();
     this.paratmeterFormField();
-    this.getState();
-    this.getEducatioYear();
-    this.getAssessmentType();
-    this.getSubject();
-    this.getQuestion();
-    console.log("data: ", this.data);
+    this.initialDropdown();
+    
+    this.data ? this.onEdit(this.data) : '';
   }
 
   formField() {
     this.questionForm = this.fb.group({
       ...this.webStorageS.createdByProps(),
-      // createdBy: 0,
-      // modifiedBy: 0,
-      // createdDate: new Date(),
-      // modifiedDate: new Date(),
-      // isDeleted: true,
-      id: [0],
-      stateId: [0],
-      districtId: [0],
-      educationYearId: [0],
-      assessmentTypeId: [0],
-      groupId: [0],
-      assesmentSubjectId: [0],
+      id: [this.editObj ? this.editObj?.id : 0],
+      stateId: ['', [Validators.required]],
+      districtId: ['', Validators.required],
+      educationYearId: ['', Validators.required],
+      assessmentTypeId: [2],
+      groupId: ['', [Validators.required]],
+      assesmentSubjectId: ['', [Validators.required]],
       grade: [0],
-      question: [''],
-      m_Question: [''],
+      question: [this.editObj ? this.editObj?.question : '', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
+      m_Question: [this.editObj ? this.editObj?.m_Question : '', [Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]],
       isOption: [0],
-      imgPath: [''],      //extra key
-      options: [
-        // {
-        //   createdBy: 0,
-        //   modifiedBy: 0,
-        //   createdDate: new Date(),
-        //   modifiedDate: new Date(),
-        //   isDeleted: true,
-        //   id: [0],
-        //   questionId: [0],
-        //   optionName: [''],
-        //   m_OptionName: [''],
-        //   optionGrade: [0],
-        //   assessmentTypeId: [0]
-        // }
-      ],
-      questionSetUrls: [
-        // {
-        //   id: [0],
-        //   questionId: [0],
-        //   docPath: ['']
-        // }
-      ]
+      expectedGrade: [this.editObj ? this.editObj?.expectedGrade : 0],
+      questionTypeId: ['', [Validators.required]],
+      options: [],
+      questionSetUrls: []
     })
   }
 
   paratmeterFormField() {
     this.paramterForm = this.fb.group({
-      optionName: [''],
-      m_OptionName: ['']
+      optionName: ['', [Validators.pattern(this.validation.alphaNumericOnly)]],
+      m_OptionName: ['', [Validators.pattern(this.validation.marathiAlphanumeric)]]
     })
   }
 
   //#region -------------------------------------------------------- dropdown start here ---------------------------------------------------
+  initialDropdown(){
+    this.getState();
+    this.getEducatioYear();
+    // this.getAssessmentType();
+    this.getStandard();
+    this.getSubject();
+    this.getQuestion();
+  }
+
   getState() {
     this.masterService.getAllState('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.stateArr = res.responseData;
-          // this.editFlag ? (this.f['stateId'].setValue(this.data.stateId), this.getDistrict()) : '';
+          this.editObj ? (this.f['stateId'].setValue(this.editObj?.stateId), this.getDistrict()) : '';
         }
         else {
           this.stateArr = [];
@@ -115,7 +113,7 @@ export class AddAssessmentConfigurationComponent {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.districtArr = []);
-        // this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : '';
+        this.editObj ? (this.f['districtId'].setValue(this.editObj?.districtId)) : '';
       }
     });
   }
@@ -126,6 +124,7 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.educationYearArr = res.responseData;
+          this.editObj ? (this.f['educationYearId'].setValue(this.editObj?.educationYearId)) : '';
         }
         else {
           this.educationYearArr = [];
@@ -134,15 +133,31 @@ export class AddAssessmentConfigurationComponent {
     });
   }
 
-  getAssessmentType() {
-    this.assessmentTypeArr = [];
-    this.masterService.getAssementType(this.webStorageS.languageFlag).subscribe({
+  // getAssessmentType() {
+  //   this.assessmentTypeArr = [];
+  //   this.masterService.getAssementType(this.webStorageS.languageFlag).subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == "200") {
+  //         this.assessmentTypeArr = res.responseData;
+  //         this.editObj ? (this.f['assessmentTypeId'].setValue(this.editObj?.assessmentTypeId)) : '';
+  //       }
+  //       else {
+  //         this.assessmentTypeArr = [];
+  //       }
+  //     },
+  //   });
+  // }
+
+  getStandard() {
+    this.standardArr = [];
+    this.masterService.GetAllStandardClassWise(this.webStorageS.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.assessmentTypeArr = res.responseData;
+          this.standardArr = res.responseData;
+          this.editObj ? (this.f['groupId'].setValue(this.editObj?.groupId)) : '';
         }
         else {
-          this.assessmentTypeArr = [];
+          this.standardArr = [];
         }
       },
     });
@@ -154,6 +169,7 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subjectArr = res.responseData;
+          this.editObj ? (this.f['assesmentSubjectId'].setValue(this.editObj?.assesmentSubjectId)) : '';
         }
         else {
           this.subjectArr = [];
@@ -168,6 +184,7 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.questionArr = res.responseData;
+          this.editObj ? (this.f['questionTypeId'].setValue(this.editObj?.questionTypeId)) : '';
         }
         else {
           this.questionArr = [];
@@ -188,8 +205,8 @@ export class AddAssessmentConfigurationComponent {
           let imgArr = uploadMultipleImg.split(',')
           for (let i = 0; i < imgArr.length; i++) {
             let data = {
-              id: [0],
-              questionId: [0],
+              id: 0,
+              questionId: 0,
               docPath: imgArr[i]
             }
             this.imgArray.push(data)
@@ -221,26 +238,24 @@ export class AddAssessmentConfigurationComponent {
 
   //#region ---------------------------------------------- Add and remove Parameter start here ----------------------------------------------
   addParametereData() {
+    this.addValidation();
     let formValue = this.paramterForm.value;
 
     let obj = {
-      id: [0],
-      questionId: [0],
+      id: 0,
+      questionId: 0,
       optionName: formValue.optionName,
       m_OptionName: formValue.m_OptionName,
-      optionGrade: [0],
-      assessmentTypeId: [0],
+      optionGrade: 0,
+      assessmentTypeId: 0,
       ...this.webStorageS.createdByProps(),
     }
 
-    if(this.paramterArray.length > 0){
-      // this.paramterArray.map((x: any) => { 
-      //   if(x.optionName == formValue.optionName || x.m_OptionName == formValue.m_OptionName){
-      //     this.commonMethod.snackBar(this.webStorageS.getLangauge() == 'EN' ? 'Parameter is already exist' : 'पॅरामीटर आधीपासून अस्तित्वात आहे', 1);
-      //     return
-      //   }
-      //  });
+    if(!this.paramterForm.valid){
+      return
+    }
 
+    if(this.paramterArray.length > 0){
       let duplicateOptionName = this.paramterArray.some((x: any) => {
         return x.optionName == formValue.optionName
       });
@@ -256,6 +271,7 @@ export class AddAssessmentConfigurationComponent {
     }
 
     this.paramterArray.push(obj);
+    this.removeValidation();
     this.paramterForm.controls['optionName'].setValue('');
     this.paramterForm.controls['m_OptionName'].setValue('');
   }
@@ -265,20 +281,109 @@ export class AddAssessmentConfigurationComponent {
   }
   //#endregion ------------------------------------------- Add and remove Parameter end here ------------------------------------------------
 
-  //#region ---------------------------------------------- Submit and Edit start here -------------------------------------------------------
+  //#region ---------------------------------------------- Add and remove validation start here ---------------------------------------------
+  addValidation(){
+    this.paramterForm.controls['optionName'].setValidators(Validators.required);
+    this.paramterForm.controls['m_OptionName'].setValidators(Validators.required);
+
+    this.paramterForm.controls['optionName'].updateValueAndValidity();
+    this.paramterForm.controls['m_OptionName'].updateValueAndValidity();
+  }
+
+  removeValidation(){
+    this.paramterForm.controls['optionName'].clearValidators();
+    this.paramterForm.controls['m_OptionName'].clearValidators();
+  }
+
+  //#endregion ------------------------------------------- Add and remove validation end here -----------------------------------------------
+
+  //#region ---------------------------------------------- Submit and Update start here -----------------------------------------------------
   onSubmit(){
     let formValue = this.questionForm.value;
     formValue.questionSetUrls = this.imgArray;
     formValue.options = this.paramterArray;
 
     console.log("formValue: ", formValue);
-    
 
-
-
+    let url = this.data ? 'UpdateCriteria' : 'AddCriteria';
+    if(!this.questionForm.valid){
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
+      return
+    }
+    else if(!this.paramterArray.length && (formValue.questionTypeId == 1 || formValue.questionTypeId == 2)){
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter At Least One Parameter' : 'कृपया किमान एक पॅरामीटर प्रविष्ट करा', 1);
+      return
+    }
+    else if(formValue.expectedGrade == 0){
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Select isExpected From Any Parameter ' : 'कृपया कोणत्याही पॅरामीटरमधून इज एक्सपेक्टेड निवडा', 1);
+      return
+    }
+    else{
+      this.ngxSpinner.show();
+      this.apiService.setHttp(this.data ? 'put' : 'post', 'zp-satara/AssessmentConfiguration/' + url + '?lang=' + this.webStorageS.getLangauge(), false, formValue, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          this.ngxSpinner.hide();
+          res.statusCode == "200" ? (this.commonMethod.showPopup(res.statusMessage, 0), this.dialogRef.close('yes')) : this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+        },
+        error: ((err: any) => {
+          this.ngxSpinner.hide();
+          this.commonMethod.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusMessage, 1);
+        })
+      });
+    }
   }
-  //#endregion ------------------------------------------- Submit and Edit end here ---------------------------------------------------------
+  //#endregion ------------------------------------------- Submit and Update end here --------------------------------------------------------
 
+  //#region -------------------------------------------- Patch values on Edit start here -----------------------------------------------------
+  onEdit(id?: number){
+    this.apiService.setHttp('get', 'zp-satara/AssessmentConfiguration/GetById?Id=' + id + '&lan=' + this.webStorageS.getLangauge(), false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.editObj = res.responseData;
+          console.log("editObj: ", this.editObj);
+          this.formField();
+          this.initialDropdown();
 
+          this.editObj?.questionSetUrls.map((res: any) => {
+            let questionSetObj = {
+              id: res.id,
+              questionId: res.questionId,
+              docPath: res.docPath
+            }
+            this.imgArray.push(questionSetObj);
+          });
 
+          this.editObj?.options.map((res: any) => {
+            let optionObj = {
+              id: res.id,
+              questionId: res.questionId,
+              optionName: res.optionName,
+              m_OptionName: res.m_OptionName,
+              optionGrade: res.optionGrade,
+              assessmentTypeId: res.assessmentTypeId,
+            }
+            this.paramterArray.push(optionObj);
+          });
+
+          for(let i = 0; i < this.paramterArray.length; i++){
+            if(this.editObj?.expectedGrade == i+1){
+              this.paramterArray[i].checked = true;
+            }
+          }
+        }
+      }
+    });
+  }
+  //#endregion ------------------------------------------ Patch values on Edit end here ------------------------------------------------------
+
+  onCheck(index: number){
+    this.questionForm.value.expectedGrade = index + 1;
+  }
+
+  onEditParameter(obj?: any){
+    console.log("onEdit Parameter : ", obj);
+    
+  }
 }

@@ -269,13 +269,37 @@ export class AddCctvLocationComponent {
     this.cf['password'].updateValueAndValidity();
   }
 
-  onSubmitCameraDetails() {
+  onSubmitCameraDetails(){
     this.addValidations(true);
     let formValue = this.cameraDetailsForm.value;
-    let cctyTypeName = this.cctvCameraTypeArr.find((cctv:any)=>cctv.id == formValue.cctvTypeId )
+    let cctyTypeName = this.cctvCameraTypeArr.find((cctv:any)=>cctv.id == formValue.cctvTypeId)
     if (this.cameraDetailsForm.invalid) {
       return
-    } else {
+    }
+    else if(!this.editCctvObj){
+      this.cameraDetailsArr.forEach((camera: any)=>{
+        if (camera.cctvName ==  (formValue.cctvName).trim()) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Camera Name Already Exist' : 'कॅमेराचे नाव आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }else if (camera.cctvModel == (formValue.cctvModel).trim()) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Camera Model Already Exist' : 'कॅमेराचे मॉडेल आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }else if (camera.deviceId == (formValue.deviceId).trim()) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Device Id Already Exist' : 'डिव्हाइस आयडी आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }else if (camera.userName == (formValue.userName).trim()) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'User Name Already Exist' : 'वापरकर्ता नाव आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }else if (camera.password == (formValue.password).trim()) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Password Already Exist' : 'पासवर्ड आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }else if (camera.link == (formValue.link).trim()) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'URL Link Already Exist' : 'URL लिंक आधीपासून अस्तित्वात आहे', 1);
+          return;
+        }
+      })
+    }
+     else{
       let obj = {
         "createdBy": this.webService.getUserId() || 0,
         "modifiedBy": this.webService.getUserId() || 0,
@@ -295,17 +319,18 @@ export class AddCctvLocationComponent {
         "password": formValue.password,
         "link":formValue.link
       }
-      if (this.data) {
+      if(this.data){
         this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
-        this.cameraDetailsArr.unshift(obj);
+        console.log("if data availale", this.cameraDetailsArr);
+        this.cameraDetailsArr.push(obj);
         this.cameraDetailsArr = [...this.cameraDetailsArr];
+        this.editCctvObj = null;
       }
-      else {
+      else{
         // this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
         this.cameraDetailsArr.push(obj);
         // this.cameraDetailsArr = [...this.cameraDetailsArr];
         console.log("this.cameraDetailsArr", this.cameraDetailsArr);
-        
       }
       this.cameraFormData();
       this.addValidations();

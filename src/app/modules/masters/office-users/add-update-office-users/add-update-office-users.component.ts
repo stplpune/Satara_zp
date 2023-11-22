@@ -280,10 +280,19 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Contact No.(Kendra) and Mobile No. Can Not Be Same' : 'संपर्क क्रमांक (केंद्र) आणि संपर्क क्रमांक एकच असू शकत नाही', 1);
       return
     }
+    if (this.officeForm.value.designationId == 18 && (this.officeForm.value.kendraEmailId == this.officeForm.value.emailId)) {
+      this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'EmailId (Kendra) and Mobile No. Can Not Be Same' : 'ई - मेल आयडी (केंद्र) आणि संपर्क क्रमांक एकच असू शकत नाही', 1);
+      return
+    }
     if (this.officeForm.value.designationId == 11 && (this.officeForm.value.beoMobileNo == this.officeForm.value.mobileNo)) {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Contact No.(BEO Office) and Mobile No. Can Not Be Same' : 'संपर्क क्रमांक (BEO कार्यालय) आणि संपर्क क्रमांक एकच असू शकत नाही', 1);
       return
     }
+    if (this.officeForm.value.designationId == 11 && (this.officeForm.value.beoEmailId == this.officeForm.value.emailId)) {
+      this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'EmailId(BEO Office) and Email Can Not Be Same' : 'ई - मेल आयडी (BEO कार्यालय) आणि ई - मेल आयडी एकच असू शकत नाही', 1);
+      return
+    }
+
     if (this.officeForm.valid) {
       if (this.officeForm.value.designationId == 18) {
         let arrr = this.officeForm.value.centerId;

@@ -487,7 +487,7 @@ export class CctvLocationRegistrationComponent {
       this.filterForm.controls['TalukaId']?.setValue('');
       this.filterForm.controls['centerId']?.setValue('');
       this.filterForm.controls['villageId']?.setValue('');
-      this.filterForm.controls['SchoolId']?.setValue('');   
+      this.filterForm.controls['SchoolId']?.setValue(''); 
       this.districtArr = [];
       this.talukaArr = [];
       this.centerArr = [];  

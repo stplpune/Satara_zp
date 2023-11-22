@@ -42,6 +42,9 @@ export const MY_FORMATS = {
   ],
 })
 export class AddExamMasterComponent {
+  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  dataSource = ELEMENT_DATA;
+
   examForm!: FormGroup;
   stateArr = new Array();
   districtArr = new Array();
@@ -49,7 +52,7 @@ export class AddExamMasterComponent {
   languageFlag: any;
   dateFrom = new FormControl(moment());
   dateTo = new FormControl(moment());
-  // minVal: any;
+  minVal: any;
   get f() { return this.examForm.controls }
 
   constructor(private masterService: MasterService,
@@ -179,7 +182,7 @@ export class AddExamMasterComponent {
         ctrlValue.year(normalizedMonthAndYear.year());
         this.dateFrom.setValue(ctrlValue);
         this.examForm.value.fromMonth=ctrlValue;
-        // this.minVal = ctrlValue
+        this.minVal = ctrlValue
         datepicker.close();
       }
       else if(this.examForm.value.toMonth && flag == 'todate'){
@@ -194,3 +197,22 @@ export class AddExamMasterComponent {
     }
 }
 
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
+  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
+  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
+  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
+  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
+  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
+  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
+  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
+  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
+  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+];

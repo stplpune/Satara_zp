@@ -13,7 +13,7 @@
     <mat-card-header class="card-header border-bottom-0">
         <form [formGroup]="schoolReportForm" (ngSubmit)="searchAssessMent('filter')">
             <div class="row gx-2">
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
                         <mat-select formControlName="stateId" (selectionChange)="clearDropdown('stateId'); getDistrict();">
@@ -23,7 +23,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
                         <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId'); getTaluka();">
@@ -34,7 +34,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
@@ -45,7 +45,7 @@
                         <!-- <mat-error *ngIf="fc['talukaId'].hasError('required')"> {{'Labels.pleaseSelectTaluka'| translate }} </mat-error> -->
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
@@ -55,7 +55,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
@@ -150,7 +150,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-auto">
                     <div class="d-flex gap-2 justify-content-end">
                         <button mat-flat-button class="btn-main" type="submit">{{'Labels.ViewReport' |
                             translate}}</button>

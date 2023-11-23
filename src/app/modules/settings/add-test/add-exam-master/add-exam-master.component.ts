@@ -53,6 +53,8 @@ export class AddExamMasterComponent {
   dateFrom = new FormControl(moment());
   dateTo = new FormControl(moment());
   minVal: any;
+  standardArr = new Array();
+  subjectArr = new Array();
   get f() { return this.examForm.controls }
 
   constructor(private masterService: MasterService,
@@ -73,6 +75,8 @@ export class AddExamMasterComponent {
         this.languageFlag = lang;
       });
       this.getState();
+      this.getStandard();
+      this.getSubject();
       this.getEducatioYear();
       this.formField();
     }
@@ -143,6 +147,35 @@ export class AddExamMasterComponent {
         },
       });
     }
+
+    getStandard(){
+      this.standardArr = [];
+      this.masterService.GetAllStandardClassWise(this.webService.languageFlag).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.standardArr.push({"id": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
+          }
+          else {
+            this.standardArr = [];
+          }
+        }
+      });
+    }
+    
+    getSubject() {
+      this.subjectArr = [];
+      this.masterService.getAllSubject(this.webService.languageFlag).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.subjectArr.push({"id": 0, "subject": "All", "m_Subject": "सर्व"},...res.responseData);
+          }
+          else {
+            this.subjectArr = [];
+          }
+        },
+      });
+    }
+
 
 
     onSubmit(){

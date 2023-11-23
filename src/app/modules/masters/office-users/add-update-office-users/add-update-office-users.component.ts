@@ -287,7 +287,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'EmailId (Kendra) and EmailId Can Not Be Same' : 'ई - मेल आयडी (केंद्र) आणि ई - मेल आयडी  एकच असू शकत नाही', 1);
       return
     }
-    if (this.officeForm.value.designationId == 11 &&  (this.officeForm.value.beoMobileNo == this.officeForm.value.mobileNo)) {
+    if (this.officeForm.value.designationId == 11 && (this.officeForm.value.beoMobileNo.length > 0) &&(this.officeForm.value.mobileNo.length > 0) && (this.officeForm.value.beoMobileNo.length  == this.officeForm.value.mobileNo)) {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Contact No.(BEO Office) and Mobile No. Can Not Be Same' : 'संपर्क क्रमांक (BEO कार्यालय) आणि संपर्क क्रमांक एकच असू शकत नाही', 1);
       return
     }

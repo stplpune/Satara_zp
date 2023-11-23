@@ -77,7 +77,7 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
-                        <mat-select formControlName="questionTypeId">
+                        <mat-select formControlName="questionTypeId" (selectionChange)="this.questionForm.value.questionTypeId != 1 || this.questionForm.value.questionTypeId != 2 ? this.paramterArray = [] : ''">
                             <mat-option *ngFor="let que of questionArr" [value]="que.id">
                                 {{webStorageS.getLangauge() == 'EN' ? que.questionType : que.m_QuestionType}}
                             </mat-option>
@@ -90,6 +90,7 @@
                         <textarea matInput formControlName="question"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);"
                             maxlength="50"></textarea>
+                            <mat-error *ngIf="f['question'].hasError('pattern')">Please Enter Valid Assesment Criteria</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
@@ -98,19 +99,20 @@
                         <textarea matInput formControlName="m_Question"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);"
                             maxlength="50"></textarea>
+                            <mat-error *ngIf="f['m_Question'].hasError('pattern')">Please Enter Valid Assesment Criteria (Marathi)</mat-error>
                     </mat-form-field>
                 </div>
 
                 <form [formGroup]="paramterForm">
                     <div class="col-sm-12"
                         *ngIf="questionForm.value.questionTypeId ==1 || questionForm.value.questionTypeId ==2">
-                        <!-- *ngIf="questionForm.value.questionTypeId ==1 || questionForm.value.questionTypeId ==2" -->
                         <div class="row gx-2">
                             <div class="col-md-6 d-flex gap-2">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.Parameter'| translate}}</mat-label>
                                     <input matInput formControlName="optionName" maxlength="100"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);">
+                                        <mat-error *ngIf="paramterForm.controls['optionName'].hasError('pattern')">Please Enter Valid Parameter</mat-error>
                                 </mat-form-field>
                             </div>
 
@@ -119,6 +121,7 @@
                                     <mat-label>{{'Labels.ParameterMarathi'| translate}}</mat-label>
                                     <input matInput formControlName="m_OptionName" maxlength="100"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);">
+                                        <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">Please Enter Valid Parameter (Marathi)</mat-error>
                                 </mat-form-field>
                                 <button mat-flat-button type="submit" (click)="addParametereData()"
                                     class="btn-main btn-icon">
@@ -162,15 +165,15 @@
                                                 <td>{{paramter.optionName}}</td>
                                                 <td>{{paramter.m_OptionName}}</td>
                                                 <td>
-                                                    <mat-checkbox (change)="onCheck(i)"
-                                                        [checked]="paramter.checked == true">
+                                                    <mat-checkbox (change)="onCheck(i, $event)"
+                                                        [checked]="paramter.checked">
                                                     </mat-checkbox>
                                                 </td>
                                                 <td>
                                                     <button
                                                         mat-icon-button id="tooltip"
                                                         matTooltip="{{'Labels.edit' | translate}}"
-                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditParameter(paramter)">
+                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditParameter(paramter, i)">
                                                         <mat-icon class="text-main">edit</mat-icon>
                                                     </button>
                                                 </td>

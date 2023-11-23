@@ -384,5 +384,11 @@ export class AssessmentConfigurationComponent {
     });
   }
   //#endregion ---------------------------------------------- Block/Unblock end here -------------------------------------------------------
+
+  changeDropdown(label: string){
+    if(label == 'state'){
+      this.filterForm.controls['districtId'].setValue(0);
+    }
+  }
 }
 

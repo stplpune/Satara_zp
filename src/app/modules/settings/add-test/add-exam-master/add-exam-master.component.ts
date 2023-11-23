@@ -46,6 +46,7 @@ export class AddExamMasterComponent {
   dataSource = ELEMENT_DATA;
 
   examForm!: FormGroup;
+  assetCriteriaFrom!: FormGroup
   stateArr = new Array();
   districtArr = new Array();
   educationYearArr = new Array();
@@ -55,9 +56,10 @@ export class AddExamMasterComponent {
   minVal: any;
   standardArr = new Array();
   subjectArr = new Array();
+  criteriaArr = new Array();
+
   get f() { return this.examForm.controls }
-  get cf() { return this.assetCriteria.controls}
-  assetCriteria!: FormGroup
+  get cf() { return this.assetCriteriaFrom.controls}
   constructor(private masterService: MasterService,
     private commonMethods: CommonMethodsService,
     private errors: ErrorsService,
@@ -78,6 +80,7 @@ export class AddExamMasterComponent {
       this.getState();
       this.getStandard();
       this.getSubject();
+      this.getCriteria();
       this.getEducatioYear();
       this.formField();
       this.examCriteriaFeild();
@@ -103,10 +106,10 @@ export class AddExamMasterComponent {
     }
 
     examCriteriaFeild(){
-      this.assetCriteria = this.fb.group({
-        standardId: [],
-        subjectId: [], 
-        assetCriteriaId: []
+      this.assetCriteriaFrom = this.fb.group({
+        standardId: [''],
+        subjectId: [''], 
+        assetCriteriaId: ['']
       });
     }
   
@@ -171,7 +174,7 @@ export class AddExamMasterComponent {
       });
     }
 
-    getSubject() {
+    getSubject(){
       this.subjectArr = [];
       this.masterService.getAllSubject(this.webService.languageFlag).subscribe({
         next: (res: any) => {
@@ -185,8 +188,28 @@ export class AddExamMasterComponent {
       });
     }
 
+    getCriteria(){
+      this.criteriaArr = [];
+      this.masterService.GetAllExamTypeCriteria(this.webService.languageFlag).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200"){
+            this.criteriaArr = res.responseData;
+          }
+          else {
+            this.subjectArr = [];
+          }
+        },
+      });
+    }
+
     addAssCriteria(){
-      this.addValidation();
+      this.addValidation(true);
+      let criteriaForm = this.assetCriteriaFrom.value
+      if (this.assetCriteriaFrom.invalid) {
+        return
+      }
+      console.log("criteriaForm", criteriaForm);
+      
     }
 
     onSubmit(){
@@ -215,12 +238,19 @@ export class AddExamMasterComponent {
 
     addValidation(status?: any){
       if(status){
-        this.cf['cctvTypeId'].setValidators([Validators.required]);
-
+        this.cf['standardId'].setValidators([Validators.required]);
+        this.cf['subjectId'].setValidators([Validators.required]);
+        this.cf['assetCriteriaId'].setValidators([Validators.required]);
       }
       else{
-
+        this.cf['standardId'].clearValidators();
+        this.cf['subjectId'].clearValidators();
+        this.cf['assetCriteriaId'].clearValidators();
       }
+      this.cf['standardId'].updateValueAndValidity();
+      this.cf['subjectId'].updateValueAndValidity();
+      this.cf['assetCriteriaId'].updateValueAndValidity();
+
     }
 
     clearDropdown(){

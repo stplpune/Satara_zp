@@ -626,6 +626,16 @@ export class MasterService {
     });
   }
 
+  GetAllExamTypeCriteria(langFlag?: string){
+    return new Observable((obj) => {
+      this.apiService.setHttp('GET', 'zp-satara/master/GetAllExamTypeCriteria?flag_lang=' + langFlag, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => { if (res.statusCode == "200") { obj.next(res) } else { obj.error(res); } },
+        error: (e: any) => { obj.error(e) }
+      });
+    });
+  }
+
 
 
 

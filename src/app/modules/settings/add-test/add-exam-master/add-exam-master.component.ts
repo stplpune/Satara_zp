@@ -56,7 +56,8 @@ export class AddExamMasterComponent {
   standardArr = new Array();
   subjectArr = new Array();
   get f() { return this.examForm.controls }
-
+  get cf() { return this.assetCriteria.controls}
+  assetCriteria!: FormGroup
   constructor(private masterService: MasterService,
     private commonMethods: CommonMethodsService,
     private errors: ErrorsService,
@@ -79,10 +80,10 @@ export class AddExamMasterComponent {
       this.getSubject();
       this.getEducatioYear();
       this.formField();
+      this.examCriteriaFeild();
     }
     
     formField(){
-    
       this.examForm = this.fb.group({
         id: [this.data ? this.data.id : 0],
         stateId: ['', Validators.required],
@@ -99,6 +100,14 @@ export class AddExamMasterComponent {
       })
     
       this.data ?  (this.dateFrom.setValue(moment(this.data.fromMonth)),this.dateTo.setValue(moment(this.data.toMonth))) :''
+    }
+
+    examCriteriaFeild(){
+      this.assetCriteria = this.fb.group({
+        standardId: [],
+        subjectId: [], 
+        assetCriteriaId: []
+      });
     }
   
     getState(){
@@ -153,7 +162,7 @@ export class AddExamMasterComponent {
       this.masterService.GetAllStandardClassWise(this.webService.languageFlag).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.standardArr.push({"id": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
+            this.standardArr=res.responseData;
           }
           else {
             this.standardArr = [];
@@ -161,13 +170,13 @@ export class AddExamMasterComponent {
         }
       });
     }
-    
+
     getSubject() {
       this.subjectArr = [];
       this.masterService.getAllSubject(this.webService.languageFlag).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.subjectArr.push({"id": 0, "subject": "All", "m_Subject": "सर्व"},...res.responseData);
+            this.subjectArr = res.responseData;
           }
           else {
             this.subjectArr = [];
@@ -176,7 +185,9 @@ export class AddExamMasterComponent {
       });
     }
 
-
+    addAssCriteria(){
+      this.addValidation();
+    }
 
     onSubmit(){
       let formValue = this.examForm.value;
@@ -199,6 +210,16 @@ export class AddExamMasterComponent {
             this.commonMethods.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusMessage, 1);
           })
         });
+      }
+    }
+
+    addValidation(status?: any){
+      if(status){
+        this.cf['cctvTypeId'].setValidators([Validators.required]);
+
+      }
+      else{
+
       }
     }
 

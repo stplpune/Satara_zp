@@ -79,40 +79,40 @@
                     </mat-form-field>
                 </div>
             </div>
-
             <div class="row gx-2">
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label> {{'Labels.standard'| translate}}</mat-label>
+                        <mat-select formControlName="standardId">
+                          <mat-option *ngFor="let standard of standardArr" [value]="standard.id">
+                              {{languageFlag == 'English' ? standard.standard : standard.m_Standard}}
+                            </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
                 <div class="col-sm">
                         <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                             <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                            <mat-select formControlName="assesmentSubjectId">
+                            <mat-select formControlName="subjectId">
                                 <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
                                     {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                 </div>
+                
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.state'| translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="clearDropdown(); getDistrict();">
-                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
-                                {{languageFlag == 'English' ? state.state : state.m_State}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm">
-                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.state'| translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="clearDropdown(); getDistrict();">
-                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
-                                {{languageFlag == 'English' ? state.state : state.m_State}}
+                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                        <mat-select multiple formControlName="assetCriteriaId">
+                            <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
+                                {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-auto">
-                    <button mat-flat-button class="btn-icon btn-main">
+                    <button mat-flat-button class="btn-icon btn-main" (click)="addAssCriteria()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>

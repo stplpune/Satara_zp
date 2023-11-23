@@ -34,6 +34,7 @@ export class AddCctvLocationComponent {
   currentDate = new Date();
   public loginData: any;
   cctvCameraTypeArr = new Array();
+  selectedIndex! : number;
   get cf() { return this.cameraDetailsForm.controls };
 
   constructor(public webService: WebStorageService,
@@ -269,6 +270,74 @@ export class AddCctvLocationComponent {
     this.cf['password'].updateValueAndValidity();
   }
 
+  // onSubmitCameraDetails(){
+  //   this.addValidations(true);
+  //   let formValue = this.cameraDetailsForm.value;
+  //   let cctyTypeName = this.cctvCameraTypeArr.find((cctv:any)=>cctv.id == formValue.cctvTypeId)
+  //   if (this.cameraDetailsForm.invalid) {
+  //     return
+  //   }
+  //   else if(!this.editCctvObj){
+  //     this.cameraDetailsArr.forEach((camera: any)=>{
+  //       if (camera.cctvName ==  (formValue.cctvName).trim()) {
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Camera Name Already Exist' : 'कॅमेराचे नाव आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }else if (camera.cctvModel == (formValue.cctvModel).trim()) {
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Camera Model Already Exist' : 'कॅमेराचे मॉडेल आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }else if (camera.deviceId == (formValue.deviceId).trim()) {
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Device Id Already Exist' : 'डिव्हाइस आयडी आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }else if (camera.userName == (formValue.userName).trim()) {
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'User Name Already Exist' : 'वापरकर्ता नाव आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }else if (camera.password == (formValue.password).trim()) {
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Password Already Exist' : 'पासवर्ड आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }else if (camera.link == (formValue.link).trim()) {
+  //         this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'URL Link Already Exist' : 'URL लिंक आधीपासून अस्तित्वात आहे', 1);
+  //         return;
+  //       }
+  //     })
+  //   }
+  //    else{
+  //     let obj = {
+  //       "createdBy": this.webService.getUserId() || 0,
+  //       "modifiedBy": this.webService.getUserId() || 0,
+  //       "createdDate": new Date(),
+  //       "modifiedDate": new Date(),
+  //       "isDeleted": formValue.isDeleted,
+  //       "id": formValue.id,
+  //       "cctvRegisterId": formValue.cctvRegisterId,
+  //       "cctvTypeId": formValue.cctvTypeId,
+  //       "cctvType": cctyTypeName.cctvType,
+  //       "ipAddress":formValue.ipAddress,
+  //       "cctvName": formValue.cctvName,
+  //       "cctvModel": formValue.cctvModel,
+  //       "registerDate": formValue.registerDate,
+  //       "deviceId": formValue.deviceId,
+  //       "userName": formValue.userName,
+  //       "password": formValue.password,
+  //       "link":formValue.link
+  //     }
+  //     if(this.data){
+  //       this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
+  //       console.log("if data availale", this.cameraDetailsArr);
+  //       this.cameraDetailsArr.push(obj);
+  //       this.cameraDetailsArr = [...this.cameraDetailsArr];
+  //       this.editCctvObj = null;
+  //     }
+  //     else{
+  //       // this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
+  //       this.cameraDetailsArr.push(obj);
+  //       // this.cameraDetailsArr = [...this.cameraDetailsArr];
+  //       console.log("this.cameraDetailsArr", this.cameraDetailsArr);
+  //     }
+  //     this.cameraFormData();
+  //     this.addValidations();
+  //   }
+  // }
+
   onSubmitCameraDetails(){
     this.addValidations(true);
     let formValue = this.cameraDetailsForm.value;
@@ -276,31 +345,8 @@ export class AddCctvLocationComponent {
     if (this.cameraDetailsForm.invalid) {
       return
     }
-    else if(!this.editCctvObj){
-      this.cameraDetailsArr.forEach((camera: any)=>{
-        if (camera.cctvName ==  (formValue.cctvName).trim()) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Camera Name Already Exist' : 'कॅमेराचे नाव आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else if (camera.cctvModel == (formValue.cctvModel).trim()) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Camera Model Already Exist' : 'कॅमेराचे मॉडेल आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else if (camera.deviceId == (formValue.deviceId).trim()) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Device Id Already Exist' : 'डिव्हाइस आयडी आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else if (camera.userName == (formValue.userName).trim()) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'User Name Already Exist' : 'वापरकर्ता नाव आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else if (camera.password == (formValue.password).trim()) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Password Already Exist' : 'पासवर्ड आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }else if (camera.link == (formValue.link).trim()) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'URL Link Already Exist' : 'URL लिंक आधीपासून अस्तित्वात आहे', 1);
-          return;
-        }
-      })
-    }
      else{
-      let obj = {
+      let object = {
         "createdBy": this.webService.getUserId() || 0,
         "modifiedBy": this.webService.getUserId() || 0,
         "createdDate": new Date(),
@@ -319,26 +365,26 @@ export class AddCctvLocationComponent {
         "password": formValue.password,
         "link":formValue.link
       }
-      if(this.data){
-        this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
+      if(this.editCctvObj){
         console.log("if data availale", this.cameraDetailsArr);
-        this.cameraDetailsArr.push(obj);
-        this.cameraDetailsArr = [...this.cameraDetailsArr];
-        this.editCctvObj = null;
-      }
-      else{
-        // this.cameraDetailsArr = this.cameraDetailsArr.filter((x) => x.id != this.cameraDetailsForm.value.id);
-        this.cameraDetailsArr.push(obj);
-        // this.cameraDetailsArr = [...this.cameraDetailsArr];
-        console.log("this.cameraDetailsArr", this.cameraDetailsArr);
+          this.cameraDetailsArr[this.selectedIndex] = (object);
+          this.editCctvObj = null;
+        }
+      else{        
+        if(!this.cameraDetailsArr.some(obj => (obj.ipAddress == this.cameraDetailsForm.value.ipAddress))) {
+          this.cameraDetailsArr.push(object);
+        }else{
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'IPAddress Already Exist' : 'आयपीएड्रेस आधीपासून अस्तित्वात आहे', 1);
+        }
       }
       this.cameraFormData();
       this.addValidations();
     }
   }
 
-  onEditCctv(data: any) {
+  onEditCctv(data: any, index?: any) {
     this.editCctvObj = data;
+    this.selectedIndex = index;
     this.cameraFormData();
   }
 

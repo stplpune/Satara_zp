@@ -143,7 +143,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.RegistrationDate'| translate}}</mat-label>
                         <input matInput [matDatepicker]="picker" formControlName="registerDate" (click)="picker.open()"
-                            [max]="currentDate">
+                            [max]="currentDate" readonly>
                         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
@@ -230,7 +230,7 @@
                                 <td>
                                     <button mat-icon-button matTooltip="{{'Labels.edit' | translate}}"
                                         matTooltipPosition="left" matTooltipClass="tooltip" type="button"
-                                        (click)="onEditCctv(cctv)" [disabled]="cameraDetailsArr[i].isDeleted">
+                                        (click)="onEditCctv(cctv, i)" [disabled]="cameraDetailsArr[i].isDeleted">
                                         <mat-icon class="text-main"> edit</mat-icon>
                                     </button>
                                     <button mat-icon-button matTooltip="{{'Labels.delete' | translate}}"

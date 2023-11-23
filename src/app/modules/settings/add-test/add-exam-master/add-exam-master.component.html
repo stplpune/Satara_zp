@@ -79,7 +79,8 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="row gx-2">
+            <form [formGroup]="assetCriteriaFrom">
+                <div class="row gx-2">
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label> {{'Labels.standard'| translate}}</mat-label>
@@ -103,16 +104,16 @@
                 
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                        <mat-label>{{'Labels.AssesmentCriteria' | translate}}</mat-label>
                         <mat-select multiple formControlName="assetCriteriaId">
-                            <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
-                                {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
+                            <mat-option *ngFor="let criteria of criteriaArr" [value]="criteria.id">
+                                {{languageFlag == 'English' ? criteria.question : criteria.m_Question}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-auto">
-                    <button mat-flat-button class="btn-icon btn-main" (click)="addAssCriteria()">
+                    <button mat-flat-button class="btn-icon btn-main" type="submit" (click)="addAssCriteria()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
@@ -150,13 +151,15 @@
                     </div>
                 </div>
             </div>
+            </form>
+            
         </mat-card-content>
         <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
             <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
                 translate}}</button>
             <!-- <button type="submit" mat-flat-button class="btn-main ">{{data ? ('Labels.update' | translate) :
                 ('Labels.submit' | translate)}}</button> -->
-            <button type="submit" mat-flat-button class="btn-main ">{{ data ? ('Labels.update' | translate) :
+            <button type="submit" mat-flat-button class="btn-main">{{ data ? ('Labels.update' | translate) :
                 'Labels.submit' | translate}} </button>
         </mat-card-footer>
     </form>

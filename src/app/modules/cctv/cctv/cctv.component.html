@@ -22,11 +22,33 @@
     <mat-card-header class="card-header pb-0 border-bottom-0">
         <form [formGroup]="filterForm" (ngSubmit)="getTableData()">
             <div class="row gx-2">
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.state' | translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="clearDependency('state');getDistrict();">
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                              {{webStorageS.getLangauge() ==
+                                'EN' ? state.state : state.m_State}}
+                            </mat-option>
+                          </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.district' | translate}}</mat-label>
+                        <mat-select formControlName="districtId" (selectionChange)="clearDependency('district');getTalukaDropByDis()">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                              {{webStorageS.getLangauge() ==
+                                'EN' ? district.district : district.m_District}}
+                            </mat-option>
+                          </mat-select>
+                    </mat-form-field>
+                </div>
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="onChangeDropD('taluka');getCenterDropByTaluka();">
+                            (selectionChange)="clearDependency('taluka');getCenterDropByTaluka();">
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
                                 'EN' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
@@ -38,7 +60,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
-                            (selectionChange)="onChangeDropD('center'); getVillageDropByCenter()">
+                            (selectionChange)="clearDependency('center'); getVillageDropByCenter()">
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
                                 'EN' ? cen.center:cen.m_Center}}</mat-option>
                         </mat-select>
@@ -49,7 +71,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
-                            (selectionChange)="onChangeDropD('village'); getSchoolDropByFilter();">
+                            (selectionChange)="clearDependency('village'); getSchoolDropByFilter();">
                             <mat-option *ngFor="let village of villageArr"
                                 [value]="village.id">{{webStorageS.getLangauge() == 'EN' ?
                                 village.village:village.m_Village}}</mat-option>
@@ -60,7 +82,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                        <mat-select formControlName="schoolId" (selectionChange)="onChangeDropD('school');">
+                        <mat-select formControlName="schoolId" (selectionChange)="clearDependency('school');">
                             <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() ==
                                 'EN' ?
                                 sch.schoolName:sch.m_SchoolName}}</mat-option>

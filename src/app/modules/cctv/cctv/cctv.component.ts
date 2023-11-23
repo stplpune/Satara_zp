@@ -31,6 +31,8 @@ export class CctvComponent {
   highLightFlag: boolean = true;
   displayedColumns = new Array();
   langTypeName: any;
+  stateArr = new Array();
+  districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -64,7 +66,7 @@ export class CctvComponent {
       this.languageChange();
     });
     this.filterFormData();
-    this.getTalukaDropByDis();
+    this.getState();
     this.getAllCCTVLocation();
     this.getTableData();
   }
@@ -83,6 +85,8 @@ export class CctvComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
+      stateId: [''],
+      districtId: [''],
       talukaId: [''],
       centerId: [''],
       villageId: [''],
@@ -92,11 +96,48 @@ export class CctvComponent {
     })
   }
 
+  
+  getState(){
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    })
+  }
+
+  getDistrict() {
+    this.districtArr = [];
+    let stateId = this.filterForm.value.stateId;
+    if(stateId != 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.filterForm.controls['districtId'].setValue(0);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+      });  
+    }
+  }
+
+
+
   // Get Taluka Dropdown By district
 
   getTalukaDropByDis() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
+    let districtId = this.f['districtId'].value
+    if (districtId != 0) {
+    this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
@@ -108,6 +149,7 @@ export class CctvComponent {
         }
       }
     });
+  }
   }
 
   // Get Center Dropdown
@@ -128,7 +170,6 @@ export class CctvComponent {
         }
       });
     }
-
   }
 
   // Get Village Dropdown
@@ -140,7 +181,7 @@ export class CctvComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.filterForm?.value.villageId ? this.getSchoolDropByFilter() : '';
+            this.f['villageId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -260,6 +301,48 @@ export class CctvComponent {
         break;
     }
   }
+
+  clearDependency(flag : any){
+    if(flag == 'state'){
+      this.filterForm.controls['districtId']?.setValue('');
+      this.filterForm.controls['talukaId']?.setValue('');
+      this.filterForm.controls['centerId']?.setValue('');
+      this.filterForm.controls['villageId']?.setValue('');
+      this.filterForm.controls['schoolId']?.setValue(''); 
+      this.districtArr = [];
+      this.talukaArr = [];
+      this.centerArr = [];  
+      this.villageArr = [];
+      this.schoolArr = [];
+    }
+    else if(flag == 'district'){
+      this.filterForm.controls['talukaId']?.setValue('');
+      this.filterForm.controls['centerId']?.setValue('');
+      this.filterForm.controls['villageId']?.setValue('');
+      this.filterForm.controls['schoolId']?.setValue('');   
+      this.talukaArr = [];
+      this.centerArr = [];  
+      this.villageArr = [];
+      this.schoolArr = [];
+    }
+    else if(flag == 'taluka'){
+      this.filterForm.controls['centerId']?.setValue(0);
+      this.filterForm.controls['villageId']?.setValue('');
+      this.filterForm.controls['schoolId']?.setValue('');   
+      this.centerArr = [];  
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if (flag == 'center'){
+      this.filterForm.controls['villageId']?.setValue(0);
+      this.filterForm.controls['schoolId']?.setValue('');
+      this.villageArr = [];
+      this.schoolArr = [];
+    }else if (flag =='village'){
+      this.filterForm.controls['schoolId']?.setValue(0);
+      this.schoolArr = [];
+    }
+  }
+
 
   // clear button func
   clearForm() {

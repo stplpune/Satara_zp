@@ -59,7 +59,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "name": [this.data ? this.data.officeName : "", [Validators.required, Validators.pattern('^([ a-zA-Z])[ a-zA-Z]+$')]],
         "m_Name": [this.data ? this.data.m_OfficeName : "", [Validators.required,Validators.pattern('^[\u0900-\u0965 ]+$')]],
         "mobileNo": [this.data ? this.data.mobileNo : "", [Validators.required, Validators.pattern(this.validation.mobile_No)]],
-        "emailId": [this.data ? this.data.emailId : "", [Validators.required, Validators.pattern(this.validation.email)]],
+        "emailId": [this.data ? this.data.emailId : "", [Validators.pattern(this.validation.email)]],
         "address": [this.data ? this.data.address : "",],
         "schoolId": [this.data ? this.data.schoolId : null],
         "designationId": [this.data ? this.data.designationId : null, [Validators.required]],
@@ -80,7 +80,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "bitId": [this.data ? this.data.bitId : 0],
         "lan": [this.webStorageService.languageFlag],
         "agencyId": [this.data ? this.data.agencyId : null],
-        "isBlock" : true,
+        "isBlock" : [true],
         "userId": [this.data ? this.data.userId : 0], 
         "officeCenterSchoolModel":[]
       })
@@ -291,7 +291,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Contact No.(BEO Office) and Mobile No. Can Not Be Same' : 'संपर्क क्रमांक (BEO कार्यालय) आणि संपर्क क्रमांक एकच असू शकत नाही', 1);
       return
     }
-    if (this.officeForm.value.designationId == 11 &&  (this.officeForm.value.beoEmailId == this.officeForm.value.emailId)) {
+    if (this.officeForm.value.designationId == 11 && (this.officeForm.value.emailId.length > 0)  && (this.officeForm.value.beoEmailId.length > 0 ) && (this.officeForm.value.beoEmailId == this.officeForm.value.emailId)) {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'EmailId(BEO Office) and Email Can Not Be Same' : 'ई - मेल आयडी (BEO कार्यालय) आणि ई - मेल आयडी एकच असू शकत नाही', 1);
       return
     }

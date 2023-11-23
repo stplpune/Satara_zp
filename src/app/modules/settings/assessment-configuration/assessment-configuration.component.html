@@ -23,7 +23,7 @@
     <mat-card-header class="card-header">
         <form class="w-100" [formGroup]="filterForm" #formDirective="ngForm">
             <div class="row gx-2">
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state' | translate}}</mat-label>
                         <mat-select formControlName="stateId" (selectionChange)="getDistrict()">
@@ -33,7 +33,7 @@
                           </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.district' | translate}}</mat-label>
                         <mat-select formControlName="districtId">

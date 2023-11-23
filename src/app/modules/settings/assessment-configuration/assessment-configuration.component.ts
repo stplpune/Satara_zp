@@ -50,7 +50,9 @@ export class AssessmentConfigurationComponent {
     ngOnInit(){
       this.formField();
       this.getTableData();
-      this.getState(); this.getAssessmentType(); this.getSubject(); this.getEducatioYear();  this.getQuestion();
+      this.getState(); 
+      // this.getAssessmentType(); 
+      this.getSubject(); this.getEducatioYear();  this.getQuestion();
       this.languageFlag = this.webService.languageFlag;
       this.webService.langNameOnChange.subscribe(lang => {
         this.languageFlag = lang;
@@ -160,19 +162,19 @@ export class AssessmentConfigurationComponent {
       }
     }
 
-    getAssessmentType() {
-      this.assessmentTypeArr = [];
-      this.masterService.getAssementType(this.webService.languageFlag).subscribe({
-        next: (res: any) => {
-          if (res.statusCode == "200") {
-            this.assessmentTypeArr.push({"id": 0, "assessmentType": "All", "m_AssessmentType": "सर्व"}, ...res.responseData);
-          }
-          else {
-            this.assessmentTypeArr = [];
-          }
-        },
-      });
-    }
+    // getAssessmentType() {
+    //   this.assessmentTypeArr = [];
+    //   this.masterService.getAssementType(this.webService.languageFlag).subscribe({
+    //     next: (res: any) => {
+    //       if (res.statusCode == "200") {
+    //         this.assessmentTypeArr.push({"id": 0, "assessmentType": "All", "m_AssessmentType": "सर्व"}, ...res.responseData);
+    //       }
+    //       else {
+    //         this.assessmentTypeArr = [];
+    //       }
+    //     },
+    //   });
+    // }
 
     onChangeAssementType(){
       this.filterForm.value.assessmentType == 1 ? this.getGroupClass() : this.getStandard();

@@ -498,10 +498,18 @@
         "SelectClass":"Select Assesment Type",
         "EducationalYear":"Educational Year",
         "AssesmentCriteria":"Assesment Criteria",
+        "AddAssesmentCriteria":"Add Assesment Criteria",
+        "UpdateAssesmentCriteria":"Update Assesment Criteria",
         "UploadPhotoDocument":"Upload Photo / Document",
         "MonthRangeFrom":"Month Range From",
         "MonthRangeTo":"Month Range To",
-        "AssesmentCriteriaMarathi":"Assesment Criteria (Marathi)"
+        "AssesmentCriteriaMarathi":"Assesment Criteria (Marathi)",
+        "Parameter":"Parameter",
+        "ParameterMarathi":"Parameter(Marathi)",
+        "PleaseEnterValidParameter(Marathi)":"Please Enter Valid Parameter (Marathi)",
+        "PleaseEnterValidParameter":"Please Enter Valid Parameter",
+        "PleaseEnterValidAssesmentCriteria(Marathi)":"Please Enter Valid Assesment Criteria (Marathi)",
+        "PleaseEnterValidAssesmentCriteria":"Please Enter Valid Assesment Criteria"
 
     }
 }

@@ -12,11 +12,11 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
             <div class="text-main fw-bold">
-                {{'Labels.QuestionType' | translate}}
+                {{'Labels.AssesmentCriteria' | translate}}
             </div>
             <button mat-flat-button class="btn-main" (click)="openDialog()">
                 <mat-icon>add</mat-icon>
-                {{'Labels.AddQuestionType'| translate}}
+                {{'Labels.AddAssesmentCriteria'| translate}}
             </button>
         </div>
     </mat-card-header>
@@ -43,7 +43,7 @@
                           </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <!-- <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.SelectClass' | translate}}</mat-label>
                         <mat-select formControlName="assessmentType" (selectionChange)="onChangeAssementType()">
@@ -52,9 +52,9 @@
                               </mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
 
-                <div class="col-sm-2" *ngIf="filterForm.value.assessmentType ==1">
+                <div class="col-sm" *ngIf="filterForm.value.assessmentType ==1">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                       <mat-label>{{'Labels.groupClass'|translate}}</mat-label>
                       <mat-select formControlName="groupId">
@@ -65,7 +65,7 @@
                     </mat-form-field>
                   </div>
           
-                  <div class="col-sm-2" *ngIf="filterForm.value.assessmentType ==2">
+                  <div class="col-sm" *ngIf="filterForm.value.assessmentType ==2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                       <mat-label> {{'Labels.standard'| translate}}</mat-label>
                       <mat-select formControlName="standardId">
@@ -76,7 +76,7 @@
                     </mat-form-field>
                   </div>
 
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
                         <mat-select formControlName="subjectId">
@@ -86,7 +86,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-auto">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
                         <mat-select formControlName="questionTypeId">

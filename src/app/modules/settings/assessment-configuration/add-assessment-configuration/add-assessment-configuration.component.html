@@ -2,7 +2,7 @@
     <mat-card-header class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">
-                {{data ? ('Labels.UpdateAddQuestionType' | translate) : 'Labels.AddQuestionType' | translate}}
+                {{data ? ('Labels.UpdateAssesmentCriteria' | translate) : 'Labels.AddAssesmentCriteria' | translate}}
             </h6>
             <button mat-icon-button mat-dialog-close class="btn-modal-close">
                 <mat-icon>close</mat-icon>
@@ -90,7 +90,7 @@
                         <textarea matInput formControlName="question"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);"
                             maxlength="50"></textarea>
-                            <mat-error *ngIf="f['question'].hasError('pattern')">Please Enter Valid Assesment Criteria</mat-error>
+                            <mat-error *ngIf="f['question'].hasError('pattern')">{{'Labels.PleaseEnterValidAssesmentCriteria'| translate}}</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-6">
@@ -99,7 +99,7 @@
                         <textarea matInput formControlName="m_Question"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);"
                             maxlength="50"></textarea>
-                            <mat-error *ngIf="f['m_Question'].hasError('pattern')">Please Enter Valid Assesment Criteria (Marathi)</mat-error>
+                            <mat-error *ngIf="f['m_Question'].hasError('pattern')">{{'Labels.PleaseEnterValidAssesmentCriteria(Marathi)'| translate}}</mat-error>
                     </mat-form-field>
                 </div>
 
@@ -112,7 +112,7 @@
                                     <mat-label>{{'Labels.Parameter'| translate}}</mat-label>
                                     <input matInput formControlName="optionName" maxlength="100"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);">
-                                        <mat-error *ngIf="paramterForm.controls['optionName'].hasError('pattern')">Please Enter Valid Parameter</mat-error>
+                                        <mat-error *ngIf="paramterForm.controls['optionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter'| translate}}</mat-error>
                                 </mat-form-field>
                             </div>
 
@@ -121,7 +121,7 @@
                                     <mat-label>{{'Labels.ParameterMarathi'| translate}}</mat-label>
                                     <input matInput formControlName="m_OptionName" maxlength="100"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);">
-                                        <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">Please Enter Valid Parameter (Marathi)</mat-error>
+                                        <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter(Marathi)'| translate}}<</mat-error>
                                 </mat-form-field>
                                 <button mat-flat-button type="submit" (click)="addParametereData()"
                                     class="btn-main btn-icon">
@@ -138,7 +138,7 @@
                                     </mat-chip>
                                 </mat-chip-listbox> -->
 
-                                <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                                <div cdkDropList class="table-responsive table-height-xs scrollbar mb-2" (cdkDropListDropped)="drop($event)">
                                     <!-- <ng-container *ngFor="let paramter of paramterArray">
                                         <div class="example-box" cdkDrag>
                                             {{paramter.optionName}} / {{paramter.m_OptionName}}
@@ -148,15 +148,14 @@
                                         </div>
                                     </ng-container> -->
 
-                                    <table class="table">
+                                    <table class="table dashboard-table">
                                         <thead>
                                             <tr>
                                                 <th>{{webStorageS.getLangauge() == 'EN' ? 'Parameter' : 'पॅरामीटर'}}
                                                 </th>
                                                 <th>{{webStorageS.getLangauge() == 'EN' ? 'Parameter (Marathi)' :
                                                     'पॅरामीटर (मराठी)'}}</th>
-                                                <th>{{webStorageS.getLangauge() == 'EN' ? 'isExpected' : 'अपेक्षित
-                                                    आहे'}}</th>
+                                                <th>{{webStorageS.getLangauge() == 'EN' ? 'isExpected' : 'अपेक्षित आहे'}}</th>
                                                 <th>{{webStorageS.getLangauge() == 'EN' ? 'Action' : 'कृती'}}</th>
                                             </tr>
                                         </thead>

@@ -29,7 +29,9 @@ export class AddAssessmentConfigurationComponent {
   imgArray = new Array();
   paramterArray = new Array();
   editObj: any;
-  checked: any;
+  questionEditObj: any;
+  index: any;
+  isExpectedFlag: boolean = false;
   get f() { return this.questionForm.controls }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -79,8 +81,8 @@ export class AddAssessmentConfigurationComponent {
 
   paratmeterFormField() {
     this.paramterForm = this.fb.group({
-      optionName: ['', [Validators.pattern(this.validation.alphaNumericOnly)]],
-      m_OptionName: ['', [Validators.pattern(this.validation.marathiAlphanumeric)]]
+      optionName: [this.questionEditObj ? this.questionEditObj.optionName : '', [Validators.pattern(this.validation.alphaNumericOnly)]],
+      m_OptionName: [this.questionEditObj ? this.questionEditObj.m_OptionName : '', [Validators.pattern(this.validation.marathiAlphanumeric)]]
     })
   }
 
@@ -242,20 +244,20 @@ export class AddAssessmentConfigurationComponent {
     let formValue = this.paramterForm.value;
 
     let obj = {
-      id: 0,
-      questionId: 0,
+      id: this.questionEditObj ? this.questionEditObj.id : 0,
+      questionId: this.questionEditObj ? this.questionEditObj.questionId : 0,
       optionName: formValue.optionName,
       m_OptionName: formValue.m_OptionName,
-      optionGrade: 0,
-      assessmentTypeId: 0,
+      optionGrade: this.questionEditObj ? this.questionEditObj.optionGrade : 0,
+      assessmentTypeId: this.questionEditObj ? this.questionEditObj.assessmentTypeId : 0,
+      checked: false,
       ...this.webStorageS.createdByProps(),
     }
 
     if(!this.paramterForm.valid){
       return
     }
-
-    if(this.paramterArray.length > 0){
+    else if(this.paramterArray.length > 0 && !this.questionEditObj){
       let duplicateOptionName = this.paramterArray.some((x: any) => {
         return x.optionName == formValue.optionName
       });
@@ -264,27 +266,40 @@ export class AddAssessmentConfigurationComponent {
         return x.m_OptionName == formValue.m_OptionName
       });
 
-      if(duplicateOptionName || duplicatem_OptionName){
+      if(duplicateOptionName || duplicatem_OptionName && !this.questionEditObj){
         this.commonMethod.snackBar(this.webStorageS.getLangauge() == 'EN' ? 'Parameter is already exist' : 'पॅरामीटर आधीपासून अस्तित्वात आहे', 1);
           return
       }
+      else{
+        this.paramterArray.push(obj);
+      }
+    }
+    else{
+      if(this.questionEditObj){
+        this.paramterArray[this.index] = obj;
+        this.paramterArray = [...this.paramterArray];
+      }
+      else{
+        this.paramterArray.push(obj);
+        // this.paramterArray = [...this.paramterArray];
+      }
     }
 
-    this.paramterArray.push(obj);
+    // this.paramterArray.push(obj);
     this.removeValidation();
     this.paramterForm.controls['optionName'].setValue('');
     this.paramterForm.controls['m_OptionName'].setValue('');
   }
 
-  removeAddData(index: any) {
-    this.paramterArray.splice(index, 1);
-  }
+  // removeAddData(index: any) {
+  //   this.paramterArray.splice(index, 1);
+  // }
   //#endregion ------------------------------------------- Add and remove Parameter end here ------------------------------------------------
 
   //#region ---------------------------------------------- Add and remove validation start here ---------------------------------------------
   addValidation(){
-    this.paramterForm.controls['optionName'].setValidators(Validators.required);
-    this.paramterForm.controls['m_OptionName'].setValidators(Validators.required);
+    this.paramterForm.controls['optionName'].setValidators([Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]);
+    this.paramterForm.controls['m_OptionName'].setValidators([Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]);
 
     this.paramterForm.controls['optionName'].updateValueAndValidity();
     this.paramterForm.controls['m_OptionName'].updateValueAndValidity();
@@ -297,13 +312,21 @@ export class AddAssessmentConfigurationComponent {
 
   //#endregion ------------------------------------------- Add and remove validation end here -----------------------------------------------
 
+  isExpectedCondition(){
+    if(this.questionForm.value.expectedGrade == 0 && (this.questionForm.value.questionTypeId == 1 || this.questionForm.value.questionTypeId == 2)){
+      this.isExpectedFlag = true;
+    }
+    else{
+      this.isExpectedFlag = false;
+    }
+  }
+
   //#region ---------------------------------------------- Submit and Update start here -----------------------------------------------------
   onSubmit(){
     let formValue = this.questionForm.value;
     formValue.questionSetUrls = this.imgArray;
     formValue.options = this.paramterArray;
-
-    console.log("formValue: ", formValue);
+    this.isExpectedCondition();
 
     let url = this.data ? 'UpdateCriteria' : 'AddCriteria';
     if(!this.questionForm.valid){
@@ -314,7 +337,7 @@ export class AddAssessmentConfigurationComponent {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter At Least One Parameter' : 'कृपया किमान एक पॅरामीटर प्रविष्ट करा', 1);
       return
     }
-    else if(formValue.expectedGrade == 0){
+    else if(this.isExpectedFlag == true){
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Select isExpected From Any Parameter ' : 'कृपया कोणत्याही पॅरामीटरमधून इज एक्सपेक्टेड निवडा', 1);
       return
     }
@@ -342,7 +365,6 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.editObj = res.responseData;
-          console.log("editObj: ", this.editObj);
           this.formField();
           this.initialDropdown();
 
@@ -378,12 +400,22 @@ export class AddAssessmentConfigurationComponent {
   }
   //#endregion ------------------------------------------ Patch values on Edit end here ------------------------------------------------------
 
-  onCheck(index: number){
-    this.questionForm.value.expectedGrade = index + 1;
+  onCheck(index: number, event: any){
+    this.questionForm.value.expectedGrade = Number(index + 1);
+    if(event.checked == true){
+      this.paramterArray.map((x: any) => {
+        x.checked = false;
+      })
+    }
+    else{
+      this.questionForm.value.expectedGrade = 0;
+    }
+    this.paramterArray[index].checked = true;
   }
 
-  onEditParameter(obj?: any){
-    console.log("onEdit Parameter : ", obj);
-    
+  onEditParameter(obj?: any, index?: number){
+    this.index = index;
+    this.questionEditObj = obj;
+    this.paratmeterFormField();
   }
 }

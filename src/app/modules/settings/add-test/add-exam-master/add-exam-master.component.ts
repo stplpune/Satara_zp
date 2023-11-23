@@ -154,11 +154,10 @@ export class AddExamMasterComponent {
         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
         return
       }else{
-
         this.ngxSpinner.show();
         this.apiService.setHttp(this.data ? 'put' : 'post', 'zp-satara/ExamType/'+ url, false, formValue, false, 'baseUrl');
         this.apiService.getHttp().subscribe({
-          next: (res: any) => {            
+          next: (res: any) =>{
             res.statusCode == "200" ? (this.commonMethods.showPopup(res.statusMessage, 0), this.dialogRef.close('yes')) : this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.ngxSpinner.hide();
           },

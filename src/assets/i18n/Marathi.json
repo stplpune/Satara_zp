@@ -84,6 +84,7 @@
         "Relations":"धर्म",
         "relations":"नाती",
         "dashboard": "डॅशबोर्ड",
+        "dashboard2": "डॅशबोर्ड-2",
         "agencyRegistration" : "इतर नोंदणी",
         "DesignationMaster": "पदनाम मास्टर",
         "addAgency" : "इतर नोंदणी",
@@ -517,6 +518,12 @@
         "PleaseEnterValidParameter(Marathi)":"कृपया वैध पॅरामीटर प्रविष्ट करा (मराठी)",
         "PleaseEnterValidParameter":"कृपया वैध पॅरामीटर प्रविष्ट करा",
         "PleaseEnterValidAssesmentCriteria(Marathi)":"कृपया वैध मूल्यांकन निकष प्रविष्ट करा (मराठी)",
-        "PleaseEnterValidAssesmentCriteria":"कृपया वैध मूल्यांकन निकष प्रविष्ट करा"
+        "PleaseEnterValidAssesmentCriteria":"कृपया वैध मूल्यांकन निकष प्रविष्ट करा",
+        "SchoolwisePerformance":"शाळानिहाय कामगिरी",
+        "TeacherWisePerformance":"शिक्षकनिहाय कामगिरी",
+        "AllClass":"सर्व वर्ग",
+        "AllSubject":"सर्व विषय",
+        "Classwiseperformance":"वर्गवार कामगिरी",
+        "SubjectWisePerformance":"विषयनिहाय कामगिरी"
     }
 }

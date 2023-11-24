@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashbaord2.component.scss']
 })
 export class Dashbaord2Component {
-
+  dashboardCountData = new Array();
 }

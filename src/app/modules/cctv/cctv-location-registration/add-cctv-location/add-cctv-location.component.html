@@ -178,7 +178,7 @@
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.urlLink'| translate}}</mat-label>
                         <input matInput formControlName="link" (keypress)="validators.noFirstSpaceAllow($event);"
-                            maxlength="10" minlength="8">
+                            maxlength="100" minlength="8">
                         <mat-error *ngIf="cf['link'].hasError('pattern')">Please Enter Valid
                             Link</mat-error>
                     </mat-form-field>

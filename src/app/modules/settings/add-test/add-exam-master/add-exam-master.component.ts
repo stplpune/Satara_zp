@@ -205,11 +205,10 @@ export class AddExamMasterComponent {
     addAssCriteria(){
       this.addValidation(true);
       let criteriaForm = this.assetCriteriaFrom.value
-      if (this.assetCriteriaFrom.invalid) {
+      if(this.assetCriteriaFrom.invalid) {
         return
       }
       console.log("criteriaForm", criteriaForm);
-      
     }
 
     onSubmit(){

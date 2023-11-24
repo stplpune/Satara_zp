@@ -78,11 +78,7 @@ export class CctvComponent {
 
   init_api() {
     Flashphoner.init({});
-    //Connect to WCS server over websockets
-    if(this.session){
-      Flashphoner.on(this.SESSION_STATUS.DISCONNECTED)
-    }
-    
+    //Connect to WCS server over websockets    
    
     this.session = Flashphoner.createSession({
       urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
@@ -98,6 +94,9 @@ export class CctvComponent {
   }
 
   playClick(url: any) {
+    // if(this.session){
+    //   Flashphoner.on(this.SESSION_STATUS.DISCONNECTED)
+    // }
     if (this.Browser.isSafari()) {
       Flashphoner.playFirstVideo(document.getElementById("play"), true, this.PRELOADER_URL).then(() => {
         this.playStream(url);
@@ -325,7 +324,10 @@ export class CctvComponent {
 
   // Click table row 
   childCompInfo(obj?: any) {
+
     if (obj.label == 'View') {
+      let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
+      this.playClick(url);
       // this.init();    
     }
     else {

@@ -57,6 +57,8 @@ export class AddExamMasterComponent {
   standardArr = new Array();
   subjectArr = new Array();
   criteriaArr = new Array();
+  tableArray: any;
+  criteriaObjArr = new Array();
 
   get f() { return this.examForm.controls }
   get cf() { return this.assetCriteriaFrom.controls}
@@ -80,7 +82,7 @@ export class AddExamMasterComponent {
       this.getState();
       this.getStandard();
       this.getSubject();
-      this.getCriteria();
+      // this.getCriteria();
       this.getEducatioYear();
       this.formField();
       this.examCriteriaFeild();
@@ -100,8 +102,8 @@ export class AddExamMasterComponent {
         fromMonth:  [this.data ? moment(this.data.fromMonth) : moment()],
         toMonth:  [this.data ? moment(this.data.toMonth) : moment()],
         lan: this.languageFlag,
-      })
-    
+        examTypeWises: []
+      });
       this.data ?  (this.dateFrom.setValue(moment(this.data.fromMonth)),this.dateTo.setValue(moment(this.data.toMonth))) :''
     }
 
@@ -190,7 +192,9 @@ export class AddExamMasterComponent {
 
     getCriteria(){
       this.criteriaArr = [];
-      this.masterService.GetAllExamTypeCriteria(this.webService.languageFlag).subscribe({
+      let standardId = this.assetCriteriaFrom.value.standardId;
+      let subjectId = this.assetCriteriaFrom.value.subjectId;
+      this.masterService.GetAllExamTypeCriteria(standardId, subjectId, this.webService.languageFlag).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200"){
             this.criteriaArr = res.responseData;
@@ -204,15 +208,43 @@ export class AddExamMasterComponent {
 
     addAssCriteria(){
       this.addValidation(true);
-      let criteriaForm = this.assetCriteriaFrom.value
+      let criteriaFormValue = this.assetCriteriaFrom.value;
+
       if(this.assetCriteriaFrom.invalid) {
         return
       }
-      console.log("criteriaForm", criteriaForm);
+      else{
+        
+        for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
+          let obj = {
+            id: 0,
+            examTypeId: 0,
+            standardId: criteriaFormValue.standardId,
+            subjectId: criteriaFormValue.subjectId,
+            questionId: criteriaFormValue.assetCriteriaId[i],
+            createdBy: this.webService.getUserId(),
+            modifiedBy: this.webService.getUserId()
+          }
+          this.criteriaObjArr.push(obj);
+        }
+        
+        this.tableArray = [{
+          criteriaDetails: this.criteriaObjArr
+        }]
+
+        this.tableArray.map((x: any) => {
+          let obj: any;
+          obj = x.criteriaDetails.shift();
+          Object.assign(x, obj);
+        })
+      }
+      console.log("criteriaForm", criteriaFormValue);
+      console.log("this.tableArray: ", this.tableArray);
     }
 
     onSubmit(){
       let formValue = this.examForm.value;
+      formValue.examTypeWises = this.criteriaObjArr;
       // formValue.toMonth = this.dateFrom;
       // formValue.fromMonth = this.dateTo;
       let url = this.data ? 'UpdateExamType' : 'AddExamType';

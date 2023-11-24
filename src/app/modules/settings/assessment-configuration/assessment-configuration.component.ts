@@ -82,8 +82,8 @@ export class AssessmentConfigurationComponent {
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm.value;
 
-    let str = `pageno=${this.pageNumber}&pagesize=10&lan=${this.languageFlag}&assessmentType=${formValue.assessmentTypeId || 0}&questionTypeId=${formValue.questionTypeId || 0}&SubjectId=${formValue.subjectId || 0}&EducationYearId=${formValue.educationalYearId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
-    let reportStr = `pageno=1&pagesize=`+ (this.totalCount * 10) +`&lan=${this.languageFlag}&assessmentType=${formValue.assessmentTypeId || 0}&questionTypeId=${formValue.questionTypeId || 0}&SubjectId=${formValue.subjectId || 0}&EducationYearId=${formValue.educationalYearId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
+    let str = `pageno=${this.pageNumber}&pagesize=10&lan=${this.languageFlag}&assessmentType=${formValue.assessmentTypeId || 0}&questionTypeId=${formValue.questionTypeId || 0}&SubjectId=${formValue.subjectId || 0}&StandardId=${formValue.standardId || 0}&EducationYearId=${formValue.educationalYearId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
+    let reportStr = `pageno=1&pagesize=`+ (this.totalCount * 10) +`&lan=${this.languageFlag}&assessmentType=${formValue.assessmentTypeId || 0}&questionTypeId=${formValue.questionTypeId || 0}&SubjectId=${formValue.subjectId || 0}&StandardId=${formValue.standardId || 0}&EducationYearId=${formValue.educationalYearId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
 
     this.apiService.setHttp('GET', 'zp-satara/AssessmentConfiguration/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -201,7 +201,7 @@ export class AssessmentConfigurationComponent {
       this.masterService.GetAllStandardClassWise(this.webService.languageFlag).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.standardArr.push({"id": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
+            this.standardArr.push({"groupId": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
           }
           else {
             this.standardArr = [];
@@ -348,6 +348,7 @@ export class AssessmentConfigurationComponent {
     let userEng = obj.isBlock == false ?'Block' : 'Unblock';
     let userMara = obj.isBlock == false ?'ब्लॉक' : 'अनब्लॉक';
     let dialoObj = {
+      img: 'assets/images/unblock-gif.gif',
       header: this.languageFlag == 'English' ? userEng + ' Question Type' : userMara + ' प्रश्नाचा प्रकार',
       title: this.languageFlag == 'English' ? 'Do You Want To '+userEng+' Question Type?' : 'आपण प्रश्न प्रकार '+userMara+' करू इच्छिता?',
       cancelButton: this.languageFlag == 'English' ? 'Cancel' : 'रद्द करा',

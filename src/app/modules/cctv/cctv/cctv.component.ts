@@ -79,7 +79,7 @@ export class CctvComponent {
   init_api() {
     Flashphoner.init({});
     //Connect to WCS server over websockets    
-   
+   console.log("this.SESSION_STATUS", this.SESSION_STATUS);
     this.session = Flashphoner.createSession({
       urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
     }).on(this.SESSION_STATUS.ESTABLISHED, (_session: any) => {
@@ -94,9 +94,12 @@ export class CctvComponent {
   }
 
   playClick(url: any) {
+    console.log("this.SESSION_STATUS", this.session.status());
+    
     // if(this.session){
     //   Flashphoner.on(this.SESSION_STATUS.DISCONNECTED)
     // }
+
     if (this.Browser.isSafari()) {
       Flashphoner.playFirstVideo(document.getElementById("play"), true, this.PRELOADER_URL).then(() => {
         this.playStream(url);
@@ -112,10 +115,28 @@ export class CctvComponent {
       display: document.getElementById("play")
     };
     var stream = this.session.createStream(options).on(this.STREAM_STATUS.PLAYING, (_stream: any) => {
-      console.log("playing");
+      console.log("playing", this.STREAM_STATUS);
     });
     stream.play();
+    console.log("stream", stream);
+
   }
+
+  
+  stopVideo(){
+    // let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
+    // var options:any = {
+    //   name: url,
+    //   display: document.getElementById("play")
+    // };
+    console.log("this.session",this.session);
+    
+   this.session.disconnect();
+   this.init_api()
+
+  }
+
+  
 
   
 

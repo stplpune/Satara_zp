@@ -164,7 +164,7 @@
                                 </button>
                             </ng-container>
 
-                            <button *ngIf="playStopFlag == true" type="button" mat-icon-button class="btn-second"
+                            <button type="button" mat-icon-button class="btn-second" (click)="stopVideo()"
                                 matTooltip="{{'Labels.stop' | translate}}" matTooltipPosition="above"
                                 matTooltipClass="tooltip">
                                 <mat-icon class="text-main">stop</mat-icon>

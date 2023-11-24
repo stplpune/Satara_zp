@@ -14,10 +14,22 @@
             <div class="text-main fw-bold">
                 {{'Labels.AssesmentCriteria' | translate}}
             </div>
+            <div class="d-flex flex-wrap align-items-center justify-content-lg-end justify-content-start gap-2">
+                <button mat-flat-button class="bg-danger btn-icon text-white"
+                matTooltip="{{'Labels.DownloadPdf' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip"
+                (click)="getTableData('pdfFlag')">
+                <mat-icon>description</mat-icon>
+            </button>
+            <button mat-flat-button class="bg-success btn-icon text-white"
+                matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip"
+                (click)="getTableData('excel')">
+                <mat-icon class="material-symbols-outlined">table</mat-icon>
+            </button>
             <button mat-flat-button class="btn-main" (click)="openDialog()">
                 <mat-icon>add</mat-icon>
                 {{'Labels.AddAssesmentCriteria'| translate}}
             </button>
+            </div>
         </div>
     </mat-card-header>
     <mat-card-header class="card-header">
@@ -26,11 +38,12 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state' | translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="changeDropdown('state'); getDistrict();">
+                        <mat-select formControlName="stateId"
+                            (selectionChange)="changeDropdown('state'); getDistrict();">
                             <mat-option *ngFor="let state of stateArr" [value]="state.id">
-                              {{languageFlag == 'English' ? state.state : state.m_State}}
+                                {{languageFlag == 'English' ? state.state : state.m_State}}
                             </mat-option>
-                          </mat-select>
+                        </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-2">
@@ -38,43 +51,22 @@
                         <mat-label>{{'Labels.district' | translate}}</mat-label>
                         <mat-select formControlName="districtId">
                             <mat-option *ngFor="let district of districtArr" [value]="district.id">
-                              {{languageFlag == 'English' ? district.district : district.m_District}}
+                                {{languageFlag == 'English' ? district.district : district.m_District}}
                             </mat-option>
-                          </mat-select>
-                    </mat-form-field>
-                </div>
-                <!-- <div class="col-sm">
-                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.SelectClass' | translate}}</mat-label>
-                        <mat-select formControlName="assessmentType" (selectionChange)="onChangeAssementType()">
-                            <mat-option *ngFor="let class of assessmentTypeArr" [value]="class.id">
-                                {{languageFlag == 'English' ? class.assessmentType : class.m_AssessmentType}}
-                              </mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div> -->
+                </div>
 
-                <div class="col-sm" *ngIf="filterForm.value.assessmentType ==1">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                      <mat-label>{{'Labels.groupClass'|translate}}</mat-label>
-                      <mat-select formControlName="groupId">
-                        <mat-option *ngFor="let groupClass of groupClassArr" [value]="groupClass.id">
-                            {{languageFlag == 'English' ? groupClass.groupClass : groupClass.m_GroupClass}}
-                          </mat-option>
-                      </mat-select>
+                        <mat-label> {{'Labels.standard'| translate}}</mat-label>
+                        <mat-select formControlName="standardId">
+                            <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
+                                {{languageFlag == 'English' ? standard.standard : standard.m_Standard}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
-                  </div>
-          
-                  <div class="col-sm" *ngIf="filterForm.value.assessmentType ==2">
-                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                      <mat-label> {{'Labels.standard'| translate}}</mat-label>
-                      <mat-select formControlName="standardId">
-                        <mat-option *ngFor="let standard of standardArr" [value]="standard.id">
-                            {{languageFlag == 'English' ? standard.standard : standard.m_Standard}}
-                          </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
+                </div>
 
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
@@ -82,7 +74,7 @@
                         <mat-select formControlName="subjectId">
                             <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
                                 {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
-                              </mat-option>
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
@@ -92,23 +84,26 @@
                         <mat-select formControlName="questionTypeId">
                             <mat-option *ngFor="let que of questionArr" [value]="que.id">
                                 {{languageFlag == 'English' ? que.questionType : que.m_QuestionType}}
-                              </mat-option>
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.EducationalYear' | translate}}</mat-label>
-                        <mat-select formControlName="educationalYear">
+                        <mat-select formControlName="educationalYearId">
                             <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
-                                {{languageFlag == 'English' ? educationYear.eductionYear : educationYear.eductionYear_M}}
-                              </mat-option>
+                                {{languageFlag == 'English' ? educationYear.eductionYear :
+                                educationYear.eductionYear_M}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-auto mb-2">
-                    <button mat-stroked-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' | translate}}</button>
-                    <button type="button" mat-stroked-button class="btn-second ms-2" (click)="clearFilterForm()">{{'Labels.clear'|
+                    <button mat-stroked-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' |
+                        translate}}</button>
+                    <button type="button" mat-stroked-button class="btn-second ms-2"
+                        (click)="clearFilterForm()">{{'Labels.clear'|
                         translate}}</button>
                 </div>
             </div>

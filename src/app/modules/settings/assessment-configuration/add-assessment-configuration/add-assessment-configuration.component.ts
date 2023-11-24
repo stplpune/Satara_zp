@@ -36,6 +36,12 @@ export class AddAssessmentConfigurationComponent {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.paramterArray, event.previousIndex, event.currentIndex);
+    this.paramterArray.map((x: any) => {
+      if(x.checked == true){
+        let i = this.paramterArray.indexOf(x);
+        this.questionForm.value.expectedGrade = Number(i + 1);
+      }
+    });
   }
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
@@ -230,7 +236,7 @@ export class AddAssessmentConfigurationComponent {
   }
 
   onViewDoc(index: any) {
-    window.open(this.imgArray[index].url, 'blank');
+    window.open(this.imgArray[index].docPath, 'blank');
   }
 
   clearMultipleImg(index: any) {
@@ -241,6 +247,7 @@ export class AddAssessmentConfigurationComponent {
   //#region ---------------------------------------------- Add and remove Parameter start here ----------------------------------------------
   addParametereData() {
     this.addValidation();
+    this.questionForm.value.expectedGrade = 0;
     let formValue = this.paramterForm.value;
 
     let obj = {
@@ -375,6 +382,14 @@ export class AddAssessmentConfigurationComponent {
               docPath: res.docPath
             }
             this.imgArray.push(questionSetObj);
+          });
+
+          this.imgArray.map((x: any) => {
+            let imgPath = x.docPath;
+            let extension = imgPath.split('.');
+            if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+              x.docFlag = true;
+            }
           });
 
           this.editObj?.options.map((res: any) => {

@@ -58,7 +58,7 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.standard' | translate}}</mat-label>
                         <mat-select formControlName="groupId">
-                            <mat-option *ngFor="let standard of standardArr" [value]="standard.id">
+                            <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
                                 {{webStorageS.getLangauge() == 'EN' ? standard.standard : standard.m_Standard}}
                             </mat-option>
                         </mat-select>
@@ -129,25 +129,7 @@
                                 </button>
                             </div>
                             <div class="col-md-12" *ngIf="paramterArray.length">
-                                <!-- <mat-chip-listbox>
-                                    <mat-chip *ngFor="let data of paramterArray ,let i=index">
-                                        {{data.optionName}}/{{data.m_OptionName}}
-                                        <button matChipRemove (click)="removeAddData(i)">
-                                            <mat-icon class="material-symbols-rounded">cancel</mat-icon>
-                                        </button>
-                                    </mat-chip>
-                                </mat-chip-listbox> -->
-
                                 <div cdkDropList class="table-responsive table-height-xs scrollbar mb-2" (cdkDropListDropped)="drop($event)">
-                                    <!-- <ng-container *ngFor="let paramter of paramterArray">
-                                        <div class="example-box" cdkDrag>
-                                            {{paramter.optionName}} / {{paramter.m_OptionName}}
-                                            <mat-checkbox
-                                            (change)="action($event)">
-                                        </mat-checkbox> 
-                                        </div>
-                                    </ng-container> -->
-
                                     <table class="table dashboard-table">
                                         <thead>
                                             <tr>
@@ -202,7 +184,7 @@
                         <ng-container *ngFor="let data of imgArray; let i = index">
                             <div class="gallery position-relative">
                                 <img [src]="data.docFlag ? 'assets/images/pdf-image.png' : data.docPath" height="110px"
-                                    width="110px" class="border">
+                                    width="110px" class="border" (click)="onViewDoc(i)">
                                 <span class="position-absolute" style="top:-17px;right:-17px;">
                                     <button type="button" mat-icon-button (click)="clearMultipleImg(i)"
                                         class="bg-danger bg-opacity-25 text-danger material-icons"

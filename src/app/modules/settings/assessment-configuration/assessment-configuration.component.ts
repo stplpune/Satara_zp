@@ -10,6 +10,8 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-assessment-configuration',
@@ -34,8 +36,8 @@ export class AssessmentConfigurationComponent {
   subjectArr = new Array();
   questionArr = new Array();
   educationYearArr = new Array();
-  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Question Type', 'Educational Year', 'Block/Unblock','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'ब्लॉक/अनब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Question Type', 'Educational Year', 'Unblock/Block','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(public dialog: MatDialog,
@@ -45,14 +47,15 @@ export class AssessmentConfigurationComponent {
     private webService: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
     private commonMethodS: CommonMethodsService,
-    private errors: ErrorsService) {}
+    private errors: ErrorsService,
+    private downloadFileService: DownloadPdfExcelService,
+    private datepipe: DatePipe) {}
 
     ngOnInit(){
       this.formField();
       this.getTableData();
       this.getState(); 
-      // this.getAssessmentType(); 
-      this.getSubject(); this.getEducatioYear();  this.getQuestion();
+      this.getSubject(); this.getEducatioYear();  this.getQuestion(); this.getStandard();
       this.languageFlag = this.webService.languageFlag;
       this.webService.langNameOnChange.subscribe(lang => {
         this.languageFlag = lang;
@@ -67,8 +70,8 @@ export class AssessmentConfigurationComponent {
         groupId: [0],
         standardId: [0],
         subjectId: [0],
-        assessmentType: [0],
-        educationalYear : [0],
+        assessmentTypeId: [0],
+        educationalYearId : [0],
         questionTypeId: [0],
       })
     }
@@ -79,8 +82,8 @@ export class AssessmentConfigurationComponent {
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm.value;
 
-    let str = `pageno=${this.pageNumber}&pagesize=10&lan=${this.languageFlag}&assessmentType=${formValue.assessmentType || 0}&standardId=${formValue.standardId || 0}&SubjectId=${formValue.subjectId || 0}&groupId=${formValue.groupId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
-    let reportStr = `pageno=1&pagesize=`+ (this.totalCount * 10) +`&lan=${this.languageFlag}&assessmentType=${formValue.assessmentType || 0}&standardId=${formValue.standardId || 0}&SubjectId=${formValue.subjectId || 0}&groupId=${formValue.groupId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
+    let str = `pageno=${this.pageNumber}&pagesize=10&lan=${this.languageFlag}&assessmentType=${formValue.assessmentTypeId || 0}&questionTypeId=${formValue.questionTypeId || 0}&SubjectId=${formValue.subjectId || 0}&EducationYearId=${formValue.educationalYearId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
+    let reportStr = `pageno=1&pagesize=`+ (this.totalCount * 10) +`&lan=${this.languageFlag}&assessmentType=${formValue.assessmentTypeId || 0}&questionTypeId=${formValue.questionTypeId || 0}&SubjectId=${formValue.subjectId || 0}&EducationYearId=${formValue.educationalYearId || 0}&districtId=${formValue.districtId || 0}&StateId=${formValue.stateId || 0}`;
 
     this.apiService.setHttp('GET', 'zp-satara/AssessmentConfiguration/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -92,14 +95,14 @@ export class AssessmentConfigurationComponent {
           this.totalCount = res.responseData1.pageCount;
           this.tableDatasize = res.responseData1.pageCount;
           // this.resultDownloadArr = [];
-          // let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
-          // flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
+          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData : [];
+          flag == 'pdfFlag' ? this.downloadPdf(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdf(data, 'excel') : '';
         }
         else {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
           this.tableDatasize = 0;
-          // this.tableDatasize == 0 && flag == 'pdfFlag' ? this.commonMethodS.showPopup(this.webService.languageFlag == 'EN' ? 'No Record Found' : 'रेकॉर्ड उपलब्ध नाही', 1) : '';
+          this.tableDatasize == 0 && flag == 'pdfFlag' ? this.commonMethodS.showPopup(this.webService.languageFlag == 'EN' ? 'No Record Found' : 'रेकॉर्ड उपलब्ध नाही', 1) : '';
         }
         this.languageChange();
       },
@@ -125,6 +128,37 @@ export class AssessmentConfigurationComponent {
       this.apiService.tableData.next(this.tableData);
   }
   //#endregion ------------------------------------------- Assessment Table Data end here ----------------------------------------//
+
+  downloadPdf(data: any, flag?: string){
+    let resultDownloadArr: any = [];
+    data?.find((ele: any, i: any) => {
+      let obj = {
+        srNo:  (i + 1),
+        groupClass: ele.groupClass,
+        question: flag == 'excel' ? this.languageFlag == 'English' ? ele.question : ele.m_Question : ele.question,
+        educationYear: ele.educationYear,
+      }
+      resultDownloadArr.push(obj);
+    });
+    // download pdf call
+    if (resultDownloadArr?.length > 0) {
+      let keyPDFHeader = ['Sr. No.', 'Standard', 'Question Type', 'Educational Year'];
+      let marathikeyHeader = ['अनुक्रमांक', 'इयत्ता', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष']
+      let ValueData =
+        resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );
+      let objData: any;
+
+      objData= {
+        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'Assesment Criteria List' : 'मूल्यांकन निकष यादी' : 'Assesment Criteria List',
+        'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+
+      let headerKeySize = [7, 10, 50, 15, 15];
+      flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.languageFlag == 'English' ? keyPDFHeader : marathikeyHeader, ValueData, objData, headerKeySize);
+    }
+  }
 
   //#region ---------------------------------------------- Filter Dropdown start here ----------------------------------------------
     getState(){
@@ -160,38 +194,6 @@ export class AssessmentConfigurationComponent {
       else{
         this.districtArr = [];
       }
-    }
-
-    // getAssessmentType() {
-    //   this.assessmentTypeArr = [];
-    //   this.masterService.getAssementType(this.webService.languageFlag).subscribe({
-    //     next: (res: any) => {
-    //       if (res.statusCode == "200") {
-    //         this.assessmentTypeArr.push({"id": 0, "assessmentType": "All", "m_AssessmentType": "सर्व"}, ...res.responseData);
-    //       }
-    //       else {
-    //         this.assessmentTypeArr = [];
-    //       }
-    //     },
-    //   });
-    // }
-
-    onChangeAssementType(){
-      this.filterForm.value.assessmentType == 1 ? this.getGroupClass() : this.getStandard();
-    }
-
-    getGroupClass(){
-      this.groupClassArr = [];
-      this.masterService.getAllGroupClass(this.webService.languageFlag).subscribe({
-        next: (res: any) => {
-          if (res.statusCode == "200") {
-            this.groupClassArr.push({"id": 0, "groupClass": "All", "m_GroupClass": "सर्व"}, ...res.responseData);
-          }
-          else {
-            this.groupClassArr = [];
-          }
-        }
-      });
     }
 
     getStandard(){
@@ -278,11 +280,11 @@ export class AssessmentConfigurationComponent {
       if(result == 'yes' && obj){
         this.pageNumber = obj.pageNumber
       }
-      else{
+      else if(result == 'yes'){
         this.pageNumber = 1;
       }
-        this.clearFilterForm();
-        this.getState();
+      this.formField();;
+        this.getTableData();
         this.languageChange();
     });
   }

@@ -100,6 +100,8 @@ export class AddUpdateTeacherRegistrationComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    console.log("this.data", this.data);
+    
     this.formData();
     (!this.data) ? this.getGender() : (this.editObj = this.data, this.onEdit());
     
@@ -399,20 +401,22 @@ export class AddUpdateTeacherRegistrationComponent {
   getDistrict() {
     this.districtArray = [];
     let stateId = this.teacherRegForm.value.stateId;
-    this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-          this.districtArray = res.responseData;
-          // this.teacherRegForm.controls['districtId'].setValue(1);
-          this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : '';
-        } else {
-          this.districtArray = [];
-        }
-      }),
-      //  error: (error: any) => {
-      //   this.errorHandler.handelError(error.statusCode);
-      // }
-    })
+    if(stateId > 0){
+      this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == 200 && res.responseData.length) {
+            this.districtArray = res.responseData;
+            // this.teacherRegForm.controls['districtId'].setValue(1);
+            this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : '';
+          } else {
+            this.districtArray = [];
+          }
+        }),
+        //  error: (error: any) => {
+        //   this.errorHandler.handelError(error.statusCode);
+        // }
+      })
+    }
   }
   getTaluka() {
     this.talukaArray = [];
@@ -555,21 +559,23 @@ export class AddUpdateTeacherRegistrationComponent {
   getAllDistrictTeacherDetails() {
     this.districtArrayTeacherDeatails = [];
     let stateId = this.teacherRegForm.value.teacherDetails.stateId;
-    this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == 200 && res.responseData.length) {
-          this.districtArrayTeacherDeatails = res.responseData;
-          this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : '';
-
-        } else {
-          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          this.districtArrayTeacherDeatails = [];
-        }
-      }), 
-      // error: (error: any) => {
-      //   this.errorHandler.handelError(error.statusCode)
-      // }
-    })
+    if(stateId > 0){
+      this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == 200 && res.responseData.length) {
+            this.districtArrayTeacherDeatails = res.responseData;
+            this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : '';
+  
+          } else {
+            // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+            this.districtArrayTeacherDeatails = [];
+          }
+        }), 
+        // error: (error: any) => {
+        //   this.errorHandler.handelError(error.statusCode)
+        // }
+      })
+    }
   }
 
   getAllTalukaTeacherDeatails() {

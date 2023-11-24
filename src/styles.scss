@@ -756,16 +756,11 @@ textarea {
 .swal2-icon.swal2-warning {
   margin-top: 10px !important;
 }
-.myClass video{
-  border-radius: 1px !important;
+
+.display  video{
     height: 100% !important;
     width: 100% !important;
     object-fit: cover !important;
     object-position: center !important;
-    padding: 9px;
 }
-.display {
-  width: 100% !important;
-  height: 100% !important;
-  display: inline-block;
-}
+

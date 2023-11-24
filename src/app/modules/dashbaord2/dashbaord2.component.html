@@ -1,0 +1,326 @@
+<mat-drawer-container class="example-container" hasBackdrop="false">
+    <mat-drawer #drawer mode="over" position="end">
+        <mat-card class="plain-card">
+            <mat-card-header class="card-header pb-0">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <h6 class="text-main mb-0 fw-bold">{{'Labels.filterclick' | translate}}</h6>
+                    <button mat-icon-button class="btn-modal-close" mat-dialog-close>
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </mat-card-header>
+            <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
+                <form>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
+                            <mat-select formControlName="acYearId">
+                                <mat-option >Option-1</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
+                            <mat-select formControlName="talukaId">
+                                <mat-option>Option-2</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
+                            <mat-select formControlName="centerId">
+                                <mat-option>Option-2</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
+                            <mat-select formControlName="villageId">
+                                <mat-option>Option-2</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectSchool' | translate}}</mat-label>
+                            <mat-select formControlName="schoolId">
+                                <mat-option>Option-2</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close>{{'Labels.reset'| translate}}</button>
+                        <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' | translate}}</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </mat-drawer>
+    <mat-drawer-content>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item w-100 d-flex justify-content-between" aria-current="page">
+                    <button mat-stroked-button class="btn-main btn-icon">
+                        <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
+                    <div class="d-flex justify-content-between w-100">
+                        <span class="mt-2">{{'Labels.dashboard2' | translate}} </span>
+                        <div class="d-flex gap-2">
+                            <!-- academicYear year dropdown -->
+                            <div class="row">
+                                <!-- <div class="col-sm-6" type="button" (click)="navigateToReport()">
+                                    <div class="mt-1">
+                                        {{(webStorage.languageFlag == 'EN'?
+                                        'Total schools assessed' : 'मुल्यांकन झाल्येल्या एकुण शाळा')+' :
+                                        '+
+                                        dashboardCountData[0]?.assessmentSchoolsCount+'/'+dashboardCountData[0]?.schoolCount}}
+                                    </div> --
+                                    <span  >
+                                        {{webStorage.languageFlag == 'EN'?'Total schools assessed:' :
+                                        'मुल्यांकन झाल्येल्या एकुण शाळा:' }}
+                                    </span>
+                                    <span class="fw-bold">
+                                        {{dashboardCountData[0]?.assessmentSchoolsCount+'/'+dashboardCountData[0]?.schoolCount}}
+                                    </span>
+                                </div> -->
+
+                                <div class="col-sm">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>Select</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-stroked-button class="btn-main btn-icon" (click)="drawer.toggle()">
+                                <mat-icon>filter_alt</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <div class="row mb-3 g-2" id="dash-stats">
+            <div class="col-sm-3">
+                <div class="card card-body bg-blue" routerLink="../school-registration">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/School-white.svg" class="bg-image">
+                            <p>{{'Labels.SchoolName' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.schoolCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/School.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-cyan">
+                    <div class="d-flex justify-content-between align-items-center" routerLink="../teacher-registration">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/Teacher-white.svg" class="bg-image">
+                            <p>{{'Labels.teachers' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.teacherCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/Teacher.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-voilet">
+                    <div class="d-flex justify-content-between align-items-center" routerLink="../student-registration">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/Student-white.svg" class="bg-image">
+                            <p>{{'Labels.students' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.studentCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/Student.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card card-body bg-magenta">
+                    <div class="d-flex justify-content-between align-items-center"
+                        routerLink="../office-user-registration">
+                        <div class="position-relative">
+                            <img src="assets/images/statistical-icons/ZP-Officer-white.svg" class="bg-image">
+                            <p>{{'Labels.zpOfficer' | translate}}</p>
+                            <h3>{{dashboardCountData[0]?.zpOfficerCount ||0}}</h3>
+                        </div>
+                        <div class="right-img">
+                            <img src="assets/images/statistical-icons/ZP-Officer.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-2 align-content-stretch">
+            <div class="col-sm-5">
+                <mat-card class="plain-card h-100">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div id="mapsvg"></div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-sm-7">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-header class="card-header border-0 mb-0 pb-0">
+                        <form class="w-100">
+                            <div class="row g-2">
+                                <div class="col-sm">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div id="mapsvg"></div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-sm-6">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.TeacherWisePerformance' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-header class="card-header border-0 mb-0 pb-0">
+                        <form class="w-100">
+                            <div class="row g-2">
+                                <div class="col-sm-4">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-4">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-4">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div id="mapsvg"></div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-sm-6">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.Classwiseperformance' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-header class="card-header border-0 mb-0 pb-0">
+                        <form class="w-100">
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div id="mapsvg"></div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-sm-6">
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.SubjectWisePerformance' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-header class="card-header border-0 mb-0 pb-0">
+                        <form class="w-100">
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                                        <mat-select>
+                                            <mat-option>Option-2</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div id="mapsvg"></div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>
+

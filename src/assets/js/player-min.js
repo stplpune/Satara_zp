@@ -40,7 +40,7 @@ function playStream() {
     session.createStream({
         name: "rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp", //specify the RTSP stream address
         display: document.getElementById("play"),
-        show:document.getElementById("play").classList.add("myClass")
+        // show:document.getElementById("play").classList.add("myClass")
     }).play();
 }
 

@@ -27,7 +27,8 @@ const routes: Routes = [
   { path: 'student-report', loadChildren: () => import('../../modules/reports/student-report/student-report.module').then(m => m.StudentReportModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Student Report', m_title: 'विद्यार्थी अहवाल', active: true }] } },
   { path: 'officer-report', loadChildren: () => import('../../modules/reports/student-report/student-report.module').then(m => m.StudentReportModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Officer Report', m_title: 'अधिकारी अहवाल', active: true }] } },
   { path: 'school-report', loadChildren: () => import('../../modules/reports/school-report/school-report.module').then(m => m.SchoolReportModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'School Report', m_title: 'शाळेचा अहवाल', active: true }] } },
-  
+  { path: 'dashboard2', loadChildren: () => import('../../modules/dashbaord2/dashbaord2.module').then(m => m.Dashbaord2Module),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Dashboard-2', m_title: 'डॅशबोर्ड-2', active: true }] }  },
+
   //------infrastructure-routing--------//
 
   { path: 'category', loadChildren: () => import('../../modules/infrastructure/category/category.module').then(m => m.CategoryModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Category', m_title: 'विभाग', active: true }] }},

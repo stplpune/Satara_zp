@@ -6,8 +6,8 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
-declare var init_api: any;
 //import { init_api } from '../../../../assets/js/player-min.js';
+declare var Flashphoner: any;
 
 // import * as Player from '../../../../assets/js/cctv_js/play.js';
 
@@ -53,14 +53,17 @@ export class CctvComponent {
     public webStorageS: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
-  ) {
-
-
+  ) {    
+    this.init_api();
   }
+  SESSION_STATUS = Flashphoner.constants.SESSION_STATUS;
+  STREAM_STATUS = Flashphoner.constants.STREAM_STATUS;
+  session: any;
+  PRELOADER_URL = "https://github.com/flashphoner/flashphoner_client/raw/wcs_api-2.0/examples/demo/dependencies/media/preloader.mp4";
+
 
 
   ngOnInit() {
-    init_api();
     this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
@@ -72,6 +75,52 @@ export class CctvComponent {
   }
 
   //loader.style.display = 'none';
+
+  init_api() {
+    Flashphoner.init({});
+    //Connect to WCS server over websockets    
+   
+    this.session = Flashphoner.createSession({
+      urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
+    }).on(this.SESSION_STATUS.ESTABLISHED, (_session: any) => {
+      console.log("ESTABLISHED");
+    });
+  }
+
+  Browser: any = {
+    isSafari: function () {
+      return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    },
+  }
+
+  playClick(url: any) {
+    // if(this.session){
+    //   Flashphoner.on(this.SESSION_STATUS.DISCONNECTED)
+    // }
+    if (this.Browser.isSafari()) {
+      Flashphoner.playFirstVideo(document.getElementById("play"), true, this.PRELOADER_URL).then(() => {
+        this.playStream(url);
+      });
+    } else {
+      this.playStream(url);
+    }
+  }
+
+  playStream(url: any) {
+    var options:any = {
+      name: url,
+      display: document.getElementById("play")
+    };
+    var stream = this.session.createStream(options).on(this.STREAM_STATUS.PLAYING, (_stream: any) => {
+      console.log("playing");
+    });
+    stream.play();
+  }
+
+  
+
+
+
 
   showLoader() {
     let loadershow: any = document.getElementById("myname");
@@ -275,7 +324,10 @@ export class CctvComponent {
 
   // Click table row 
   childCompInfo(obj?: any) {
+
     if (obj.label == 'View') {
+      let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
+      this.playClick(url);
       // this.init();    
     }
     else {

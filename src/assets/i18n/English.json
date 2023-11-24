@@ -96,6 +96,7 @@
         "Relations": "Religion",
         "relations": "Relations",
         "dashboard": "Dashboard",
+        "dashboard2": "Dashboard-2",
         "agencyRegistration": "Other Registration",
         "DesignationMaster": "Designation Master",
         "addAgency": "Add Other Registration",
@@ -509,7 +510,13 @@
         "PleaseEnterValidParameter(Marathi)":"Please Enter Valid Parameter (Marathi)",
         "PleaseEnterValidParameter":"Please Enter Valid Parameter",
         "PleaseEnterValidAssesmentCriteria(Marathi)":"Please Enter Valid Assesment Criteria (Marathi)",
-        "PleaseEnterValidAssesmentCriteria":"Please Enter Valid Assesment Criteria"
+        "PleaseEnterValidAssesmentCriteria":"Please Enter Valid Assesment Criteria",
+        "SchoolwisePerformance":"Schoolwise Performance",
+        "TeacherWisePerformance":"Teacherwise Performance",
+        "AllClass":"All Class",
+        "AllSubject":"All Subject",
+        "Classwiseperformance":"Classwise Performance",
+        "SubjectWisePerformance":"Subjectwise Performance"
 
     }
 }

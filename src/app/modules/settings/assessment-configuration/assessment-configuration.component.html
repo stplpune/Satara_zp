@@ -26,7 +26,7 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state' | translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="getDistrict()">
+                        <mat-select formControlName="stateId" (selectionChange)="changeDropdown('state'); getDistrict();">
                             <mat-option *ngFor="let state of stateArr" [value]="state.id">
                               {{languageFlag == 'English' ? state.state : state.m_State}}
                             </mat-option>

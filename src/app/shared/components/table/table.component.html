@@ -83,8 +83,8 @@
                        {{'Labels.apply' | translate}}
                     </button> -->
                     <button *ngIf="tableInfo?.apply"  mat-flat-button [ngClass]="tableInfo.tableData[i]?.isApproved == true || tableInfo?.isSubmitted == true  ? '':'btn-main'"
-                    [disabled]="tableInfo.tableData[i]?.isApproved == true || tableInfo?.isSubmitted == true " (click)="action(element,'apply')">
-                       {{'Labels.apply' | translate}}
+                    [disabled]="tableInfo.tableData[i]?.isApproved == true || tableInfo?.isSubmitted == true " (click)="action(element,'apply')" class="btn-icon">
+                       <!-- {{'Labels.apply' | translate}} --><mat-icon>add</mat-icon>
                     </button>
                     
                     <!-- <button mat-icon-button (click)="action(element, 'View')">

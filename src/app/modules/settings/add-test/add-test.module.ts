@@ -20,6 +20,7 @@ import { PageStatisticsComponent } from 'src/app/shared/components/page-statisti
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { AddExamMasterComponent } from './add-exam-master/add-exam-master.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { AddExamMasterComponent } from './add-exam-master/add-exam-master.compon
     FormsModule,
     MatIconModule,
     MatTableModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatTooltipModule
   ]
 })
 export class AddTestModule { }

@@ -447,7 +447,7 @@ export class AddExamMasterComponent {
     // createTableStructure(tableArray: any){
     //   this.tableArray = [];
       
-    //   // const unique standardName = [...new set]
+    //   const unique standardName = [...new Set(tableArray.map((x: any) => x.))]
 
     // }
 }

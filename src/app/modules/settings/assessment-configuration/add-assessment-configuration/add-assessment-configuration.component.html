@@ -154,8 +154,13 @@
                                                     <button
                                                         mat-icon-button id="tooltip"
                                                         matTooltip="{{'Labels.edit' | translate}}"
-                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditParameter(paramter, i)">
+                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditParameter(paramter, i)" [disabled]="editObj?.isAssessed == 1">
                                                         <mat-icon class="text-main">edit</mat-icon>
+                                                    </button>
+                                                    <button mat-icon-button (click)="globalDialogOpen(i)" [disabled]="editObj?.isAssessed == 1">
+                                                        <mat-icon class="text-danger">
+                                                            delete
+                                                        </mat-icon>
                                                     </button>
                                                 </td>
                                             </tr>

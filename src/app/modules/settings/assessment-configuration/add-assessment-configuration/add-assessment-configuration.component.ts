@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
@@ -10,6 +10,7 @@ import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-add-assessment-configuration',
@@ -54,7 +55,8 @@ export class AddAssessmentConfigurationComponent {
     private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
     private dialogRef: MatDialogRef<AddAssessmentConfigurationComponent>,
-    private errors: ErrorsService) { }
+    private errors: ErrorsService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     this.formField();
@@ -432,5 +434,29 @@ export class AddAssessmentConfigurationComponent {
     this.index = index;
     this.questionEditObj = obj;
     this.paratmeterFormField();
+  }
+
+  globalDialogOpen(index: number) {
+    let dialoObj = {
+      header: 'Delete',
+      title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete record?' : 'तुम्हाला रेकॉर्ड हटवायचा आहे का?',
+      cancelButton: this.webStorageS.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webStorageS.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onDeleteCriteria(index);
+      }
+    })
+  }
+
+  onDeleteCriteria(index: number){
+    this.paramterArray?.splice(index, 1);
   }
 }

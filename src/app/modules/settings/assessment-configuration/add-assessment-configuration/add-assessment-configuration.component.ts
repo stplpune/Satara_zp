@@ -79,7 +79,7 @@ export class AddAssessmentConfigurationComponent {
       grade: [0],
       question: [this.editObj ? this.editObj?.question : '', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
       m_Question: [this.editObj ? this.editObj?.m_Question : '', [Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]],
-      isOption: [0],
+      isOption: [this.paramterArray.length ? 1 : 0],
       expectedGrade: [this.editObj ? this.editObj?.expectedGrade : 0],
       questionTypeId: ['', [Validators.required]],
       options: [],
@@ -335,6 +335,7 @@ export class AddAssessmentConfigurationComponent {
     let formValue = this.questionForm.value;
     formValue.questionSetUrls = this.imgArray;
     formValue.options = this.paramterArray;
+    formValue.isOption = this.paramterArray.length ? 1 : 0;
     this.isExpectedCondition();
 
     let url = this.data ? 'UpdateCriteria' : 'AddCriteria';

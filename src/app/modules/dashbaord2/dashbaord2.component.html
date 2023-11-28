@@ -10,12 +10,12 @@
                 </div>
             </mat-card-header>
             <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
-                <form>
+                <form [formGroup]="mainFilterForm">
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
                             <mat-select formControlName="acYearId">
-                                <mat-option >Option-1</mat-option>
+                                <mat-option>Option-1</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -53,8 +53,10 @@
                         </mat-form-field>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close>{{'Labels.reset'| translate}}</button>
-                        <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' | translate}}</button>
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close>{{'Labels.reset'|
+                            translate}}</button>
+                        <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' |
+                            translate}}</button>
                     </div>
                 </form>
             </mat-card-content>
@@ -176,12 +178,12 @@
                     </mat-card-content>
                     <mat-card-content>
                         <div id="chart">
-                            <apx-chart [series]="piechartOptions.series" [plotOptions]="piechartOptions.plotOptions"
-                                [legend]="piechartOptions.legend" [chart]="piechartOptions.chart"
-                                [theme]="piechartOptions.theme" [fill]="piechartOptions.fill"
-                                [tooltip]="piechartOptions.tooltip" [labels]="piechartOptions.labels"
-                                [responsive]="piechartOptions.responsive" [colors]="piechartOptions.colors"
-                                [dataLabels]="piechartOptions.dataLabels">
+                            <apx-chart [series]="piechartOptions?.series" [plotOptions]="piechartOptions?.plotOptions"
+                                [legend]="piechartOptions?.legend" [chart]="piechartOptions?.chart"
+                                [theme]="piechartOptions?.theme" [fill]="piechartOptions?.fill"
+                                [tooltip]="piechartOptions?.tooltip" [labels]="piechartOptions?.labels"
+                                [responsive]="piechartOptions?.responsive" [colors]="piechartOptions?.colors"
+                                [dataLabels]="piechartOptions?.dataLabels">
                             </apx-chart>
                         </div>
                     </mat-card-content>
@@ -203,43 +205,53 @@
                           </div> -->
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
-                        <form class="w-100" [formGroup]="filterForm" >
+                        <form class="w-100" [formGroup]="filterForm">
                             <div class="row g-2">
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
-                                        <mat-select formControlName="teacherId">
-                                            <mat-option *ngFor="let data of teacherResp" [value]="data.id">{{data.roleType}}</mat-option>
+                                        <mat-select formControlName="evaluatorId" (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-option *ngFor="let data of evaluatorDataArray"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
+                                                :data.m_Evaluator}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select formControlName="classId">
-                                            <mat-option *ngFor="let data of standardResp" [value]="data.id">{{data.standard}}</mat-option>
+                                        <mat-select formControlName="classId" (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-option *ngFor="let data of standardResp"
+                                                [value]="data.id">{{data.standard}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select formControlName="subjectId">
-                                            <mat-option *ngFor="let data of subjectResp" [value]="data.id">{{data.subject}}</mat-option>
+                                        <mat-select formControlName="subjectId" (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-option *ngFor="let data of subjectResp"
+                                                [value]="data.id">{{data.subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
 
-                                <div id="chart1">
-                                    <apx-chart  [series]="chartOptions?.series" [chart]="chartOptions?.chart1"
-                                      [dataLabels]="chartOptions?.dataLabels" [plotOptions]="chartOptions?.plotOptions"
-                                      [yaxis]="chartOptions?.yaxis" [legend]="chartOptions?.legend" [fill]="chartOptions?.fill"
-                                      [stroke]="chartOptions?.stroke" [tooltip]="chartOptions?.tooltip" [xaxis]="chartOptions?.xaxis"
-                                      [legend]="chartOptions?.legend"></apx-chart>
-                                    <div class="alert alert-danger text-center p-2" role="alert">
+                                <div id="schoolwiseChart">
+                                    <ng-container *ngIf="schoolwiseChartOptions">
+                                        <apx-chart [series]="schoolwiseChartOptions?.series"
+                                            [chart]="schoolwiseChartOptions?.chart"
+                                            [dataLabels]="schoolwiseChartOptions?.dataLabels"
+                                            [plotOptions]="schoolwiseChartOptions?.plotOptions"
+                                            [xaxis]="schoolwiseChartOptions?.xaxis"
+                                            [colors]="schoolwiseChartOptions?.colors"></apx-chart>
+                                    </ng-container>
+                                    <ng-container *ngIf="!schoolwiseChartOptions">
+                                        <div class="alert alert-danger text-center p-2" role="alert">
                                       No Data Found !
                                     </div>
-                                  </div>
+                                    </ng-container>
+
+                                </div>
                             </div>
                         </form>
                     </mat-card-header>
@@ -254,34 +266,55 @@
                         <h6 class="mb-0 fw-bold">{{'Labels.TeacherWisePerformance' | translate}}</h6>
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
-                        <form class="w-100">
+                        <form class="w-100" [formGroup]="filterFormTeacherWise">
                             <div class="row g-2">
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="evaluatorId" (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-option *ngFor="let data of evaluatorDataArray"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
+                                                :data.m_Evaluator}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="classId" (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-option *ngFor="let data of standardResp"
+                                                [value]="data.id">{{data.standard}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="subjectId" (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-option *ngFor="let data of subjectResp"
+                                                [value]="data.id">{{data.subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
+                                <div id="teacherwiseChart">
+                                    <ng-container *ngIf="schoolwiseChartOptions">
+                                        <apx-chart [series]="schoolwiseChartOptions?.series"
+                                            [chart]="schoolwiseChartOptions?.chart"
+                                            [dataLabels]="schoolwiseChartOptions?.dataLabels"
+                                            [plotOptions]="schoolwiseChartOptions?.plotOptions"
+                                            [xaxis]="schoolwiseChartOptions?.xaxis"
+                                            [colors]="schoolwiseChartOptions?.colors"></apx-chart>
+                                    </ng-container>
+                                    <ng-container *ngIf="!schoolwiseChartOptions">
+                                        <div class="alert alert-danger text-center p-2" role="alert">
+                                      No Data Found !
+                                    </div>
+                                    </ng-container>
+                                </div>
+
                             </div>
                         </form>
+                        
                     </mat-card-header>
                     <mat-card-content class="card-body">
                         <div id="mapsvg"></div>
@@ -355,4 +388,3 @@
         </div>
     </mat-drawer-content>
 </mat-drawer-container>
-

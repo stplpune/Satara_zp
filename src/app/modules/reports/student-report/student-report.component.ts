@@ -156,10 +156,18 @@ export class StudentReportComponent {
   get f() { return this.studentReportForm.controls };
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+      this.masterService.getAllState('').subscribe({
+          next: (res: any) => {
+            if(res.statusCode == "200"){
+              this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+              this.getDistrict();
+            }
+            else{
+              this.stateArr = [];
+            }
+          }
+        });
   }
 
   getDistrict() {
@@ -171,7 +179,8 @@ export class StudentReportComponent {
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
+    let districtId = this.studentReportForm.getRawValue().districtId;
+    this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);

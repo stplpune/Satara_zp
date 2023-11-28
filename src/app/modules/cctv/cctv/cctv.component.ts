@@ -20,7 +20,7 @@ declare var Flashphoner: any;
 export class CctvComponent {
   viewStatus = 'Table';
   pageNumber: number = 1;
-  displayedheadersEnglish = ['Sr. No.', 'cctvLocation', 'cctvName', 'cctvModel', 'Register Date', 'Action'];
+  displayedheadersEnglish = ['Sr. No.', 'CCTV Location', 'CCTV Name', 'CCTV Model', 'Register Date', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'cctv स्थान', 'cctv नाव', 'cctv मॉडेल', 'नोंदणी तारीख', 'कृती'];
   filterForm!: FormGroup;
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];

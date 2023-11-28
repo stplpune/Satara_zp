@@ -8,8 +8,9 @@ import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 //import { init_api } from '../../../../assets/js/player-min.js';
 declare var Flashphoner: any;
-
 // import * as Player from '../../../../assets/js/cctv_js/play.js';
+
+declare var Player: any;
 
 
 @Component({
@@ -42,9 +43,12 @@ export class CctvComponent {
   playStopFlag: boolean = true;
   timer: any;
   i:number = 0;
+  ccTvId!: number;
   get f() {
     return this.filterForm.controls
   }
+  // (document.getElementById('play') as HTMLInputElement).value = '';
+  
   CCTVLocationArr = new Array();
   constructor(private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
@@ -144,12 +148,6 @@ export class CctvComponent {
     this.session.disconnect();
     this.init_api();
 }
-
-  
-
-  
-
-
 
 
   showLoader() {
@@ -354,16 +352,30 @@ export class CctvComponent {
 
   // Click table row 
   childCompInfo(obj?: any) {
+    this.ccTvId = obj?.cctvTypeId;
+    console.log("ccTvId: ", this.ccTvId);
+    const playId:any = document.getElementById("play");
+    const canvasId:any = document.getElementById("canvas1");
+    // if (obj.label == 'View') {
+    //   let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
+    //   this.playClick(url);
+    //   // this.init();    
+    // }
+    // else {
+    // }
 
-    if (obj.label == 'View') {
+    if(this.ccTvId == 1 && obj.label == 'View'){
+      canvasId.style.display = "none";
+      playId.style.display = "block";
       let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
       this.playClick(url);
-      // this.init();    
-    }
-    else {
+      this.closeVideo();
+    } else{
+      playId.style.display = "none";
+      canvasId.style.display = "block";
+      this.closeVideo();
     }
   }
-
 
   // clear dropdown 
   onChangeDropD(flag?: string) {
@@ -436,6 +448,9 @@ export class CctvComponent {
     this.getTableData();
   }
 
+  
+  //#region --------------------------------------------  without IP start here -------------------------------------------------
+
   // init() {
   //   let streamid = 1;
   //   let channel = 0;
@@ -454,7 +469,6 @@ export class CctvComponent {
   //     Player.OpenStream(devid, '', channel, streamid, 0);
   //   }, 15000);
   // }
-  
 
   // callOpenStreamMethod1(){
   //   this.timer = setInterval(() => {
@@ -476,8 +490,7 @@ export class CctvComponent {
   //       Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
   //     }, 10000);
   //     resolve
-  //   })
-   
+  //   });
   // }
 
   // disconnect() {
@@ -491,9 +504,7 @@ export class CctvComponent {
   //     console.log(value);
   //     this.init();
   //   });
-    
   // }
-
 
   // closeVideo() {
   //   console.log("close exist live stream");
@@ -535,4 +546,97 @@ export class CctvComponent {
   //   let channel = 0;
 	// 	Player.ptz_ctrl(devid, '', channel, 0, 0)
 	// }
+
+
+  init() {
+    let streamid = 1;
+    let channel = 0;
+    var devid: any = '5625617245';
+    let username = 'admin';
+    let pwd = '87be!01cd4';
+    let element:any;
+    // let array: any  =[]
+    element = document.getElementById("canvas1");
+    Player?.init([element]);
+    Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
+    
+    setTimeout(() => {
+      Player.OpenStream(devid, '', channel, streamid, 0);
+    }, 15000);
+  }
+
+  callOpenStreamMethod1(){
+    this.timer = setInterval(() => {
+      if (this.tableDataArray.length == this.i) {
+        clearInterval(this.timer);
+      } else {
+        let streamid = 1;
+        let channel = 0;
+        var devid: any = '5625617245';
+        Player?.OpenStream(devid, '', +channel, +streamid, this.i)
+        this.i++;
+      }
+    }, 5000);
+  }
+
+  callOpenStreamMethod(_deviceID,_channel,_streamid, i){
+    return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
+      }, 10000);
+      resolve
+    })
+   
+  }
+
+  disconnect() {
+    Player?.DisConnectDevice('5625617245');
+  }
+
+
+  closeVideo() {
+    console.log("close exist live stream");
+    Player.DisConnectDevice('5625617245')
+    Player?.CloseStream(0);
+    this.playStopFlag = false;
+    this.init();
+  }
+
+  openVideo(_selectedCCTV?: any){
+    let devid: any = '5625617245';
+    let streamid = 1;
+    let channel = 0;
+    Player.OpenStream(devid, '', channel, streamid, 0);
+    this.playStopFlag = true;
+  }
+
+   ptz_ctrl_up() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 2, 6)
+	}
+	 ptz_ctrl_down() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 3, 6)
+	}
+	 ptz_ctrl_left() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 4, 6)
+	}
+	 ptz_ctrl_right() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 5, 6)
+	}
+	 ptz_ctrl_stop() {
+		let devid: any = '5625617245';
+    let channel = 0;
+		Player.ptz_ctrl(devid, '', channel, 0, 0)
+	}
+
+  //#endregion --------------------------------------------  without IP end here -------------------------------------------------
+
+
 }

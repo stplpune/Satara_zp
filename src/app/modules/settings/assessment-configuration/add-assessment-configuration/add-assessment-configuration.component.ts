@@ -80,11 +80,12 @@ export class AddAssessmentConfigurationComponent {
       question: [this.editObj ? this.editObj?.question : '', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
       m_Question: [this.editObj ? this.editObj?.m_Question : '', [Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]],
       isOption: [this.paramterArray.length ? 1 : 0],
-      expectedGrade: [this.editObj ? this.editObj?.expectedGrade : 0],
+      expectedGrade: [this.editObj ? this.editObj.expectedGrade : 0],
       questionTypeId: ['', [Validators.required]],
       options: [],
       questionSetUrls: []
-    })
+    });
+
   }
 
   paratmeterFormField() {
@@ -249,7 +250,6 @@ export class AddAssessmentConfigurationComponent {
   //#region ---------------------------------------------- Add and remove Parameter start here ----------------------------------------------
   addParametereData() {
     this.addValidation();
-    this.questionForm.value.expectedGrade = 0;
     let formValue = this.paramterForm.value;
 
     let obj = {
@@ -322,6 +322,10 @@ export class AddAssessmentConfigurationComponent {
   //#endregion ------------------------------------------- Add and remove validation end here -----------------------------------------------
 
   isExpectedCondition(){
+    console.log("this.questionForm.value.expectedGrade : ", this.questionForm.value.expectedGrade);
+    console.log("this.editObj ? this.editObj?.expectedGrade ",this.editObj?.expectedGrade);
+    
+    
     if(this.questionForm.value.expectedGrade == 0 && (this.questionForm.value.questionTypeId == 1 || this.questionForm.value.questionTypeId == 2)){
       this.isExpectedFlag = true;
     }
@@ -333,6 +337,8 @@ export class AddAssessmentConfigurationComponent {
   //#region ---------------------------------------------- Submit and Update start here -----------------------------------------------------
   onSubmit(){
     let formValue = this.questionForm.value;
+    console.log("this.questionForm.value.expectedGrade : ", this.questionForm.value.expectedGrade);
+
     formValue.questionSetUrls = this.imgArray;
     formValue.options = this.paramterArray;
     formValue.isOption = this.paramterArray.length ? 1 : 0;
@@ -375,6 +381,9 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.editObj = res.responseData;
+          console.log("editObj: ", this.editObj);
+          // this.questionForm.value.expectedGrade = this.editObj.expectedGrade;
+          
           this.formField();
           this.initialDropdown();
 

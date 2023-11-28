@@ -135,7 +135,7 @@ export class AttendanceApprovalComponent {
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-      edit: false, delete: false, approve :true,
+      edit: false, delete: false, approve :true, approvalStatus:'approvalStatus'
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);

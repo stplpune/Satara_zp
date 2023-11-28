@@ -53,7 +53,7 @@ const routes: Routes = [
 
   { path: 'assessment-subject', loadChildren: () => import('../../modules/settings/add-subject/add-subject.module').then(m => m.AddSubjectModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Subject', m_title: 'मूल्यांकन विषय', active: true }] }    },
   { path: 'exam-master', loadChildren: () => import('../../modules/settings/add-test/add-test.module').then(m => m.AddTestModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Exam Master', m_title: 'परीक्षा मास्टर', active: true }] }    },
-  { path: 'assessment-configuration', loadChildren: () => import('../../modules/settings/assessment-configuration/assessment-configuration.module').then(m => m.AssessmentConfigurationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Configuration', m_title: 'मूल्यमापन संरचना', active: true }]}},
+  { path: 'assessment-configuration', loadChildren: () => import('../../modules/settings/assessment-configuration/assessment-configuration.module').then(m => m.AssessmentConfigurationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Configuration', m_title: 'मूल्यांकन निकष', active: true }]}},
   
 ]
   

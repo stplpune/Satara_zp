@@ -14,7 +14,7 @@
     <form [formGroup]="agencyRegisterForm" (ngSubmit)="onSubmit(clear)" #clear="ngForm">
         <mat-card-content class="card-body card-height-mid scrollbar">
             <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.Agencydetail' | translate}}</mat-card-subtitle>
-            <div class="row gx-3">
+            <div class="row gx-2">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.agencyName' | translate}}</mat-label>
@@ -87,7 +87,7 @@
                         <!-- <mat-error *ngIf="fc['talukaId'].hasError('required')">{{'Labels.pleaseSelectTaluka' | translate}}</mat-error> -->
                     </mat-form-field>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-8">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.agencyAdd' | translate}}</mat-label>
                         <textarea matInput formControlName="agency_Address"
@@ -97,7 +97,7 @@
             </div>
 
             <mat-card-subtitle class="mb-2 fw-bold">{{'Labels.Persondetails' | translate}}</mat-card-subtitle>
-            <div class="row gx-3">
+            <div class="row gx-2">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.contactPersonName' | translate}}</mat-label>

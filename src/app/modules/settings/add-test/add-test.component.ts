@@ -202,14 +202,10 @@ export class AddTestComponent {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result == 'yes' && obj){
-        this.onClear();
-        this.getState();
         this.getTableData();
         this.pageNumber = obj.pageNumber;
       }
       else if(result == 'yes'){
-        this.getState();
-        this.getTableData();
         this.onClear();
         this.pageNumber = 1;
       }

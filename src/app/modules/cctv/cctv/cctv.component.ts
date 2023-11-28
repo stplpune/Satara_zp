@@ -59,6 +59,8 @@ export class CctvComponent {
   SESSION_STATUS = Flashphoner.constants.SESSION_STATUS;
   STREAM_STATUS = Flashphoner.constants.STREAM_STATUS;
   session: any;
+  stream;
+
   PRELOADER_URL = "https://github.com/flashphoner/flashphoner_client/raw/wcs_api-2.0/examples/demo/dependencies/media/preloader.mp4";
 
 
@@ -109,32 +111,39 @@ export class CctvComponent {
     }
   }
 
+  //Playing stream
   playStream(url: any) {
     var options:any = {
       name: url,
       display: document.getElementById("play")
     };
-    var stream = this.session.createStream(options).on(this.STREAM_STATUS.PLAYING, (_stream: any) => {
+    this.stream = this.session.createStream(options).on(this.STREAM_STATUS.PLAYING, (_stream: any) => {
       console.log("playing", this.STREAM_STATUS);
     });
-    stream.play();
-    console.log("stream", stream);
+    this.stream.play();
+    console.log("stream", this.stream);
 
   }
 
   
-  stopVideo(){
-    // let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
-    // var options:any = {
-    //   name: url,
-    //   display: document.getElementById("play")
-    // };
-    console.log("this.session",this.session);
+  // stopVideo(){
+  //   // let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
+  //   // var options:any = {
+  //   //   name: url,
+  //   //   display: document.getElementById("play")
+  //   // };
+  //   console.log("this.session",this.session);
     
-   this.session.disconnect();
-   this.init_api()
+  //  this.session.disconnect();
+  //  this.init_api()
 
-  }
+  // }
+
+  stopVideo() {
+    this.stream.stop();
+    this.session.disconnect();
+    this.init_api();
+}
 
   
 

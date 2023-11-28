@@ -474,6 +474,7 @@ export class Dashbaord2Component {
 
     getTeacherwiseBarDetails() {
       let fd = this.filterFormTeacherWise.value;
+      console.log(fd);
       let url = `StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}`
       this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardTeacherWiseGraphDataWeb?' +url, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({

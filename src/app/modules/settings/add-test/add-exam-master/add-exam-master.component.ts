@@ -61,7 +61,8 @@ export class AddExamMasterComponent {
   tableArray: any = [];
   criteriaObjArr = new Array();
   editAssessment: any;
-
+  tableobj: any;
+  submitArr = new Array();
   get f() { return this.examForm.controls }
   get cf() { return this.assetCriteriaFrom.controls}
 
@@ -228,38 +229,8 @@ export class AddExamMasterComponent {
     addAssCriteria(){
       this.addValidation(true);
       let criteriaFormValue = this.assetCriteriaFrom.value;
-      // console.log("criteriaFormValue", criteriaFormValue);
-      // if(this.assetCriteriaFrom.invalid) {
-      //   return
-      // }
-      // else{
-
-      //   for (let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++) {
-      //     let obj = {
-      //       id: 0,
-      //       examTypeId: 0,
-      //       standardId: criteriaFormValue.standardId,
-      //       subjectId: criteriaFormValue.subjectId,
-      //       questionId: criteriaFormValue.assetCriteriaId[i],
-      //       createdBy: this.webService.getUserId(),
-      //       modifiedBy: this.webService.getUserId()
-      //     }
-      //     if (!this.criteriaObjArr.length) {
-      //       this.criteriaObjArr.push(obj)
-      //     } else {
-      //       let checkStandSubId =  this.criteriaObjArr.some((ele:any)=> {return (ele.standardId == criteriaFormValue.standardId) && (ele?.subjectId == criteriaFormValue.subjectId) && (ele?.questionId == criteriaFormValue.assetCriteriaId[i])} )
-      //       if(!checkStandSubId){
-      //         this.criteriaObjArr.push(obj)
-      //       } else{
-      //         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Same Data is already exist' : 'समान डेटा आधीपासूनच अस्तित्वात आहे', 1);
-      //         return
-      //       }
-      //     }
-      //   }
-      //   this.assetCriteriaFrom.reset();
-        
+      this.criteriaObjArr = []
           for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
-
             let obj = {
               id: 0,
               examTypeId: 0,
@@ -270,62 +241,27 @@ export class AddExamMasterComponent {
               modifiedBy: this.webService.getUserId()
             }
             this.criteriaObjArr.push(obj);
-            this.criteriaObjArr = [...this.criteriaObjArr];
-          }
-          console.log("this.criteriaObjArr",this.criteriaObjArr);
-          
-          if(this.editAssessment){
-            this.criteriaObjArr = [...this.criteriaObjArr];
-          }else{
-            // this.criteriaObjArr.push(obj);
+            this.submitArr.push(obj)
             // this.criteriaObjArr = [...this.criteriaObjArr];
           }
-        
-
-        // this.createTableStructure(this.criteriaObjArr);
-        let criteriaObj: any = [];
-        this.criteriaObjArr.map((x: any) => {
-          if((x.standardId == criteriaFormValue.standardId) && (x.subjectId == criteriaFormValue.subjectId)){
-            criteriaObj.push(x);
+          console.log("this.criteriaObjArr",this.criteriaObjArr);
+          // object create for Display
+          this.tableobj = {}
+          this.tableobj = {
+            ...this.criteriaObjArr[0],
+            "criteriaDetails": []
           }
-          
-          // criteriaObj.push(x);
-        })
-        console.log("criteriaObj", criteriaObj);
-        console.log("this.tableArray before : ", this.tableArray);
-        
-        this.tableArray.push({
-          criteriaDetails: criteriaObj
-        })
-
-        // if(this.tableArray.length){
-        //     console.log("if...");
-        //     this.tableArray.map((x: any) => {
-        //       // if(x.standardId == criteriaFormValue.standardId){
-        //         x.criteriaDetails = criteriaObj;
-        //       // }
-        //   })
-        // }
-        // else{
-        //     console.log("else...");
-        //     this.tableArray = [{
-        //     criteriaDetails: criteriaObj
-        //   }]
-        // }
-        
-
-
-        this.tableArray = [...this.tableArray];
-        console.log("this.tableArray after  : ", this.tableArray);
-        
-
-        this.tableArray.map((x: any) => {
-          let obj: any;
-          if(x.criteriaDetails.length > 0){
-            obj = x.criteriaDetails.shift();
-            Object.assign(x, obj);  
+          for (let i = 1; i < this.criteriaObjArr.length; i++) {
+            this.tableobj.criteriaDetails.push(this.criteriaObjArr[i]);
           }
+          this.tableArray.push(this.tableobj)
 
+          console.log("obj", this.tableobj);        
+          console.log("this.tableArray", this.tableArray);
+        // this.tableArray = [...this.tableArray];
+        
+
+        this.tableArray.map((x: any) => {                
           this.standardArr.map((res: any) => {
             if(res.id == x.standardId){
               x.standardName = res.standard;
@@ -335,7 +271,6 @@ export class AddExamMasterComponent {
           this.subjectArr.map((res: any) => {
             if(x.subjectId == res.id){
               x.subjectName = res.subject;
-              // x.subjectName = this.webService.languageFlag == 'En' ? res.subject : res.m_Subject;
             }
           });
 
@@ -347,7 +282,6 @@ export class AddExamMasterComponent {
             x.criteriaDetails.map((data: any) => {
               if(res.id == data.questionId){
                 data.questionName = res.question;
-                // data.questionName = this.webService.languageFlag == 'En' ? res.question : res.m_Question;
               }
             })
           })
@@ -366,8 +300,8 @@ export class AddExamMasterComponent {
     onSubmit(){
       let formValue = this.examForm.value;
       
-      formValue.examTypeWises = this.criteriaObjArr;
-      console.log("formValue: ", formValue);
+      formValue.examTypeWises = this.submitArr;
+      console.log("formValue:", formValue);
       // return
       // formValue.toMonth = this.dateFrom;
       // formValue.fromMonth = this.dateTo;

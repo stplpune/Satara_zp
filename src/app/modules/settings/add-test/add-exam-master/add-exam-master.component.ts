@@ -272,8 +272,9 @@ export class AddExamMasterComponent {
             this.criteriaObjArr.push(obj);
             this.criteriaObjArr = [...this.criteriaObjArr];
           }
+          console.log("this.criteriaObjArr",this.criteriaObjArr);
+          
           if(this.editAssessment){
-            // this.criteriaObjArr[this.index] = obj;
             this.criteriaObjArr = [...this.criteriaObjArr];
           }else{
             // this.criteriaObjArr.push(obj);
@@ -290,11 +291,12 @@ export class AddExamMasterComponent {
           
           // criteriaObj.push(x);
         })
+        console.log("criteriaObj", criteriaObj);
         console.log("this.tableArray before : ", this.tableArray);
         
-        this.tableArray = [{
+        this.tableArray.push({
           criteriaDetails: criteriaObj
-        }]
+        })
 
         // if(this.tableArray.length){
         //     console.log("if...");
@@ -319,8 +321,10 @@ export class AddExamMasterComponent {
 
         this.tableArray.map((x: any) => {
           let obj: any;
-          obj = x.criteriaDetails.shift();
-          Object.assign(x, obj);
+          if(x.criteriaDetails.length > 0){
+            obj = x.criteriaDetails.shift();
+            Object.assign(x, obj);  
+          }
 
           this.standardArr.map((res: any) => {
             if(res.id == x.standardId){

@@ -174,40 +174,72 @@
                     <mat-card-content class="card-body">
                         <div id="mapsvg"></div>
                     </mat-card-content>
+                    <mat-card-content>
+                        <div id="chart">
+                            <apx-chart [series]="piechartOptions.series" [plotOptions]="piechartOptions.plotOptions"
+                                [legend]="piechartOptions.legend" [chart]="piechartOptions.chart"
+                                [theme]="piechartOptions.theme" [fill]="piechartOptions.fill"
+                                [tooltip]="piechartOptions.tooltip" [labels]="piechartOptions.labels"
+                                [responsive]="piechartOptions.responsive" [colors]="piechartOptions.colors"
+                                [dataLabels]="piechartOptions.dataLabels">
+                            </apx-chart>
+                        </div>
+                    </mat-card-content>
                 </mat-card>
             </div>
             <div class="col-sm-7">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
+                        <!-- <div id="chart">
+                            <apx-chart  [series]="chartOptions?.series" [chart]="chartOptions?.chart"
+                              [dataLabels]="chartOptions?.dataLabels" [plotOptions]="chartOptions?.plotOptions"
+                              [yaxis]="chartOptions?.yaxis" [legend]="chartOptions?.legend" [fill]="chartOptions?.fill"
+                              [stroke]="chartOptions?.stroke" [tooltip]="chartOptions?.tooltip" [xaxis]="chartOptions?.xaxis"
+                              [legend]="chartOptions?.legend"></apx-chart>
+                            <div class="alert alert-danger text-center p-2" role="alert">
+                              No Data Found !
+                            </div>
+                          </div> -->
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
-                        <form class="w-100">
+                        <form class="w-100" [formGroup]="filterForm" >
                             <div class="row g-2">
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="teacherId">
+                                            <mat-option *ngFor="let data of teacherResp" [value]="data.id">{{data.roleType}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="classId">
+                                            <mat-option *ngFor="let data of standardResp" [value]="data.id">{{data.standard}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="subjectId">
+                                            <mat-option *ngFor="let data of subjectResp" [value]="data.id">{{data.subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
+
+                                <div id="chart1">
+                                    <apx-chart  [series]="chartOptions?.series" [chart]="chartOptions?.chart1"
+                                      [dataLabels]="chartOptions?.dataLabels" [plotOptions]="chartOptions?.plotOptions"
+                                      [yaxis]="chartOptions?.yaxis" [legend]="chartOptions?.legend" [fill]="chartOptions?.fill"
+                                      [stroke]="chartOptions?.stroke" [tooltip]="chartOptions?.tooltip" [xaxis]="chartOptions?.xaxis"
+                                      [legend]="chartOptions?.legend"></apx-chart>
+                                    <div class="alert alert-danger text-center p-2" role="alert">
+                                      No Data Found !
+                                    </div>
+                                  </div>
                             </div>
                         </form>
                     </mat-card-header>

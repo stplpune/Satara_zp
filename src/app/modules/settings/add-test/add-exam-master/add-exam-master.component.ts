@@ -58,7 +58,7 @@ export class AddExamMasterComponent {
   standardArr = new Array();
   subjectArr = new Array();
   criteriaArr = new Array();
-  tableArray: any;
+  tableArray: any = [];
   criteriaObjArr = new Array();
   editAssessment: any;
 
@@ -215,7 +215,7 @@ export class AddExamMasterComponent {
           if (res.statusCode == "200"){
             this.criteriaArr = res.responseData;
             if(id){
-              this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(id);
+              this.assetCriteriaFrom.controls['assetCriteriaId'].setValue([169, 154]);
             }
           }
           else {
@@ -228,111 +228,135 @@ export class AddExamMasterComponent {
     addAssCriteria(){
       this.addValidation(true);
       let criteriaFormValue = this.assetCriteriaFrom.value;
-      console.log(criteriaFormValue);
-      if(this.assetCriteriaFrom.invalid) {
-        return
-      }
-      else{
-
-        for (let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++) {
-          let obj = {
-            id: 0,
-            examTypeId: 0,
-            standardId: criteriaFormValue.standardId,
-            subjectId: criteriaFormValue.subjectId,
-            questionId: criteriaFormValue.assetCriteriaId[i],
-            createdBy: this.webService.getUserId(),
-            modifiedBy: this.webService.getUserId()
-          }
-          if (!this.criteriaObjArr.length) {
-            this.criteriaObjArr.push(obj)
-          } else {
-            let checkStandSubId =  this.criteriaObjArr.some((ele:any)=> {return (ele.standardId == criteriaFormValue.standardId) && (ele?.subjectId == criteriaFormValue.subjectId) && (ele?.questionId == criteriaFormValue.assetCriteriaId[i])} )
-            if(!checkStandSubId){
-              this.criteriaObjArr.push(obj)
-            }
-          }
-        }
-        this.assetCriteriaFrom.reset();
-        
-      //     for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
-      //       obj = {
-      //         id: 0,
-      //         examTypeId: 0,
-      //         standardId: criteriaFormValue.standardId,
-      //         subjectId: criteriaFormValue.subjectId,
-      //         questionId: criteriaFormValue.assetCriteriaId[i],
-      //         createdBy: this.webService.getUserId(),
-      //         modifiedBy: this.webService.getUserId()
-      //       }
-      //       this.criteriaObjArr.push(obj);
-      //       this.criteriaObjArr = [...this.criteriaObjArr];
-      //     }
-      //     if(this.editAssessment){
-      //       // this.criteriaObjArr[this.index] = obj;
-      //       this.criteriaObjArr = [...this.criteriaObjArr];
-      //     }else{
-      //       // this.criteriaObjArr.push(obj);
-      //       // this.criteriaObjArr = [...this.criteriaObjArr];
-      //     }
-      //   // }
+      // console.log("criteriaFormValue", criteriaFormValue);
+      // if(this.assetCriteriaFrom.invalid) {
+      //   return
       // }
+      // else{
 
-      // // else{
+      //   for (let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++) {
+      //     let obj = {
+      //       id: 0,
+      //       examTypeId: 0,
+      //       standardId: criteriaFormValue.standardId,
+      //       subjectId: criteriaFormValue.subjectId,
+      //       questionId: criteriaFormValue.assetCriteriaId[i],
+      //       createdBy: this.webService.getUserId(),
+      //       modifiedBy: this.webService.getUserId()
+      //     }
+      //     if (!this.criteriaObjArr.length) {
+      //       this.criteriaObjArr.push(obj)
+      //     } else {
+      //       let checkStandSubId =  this.criteriaObjArr.some((ele:any)=> {return (ele.standardId == criteriaFormValue.standardId) && (ele?.subjectId == criteriaFormValue.subjectId) && (ele?.questionId == criteriaFormValue.assetCriteriaId[i])} )
+      //       if(!checkStandSubId){
+      //         this.criteriaObjArr.push(obj)
+      //       } else{
+      //         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Same Data is already exist' : 'समान डेटा आधीपासूनच अस्तित्वात आहे', 1);
+      //         return
+      //       }
+      //     }
+      //   }
+      //   this.assetCriteriaFrom.reset();
         
-      //   // this.createTableStructure(this.criteriaObjArr);
-      //   let criteriaObj: any = [];
-      //   this.criteriaObjArr.map((x: any) => {
-      //     criteriaObj.push(x);
-      //   })
+          for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
+
+            let obj = {
+              id: 0,
+              examTypeId: 0,
+              standardId: criteriaFormValue.standardId,
+              subjectId: criteriaFormValue.subjectId,
+              questionId: criteriaFormValue.assetCriteriaId[i],
+              createdBy: this.webService.getUserId(),
+              modifiedBy: this.webService.getUserId()
+            }
+            this.criteriaObjArr.push(obj);
+            this.criteriaObjArr = [...this.criteriaObjArr];
+          }
+          if(this.editAssessment){
+            // this.criteriaObjArr[this.index] = obj;
+            this.criteriaObjArr = [...this.criteriaObjArr];
+          }else{
+            // this.criteriaObjArr.push(obj);
+            // this.criteriaObjArr = [...this.criteriaObjArr];
+          }
         
-      //   this.tableArray = [{
-      //     criteriaDetails: criteriaObj
-      //   }]
-      //   this.tableArray = [...this.tableArray];
 
-      //   this.tableArray.map((x: any) => {
-      //     let obj: any;
-      //     obj = x.criteriaDetails.shift();
-      //     Object.assign(x, obj);
+        // this.createTableStructure(this.criteriaObjArr);
+        let criteriaObj: any = [];
+        this.criteriaObjArr.map((x: any) => {
+          if((x.standardId == criteriaFormValue.standardId) && (x.subjectId == criteriaFormValue.subjectId)){
+            criteriaObj.push(x);
+          }
+          
+          // criteriaObj.push(x);
+        })
+        console.log("this.tableArray before : ", this.tableArray);
+        
+        this.tableArray = [{
+          criteriaDetails: criteriaObj
+        }]
 
-      //     this.standardArr.map((res: any) => {
-      //       if(res.id == x.standardId){
-      //         x.standardName = res.standard;
-      //       }
-      //     });
+        // if(this.tableArray.length){
+        //     console.log("if...");
+        //     this.tableArray.map((x: any) => {
+        //       // if(x.standardId == criteriaFormValue.standardId){
+        //         x.criteriaDetails = criteriaObj;
+        //       // }
+        //   })
+        // }
+        // else{
+        //     console.log("else...");
+        //     this.tableArray = [{
+        //     criteriaDetails: criteriaObj
+        //   }]
+        // }
+        
 
-      //     this.subjectArr.map((res: any) => {
-      //       if(x.subjectId == res.id){
-      //         x.subjectName = res.subject;
-      //         // x.subjectName = this.webService.languageFlag == 'En' ? res.subject : res.m_Subject;
-      //       }
-      //     });
 
-      //     this.criteriaArr.map((res: any) => {
-      //       if(x.questionId == res.id){
-      //         x.questionName = res.question;
-      //       }
+        this.tableArray = [...this.tableArray];
+        console.log("this.tableArray after  : ", this.tableArray);
+        
 
-      //       x.criteriaDetails.map((data: any) => {
-      //         if(res.id == data.questionId){
-      //           data.questionName = res.question;
-      //           // data.questionName = this.webService.languageFlag == 'En' ? res.question : res.m_Question;
-      //         }
-      //       })
-      //     })
+        this.tableArray.map((x: any) => {
+          let obj: any;
+          obj = x.criteriaDetails.shift();
+          Object.assign(x, obj);
 
-      //   })
+          this.standardArr.map((res: any) => {
+            if(res.id == x.standardId){
+              x.standardName = res.standard;
+            }
+          });
 
-      }
+          this.subjectArr.map((res: any) => {
+            if(x.subjectId == res.id){
+              x.subjectName = res.subject;
+              // x.subjectName = this.webService.languageFlag == 'En' ? res.subject : res.m_Subject;
+            }
+          });
 
-      // this.assetCriteriaFrom.controls['standardId'].setValue(0);
-      // this.assetCriteriaFrom.controls['subjectId'].setValue(0);
-      // this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
-      // this.addValidation();
+          this.criteriaArr.map((res: any) => {
+            if(x.questionId == res.id){
+              x.questionName = res.question;
+            }
 
-      // console.log("this.criteriaObjArr", this.criteriaObjArr);
-      // console.log("this.tableArray: ", this.tableArray);
+            x.criteriaDetails.map((data: any) => {
+              if(res.id == data.questionId){
+                data.questionName = res.question;
+                // data.questionName = this.webService.languageFlag == 'En' ? res.question : res.m_Question;
+              }
+            })
+          })
+
+        })
+
+      this.assetCriteriaFrom.controls['standardId'].setValue(0);
+      this.assetCriteriaFrom.controls['subjectId'].setValue(0);
+      this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
+      this.addValidation();
+
+      console.log("this.criteriaObjArr", this.criteriaObjArr);
+      console.log("this.tableArray: ", this.tableArray);
     }
 
     onSubmit(){
@@ -419,7 +443,7 @@ export class AddExamMasterComponent {
         this.getSubject(x.subjectId);
         this.getStandard(x.standardId);
         if(this.assetCriteriaFrom.value.standardId && this.assetCriteriaFrom.value.subjectId){
-          // this.getCriteria(x.questionId);
+          this.getCriteria(x.questionId);
         }
       });
     }

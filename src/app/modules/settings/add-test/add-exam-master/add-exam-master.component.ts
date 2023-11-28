@@ -255,7 +255,6 @@ export class AddExamMasterComponent {
             this.tableobj.criteriaDetails.push(this.criteriaObjArr[i]);
           }
           this.tableArray.push(this.tableobj)
-
           console.log("obj", this.tableobj);        
           console.log("this.tableArray", this.tableArray);
         // this.tableArray = [...this.tableArray];
@@ -302,9 +301,6 @@ export class AddExamMasterComponent {
       
       formValue.examTypeWises = this.submitArr;
       console.log("formValue:", formValue);
-      // return
-      // formValue.toMonth = this.dateFrom;
-      // formValue.fromMonth = this.dateTo;
       let url = this.data ? 'UpdateExamType' : 'AddExamType';
       if(!this.examForm.valid){
         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
@@ -371,6 +367,7 @@ export class AddExamMasterComponent {
     onEdit(data?: any){
       console.log("onedit: ", data);
       // this.createTableStructure(data?.questionResponses);
+
     }
 
     onEditCriteria(obj: any, index: number){

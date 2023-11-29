@@ -36,8 +36,8 @@ export class AssessmentConfigurationComponent {
   subjectArr = new Array();
   questionArr = new Array();
   educationYearArr = new Array();
-  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Question Type', 'Educational Year', 'Unblock/Block','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Question Type', 'Educational Year', 'Unblock/Block','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(public dialog: MatDialog,
@@ -113,7 +113,7 @@ export class AssessmentConfigurationComponent {
   languageChange() {
     this.highLightFlag = true;
     // let displayedColumnsReadMode = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
-    let displayedColumns = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
+    let displayedColumns = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
@@ -135,6 +135,7 @@ export class AssessmentConfigurationComponent {
       let obj = {
         srNo:  (i + 1),
         groupClass: ele.groupClass,
+        subjectName: flag == 'excel' ? this.languageFlag == 'English' ? ele.subjectName : ele.m_SubjectName : ele.subjectName,
         question: flag == 'excel' ? this.languageFlag == 'English' ? ele.question : ele.m_Question : ele.question,
         educationYear: ele.educationYear,
       }
@@ -142,8 +143,8 @@ export class AssessmentConfigurationComponent {
     });
     // download pdf call
     if (resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ['Sr. No.', 'Standard', 'Question Type', 'Educational Year'];
-      let marathikeyHeader = ['अनुक्रमांक', 'इयत्ता', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष']
+      let keyPDFHeader = ['Sr. No.', 'Standard', 'subject', 'Question Type', 'Educational Year'];
+      let marathikeyHeader = ['अनुक्रमांक', 'इयत्ता', 'विषय', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष']
       let ValueData =
         resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []

@@ -43,9 +43,6 @@ export const MY_FORMATS = {
   ],
 })
 export class AddExamMasterComponent {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-
   examForm!: FormGroup;
   assetCriteriaFrom!: FormGroup
   stateArr = new Array();
@@ -229,71 +226,80 @@ export class AddExamMasterComponent {
     addAssCriteria(){
       this.addValidation(true);
       let criteriaFormValue = this.assetCriteriaFrom.value;
-      this.criteriaObjArr = []
-          for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
-            let obj = {
-              id: 0,
-              examTypeId: 0,
-              standardId: criteriaFormValue.standardId,
-              subjectId: criteriaFormValue.subjectId,
-              questionId: criteriaFormValue.assetCriteriaId[i],
-              createdBy: this.webService.getUserId(),
-              modifiedBy: this.webService.getUserId()
-            }
-            this.criteriaObjArr.push(obj);
-            this.submitArr.push(obj)
-            // this.criteriaObjArr = [...this.criteriaObjArr];
+      if (this.assetCriteriaFrom.invalid) {
+        return
+      }
+      else if((this.submitArr.some(x => (x.standardId == criteriaFormValue.standardId && x.subjectId == criteriaFormValue.subjectId)))) {
+          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Standard And Subject Already Exist' : 'इयत्ता आणि विषय आधीच अस्तित्वात आहे', 1);
+        }      
+      else{
+        this.criteriaObjArr = [];
+        for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
+          let obj = {
+            id: 0,
+            examTypeId: 0,
+            standardId: criteriaFormValue.standardId,
+            subjectId: criteriaFormValue.subjectId,
+            questionId: criteriaFormValue.assetCriteriaId[i],
+            createdBy: this.webService.getUserId(),
+            modifiedBy: this.webService.getUserId()
           }
-          console.log("this.criteriaObjArr",this.criteriaObjArr);
-          // object create for Display
-          this.tableobj = {}
-          this.tableobj = {
-            ...this.criteriaObjArr[0],
-            "criteriaDetails": []
+          this.criteriaObjArr.push(obj);
+          this.submitArr.push(obj)
+          // this.criteriaObjArr = [...this.criteriaObjArr];
+        }
+        console.log("this.criteriaObjArr",this.criteriaObjArr);
+        // object create for Display
+        this.tableobj = {}
+        this.tableobj = {
+          ...this.criteriaObjArr[0],
+          "criteriaDetails": []
+        }
+        for (let i = 1; i < this.criteriaObjArr.length; i++) {
+          this.tableobj.criteriaDetails.push(this.criteriaObjArr[i]);
+        }
+        this.tableArray.push(this.tableobj)
+        console.log("obj", this.tableobj);        
+        console.log("this.tableArray", this.tableArray);
+      // this.tableArray = [...this.tableArray];
+      
+
+      this.tableArray.map((x: any) => {                
+        this.standardArr.map((res: any) => {
+          if(res.id == x.standardId){
+            x.standard = res.standard;
           }
-          for (let i = 1; i < this.criteriaObjArr.length; i++) {
-            this.tableobj.criteriaDetails.push(this.criteriaObjArr[i]);
+        });
+
+        this.subjectArr.map((res: any) => {
+          if(x.subjectId == res.id){
+            x.subjectName = res.subject;
           }
-          this.tableArray.push(this.tableobj)
-          console.log("obj", this.tableobj);        
-          console.log("this.tableArray", this.tableArray);
-        // this.tableArray = [...this.tableArray];
-        
+        });
 
-        this.tableArray.map((x: any) => {                
-          this.standardArr.map((res: any) => {
-            if(res.id == x.standardId){
-              x.standard = res.standard;
+        this.criteriaArr.map((res: any) => {
+          if(x.questionId == res.id){
+            x.question = res.question;
+          }
+
+          x.criteriaDetails.map((data: any) => {
+            if(res.id == data.questionId){
+              data.question = res.question;
             }
-          });
-
-          this.subjectArr.map((res: any) => {
-            if(x.subjectId == res.id){
-              x.subjectName = res.subject;
-            }
-          });
-
-          this.criteriaArr.map((res: any) => {
-            if(x.questionId == res.id){
-              x.question = res.question;
-            }
-
-            x.criteriaDetails.map((data: any) => {
-              if(res.id == data.questionId){
-                data.question = res.question;
-              }
-            })
           })
-
         })
 
-      this.assetCriteriaFrom.controls['standardId'].setValue(0);
-      this.assetCriteriaFrom.controls['subjectId'].setValue(0);
-      this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
-      this.addValidation();
+      })
 
-      console.log("this.criteriaObjArr", this.criteriaObjArr);
-      console.log("this.tableArray: ", this.tableArray);
+    this.assetCriteriaFrom.controls['standardId'].setValue(0);
+    this.assetCriteriaFrom.controls['subjectId'].setValue(0);
+    this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
+    this.addValidation();
+
+    console.log("this.criteriaObjArr", this.criteriaObjArr);
+    console.log("this.tableArray: ", this.tableArray);
+
+      }
     }
 
     onSubmit(){
@@ -446,7 +452,6 @@ export class AddExamMasterComponent {
         }
       }
       this.tableArray?.splice(index, 1);
-
       this.assetCriteriaFrom.controls['standardId'].setValue(0);
       this.assetCriteriaFrom.controls['subjectId'].setValue(0);
       this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
@@ -479,23 +484,3 @@ export class AddExamMasterComponent {
 
     }
 }
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];

@@ -94,7 +94,6 @@ export class StudentReportComponent {
       this.languageChange();
     });
     this.logInDetails = this.webService.getLoggedInLocalstorageData();
-    console.log("logInDetails: ", this.logInDetails);
     
     this.pageUrl = this.router.url;
     this.formData();
@@ -163,7 +162,7 @@ export class StudentReportComponent {
           next: (res: any) => {
             if(res.statusCode == "200"){
               this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
-              this.logInDetails ? (this.studentReportForm.controls['stateId'].setValue(this.logInDetails.stateId), this.getDistrict()) : 0;
+              this.logInDetails ? (this.studentReportForm.controls['stateId'].setValue(this.logInDetails.stateId), this.getDistrict()) : this.studentReportForm.controls['stateId'].setValue(0);
             }
             else{
               this.stateArr = [];
@@ -182,7 +181,7 @@ export class StudentReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-            this.logInDetails ? (this.studentReportForm.controls['districtId'].setValue(this.logInDetails.districtId), this.getTaluka()) : 0;
+            this.logInDetails ? (this.studentReportForm.controls['districtId'].setValue(this.logInDetails.districtId), this.getTaluka()) : this.studentReportForm.controls['districtId'].setValue(0);
           }
           else {
             this.districtArr = [];
@@ -202,7 +201,7 @@ export class StudentReportComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.logInDetails ? this.studentReportForm.controls['talukaId'].setValue(this.logInDetails?.talukaId): this.studentReportForm.controls['talukaId'].setValue(0), this.getAllCenter();
+          this.logInDetails ? (this.studentReportForm.controls['talukaId'].setValue(this.logInDetails?.talukaId), this.getAllCenter()): this.studentReportForm.controls['talukaId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -212,7 +211,7 @@ export class StudentReportComponent {
     });
   }
 
-  getAllCenter(flag?: string) {
+  getAllCenter(flag?: any) {
     this.centerArr = [];
     let id = this.studentReportForm.getRawValue().talukaId;
     if(id != 0) {
@@ -220,7 +219,8 @@ export class StudentReportComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            (this.logInDetails && flag == undefined) ? this.studentReportForm.controls['centerId'].setValue(this.logInDetails?.centerId): this.studentReportForm.controls['centerId'].setValue(0), this.getVillage();
+            
+            (this.logInDetails && flag == undefined) ? (this.studentReportForm.controls['centerId'].setValue(this.logInDetails?.centerId), this.getVillage()): this.studentReportForm.controls['centerId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -240,7 +240,9 @@ export class StudentReportComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            (this.logInDetails &&  flag == undefined) ? this.studentReportForm.controls['villageId'].setValue(this.logInDetails?.villageId): this.studentReportForm.controls['villageId'].setValue(0), this.getAllSchoolsByCenterId();
+            console.log("this.logInDetails?.villageId", this.logInDetails?.villageId);
+            
+            (this.logInDetails &&  flag == undefined) ? (this.studentReportForm.controls['villageId'].setValue(this.logInDetails?.villageId), this.getAllSchoolsByCenterId()): this.studentReportForm.controls['villageId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -258,12 +260,13 @@ export class StudentReportComponent {
     let Tid = formData.talukaId || 0;
     let Cid = formData.centerId || 0;
     let Vid = formData.villageId || 0;
-    if (Vid != 0) {
+    if (Vid > 0) {
     this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-          (this.logInDetails &&  flag == undefined) ? this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId): this.studentReportForm.controls['schoolId'].setValue(0), this.GetAllStandardClassWise();
+          (this.logInDetails &&  flag == undefined) ? (this.studentReportForm.controls['schoolId'].setValue(this.logInDetails?.schoolId), this.GetAllStandardClassWise()): this.studentReportForm.controls['schoolId'].setValue(0);
+         
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -412,6 +415,8 @@ export class StudentReportComponent {
           res.responseData.responseData3 != null ? this.totalCount = res.responseData.responseData3[0].totalCount : '';
           res.responseData.responseData3 != null ? this.tableDatasize = res.responseData.responseData3[0].totalCount : '';
           res.responseData.responseData5 != null ? this.studentCount = res?.responseData?.responseData5[0] : '';
+          // res.responseData.responseData5 = res?.responseData?.responseData5[0];
+
           
           // let data: [] = flag == 'pdfFlag' ? res.responseData.responseData2 : [];
           flag == 'pdfFlag' ? (this.downloadExcel(res.responseData.responseData2)) : '';
@@ -546,13 +551,10 @@ export class StudentReportComponent {
 
   clearForm(){
     this.formData();
-    this.studentReportForm.controls['districtId'].setValue(1);
+    this.getState();
     this.studentReportForm.controls['subjectId'].setValue(this.subjectArr[0].id);
     this.searchAssessMent();
   }
-
-
-
 }
 const today = new Date();
 const month = today.getMonth();

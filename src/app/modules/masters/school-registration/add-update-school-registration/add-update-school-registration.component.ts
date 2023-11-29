@@ -89,7 +89,7 @@ export class AddUpdateSchoolRegistrationComponent {
       "schoolCode": [this.data?.obj ? this.data?.obj.schoolCode : '', [Validators.required]],
       "schoolName": [this.data?.obj ? this.data?.obj.schoolName : '', [Validators.required, Validators.pattern('^[.,\n() a-zA-Z0-9]+$')]],
       "m_SchoolName": [this.data?.obj ? this.data?.obj.m_SchoolName : '', [Validators.required, Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
-      "stateId": [''],
+      "stateId": ['', Validators.required],
       "districtId": ['', Validators.required],
       "talukaId": ['', Validators.required],
       "villageId": ['', Validators.required],

@@ -143,7 +143,7 @@ export class AssessmentConfigurationComponent {
     });
     // download pdf call
     if (resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ['Sr. No.', 'Standard', 'subject', 'Question Type', 'Educational Year'];
+      let keyPDFHeader = ['Sr. No.', 'Standard', 'Subject', 'Question Type', 'Educational Year'];
       let marathikeyHeader = ['अनुक्रमांक', 'इयत्ता', 'विषय', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष']
       let ValueData =
         resultDownloadArr.reduce(

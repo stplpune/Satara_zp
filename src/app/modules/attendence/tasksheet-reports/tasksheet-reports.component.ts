@@ -94,6 +94,7 @@ export class TasksheetReportsComponent {
     this.getState();
     this.formField();
     this.getTableData();    
+    console.log("loginData", this.loginData);
   }
 
   navigateToReport() {
@@ -142,7 +143,6 @@ export class TasksheetReportsComponent {
           });
           console.log("this.tableDataArray",this.tableDataArray);
           
-          
           // this.totalCount = res.responseData.responseData2.pageCount;
           // this.tableDatasize = res.responseData.responseData2.pageCount;
           this.resultDownloadArr = [];
@@ -185,43 +185,62 @@ export class TasksheetReportsComponent {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
     this.districtArr = [];
-    // let stateId = this.filterForm.value.stateId;
-    this.masterService.getAllDistrict('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-          this.filterForm.controls['districtId'].setValue(0);
-        }
-        else {
-          this.districtArr = [];
-        }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
-    });
+    let stateId = this.filterForm.value.stateId;
+    if(stateId > 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            // this.f['districtId'].setValue(0);
+            this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+        error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+      });
+    }
+    else{
+      this.districtArr = [];
+    }
   }
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);          
-          this.filterForm?.getRawValue().talukaId ? this.getAllCenter() : this.f['talukaId'].setValue(0);        
-          
-        } else {
-          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
-          this.talukaArr = [];
+    let districtId = this.filterForm.value.districtId;
+    if(districtId > 0){
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);          
+            this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : this.f['talukaId'].setValue(0);
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
         }
-      }
-    });
+      });
+    }
+    else{
+      this.talukaArr = [];
+    }
   }
 
   getAllCenter() {
@@ -232,7 +251,7 @@ export class TasksheetReportsComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);    
-            this.filterForm?.value.centerId ? this.getVillage() : this.f['centerId'].setValue(0);
+            this.loginData ? (this.f['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.f['centerId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -250,7 +269,8 @@ export class TasksheetReportsComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.filterForm?.value.villageId ? this.getAllSchools() : this.f['villageId'].setValue(0);
+            // this.filterForm?.value.villageId ? this.getAllSchools() : this.f['villageId'].setValue(0);
+            this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId), this.getAllSchools()) : this.f['villageId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -269,7 +289,8 @@ export class TasksheetReportsComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-          this.filterForm?.value.schoolId ?'': this.f['schoolId'].setValue(0)
+          // this.filterForm?.value.schoolId ?'': this.f['schoolId'].setValue(0);
+          this.loginData ? (this.f['schoolId'].setValue(this.loginData.schoolId)) : this.f['schoolId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -418,8 +439,9 @@ export class TasksheetReportsComponent {
   onClear(){
     this.formField();
     this.getTableData();
-    this.getTaluka();
-    // this.districtArr = [];
+    this.getState();
+    // this.getTaluka();
+    this.districtArr = [];
     this.talukaArr = [];
     this.centerArr = [];
     this.villageArr = [];

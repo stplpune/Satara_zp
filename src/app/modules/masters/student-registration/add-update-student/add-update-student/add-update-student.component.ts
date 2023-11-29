@@ -126,7 +126,7 @@ export class AddUpdateStudentComponent {
       dob: ['', Validators.required],
       gender: ['', Validators.required],
       religionId: ['', Validators.required],
-      casteId: ['', Validators.required],
+      casteId: [0],
       casteCategoryId: ['', Validators.required],
       saralId: ['', [Validators.maxLength(19), Validators.minLength(19)]],
       mobileNo: ['', [Validators.maxLength(10), Validators.minLength(10), Validators.pattern(this.validators.mobile_No)]],

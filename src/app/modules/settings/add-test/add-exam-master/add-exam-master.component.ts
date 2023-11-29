@@ -206,7 +206,7 @@ export class AddExamMasterComponent {
     }
 
     getCriteria(id?: any){
-      console.log("id: ", id);
+      console.log("getCriteria: ", id);
       
       this.criteriaArr = [];
       let standardId = this.assetCriteriaFrom.value.standardId;
@@ -218,7 +218,7 @@ export class AddExamMasterComponent {
           if (res.statusCode == "200"){
             this.criteriaArr = res.responseData;
             if(id){
-              this.assetCriteriaFrom.controls['assetCriteriaId'].setValue([169, 154]);
+              this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(id);
             }
           }
           else {
@@ -368,6 +368,7 @@ export class AddExamMasterComponent {
 
     onSubmit(){
       let formValue = this.examForm.value;
+      console.log("this.submitArr", this.submitArr);
       
       formValue.examTypeWises = this.submitArr;
       console.log("formValue:", formValue);
@@ -500,7 +501,7 @@ export class AddExamMasterComponent {
       });
     }
 
-    globalDialogOpen(index: number) {
+    globalDialogOpen(data: any) {
       let dialoObj = {
         header: 'Delete',
         title: this.webService.languageFlag == 'EN' ? 'Do you want to delete record?' : 'तुम्हाला रेकॉर्ड हटवायचा आहे का?',
@@ -514,8 +515,8 @@ export class AddExamMasterComponent {
         autoFocus: false
       })
       deleteDialogRef.afterClosed().subscribe((result: any) => {
-        if (result == 'yes') {
-          this.onDeleteCriteria(index);
+        if (result == 'yes'){
+          this.onDeleteCriteria(data);
         }
       })
     }

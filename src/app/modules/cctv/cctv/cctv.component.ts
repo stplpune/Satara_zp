@@ -44,6 +44,7 @@ export class CctvComponent {
   timer: any;
   i:number = 0;
   ccTvId!: number;
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
   get f() {
     return this.filterForm.controls
   }
@@ -173,13 +174,13 @@ export class CctvComponent {
     })
   }
 
-  
   getState(){
     this.stateArr = [];
     this.masterService.getAllState('').subscribe({
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
         }
         else{
           this.stateArr = [];
@@ -196,7 +197,7 @@ export class CctvComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-            this.filterForm.controls['districtId'].setValue(0);
+            this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTalukaDropByDis()) : this.f['districtId'].setValue(0);
           }
           else {
             this.districtArr = [];
@@ -206,10 +207,7 @@ export class CctvComponent {
     }
   }
 
-
-
   // Get Taluka Dropdown By district
-
   getTalukaDropByDis() {
     this.talukaArr = [];
     let districtId = this.f['districtId'].value
@@ -218,8 +216,7 @@ export class CctvComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.f['talukaId'].setValue(0);
-          this.filterForm?.value.talukaId ? this.getCenterDropByTaluka() : '';
+          this.loginData ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getCenterDropByTaluka()): this.f['talukaId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -230,7 +227,6 @@ export class CctvComponent {
   }
 
   // Get Center Dropdown
-
   getCenterDropByTaluka() {
     this.centerArr = [];
     let id = this.f['talukaId'].value;
@@ -240,6 +236,7 @@ export class CctvComponent {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
             this.filterForm?.value.centerId ? this.getVillageDropByCenter() : '';
+            this.loginData ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDropByCenter()): this.f['centerId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -259,6 +256,7 @@ export class CctvComponent {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
             this.f['villageId'].setValue(0);
+            this.loginData ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getSchoolDropByFilter()): this.f['villageId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -266,7 +264,6 @@ export class CctvComponent {
         }
       });
     }
-
   }
 
   // getSchool Drop 
@@ -279,6 +276,7 @@ export class CctvComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+          this.loginData ? (this.f['schoolId'].setValue(this.loginData?.schoolId)): this.f['schoolId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -356,6 +354,7 @@ export class CctvComponent {
     console.log("ccTvId: ", this.ccTvId);
     const playId:any = document.getElementById("play");
     const canvasId:any = document.getElementById("canvas1");
+
     // if (obj.label == 'View') {
     //   let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
     //   this.playClick(url);
@@ -370,7 +369,9 @@ export class CctvComponent {
       let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
       this.playClick(url);
       this.closeVideo();
-    } else{
+    } else if(this.ccTvId == 2 && obj.label == 'View'){
+      console.log("else...");
+      
       playId.style.display = "none";
       canvasId.style.display = "block";
       this.closeVideo();
@@ -441,10 +442,13 @@ export class CctvComponent {
   // clear button func
   clearForm() {
     this.filterForm.reset();
+    this.districtArr = [];
+    this.talukaArr = [];
     this.villageArr = [];
     this.centerArr = [];
     this.schoolArr = [];
     this.CCTVLocationArr = [];
+    this.getState();
     this.getTableData();
   }
 
@@ -549,6 +553,8 @@ export class CctvComponent {
 
 
   init() {
+    console.log("calling init...");
+    
     let streamid = 1;
     let channel = 0;
     var devid: any = '5625617245';

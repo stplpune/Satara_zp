@@ -4,18 +4,18 @@
             <mat-card-header class="card-header pb-0">
                 <div class="d-flex justify-content-between align-items-center w-100">
                     <h6 class="text-main mb-0 fw-bold">{{'Labels.filterclick' | translate}}</h6>
-                    <button mat-icon-button class="btn-modal-close" mat-dialog-close>
+                    <button mat-icon-button class="btn-modal-close" mat-dialog-close (click)="this.drawer.close()">
                         <mat-icon>close</mat-icon>
                     </button>
                 </div>
             </mat-card-header>
             <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
-                <form [formGroup]="mainFilterForm">
+                <form [formGroup]="mainFilterForm" (ngSubmit)="onMainFilterSubmit();this.drawer.close()">
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
-                            <mat-select formControlName="acYearId">
-                                <mat-option *ngFor="let year of acYear" [value]="year.educationYearId">
+                            <mat-select formControlName="acYearId" (selectionChange)="setAcadamicYearValue()">
+                                <mat-option *ngFor="let year of acYear" [value]="year.id">
                                     {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
                                 </mat-option>
                             </mat-select>
@@ -25,24 +25,30 @@
                         <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
-                            <mat-select formControlName="talukaId">
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="talukaId" (selectionChange)="getCenters()">
+                                <mat-option *ngFor="let taluka of talukaData" [value]="taluka.id">
+                                    {{webStorage.languageFlag == 'EN' ? taluka.taluka:taluka.m_Taluka}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
-                            <mat-select formControlName="centerId">
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="centerId" (selectionChange)="getVillage()">
+                                <mat-option *ngFor="let center of centerData" [value]="center.id">
+                                    {{webStorage.languageFlag == 'EN'?center.center:center.m_Center}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
-                            <mat-select formControlName="villageId">
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="villageId" (selectionChange)="getschools()">
+                                <mat-option *ngFor="let village of villageData" [value]="village.id">
+                                    {{webStorage.languageFlag == 'EN'? village.village:village.m_Village}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -50,12 +56,14 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectSchool' | translate}}</mat-label>
                             <mat-select formControlName="schoolId">
-                                <mat-option>Option-2</mat-option>
+                                <mat-option *ngFor="let school of schoolData" [value]="school.id">
+                                    {{webStorage.languageFlag == 'EN'?school.schoolName :school.m_SchoolName }}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close>{{'Labels.reset'|
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close (click)="resetMainFilter()">{{'Labels.reset'|
                             translate}}</button>
                         <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' |
                             translate}}</button>
@@ -93,9 +101,11 @@
 
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>Select</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-label>Select Academic Year</mat-label>
+                                        <mat-select [formControl]="academicYear" (selectionChange)="onMainFilterSubmit('year')">
+                                            <mat-option *ngFor="let year of acYear" [value]="year.id">
+                                                {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -195,16 +205,6 @@
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
-                        <!-- <div id="chart">
-                            <apx-chart  [series]="chartOptions?.series" [chart]="chartOptions?.chart"
-                              [dataLabels]="chartOptions?.dataLabels" [plotOptions]="chartOptions?.plotOptions"
-                              [yaxis]="chartOptions?.yaxis" [legend]="chartOptions?.legend" [fill]="chartOptions?.fill"
-                              [stroke]="chartOptions?.stroke" [tooltip]="chartOptions?.tooltip" [xaxis]="chartOptions?.xaxis"
-                              [legend]="chartOptions?.legend"></apx-chart>
-                            <div class="alert alert-danger text-center p-2" role="alert">
-                              No Data Found !
-                            </div>
-                          </div> -->
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100" [formGroup]="filterForm">
@@ -251,7 +251,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="!schoolwiseChartOptions">
                                         <div class="alert alert-danger text-center p-2" role="alert">
-                                      No Data Found !
+                                            {{'Labels.dataNotFound' | translate}}
                                     </div>
                                     </ng-container>
 
@@ -314,7 +314,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="!teacherwiseChartOptions">
                                         <div class="alert alert-danger text-center p-2" role="alert">
-                                      No Data Found !
+                                            {{'Labels.dataNotFound' | translate}}
                                     </div>
                                     </ng-container>
                                 </div>
@@ -367,7 +367,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="!classwiseChartOptions">
                                         <div class="alert alert-danger text-center p-2" role="alert">
-                                      No Data Found !
+                                            {{'Labels.dataNotFound' | translate}}
                                     </div>
                                     </ng-container>
                                 </div>
@@ -418,7 +418,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="!subjectWiseChartOptions">
                                         <div class="alert alert-danger text-center p-2" role="alert">
-                                      No Data Found !
+                                            {{'Labels.dataNotFound' | translate}}
                                     </div>
                                     </ng-container>
                                 </div>

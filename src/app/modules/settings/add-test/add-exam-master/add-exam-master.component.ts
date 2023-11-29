@@ -201,7 +201,7 @@ export class AddExamMasterComponent {
     }
 
     getCriteria(id?: any){
-      console.log("id: ", id);
+      console.log("getCriteria: ", id);
       
       this.criteriaArr = [];
       let standardId = this.assetCriteriaFrom.value.standardId;
@@ -213,7 +213,7 @@ export class AddExamMasterComponent {
           if (res.statusCode == "200"){
             this.criteriaArr = res.responseData;
             if(id){
-              this.assetCriteriaFrom.controls['assetCriteriaId'].setValue([169, 154]);
+              this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(id);
             }
           }
           else {
@@ -304,6 +304,7 @@ export class AddExamMasterComponent {
 
     onSubmit(){
       let formValue = this.examForm.value;
+      console.log("this.submitArr", this.submitArr);
       
       formValue.examTypeWises = this.submitArr;
       console.log("formValue:", formValue);
@@ -413,14 +414,15 @@ export class AddExamMasterComponent {
     onEditCriteria(obj: any, index: number){
       console.log("onEditCriteria : ", obj);
       console.log("index : ", index);
-
-      obj.map((x: any) => {
-        this.getSubject(x.subjectId);
-        this.getStandard(x.standardId);
-        if(this.assetCriteriaFrom.value.standardId && this.assetCriteriaFrom.value.subjectId){
-          this.getCriteria(x.questionId);
-        }
-      });
+        this.getStandard(obj?.standardId);
+        this.getSubject(obj?.subjectId);
+          const arrayData=obj?.criteriaDetails.length ? obj?.criteriaDetails.map((x:any)=>{return x.questionId}) :[]        
+          let ques = [obj?.questionId, ...arrayData] 
+          console.log("ques", ques);
+          setTimeout(() => {
+            this.getCriteria(ques);
+          }, 1000);
+  
     }
 
     globalDialogOpen(index: number) {

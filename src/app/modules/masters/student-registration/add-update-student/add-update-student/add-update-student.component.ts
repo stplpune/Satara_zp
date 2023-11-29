@@ -110,8 +110,8 @@ export class AddUpdateStudentComponent {
 
   formData() {
     this.stuRegistrationForm = this.fb.group({
-      stateId: [''],
-      districtId: [''],
+      stateId: ['', Validators.required],
+      districtId: ['', Validators.required],
       talukaId: ['', Validators.required],
       centerId: ['', Validators.required],
       villageId: ['', Validators.required],
@@ -120,14 +120,14 @@ export class AddUpdateStudentComponent {
       mName: ['', [Validators.pattern(this.validators.name)]],
       lName: ['', [Validators.required, Validators.pattern(this.validators.name)]],
       f_MName: ['', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
-      m_MName: ['', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
+      m_MName: ['', [Validators.pattern('^[\u0900-\u0965 ]+$')]],
       l_MName: ['', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
       standard: ['', Validators.required],
       dob: ['', Validators.required],
       gender: ['', Validators.required],
-      religionId: ['', Validators.required],
+      religionId: [0],
       casteId: [0],
-      casteCategoryId: ['', Validators.required],
+      casteCategoryId: [0],
       saralId: ['', [Validators.maxLength(19), Validators.minLength(19)]],
       mobileNo: ['', [Validators.maxLength(10), Validators.minLength(10), Validators.pattern(this.validators.mobile_No)]],
       fatherFullName: [''],

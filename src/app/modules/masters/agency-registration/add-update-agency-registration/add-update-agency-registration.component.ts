@@ -42,12 +42,12 @@ export class AddUpdateAgencyRegistrationComponent {
       "contactPerson_Name": [data ? data.contactPerson_Name : "", [Validators.required, Validators.pattern(this.validation.fullName)]],
       "agency_MobileNo": [data ? data.agency_MobileNo : "", [Validators.required, Validators.pattern(this.validation.mobile_No)]],
       "contact_No": [data ? data.contact_No : "", [Validators.required, Validators.pattern(this.validation.mobile_No)]],
-      "emailId": [data ? data.emailId : "", [Validators.required, Validators.pattern(this.validation.email)]],
-      "agency_EmailId": [data ? data.agency_EmailId : "", [Validators.required, Validators.pattern(this.validation.email)]],
+      "emailId": [data ? data.emailId : "", [Validators.pattern(this.validation.email)]],
+      "agency_EmailId": [data ? data.agency_EmailId : "", [Validators.pattern(this.validation.email)]],
       "address": [data ? data.address : "", [Validators.required]],
       "agency_Address": [data ? data.agency_Address : "", [Validators.required]],
-      "stateId": [{ value: this.data ? this.data.stateId : 0 }],
-      "districtId": [{ value: this.data ? this.data.districtId : 0 }],
+      "stateId": [this.data ? this.data.stateId : '' , [Validators.required]],
+      "districtId": [this.data ? this.data.districtId : '' , [Validators.required]],
       "talukaId": ["", Validators.required],
       "lan": this.webStorageService.languageFlag,
       "localID": 0,
@@ -91,7 +91,7 @@ export class AddUpdateAgencyRegistrationComponent {
     this.ngxSpinner.show();
     let obj = this.agencyRegisterForm.value;
     obj.districtId = 1;
-    if (this.agencyRegisterForm.valid && obj.emailId != obj.agency_EmailId && obj.contact_No != obj.agency_MobileNo) {
+    if (this.agencyRegisterForm.valid && obj.contact_No != obj.agency_MobileNo) {
       this.api.setHttp(this.data ? 'put' : 'post', 'zp-satara/Agency/' + (this.data ? 'Update' : 'Add'), false, obj, false, 'baseUrl');
       this.api.getHttp().subscribe({
         next: (res: any) => {
@@ -108,7 +108,12 @@ export class AddUpdateAgencyRegistrationComponent {
       return;
     }
     else {
-      obj.emailId == obj.agency_EmailId ? this.common.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Email Id & Email Id Can Not Be Same' : 'ईमेल आयडी आणि एजन्सीचा ईमेल आयडी एकच असू शकत नाही', 1) : '';
+      if(obj.emailId != '' && obj.agency_EmailId != ''){
+        console.log("Email....");
+        
+        obj.emailId == obj.agency_EmailId ? this.common.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Email Id & Email Id Can Not Be Same' : 'ईमेल आयडी आणि एजन्सीचा ईमेल आयडी एकच असू शकत नाही', 1) : '';
+      }
+      
       obj.contact_No == obj.agency_MobileNo ? this.common.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Mobile No. and Contact Person No. Can Not Be Same' : 'संपर्क क्रमांक आणि एजन्सीचा संपर्क क्रमांक एकच असू शकत नाही', 1) : '';
       this.ngxSpinner.hide();
       return;

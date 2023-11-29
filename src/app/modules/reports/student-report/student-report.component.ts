@@ -94,6 +94,8 @@ export class StudentReportComponent {
       this.languageChange();
     });
     this.logInDetails = this.webService.getLoggedInLocalstorageData();
+    console.log("logInDetails: ", this.logInDetails);
+    
     this.pageUrl = this.router.url;
     this.formData();
     // this.getDistrict();
@@ -161,7 +163,7 @@ export class StudentReportComponent {
           next: (res: any) => {
             if(res.statusCode == "200"){
               this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
-              this.getDistrict();
+              this.logInDetails ? (this.studentReportForm.controls['stateId'].setValue(this.logInDetails.stateId), this.getDistrict()) : 0;
             }
             else{
               this.stateArr = [];
@@ -171,11 +173,27 @@ export class StudentReportComponent {
   }
 
   getDistrict() {
-    this.$districts = this.masterService.getAlllDistrict(this.languageFlag);
-    // this.studentReportForm.controls['districtId'].setValue(1);
-    this.getTaluka();
+    // this.$districts = this.masterService.getAlllDistrict(this.languageFlag);
+    // // this.studentReportForm.controls['districtId'].setValue(1);
+    // this.getTaluka();
+    let stateId: any = this.studentReportForm.value.stateId;
+    if(stateId > 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.logInDetails ? (this.studentReportForm.controls['districtId'].setValue(this.logInDetails.districtId), this.getTaluka()) : 0;
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+      });
+    }
+    else{
+      this.districtArr = [];
+    }
   }
-
 
   getTaluka() {
     this.talukaArr = [];
@@ -393,7 +411,7 @@ export class StudentReportComponent {
           }
           res.responseData.responseData3 != null ? this.totalCount = res.responseData.responseData3[0].totalCount : '';
           res.responseData.responseData3 != null ? this.tableDatasize = res.responseData.responseData3[0].totalCount : '';
-          this.studentCount = res.responseData.responseData5[0];
+          res.responseData.responseData5 != null ? this.studentCount = res?.responseData?.responseData5[0] : '';
           
           // let data: [] = flag == 'pdfFlag' ? res.responseData.responseData2 : [];
           flag == 'pdfFlag' ? (this.downloadExcel(res.responseData.responseData2)) : '';

@@ -134,9 +134,9 @@
                                 <tbody *ngFor="let data of tableArray; let i=index;">
                                     <tr>
                                         <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{i+1}}</td>
-                                        <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{data?.standardName}}</td>
+                                        <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{data?.standard}}</td>
                                         <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{data?.subjectName}}</td>
-                                        <td>{{data?.questionName}}</td>
+                                        <td>{{data?.question}}</td> 
                                         <td [attr.rowspan]="data.criteriaDetails?.length + 1">
                                             <button
                                                         mat-icon-button id="tooltip"
@@ -152,7 +152,7 @@
                                         </td>
                                     </tr>
                                     <tr *ngFor="let detail of data.criteriaDetails; let i=index;">
-                                        <td>{{detail?.questionName}}</td>
+                                        <td>{{detail?.question}}</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -21,6 +21,7 @@ export class SchoolReportComponent {
   schoolReportForm!: FormGroup;
   $districts?: Observable<any>;
   stateArr = new Array();
+  districtArr = new Array();
   talukaArr = new Array();
   centerArr = new Array();
   villageArr = new Array();
@@ -99,21 +100,46 @@ export class SchoolReportComponent {
   get f(){return this.schoolReportForm.controls}
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.stateArr = [];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict(){
-    this.$districts = this.masterService.getAlllDistrict();
-    this.f['districtId'].setValue(1);
-    this.getTaluka();
+    // this.$districts = this.masterService.getAlllDistrict();
+    // this.f['districtId'].setValue(1);
+    // this.getTaluka();
+    let stateId: any = this.schoolReportForm.value.stateId;
+    if(stateId > 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.schoolReportForm.controls['districtId'].setValue(0);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+      });
+    }
+    else{
+      this.districtArr = [];
+    }
   }
 
   getTaluka(){
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
+    let districtId: any = this.schoolReportForm.value.districtId;
+    this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);

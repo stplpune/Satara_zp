@@ -28,7 +28,7 @@
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
                         <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId'); getTaluka();">
                             <!-- [disabled]="schoolReportForm.value.districtId == 1" [disabled]="true" -->
-                            <mat-option *ngFor="let dist of $districts | async" [value]="dist.id">{{languageFlag ==
+                            <mat-option *ngFor="let dist of districtArr" [value]="dist.id">{{languageFlag ==
                                 'English' ?
                                 dist.district : dist.m_District}}</mat-option>
                         </mat-select>

@@ -17,6 +17,37 @@
             <div class="row gx-2">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.state' | translate}}</mat-label>
+                        <mat-select formControlName="stateId" (selectionChange)="getAllDistricts();">
+                            <mat-option *ngFor="let state of stateData" [value]="state.id">
+                                {{webStorageService.languageFlag=='mr-IN' ? state.m_State : state.state}}
+                              </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.district' | translate}}</mat-label>
+                        <mat-select formControlName="districtId" (selectionChange)="getAllTalukas();">
+                            <mat-option *ngFor="let data of districtData"
+                                [value]="data.id">{{webStorageService.languageFlag=='mr-IN' ? data.m_District
+                                :data.district}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka' | translate}}</mat-label>
+                        <mat-select formControlName="talukaId">
+                            <mat-option *ngFor="let data of talukaData"
+                                [value]="data.id">{{webStorageService.languageFlag=='mr-IN' ? data.m_Taluka :
+                                data.taluka}}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['talukaId'].hasError('required')">{{'Labels.pleaseSelectTaluka' | translate}}</mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.agencyName' | translate}}</mat-label>
                         <input appAutofocus matInput formControlName="agency_Name" maxlength="50"
                             (keypress)="validation.noFirstSpaceAllow($event)">
@@ -56,37 +87,7 @@
                             translate}}</mat-error>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.state' | translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="getAllDistricts();">
-                            <mat-option *ngFor="let state of stateData" [value]="state.id">
-                                {{webStorageService.languageFlag=='mr-IN' ? state.m_State : state.state}}
-                              </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.district' | translate}}</mat-label>
-                        <mat-select formControlName="districtId" (selectionChange)="getAllTalukas();">
-                            <mat-option *ngFor="let data of districtData"
-                                [value]="data.id">{{webStorageService.languageFlag=='mr-IN' ? data.m_District
-                                :data.district}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100 ">
-                        <mat-label>{{'Labels.taluka' | translate}}</mat-label>
-                        <mat-select formControlName="talukaId">
-                            <mat-option *ngFor="let data of talukaData"
-                                [value]="data.id">{{webStorageService.languageFlag=='mr-IN' ? data.m_Taluka :
-                                data.taluka}}</mat-option>
-                        </mat-select>
-                        <!-- <mat-error *ngIf="fc['talukaId'].hasError('required')">{{'Labels.pleaseSelectTaluka' | translate}}</mat-error> -->
-                    </mat-form-field>
-                </div>
+                
                 <div class="col-sm-8">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.agencyAdd' | translate}}</mat-label>

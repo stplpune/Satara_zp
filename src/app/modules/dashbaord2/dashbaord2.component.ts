@@ -657,7 +657,7 @@ export class Dashbaord2Component {
     let fd = this.classwiseFilterForm.value;
     let mainFV = this.mainFilterForm.value;
     let url = `TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
-    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&lan=${this.selectedLang}`
+    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EducationYearId=${+mainFV.acYearId || 0}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardStandardWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -735,7 +735,7 @@ export class Dashbaord2Component {
     let fd = this.subjectWiseFilterForm.value;
     let mainFV = this.mainFilterForm.value;
     let url = `TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
-    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&lan=${this.selectedLang}`
+    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EducationYearId=${+mainFV.acYearId || 0}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardSubjectWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

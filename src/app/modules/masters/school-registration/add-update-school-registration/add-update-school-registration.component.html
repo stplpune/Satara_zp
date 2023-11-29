@@ -58,7 +58,7 @@
                         <mat-label>{{'Labels.SchoolIsKendra' | translate}}</mat-label>
                         <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
                         formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
-                        [class.disabled]="editObj" />
+                        [class.disabled]="editObj || !schoolRegForm.value.talukaId" />
                         <span class="small form-label">{{'Labels.Yes' | translate}}</span>
                     </div>
                 </div>

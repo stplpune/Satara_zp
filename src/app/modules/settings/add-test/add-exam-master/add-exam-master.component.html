@@ -84,7 +84,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label> {{'Labels.standard'| translate}}</mat-label>
-                        <mat-select formControlName="standardId">
+                        <mat-select formControlName="standardId" (selectionChange)="onDropdownChange($event,'std')">
                           <mat-option *ngFor="let standard of standardArr" [value]="standard.id">
                               {{languageFlag == 'English' ? standard.standard : standard.m_Standard}}
                             </mat-option>
@@ -94,7 +94,7 @@
                 <div class="col-sm">
                         <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                             <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                            <mat-select formControlName="subjectId" (selectionChange)="getCriteria()">
+                            <mat-select formControlName="subjectId" (selectionChange)="getCriteria();onDropdownChange($event,'sub')">
                                 <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
                                     {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
                                 </mat-option>
@@ -105,7 +105,7 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.AssesmentCriteria' | translate}}</mat-label>
-                        <mat-select multiple formControlName="assetCriteriaId">
+                        <mat-select multiple formControlName="assetCriteriaId" (selectionChange)="onDropdownChange($event,'ass')">
                             <mat-option *ngFor="let criteria of criteriaArr" [value]="criteria.id">
                                 {{languageFlag == 'English' ? criteria.question : criteria.m_Question}}
                             </mat-option>
@@ -133,15 +133,17 @@
                                 </thead>
                                 <tbody *ngFor="let data of tableArray; let i=index;">
                                     <tr>
-                                        <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{i+1}}</td>
-                                        <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{data?.standard}}</td>
-                                        <td [attr.rowspan]="data.criteriaDetails?.length + 1">{{data?.subjectName}}</td>
-                                        <td>{{data?.question}}</td> 
-                                        <td [attr.rowspan]="data.criteriaDetails?.length + 1">
+                                        <td [attr.rowspan]="data.criteriaDetails?.length">{{i+1}}</td>
+                                        <td [attr.rowspan]="data.criteriaDetails?.length">{{data?.standardName}}</td>
+                                        <td [attr.rowspan]="data.criteriaDetails?.length">{{data?.subjectName}}</td>
+                                        <td><tr  *ngFor="let detail of data.criteriaDetails; let i=index;">
+                                            <td>{{detail}}</td>
+                                        </tr></td>
+                                        <td [attr.rowspan]="data.criteriaDetails?.length">
                                             <button
                                                         mat-icon-button id="tooltip"
                                                         matTooltip="{{'Labels.edit' | translate}}"
-                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditCriteria(data.criteriaDetails, i)">
+                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditCriteria(data)">
                                                         <mat-icon class="text-main">edit</mat-icon>
                                             </button>
                                             <button mat-icon-button (click)="globalDialogOpen(i)">
@@ -150,9 +152,6 @@
                                                 </mat-icon>
                                             </button>
                                         </td>
-                                    </tr>
-                                    <tr *ngFor="let detail of data.criteriaDetails; let i=index;">
-                                        <td>{{detail?.question}}</td>
                                     </tr>
                                 </tbody>
                             </table>

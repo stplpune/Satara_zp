@@ -60,6 +60,8 @@ export class AddExamMasterComponent {
   editAssessment: any;
   tableobj: any;
   submitArr = new Array();
+  editCriteriaFlag:boolean =false;
+  editCriteriaObj:any;
   get f() { return this.examForm.controls }
   get cf() { return this.assetCriteriaFrom.controls}
 
@@ -114,8 +116,11 @@ export class AddExamMasterComponent {
     examCriteriaFeild(){
       this.assetCriteriaFrom = this.fb.group({
         standardId: [''],
+        standardName: [''],
         subjectId: [''], 
-        assetCriteriaId: ['']
+        subjectName: [''],
+        assetCriteriaId: [''],
+        assetCriteriaName:[''],
       });
     }
   
@@ -223,82 +228,141 @@ export class AddExamMasterComponent {
       });
     }
 
+    // addAssCriteria(){
+    //   this.addValidation(true);
+    //   let criteriaFormValue = this.assetCriteriaFrom.value;
+    //   if (this.assetCriteriaFrom.invalid) {
+    //     return
+    //   }
+    //   else if((this.submitArr.some(x => (x.standardId == criteriaFormValue.standardId && x.subjectId == criteriaFormValue.subjectId)))) {
+    //       this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Standard And Subject Already Exist' : 'इयत्ता आणि विषय आधीच अस्तित्वात आहे', 1);
+    //     }      
+    //   else{
+    //     this.criteriaObjArr = [];
+    //     for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
+    //       let obj = {
+    //         id: 0,
+    //         examTypeId: 0,
+    //         standardId: criteriaFormValue.standardId,
+    //         subjectId: criteriaFormValue.subjectId,
+    //         questionId: criteriaFormValue.assetCriteriaId[i],
+    //         createdBy: this.webService.getUserId(),
+    //         modifiedBy: this.webService.getUserId()
+    //       }
+    //       this.criteriaObjArr.push(obj);
+    //       this.submitArr.push(obj)
+    //       // this.criteriaObjArr = [...this.criteriaObjArr];
+    //     }
+    //     console.log("this.criteriaObjArr",this.criteriaObjArr);
+    //     // object create for Display
+    //     this.tableobj = {}
+    //     this.tableobj = {
+    //       ...this.criteriaObjArr[0],
+    //       "criteriaDetails": []
+    //     }
+    //     for (let i = 1; i < this.criteriaObjArr.length; i++) {
+    //       this.tableobj.criteriaDetails.push(this.criteriaObjArr[i]);
+    //     }
+    //     this.tableArray.push(this.tableobj)
+    //     console.log("obj", this.tableobj);        
+    //     console.log("this.tableArray", this.tableArray);
+    //   // this.tableArray = [...this.tableArray];
+      
+
+    //   this.tableArray.map((x: any) => {                
+    //     this.standardArr.map((res: any) => {
+    //       if(res.id == x.standardId){
+    //         x.standard = res.standard;
+    //       }
+    //     });
+
+    //     this.subjectArr.map((res: any) => {
+    //       if(x.subjectId == res.id){
+    //         x.subjectName = res.subject;
+    //       }
+    //     });
+
+    //     this.criteriaArr.map((res: any) => {
+    //       if(x.questionId == res.id){
+    //         x.question = res.question;
+    //       }
+
+    //       x.criteriaDetails.map((data: any) => {
+    //         if(res.id == data.questionId){
+    //           data.question = res.question;
+    //         }
+    //       })
+    //     })
+
+    //   })
+
+    // this.assetCriteriaFrom.controls['standardId'].setValue(0);
+    // this.assetCriteriaFrom.controls['subjectId'].setValue(0);
+    // this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
+    // this.addValidation();
+
+    // console.log("this.criteriaObjArr", this.criteriaObjArr);
+    // console.log("this.tableArray: ", this.tableArray);
+
+    //   }
+    // }
+
     addAssCriteria(){
       this.addValidation(true);
       let criteriaFormValue = this.assetCriteriaFrom.value;
-      if (this.assetCriteriaFrom.invalid) {
+      if(this.assetCriteriaFrom.invalid) {
         return
       }
-      else if((this.submitArr.some(x => (x.standardId == criteriaFormValue.standardId && x.subjectId == criteriaFormValue.subjectId)))) {
-          this.commonMethods.showPopup(this.webService.languageFlag == 'EN' ? 'Standard And Subject Already Exist' : 'इयत्ता आणि विषय आधीच अस्तित्वात आहे', 1);
-        }      
       else{
         this.criteriaObjArr = [];
-        for(let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++){
-          let obj = {
+        for (let i = 0; i < criteriaFormValue.assetCriteriaId.length; i++) {
+          let splitCriteriaName = criteriaFormValue.assetCriteriaName.split(",");
+
+          let obj: any = {
             id: 0,
             examTypeId: 0,
             standardId: criteriaFormValue.standardId,
+            standardName: criteriaFormValue.standardName,
             subjectId: criteriaFormValue.subjectId,
+            subjectName: criteriaFormValue.subjectName,
             questionId: criteriaFormValue.assetCriteriaId[i],
+            questionName: splitCriteriaName[i],
             createdBy: this.webService.getUserId(),
-            modifiedBy: this.webService.getUserId()
-          }
-          this.criteriaObjArr.push(obj);
-          this.submitArr.push(obj)
-          // this.criteriaObjArr = [...this.criteriaObjArr];
-        }
-        console.log("this.criteriaObjArr",this.criteriaObjArr);
-        // object create for Display
-        this.tableobj = {}
-        this.tableobj = {
-          ...this.criteriaObjArr[0],
-          "criteriaDetails": []
-        }
-        for (let i = 1; i < this.criteriaObjArr.length; i++) {
-          this.tableobj.criteriaDetails.push(this.criteriaObjArr[i]);
-        }
-        this.tableArray.push(this.tableobj)
-        console.log("obj", this.tableobj);        
-        console.log("this.tableArray", this.tableArray);
-      // this.tableArray = [...this.tableArray];
-      
-
-      this.tableArray.map((x: any) => {                
-        this.standardArr.map((res: any) => {
-          if(res.id == x.standardId){
-            x.standard = res.standard;
-          }
-        });
-
-        this.subjectArr.map((res: any) => {
-          if(x.subjectId == res.id){
-            x.subjectName = res.subject;
-          }
-        });
-
-        this.criteriaArr.map((res: any) => {
-          if(x.questionId == res.id){
-            x.question = res.question;
+            modifiedBy: this.webService.getUserId(),
           }
 
-          x.criteriaDetails.map((data: any) => {
-            if(res.id == data.questionId){
-              data.question = res.question;
+          if (!this.criteriaObjArr.length) {
+            this.criteriaObjArr.push(obj);
+          } else {
+            let checkStandSubId = this.criteriaObjArr.some((ele: any) => { return (ele.standardId == criteriaFormValue.standardId) && (ele?.subjectId == criteriaFormValue.subjectId) && (ele?.questionId == criteriaFormValue.assetCriteriaId[i]) })
+            if (!checkStandSubId) {
+              this.criteriaObjArr.push(obj)
             }
-          })
-        })
-
-      })
-
-    this.assetCriteriaFrom.controls['standardId'].setValue(0);
-    this.assetCriteriaFrom.controls['subjectId'].setValue(0);
-    this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
-    this.addValidation();
-
-    console.log("this.criteriaObjArr", this.criteriaObjArr);
-    console.log("this.tableArray: ", this.tableArray);
-
+          }
+        }
+        if(this.editCriteriaFlag ){
+          let index = this.tableArray.findIndex((ele: any) => { return (ele.standardId == criteriaFormValue.standardId)  && (ele.subjectId == criteriaFormValue.subjectId)});
+          index != '-1' ? (this.tableArray[index].criteriaDetailsIds = [],  this.tableArray[index].criteriaDetails = []):'';
+        }
+        
+        let index:any;
+        this.criteriaObjArr.forEach((a) => {
+          var key = a.standardId.toString()+a.subjectId.toString();
+          if (a.standardId.toString()+a.subjectId.toString() === key) {
+            index = this.tableArray.findIndex((ele: any) => { return (ele.standardId == a.standardId)  && (ele.subjectId == a.subjectId)})
+            if (index == '-1') {
+              this[key] = { standardId: a.standardId, subjectId:a.subjectId,standardName: a.standardName, subjectName:a.subjectName, criteriaDetails: [], criteriaDetailsIds:[] };
+              this.tableArray.push(this[key]);
+              this[key]?.criteriaDetails.push(a.questionName);
+              this[key]?.criteriaDetailsIds.push(a.questionId);
+            }else{
+              let checkVal = this.tableArray[index].criteriaDetailsIds.find((ele:any)=> {return ele == a.questionId});
+              !checkVal ?  (this[key]?.criteriaDetails.push(a.questionName), this[key]?.criteriaDetailsIds.push(a.questionId)) :'';
+            }
+          }
+        },Object.create(null));
+        this.assetCriteriaFrom.reset();
+        this.editCriteriaFlag ? this.editCriteriaFlag = false:'';
       }
     }
 
@@ -410,16 +474,29 @@ export class AddExamMasterComponent {
 
     }
 
-    onEditCriteria(obj: any, index: number){
-      console.log("onEditCriteria : ", obj);
-      console.log("index : ", index);
+    // onEditCriteria(obj: any, index: number){
+    //   console.log("onEditCriteria : ", obj);
+    //   console.log("index : ", index);
 
-      obj.map((x: any) => {
-        this.getSubject(x.subjectId);
-        this.getStandard(x.standardId);
-        if(this.assetCriteriaFrom.value.standardId && this.assetCriteriaFrom.value.subjectId){
-          this.getCriteria(x.questionId);
-        }
+    //   obj.map((x: any) => {
+    //     this.getSubject(x.subjectId);
+    //     this.getStandard(x.standardId);
+    //     if(this.assetCriteriaFrom.value.standardId && this.assetCriteriaFrom.value.subjectId){
+    //       this.getCriteria(x.questionId);
+    //     }
+    //   });
+    // }
+
+    onEditCriteria(obj: any) {
+      this.editCriteriaFlag = true;
+      this.getStandard();
+      this.editCriteriaObj = obj;
+      this.assetCriteriaFrom.patchValue({
+        standardId: obj.standardId,
+        subjectId: obj.subjectId,
+        assetCriteriaId: obj.criteriaDetailsIds,
+        standardName:obj.standardName,
+        subjectName:obj.subjectName,
       });
     }
 
@@ -444,18 +521,7 @@ export class AddExamMasterComponent {
     }
 
     onDeleteCriteria(index: number){
-      let standardId = this.criteriaObjArr[index].standardId;
-
-      for(let i = 0; i < this.criteriaObjArr.length; i++){
-        if(standardId == this.criteriaObjArr[i].standardId){
-          this.criteriaObjArr.splice(i);
-        }
-      }
-      this.tableArray?.splice(index, 1);
-      this.assetCriteriaFrom.controls['standardId'].setValue(0);
-      this.assetCriteriaFrom.controls['subjectId'].setValue(0);
-      this.assetCriteriaFrom.controls['assetCriteriaId'].setValue(0);
-      this.addValidation(true);
+      this.tableArray.splice(index,1);
     }
 
     createTableStructure(tableArray: any){
@@ -482,5 +548,15 @@ export class AddExamMasterComponent {
       
       return this.tableArray
 
+    }
+
+    onDropdownChange(event:any, label:string){
+      if(label == 'std'){
+        this.assetCriteriaFrom.controls['standardName'].setValue(event.source.triggerValue);
+      }else  if(label == 'sub'){
+        this.assetCriteriaFrom.controls['subjectName'].setValue(event.source.triggerValue);
+      }else{
+        this.assetCriteriaFrom.controls['assetCriteriaName'].setValue(event.source.triggerValue);
+      }
     }
 }

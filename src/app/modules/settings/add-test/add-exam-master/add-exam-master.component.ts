@@ -263,7 +263,7 @@ export class AddExamMasterComponent {
         this.tableArray.map((x: any) => {                
           this.standardArr.map((res: any) => {
             if(res.id == x.standardId){
-              x.standardName = res.standard;
+              x.standard = res.standard;
             }
           });
 
@@ -275,12 +275,12 @@ export class AddExamMasterComponent {
 
           this.criteriaArr.map((res: any) => {
             if(x.questionId == res.id){
-              x.questionName = res.question;
+              x.question = res.question;
             }
 
             x.criteriaDetails.map((data: any) => {
               if(res.id == data.questionId){
-                data.questionName = res.question;
+                data.question = res.question;
               }
             })
           })
@@ -366,7 +366,40 @@ export class AddExamMasterComponent {
 
     onEdit(data?: any){
       console.log("onedit: ", data);
-      // this.createTableStructure(data?.questionResponses);
+      let criteriaArr = data?.questionResponses;
+      console.log("criteriaArr: ", criteriaArr);
+    //   let groupingViaCommonProperty = Object.values(
+    //     criteriaArr.reduce((acc, current) => {
+    //         acc[current.subjectId] = acc[current.subjectId] ?? [];
+    //         acc[current.subjectId].push(current);
+    //         return acc;
+    //     }, {})
+    // );
+    // cretaing array which having same stanadrd and subject 
+    const grouped = {};
+    criteriaArr.forEach(obj => {
+      const key = obj.subjectId + '-' + obj.standardId;
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(obj);
+    });
+    let newArr = Object.values(grouped);    
+    console.log("newArr", newArr);
+    this.tableobj = {};
+    newArr.map((x:any)=>{
+      this.tableobj = {
+        ...x[0],
+        "criteriaDetails": []
+      }
+      for(let i = 1; i < x.length; i++) {
+        this.tableobj.criteriaDetails.push(x[i]);
+      }
+      this.tableArray.push(this.tableobj);
+    })
+
+    console.log("this.tableArray",this.tableArray);
+    
 
     }
 

@@ -117,7 +117,7 @@ export class AddUpdateStudentComponent {
       villageId: ['', Validators.required],
       schoolId: ['', Validators.required],
       fName: ['', [Validators.required, Validators.pattern(this.validators.name)]],
-      mName: ['', [Validators.required, Validators.pattern(this.validators.name)]],
+      mName: ['', [Validators.pattern(this.validators.name)]],
       lName: ['', [Validators.required, Validators.pattern(this.validators.name)]],
       f_MName: ['', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],
       m_MName: ['', [Validators.required, Validators.pattern('^[\u0900-\u0965 ]+$')]],

@@ -367,6 +367,7 @@ export class AddExamMasterComponent {
     onEdit(data?: any){
       console.log("onedit: ", data);
       let criteriaArr = data?.questionResponses;
+      this.submitArr = criteriaArr;
       console.log("criteriaArr: ", criteriaArr);
     //   let groupingViaCommonProperty = Object.values(
     //     criteriaArr.reduce((acc, current) => {

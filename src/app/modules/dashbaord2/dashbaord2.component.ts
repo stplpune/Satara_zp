@@ -1,6 +1,6 @@
-import { Component, ViewChild,   } from '@angular/core';
+import { Component, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
- import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis, ChartComponent } from 'ng-apexcharts';
+ import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis, } from 'ng-apexcharts';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
@@ -25,27 +25,34 @@ export type ChartOptions = {
 export class Dashbaord2Component {
   filterForm!: FormGroup;
   filterFormTeacherWise!: FormGroup;
+  classwiseFilterForm!: FormGroup;
+  subjectWiseFilterForm!: FormGroup;
   mainFilterForm!: FormGroup;
 
   dashboardCountData = new Array();
+  acYear = new Array();
   graphInstance: any;
   selectedLang: any;
   piechartOptions: any;
-//  chartOptions: any;
   
   subjectResp = new Array();
   standardResp = new Array();
   teacherResp = new Array();
-  bartDetailsObj = new Array();
 
   evaluatorDataArray = new Array();
   
 
-   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
+   // @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
    public schoolwiseChartOptions!: Partial<ChartOptions> | any;
 
-   @ViewChild("teacherwiseChart") teacherwiseChart!: ChartComponent;
+   // @ViewChild("teacherwiseChart") teacherwiseChart!: ChartComponent;
    public teacherwiseChartOptions!: Partial<ChartOptions> | any;
+
+   //@ViewChild("classwiseChart") classwiseChart!: ChartComponent;
+   public classwiseChartOptions!: Partial<ChartOptions> | any;
+
+   //@ViewChild("subjectWiseChart") subjectWiseChart!: ChartComponent;
+   public subjectWiseChartOptions!: Partial<ChartOptions> | any;
 
 
   constructor(private spinner: NgxSpinnerService,
@@ -59,27 +66,36 @@ export class Dashbaord2Component {
   ngOnInit() {
     this.webStorage.langNameOnChange.subscribe((lang) => {
       console.log(lang);
-
       this.selectedLang = lang;
       // this.tableHeadingArrayTop = this.selectedLang == 'English' ? ['Top Performing Schools'] : ['उत्तम कामगिरी करणाऱ्या शाळा'];
       // this.tableHeadingArrayLow = this.selectedLang == 'English' ? ['Low Performing Schools'] : ['साधारण कामगिरी करणाऱ्या शाळा'];
       // this.initialApiCall('languageChange');
+      this.allDropdownApi();  
     });
     this. mainFillterDefaultFormat();
     this.defaultSchoolwiseFormat();
     this.defaultTeacherwiseFormat()
+    this.defaultClassrwiseFormat();
+    this.defaultSubjectWiseFormat();
     this.getdashboardCount();
     
-    this.getSubject();
-    this.GetAllStandardClassWise();
-    this.getTeacher();
-    this.bindEvaluator();
+    this.allDropdownApi();
 
     this.getPieChart();
     this.getPieChartData();
     this.getSchoolwiseBarDetails();
     this.getTeacherwiseBarDetails();
+    this.getClasswiseBarDetails();
+    this.getSubjectwiseBarDetails()
   
+  }
+
+  allDropdownApi(){
+    this. getYearArray();
+    this.getSubject();
+    this.GetAllStandardClassWise();
+    this.getTeacher();
+    this.bindEvaluator();
   }
 
   mainFillterDefaultFormat() {
@@ -108,13 +124,36 @@ export class Dashbaord2Component {
     })
   }
 
+  defaultClassrwiseFormat() {
+    this.classwiseFilterForm = this.fb.group({
+      classId: [0],
+      subjectId: [0],
+    })
+  }
+
+  defaultSubjectWiseFormat() {
+    this.subjectWiseFilterForm = this.fb.group({
+      classId: [0],
+      subjectId: [0],
+    })
+  }
+
 
   // ----------------------------------dropdown start here----------------------
+
+  getYearArray() {
+    this.acYear = [];
+    this.masterService.getAcademicYears().subscribe((res: any) => {
+      this.acYear.push(...res.responseData);
+      //this.f['acYearId'].patchValue(this.educationYear);
+    })
+  }
+
   getSubject() {
-    this.masterService.getAllSubject(this.webStorage.languageFlag).subscribe({
+    this.masterService.getAllSubject(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.subjectResp = res.responseData;
+          this.subjectResp = [ {id: 0, subject: "All", m_Subject: "सर्व"},...res.responseData];
         }
       },
       error: (() => {
@@ -124,10 +163,10 @@ export class Dashbaord2Component {
   }
 
   GetAllStandardClassWise() {
-    this.masterService.GetAllStandardClassWise(this.webStorage.languageFlag).subscribe({
+    this.masterService.GetAllStandardClassWise(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.standardResp = res.responseData;
+          this.standardResp = [{id: 0, standard: "All", m_Standard: "सर्व", groupId: 4},...res.responseData];
         }
       },
       error: (() => {
@@ -137,7 +176,7 @@ export class Dashbaord2Component {
   }
 
   getTeacher() {
-    this.masterService.getRoleOfTeacher(this.webStorage.languageFlag).subscribe({
+    this.masterService.getRoleOfTeacher(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.teacherResp = res.responseData;
@@ -147,6 +186,22 @@ export class Dashbaord2Component {
         this.teacherResp = [];
       })
     });
+  }
+
+  bindEvaluator(){
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang='+this.selectedLang, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next:(res:any) =>{
+        if (res.statusCode == '200') {
+          this.evaluatorDataArray = res.responseData;
+         // this.getSchoolwiseBarDetails();
+        }else{
+          this.evaluatorDataArray = [];
+        }
+      },
+      error:(() => {this.evaluatorDataArray = [];})
+    })
+
   }
 
 
@@ -377,23 +432,7 @@ export class Dashbaord2Component {
   // ----------------------------- Schoolwise Performance barChart start here---------------------------
 
 
-  bindEvaluator(){
-    this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=', false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next:(res:any) =>{
-        if (res.statusCode == '200') {
-          this.evaluatorDataArray = res.responseData;
-         // this.getSchoolwiseBarDetails();
-        }else{
-          this.evaluatorDataArray = [];
-        }
-      },
-      error:(() => {this.evaluatorDataArray = [];})
-    })
-
-  }
-
-
+  
   getSchoolwiseBarDetails() {
     let fd = this.filterForm.value;
     let url = `StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}`
@@ -401,27 +440,24 @@ export class Dashbaord2Component {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.bartDetailsObj = res.responseData.responseData1;          
+          let schoolwiseBarDetails = res.responseData.responseData1;          
           let xAxiaArray:any=[];
           let yAxisArray:any=[];
         //  let totalStudentCount :any=[];
 
-          this.bartDetailsObj.map((x: any) =>{
+         schoolwiseBarDetails.map((x: any) =>{
             xAxiaArray.push(x.graphLevel);
             yAxisArray.push(x.studentCount)
            // totalStudentCount.push(x.totalStudentCount)
-          });        
+          });    
 
           this.schoolwiseBarChart(xAxiaArray, yAxisArray,)
         } else {
-          // this.chartDetailsObj = [];
-          // this.isChartShow = false;
+          this.schoolwiseChartOptions = '';
         }
       },
       error: (err: any) => {
-        this.spinner.hide();
-        // this.chartDetailsObj = [];
-        // this.isChartShow = false;
+        this.schoolwiseChartOptions = '';
         this.error.handelError(err.status);
       },
     });
@@ -469,7 +505,7 @@ export class Dashbaord2Component {
 
   // --------------------------------Schoolwise Performance barChart  end here------------------------------
 
-    // --------------------------------Teacherwise  Performance barChart  end here------------------------------
+    // --------------------------------Teacherwise  Performance barChart  Start here------------------------------
 
 
     getTeacherwiseBarDetails() {
@@ -480,12 +516,12 @@ export class Dashbaord2Component {
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == '200') {
-            this.bartDetailsObj = res.responseData.responseData1;          
+            let teacherwiseBarDetails = res.responseData.responseData1;          
             let xAxiaArray:any=[];
             let yAxisArray:any=[];
           //  let totalStudentCount :any=[];
   
-            this.bartDetailsObj.map((x: any) =>{
+          teacherwiseBarDetails.map((x: any) =>{
               xAxiaArray.push(x.graphLevel);
               yAxisArray.push(x.studentCount)
              // totalStudentCount.push(x.totalStudentCount)
@@ -493,14 +529,11 @@ export class Dashbaord2Component {
   
             this.teacherwiseBarChart(xAxiaArray, yAxisArray,)
           } else {
-            // this.chartDetailsObj = [];
-            // this.isChartShow = false;
+            this.teacherwiseChartOptions ='';
           }
         },
         error: (err: any) => {
-          this.spinner.hide();
-          // this.chartDetailsObj = [];
-          // this.isChartShow = false;
+          this.teacherwiseChartOptions ='';
           this.error.handelError(err.status);
         },
       });
@@ -545,7 +578,154 @@ export class Dashbaord2Component {
         },
       }     
     }
+// --------------------------------Teacherwise  Performance barChart  end here------------------------------
+
+// --------------------------------Classwise Performance barChart  Start here------------------------------
+getClasswiseBarDetails() {
+  let fd = this.classwiseFilterForm.value;
+  console.log(fd);
+  let url = `StandardId=${fd.classId}&SubjectId=${fd.subjectId}`
+  this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardStandardWiseGraphDataWeb?' +url, false, false, false, 'baseUrl');
+  this.apiService.getHttp().subscribe({
+    next: (res: any) => {
+      if (res.statusCode == '200') {
+        let classwiseBarDetails = res.responseData.responseData1;          
+        let xAxiaArray:any=[];
+        let yAxisArray:any=[];
+      //  let totalStudentCount :any=[];
+
+      classwiseBarDetails.map((x: any) =>{
+          xAxiaArray.push(this.selectedLang == 'English'?x.standard :x.m_Standard);
+          yAxisArray.push(x.studentCount)
+         // totalStudentCount.push(x.totalStudentCount)
+        });        
+
+        this.classwiseBarChart(xAxiaArray, yAxisArray,)
+      } else {
+        this.classwiseChartOptions ='';
+      }
+    },
+    error: (err: any) => {
+      this.classwiseChartOptions = '';
+      this.error.handelError(err.status);
+    },
+  });
+}
+classwiseBarChart(xAxiaArray?: any, yAxisArray?: any) {
+  this.classwiseChartOptions = {
+    series: [
+      {
+        name: 'basic',
+        data: yAxisArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+      },
+    ],
+    chart: {
+      type: 'bar',
+      height: 300,
+      toolbar: {
+        show: false
+      }
+    },
+    colors: [
+      '#b51d31',
+      '#b39536',
+      '#50c77b',        
+      // '#2b908f',
+      // '#f9a3a4',
+      // '#90ee7e',
+      // '#f48024',
+      // '#69d2e7',
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        distributed: true,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      categories: xAxiaArray,
+      
+    },
+  }     
+}
+
+// --------------------------------Classwise  Performance barChart  end here------------------------------
 
 
-      // --------------------------------Teacherwise  Performance barChart  end here------------------------------
+// --------------------------------Subjectwise Performance barChart  Start here------------------------------
+getSubjectwiseBarDetails() {
+  let fd = this.subjectWiseFilterForm.value;
+  console.log(fd);
+  let url = `StandardId=${fd.classId}&SubjectId=${fd.subjectId}`
+  this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardSubjectWiseGraphDataWeb?' +url, false, false, false, 'baseUrl');
+  this.apiService.getHttp().subscribe({
+    next: (res: any) => {
+      if (res.statusCode == '200') {
+        let subjectwiseBarDetails = res.responseData.responseData1;          
+        let xAxiaArray:any=[];
+        let yAxisArray:any=[];
+      //  let totalStudentCount :any=[];
+
+      subjectwiseBarDetails.map((x: any) =>{
+          xAxiaArray.push(this.selectedLang == 'English'?x.subject :x.m_Subject);
+          yAxisArray.push(x.studentCount)
+         // totalStudentCount.push(x.totalStudentCount)
+        });        
+
+        this.subjectwiseBarChart(xAxiaArray, yAxisArray,)
+      } else {
+        this.subjectWiseChartOptions ='';
+      }
+    },
+    error: (err: any) => {
+      this.subjectWiseChartOptions ='';
+      this.error.handelError(err.status);
+    },
+  });
+}
+subjectwiseBarChart(xAxiaArray?: any, yAxisArray?: any) {
+  this.subjectWiseChartOptions = {
+    series: [
+      {
+        name: 'basic',
+        data: yAxisArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+      },
+    ],
+    chart: {
+      type: 'bar',
+      height: 350,
+      toolbar: {
+        show: false
+      }
+    },
+    colors: [
+      '#b51d31',
+      '#b39536',
+      '#50c77b',        
+      // '#2b908f',
+      // '#f9a3a4',
+      // '#90ee7e',
+      // '#f48024',
+      // '#69d2e7',
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        distributed: true,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      categories: xAxiaArray,
+      
+    },
+  }     
+}
+
+// --------------------------------Subjectwise  Performance barChart  end here------------------------------
 }

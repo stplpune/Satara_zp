@@ -15,7 +15,9 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
                             <mat-select formControlName="acYearId">
-                                <mat-option>Option-1</mat-option>
+                                <mat-option *ngFor="let year of acYear" [value]="year.educationYearId">
+                                    {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -222,7 +224,8 @@
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
                                         <mat-select formControlName="classId" (selectionChange)="getSchoolwiseBarDetails()">
                                             <mat-option *ngFor="let data of standardResp"
-                                                [value]="data.id">{{data.standard}}</mat-option>
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
+                                                :data.m_Standard}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -231,7 +234,8 @@
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
                                         <mat-select formControlName="subjectId" (selectionChange)="getSchoolwiseBarDetails()">
                                             <mat-option *ngFor="let data of subjectResp"
-                                                [value]="data.id">{{data.subject}}</mat-option>
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
+                                                :data.m_Subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -283,7 +287,8 @@
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
                                         <mat-select formControlName="classId" (selectionChange)="getTeacherwiseBarDetails()">
                                             <mat-option *ngFor="let data of standardResp"
-                                                [value]="data.id">{{data.standard}}</mat-option>
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
+                                                :data.m_Standard  }}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -292,7 +297,9 @@
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
                                         <mat-select formControlName="subjectId" (selectionChange)="getTeacherwiseBarDetails()">
                                             <mat-option *ngFor="let data of subjectResp"
-                                                [value]="data.id">{{data.subject}}</mat-option>
+                                                [value]="data.id">{{
+                                                    webStorage.languageFlag == 'EN'?data.subject
+                                                :data.m_Subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -327,23 +334,42 @@
                         <h6 class="mb-0 fw-bold">{{'Labels.Classwiseperformance' | translate}}</h6>
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
-                        <form class="w-100">
+                        <form class="w-100" [formGroup]="classwiseFilterForm">
                             <div class="row g-2">
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="classId" (selectionChange)="getClasswiseBarDetails()">
+                                            <mat-option *ngFor="let data of standardResp"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
+                                                :data.m_Standard}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="subjectId" (selectionChange)="getClasswiseBarDetails()">
+                                            <mat-option *ngFor="let data of subjectResp"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
+                                                :data.m_Subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
+                                </div>
+                                <div id="classwiseChart">
+                                    <ng-container *ngIf="classwiseChartOptions">
+                                        <apx-chart [series]="classwiseChartOptions?.series"
+                                            [chart]="classwiseChartOptions?.chart"
+                                            [dataLabels]="classwiseChartOptions?.dataLabels"
+                                            [plotOptions]="classwiseChartOptions?.plotOptions"
+                                            [xaxis]="classwiseChartOptions?.xaxis"
+                                            [colors]="classwiseChartOptions?.colors"></apx-chart>
+                                    </ng-container>
+                                    <ng-container *ngIf="!classwiseChartOptions">
+                                        <div class="alert alert-danger text-center p-2" role="alert">
+                                      No Data Found !
+                                    </div>
+                                    </ng-container>
                                 </div>
                             </div>
                         </form>
@@ -359,23 +385,42 @@
                         <h6 class="mb-0 fw-bold">{{'Labels.SubjectWisePerformance' | translate}}</h6>
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
-                        <form class="w-100">
+                        <form class="w-100" [formGroup]="subjectWiseFilterForm">
                             <div class="row g-2">
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="classId" (selectionChange)="getSubjectwiseBarDetails()">
+                                            <mat-option *ngFor="let data of standardResp"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
+                                                :data.m_Standard}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select formControlName="subjectId" (selectionChange)="getSubjectwiseBarDetails()">
+                                            <mat-option *ngFor="let data of subjectResp"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
+                                                :data.m_Subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
+                                </div>
+                                <div id="subjectWiseChart">
+                                    <ng-container *ngIf="subjectWiseChartOptions">
+                                        <apx-chart [series]="subjectWiseChartOptions?.series"
+                                            [chart]="subjectWiseChartOptions?.chart"
+                                            [dataLabels]="subjectWiseChartOptions?.dataLabels"
+                                            [plotOptions]="subjectWiseChartOptions?.plotOptions"
+                                            [xaxis]="subjectWiseChartOptions?.xaxis"
+                                            [colors]="subjectWiseChartOptions?.colors"></apx-chart>
+                                    </ng-container>
+                                    <ng-container *ngIf="!subjectWiseChartOptions">
+                                        <div class="alert alert-danger text-center p-2" role="alert">
+                                      No Data Found !
+                                    </div>
+                                    </ng-container>
                                 </div>
                             </div>
                         </form>

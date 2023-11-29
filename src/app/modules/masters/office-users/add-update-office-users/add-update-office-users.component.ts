@@ -30,6 +30,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   errorMsg : any;
   kendraErrorMsg :any
   officeCenterSchoolModelArr = new Array();
+  loginData = this.webStorageService.getLoggedInLocalstorageData();
 
   constructor(private masterService: MasterService,
     private fb: FormBuilder,
@@ -141,7 +142,8 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr = res.responseData;
-          // this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrictDrop()) : '';
+          this.loginData ? (this.fc['stateId'].setValue(this.loginData.stateId), this.getDistrictDrop()) : this.fc['stateId'].setValue(0);
+          // this.editFlag ? (this.fc['stateId'].setValue(this.editObj.stateId), this.getDistrictDrop()) : '';
         }
         else{
           this.stateArr = [];
@@ -151,11 +153,11 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   }
 
   getDistrictDrop() {
-    console.log("calling.. district");
     let stateId = this.officeForm.value.stateId;
     this.masterService.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe({
       next: (resp: any) => {
         resp.statusCode == "200" ? this.districts = resp.responseData : this.districts = [];
+        this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getTalukaDrop()) : this.fc['districtId'].setValue(0);
       },
       error: (error: any) => {
         { this.error.handelError(error) };
@@ -168,6 +170,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     this.masterService.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe({
       next: (resp: any) => {
         resp.statusCode == "200" ? (this.talukas = resp.responseData) : this.talukas = [];
+        this.loginData ? (this.fc['talukaId'].setValue(this.loginData.talukaId), this.getVillage()) : this.fc['talukaId'].setValue(0);
       },
       error: (error: any) => {
         { this.error.handelError(error) };
@@ -183,6 +186,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.villageArr = res.responseData;
+          this.loginData ? this.fc['villageId'].setValue(this.loginData.villageId) : this.fc['villageId'].setValue(0);
           this.data ? (this.officeForm.controls['villageId'].setValue(this.data.villageId)) :'';
         } else {
           this.commonService.checkEmptyData(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);

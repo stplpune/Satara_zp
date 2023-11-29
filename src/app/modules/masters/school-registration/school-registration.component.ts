@@ -50,6 +50,8 @@ export class SchoolRegistrationComponent implements OnInit {
   displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'Kendra', 'Village', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
   viewStatus = 'Table';
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
+
   constructor(private dialog: MatDialog,
     private apiService: ApiService,
     private errors: ErrorsService,
@@ -234,6 +236,7 @@ export class SchoolRegistrationComponent implements OnInit {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.stateId.setValue(this.loginData.stateId), this.getDistrict()) : this.stateId.setValue(0);
         }
         else{
           this.stateArr = [];
@@ -249,7 +252,7 @@ export class SchoolRegistrationComponent implements OnInit {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-            this.districtId.setValue(this.districtArr[0].id);
+            this.loginData ? (this.districtId.setValue(this.loginData.districtId), this.getTaluka()) : this.districtId.setValue(0);
           }
           else {
             this.districtArr = [];
@@ -269,6 +272,7 @@ export class SchoolRegistrationComponent implements OnInit {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.loginData ? (this.talukaId.setValue(this.loginData?.talukaId), this.getCenter()): this.talukaId.setValue(0);
           }
           else {
             this.talukaArr = [];
@@ -289,7 +293,7 @@ export class SchoolRegistrationComponent implements OnInit {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.centerId.setValue(0);
+            this.loginData ? (this.centerId.setValue(this.loginData?.centerId), this.getVillage()): this.centerId.setValue(0);
           }
           else {
             this.centerArr = [];
@@ -310,10 +314,8 @@ export class SchoolRegistrationComponent implements OnInit {
       this.masterService.getAllVillage('', centerId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.villageArr = res.responseData;
-            let obj = { id: 0, village: 'All', m_Village: 'सर्व' }
-            this.villageArr.unshift(obj)
-            this.villageId.setValue(0);
+            this.villageArr.push({ id: 0, village: 'All', m_Village: 'सर्व' }, ...res.responseData);
+            this.loginData ? this.villageId.setValue(this.loginData?.villageId) : this.villageId.setValue(0);
           }
           else {
             this.villageArr = [];
@@ -377,12 +379,12 @@ export class SchoolRegistrationComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 'yes' && obj) {
         this.onClear();
-        this.getDistrict();
+        this.getState();
         this.getTableData();
         this.pageNumber = obj.pageNumber;
       }
       else if (result == 'yes') {
-        this.getDistrict();
+        this.getState();
         this.getTableData();
         this.onClear();
         this.pageNumber = 1;
@@ -463,6 +465,7 @@ export class SchoolRegistrationComponent implements OnInit {
       this.villageArr = [];
       this.centerArr = [];
       this.getTableData();
+      this.getState();
       this.pageNumber = 1;
     }
   }

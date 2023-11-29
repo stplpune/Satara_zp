@@ -47,6 +47,7 @@ export class AddUpdateSchoolRegistrationComponent {
   editEventObj: any;
   textSearch = new FormControl('');
   imgValidation: boolean = false;
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(private masterService: MasterService,
@@ -75,8 +76,6 @@ export class AddUpdateSchoolRegistrationComponent {
     }
     this.userId = this.webStorageS.getUserTypeId();
     (this.userId == 4 && this.data?.flag == 'event') ? (this.getTableData(), this.eventFormFeild()) : '';
-    console.log("this.editObj: ", this.editObj);
-    
   }
 
   get f() {
@@ -161,6 +160,7 @@ export class AddUpdateSchoolRegistrationComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr = res.responseData;
+          this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
           this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
         }
         else{
@@ -175,6 +175,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
+        this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
         this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : '';
       }
     });
@@ -185,6 +186,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
+        this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getCenter()) : this.f['talukaId'].setValue(0);
         this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), this.getBitOrCenter()) : '';
         this.data?.obj?.isKendraSchool == true ? this.getVillage() : ''
       }
@@ -195,6 +197,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.masterService.getAllCenter(this.webStorageS.languageFlag, this.schoolRegForm.value.talukaId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.centerArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.centerArr = []);
+        this.loginData ? (this.f['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.f['centerId'].setValue(0);
         this.editFlag ? (this.f['centerId'].setValue(this.data?.obj.centerId), this.getVillage()) : '';
       }
     });
@@ -206,6 +209,7 @@ export class AddUpdateSchoolRegistrationComponent {
     this.masterService.getAllVillage(this.webStorageS.languageFlag,this.isKendra ? tId : cId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
+        this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId), this.getSchoolType()) : this.f['villageId'].setValue(0);
         this.editFlag ? (this.f['villageId'].setValue(this.data?.obj.villageId), this.getSchoolType()) : '';
       }
     });
@@ -412,8 +416,6 @@ export class AddUpdateSchoolRegistrationComponent {
 
   //#region ------------------------------------------------- Edit Record start here --------------------------------------------//
   onEdit() {
-    console.log("data",this.data?.obj);
-    
     this.editFlag = true;
     this.docArray = [];
     this.schoolRegForm.controls['uploadImage'].setValue(this.data?.obj?.uploadImage);
@@ -541,7 +543,6 @@ export class AddUpdateSchoolRegistrationComponent {
   onSubmitEvent() {
     let formValue = this.eventForm.value;
     formValue.eventImages = this.imgArray;
-    console.log("this.imgArray", this.imgArray);
     
     (this.imgArray.length) == 0 ? this.imgValidation = true : '';
 

@@ -20,6 +20,8 @@ export class AddUpdateAgencyRegistrationComponent {
   districtData = new Array();
   talukaData = new Array();
   editData: any;
+  loginData = this.webStorageService.getLoggedInLocalstorageData();
+
   constructor(public dialogRef: MatDialogRef<AddUpdateAgencyRegistrationComponent>, private api: ApiService, public webStorageService: WebStorageService,
     private fb: FormBuilder, private master: MasterService, public validation: ValidationService, private ngxSpinner: NgxSpinnerService,
     private common: CommonMethodsService, @Inject(MAT_DIALOG_DATA) public data: any, private errors: ErrorsService) { }
@@ -30,7 +32,6 @@ export class AddUpdateAgencyRegistrationComponent {
     this.getState();
     // this.getAllDistricts();
     // this.getAllTalukas();
-    console.log("editData", this.editData);
   }
 
   defaultForm(data?: any) {
@@ -63,6 +64,7 @@ export class AddUpdateAgencyRegistrationComponent {
     next: (res: any) => {
       if(res.statusCode == "200"){
         this.stateData = res.responseData;
+        this.loginData ? (this.fc['stateId'].setValue(this.loginData.stateId), this.getAllDistricts()) : this.fc['stateId'].setValue(0);
         this.editData ? (this.fc['stateId'].setValue(this.editData.stateId), this.getAllDistricts()) : '';
       }
       else{
@@ -76,6 +78,7 @@ export class AddUpdateAgencyRegistrationComponent {
     let stateId = this.agencyRegisterForm.value.stateId;
     this.master.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe((res: any) => {
       res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
+      this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
       this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : '';
     })
   }
@@ -83,7 +86,9 @@ export class AddUpdateAgencyRegistrationComponent {
   getAllTalukas() {
     let districtId = this.agencyRegisterForm.value.districtId;
     this.master.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe((res: any) => {
-      res.statusCode == 200 ? (this.talukaData = res.responseData, this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : '') : this.talukaData = [];
+      res.statusCode == 200 ? this.talukaData = res.responseData : this.talukaData = [];
+      this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
+      this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : '';
     })
   }
 
@@ -109,8 +114,6 @@ export class AddUpdateAgencyRegistrationComponent {
     }
     else {
       if(obj.emailId != '' && obj.agency_EmailId != ''){
-        console.log("Email....");
-        
         obj.emailId == obj.agency_EmailId ? this.common.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Email Id & Email Id Can Not Be Same' : 'ईमेल आयडी आणि एजन्सीचा ईमेल आयडी एकच असू शकत नाही', 1) : '';
       }
       

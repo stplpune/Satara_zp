@@ -411,6 +411,7 @@
         "selectRole": "Select Role",
         "NGOName": "NGO Name",
         "ExamType": "Exam Type",
+        "ExamNameTxt": "Exam Name",
         "AssessmentType": "Assessment Type",
         "reports": "Reports",
         "studentReport": "Student Report",

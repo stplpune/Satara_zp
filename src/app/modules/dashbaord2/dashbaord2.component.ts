@@ -3,10 +3,11 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis, } from 'ng-apexcharts';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
+import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
-
+declare var $: any;
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -29,8 +30,8 @@ export class Dashbaord2Component {
   subjectWiseFilterForm!: FormGroup;
   mainFilterForm!: FormGroup;
 
-  academicYear = new FormControl('')
-
+  academicYear = new FormControl('');
+  globalTalId: any;
   dashboardCountData = new Array();
   acYear = new Array();
   graphInstance: any;
@@ -68,6 +69,7 @@ export class Dashbaord2Component {
     public webStorage: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
+    private commonMethods: CommonMethodsService,
 
   ) { }
   ngOnInit() {
@@ -90,7 +92,12 @@ export class Dashbaord2Component {
     this.allChartApi();
   }
 
+  ngAfterViewInit() {
+    this.showSvgMap(this.commonMethods.mapRegions());
+  }
+
   allChartApi() {
+    this.clickOnSvgMap('select');
     this.getPieChart();
     this.getPieChartData();
     this.getSchoolwiseBarDetails();
@@ -314,88 +321,119 @@ export class Dashbaord2Component {
   }
 
   // -----------------------------------svg map----------------------------
-  // showSvgMap(data: any) {
-  //   this.graphInstance ? this.graphInstance.destroy() : '';
-  //   //let createMap: any = document.getElementById("#mapsvg");
+  showSvgMap(data: any) {
+    this.graphInstance ? this.graphInstance.destroy() : '';
+    //let createMap: any = document.getElementById("#mapsvg");
 
-  //   this.graphInstance = $("#mapsvg").mapSvg({
-  //     width: 550,
-  //     height: 430,
-  //     colors: {
-  //       baseDefault: "#0d4487",
-  //       background: "#fff",
-  //       selected: "#0d4487",
-  //       hover: "#0d4487",  // hover effect
-  //       directory: "#0d4487",
-  //       status: {}
-  //     },
-  //     regions: data,
-  //     viewBox: [0, 0, 763.614, 599.92],
-  //     cursor: "pointer",
-  //     zoom: {
-  //       on: false,
-  //       limit: [0, 50],
-  //       delta: 2,
-  //       buttons: {
-  //         on: true,
-  //         location: "left"
-  //       },
-  //       mousewheel: true
-  //     },
-  //     tooltips: {
-  //       mode: "title",
-  //       off: true,
-  //       priority: "local",
-  //       position: "bottom"
-  //     },
-  //     popovers: {
-  //       mode: "on",
-  //       on: false,
-  //       priority: "local",
-  //       position: "top",
-  //       centerOn: false,
-  //       width: 300,
-  //       maxWidth: 50,
-  //       maxHeight: 50,
-  //       resetViewboxOnClose: false,
-  //       mobileFullscreen: false
-  //     },
-  //     gauge: {
-  //       on: false,
-  //       labels: {
-  //         low: "low",
-  //         high: "high"
-  //       },
-  //       colors: {
-  //         lowRGB: {
-  //           r: 211,
-  //           g: 227,
-  //           b: 245,
-  //           a: 1
-  //         },
-  //         highRGB: {
-  //           r: 67,
-  //           g: 109,
-  //           b: 154,
-  //           a: 1
-  //         },
-  //         low: "#d3e3f5",
-  //         high: "#436d9a",
-  //         diffRGB: {
-  //           r: -144,
-  //           g: -118,
-  //           b: -91,
-  //           a: 0
-  //         }
-  //       },
-  //       min: 0,
-  //       max: false
-  //     },
-  //     source: this.selectedLang == 'English' ? "assets/distSVG/satara.svg" : "assets/distSVG/satara_marathi.svg",
-  //     title: "Satara_Dist",
-  //     responsive: true
-  //   });
-  // }
+    this.graphInstance = $("#mapsvg").mapSvg({
+      width: 400,
+      height: 300,
+      colors: {
+        baseDefault: "#0d4487",
+        background: "#fff",
+        selected: "#0d4487",
+        hover: "#0d4487",  // hover effect
+        directory: "#0d4487",
+        status: {}
+      },
+      regions: data,
+      viewBox: [0, 0, 763.614, 599.92],
+      cursor: "pointer",
+      zoom: {
+        on: false,
+        limit: [0, 50],
+        delta: 2,
+        buttons: {
+          on: true,
+          location: "left"
+        },
+        mousewheel: true
+      },
+      tooltips: {
+        mode: "title",
+        off: true,
+        priority: "local",
+        position: "bottom"
+      },
+      popovers: {
+        mode: "on",
+        on: false,
+        priority: "local",
+        position: "top",
+        centerOn: false,
+        width: 250,
+        maxWidth: 50,
+        maxHeight: 50,
+        resetViewboxOnClose: false,
+        mobileFullscreen: false
+      },
+      gauge: {
+        on: false,
+        labels: {
+          low: "low",
+          high: "high"
+        },
+        colors: {
+          lowRGB: {
+            r: 211,
+            g: 227,
+            b: 245,
+            a: 1
+          },
+          highRGB: {
+            r: 67,
+            g: 109,
+            b: 154,
+            a: 1
+          },
+          low: "#d3e3f5",
+          high: "#436d9a",
+          diffRGB: {
+            r: -144,
+            g: -118,
+            b: -91,
+            a: 0
+          }
+        },
+        min: 0,
+        max: false
+      },
+      source: this.selectedLang == 'English' ? "assets/distSVG/satara.svg" : "assets/distSVG/satara_marathi.svg",
+      title: "Satara_Dist",
+      responsive: true
+    });
+  }
+
+  clickOnSvgMap(flag?: string) {
+    if (flag == 'select') {      
+      //this.enbTalDropFlag ? $('#mapsvg path').addClass('disabledAll'): '';
+      let checkTalActiveClass = $('#mapsvg   path').hasClass("talActive");
+      checkTalActiveClass ? $('#mapsvg path[id="' + this.globalTalId + '"]').removeAttr("style") : '';
+      this.svgMapAddOrRemoveClass();
+    }
+
+
+    // ----------------------------- Map click event --------------------------------------------------------//
+    $(document).on('click', '#mapsvg  path', (e: any) => {
+      let getClickedId = e.currentTarget;
+      let talId = $(getClickedId).attr('data-name').split(" ")[0];
+      if (this.mainFilterForm.controls['talukaId'].value != talId) {
+        this.mainFilterForm.controls['talukaId'].setValue(+talId);
+        this.getCenters();
+        this.svgMapAddOrRemoveClass();
+        this.allChartApi()
+      }
+    })
+  }
+
+  svgMapAddOrRemoveClass() {
+    let checkTalActiveClass = $('#mapsvg   path').hasClass("talActive");
+    checkTalActiveClass ? $('#mapsvg   path#' + this.globalTalId).removeClass("talActive") : '';
+    this.talukaData.find(() => {
+      this.globalTalId = this.mainFilterForm?.value?.talukaId;
+      $('#mapsvg path[id="' + this.mainFilterForm?.value?.talukaId + '"]').addClass('talActive');
+    });
+  }
 
   // -----------------------------------------------------------------------------------
   // ------------------------------piechart start here--------------------------

@@ -280,9 +280,9 @@
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
                                         <mat-select formControlName="evaluatorId" (selectionChange)="getTeacherwiseBarDetails()">
-                                            <mat-option *ngFor="let data of evaluatorDataArray"
-                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
-                                                :data.m_Evaluator}}</mat-option>
+                                            <mat-option *ngFor="let data of teacherResp"
+                                                [value]="data.roleId">{{webStorage.languageFlag == 'EN'?data.roleType
+                                                :data.m_RoleType}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

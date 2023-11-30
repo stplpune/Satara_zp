@@ -247,7 +247,8 @@ export class Dashbaord2Component {
   }
 
   getTeacher() {
-    this.masterService.getRoleOfTeacher(this.selectedLang).subscribe({
+    let schoolId = this.filterFormTeacherWise.value.evaluatorId || 0;
+    this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.teacherResp = res.responseData;

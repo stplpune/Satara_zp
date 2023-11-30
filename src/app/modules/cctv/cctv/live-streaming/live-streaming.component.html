@@ -1,21 +1,24 @@
-<mat-card class="plain-card border">
-    <div mat-dialog-title class="card-header">
-        <div class="d-flex align-items-center justify-content-between w-100">
-            <h6 class="text-main mb-0 fw-bold">Live Streaming</h6>
-            <button mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeModal()">
-                <mat-icon>close</mat-icon>
-            </button>
-        </div>
+<div mat-dialog-title class="card-header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <h6 class="text-main mb-0 fw-bold">Live Streaming</h6>
+        <button mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeModal()">
+            <mat-icon>close</mat-icon>
+        </button>
     </div>
-    <mat-card-content class="card-body p-0">
-        <ng-container *ngIf="this.ccTvId == 1">
-            <div id="play" class="display border-0"></div>
-        </ng-container>
-        <ng-container *ngIf="this.ccTvId == 2">
-            <canvas id="canvas1" width="780px" height="300px" class="border-0"></canvas>
-        </ng-container>
-    </mat-card-content>
-    <!-- <mat-card-footer class="card-footer border-top-0 pt-0">
+</div>
+<mat-dialog-content class="card-body scrollbar pt-0 pb-0">
+    <ng-container *ngIf="this.ccTvId == 1">
+        <div id="play" class="video-display"></div>
+    </ng-container>
+    <ng-container *ngIf="this.ccTvId == 2">
+        <canvas id="canvas1" width="746px" height="416px" class="border-0"></canvas>
+    </ng-container>
+</mat-dialog-content>
+
+
+
+
+<!-- <mat-card-footer class="card-footer border-top-0 pt-0">
         <div class="d-flex justify-content-center align-items-center gap-2">
             <button type="button" mat-icon-button class="btn btn-second" matTooltip="{{'Labels.upward' | translate}}"
                 matTooltipPosition="left" matTooltipClass="tooltip">
@@ -51,4 +54,3 @@
             </button>
         </div>
     </mat-card-footer> -->
-</mat-card>

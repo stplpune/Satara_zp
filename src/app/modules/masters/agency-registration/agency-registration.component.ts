@@ -35,7 +35,7 @@ export class AgencyRegistrationComponent implements OnInit {
   highLightFlag :boolean=true;
   viewStatus='Table';
   constructor(private dialog: MatDialog, private apiService: ApiService, private ngxSpinner: NgxSpinnerService,
-    private webStroageService: WebStorageService, private downloadPdfservice: DownloadPdfExcelService,
+    public webStroageService: WebStorageService, private downloadPdfservice: DownloadPdfExcelService,
     private errors: ErrorsService, private common: CommonMethodsService, public validation: ValidationService,
     public datepipe : DatePipe
   ) { }

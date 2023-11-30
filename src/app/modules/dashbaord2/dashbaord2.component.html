@@ -219,7 +219,7 @@
                             <div class="row g-2">
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
+                                        <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
                                         <mat-select formControlName="evaluatorId" (selectionChange)="getSchoolwiseBarDetails()">
                                             <mat-option *ngFor="let data of evaluatorDataArray"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
@@ -281,8 +281,8 @@
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
                                         <mat-select formControlName="evaluatorId" (selectionChange)="getTeacherwiseBarDetails()">
                                             <mat-option *ngFor="let data of teacherResp"
-                                                [value]="data.roleId">{{webStorage.languageFlag == 'EN'?data.roleType
-                                                :data.m_RoleType}}</mat-option>
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.teacherName
+                                                :data.m_TeacherName}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -339,12 +339,21 @@
                         <form class="w-100" [formGroup]="classwiseFilterForm">
                             <div class="row g-2">
                                 <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
+                                    <!-- <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
                                         <mat-select formControlName="classId" (selectionChange)="getClasswiseBarDetails()">
                                             <mat-option *ngFor="let data of standardResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
                                                 :data.m_Standard}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field> -->
+
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.level' | translate}}</mat-label>
+                                        <mat-select formControlName="classId" (selectionChange)="getClasswiseBarDetails()">
+                                            <mat-option *ngFor="let data of graphLevelArr"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.graphLevel
+                                                :data.m_GraphLevel}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -390,12 +399,21 @@
                         <form class="w-100" [formGroup]="subjectWiseFilterForm">
                             <div class="row g-2">
                                 <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
+                                    <!-- <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
                                         <mat-select formControlName="classId" (selectionChange)="getSubjectwiseBarDetails()">
                                             <mat-option *ngFor="let data of standardResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
                                                 :data.m_Standard}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field> -->
+
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.level' | translate}}</mat-label>
+                                        <mat-select formControlName="classId" (selectionChange)="getSubjectwiseBarDetails()">
+                                            <mat-option *ngFor="let data of graphLevelArr"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.graphLevel
+                                                :data.m_GraphLevel}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

@@ -517,7 +517,8 @@
         "AllClass":"All Class",
         "AllSubject":"All Subject",
         "Classwiseperformance":"Classwise Performance",
-        "SubjectWisePerformance":"Subjectwise Performance"
+        "SubjectWisePerformance":"Subjectwise Performance",
+        "Evaluator": "Evaluator"
 
     }
 }

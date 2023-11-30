@@ -525,6 +525,7 @@
         "AllClass":"सर्व वर्ग",
         "AllSubject":"सर्व विषय",
         "Classwiseperformance":"वर्गवार कामगिरी",
-        "SubjectWisePerformance":"विषयनिहाय कामगिरी"
+        "SubjectWisePerformance":"विषयनिहाय कामगिरी",
+        "Evaluator": "मूल्यांकनकर्ता"
     }
 }

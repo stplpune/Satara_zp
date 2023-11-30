@@ -46,7 +46,7 @@ export class Dashbaord2Component {
   subjectResp = new Array();
   standardResp = new Array();
   teacherResp = new Array();
-
+  graphLevelArr = new Array();
   evaluatorDataArray = new Array();
 
 
@@ -112,6 +112,7 @@ export class Dashbaord2Component {
     this.getSubject();
     this.GetAllStandardClassWise();
     this.getTeacher();
+    this.getAllGraphLevel();
     this.bindEvaluator();
   }
 
@@ -256,6 +257,19 @@ export class Dashbaord2Component {
       },
       error: (() => {
         this.teacherResp = [];
+      })
+    });
+  }
+
+  getAllGraphLevel(){
+    this.masterService.GetAllGraphLevel(this.selectedLang).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.graphLevelArr = res.responseData;
+        }
+      },
+      error: (() => {
+        this.graphLevelArr = [];
       })
     });
   }

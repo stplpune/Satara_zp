@@ -262,8 +262,8 @@ export class CctvComponent {
     setTimeout(() => {
       this.dialog.open(LiveStreamingComponent, {
         width: '800px',
-        height:'520px',
         data:obj,
+        disableClose: true,
       });
       // this.ngxSpinner.hide();
     }, 15000);

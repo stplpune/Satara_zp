@@ -757,10 +757,11 @@ textarea {
   margin-top: 10px !important;
 }
 
-.display  video{
-    height: 100% !important;
+.video-display  video{
+    height: 416px !important;
     width: 100% !important;
     object-fit: cover !important;
     object-position: center !important;
+    border: none !important;
 }
 

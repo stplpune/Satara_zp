@@ -377,7 +377,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr = res.responseData;
-          this.loginData ? (this.stuRegistrationForm.controls['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.stuRegistrationForm.controls['stateId'].setValue(0);
+          // this.loginData ? (this.stuRegistrationForm.controls['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.stuRegistrationForm.controls['stateId'].setValue(0);
           this.editFlag ? (this.stuRegistrationForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
         }
         else{
@@ -394,7 +394,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr = res.responseData;
-          this.loginData ? (this.stuRegistrationForm.controls['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.stuRegistrationForm.controls['districtId'].setValue(0);
+          // this.loginData ? (this.stuRegistrationForm.controls['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.stuRegistrationForm.controls['districtId'].setValue(0);
           this.editFlag ? (this.stuRegistrationForm.controls['districtId'].setValue(this.editObj.districtId), this.getTaluka()) : '';
         } else {
           this.districtArr = [];
@@ -410,7 +410,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr = res.responseData;
-          this.loginData ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : this.stuRegistrationForm.controls['talukaId'].setValue(0);
+          // this.loginData ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : this.stuRegistrationForm.controls['talukaId'].setValue(0);
           this.editFlag ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.editObj.talukaId), this.getAllCenter()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : '';
         } else {
           this.talukaArr = [];
@@ -426,7 +426,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.centerArr = res.responseData;
-          this.loginData ? (this.stuRegistrationForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.stuRegistrationForm.controls['centerId'].setValue(0);
+          // this.loginData ? (this.stuRegistrationForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.stuRegistrationForm.controls['centerId'].setValue(0);
           this.editFlag ? (this.stuRegistrationForm.controls['centerId'].setValue(this.editObj.centerId), this.getVillage()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : '';
         } else {
           this.centerArr = [];
@@ -441,7 +441,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.villageArr = res.responseData;
-          this.loginData ? (this.stuRegistrationForm.controls['villageId'].setValue(this.loginData.villageId), this.getAllSchoolsByCenterId()) : this.stuRegistrationForm.controls['villageId'].setValue(0);
+          // this.loginData ? (this.stuRegistrationForm.controls['villageId'].setValue(this.loginData.villageId), this.getAllSchoolsByCenterId()) : this.stuRegistrationForm.controls['villageId'].setValue(0);
           this.editFlag ? (this.stuRegistrationForm.controls['villageId'].setValue(this.editObj.villageId), this.getAllSchoolsByCenterId()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['villageId'].setValue(this.loginData.villageId), this.getAllSchoolsByCenterId()) : '';
         } else {
           this.villageArr = [];
@@ -459,7 +459,7 @@ export class AddUpdateStudentComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.schoolArr = res.responseData;
-          this.loginData ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.loginData.schoolId), this.getStandard()) : this.stuRegistrationForm.controls['schoolId'].setValue(0);
+          // this.loginData ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.loginData.schoolId), this.getStandard()) : this.stuRegistrationForm.controls['schoolId'].setValue(0);
           this.editFlag ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.editObj.schoolId), this.getStandard()) : this.loginData.userTypeId == 4 ? (this.stuRegistrationForm.controls['schoolId'].setValue(this.loginData.schoolId), this.getStandard()) : '';
         } else {
           this.schoolArr = [];

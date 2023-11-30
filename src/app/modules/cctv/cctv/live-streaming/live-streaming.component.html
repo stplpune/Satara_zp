@@ -1,6 +1,6 @@
 <div mat-dialog-title class="card-header">
     <div class="d-flex align-items-center justify-content-between w-100">
-        <h6 class="text-main mb-0 fw-bold">Live Streaming</h6>
+        <h6 class="text-main mb-0 fw-bold">{{langTypeName == 'English' ? obj?.cctvType : obj?.m_CCTVType }} Camera Live Streaming - {{langTypeName == 'English' ? obj?.schoolName : obj?.m_SchoolName }} </h6>
         <button mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeModal()">
             <mat-icon>close</mat-icon>
         </button>

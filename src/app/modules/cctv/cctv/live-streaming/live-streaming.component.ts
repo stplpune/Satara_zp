@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { WebStorageService } from 'src/app/core/services/web-storage.service';
 
 declare var Flashphoner: any;
 declare var Player: any;
@@ -26,9 +27,11 @@ export class LiveStreamingComponent {
   tableDataArray: any;
   ccTvId!: number;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public obj: any, private ngxSpinner: NgxSpinnerService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public obj: any, private ngxSpinner: NgxSpinnerService, private webStorageS: WebStorageService) {
     this.ngxSpinner.show();
     this.ccTvId = obj?.cctvTypeId;
+    console.log("obj", obj);
+    
 
     setTimeout(() => {
     if (this.ccTvId == 1 && obj.label == 'View') { //IP
@@ -38,9 +41,9 @@ export class LiveStreamingComponent {
     }
     }, 1000);
 
-    // setTimeout(() => {
-    //   this.init_WithOutIP();
-    // }, 3000);
+    this.webStorageS.langNameOnChange.subscribe(lang => {
+      this.langTypeName = lang;
+    });
   }
 
 

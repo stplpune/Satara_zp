@@ -14,7 +14,8 @@
   <mat-card-header class="card-header">
     <div class="d-flex flex-wrap w-100 align-items-center justify-content-between">
       <div class="text-main fw-bold mb-2 mb-lg-0">
-        {{'Labels.OfficeUsersList' | translate}}
+        {{'Labels.OfficeUsersList' | translate}} ({{'Labels.total' | translate }} -
+        {{webStorageService.numberTransformFunction(tableDatasize)}})
       </div>
       <div class="d-flex flex-wrap gap-2">
         <button mat-flat-button class="bg-danger btn-icon text-white" matTooltip="{{'Labels.DownloadPdf' | translate}}"

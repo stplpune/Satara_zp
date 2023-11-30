@@ -403,6 +403,7 @@
         "selectRole" : "रोल निवडा",
         "NGOName": "एनजीओ नाव",
         "ExamType": "परीक्षेचा प्रकार",
+        "ExamNameTxt": "परीक्षेचे नाव",
         "AssessmentType" : "मूल्यांकन प्रकार",
         "reports": "अहवाल",
         "studentReport": "विद्यार्थी अहवाल",

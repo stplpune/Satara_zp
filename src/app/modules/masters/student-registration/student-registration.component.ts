@@ -42,6 +42,7 @@ export class StudentRegistrationComponent {
   highLightFlag: boolean = true;
   studentDetails: any;
   viewStatus = "Table";
+  loginData = this.webService.getLoggedInLocalstorageData();
   displayedColumns = ['srNo', 'docPath', 'fullName', 'standard', 'mobileNo', 'gender', 'action'];
   marathiDisplayedColumns = ['srNo', 'docPath', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender', 'action'];
   displayedheaders = ['Sr. No.', '', ' Student Name', 'Standard', 'Parent Mobile No.', 'Gender', 'action'];
@@ -282,6 +283,7 @@ export class StudentRegistrationComponent {
     this.schoolArr = [];
     this.villageArr = [];
     this.filterFormData();
+    this.getState();
     this.getTableData();
   }
 
@@ -380,6 +382,7 @@ export class StudentRegistrationComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
         }
         else{
           this.stateArr = [];
@@ -396,7 +399,7 @@ export class StudentRegistrationComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-            this.filterForm.controls['districtId'].setValue(0);
+            this.loginData ? (this.filterForm.controls['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.filterForm.controls['districtId'].setValue(0);
           }
           else {
             this.districtArr = [];
@@ -417,7 +420,7 @@ export class StudentRegistrationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-            this.filterForm.controls['talukaId'].setValue(0);
+            this.loginData ? (this.filterForm.controls['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter()): this.filterForm.controls['talukaId'].setValue(0);
           } else {
             this.talukaArr = [];
           }
@@ -437,7 +440,7 @@ export class StudentRegistrationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.filterForm.controls['centerId'].setValue(0);
+            this.loginData ? (this.filterForm.controls['centerId'].setValue(this.loginData?.centerId), this.getVillage()): this.filterForm.controls['centerId'].setValue(0);
           } else {
             this.centerArr = [];
           }
@@ -457,7 +460,7 @@ export class StudentRegistrationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.filterForm.controls['villageId'].setValue(0);
+            this.loginData ? (this.filterForm.controls['villageId'].setValue(this.loginData?.villageId), this.getAllSchoolsByCenterId()) : this.filterForm.controls['villageId'].setValue(0);
           } else {
             this.villageArr = [];
           }
@@ -479,7 +482,7 @@ export class StudentRegistrationComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-            this.filterForm.controls['schoolId'].setValue(0);
+            this.loginData ? this.filterForm.controls['schoolId'].setValue(this.loginData?.schoolId) : this.filterForm.controls['schoolId'].setValue(0);
           } else {
             // this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.schoolArr = [];

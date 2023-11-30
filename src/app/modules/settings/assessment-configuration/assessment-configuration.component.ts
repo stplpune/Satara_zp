@@ -112,8 +112,8 @@ export class AssessmentConfigurationComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    // let displayedColumnsReadMode = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
-    let displayedColumns = ['srNo', 'groupClass', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
+    // let displayedColumnsReadMode = ['srNo', 'standard', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
+    let displayedColumns = ['srNo', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
@@ -134,7 +134,7 @@ export class AssessmentConfigurationComponent {
     data?.find((ele: any, i: any) => {
       let obj = {
         srNo:  (i + 1),
-        groupClass: ele.groupClass,
+        standard: ele.standard,
         subjectName: flag == 'excel' ? this.languageFlag == 'English' ? ele.subjectName : ele.m_SubjectName : ele.subjectName,
         question: flag == 'excel' ? this.languageFlag == 'English' ? ele.question : ele.m_Question : ele.question,
         educationYear: ele.educationYear,

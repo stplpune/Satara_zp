@@ -51,6 +51,7 @@ export class TeacherRegistrationComponent implements OnInit {
   clusterArray = new Array();
   villageArray = new Array();
   viewStatus = 'Table';
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
   @HostBinding('class') className = '';
   constructor(private dialog: MatDialog, private overlay: OverlayContainer, private apiService: ApiService, private errors: ErrorsService,
     public webStorageS: WebStorageService, private downloadFileService: DownloadPdfExcelService, private commonMethodS: CommonMethodsService,
@@ -169,6 +170,7 @@ export class TeacherRegistrationComponent implements OnInit {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.stateId.setValue(this.loginData.stateId), this.getDistrict()) : this.stateId.setValue(0);
         }
         else{
           this.stateArr = [];
@@ -184,6 +186,7 @@ export class TeacherRegistrationComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.districtId.setValue(this.loginData.districtId), this.getAllTaluka()) : this.districtId.setValue(0);
         }
         else {
           this.districtArr = [];
@@ -204,6 +207,7 @@ export class TeacherRegistrationComponent implements OnInit {
         next: ((res: any) => {
           if (res.statusCode == "200" && res.responseData.length) {
             this.talukaArray.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.loginData ? (this.talukaId.setValue(this.loginData?.talukaId), this.getCluster()): this.talukaId.setValue(0);
           } else {
             this.talukaArray = [];
           }
@@ -223,6 +227,7 @@ export class TeacherRegistrationComponent implements OnInit {
         next: ((res: any) => {
           if (res.statusCode == "200" && res.responseData.length) {
             this.clusterArray.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+            this.loginData ? (this.clusterId.setValue(this.loginData?.centerId), this.getVillage()): this.clusterId.setValue(0);
           } else {
             this.clusterArray = [];
           }
@@ -242,6 +247,7 @@ export class TeacherRegistrationComponent implements OnInit {
         next: ((res: any) => {
           if (res.statusCode == "200" && res.responseData.length) {
             this.villageArray.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.loginData ? this.villageId.setValue(this.loginData?.villageId) : this.villageId.setValue(0);
           } else {
             this.villageArray = [];
           }
@@ -505,9 +511,11 @@ export class TeacherRegistrationComponent implements OnInit {
       this.talukaId.setValue(0);
       this.clusterId.setValue(0);
       this.getTableData();
+      this.getState();
     }
     else {
       this.getTableData();
+      this.getState();
     }
   }
 

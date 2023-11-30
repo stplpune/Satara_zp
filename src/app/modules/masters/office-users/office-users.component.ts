@@ -39,6 +39,7 @@ export class OfficeUsersComponent implements OnInit {
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
   viewStatus='Table';
+  loginData = this.webStorageService.getLoggedInLocalstorageData();
   displayedheadersEnglish = ['Sr. No.', ' Office User Name', 'Designation', 'Taluka', 'Mobile No.', 'Email ID', 'Unblock/Block', 'action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'ऑफिस युजर नावे', 'पदनाम', 'तालुका', 'मोबाईल क्र.', 'ई-मेल आयडी', 'अनब्लॉक/ब्लॉक', 'कृती'];
   constructor(private apiService: ApiService, private errors: ErrorsService, private dialog: MatDialog, private commonService: CommonMethodsService,
@@ -176,7 +177,7 @@ export class OfficeUsersComponent implements OnInit {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
-          this.stateId.setValue(0);
+          this.loginData ? (this.stateId.setValue(this.loginData.stateId), this.getDistrict()) : this.stateId.setValue(0);
         }
         else{
           this.stateArr = [];
@@ -193,7 +194,7 @@ export class OfficeUsersComponent implements OnInit {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-          this.districtId.setValue(0);
+          this.loginData ? (this.districtId.setValue(this.loginData.districtId), this.getAllTaluka()) : this.districtId.setValue(0);
         }
         else {
           this.districtArr = [];
@@ -212,7 +213,7 @@ export class OfficeUsersComponent implements OnInit {
         next: ((res: any) => {
           if (res.statusCode == 200 && res.responseData.length) {
             this.talukaArray.push({"id": 0, "taluka": "All", "m_Taluka": "सर्व"}, ...res.responseData);
-            this.talukaId.setValue(0);
+            this.loginData ? this.talukaId.setValue(this.loginData?.talukaId): this.talukaId.setValue(0);
           } else {
             this.commonService.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
             this.talukaArray = [];
@@ -346,6 +347,7 @@ export class OfficeUsersComponent implements OnInit {
       this.districtId.setValue(0);
       this.talukaId.setValue(0);
       this.getTableData();
+      this.getState();
       this.districtArr = [];
       this.talukaArray = [];
     }

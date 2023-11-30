@@ -6,12 +6,8 @@ import { CommonMethodsService } from 'src/app/core/services/common-methods.servi
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
-//import { init_api } from '../../../../assets/js/player-min.js';
-declare var Flashphoner: any;
-// import * as Player from '../../../../assets/js/cctv_js/play.js';
-
-declare var Player: any;
-
+import { LiveStreamingComponent } from './live-streaming/live-streaming.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cctv',
@@ -42,15 +38,14 @@ export class CctvComponent {
   cctvFlag: boolean = false;
   playStopFlag: boolean = true;
   timer: any;
-  i:number = 0;
   ccTvId!: number;
   loginData = this.webStorageS.getLoggedInLocalstorageData();
   get f() {
     return this.filterForm.controls
   }
-  // (document.getElementById('play') as HTMLInputElement).value = '';
-  
+
   CCTVLocationArr = new Array();
+
   constructor(private ngxSpinner: NgxSpinnerService,
     private apiService: ApiService,
     private commonMethodS: CommonMethodsService,
@@ -58,16 +53,10 @@ export class CctvComponent {
     public webStorageS: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
-  ) {    
-    this.init_api();
+    public dialog: MatDialog
+  ) {
+
   }
-  SESSION_STATUS = Flashphoner.constants.SESSION_STATUS;
-  STREAM_STATUS = Flashphoner.constants.STREAM_STATUS;
-  session: any;
-  stream;
-
-  PRELOADER_URL = "https://github.com/flashphoner/flashphoner_client/raw/wcs_api-2.0/examples/demo/dependencies/media/preloader.mp4";
-
 
 
   ngOnInit() {
@@ -79,86 +68,6 @@ export class CctvComponent {
     this.getState();
     this.getAllCCTVLocation();
     this.getTableData();
-  }
-
-  //loader.style.display = 'none';
-
-  init_api() {
-    Flashphoner.init({});
-    //Connect to WCS server over websockets    
-   console.log("this.SESSION_STATUS", this.SESSION_STATUS);
-    this.session = Flashphoner.createSession({
-      urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
-    }).on(this.SESSION_STATUS.ESTABLISHED, (_session: any) => {
-      console.log("ESTABLISHED");
-    });
-  }
-
-  Browser: any = {
-    isSafari: function () {
-      return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    },
-  }
-
-  playClick(url: any) {
-    console.log("this.SESSION_STATUS", this.session.status());
-    
-    // if(this.session){
-    //   Flashphoner.on(this.SESSION_STATUS.DISCONNECTED)
-    // }
-
-    if (this.Browser.isSafari()) {
-      Flashphoner.playFirstVideo(document.getElementById("play"), true, this.PRELOADER_URL).then(() => {
-        this.playStream(url);
-      });
-    } else {
-      this.playStream(url);
-    }
-  }
-
-  //Playing stream
-  playStream(url: any) {
-    var options:any = {
-      name: url,
-      display: document.getElementById("play")
-    };
-    this.stream = this.session.createStream(options).on(this.STREAM_STATUS.PLAYING, (_stream: any) => {
-      console.log("playing", this.STREAM_STATUS);
-    });
-    this.stream.play();
-    console.log("stream", this.stream);
-
-  }
-
-  
-  // stopVideo(){
-  //   // let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
-  //   // var options:any = {
-  //   //   name: url,
-  //   //   display: document.getElementById("play")
-  //   // };
-  //   console.log("this.session",this.session);
-    
-  //  this.session.disconnect();
-  //  this.init_api()
-
-  // }
-
-  stopVideo() {
-    this.stream.stop();
-    this.session.disconnect();
-    this.init_api();
-}
-
-
-  showLoader() {
-    let loadershow: any = document.getElementById("myname");
-    loadershow.style.display = 'block';
-  }
-
-  hideLoader() {
-    var loadershow: any = document.getElementById("myname");
-    loadershow.style.display = 'none';
   }
 
   filterFormData() {
@@ -174,15 +83,15 @@ export class CctvComponent {
     })
   }
 
-  getState(){
+  getState() {
     this.stateArr = [];
     this.masterService.getAllState('').subscribe({
       next: (res: any) => {
-        if(res.statusCode == "200"){
-          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+        if (res.statusCode == "200") {
+          this.stateArr.push({ "id": 0, "state": "All", "m_State": "सर्व" }, ...res.responseData);
           this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
         }
-        else{
+        else {
           this.stateArr = [];
         }
       }
@@ -192,18 +101,18 @@ export class CctvComponent {
   getDistrict() {
     this.districtArr = [];
     let stateId = this.filterForm.value.stateId;
-    if(stateId != 0){
+    if (stateId != 0) {
       this.masterService.getAllDistrict('', stateId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.districtArr.push({ "id": 0, "district": "All", "m_District": "सर्व" }, ...res.responseData);
             this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTalukaDropByDis()) : this.f['districtId'].setValue(0);
           }
           else {
             this.districtArr = [];
           }
         },
-      });  
+      });
     }
   }
 
@@ -212,18 +121,18 @@ export class CctvComponent {
     this.talukaArr = [];
     let districtId = this.f['districtId'].value
     if (districtId != 0) {
-    this.masterService.getAllTaluka('', districtId).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.loginData ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getCenterDropByTaluka()): this.f['talukaId'].setValue(0);
-        } else {
-          this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
-          this.talukaArr = [];
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.loginData ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getCenterDropByTaluka()) : this.f['talukaId'].setValue(0);
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
         }
-      }
-    });
-  }
+      });
+    }
   }
 
   // Get Center Dropdown
@@ -236,7 +145,7 @@ export class CctvComponent {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
             this.filterForm?.value.centerId ? this.getVillageDropByCenter() : '';
-            this.loginData ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDropByCenter()): this.f['centerId'].setValue(0);
+            this.loginData ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDropByCenter()) : this.f['centerId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -256,7 +165,7 @@ export class CctvComponent {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
             this.f['villageId'].setValue(0);
-            this.loginData ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getSchoolDropByFilter()): this.f['villageId'].setValue(0);
+            this.loginData ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getSchoolDropByFilter()) : this.f['villageId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -276,7 +185,7 @@ export class CctvComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-          this.loginData ? (this.f['schoolId'].setValue(this.loginData?.schoolId)): this.f['schoolId'].setValue(0);
+          this.loginData ? (this.f['schoolId'].setValue(this.loginData?.schoolId)) : this.f['schoolId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.schoolArr = [];
@@ -316,7 +225,7 @@ export class CctvComponent {
           this.totalCount = res.responseData.responseData2.pageCount;
           this.tableDatasize = res.responseData.responseData2.pageCount;
           // this.selectedCCTV = this.tableDataArray[0]; // bydefault patch first CCTV camera
-         
+
 
         }
         else {
@@ -348,35 +257,16 @@ export class CctvComponent {
 
   }
 
-  // Click table row 
   childCompInfo(obj?: any) {
-    this.ccTvId = obj?.cctvTypeId;
-    console.log("ccTvId: ", this.ccTvId);
-    const playId:any = document.getElementById("play");
-    const canvasId:any = document.getElementById("canvas1");
-
-    // if (obj.label == 'View') {
-    //   let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
-    //   this.playClick(url);
-    //   // this.init();    
-    // }
-    // else {
-    // }
-
-    if(this.ccTvId == 1 && obj.label == 'View'){
-      canvasId.style.display = "none";
-      playId.style.display = "block";
-      let url = 'rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp';
-      this.playClick(url);
-      this.closeVideo();
-    } else if(this.ccTvId == 2 && obj.label == 'View'){
-      console.log("else...");
-      
-      playId.style.display = "none";
-      canvasId.style.display = "block";
-      this.closeVideo();
-    }
-    this.closeVideo();
+    this.ngxSpinner.show();
+    setTimeout(() => {
+      this.dialog.open(LiveStreamingComponent, {
+        width: '800px',
+        height:'520px',
+        data:obj,
+      });
+      // this.ngxSpinner.hide();
+    }, 10000);
   }
 
   // clear dropdown 
@@ -398,42 +288,42 @@ export class CctvComponent {
     }
   }
 
-  clearDependency(flag : any){
-    if(flag == 'state'){
+  clearDependency(flag: any) {
+    if (flag == 'state') {
       this.filterForm.controls['districtId']?.setValue('');
       this.filterForm.controls['talukaId']?.setValue('');
       this.filterForm.controls['centerId']?.setValue('');
       this.filterForm.controls['villageId']?.setValue('');
-      this.filterForm.controls['schoolId']?.setValue(''); 
+      this.filterForm.controls['schoolId']?.setValue('');
       this.districtArr = [];
       this.talukaArr = [];
-      this.centerArr = [];  
+      this.centerArr = [];
       this.villageArr = [];
       this.schoolArr = [];
     }
-    else if(flag == 'district'){
+    else if (flag == 'district') {
       this.filterForm.controls['talukaId']?.setValue('');
       this.filterForm.controls['centerId']?.setValue('');
       this.filterForm.controls['villageId']?.setValue('');
-      this.filterForm.controls['schoolId']?.setValue('');   
+      this.filterForm.controls['schoolId']?.setValue('');
       this.talukaArr = [];
-      this.centerArr = [];  
+      this.centerArr = [];
       this.villageArr = [];
       this.schoolArr = [];
     }
-    else if(flag == 'taluka'){
+    else if (flag == 'taluka') {
       this.filterForm.controls['centerId']?.setValue(0);
       this.filterForm.controls['villageId']?.setValue('');
-      this.filterForm.controls['schoolId']?.setValue('');   
-      this.centerArr = [];  
+      this.filterForm.controls['schoolId']?.setValue('');
+      this.centerArr = [];
       this.villageArr = [];
       this.schoolArr = [];
-    }else if (flag == 'center'){
+    } else if (flag == 'center') {
       this.filterForm.controls['villageId']?.setValue(0);
       this.filterForm.controls['schoolId']?.setValue('');
       this.villageArr = [];
       this.schoolArr = [];
-    }else if (flag =='village'){
+    } else if (flag == 'village') {
       this.filterForm.controls['schoolId']?.setValue(0);
       this.schoolArr = [];
     }
@@ -452,200 +342,5 @@ export class CctvComponent {
     this.getState();
     this.getTableData();
   }
-
-  
-  //#region --------------------------------------------  without IP start here -------------------------------------------------
-
-  init() {
-    let streamid = 1;
-    let channel = 0;
-    var devid: any = '5625617245';
-    let username = 'admin';
-    let pwd = '87be!01cd4';
-    let element:any;
-    // let array: any  =[]
-    element = document.getElementById("canvas1");
-    Player?.init([element]);
-    // Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
-    setTimeout(() => {
-      Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
-    }, 2000);
-    
-    setTimeout(() => {
-      Player.OpenStream(devid, '', channel, streamid, 0);
-    }, 15000);
-  }
-
-  callOpenStreamMethod1(){
-    this.timer = setInterval(() => {
-      if (this.tableDataArray.length == this.i) {
-        clearInterval(this.timer);
-      } else {
-        let streamid = 1;
-        let channel = 0;
-        var devid: any = '5625617245';
-        Player?.OpenStream(devid, '', +channel, +streamid, this.i)
-        this.i++;
-      }
-    }, 5000);
-  }
-
-  callOpenStreamMethod(_deviceID,_channel,_streamid, i){
-    return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
-      }, 10000);
-      resolve
-    });
-  }
-
-  disconnect() {
-    Player?.DisConnectDevice('5625617245');
-    const promiseOne = new Promise((resolve)=>{
-      this.closeVideo();
-      resolve('resolved')
-    });
-
-    promiseOne.then((value) => {
-      console.log(value);
-      this.init();
-    });
-  }
-
-  closeVideo() {
-    console.log("close exist live stream");
-    // Player.DisConnectDevice('5625617245')
-    // Player?.CloseStream(0);
-    // this.playStopFlag = false;
-    this.init();
-  }
-
-  openVideo(_selectedCCTV?: any){
-    let devid: any = '5625617245';
-    let streamid = 1;
-    let channel = 0;
-    Player.OpenStream(devid, '', channel, streamid, 0);
-    this.playStopFlag = true;
-  }
-
-   ptz_ctrl_up() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 2, 6)
-	}
-	 ptz_ctrl_down() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 3, 6)
-	}
-	 ptz_ctrl_left() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 4, 6)
-	}
-	 ptz_ctrl_right() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 5, 6)
-	}
-	 ptz_ctrl_stop() {
-		let devid: any = '5625617245';
-    let channel = 0;
-		Player.ptz_ctrl(devid, '', channel, 0, 0)
-	}
-
-
-  // init() {
-  //   console.log("calling init...");
-    
-  //   let streamid = 1;
-  //   let channel = 0;
-  //   var devid: any = '5625617245';
-  //   let username = 'admin';
-  //   let pwd = '87be!01cd4';
-  //   let element:any;
-  //   // let array: any  =[]
-  //   element = document.getElementById("canvas1");
-  //   Player?.init([element]);
-  //   Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
-    
-  //   setTimeout(() => {
-  //     Player.OpenStream(devid, '', channel, streamid, 0);
-  //   }, 15000);
-  // }
-
-  // callOpenStreamMethod1(){
-  //   this.timer = setInterval(() => {
-  //     if (this.tableDataArray.length == this.i) {
-  //       clearInterval(this.timer);
-  //     } else {
-  //       let streamid = 1;
-  //       let channel = 0;
-  //       var devid: any = '5625617245';
-  //       Player?.OpenStream(devid, '', +channel, +streamid, this.i)
-  //       this.i++;
-  //     }
-  //   }, 5000);
-  // }
-
-  // callOpenStreamMethod(_deviceID,_channel,_streamid, i){
-  //   return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
-  //     }, 10000);
-  //     resolve
-  //   })
-   
-  // }
-
-  // disconnect() {
-  //   Player?.DisConnectDevice('5625617245');
-  // }
-
-
-  // closeVideo() {
-  //   console.log("close exist live stream");
-  //   Player.DisConnectDevice('5625617245')
-  //   Player?.CloseStream(0);
-  //   this.playStopFlag = false;
-  //   this.init();
-  // }
-
-  // openVideo(_selectedCCTV?: any){
-  //   let devid: any = '5625617245';
-  //   let streamid = 1;
-  //   let channel = 0;
-  //   Player.OpenStream(devid, '', channel, streamid, 0);
-  //   this.playStopFlag = true;
-  // }
-
-  //  ptz_ctrl_up() {
-	// 	let devid: any = '5625617245';
-  //   let channel = 0;
-	// 	Player.ptz_ctrl(devid, '', channel, 2, 6)
-	// }
-	//  ptz_ctrl_down() {
-	// 	let devid: any = '5625617245';
-  //   let channel = 0;
-	// 	Player.ptz_ctrl(devid, '', channel, 3, 6)
-	// }
-	//  ptz_ctrl_left() {
-	// 	let devid: any = '5625617245';
-  //   let channel = 0;
-	// 	Player.ptz_ctrl(devid, '', channel, 4, 6)
-	// }
-	//  ptz_ctrl_right() {
-	// 	let devid: any = '5625617245';
-  //   let channel = 0;
-	// 	Player.ptz_ctrl(devid, '', channel, 5, 6)
-	// }
-	//  ptz_ctrl_stop() {
-	// 	let devid: any = '5625617245';
-  //   let channel = 0;
-	// 	Player.ptz_ctrl(devid, '', channel, 0, 0)
-	// }
-
-  //#endregion --------------------------------------------  without IP end here -------------------------------------------------
-
 
 }

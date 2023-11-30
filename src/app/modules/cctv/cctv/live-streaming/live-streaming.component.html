@@ -2,21 +2,18 @@
     <div mat-dialog-title class="card-header">
         <div class="d-flex align-items-center justify-content-between w-100">
             <h6 class="text-main mb-0 fw-bold">Live Streaming</h6>
-            <button mat-icon-button mat-dialog-close class="btn-modal-close">
+            <button mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeModal()">
                 <mat-icon>close</mat-icon>
             </button>
         </div>
     </div>
     <mat-card-content class="card-body p-0">
-        <ng-container>
+        <ng-container *ngIf="this.ccTvId == 1">
             <div id="play" class="display border-0"></div>
         </ng-container>
-        <!-- <canvas id="canvas1" width="606px" height="300px" class="border-0"></canvas> -->
-
-        <!-- <ng-container>
-            <canvas id="canvas1" width="606px" height="300px" class="border-0"></canvas>
-        </ng-container> -->
-
+        <ng-container *ngIf="this.ccTvId == 2">
+            <canvas id="canvas1" width="780px" height="300px" class="border-0"></canvas>
+        </ng-container>
     </mat-card-content>
     <!-- <mat-card-footer class="card-footer border-top-0 pt-0">
         <div class="d-flex justify-content-center align-items-center gap-2">

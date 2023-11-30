@@ -266,7 +266,7 @@ export class CctvComponent {
         data:obj,
       });
       // this.ngxSpinner.hide();
-    }, 10000);
+    }, 15000);
   }
 
   // clear dropdown 

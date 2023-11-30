@@ -30,14 +30,20 @@ export class LiveStreamingComponent {
     this.ngxSpinner.show();
     this.ccTvId = obj?.cctvTypeId;
 
-    document.getElementById("play");
-
-    if (this.ccTvId == 1 && obj.label == 'View') {
+    setTimeout(() => {
+    if (this.ccTvId == 1 && obj.label == 'View') { //IP
       this.init_WithIP();
-    } else if (this.ccTvId == 2 && obj.label == 'View') {
-
+    } else if (this.ccTvId == 2 && obj.label == 'View') { //WithoutIP solar
+      this.init_WithOutIP()
     }
+    }, 1000);
+
+    // setTimeout(() => {
+    //   this.init_WithOutIP();
+    // }, 3000);
   }
+
+
 
   //#region ------------------------------------------------------With ip code start heare--------------------------------------------//
   SESSION_STATUS = Flashphoner.constants.SESSION_STATUS;
@@ -88,72 +94,64 @@ export class LiveStreamingComponent {
 
   //#region --------------------------------------------  without IP start here -------------------------------------------------
 
-  // init_WithOutIP() {
+  init_WithOutIP() { // solar
+    let streamid = 1;
+    let channel = 0;
+    var devid: any = '5625617245';
+    let username = 'admin';
+    let pwd = '87be!01cd4';
+    let element: any;
+    element = document.getElementById("canvas1");
+    Player?.init([element]);
+
+    setTimeout(() => {
+      Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
+    }, 2000);
+
+    setTimeout(() => {
+      Player.OpenStream(devid, '', channel, streamid, 0);
+    }, 3000);
+    this.ngxSpinner.hide();
+  }
+
+  // openVideo(){
+  //   let devid: any = '5625617245';
   //   let streamid = 1;
   //   let channel = 0;
-  //   var devid: any = '5625617245';
-  //   let username = 'admin';
-  //   let pwd = '87be!01cd4';
-  //   let element: any;
-  //   element = document.getElementById("canvas1");
-  //   Player?.init([element]);
-
-  //   setTimeout(() => {
-  //     Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
-  //   }, 2000);
-
   //   setTimeout(() => {
   //     Player.OpenStream(devid, '', channel, streamid, 0);
-  //   }, 3000);
+  //   }, 2000);
   // }
 
-  // callOpenStreamMethod1() {
-  //   this.timer = setInterval(() => {
-  //     if (this.tableDataArray.length == this.i) {
-  //       clearInterval(this.timer);
-  //     } else {
-  //       let streamid = 1;
-  //       let channel = 0;
-  //       var devid: any = '5625617245';
-  //       Player?.OpenStream(devid, '', +channel, +streamid, this.i)
-  //       this.i++;
-  //     }
-  //   }, 5000);
-  // }
 
-  // callOpenStreamMethod(_deviceID, _channel, _streamid, i) {
-  //   return new Promise((resolve) => {  //  return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       Player?.OpenStream(_deviceID, '', +_channel, +_streamid, i)
-  //     }, 10000);
-  //     resolve
-  //   });
-  // }
 
-  // disconnect() {
-  //   Player?.DisConnectDevice('5625617245');
-  //   const promiseOne = new Promise((resolve) => {
-  //     this.closeVideo();
-  //     resolve('resolved')
-  //   });
+ 
 
-  //   promiseOne.then((value) => {
-  //     console.log(value);
-  //     this.init_WithOutIP();
-  //   });
-  // }
+  disconnect() {
+    Player?.DisConnectDevice('5625617245');
+    const promiseOne = new Promise((resolve) => {
+      this.closeVideo();
+      resolve('resolved')
+    });
 
-  // closeVideo() {
-  //   this.init_WithOutIP();
-  // }
+    promiseOne.then((value) => {
+      console.log(value);
+      this.init_WithOutIP();
+    });
+  }
 
-  // stopVideo() {
-  //   this.stream.stop();
-  //   this.session.disconnect();
-  //   this.init_WithIP();
-  // }
+  closeVideo() {
+    this.init_WithOutIP();
+  }
+
+ 
   
   ngOnDestroy(){
+    this.closeModal();
+    // this.init_WithIP();
+  }
+
+  closeModal(){
     this.stream.stop();
     this.session.disconnect();
   }

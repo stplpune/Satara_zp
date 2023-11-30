@@ -64,7 +64,7 @@ export class AddUpdateAgencyRegistrationComponent {
     next: (res: any) => {
       if(res.statusCode == "200"){
         this.stateData = res.responseData;
-        this.loginData ? (this.fc['stateId'].setValue(this.loginData.stateId), this.getAllDistricts()) : this.fc['stateId'].setValue(0);
+        // this.loginData ? (this.fc['stateId'].setValue(this.loginData.stateId), this.getAllDistricts()) : this.fc['stateId'].setValue(0);
         this.editData ? (this.fc['stateId'].setValue(this.editData.stateId), this.getAllDistricts()) : '';
       }
       else{
@@ -78,7 +78,7 @@ export class AddUpdateAgencyRegistrationComponent {
     let stateId = this.agencyRegisterForm.value.stateId;
     this.master.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe((res: any) => {
       res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
-      this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
+      // this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
       this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : '';
     })
   }
@@ -87,7 +87,7 @@ export class AddUpdateAgencyRegistrationComponent {
     let districtId = this.agencyRegisterForm.value.districtId;
     this.master.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe((res: any) => {
       res.statusCode == 200 ? this.talukaData = res.responseData : this.talukaData = [];
-      this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
+      // this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
       this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : '';
     })
   }

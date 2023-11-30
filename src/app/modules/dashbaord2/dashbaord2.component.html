@@ -179,30 +179,38 @@
             </div>
         </div>
 
-        <div class="row g-2 align-content-stretch">
-            <div class="col-sm-5">
-                <mat-card class="plain-card h-100">
-                    <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
-                    </mat-card-header>
-                    <mat-card-content class="card-body">
-                        <div id="mapsvg"></div>
-                    </mat-card-content>
-                    <mat-card-content>
-                        <div id="chart">
-                            <apx-chart [series]="piechartOptions?.series" [plotOptions]="piechartOptions?.plotOptions"
-                                [legend]="piechartOptions?.legend" [chart]="piechartOptions?.chart"
-                                [theme]="piechartOptions?.theme" [fill]="piechartOptions?.fill"
-                                [tooltip]="piechartOptions?.tooltip" [labels]="piechartOptions?.labels"
-                                [responsive]="piechartOptions?.responsive" [colors]="piechartOptions?.colors"
-                                [dataLabels]="piechartOptions?.dataLabels">
-                            </apx-chart>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
+        <div class="row g-2">
+            <div class="col-sm-4 h-auto">
+                <div class="d-flex align-content-around flex-wrap">
+                    <mat-card class="plain-card mb-2 w-100 h-auto">
+                        <mat-card-header class="card-header">
+                            <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                        </mat-card-header>
+                        <mat-card-content class="card-body">
+                            <div id="mapsvg"></div>
+                        </mat-card-content>
+                    </mat-card>
+    
+                    <mat-card class="plain-card  w-100 h-auto">
+                        <mat-card-header class="card-header">
+                            <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                        </mat-card-header>
+                        <mat-card-content class="card-body">
+                            <div id="chart">
+                                <apx-chart [series]="piechartOptions?.series" [plotOptions]="piechartOptions?.plotOptions"
+                                    [legend]="piechartOptions?.legend" [chart]="piechartOptions?.chart"
+                                    [theme]="piechartOptions?.theme" [fill]="piechartOptions?.fill"
+                                    [tooltip]="piechartOptions?.tooltip" [labels]="piechartOptions?.labels"
+                                    [responsive]="piechartOptions?.responsive" [colors]="piechartOptions?.colors"
+                                    [dataLabels]="piechartOptions?.dataLabels">
+                                </apx-chart>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
             </div>
-            <div class="col-sm-7">
-                <mat-card class="plain-card">
+            <div class="col-sm-8">
+                <mat-card class="plain-card mb-2">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
                     </mat-card-header>
@@ -239,33 +247,29 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-
-                                <div id="schoolwiseChart">
-                                    <ng-container *ngIf="schoolwiseChartOptions">
-                                        <apx-chart [series]="schoolwiseChartOptions?.series"
-                                            [chart]="schoolwiseChartOptions?.chart"
-                                            [dataLabels]="schoolwiseChartOptions?.dataLabels"
-                                            [plotOptions]="schoolwiseChartOptions?.plotOptions"
-                                            [xaxis]="schoolwiseChartOptions?.xaxis"
-                                            [colors]="schoolwiseChartOptions?.colors"></apx-chart>
-                                    </ng-container>
-                                    <ng-container *ngIf="!schoolwiseChartOptions">
-                                        <div class="alert alert-danger text-center p-2" role="alert">
-                                            {{'Labels.dataNotFound' | translate}}
-                                    </div>
-                                    </ng-container>
-
-                                </div>
                             </div>
                         </form>
                     </mat-card-header>
-                    <mat-card-content class="card-body">
-                        <div id="mapsvg"></div>
+                    <mat-card-content class="card-body pt-0">
+                        <div id="schoolwiseChart">
+                            <ng-container *ngIf="schoolwiseChartOptions">
+                                <apx-chart [series]="schoolwiseChartOptions?.series"
+                                    [chart]="schoolwiseChartOptions?.chart"
+                                    [dataLabels]="schoolwiseChartOptions?.dataLabels"
+                                    [plotOptions]="schoolwiseChartOptions?.plotOptions"
+                                    [xaxis]="schoolwiseChartOptions?.xaxis"
+                                    [colors]="schoolwiseChartOptions?.colors"></apx-chart>
+                            </ng-container>
+                            <ng-container *ngIf="!schoolwiseChartOptions">
+                                <div class="alert alert-danger text-center p-2" role="alert">
+                                    {{'Labels.dataNotFound' | translate}}
+                            </div>
+                            </ng-container>
+                        </div>
                     </mat-card-content>
                 </mat-card>
-            </div>
-            <div class="col-sm-6">
-                <mat-card class="plain-card">
+
+                <mat-card class="plain-card pt-0">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.TeacherWisePerformance' | translate}}</h6>
                     </mat-card-header>
@@ -303,31 +307,29 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                                <div id="teacherwiseChart">
-                                    <ng-container *ngIf="teacherwiseChartOptions">
-                                        <apx-chart [series]="teacherwiseChartOptions?.series"
-                                            [chart]="teacherwiseChartOptions?.chart"
-                                            [dataLabels]="teacherwiseChartOptions?.dataLabels"
-                                            [plotOptions]="teacherwiseChartOptions?.plotOptions"
-                                            [xaxis]="teacherwiseChartOptions?.xaxis"
-                                            [colors]="teacherwiseChartOptions?.colors"></apx-chart>
-                                    </ng-container>
-                                    <ng-container *ngIf="!teacherwiseChartOptions">
-                                        <div class="alert alert-danger text-center p-2" role="alert">
-                                            {{'Labels.dataNotFound' | translate}}
-                                    </div>
-                                    </ng-container>
-                                </div>
-
                             </div>
                         </form>
-                        
                     </mat-card-header>
                     <mat-card-content class="card-body">
-                        <div id="mapsvg"></div>
+                        <div id="teacherwiseChart">
+                            <ng-container *ngIf="teacherwiseChartOptions">
+                                <apx-chart [series]="teacherwiseChartOptions?.series"
+                                    [chart]="teacherwiseChartOptions?.chart"
+                                    [dataLabels]="teacherwiseChartOptions?.dataLabels"
+                                    [plotOptions]="teacherwiseChartOptions?.plotOptions"
+                                    [xaxis]="teacherwiseChartOptions?.xaxis"
+                                    [colors]="teacherwiseChartOptions?.colors"></apx-chart>
+                            </ng-container>
+                            <ng-container *ngIf="!teacherwiseChartOptions">
+                                <div class="alert alert-danger text-center p-2" role="alert">
+                                    {{'Labels.dataNotFound' | translate}}
+                            </div>
+                            </ng-container>
+                        </div>
                     </mat-card-content>
                 </mat-card>
             </div>
+           
             <div class="col-sm-6">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header">

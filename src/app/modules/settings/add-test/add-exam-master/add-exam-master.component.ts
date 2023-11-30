@@ -330,7 +330,8 @@ export class AddExamMasterComponent {
             createdBy: this.webService.getUserId(),
             modifiedBy: this.webService.getUserId(),
           }
-
+          console.log("this.criteriaObjArr", this.criteriaObjArr);
+          
           if (!this.criteriaObjArr.length) {
             this.criteriaObjArr.push(obj);
           } else {
@@ -361,31 +362,74 @@ export class AddExamMasterComponent {
             }
           }
         },Object.create(null));
+        this.addValidation();
         this.assetCriteriaFrom.reset();
         this.editCriteriaFlag ? this.editCriteriaFlag = false:'';
+        console.log("this.tableArray", this.tableArray);
+        
       }
     }
 
     onSubmit(){
       let formValue = this.examForm.value;
-      console.log("this.submitArr", this.submitArr);
-      
-      formValue.examTypeWises = this.submitArr;
-      console.log("formValue:", formValue);
+      // let addExamArray:any = [];
+      let obj = {
+        "id": formValue.id,
+        "stateId": formValue.stateId,
+        "districtId": formValue.districtId,
+        "examType": formValue.examType,
+        "m_ExamType": formValue.m_ExamType,
+        "shortForm": "",
+        "educationYearId": formValue.educationYearId,
+        "fromMonth": formValue.fromMonth,
+        "toMonth": formValue.toMonth,
+        "createdBy": this.webService.getUserId(),
+        "modifiedBy": this.webService.getUserId(),
+        "lan": "",
+        examTypeWises:[] as any
+        }
+
+      this.tableArray.find((ele:any)=>{
+        ele.criteriaDetailsIds.find((item:any)=>{
+          let obj1 = {
+            "id": 0,
+            "examTypeId": 0,
+            "standardId": ele?.standardId,
+            "subjectId": ele?.subjectId,
+            "questionId": item,
+            "createdBy": this.webService.getUserId(),
+            "modifiedBy": this.webService.getUserId()
+          }
+          obj.examTypeWises.push(obj1)
+        })
+        // addExamArray.push(obj)
+      })
+
+      console.log("this.obj", obj);
+      console.log(typeof(obj));
+      // formValue.examTypeWises = this.submitArr;
+      // console.log("formValue:", formValue);
       let url = this.data ? 'UpdateExamType' : 'AddExamType';
       if(!this.examForm.valid){
         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
         return
-      }else{
+      }
+      else if(obj.examTypeWises.length == 0){
+        this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Add Atleast One Assessment Criteria to Exam' : 'कृपया परीक्षेत किमान एक मूल्यमापन निकष जोडा', 1);
+        return
+      }
+      else{
+        console.log("obj.examTypeWises", obj.examTypeWises.length);
+
         this.ngxSpinner.show();
-        this.apiService.setHttp(this.data ? 'put' : 'post', 'zp-satara/ExamType/'+ url, false, formValue, false, 'baseUrl');
+        this.apiService.setHttp(this.data ?'put':'post', 'zp-satara/ExamType/'+url, false, obj, false, 'baseUrl');
         this.apiService.getHttp().subscribe({
           next: (res: any) =>{
             res.statusCode == "200" ? (this.commonMethods.showPopup(res.statusMessage, 0), this.dialogRef.close('yes')) : this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.ngxSpinner.hide();
           },
           error: ((err: any) => {
-            this.ngxSpinner.hide();            
+            this.ngxSpinner.hide();       
             this.commonMethods.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethods.showPopup(err.statusMessage, 1);
           })
         });
@@ -438,42 +482,26 @@ export class AddExamMasterComponent {
     onEdit(data?: any){
       console.log("onedit: ", data);
       let criteriaArr = data?.questionResponses;
-      this.submitArr = criteriaArr;
-      console.log("criteriaArr: ", criteriaArr);
-    //   let groupingViaCommonProperty = Object.values(
-    //     criteriaArr.reduce((acc, current) => {
-    //         acc[current.subjectId] = acc[current.subjectId] ?? [];
-    //         acc[current.subjectId].push(current);
-    //         return acc;
-    //     }, {})
-    // );
-    // cretaing array which having same stanadrd and subject 
-    const grouped = {};
-    criteriaArr.forEach(obj => {
-      const key = obj.subjectId + '-' + obj.standardId;
-      if (!grouped[key]) {
-        grouped[key] = [];
-      }
-      grouped[key].push(obj);
-    });
-    let newArr = Object.values(grouped);    
-    console.log("newArr", newArr);
-    this.tableobj = {};
-    newArr.map((x:any)=>{
-      this.tableobj = {
-        ...x[0],
-        "criteriaDetails": []
-      }
-      for(let i = 1; i < x.length; i++) {
-        this.tableobj.criteriaDetails.push(x[i]);
-      }
-      this.tableArray.push(this.tableobj);
-    })
-
-    console.log("this.tableArray",this.tableArray);
-    
-
+      let index:any;
+      criteriaArr.forEach((a) => {
+        var key = a.standardId.toString()+a.subjectId.toString();
+        if (a.standardId.toString()+a.subjectId.toString() === key) {
+          index = this.tableArray.findIndex((ele: any) => { return (ele.standardId == a.standardId)  && (ele.subjectId == a.subjectId)})
+          if (index == '-1') {
+            this[key] = { standardId: a.standardId, subjectId:a.subjectId,standardName: a.standard, subjectName:a.subjectName, criteriaDetails: [], criteriaDetailsIds:[] };
+            this.tableArray.push(this[key]);
+            this[key]?.criteriaDetails.push(a.question);
+            this[key]?.criteriaDetailsIds.push(a.questionId);
+          }else{
+            let checkVal = this.tableArray[index].criteriaDetailsIds.find((ele:any)=> {return ele == a.questionId});
+            !checkVal ?  (this[key]?.criteriaDetails.push(a.question), this[key]?.criteriaDetailsIds.push(a.questionId)) :'';
+          }
+        }
+      })
+      console.log(this.tableArray);
     }
+
+    
 
     // onEditCriteria(obj: any, index: number){
     //   console.log("onEditCriteria : ", obj);
@@ -491,6 +519,7 @@ export class AddExamMasterComponent {
     onEditCriteria(obj: any) {
       this.editCriteriaFlag = true;
       this.getStandard();
+      this.getSubject();
       this.editCriteriaObj = obj;
       this.assetCriteriaFrom.patchValue({
         standardId: obj.standardId,
@@ -499,9 +528,10 @@ export class AddExamMasterComponent {
         standardName:obj.standardName,
         subjectName:obj.subjectName,
       });
+      this.getCriteria();
     }
 
-    globalDialogOpen(data: any) {
+    globalDialogOpen(index: any) {
       let dialoObj = {
         header: 'Delete',
         title: this.webService.languageFlag == 'EN' ? 'Do you want to delete record?' : 'तुम्हाला रेकॉर्ड हटवायचा आहे का?',
@@ -516,7 +546,7 @@ export class AddExamMasterComponent {
       })
       deleteDialogRef.afterClosed().subscribe((result: any) => {
         if (result == 'yes'){
-          this.onDeleteCriteria(data);
+          this.onDeleteCriteria(index);
         }
       })
     }

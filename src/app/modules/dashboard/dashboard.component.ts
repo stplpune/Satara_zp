@@ -758,7 +758,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
   clickOnSvgMap(flag?: string) {
-    debugger
+    // debugger
     if (flag == 'select') {      
       //this.enbTalDropFlag ? $('#mapsvg path').addClass('disabledAll'): '';
       let checkTalActiveClass = $('#mapsvg   path').hasClass("talActive");
@@ -769,7 +769,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // ----------------------------- Map click event --------------------------------------------------------//
     $(document).on('click', '#mapsvg  path', (e: any) => {
-      debugger
+      // debugger
       let getClickedId = e.currentTarget;
       let talId = $(getClickedId).attr('data-name').split(" ")[0];
       if (this.filterForm.controls['talukaId'].value != talId) {

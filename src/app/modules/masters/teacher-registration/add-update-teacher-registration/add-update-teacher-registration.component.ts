@@ -369,7 +369,7 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.genderArray = res.responseData;
-          this.editFlag == true ? (this.teacherRegForm.controls['genderId'].setValue(this.editObj?.genderID), this.getState(), this.getRole()) : (this.editFlag == false) ? (this.getState(), this.getStateTeacherDetails(), this.getEducationQualification(), this.getRole()) : ''
+          this.editFlag == true ? (this.teacherRegForm.controls['genderId'].setValue(this.editObj?.genderID), this.getState(), this.getRole(), this.getStateTeacherDetails()) : (this.editFlag == false) ? (this.getState(), this.getEducationQualification(), this.getRole(), this.getStateTeacherDetails()) : ''
         }
         else {
           this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
@@ -383,19 +383,18 @@ export class AddUpdateTeacherRegistrationComponent {
   }
 
   getState(){
+    // debugger
     this.masterService.getAllState('').subscribe({
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArray = res.responseData;
-          // this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
-          this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
+          this.editFlag ? (this.f['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
         }
         else{
           this.stateArray = [];
         }
       }
     });
-    this.editFlag ? (this.teacherRegForm.controls['stateId'].setValue(this.editObj.stateId), this.getDistrict()) : '';
   }
 
   getDistrict() {
@@ -406,8 +405,7 @@ export class AddUpdateTeacherRegistrationComponent {
         next: ((res: any) => {
           if (res.statusCode == 200 && res.responseData.length) {
             this.districtArray = res.responseData;
-            // this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
-            this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : '';
+            this.editFlag ? (this.teacherRegForm.controls['districtId'].setValue(this.editObj?.districtId), this.getTaluka()) : this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
           } else {
             this.districtArray = [];
           }
@@ -425,8 +423,7 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.talukaArray = res.responseData;
-          // this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getVillage()) : this.f['talukaId'].setValue(0);
-          this.editFlag ? (this.teacherRegForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getVillage()) : '';
+          this.editFlag ? (this.teacherRegForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getVillage()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getVillage()) : this.f['talukaId'].setValue(0);
         } else {
           // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArray = [];
@@ -440,15 +437,14 @@ export class AddUpdateTeacherRegistrationComponent {
   getVillage() {
     this.villageArray = [];
     let talukaId = this.teacherRegForm.value.talukaId;
+    console.log("talukaId: ", talukaId);
     
     this.masterService.getAllVillage(this.webStorageS.languageFlag, talukaId).subscribe({
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.villageArray = res.responseData;
-        // this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId), this.getEducationQualification()) : this.f['villageId'].setValue(0);
-          this.editFlag ? (this.teacherRegForm.controls['villageId'].setValue(this.editObj?.villageId), this.getEducationQualification()) : this.getEducationQualification();
+          (this.editFlag ? (this.teacherRegForm.controls['villageId'].setValue(this.editObj?.villageId)) : this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId)) : this.f['villageId'].setValue(0), this.getEducationQualification());
         } else {
-          // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.districtArrayTeacherDeatails = [];
         }
       }),
@@ -532,7 +528,7 @@ export class AddUpdateTeacherRegistrationComponent {
       next: ((res: any) => {
         if (res.statusCode == 200 && res.responseData.length) {
           this.profesionalQualificationArray = res.responseData;
-          this.editFlag ? (this.td['professionalQualificationId'].setValue(this.editObj.teacherDetails?.professionalQualificationId), this.getStateTeacherDetails()) : '';
+          this.editFlag ? (this.td['professionalQualificationId'].setValue(this.editObj.teacherDetails?.professionalQualificationId)) : '';
         } else {
           // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.profesionalQualificationArray = [];
@@ -545,12 +541,13 @@ export class AddUpdateTeacherRegistrationComponent {
   }
 
   getStateTeacherDetails(){
+    // debugger
     this.masterService.getAllState('').subscribe({
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArrayTeacherDeatails = res.responseData;
           // this.loginData ? (this.td['stateId'].setValue(this.loginData.stateId), this.getAllDistrictTeacherDetails()) : this.td['stateId'].setValue(0);
-          this.editFlag ? (this.td['stateId'].setValue(this.editObj.teacherDetails?.stateId), this.getAllDistrictTeacherDetails()) : '';
+          this.editFlag ? (this.td['stateId'].setValue(this.editObj.teacherDetails?.stateId), this.getAllDistrictTeacherDetails()) : this.loginData ? (this.td['stateId'].setValue(this.loginData.stateId), this.getAllDistrictTeacherDetails()) : this.td['stateId'].setValue(0);
         }
         else{
           this.stateArrayTeacherDeatails = [];
@@ -568,7 +565,7 @@ export class AddUpdateTeacherRegistrationComponent {
           if (res.statusCode == 200 && res.responseData.length) {
             this.districtArrayTeacherDeatails = res.responseData;
             // this.loginData ? (this.td['districtId'].setValue(this.loginData.districtId), this.getAllTalukaTeacherDeatails()) : this.td['districtId'].setValue(0);
-            this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : '';
+            this.editFlag ? (this.td['districtId'].setValue(this.editObj.teacherDetails?.districtId), this.getAllTalukaTeacherDeatails()) : this.loginData ? (this.td['districtId'].setValue(this.loginData.districtId), this.getAllTalukaTeacherDeatails()) : this.td['districtId'].setValue(0);
   
           } else {
             // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
@@ -590,7 +587,7 @@ export class AddUpdateTeacherRegistrationComponent {
         if (res.statusCode == 200 && res.responseData.length) {
           this.talukaArrayTeacherDetails = res.responseData;
           // this.loginData ? (this.td['talukaId'].setValue(this.loginData.talukaId), this.getCluster()) : this.td['talukaId'].setValue(0);
-          this.editFlag ? (this.td['talukaId'].setValue(this.editObj.teacherDetails?.talukaId), this.getCluster()) : '';
+          this.editFlag ? (this.td['talukaId'].setValue(this.editObj.teacherDetails?.talukaId), this.getCluster()) : this.loginData ? (this.td['talukaId'].setValue(this.loginData.talukaId), this.getCluster()) : this.td['talukaId'].setValue(0);
         } else {
           // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.talukaArrayTeacherDetails = [];
@@ -610,7 +607,7 @@ export class AddUpdateTeacherRegistrationComponent {
         if (res.statusCode == 200 && res.responseData.length) {
           this.clusterArray = res.responseData;
           // this.loginData ? (this.td['clusterId'].setValue(this.loginData.centerId), this.getAllVillageTeacherDeatails()) : this.td['clusterId'].setValue(0);
-          this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllVillageTeacherDeatails()) : '';
+          this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllVillageTeacherDeatails()) : this.loginData ? (this.td['clusterId'].setValue(this.loginData.centerId), this.getAllVillageTeacherDeatails()) : this.td['clusterId'].setValue(0);
         } else {
           // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.clusterArray = [];
@@ -630,10 +627,10 @@ export class AddUpdateTeacherRegistrationComponent {
         if (res.statusCode == 200 && res.responseData.length) {
           this.teacherDetailsVillageArray = res.responseData;
           // this.loginData ? (this.td['villageId'].setValue(this.loginData.villageId), this.getAllSchool()) : this.td['villageId'].setValue(0);
-          this.editFlag ? (this.td['villageId'].setValue(this.editObj.teacherDetails?.villageId),this.getAllSchool()) : '';
+          this.editFlag ? (this.td['villageId'].setValue(this.editObj.teacherDetails?.villageId),this.getAllSchool()) : this.loginData ? (this.td['villageId'].setValue(this.loginData.villageId), this.getAllSchool()) : this.td['villageId'].setValue(0);
         } else {
           // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          this.clusterArray = [];
+          this.teacherDetailsVillageArray = [];
         }
       }), 
       // error: (error: any) => {
@@ -653,7 +650,7 @@ export class AddUpdateTeacherRegistrationComponent {
         if (res.statusCode == 200 && res.responseData.length) {
           this.schoolArray = res.responseData;
           // this.loginData ? this.td['schoolId'].setValue(this.loginData.schoolId) : this.td['schoolId'].setValue(0);
-          this.editFlag ? (this.td['schoolId'].setValue(this.editObj.teacherDetails?.schoolId)) : '';
+          this.editFlag ? (this.td['schoolId'].setValue(this.editObj.teacherDetails?.schoolId)) : this.loginData ? this.td['schoolId'].setValue(this.loginData.schoolId) : this.td['schoolId'].setValue(0);
         } else {
           // this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errorHandler.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
           this.schoolArray = [];

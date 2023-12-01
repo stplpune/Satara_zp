@@ -73,13 +73,14 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.MonthRangeTo' | translate}}</mat-label>
                         <input matInput [matDatepicker]="dp2" [formControl]="dateTo" readonly [min]="minVal">
-                <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
-                <mat-datepicker #dp2 startView="multi-year" (monthSelected)="setMonthAndYear($event, dp2, 'todate')">
-                </mat-datepicker>
+                        <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
+                        <mat-datepicker #dp2 startView="multi-year"
+                            (monthSelected)="setMonthAndYear($event, dp2, 'todate')">
+                        </mat-datepicker>
                     </mat-form-field>
                 </div>
             </div>
-            <form [formGroup]="assetCriteriaFrom">
+            <!-- <form [formGroup]="assetCriteriaFrom">
                 <div class="row gx-2">
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
@@ -156,16 +157,11 @@
                                 </tbody>
                             </table>
                         </div>
-
-
-
-
-
                     </div>
                 </div>
             </div>
-            </form>
-            
+            </form> -->
+
         </mat-card-content>
         <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
             <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |

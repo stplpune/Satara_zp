@@ -206,12 +206,9 @@ export class AddExamMasterComponent {
     }
 
     getCriteria(id?: any){
-      console.log("getCriteria: ", id);
-      
       this.criteriaArr = [];
       let standardId = this.assetCriteriaFrom.value.standardId;
       let subjectId = this.assetCriteriaFrom.value.subjectId;
-      console.log("standardId: ", standardId , " subjectId : ", subjectId);
       
       this.masterService.GetAllExamTypeCriteria(standardId, subjectId, this.webService.languageFlag).subscribe({
         next: (res: any) => {
@@ -386,41 +383,36 @@ export class AddExamMasterComponent {
         "createdBy": this.webService.getUserId(),
         "modifiedBy": this.webService.getUserId(),
         "lan": "",
-        examTypeWises:[] as any
+        // examTypeWises:[] as any
         }
 
-      this.tableArray.find((ele:any)=>{
-        ele.criteriaDetailsIds.find((item:any)=>{
-          let obj1 = {
-            "id": 0,
-            "examTypeId": 0,
-            "standardId": ele?.standardId,
-            "subjectId": ele?.subjectId,
-            "questionId": item,
-            "createdBy": this.webService.getUserId(),
-            "modifiedBy": this.webService.getUserId()
-          }
-          obj.examTypeWises.push(obj1)
-        })
-        // addExamArray.push(obj)
-      })
-
-      console.log("this.obj", obj);
-      console.log(typeof(obj));
+      // this.tableArray.find((ele:any)=>{
+      //   ele.criteriaDetailsIds.find((item:any)=>{
+      //     let obj1 = {
+      //       "id": 0,
+      //       "examTypeId": 0,
+      //       "standardId": ele?.standardId,
+      //       "subjectId": ele?.subjectId,
+      //       "questionId": item,
+      //       "createdBy": this.webService.getUserId(),
+      //       "modifiedBy": this.webService.getUserId()
+      //     }
+      //     obj.examTypeWises.push(obj1)
+      //   })
+      //   addExamArray.push(obj)
+      // })
+      
       // formValue.examTypeWises = this.submitArr;
-      // console.log("formValue:", formValue);
       let url = this.data ? 'UpdateExamType' : 'AddExamType';
       if(!this.examForm.valid){
         this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
         return
       }
-      else if(obj.examTypeWises.length == 0){
-        this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Add Atleast One Assessment Criteria to Exam' : 'कृपया परीक्षेत किमान एक मूल्यमापन निकष जोडा', 1);
-        return
-      }
+      // else if(obj.examTypeWises.length == 0){
+      //   this.commonMethods.showPopup(this.languageFlag == 'English' ? 'Please Add Atleast One Assessment Criteria to Exam' : 'कृपया परीक्षेत किमान एक मूल्यमापन निकष जोडा', 1);
+      //   return
+      // }
       else{
-        console.log("obj.examTypeWises", obj.examTypeWises.length);
-
         this.ngxSpinner.show();
         this.apiService.setHttp(this.data ?'put':'post', 'zp-satara/ExamType/'+url, false, obj, false, 'baseUrl');
         this.apiService.getHttp().subscribe({
@@ -480,7 +472,6 @@ export class AddExamMasterComponent {
     }
 
     onEdit(data?: any){
-      console.log("onedit: ", data);
       let criteriaArr = data?.questionResponses;
       let index:any;
       criteriaArr.forEach((a) => {
@@ -553,32 +544,6 @@ export class AddExamMasterComponent {
 
     onDeleteCriteria(index: number){
       this.tableArray.splice(index,1);
-    }
-
-    createTableStructure(tableArray: any){
-      this.tableArray = [];
-      
-      const uniquestandardName = [...new Set(tableArray.map((x: any) => x.standardId))];
-
-      uniquestandardName.map((x: any) => {
-        const unquieArray = tableArray.filter((y: any) => y.standardId == x);
-
-        if(unquieArray.length > 1){
-          const fObj = unquieArray[0];
-          unquieArray.shift();
-
-          const uniuqeConsumerObj = Object.assign(fObj, { detailsArr: unquieArray });
-          this.tableArray.push(uniuqeConsumerObj);
-        }else {
-          const uniuqeConsumerObj = Object.assign(unquieArray[0], { detailsArr: [] });
-          this.tableArray.push(uniuqeConsumerObj);
-        }
-      })
-
-      console.log("tableArray after return", this.tableArray);
-      
-      return this.tableArray
-
     }
 
     onDropdownChange(event:any, label:string){

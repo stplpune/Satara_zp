@@ -110,19 +110,21 @@
                             <div class="col-md-6 d-flex gap-2">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.Parameter'| translate}}</mat-label>
-                                    <input matInput formControlName="optionName" maxlength="100"
+                                    <textarea matInput formControlName="optionName" maxlength="100"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);">
                                         <mat-error *ngIf="paramterForm.controls['optionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter'| translate}}</mat-error>
-                                </mat-form-field>
+                                    </textarea>
+                                    </mat-form-field>
                             </div>
 
                             <div class="col-md-6 d-flex gap-2">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.ParameterMarathi'| translate}}</mat-label>
-                                    <input matInput formControlName="m_OptionName" maxlength="100"
+                                    <textarea matInput formControlName="m_OptionName" maxlength="100"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);">
-                                        <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter(Marathi)'| translate}}<</mat-error>
-                                </mat-form-field>
+                                        <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter(Marathi)'| translate}}</mat-error>
+                                    </textarea>
+                                    </mat-form-field>
                                 <button mat-flat-button type="submit" (click)="addParametereData()"
                                     class="btn-main btn-icon">
                                     <mat-icon>add</mat-icon>

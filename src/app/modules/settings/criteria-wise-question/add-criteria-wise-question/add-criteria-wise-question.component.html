@@ -1,1 +1,139 @@
-<p>add-criteria-wise-question works!</p>
+<mat-card class="plain-card">
+    <mat-card-header class="card-header">
+        <div class="d-flex align-items-center justify-content-between w-100">
+            <h6 class="text-main mb-0 fw-bold">
+                {{data ? ('Labels.updatecriteriawisequestion' | translate): 'Labels.addcriteriawisequestion' |
+                translate}}
+            </h6>
+            <button mat-icon-button mat-dialog-close class="btn-modal-close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </mat-card-header>
+    <form class="w-100">
+        <mat-card-content class="card-body card-height-mid scrollbar">
+            <div class="row gx-2 w-100">
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.state'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.district'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-select formControlName="stateId">
+                                <mat-option>option-1</mat-option>
+                            </mat-select>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.EducationalYear'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.standard'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.Subject'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-select formControlName="stateId">
+                                <mat-option>option-1</mat-option>
+                            </mat-select>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.QuestionType'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.QuestionType'| translate}}</mat-label>
+                        <mat-select>
+                            <mat-option>option-1</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-8">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.introduction'| translate}}</mat-label>
+                        <textarea matInput></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row gx-2 ">
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.Question'| translate}}</mat-label>
+                       <input matInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
+                       <input matInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.ExpAnswer'| translate}}</mat-label>
+                       <input matInput>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="upload-btn-wrapper">
+                        <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
+                            matTooltipClass="tooltip">{{'Labels.UploadPhotoDocument' | translate}}</button>
+                        <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt" #uploadImage />
+                        <!-- formControlName="imgPath" -->
+                    </div>
+                </div>
+                <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
+            </div>
+            <div class="col-sm-12 mt-3">
+                <div class="d-flex flex-wrap gap-4">
+                    <ng-container>
+                        <div class="gallery position-relative">
+                            <img  height="110px"
+                                width="110px" class="border">
+                            <span class="position-absolute" style="top:-17px;right:-17px;">
+                                <button type="button" mat-icon-button class="bg-danger bg-opacity-25 text-danger material-icons"
+                                    matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
+                                    matTooltipClass="tooltip">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
+            <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |
+                translate}}</button>
+            <button type="submit" mat-flat-button class="btn-main">{{ data ? ('Labels.update' | translate) :
+                'Labels.submit' | translate}} </button>
+        </mat-card-footer>
+    </form>
+</mat-card>

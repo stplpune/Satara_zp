@@ -520,7 +520,14 @@
         "SubjectWisePerformance":"Subjectwise Performance",
         "Evaluator": "Evaluator",
         "selectState":"Select State",
-        "selectDistrict":"Select District"
+        "selectDistrict":"Select District",
+        "criteriawisequestion":"Criteria Wise Question",
+        "addcriteriawisequestion":"Add Criteria Wise Question",
+        "updatecriteriawisequestion":"Update Criteria Wise Question",
+        "introduction":"Introduction",
+        "Question":"Question",
+        "QuestionMarathi":"Question (Marathi)",
+        "ExpAnswer":"Expert Answer"
 
     }
 }

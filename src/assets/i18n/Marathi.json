@@ -528,6 +528,13 @@
         "SubjectWisePerformance":"विषयनिहाय कामगिरी",
         "Evaluator": "मूल्यांकनकर्ता",
         "selectState":"राज्य निवडा",
-        "selectDistrict":"जिल्हा निवडा"
+        "selectDistrict":"जिल्हा निवडा",
+        "criteriawisequestion":"निकषा नुसार प्रश्न",
+        "addcriteriawisequestion":"निकषानुसार प्रश्न जोडा",
+        "updatecriteriawisequestion":"निकषानुसार प्रश्न अपडेट करा",
+        "introduction":"प्रस्तावना",
+        "Question":"प्रश्न",
+        "QuestionMarathi":"प्रश्न (मराठी)",
+        "ExpAnswer":"तज्ञांचे उत्तर"
     }
 }

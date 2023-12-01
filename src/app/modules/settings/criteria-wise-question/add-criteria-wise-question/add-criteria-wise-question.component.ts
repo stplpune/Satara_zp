@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./add-criteria-wise-question.component.scss']
 })
 export class AddCriteriaWiseQuestionComponent {
+data: any;
 
 }

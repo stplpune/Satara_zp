@@ -54,7 +54,7 @@ export class AddUpdateAgencyRegistrationComponent {
       "localID": 0,
       "timestamp": new Date()
     })
-    data ? (this.getState()) : ''
+    // data ? (this.getState()) : ''
   }
 
   get fc() { return this.agencyRegisterForm.controls }
@@ -65,7 +65,7 @@ export class AddUpdateAgencyRegistrationComponent {
       if(res.statusCode == "200"){
         this.stateData = res.responseData;
         // this.loginData ? (this.fc['stateId'].setValue(this.loginData.stateId), this.getAllDistricts()) : this.fc['stateId'].setValue(0);
-        this.editData ? (this.fc['stateId'].setValue(this.editData.stateId), this.getAllDistricts()) : '';
+        this.editData ? (this.fc['stateId'].setValue(this.editData.stateId)) : this.loginData ? (this.fc['stateId'].setValue(this.loginData.stateId)) : this.fc['stateId'].setValue(0), this.getAllDistricts();
       }
       else{
         this.stateData = [];
@@ -79,7 +79,7 @@ export class AddUpdateAgencyRegistrationComponent {
     this.master.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe((res: any) => {
       res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
       // this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
-      this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : '';
+      this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
     })
   }
 
@@ -88,7 +88,7 @@ export class AddUpdateAgencyRegistrationComponent {
     this.master.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe((res: any) => {
       res.statusCode == 200 ? this.talukaData = res.responseData : this.talukaData = [];
       // this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
-      this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : '';
+      this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
     })
   }
 

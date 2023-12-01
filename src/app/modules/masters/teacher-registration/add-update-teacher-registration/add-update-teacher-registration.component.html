@@ -156,12 +156,24 @@
             <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100 ">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select formControlName="talukaId" (selectionChange)="clearDropdown('Taluka'); getVillage();">
+                    <mat-select formControlName="talukaId" (selectionChange)="clearDropdown('Taluka'); getCluster();">
                         <mat-option *ngFor="let taluka of talukaArray" [value]="taluka.id">
                             {{webStorageS.getLangauge() == 'EN' ?
                             taluka.taluka : taluka.m_Taluka}}</mat-option>
                     </mat-select>
                     <!-- <mat-error *ngIf="f['talukaId'].hasError('required')">{{'Labels.talukaIsRequired'| translate}}</mat-error> -->
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-form-field appearance="outline" class="w-100 ">
+                    <mat-label>{{'Labels.clusterName'| translate}}</mat-label>
+                    <mat-select formControlName="centerId"
+                        (selectionChange)="clearDropdown('cluster'); getVillage();">
+                        <mat-option *ngFor="let cluster of clusterArray"
+                            [value]="cluster.id">{{webStorageS.getLangauge() == 'EN' ?
+                            cluster.center : cluster.m_Center}}</mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="td['clusterId'].hasError('required')">Cluster Is Required</mat-error>                        -->
                 </mat-form-field>
             </div>
             <div class="col-sm-4">
@@ -327,7 +339,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="clearDropdown('talukaTeacherDetails');getCluster()">
+                            (selectionChange)="clearDropdown('talukaTeacherDetails'); getClusterTeacherDeatails()">
                             <mat-option *ngFor="let talukaObj of talukaArrayTeacherDetails" [value]="talukaObj.id">
                                 {{webStorageS.getLangauge() == 'EN' ?
                                 talukaObj.taluka : talukaObj.m_Taluka}}</mat-option>
@@ -339,7 +351,7 @@
                         <mat-label>{{'Labels.clusterName'| translate}}</mat-label>
                         <mat-select formControlName="clusterId"
                             (selectionChange)="getAllVillageTeacherDeatails();clearDropdown('cluster')">
-                            <mat-option *ngFor="let cluster of clusterArray"
+                            <mat-option *ngFor="let cluster of clusterArrayTeacherDeatails"
                                 [value]="cluster.id">{{webStorageS.getLangauge() == 'EN' ?
                                 cluster.center : cluster.m_Center}}</mat-option>
                         </mat-select>

@@ -84,48 +84,76 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Question'| translate}}</mat-label>
-                       <input matInput>
+                        <input matInput>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
-                       <input matInput>
+                        <input matInput>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.ExpAnswer'| translate}}</mat-label>
-                       <input matInput>
+                        <input matInput>
                     </mat-form-field>
                 </div>
             </div>
-            <div class="col-sm-6 mb-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="upload-btn-wrapper">
-                        <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
-                            matTooltipClass="tooltip">{{'Labels.UploadPhotoDocument' | translate}}</button>
-                        <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt" #uploadImage />
-                        <!-- formControlName="imgPath" -->
-                    </div>
+            <div class="col-sm-12">
+                <div class="table-responsive table-height-xs scrollbar mb-2">
+                    <table class="table dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Question</th>
+                                <th>Question (Marathi)</th>
+                                <th>Expect Answer</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Write a story according to drawing</td>
+                                <td>रेखाचित्रानुसार कथा लिहा</td>
+                                <td>Listening and Speaking</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
-            </div>
-            <div class="col-sm-12 mt-3">
-                <div class="d-flex flex-wrap gap-4">
-                    <ng-container>
-                        <div class="gallery position-relative">
-                            <img  height="110px"
-                                width="110px" class="border">
-                            <span class="position-absolute" style="top:-17px;right:-17px;">
-                                <button type="button" mat-icon-button class="bg-danger bg-opacity-25 text-danger material-icons"
-                                    matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
-                                    matTooltipClass="tooltip">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </span>
+                <div class="col-sm-6 mb-3">
+                    <div class="d-flex justify-content-between1 align-items-center gap-2">
+                        <div class="upload-btn-wrapper">
+                            <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
+                                matTooltipClass="tooltip">{{'Labels.UploadPhotoDocument' | translate}}</button>
+                            <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
+                                #uploadImage />
+                            <!-- formControlName="imgPath" -->
                         </div>
-                    </ng-container>
+                        <button mat-flat-button type="submit" class="btn-main btn-icon">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                    <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
+                </div>
+                <div class="col-sm-12 mt-3">
+                    <div class="d-flex flex-wrap gap-4">
+                        <ng-container>
+                            <div class="gallery position-relative">
+                                <img height="110px" width="110px" class="border">
+                                <span class="position-absolute" style="top:-17px;right:-17px;">
+                                    <button type="button" mat-icon-button
+                                        class="bg-danger bg-opacity-25 text-danger material-icons"
+                                        matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
+                                        matTooltipClass="tooltip">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
         </mat-card-content>

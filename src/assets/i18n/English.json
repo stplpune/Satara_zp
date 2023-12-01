@@ -518,7 +518,9 @@
         "AllSubject":"All Subject",
         "Classwiseperformance":"Classwise Performance",
         "SubjectWisePerformance":"Subjectwise Performance",
-        "Evaluator": "Evaluator"
+        "Evaluator": "Evaluator",
+        "selectState":"Select State",
+        "selectDistrict":"Select District"
 
     }
 }

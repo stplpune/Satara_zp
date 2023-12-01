@@ -526,6 +526,8 @@
         "AllSubject":"सर्व विषय",
         "Classwiseperformance":"वर्गवार कामगिरी",
         "SubjectWisePerformance":"विषयनिहाय कामगिरी",
-        "Evaluator": "मूल्यांकनकर्ता"
+        "Evaluator": "मूल्यांकनकर्ता",
+        "selectState":"राज्य निवडा",
+        "selectDistrict":"जिल्हा निवडा"
     }
 }

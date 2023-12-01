@@ -170,6 +170,11 @@ body {
   margin: 2px;
 }
 
+.dashboard-table .mat-mdc-icon-button.mat-mdc-button-base:disabled,
+.inner-table .mat-mdc-icon-button.mat-mdc-button-base:disabled {
+   opacity: 0.5 !important;
+}
+
 .dashboard-table button mat-icon,
 .inner-table button mat-icon {
   font-size: 18px !important;

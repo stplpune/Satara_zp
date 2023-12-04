@@ -78,7 +78,7 @@
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectSchool' | translate}}</mat-label>
-                            <mat-select formControlName="schoolId">
+                            <mat-select formControlName="schoolId" (selectionChange)="getTeacher()">
                                 <mat-option *ngFor="let school of schoolData" [value]="school.id">
                                     {{webStorage.languageFlag == 'EN'?school.schoolName :school.m_SchoolName }}
                                 </mat-option>
@@ -301,6 +301,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
+                            <div class="row g-2">{{"Total Student :- " +totalStudentCountSchoolwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body pt-0">
@@ -363,6 +364,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
+                            <div class="row g-2">{{"Total Student :- " +totalStudentCountTeacharwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body">
@@ -455,7 +457,7 @@
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100" [formGroup]="subjectWiseFilterForm">
                             <div class="row g-2">
-                                <!-- <div class="col-sm-6">
+                                <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.level' | translate}}</mat-label>
                                         <mat-select formControlName="levelId"
@@ -465,7 +467,7 @@
                                                 :data.m_GraphLevel}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div> -->
+                                </div>
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>

@@ -381,15 +381,15 @@
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100" [formGroup]="classwiseFilterForm">
                             <div class="row g-2">
-                                <div class="col-sm-6">
-                                    <!-- <mat-form-field appearance="outline" class="w-100">
+                                <!-- <div class="col-sm-6">
+                                    <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
                                         <mat-select formControlName="classId" (selectionChange)="getClasswiseBarDetails()">
                                             <mat-option *ngFor="let data of standardResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
                                                 :data.m_Standard}}</mat-option>
                                         </mat-select>
-                                    </mat-form-field> -->
+                                    </mat-form-field>
 
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.level' | translate}}</mat-label>
@@ -400,7 +400,7 @@
                                                 :data.m_GraphLevel}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
+                                </div> -->
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
@@ -443,7 +443,7 @@
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100" [formGroup]="subjectWiseFilterForm">
                             <div class="row g-2">
-                                <div class="col-sm-6">
+                                <!-- <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.level' | translate}}</mat-label>
                                         <mat-select formControlName="levelId"
@@ -453,7 +453,7 @@
                                                 :data.m_GraphLevel}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
+                                </div> -->
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>

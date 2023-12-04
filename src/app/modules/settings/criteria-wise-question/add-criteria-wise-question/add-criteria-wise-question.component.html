@@ -10,96 +10,154 @@
             </button>
         </div>
     </mat-card-header>
-    <form class="w-100">
+    <form [formGroup]="addCriteriaForm" (ngSubmit)="onSubmit()">
         <mat-card-content class="card-body card-height-mid scrollbar">
             <div class="row gx-2 w-100">
+              
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>option-1</mat-option>
+                        <mat-select formControlName="stateId" (selectionChange)="getDistrict();">
+                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                                {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-select formControlName="stateId">
-                                <mat-option>option-1</mat-option>
-                            </mat-select>
+                        <mat-select formControlName="districtId">
+                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                district.district : district.m_District}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.EducationalYear'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>option-1</mat-option>
+                        <mat-select formControlName="educationYearId">
+                            <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
+                                {{webStorageS.getLangauge() == 'EN' ? educationYear.eductionYear :
+                                educationYear.eductionYear_M}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.standard'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>option-1</mat-option>
+                        <mat-label>{{'Labels.standard' | translate}}</mat-label>
+                        <mat-select formControlName="standardId">
+                            <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
+                                {{webStorageS.getLangauge() == 'EN' ? standard.standard : standard.m_Standard}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.Subject'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-select formControlName="stateId">
-                                <mat-option>option-1</mat-option>
-                            </mat-select>
+                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                        <mat-select formControlName="assesmentSubjectId">
+                            <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
+                                {{webStorageS.getLangauge() == 'EN' ? sub.subject : sub.m_Subject}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.QuestionType'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>option-1</mat-option>
+                        <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
+                        <mat-select formControlName="questionTypeId" (selectionChange)="getCriteriaBySS_QuestionTypeId()">
+                            <mat-option *ngFor="let que of questionArr" [value]="que.id">
+                                {{webStorageS.getLangauge() == 'EN' ? que.questionType : que.m_QuestionType}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
+
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.Criteria'| translate}}</mat-label>
-                        <mat-select>
-                            <mat-option>option-1</mat-option>
+                        <mat-label>{{'Labels.Criteria' | translate}}</mat-label>
+                        <mat-select formControlName="criteriaId">
+                            <mat-option *ngFor="let criteria of criteriaArr" [value]="criteria.id">
+                                {{webStorageS.getLangauge() == 'EN' ? criteria.question : criteria.m_Question}}
+                            </mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
+
                 <div class="col-sm-8">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.introduction'| translate}}</mat-label>
-                        <textarea matInput></textarea>
+                        <textarea matInput formControlName="introduction"
+                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);"
+                        maxlength="100"></textarea>
+                        <mat-error *ngIf="f['introduction'].hasError('pattern')">Please Enter Valid Introduction</mat-error>
                     </mat-form-field>
                 </div>
             </div>
+
+            <form [formGroup]="addQuestionForm" >
             <div class="row gx-2 ">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Question'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="cQuestion"
+                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);" maxlength="50">
+                        <mat-error *ngIf="aq['cQuestion'].hasError('pattern')">Please Enter Valid Question</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="m_CQuestion" (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);" maxlength="50">
+                        <mat-error *ngIf="aq['m_CQuestion'].hasError('pattern')">Please Enter Valid Marathi Question</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.ExpAnswer'| translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="expectedAns"
+                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);" maxlength="50">
+                        <mat-error *ngIf="aq['expectedAns'].hasError('pattern')">Please Enter Valid Expected Answer</mat-error>
                     </mat-form-field>
                 </div>
             </div>
+
+            <div class="col-sm-6 mb-3">
+                <div class="d-flex justify-content-between1 align-items-center gap-2">
+                    <div class="upload-btn-wrapper">
+                        <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
+                            matTooltipClass="tooltip" (click)="fileInput.click()">{{'Labels.UploadPhotoDocument' | translate}}</button>
+                        <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
+                        (change)="documentUpload($event);fileInput.value = ''" #fileInput />
+                    </div>
+                    <button mat-flat-button type="submit" class="btn-main btn-icon" (click)="addQueForm()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+                <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
+            </div>
+            <div class="col-sm-12 mt-3">
+                <div class="d-flex flex-wrap gap-4">
+                    <ng-container>
+                        <div class="gallery position-relative" *ngFor="let imgObj of imgArray;let i = index">
+                            <img height="110px" width="110px" class="border" [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath">
+                            <span class="position-absolute" style="top:-17px;right:-17px;">
+                                <button type="button" mat-icon-button class="bg-danger bg-opacity-25 text-danger material-icons"
+                                    matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
+                                    matTooltipClass="tooltip" (click)="deleteDocoment(i);fileInput.value = ''">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </span>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </form>
+
             <div class="col-sm-12">
                 <div class="table-responsive table-height-xs scrollbar mb-2">
                     <table class="table dashboard-table">
@@ -113,47 +171,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Write a story according to drawing</td>
-                                <td>रेखाचित्रानुसार कथा लिहा</td>
-                                <td>Listening and Speaking</td>
-                                <td></td>
+                            <tr *ngFor="let AddQ of addQuestionArray; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{AddQ?.cQuestion}}</td>
+                                <td>{{AddQ?.m_CQuestion}}</td>
+                                <td>{{AddQ?.expectedAns}}</td>
+                                <td>
+                                    <button mat-icon-button id="tooltip" matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
+                                        matTooltipClass="tooltip" (click)="editAddQuestion(AddQ, i)">
+                                        <mat-icon class="text-main">edit</mat-icon>
+                                    </button>
+                                    <button mat-icon-button (click)="globalDialogOpen(i)">
+                                        <mat-icon class="text-danger"> delete </mat-icon>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="col-sm-6 mb-3">
-                    <div class="d-flex justify-content-between1 align-items-center gap-2">
-                        <div class="upload-btn-wrapper">
-                            <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
-                                matTooltipClass="tooltip">{{'Labels.UploadPhotoDocument' | translate}}</button>
-                            <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
-                                #uploadImage />
-                            <!-- formControlName="imgPath" -->
-                        </div>
-                        <button mat-flat-button type="submit" class="btn-main btn-icon">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                    </div>
-                    <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
-                </div>
-                <div class="col-sm-12 mt-3">
-                    <div class="d-flex flex-wrap gap-4">
-                        <ng-container>
-                            <div class="gallery position-relative">
-                                <img height="110px" width="110px" class="border">
-                                <span class="position-absolute" style="top:-17px;right:-17px;">
-                                    <button type="button" mat-icon-button
-                                        class="bg-danger bg-opacity-25 text-danger material-icons"
-                                        matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
-                                        matTooltipClass="tooltip">
-                                        <mat-icon>delete</mat-icon>
-                                    </button>
-                                </span>
-                            </div>
-                        </ng-container>
-                    </div>
                 </div>
             </div>
         </mat-card-content>

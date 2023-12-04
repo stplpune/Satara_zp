@@ -1,1 +1,56 @@
-deepalifvfffffffffffff
+<div mat-dialog-title class="card-header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <h6 class="text-main mb-0 fw-bold">{{langTypeName == 'English' ? obj?.cctvType : obj?.m_CCTVType }} Camera Live Streaming - {{langTypeName == 'English' ? obj?.schoolName : obj?.m_SchoolName }} </h6>
+        <button mat-icon-button mat-dialog-close class="btn-modal-close" (click)="closeModal()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+<mat-dialog-content class="card-body scrollbar pt-0 pb-0">
+    <ng-container *ngIf="this.ccTvId == 1">
+        <div id="play" class="video-display"></div>
+    </ng-container>
+    <ng-container *ngIf="this.ccTvId == 2">
+        <canvas id="canvas1" width="746px" height="416px" class="border-0"></canvas>
+    </ng-container>
+</mat-dialog-content>
+
+
+
+
+<!-- <mat-card-footer class="card-footer border-top-0 pt-0">
+        <div class="d-flex justify-content-center align-items-center gap-2">
+            <button type="button" mat-icon-button class="btn btn-second" matTooltip="{{'Labels.upward' | translate}}"
+                matTooltipPosition="left" matTooltipClass="tooltip">
+                <mat-icon class="text-main">arrow_upward</mat-icon>
+            </button>
+
+            <button type="button" mat-icon-button class="btn-second" matTooltip="{{'Labels.left' | translate}}"
+                matTooltipPosition="below" matTooltipClass="tooltip">
+                <mat-icon class="text-main">arrow_back</mat-icon>
+            </button>
+            <ng-container>
+                <button type="button" mat-icon-button class="btn-second"
+                    (click)="playClick('rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp')"
+                    matTooltip="{{'Labels.play' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip">
+                    <mat-icon class="text-main">play_arrow</mat-icon>
+                </button>
+            </ng-container>
+
+            <button type="button" mat-icon-button class="btn-second" (click)="stopVideo()"
+                    matTooltip="{{'Labels.stop' | translate}}" matTooltipPosition="above"
+                    matTooltipClass="tooltip">
+                    <mat-icon class="text-main">stop</mat-icon>
+                </button>
+
+            <button type="button" mat-icon-button class="btn-second" matTooltip="{{'Labels.right' | translate}}"
+                matTooltipPosition="below" matTooltipClass="tooltip">
+                <mat-icon class="text-main">arrow_forward</mat-icon>
+            </button>
+
+            <button type="button" mat-icon-button class="btn-second" matTooltip="{{'Labels.downward' | translate}}"
+                matTooltipPosition="right" matTooltipClass="tooltip">
+                <mat-icon class="text-main">arrow_downward</mat-icon>
+            </button>
+        </div>
+    </mat-card-footer> -->

@@ -260,7 +260,7 @@ export class CctvComponent {
   }
 
   childCompInfo(obj?: any) {
-    // this.ngxSpinner.show();
+    this.ngxSpinner.show();
     // if(obj.cctvTypeId == 2){
     //   this.router.navigate(['/cctv-streaming'])
     //   }else{

@@ -284,6 +284,7 @@ ConnectApi.ondisconnect = function (api_conn, code) {
  */
 ConnectApi.onopenstream = function (api_conn, channel, streamid, result, cam_desc) {
 	console.log("play.js file",api_conn.deviceid + '打开码流成功,通道' + channel + '码流' + streamid);
+	console.log("hdhbhd",api_conn, channel , streamid);
 	// console.log(cam_desc);
 	// console.log(result);
 	if (result != 0) {

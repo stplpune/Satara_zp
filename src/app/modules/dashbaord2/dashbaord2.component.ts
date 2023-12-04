@@ -52,8 +52,10 @@ export class Dashbaord2Component {
   evaluatorDataArray = new Array();
   examTypeData = new Array();
   allTeacherOfficerData = new Array();
-  talukaLabel:any
-  districtLabel:any
+  talukaLabel:any;
+  districtLabel:any;
+  totalStudentCountSchoolwise :number= 0;
+  totalStudentCountTeacharwise:number = 0;
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
@@ -134,6 +136,7 @@ export class Dashbaord2Component {
     this.getAllGraphLevel();
     this.bindEvaluator();
     this.getExamType();
+    this.getAllTeacherOfficerByEvaluatorId();
   }
 
   mainFillterDefaultFormat() {
@@ -161,7 +164,7 @@ export class Dashbaord2Component {
 
   defaultTeacherwiseFormat() {
     this.filterFormTeacherWise = this.fb.group({
-      evaluatorId: [1],
+      evaluatorId: [0],
       classId: [0],
       subjectId: [0],
     })
@@ -177,7 +180,7 @@ export class Dashbaord2Component {
   defaultSubjectWiseFormat() {
     this.subjectWiseFilterForm = this.fb.group({
       classId: [0],
-      levelId: [0],
+      levelId: [1],
     })
   }
 
@@ -279,7 +282,7 @@ export class Dashbaord2Component {
     this.masterService.GetAllStandardClassWise(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.standardResp = [{ id: 0, standard: "All", m_Standard: "सर्व", groupId: 4 }, ...res.responseData];
+          this.standardResp = [{ id: 0, standard: "All", m_Standard: "सर्व" }, ...res.responseData];
         }
       },
       error: (() => {
@@ -293,7 +296,7 @@ export class Dashbaord2Component {
     this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.teacherResp = res.responseData;
+          this.teacherResp = [{ id: 0, teacherName: "All", m_TeacherName: "सर्व" }, ...res.responseData];
         }
       },
       error: (() => {
@@ -306,7 +309,7 @@ export class Dashbaord2Component {
     this.masterService.GetAllGraphLevel(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.graphLevelArr = [{ "id": 0, "graphLevel": "All", "m_GraphLevel": "सर्व"},...res.responseData];
+          this.graphLevelArr = res.responseData;
         }
       },
       error: (() => {
@@ -633,23 +636,25 @@ export class Dashbaord2Component {
           let schoolwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
           let yAxisArray: any = [];
-          //  let totalStudentCount :any=[];
+          this.totalStudentCountSchoolwise = schoolwiseBarDetails[0].totalStudentCount;
 
           schoolwiseBarDetails.map((x: any) => {
-            xAxiaArray.push(x.graphLevel);
-            yAxisArray.push(x.percentage)
+            xAxiaArray.push(this.selectedLang == 'English' ? x.graphLevel : x.m_GraphLevel);
+            yAxisArray.push(x.percentage);
             // totalStudentCount.push(x.totalStudentCount)
           });
           // let isAllZero = yAxisArray.every(res => res == 0);
           // isAllZero ? this.schoolwiseChartOptions = '' : this.schoolwiseBarChart(xAxiaArray, yAxisArray);
-          this.schoolwiseBarChart(xAxiaArray, yAxisArray)
+          this.schoolwiseBarChart(xAxiaArray, yAxisArray);
 
         } else {
+          this.totalStudentCountSchoolwise = 0;
           this.schoolwiseChartOptions = '';
         }
       },
       error: (err: any) => {
         this.schoolwiseChartOptions = '';
+        this.totalStudentCountSchoolwise = 0;
         this.error.handelError(err.status);
       },
     });
@@ -713,10 +718,10 @@ export class Dashbaord2Component {
           let teacherwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
           let yAxisArray: any = [];
-          //  let totalStudentCount :any=[];
+          this.totalStudentCountTeacharwise = teacherwiseBarDetails[0].totalStudentCount;
 
           teacherwiseBarDetails.map((x: any) => {
-            xAxiaArray.push(x.graphLevel);
+            xAxiaArray.push(this.selectedLang == 'English' ? x.graphLevel : x.m_GraphLevel);
             yAxisArray.push(x.studentCount)
             // totalStudentCount.push(x.totalStudentCount)
           });
@@ -725,10 +730,12 @@ export class Dashbaord2Component {
           // isAllZero ? this.teacherwiseChartOptions = '' : this.teacherwiseBarChart(xAxiaArray, yAxisArray);
           this.teacherwiseBarChart(xAxiaArray, yAxisArray)
         } else {
+          this.totalStudentCountTeacharwise = 0;
           this.teacherwiseChartOptions = '';
         }
       },
       error: (err: any) => {
+        this.totalStudentCountTeacharwise = 0;
         this.teacherwiseChartOptions = '';
         this.error.handelError(err.status);
       },
@@ -798,7 +805,7 @@ export class Dashbaord2Component {
           //  let totalStudentCount :any=[];
 
           classwiseBarDetails.map((x: any) => {
-            xAxiaArray.includes(x.standard) ? '':xAxiaArray.push(x.standard);
+            xAxiaArray.includes(this.selectedLang == 'English' ? x.standard : x.m_Standard) ? '':xAxiaArray.push(this.selectedLang == 'English' ? x.standard : x.m_Standard);
             x.graphLevelId == 1 ? slowLearnerArray.push(x.studentCount) : x.graphLevelId == 2 ?  goodLearnerArray.push(x.studentCount) : brilliantLearnerArray.push(x.studentCount)
             // totalStudentCount.push(x.totalStudentCount)
           });

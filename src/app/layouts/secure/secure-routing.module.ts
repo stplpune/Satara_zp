@@ -6,6 +6,7 @@ import { AddUpdateStudentComponent } from 'src/app/modules/masters/student-regis
 import { AddSchoolProfileComponent } from 'src/app/modules/masters/school-registration/add-school-profile/add-school-profile.component';
 import { TasksheetReportDetailsComponent } from 'src/app/modules/attendence/tasksheet-reports/tasksheet-report-details/tasksheet-report-details.component';
 import { ViewStockDetailsComponent } from 'src/app/modules/infrastructure/store-master/view-stock-details/view-stock-details.component';
+import { LiveStreamingComponent } from 'src/app/modules/cctv/cctv/live-streaming/live-streaming.component';
 
 const routes: Routes = [
   { path: '', component: SecureComponent },
@@ -55,6 +56,8 @@ const routes: Routes = [
   { path: 'exam-master', loadChildren: () => import('../../modules/settings/add-test/add-test.module').then(m => m.AddTestModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Exam Master', m_title: 'परीक्षा मास्टर', active: true }] }    },
   { path: 'assessment-configuration', loadChildren: () => import('../../modules/settings/assessment-configuration/assessment-configuration.module').then(m => m.AssessmentConfigurationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Configuration', m_title: 'मूल्यांकन निकष', active: true }]}},
   { path: 'criteria-wise-question', loadChildren: () => import('../../modules/settings/criteria-wise-question/criteria-wise-question.module').then(m => m.CriteriaWiseQuestionModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Criteria Wise Question', m_title: 'निकषा नुसार प्रश्न', active: true }]} },
+  { path: 'cctv-streaming', component:LiveStreamingComponent , data: { breadcrumb: [{ title: 'cctv',m_title: 'cctv-प्रवाह', active: true }] } },
+
 ]
   
 

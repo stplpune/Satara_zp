@@ -249,7 +249,7 @@ export class AddCctvLocationComponent {
       this.cf['deviceId'].setValidators([Validators.required]);
       this.cf['registerDate'].setValidators([Validators.required]);
       this.cf['userName'].setValidators([Validators.required]);
-      this.cf['password'].setValidators([Validators.required, Validators.pattern(this.validators.valPassword)]);
+      this.cf['password'].setValidators([Validators.required]);
     } else {
       this.cf['cctvTypeId'].clearValidators();
       this.cf['ipAddress'].clearValidators();

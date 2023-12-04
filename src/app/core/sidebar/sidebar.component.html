@@ -12,10 +12,93 @@
       </mat-icon>
     </button>
   </div>
+
   <div class="sidebar-body">
+    <!-- <ul class="main-menu">
+      <li class="menu-item" routerLinkActive="active">
+        <a class="menu-link" routerLinkActive="active" data-bs-toggle="collapse" href="#collapseMaster" role="button"
+          aria-expanded="false" aria-controls="collapseMaster">
+          <div class="d-flex align-items-center">
+            <div class="icon">
+              <img src="../../../assets/images/menu-icons/dashboard-grey.svg">
+            </div>
+            <span>Dashboard</span>
+          </div>
+          <span class="dropdown-toggle"></span>
+        </a>
+        <div class="collapse" id="collapseMaster">
+          <ul class="sub-menu">
+            <li class="submenu-item" routerLinkActive="active">
+              <a class="submenu-link" routerLinkActive="active" href="#">
+                <div class="d-flex">
+                  <img src="assets/image/menu-icons/circle.svg" class="sub-menu-icon">
+                  <span>Assessment Reports</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item" routerLinkActive="active">
+        <a class="menu-link" routerLinkActive="active" data-bs-toggle="collapse" href="#collapseMaster1" role="button"
+          aria-expanded="false" aria-controls="collapseMaster">
+          <div class="d-flex align-items-center">
+            <div class="icon">
+              <img src="../../../assets/images/menu-icons/dashboard-grey.svg">
+            </div>
+            <span>Reports</span>
+          </div>
+          <span class="dropdown-toggle"></span>
+        </a>
+        <div class="collapse" id="collapseMaster1">
+          <ul class="sub-menu">
+            <li class="submenu-item">
+              <a class="submenu-link" href="#" data-bs-toggle="collapse" href="#collapseOfficeMaster1" role="button"
+                aria-expanded="false" aria-controls="collapseOfficeMaster">
+                <div class="d-flex">
+                  <img src="assets/image/menu-icons/circle.svg" class="sub-menu-icon">
+                  <span>Assessment Reports</span>
+                </div>
+                <span class="dropdown-toggle"></span>
+              </a>
+              <div class="collapse" id="collapseOfficeMaster1">
+                <ul class="sub-submenu">
+                  <li class="sub-submenu">
+                    <a class="sub-submenu-link">
+                      <div class="d-flex  gap-2">
+                        <img src="../../../../assets/image/menu-icons/arrow-small-right.svg" class="sub-submenu-icon">
+                        <span>By Teacher</span>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="sub-submenu">
+                    <a class="sub-submenu-link">
+                      <div class="d-flex gap-2">
+                        <img src="../../../../assets/image/menu-icons/arrow-small-right.svg" class="sub-submenu-icon">
+                        <span>By Officer</span>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="submenu-item">
+              <a class="submenu-link" href="#">
+                <div class="d-flex">
+                  <img src="assets/image/menu-icons/circle.svg" class="sub-menu-icon">
+                  <span>Officer Master</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul> -->
+
     <ul class="main-menu">
       <ng-container *ngFor="let pages of loginPages; let i = index">
-      <!-- FOR ONLY ONE DASHBOARD MENU  -->
+        <!-- FOR ONLY ONE DASHBOARD MENU  -->
         <ng-container *ngIf="pages.pageURL.length <= 1">
           <li routerLinkActive="active">
             <a routerLink="/{{pages.pageURL}}" routerLinkActive="active"
@@ -30,9 +113,9 @@
             </a>
           </li>
         </ng-container>
-      <!--END FOR ONLY ONE DASHBOARD MENU  -->
+        <!--END FOR ONLY ONE DASHBOARD MENU  -->
 
-      <!-- FOR ONLY ONE MENU PART  -->
+        <!-- FOR ONLY ONE MENU PART  -->
         <ng-container *ngIf="pages.pageURL.length > 1">
           <li>
             <a data-bs-toggle="collapse" href="#collapseMaster{{i}}" role="button"
@@ -72,7 +155,7 @@
             </div>
           </li>
         </ng-container>
-      <!-- END FOR ONLY ONE MENU PART  -->
+        <!-- END FOR ONLY ONE MENU PART  --->
       </ng-container>
     </ul>
   </div>

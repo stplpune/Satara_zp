@@ -60,7 +60,8 @@ export class LiveStreamingComponent {
     this.session = Flashphoner.createSession({
       urlServer: "wss://demo.flashphoner.com" //specify the address of your WCS
     }).on(this.SESSION_STATUS.ESTABLISHED, (_session: any) => {
-      this.playClick('rtsp://103.204.39.9:1027/avstream/channel=1/stream=0.sdp')
+      let url = this.obj?.link
+      this.playClick(url)
     });
   }
 
@@ -98,22 +99,22 @@ export class LiveStreamingComponent {
   //#region --------------------------------------------  without IP start here -------------------------------------------------
 
   init_WithOutIP() { // solar
+    this.ngxSpinner.show();
+
     let streamid = 1;
     let channel = 0;
-    var devid: any = '5625617245';
-    let username = 'admin';
-    let pwd = '87be!01cd4';
+    var devid: any = this.obj?.deviceId || '5625617245';
+    let username = this.obj?.userName || 'admin';
+    let pwd = this.obj?.password  || 'da]e2e38c5';
     let element: any;
     element = document.getElementById("canvas1");
     Player?.init([element]);
-
     setTimeout(() => {
       Player.ConnectDevice(devid, '', username, pwd, 0, 80, 0, channel, streamid, "ws")
     }, 2000);
-
     setTimeout(() => {
       Player.OpenStream(devid, '', channel, streamid, 0);
-    }, 3000);
+    }, 15000);
     this.ngxSpinner.hide();
   }
 

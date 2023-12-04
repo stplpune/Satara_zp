@@ -8,6 +8,7 @@ import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { LiveStreamingComponent } from './live-streaming/live-streaming.component';
 import { MatDialog } from '@angular/material/dialog';
+// import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cctv',
@@ -53,7 +54,8 @@ export class CctvComponent {
     public webStorageS: WebStorageService,
     private fb: FormBuilder,
     private masterService: MasterService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    // private router: Router,
   ) {
 
   }
@@ -259,14 +261,20 @@ export class CctvComponent {
 
   childCompInfo(obj?: any) {
     this.ngxSpinner.show();
-    setTimeout(() => {
-      this.dialog.open(LiveStreamingComponent, {
-        width: '800px',
-        data:obj,
-        disableClose: true,
-      });
-      // this.ngxSpinner.hide();
-    }, 15000);
+    // if(obj.cctvTypeId == 2){
+    //   this.router.navigate(['/cctv-streaming'])
+    //   }else{
+        console.log("gfhf", obj.cctvTypeId);
+        
+        setTimeout(() => {
+          this.dialog.open(LiveStreamingComponent, {
+            width: '800px',
+            data:obj,
+            disableClose: true,
+          });
+          // this.ngxSpinner.hide();
+        }, 15000);
+      // }
   }
 
   // clear dropdown 

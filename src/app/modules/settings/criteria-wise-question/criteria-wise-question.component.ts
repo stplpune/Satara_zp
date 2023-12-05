@@ -33,8 +33,8 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   educationYearArr = new Array();
   criteriaArr = new Array();
 
-  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Question Type', 'Educational Year','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'District',  'Standard', 'Subject','Question Type', 'Educational Year', 'Criteria', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा','इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'निकष', 'कृती'];
 
   constructor(public dialog: MatDialog,
     private fb: FormBuilder,
@@ -76,7 +76,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumns = ['srNo', 'standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear','action'];
+    let displayedColumns = ['srNo', 'state','standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'criteria', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
@@ -177,7 +177,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   getCriteriaBySS_QuestionTypeId() {  
     this.criteriaArr = [];
     let formValue = this.filterForm.value; 
-    let obj = formValue.standardId + "&SubjectId=" + formValue.assesmentSubjectId + '&QuestionTypeId=' + formValue.questionTypeId + '&flag_lang=' + this.languageFlag
+    let obj = formValue.standardId + "&SubjectId=" + formValue.subjectId + '&QuestionTypeId=' + formValue.questionTypeId + '&flag_lang=' + this.languageFlag
     + '&StateId=' + formValue.stateId + '&DistrictId=' + formValue.districtId + '&EducationYearId=' + formValue.educationalYearId;
     this.apiService.setHttp('get', 'zp-satara/master/GetCriteriaByStandardSubject?StandardId=' + obj , false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -190,9 +190,23 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     });
   }
 
-  clearFilter(flag: string){
+  clearFilter(flag?: string){
+    // switch(flag){
+    //   case 'state':
+    //   this.f['districtId'].setValue(0);
+    //   this.f['criteriaId'].setValue(0);
+    //   this.criteriaArr = [];
+    //   break;
+    //   case 'district': 
+    //   this.f['criteriaId'].setValue(0);
+    // }
     if(flag == 'state'){
       this.f['districtId'].setValue(0);
+      this.f['criteriaId'].setValue(0);
+      this.criteriaArr = [];
+    }else{
+      this.f['criteriaId'].setValue(0);
+      this.criteriaArr = [];
     }
   }
 
@@ -211,9 +225,9 @@ export class CriteriaWiseQuestionComponent implements OnInit{
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          this.tableDataArray = res.responseData;
-          // this.totalCount = res.responseData1.pageCount;
-          // this.tableDatasize = res.responseData1.pageCount;
+          this.tableDataArray = res.responseData?.responseData1;
+          this.totalCount = res.responseData?.responseData2.pageCount;
+          this.tableDatasize = res.responseData?.responseData2.pageCount;
         }
         else {
           this.ngxSpinner.hide();
@@ -240,7 +254,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
         this.getTableData();
         break;
       case 'Edit':
-        // this.openDialog(obj);
+        this.openDialog(obj);
         break;
       case 'Delete':
         // this.globalDialogOpen(obj);
@@ -250,10 +264,11 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     }
   }
 
-  openDialog() {
+  openDialog(obj?: any) {    
     const dialogRef = this.dialog.open(AddCriteriaWiseQuestionComponent,{
       width: '700px',
       disableClose:true,
+      data: obj.criteriaId
     });
 
     dialogRef.afterClosed().subscribe(result => {

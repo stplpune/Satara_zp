@@ -379,12 +379,12 @@ export class SchoolRegistrationComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 'yes' && obj) {
         this.onClear();
-        this.getState();
+        // this.getState();
         this.getTableData();
         this.pageNumber = obj.pageNumber;
       }
       else if (result == 'yes') {
-        this.getState();
+        // this.getState();
         this.getTableData();
         this.onClear();
         this.pageNumber = 1;

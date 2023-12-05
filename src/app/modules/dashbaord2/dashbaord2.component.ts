@@ -671,6 +671,11 @@ export class Dashbaord2Component {
         height: 300,
         toolbar: {
           show: false
+        },
+        events: {
+          dataPointSelection: (event, chartContext, config) => {
+            console.log(event,chartContext, config);
+          }
         }
       },
       colors: [
@@ -835,7 +840,6 @@ export class Dashbaord2Component {
           name: this.selectedLang == 'English' ? 'Brilliant':'हुशार',
           data: brilliantLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
-         
       ],
       chart: {
         type: 'bar',

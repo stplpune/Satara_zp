@@ -29,6 +29,8 @@ export class AddUpdateSchoolRegistrationComponent {
   categoryArr = new Array();
   schoolMngArr = new Array();
   bitArr = new Array();
+  areaArray = new Array();
+  mediumArray = new Array();
   schoolRegForm !: FormGroup;
   uploadImg: any;
   uploadMultipleImg: any;
@@ -71,6 +73,8 @@ export class AddUpdateSchoolRegistrationComponent {
       this.onEdit();
     } else {
       this.getState();
+      this.getSchoolArea();
+      this.getMedium();
       this.getSchoolType();
       this.getLowestGroupClass();
     }
@@ -97,6 +101,8 @@ export class AddUpdateSchoolRegistrationComponent {
       "s_ManagementId": ['', Validators.required],
       "s_TypeId": ['', Validators.required],
       "g_ClassId": 0,
+      "s_MediumId": 0,
+      "s_AreaId": 0,
       "lan": this.webStorageS.languageFlag,
       "localID": 0,
       "lowestClass": ['', Validators.required],
@@ -276,6 +282,24 @@ export class AddUpdateSchoolRegistrationComponent {
     });
   }
 
+  getSchoolArea(){
+    this.areaArray = [
+      { id: 1, area: 'Urban', m_Area: 'शहरी' },
+      { id: 2, area: 'Rural', m_Area: 'ग्रामीण' }
+    ];
+    this.editObj ? this.f['s_AreaId'].setValue(this.editObj.s_AreaId) : '';
+  }
+
+  getMedium(){
+    this.mediumArray = [
+      { id: 1, medium: 'Marathi', m_Medium: 'मराठी' },
+      { id: 2, medium: 'Hindi', m_Medium: 'हिंदी' },
+      { id: 3, medium: 'English', m_Medium: 'इंग्रजी' },
+      { id: 4, medium: 'Urdu', m_Medium: 'उर्दू' }
+    ];
+    this.editObj ? this.f['s_MediumId'].setValue(this.editObj.s_MediumId) : '';
+  }
+
   //#endregion ------------------------------------------- School Registration Dropdown end here ----------------------------------------// 
 
   //#region ------------------------------------------------- Upload Image start here --------------------------------------------// 
@@ -435,6 +459,8 @@ export class AddUpdateSchoolRegistrationComponent {
       this.docArray.push(schoolDocumentObj);
     })
     this.getState();
+    this.getSchoolArea();
+    this.getMedium();
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 

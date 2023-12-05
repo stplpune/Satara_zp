@@ -132,36 +132,46 @@
                 <thead>
                     <tr>
                         <th>{{'Labels.SrNo'| translate}}</th>
+                        <th>{{'Labels.district'| translate}}</th>
+                        <th>{{'Labels.taluka'| translate}}</th>
+                        <th>{{'Labels.center'| translate}}</th>
+                        <th>{{'Labels.village'| translate}}</th>
+                        <th>{{'Labels.SchoolName'| translate}}</th>
                         <th>{{'Labels.CCTVLocation'| translate}}</th>
                         <th>{{'Labels.CCTVType'| translate}}</th>
-                        <th>{{'Labels.ipAddress'| translate}}</th>
+                        <!-- <th>{{'Labels.ipAddress'| translate}}</th> -->
                         <th>{{'Labels.CCTVName'| translate}}</th>
-                        <th>{{'Labels.CCTVModel'| translate}}</th>
-                        <th>{{'Labels.DeviceId'| translate}}</th>
+                        <!-- <th>{{'Labels.CCTVModel'| translate}}</th> -->
+                        <!-- <th>{{'Labels.DeviceId'| translate}}</th> -->
                         <th>{{'Labels.RegistrationDate'| translate}}</th>
-                        <th>{{'Labels.Username'| translate}}</th>
-                        <th>{{'Labels.Password'| translate}}</th>
-                        <th>{{'Labels.remark'| translate}}</th>
+                        <!-- <th>{{'Labels.Username'| translate}}</th>
+                        <th>{{'Labels.Password'| translate}}</th> -->
+                        <!-- <th>{{'Labels.remark'| translate}}</th> -->
                         <th>{{'Labels.action'| translate}}</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let data of tableDataArray; let i=index;">
                     <tr>
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{i+1}}</td>
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{data?.cctvLocation}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{this.languageFlag == 'English' ? data?.district : data?.m_District}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{this.languageFlag == 'English' ? data?.taluka : data?.m_Taluka}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{this.languageFlag == 'English' ? data?.center : data?.m_Center}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{this.languageFlag == 'English' ? data?.village : data?.m_Village}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{this.languageFlag == 'English' ? data?.schoolName : data?.m_SchoolName}}</td>
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">{{this.languageFlag == 'English' ? data?.cctvLocation :data?.m_CCTVLocation}}</td>
                         <td>{{data?.cctvTypeE}}</td>
-                        <td>{{data?.ipAddressE | dash}}</td>
+                        <!-- <td>{{data?.ipAddressE | dash}}</td> -->
                         <td>{{data?.cctvNameE}}</td>
-                        <td>{{data?.cctvModelE}}</td>
-                        <td>{{data?.deviceIdE}}</td>
+                        <!-- <td>{{data?.cctvModelE}}</td> -->
+                        <!-- <td>{{data?.deviceIdE}}</td> -->
                         <td>{{data?.registerDateE | date:'dd-MM-yyyy'}}</td>
-                        <td>{{data?.userNameE}}</td>
-                        <td>{{data?.passwordE}}</td>
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
+                        <!-- <td>{{data?.userNameE}}</td>
+                        <td>{{data?.passwordE}}</td> -->
+                        <!-- <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
                             <span class="text-ellipsis-150-L2">
                                 {{data?.remark}}
                             </span>
-                        </td>
+                        </td> -->
                         <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
                             <button mat-icon-button 
                                 matTooltip="{{'Labels.edit' | translate}}"
@@ -178,12 +188,12 @@
                     <tr *ngFor="let detail of data.cctvDetailsModelResponse; let i=index;">
                         <td>{{detail?.cctvTypeE}}</td>
                         <td>{{detail?.cctvNameE}}</td>
-                        <td>{{detail?.ipAddressE  | dash}}</td>
-                        <td>{{detail?.cctvModelE}}</td>
-                        <td>{{detail?.deviceIdE}}</td>
+                        <!-- <td>{{detail?.ipAddressE  | dash}}</td> -->
+                        <!-- <td>{{detail?.cctvModelE}}</td> -->
+                        <!-- <td>{{detail?.deviceIdE}}</td> -->
                         <td>{{detail?.registerDateE | date:'dd-MM-yyyy'}}</td>
-                        <td>{{detail?.userNameE}}</td>
-                        <td>{{detail?.passwordE}}</td>
+                        <!-- <td>{{detail?.userNameE}}</td>
+                        <td>{{detail?.passwordE}}</td> -->
                     </tr>
                 </tbody>
             </table>

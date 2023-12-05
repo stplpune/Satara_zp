@@ -536,6 +536,7 @@
         "Criteria" :"निकष",
         "Question":"प्रश्न",
         "QuestionMarathi":"प्रश्न (मराठी)",
-        "ExpAnswer":"तज्ञांचे उत्तर"
+        "ExpAnswer":"तज्ञांचे उत्तर",
+        "DateOfBirth": "जन्मतारीख"
     }
 }

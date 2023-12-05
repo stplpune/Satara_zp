@@ -242,6 +242,31 @@
                 </div>
                 <!-- End office user name input Marathi -->
 
+                <!-- office user gender dropdown -->
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.gender'| translate}}</mat-label>
+                        <mat-select formControlName="genderId">
+                            <mat-option [value]="gender.id"
+                                *ngFor="let gender of genderArray">{{webStorageService.getLangauge() == 'EN' ?
+                                gender.gender : gender.m_Gender}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <!-- End office user gender dropdown -->
+
+                <!-- office user date of birth input -->
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.DateOfBirth'| translate}}</mat-label>
+                        <input matInput [matDatepicker]="picker" (click)="picker.open()" readonly
+                            formControlName="dob" [max]="currentDate">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <!-- End office user date of birth input -->
+
                 <!-- office user Mobile input -->
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100">

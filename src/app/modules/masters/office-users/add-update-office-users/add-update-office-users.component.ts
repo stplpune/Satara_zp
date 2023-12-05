@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -26,7 +27,9 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   schools = new Array();
   others = new Array();
   bits = new Array();
+  genderArray = new Array();
   submitted : boolean = false;
+  currentDate = new Date();
   errorMsg : any;
   kendraErrorMsg :any
   officeCenterSchoolModelArr = new Array();
@@ -41,11 +44,13 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public validation: ValidationService,
     public webStorageService: WebStorageService,
+    private datePipe: DatePipe,
     private ngxSpinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.defaultForm();
     this.getStateDrop();
+    this.getGender();
     (!this.data) ? (this.getLevelDrop()) : '';   
     console.log("this.data", this.data);
      
@@ -83,15 +88,23 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "agencyId": [this.data ? this.data.agencyId : null],
         "isBlock" : [true],
         "userId": [this.data ? this.data.userId : 0], 
+        "genderId": [this.data ? this.data.genderId : '', [Validators.required]],
+        "dob": [this.data ? this.data.dob : ''],
         "officeCenterSchoolModel":[]
       })
-    this.data ? (this.data, this.getLevelDrop(), this.getStateDrop(),this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(), this.getVillage(),this.getAgencyDrop(), this.getBitDrop(),this.onEdit()) : ''
+    this.data ? (this.data, this.getLevelDrop(), this.getGender(), this.getStateDrop(),this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(), this.getVillage(),this.getAgencyDrop(), this.getBitDrop(),this.onEdit()) : ''
   }
 
   get fc() { return this.officeForm.controls }
 
+  getGender(){
+    this.masterService.getAllGender('').subscribe({
+      next: (res: any) => {
+        res.statusCode == "200" ? this.genderArray = res.responseData : this.genderArray = [];
+      }
+    })
+  }
   
-
   getLevelDrop() {
     this.masterService.GetDesignationLevel(this.webStorageService.languageFlag).subscribe({
       next: (resp: any) => {
@@ -278,7 +291,10 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   submitOfficeData() {
     this.submitted = true;
-    let formData = this.officeForm.value
+    let formData = this.officeForm.value;
+    formData.dob = this.datePipe.transform(formData.dob, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
+    console.log("formData: ", formData);
+    
     // return;
     let kendramobLength = this.officeForm.value.kendraMobileNo.length;
     let mobileLength = this.officeForm.value.mobileNo.length;

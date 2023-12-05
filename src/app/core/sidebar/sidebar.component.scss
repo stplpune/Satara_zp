@@ -112,7 +112,7 @@
   // filter: invert(39%) sepia(31%) saturate(3621%) hue-rotate(358deg) brightness(99%) contrast(93%);
 }
 
-.main-menu a.menu-link .menu-icon{
+.main-menu a.menu-link .menu-icon {
   margin-right: 15px;
   padding: 10px 10px 10px 15px;
 }
@@ -127,7 +127,7 @@
   transform: rotate(-180deg);
 }
 
-.main-menu .sub-menu{
+.main-menu .sub-menu {
   padding: 0;
   margin: 5px 8px;
   list-style-type: none;
@@ -138,7 +138,7 @@
   padding-block: 10px;
 }
 
-.main-menu .sub-menu li.sub-menu-item a.sub-menu-link{
+.main-menu .sub-menu li.sub-menu-item a.sub-menu-link {
   font-size: 0.85rem;
   text-decoration: none;
   display: flex;
@@ -150,15 +150,58 @@
 
 .main-menu .sub-menu li.sub-menu-item a.sub-menu-link:active,
 .main-menu .sub-menu li.sub-menu-item a.sub-menu-link.active,
-.main-menu .sub-menu li.sub-menu-item a.sub-menu-link:hover {
-  color: var( --main-dark-color);
+.main-menu .sub-menu li.sub-menu-item a.sub-menu-link:hover,
+.main-menu .sub-menu .sub-submenu a.sub-submenu-link:hover {
+  color: var(--main-dark-color);
 }
 
 .main-menu .sub-menu a.sub-menu-link img {
-  width: 15px;
+  width: 14px;
   margin-right: 25px;
   filter: invert(36%) sepia(80%) saturate(2100%) hue-rotate(152deg) brightness(80%) contrast(10%);
 }
+
+.main-menu .sub-menu .sub-submenu {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+.main-menu .sub-menu .sub-submenu a.sub-submenu-link {
+  font-size: 0.80rem;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 3px;
+  color: var(--main-color);
+}
+
+.main-menu .sub-menu .sub-submenu a.sub-submenu-link img {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  filter: invert(36%) sepia(80%) saturate(2100%) hue-rotate(152deg) brightness(80%) contrast(10%);
+  padding-bottom: 4px;
+}
+
+.main-menu .sub-menu .sub-submenu a.sub-submenu-link:hover img {
+  -webkit-animation: bounceright 0.3s alternate ease infinite;
+  animation: bounceright 0.3s alternate ease infinite;
+  filter: invert(36%) sepia(80%) saturate(2100%) hue-rotate(152deg) brightness(80%) contrast(10%);
+}
+
+@keyframes bounceright {
+  from {
+    -webkit-transform: translateX(0);
+  }
+
+  to {
+    -webkit-transform: translateX(3px);
+  }
+}
+
 
 
 

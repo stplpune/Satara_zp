@@ -1,4 +1,5 @@
-<div class="sidebar" [ngClass]="{'open' : getSideBarState()}" (mouseenter)="showSubmenu = true" (mouseleave)="showSubmenu = false">
+<div class="sidebar" [ngClass]="{'open' : getSideBarState()}" (mouseenter)="showSubmenu = true"
+  (mouseleave)="showSubmenu = false">
   <div class="sidebar-header">
     <div class="d-flex align-items-center">
       <div class="logo">
@@ -7,117 +8,86 @@
       <img src="assets/images/Zp-satara-label.svg" class="text">
     </div>
     <button (click)="closeSidebar()" class="btn btn-sidebar-close">
-      <mat-icon class="material-symbols-rounded">
-        close
-      </mat-icon>
+      <mat-icon class="material-symbols-rounded">close</mat-icon>
     </button>
   </div>
 
   <div class="sidebar-body">
     <ul class="main-menu">
       <ng-container *ngFor="let pages of finalMenuList; let i = index">
-      <li class="menu-item" *ngIf="pages.pageURL.length <= 1">     
-        <a class="menu-link" routerLink="/{{pages.pageURL}}" data-bs-toggle="collapse" href="#collapseMaster" role="button"
-          aria-expanded="false" aria-controls="collapseMaster">
-          <div class="d-flex align-items-center">
-            <div class="icon">
-              <img src="{{pages.icon}}">
+        <li class="menu-item" *ngIf="pages.pageURL.length <= 1">
+          <a class="menu-link" routerLink="/{{pages.pageURL}}" data-bs-toggle="collapse" href="#collapseMaster"
+            role="button" aria-expanded="false" aria-controls="collapseMaster">
+            <div class="d-flex align-items-center">
+              <img src="{{pages.icon}}" class="menu-icon">
+              <span>{{WebStorageService.languageFlag == 'EN' ? pages.key :
+                pages.keyM}}</span>
             </div>
-            <span>{{WebStorageService.languageFlag == 'EN' ? pages.key :
-              pages.keyM}}</span>
-          </div>
-          <!-- <span class="dropdown-toggle"></span> -->
-        </a>
-        <!-- <div class="collapse" id="collapseMaster">
-          <ul class="sub-menu">
-            <li class="submenu-item" routerLinkActive="active">
-              <a class="submenu-link" routerLinkActive="active" href="#">
-                <div class="d-flex">
-                  <img src="assets/image/menu-icons/circle.svg" class="sub-menu-icon">
-                  <span>Assessment Reports</span>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div> -->
-      </li>
+          </a>
+        </li>
 
-      <li class="menu-item" *ngIf="pages.pageURL.length > 1">
-        <a class="menu-link" routerLinkActive="active" data-bs-toggle="collapse" href="#collapseMaster1{{i}}" role="button"
-        [attr.aria-expanded]="!pages.isCollapsed" [attr.aria-controls]="'collapseMaster'+i" (click)="subMenuClick(pages);">
-            <div class="icon">
-              <div class="d-flex gap-2">
-                <img src="{{pages.icon}}" class="menu-icon">
-                <span>{{WebStorageService.languageFlag == 'EN' ? pages.key : pages.keyM}}</span>
-              </div>
+        <li class="menu-item" *ngIf="pages.pageURL.length > 1">
+          <a class="menu-link" routerLinkActive="active" data-bs-toggle="collapse" href="#collapseMaster1{{i}}"
+            role="button" [attr.aria-expanded]="!pages.isCollapsed" [attr.aria-controls]="'collapseMaster'+i"
+            (click)="subMenuClick(pages);">
+            <div class="d-flex align-items-center">
+              <img src="{{pages.icon}}" class="menu-icon">
+              <span>{{WebStorageService.languageFlag == 'EN' ? pages.key : pages.keyM}}</span>
             </div>
-            <!-- <span>Reports</span> -->
-          <span class="dropdown-toggle"></span>
-        </a>
-        <div [class]="!pages.isCollapsed ? 'collapse' : 'collapse show'" id="collapseMaster1{{i}}" *ngIf="showSubmenu && pages.isCollapsed">
-          <ul class="sub-menu">
-            <ng-container *ngFor="let a of pages.array; let j = index">
-              <ng-container *ngIf="a.pageSubMenuView">
-                <li class="submenu-item">
-                  <a class="submenu-link" data-bs-toggle="collapse" href="#collapseOfficeMaster{{i}}{{j}}" role="button"
-                  [attr.aria-expanded]="!pages.isCollapsed" [attr.aria-controls]="'collapseOfficeMaster'+i+j"
-                  [class.active]="pages?.isCollapsed" routerLinkActive="active">
-                    <div class="d-flex">
-                      <img src="assets/image/menu-icons/circle.svg" class="sub-menu-icon">
-                      <span>{{WebStorageService.languageFlag == 'EN' ? a.pageSubMenuView : a.m_PageSubMenuView}}</span>
+            <span class="dropdown-toggle"></span>
+          </a>
+          <div [class]="!pages.isCollapsed ? 'collapse' : 'collapse show'" id="collapseMaster1{{i}}">
+            <!-- >*ngIf="showSubmenu && pages.isCollapsed" -->
+            <ul class="sub-menu">
+              <ng-container *ngFor="let a of pages.array; let j = index">
+                <ng-container *ngIf="a.pageSubMenuView">
+                  <li class="sub-menu-item">
+                    <a class="sub-menu-link" data-bs-toggle="collapse" href="#collapseOfficeMaster{{i}}{{j}}"
+                      role="button" [attr.aria-expanded]="!pages.isCollapsed"
+                      [attr.aria-controls]="'collapseOfficeMaster'+i+j" [class.active]="pages?.isCollapsed"
+                      routerLinkActive="active">
+                      <div class="d-flex align-items-center">
+                        <img src=".././../../assets/images/menu-icons/circle.svg" class="sub-menu-icon">
+                        <span>{{WebStorageService.languageFlag == 'EN' ? a.pageSubMenuView :
+                          a.m_PageSubMenuView}}</span>
+                      </div>
+                      <span class="dropdown-toggle"></span>
+                    </a>
+                    <div [class]="a?.isCollapsed ? '' : 'collapse'" id="collapseOfficeMaster{{i}}{{j}}">
+                      <ul class="sub-submenu">
+                        <li class="sub-submenu" *ngFor="let page of a?.pageURL; let pageUrlIndex = index">
+                          <a class="sub-submenu-link" routerLinkActive="active" routerLink="/{{page}}"
+                            [class.active]="a?.isCollapsed">
+                            <div class="d-flex  gap-2">
+                              <img src="assets/images/sidebar-icons/circle.svg" class="sub-submenu-icon">
+                              <ng-container
+                                *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? a.pageName : a.m_PageName; let pageNameIndex = index">
+                                <span *ngIf="(pageNameIndex == pageUrlIndex)">{{pageName}}</span>
+                              </ng-container>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
                     </div>
-                    <span class="dropdown-toggle"></span>
-                  </a>
-                  <div [class]="a?.isCollapsed ? '' : 'collapse'" id="collapseOfficeMaster{{i}}{{j}}">
-                    <ul class="sub-submenu">
-                      <li class="sub-submenu" *ngFor="let page of a?.pageURL; let pageUrlIndex = index">
-                        <a class="sub-submenu-link" routerLinkActive="active" routerLink="/{{page}}" [class.active]="a?.isCollapsed">
-                          <div class="d-flex  gap-2">
-                            <img src="assets/images/sidebar-icons/circle.svg" class="sub-submenu-icon">
-                            <ng-container *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? a.pageName : a.m_PageName; let pageNameIndex = index">
-                              <span *ngIf="(pageNameIndex == pageUrlIndex)">{{pageName}}</span>
-                            </ng-container>
-                            <!-- <span>By Teacher</span> -->
-                          </div>
-                        </a>
-                      </li>
-                      <!-- <li class="sub-submenu">
-                        <a class="sub-submenu-link">
-                          <div class="d-flex gap-2">
-                            <img src="../../../../assets/image/menu-icons/arrow-small-right.svg" class="sub-submenu-icon">
-                            <span>By Officer</span>
-                          </div>
-                        </a>
-                      </li> -->
-                    </ul>
-                  </div>
-                </li>
+                  </li>
+                </ng-container>
+                <ng-container *ngIf="!a.pageSubMenuView">
+                  <li class="sub-menu-item" *ngFor="let page of a?.pageURL; let pageUrlIndex = index">
+                    <a class="sub-menu-link" routerLink="/{{page}}">
+                      <div class="d-flex align-items-center">
+                        <img src=".././../../assets/images/menu-icons/circle.svg" class="sub-menu-icon">
+                        <ng-container *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? a.pageName : a.m_PageName; let pageNameIndex = index">
+                          <span *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</span>
+                        </ng-container>
+                      </div>
+                    </a>
+                  </li>
+                </ng-container>
               </ng-container>
-              <ng-container *ngIf="!a.pageSubMenuView">
-                <li *ngFor="let page of a?.pageURL; let pageUrlIndex = index">
-                  <a class="submenu-link" routerLink="/{{page}}" >
-                    <div class="d-flex">
-                      <!-- <img src="assets/images/sidebar-icons/circle.svg"> -->
-                      <ng-container *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? a.pageName : a.m_PageName; let pageNameIndex = index">
-                        <span *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</span>
-                      </ng-container>                        
-                    </div>
-                  </a>
-                </li>
-              </ng-container>
-            </ng-container>
-            <!-- <li class="submenu-item">
-              <a class="submenu-link" href="#">
-                <div class="d-flex">
-                  <img src="assets/image/menu-icons/circle.svg" class="sub-menu-icon">
-                  <span>Officer Master</span>
-                </div>
-              </a>
-            </li> -->
-          </ul>
-        </div>
-      </li>
-    </ng-container>
+            </ul>
+          </div>
+        </li>
+      </ng-container>
     </ul>
 
     <!-- <ul class="main-menu">

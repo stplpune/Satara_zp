@@ -301,7 +301,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row g-2">{{"Total Student :- " +totalStudentCountSchoolwise}}</div>
+                            <div class="row g-2" *ngIf="totalStudentCountSchoolwise">{{('Labels.TotalStudent' | translate)+" : " +totalStudentCountSchoolwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body pt-0">
@@ -364,7 +364,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row g-2">{{"Total Student :- " +totalStudentCountTeacharwise}}</div>
+                            <div class="row g-2" *ngIf="totalStudentCountTeacharwise">{{('Labels.TotalStudent' | translate)+" : " +totalStudentCountTeacharwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body">

@@ -32,7 +32,6 @@ export class Dashbaord2Component {
 
   academicYear = new FormControl('');
   examType = new FormControl(0);
-  globalTalId: any;
   dashboardCountData = new Array();
   acYear = new Array();
   graphInstance: any;
@@ -381,7 +380,7 @@ export class Dashbaord2Component {
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == "200") {
+        if (res.statusCode == "200" && res.responseData.responseData1.length) {
           this.dashboardCountData.push(res.responseData.responseData1[0]);
           // this.totalStudentSurveyData = res.responseData.responseData2;
           // this.totalStudentSurveyData.map((x: any) => {
@@ -509,14 +508,14 @@ export class Dashbaord2Component {
         this.getCenters();
         this.svgMapAddOrRemoveClass();
         this.getdashboardCount();
-        this.allChartApi()
+        this.allChartApi();
+        this.getAllTeacherOfficerByEvaluatorId();
       }
     })
   }
 
   svgMapAddOrRemoveClass() {
-    $('#mapsvg1 path').removeClass("talActive1")
-    this.globalTalId = this.mainFilterForm?.value?.talukaId;
+    $('#mapsvg1 path').removeClass("talActive1");
     $('#mapsvg1 path[data-name="' + this.mainFilterForm?.value?.talukaId + '"]').addClass('talActive1');
   }
 
@@ -632,11 +631,11 @@ export class Dashbaord2Component {
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardStudentGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == '200') {
+        if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let schoolwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
           let yAxisArray: any = [];
-          this.totalStudentCountSchoolwise = schoolwiseBarDetails[0].totalStudentCount;
+          this.totalStudentCountSchoolwise = schoolwiseBarDetails[0]?.totalStudentCount;
 
           schoolwiseBarDetails.map((x: any) => {
             xAxiaArray.push(this.selectedLang == 'English' ? x.graphLevel : x.m_GraphLevel);
@@ -714,11 +713,11 @@ export class Dashbaord2Component {
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardTeacherWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == '200') {
+        if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let teacherwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
           let yAxisArray: any = [];
-          this.totalStudentCountTeacharwise = teacherwiseBarDetails[0].totalStudentCount;
+          this.totalStudentCountTeacharwise = teacherwiseBarDetails[0]?.totalStudentCount;
 
           teacherwiseBarDetails.map((x: any) => {
             xAxiaArray.push(this.selectedLang == 'English' ? x.graphLevel : x.m_GraphLevel);
@@ -793,16 +792,12 @@ export class Dashbaord2Component {
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardStandardWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == '200') {
+        if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let classwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
-        
-        
-
           let slowLearnerArray: any = [];
           let brilliantLearnerArray: any = [];
           let goodLearnerArray: any = [];
-          //  let totalStudentCount :any=[];
 
           classwiseBarDetails.map((x: any) => {
             xAxiaArray.includes(this.selectedLang == 'English' ? x.standard : x.m_Standard) ? '':xAxiaArray.push(this.selectedLang == 'English' ? x.standard : x.m_Standard);
@@ -829,15 +824,15 @@ export class Dashbaord2Component {
     this.classwiseChartOptions = {
       series: [
         {
-          name: 'Slow Learner',
+          name: this.selectedLang == 'English' ? 'Slow Learner' :'हळू शिकणारा',
           data: slowLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
         {
-          name: 'Good Learner',
+          name: this.selectedLang == 'English' ? 'Good Learner':'चांगला शिकणारा',
           data: goodLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
         {
-          name: 'Brilliant Learner',
+          name: this.selectedLang == 'English' ? 'Brilliant':'हुशार',
           data: brilliantLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
          
@@ -895,7 +890,7 @@ export class Dashbaord2Component {
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardSubjectWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        if (res.statusCode == '200') {
+        if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let subjectwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
           let yAxisArray: any = [];

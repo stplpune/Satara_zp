@@ -381,10 +381,10 @@ export class AddUpdateSchoolRegistrationComponent {
     formValue.uploadImage = this.schoolRegForm.value.uploadImage;
     formValue.schoolDocument = this.docArray;
 
-    if (formValue.isKendraSchool == true) {
-      this.f['centerId'].clearValidators();
-      this.f['centerId'].updateValueAndValidity();
-    } else {
+    if (formValue.isKendraSchool != true) {
+    //   this.f['centerId'].clearValidators();
+    //   this.f['centerId'].updateValueAndValidity();
+    // } else {
       this.f['bitId'].clearValidators();
       this.f['bitId'].updateValueAndValidity();
     }
@@ -491,12 +491,12 @@ export class AddUpdateSchoolRegistrationComponent {
     if (eventValue == true) {
       this.f['bitId'].setValidators(Validators.required);
       this.f['bitId'].updateValueAndValidity();
-      this.f['centerId'].clearValidators();
-      this.f['centerId'].updateValueAndValidity();
+      // this.f['centerId'].clearValidators();
+      // this.f['centerId'].updateValueAndValidity();
     }
     else if (eventValue == false) {
-      this.f['centerId'].setValidators(Validators.required);
-      this.f['centerId'].updateValueAndValidity();
+      // this.f['centerId'].setValidators(Validators.required);
+      // this.f['centerId'].updateValueAndValidity();
 
       this.f['bitId'].clearValidators();
       this.f['bitId'].updateValueAndValidity();

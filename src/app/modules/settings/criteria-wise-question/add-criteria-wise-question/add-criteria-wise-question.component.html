@@ -99,7 +99,9 @@
                 </div>
             </div>
 
-            <form [formGroup]="addQuestionForm" >
+          <ng-container *ngIf="f['questionTypeId'].value == 3 || f['questionTypeId'].value == 4">
+
+            <form [formGroup]="addQuestionForm" #addQueFormDirective="ngForm" (ngSubmit)="addQueForm()">
             <div class="row gx-2 ">
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
@@ -134,7 +136,7 @@
                         <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
                         (change)="documentUpload($event);fileInput.value = ''" #fileInput />
                     </div>
-                    <button mat-flat-button type="submit" class="btn-main btn-icon" (click)="addQueForm()">
+                    <button mat-flat-button type="submit" class="btn-main btn-icon">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
@@ -144,7 +146,8 @@
                 <div class="d-flex flex-wrap gap-4">
                     <ng-container>
                         <div class="gallery position-relative" *ngFor="let imgObj of imgArray;let i = index">
-                            <img height="110px" width="110px" class="border" [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath">
+                            <img height="110px" width="110px" class="border" [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath"
+                            (click)="viewDocoment(i)">
                             <span class="position-absolute" style="top:-17px;right:-17px;">
                                 <button type="button" mat-icon-button class="bg-danger bg-opacity-25 text-danger material-icons"
                                     matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
@@ -158,7 +161,7 @@
             </div>
         </form>
 
-            <div class="col-sm-12">
+            <div class="col-sm-12" *ngIf="addQuestionArray?.length">
                 <div class="table-responsive table-height-xs scrollbar mb-2">
                     <table class="table dashboard-table">
                         <thead>
@@ -177,11 +180,11 @@
                                 <td>{{AddQ?.m_CQuestion}}</td>
                                 <td>{{AddQ?.expectedAns}}</td>
                                 <td>
-                                    <button mat-icon-button id="tooltip" matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
+                                    <button mat-icon-button type="button" id="tooltip" matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
                                         matTooltipClass="tooltip" (click)="editAddQuestion(AddQ, i)">
                                         <mat-icon class="text-main">edit</mat-icon>
                                     </button>
-                                    <button mat-icon-button (click)="globalDialogOpen(i)">
+                                    <button mat-icon-button type="button" (click)="globalDialogOpen(i)">
                                         <mat-icon class="text-danger"> delete </mat-icon>
                                     </button>
                                 </td>
@@ -190,6 +193,8 @@
                     </table>
                 </div>
             </div>
+        </ng-container>
+
         </mat-card-content>
         <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
             <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |

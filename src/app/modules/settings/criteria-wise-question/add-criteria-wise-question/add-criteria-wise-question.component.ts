@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
@@ -28,7 +28,6 @@ export class AddCriteriaWiseQuestionComponent {
   subjectArr = new Array();
   questionArr = new Array();
   criteriaArr = new Array();
-  // paramterArray = new Array();
   editObj: any;
 
   constructor(
@@ -44,7 +43,7 @@ export class AddCriteriaWiseQuestionComponent {
     private dialogRef: MatDialogRef<AddAssessmentConfigurationComponent>,
     private errors: ErrorsService,
     private dialog: MatDialog
-  ) { this.dialog}
+  ) { this.dialog }
 
   ngOnInit() {
     this.addCriteria_Form();
@@ -55,7 +54,8 @@ export class AddCriteriaWiseQuestionComponent {
     this.getSubject();
     this.getQuestion();
 
-    this.data ? this.patchFormData(this.data) : '';
+    this.data = 177
+    this.data ? this.callGetByIdApi(this.data) : '';
   }
 
   get f() { return this.addCriteriaForm.controls }
@@ -72,7 +72,11 @@ export class AddCriteriaWiseQuestionComponent {
       criteriaId: ['', [Validators.required]],
       introduction: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
     })
-  } 
+  }
+
+  // questionTypeChange(){
+
+  // }
 
   getState() {
     this.masterService.getAllState('').subscribe({
@@ -147,34 +151,36 @@ export class AddCriteriaWiseQuestionComponent {
     });
   }
 
-  getCriteriaBySS_QuestionTypeId() {  
+  getCriteriaBySS_QuestionTypeId() {
     this.criteriaArr = [];
-    let formValue = this.addCriteriaForm.value; 
+    let formValue = this.addCriteriaForm.value;
     let obj = formValue.standardId + "&SubjectId=" + formValue.assesmentSubjectId + '&QuestionTypeId=' + formValue.questionTypeId + '&flag_lang=' + this.webStorageS.getLangauge()
-    + '&StateId=' + formValue.stateId + '&DistrictId=' + formValue.districtId + '&EducationYearId=' + formValue.educationYearId;
-    this.apiService.setHttp('get', 'zp-satara/master/GetCriteriaByStandardSubject?StandardId=' + obj , false, false, false, 'baseUrl');
+      + '&StateId=' + formValue.stateId + '&DistrictId=' + formValue.districtId + '&EducationYearId=' + formValue.educationYearId;
+    this.apiService.setHttp('get', 'zp-satara/master/GetCriteriaByStandardSubject?StandardId=' + obj, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.criteriaArr = res.responseData;
-          // this.editObj ? (this.f['questionTypeId'].setValue(this.editObj?.questionTypeId)) : '';
         }
         else { this.criteriaArr = []; }
       },
     });
   }
 
-  onSubmit(){
-    if(!this.addCriteriaForm.valid){
+  onSubmit() {
+    if (!this.addCriteriaForm.valid) {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
-      return
-    } else{
+      return;
+    } else if ((this.f['questionTypeId'].value == 3 || this.f['questionTypeId'].value == 4) && !this.addQuestionArray?.length) {
+      this.commonMethod.showPopup('Please Add at Least One Question', 1);
+      return;
+    } else {
       this.ngxSpinner.show();
-      let formValue = this.addCriteriaForm.value; 
+      let formValue = this.addCriteriaForm.value;
 
-     let obj = {
+      let obj = {
         ...this.webStorageS.createdByProps(),
-        "id": 0,
+        "id": formValue.id,
         "criteriaId": formValue.criteriaId,
         "introduction": formValue.introduction,
         "cQuestionListModel": this.addQuestionArray,
@@ -182,7 +188,7 @@ export class AddCriteriaWiseQuestionComponent {
       }
 
       let urlName = this.data ? 'zp-satara/AssessmentQuestion/UpdateQuestion' : 'zp-satara/AssessmentQuestion/AddQuestion';
-      this.apiService.setHttp(this.data ? 'put' : 'post', urlName , false, obj, false, 'baseUrl');
+      this.apiService.setHttp(this.data ? 'put' : 'post', urlName, false, obj, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           this.ngxSpinner.hide();
@@ -197,36 +203,79 @@ export class AddCriteriaWiseQuestionComponent {
 
   }
 
-  patchFormData(_id?: number) {
+  callGetByIdApi(id: number) { // Edit getBy Id Api  
+    this.apiService.setHttp('get', 'zp-satara/AssessmentQuestion/GetById?Id=' + id + '&lan=' + this.webStorageS.getLangauge(), false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.patchFormData(res.responseData);
+        }
+      }, error: ((err: any) => {
+        this.commonMethod.checkEmptyData(err.statusMessage) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusMessage, 1);
+      })
+    });
+  }
 
+  patchFormData(obj: any) {
+    this.addQuestionArray = [];
+    this.editObj = obj;
+
+    this.addCriteriaForm.patchValue({
+      id: obj?.criteriaId,
+      stateId: obj?.stateId,
+      districtId: obj?.districtId,
+      educationYearId: obj?.educationYearId,
+      standardId: obj?.standardId,
+      assesmentSubjectId: obj?.subjectId,
+      questionTypeId: obj?.questionTypeId,
+      criteriaId: obj?.criteriaId,
+      introduction: obj?.introduction,
+    })
+    this.getDistrict(); this.getCriteriaBySS_QuestionTypeId();
+
+    this.addQuestionArray = obj?.cQuestionModel.map((ele: any) => {
+      let obj = {
+        ...this.webStorageS.createdByProps(),
+        "id": ele?.cQuestionId,
+        "criteriaId": ele?.criteriaId,
+        "cQuestion": ele?.cQuestion,
+        "m_CQuestion": ele?.m_CQuestion,
+        "expectedAns": ele?.expectedAns,
+        "documentModel": ele?.documentModel
+      }
+      return ele = obj;
+    })
   }
 
   //............................................INside FormArray Form Code Start Here ......................................//
 
-  addQuestionForm:FormGroup | any;
-  addQuestionArray:any[] = [];
+  addQuestionForm: FormGroup | any;
+  addQuestionArray: any[] = [];
   imgArray = new Array();
+  @ViewChild('addQueFormDirective') private addQueFormDirective!: NgForm;
+  index: any;
+  addQueEditFlag: boolean = false;
 
-
-  get aq(){ return this.addQuestionForm.controls;}
+  get aq() { return this.addQuestionForm.controls; }
 
   addQuestion_Form() {
     this.addQuestionForm = this.fb.group({
-      id:[0],
+      id: [0],
       cQuestion: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
       m_CQuestion: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]],
       expectedAns: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
     })
-  }  
+  }
 
-  
-  addQueForm(){
-    if(!this.imgArray?.length){
-      this.commonMethod.showPopup("At Least One Document Required", 0);
+  addQueForm() {
+    if (!this.addQuestionForm.valid) {
       return;
-    } else{
+    } else if (!this.imgArray?.length) {
+      this.commonMethod.showPopup("Please Upload at Least One Document", 1);
+      return;
+    } else {
       let formData = this.addQuestionForm.value;
-      let obj = 
+      let obj =
       {
         ...this.webStorageS.createdByProps(),
         "id": formData.id,
@@ -236,14 +285,38 @@ export class AddCriteriaWiseQuestionComponent {
         "expectedAns": formData.expectedAns,
         "documentModel": this.imgArray
       }
-      this.addQuestionArray.push(obj);
-      this.addQuestion_Form();
-      this.imgArray = [];
+
+      let checkDublicate = this.addQuestionArray?.some((x: any) => (x.cQuestion == formData.cQuestion || x.m_CQuestion == formData.m_CQuestion));
+
+      if (checkDublicate == true && this.addQueEditFlag != true) {
+        this.commonMethod.snackBar(this.webStorageS.getLangauge() == 'EN' ? 'Parameter is already exist' : 'पॅरामीटर आधीपासून अस्तित्वात आहे', 1);
+        return
+      } else if (this.addQueEditFlag == true) {
+        this.addQuestionArray[this.index] = obj;
+      } else {
+        this.addQuestionArray.push(obj);
+      }
+      this.clearAddQueForm();
     }
   }
 
-  editAddQuestion(_obj:any,_index:any){
+  clearAddQueForm() {
+    this.addQueFormDirective?.resetForm();
+    this.addQuestion_Form();
+    this.imgArray = [];
+    this.addQueEditFlag = false;
+  }
 
+  editAddQuestion(obj: any, index: any) {
+    this.index = index;
+    this.addQueEditFlag = true;
+    this.addQuestionForm.patchValue({
+      id: obj?.id,
+      cQuestion: obj?.cQuestion,
+      m_CQuestion: obj?.m_CQuestion,
+      expectedAns: obj?.expectedAns,
+    });
+    this.imgArray = obj?.documentModel;
   }
 
   globalDialogOpen(index: number) {
@@ -266,11 +339,12 @@ export class AddCriteriaWiseQuestionComponent {
     })
   }
 
-  deleteAddQuestion(index: number){
+  deleteAddQuestion(index: number) {
     this.addQuestionArray?.splice(index, 1);
+    this.clearAddQueForm();
   }
 
-//.................................... Document Upload Code Start Here ....................................//
+  //.................................... Document Upload Code Start Here ....................................//
 
   documentUpload(event: any) {
     let documentUrl: any = this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt')
@@ -304,7 +378,7 @@ export class AddCriteriaWiseQuestionComponent {
 
   //.................................... Document Upload Code End Here ....................................//
 
-  
+
   //............................................INside FormArray Form Code End Here ......................................//
 
 }

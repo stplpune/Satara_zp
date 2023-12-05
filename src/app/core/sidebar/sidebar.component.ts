@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { WebStorageService } from '../services/web-storage.service';
-import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -9,8 +7,11 @@ import { Router } from '@angular/router';
 })
 export class SidebarComponent {
   loginPages = new Array();
+  finalMenuList = new Array();
   selectedPageId!: number;
-  constructor(public WebStorageService: WebStorageService, private router: Router) {
+  showSubmenu: boolean = false;
+
+  constructor(public WebStorageService: WebStorageService) {
     let data: any = this.WebStorageService.getAllPageName();
     this.sideBarMenu(data);
   }
@@ -24,7 +25,7 @@ export class SidebarComponent {
     })
     items.forEach((item: any) => {
       let existing: any = this.loginPages.filter((v: any) => {
-        return v.pageNameView == item.pageNameView;
+        return (v.pageNameView == item.pageNameView && v.pageSubMenuView == item.pageSubMenuView);
       });
       if (existing.length) {
         let existingIndex: any = this.loginPages.indexOf(existing[0]);
@@ -41,17 +42,33 @@ export class SidebarComponent {
         this.loginPages.push(item);
       }
     });
-    this.loginPages.filter((x: any) => {
-      var path = this.router?.url?.split('/')[1];
-      if(x.pageURL.includes(path)){
-        x.isCollapsed = true;
-      }else{
-        let data1: any = this.WebStorageService?.getAllPageName();
-        data1.filter((d: any) => {
-          (d.pageURL == path && d.pageNameView == x.pageNameView) ? x.isCollapsed = true : '';
-        })
+    // this.loginPages.filter((x: any) => {
+    //   var path = this.router?.url?.split('/')[1];
+    //   if(x.pageURL.includes(path)){
+    //     x.isCollapsed = true;
+    //   }else{
+    //     let data1: any = this.WebStorageService?.getAllPageName();
+    //     data1.filter((d: any) => {
+    //       (d.pageURL == path && d.pageNameView == x.pageNameView) ? x.isCollapsed = true : '';
+    //     })
+    //   }
+    // })
+    
+    let MenuList : any = []
+    this.loginPages.find((ele: any)=>{
+      if(!MenuList.length){
+        MenuList.push({ 'key': ele.pageNameView, 'keyM': ele.m_PageNameView, 'isCollapsed': false, 'icon': ele.menuIcon, 'pageURL': ele.pageURL, array: [ele] })
       }
-    })     
+      else {
+        let check = MenuList.findIndex((item: any) => { return item.key == ele.pageNameView })
+        if (check != -1) {
+          MenuList[check].array.push(ele)
+        } else {
+          MenuList.push({ 'key': ele.pageNameView, 'keyM': ele.m_PageNameView, 'isCollapsed': false ,'icon': ele.menuIcon, 'pageURL': ele.pageURL, array: [ele] })
+        }
+      }
+    })
+    this.finalMenuList = MenuList;   
   }
 
     //************************************ Sidebar SubMenu Function - Start Here **********************/
@@ -69,10 +86,15 @@ export class SidebarComponent {
   
   closeSidebar() {
     this.WebStorageService.setSidebarState(!this.WebStorageService.getSidebarState());
-
   }
 
   getSideBarState() {
     return this.WebStorageService.getSidebarState();
+  }
+
+  subMenuClick(pages: any){    
+    this.finalMenuList.forEach((item: any) => {
+      pages == item ? item.isCollapsed = true : item.isCollapsed = false;
+    })
   }
 }

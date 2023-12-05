@@ -50,7 +50,7 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.standard' | translate}}</mat-label>
                         <mat-select formControlName="standardId" (selectionChange)="callCritetiaApi()">
-                            <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
+                            <mat-option *ngFor="let standard of standardArr" [value]="standard.id">
                                 {{webStorageS.getLangauge() == 'EN' ? standard.standard : standard.m_Standard}}
                             </mat-option>
                         </mat-select>
@@ -92,7 +92,7 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.introduction'| translate}}</mat-label>
                         <textarea matInput formControlName="introduction"
-                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);"
+                        (keypress)="validation.noFirstSpaceAllow($event)"
                         maxlength="100"></textarea>
                         <mat-error *ngIf="f['introduction'].hasError('pattern')">Please Enter Valid Introduction</mat-error>
                     </mat-form-field>
@@ -107,14 +107,14 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Question'| translate}}</mat-label>
                         <input matInput formControlName="cQuestion"
-                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);" maxlength="50">
+                        (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
                         <mat-error *ngIf="aq['cQuestion'].hasError('pattern')">Please Enter Valid Question</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
-                        <input matInput formControlName="m_CQuestion" (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);" maxlength="50">
+                        <input matInput formControlName="m_CQuestion" (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
                         <mat-error *ngIf="aq['m_CQuestion'].hasError('pattern')">Please Enter Valid Marathi Question</mat-error>
                     </mat-form-field>
                 </div>
@@ -122,7 +122,7 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.ExpAnswer'| translate}}</mat-label>
                         <input matInput formControlName="expectedAns"
-                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);" maxlength="50">
+                        (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
                         <mat-error *ngIf="aq['expectedAns'].hasError('pattern')">Please Enter Valid Expected Answer</mat-error>
                     </mat-form-field>
                 </div>

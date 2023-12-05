@@ -36,9 +36,9 @@
             </div>
             <span class="dropdown-toggle"></span>
           </a>
-          <div [class]="!pages.isCollapsed ? 'collapse' : 'collapse show'" id="collapseMaster1{{i}}">
+          <div *ngIf="showSubmenu && pages.isCollapsed" [class]="!pages.isCollapsed ? 'collapse' : 'collapse show'" id="collapseMaster1{{i}}">
             <!-- >*ngIf="showSubmenu && pages.isCollapsed" -->
-            <ul class="sub-menu">
+            <ul class="sub-menu" >
               <ng-container *ngFor="let a of pages.array; let j = index">
                 <ng-container *ngIf="a.pageSubMenuView">
                   <li class="sub-menu-item">

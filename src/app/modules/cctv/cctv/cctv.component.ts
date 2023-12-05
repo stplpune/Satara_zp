@@ -18,8 +18,8 @@ import { MatDialog } from '@angular/material/dialog';
 export class CctvComponent {
   viewStatus = 'Table';
   pageNumber: number = 1;
-  displayedheadersEnglish = ['Sr. No.', 'cctvType','CCTV Location', 'CCTV Name', 'CCTV Model', 'Register Date', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'cctv प्रकार', 'cctv स्थान', 'cctv नाव', 'cctv मॉडेल', 'नोंदणी तारीख', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'District', 'Taluka', 'Center','Village','School', 'CCTVType','CCTV Location', 'CCTV Name', 'CCTV Model', 'Register Date', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र','गाव','शाळा', 'cctv प्रकार', 'cctv स्थान', 'cctv नाव', 'cctv मॉडेल', 'नोंदणी तारीख', 'कृती'];
   filterForm!: FormGroup;
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   tableDataArray = new Array();
@@ -243,7 +243,8 @@ export class CctvComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    this.displayedColumns = ['srNo', this.langTypeName == 'English' ? 'cctvType' : 'm_CCTVType', this.langTypeName == 'English' ? 'cctvLocation' : 'm_CCTVLocation', this.langTypeName == 'English' ? 'cctvName' : 'cctvName', this.langTypeName == 'English' ? 'cctvModel' : 'cctvModel', 'registerDate'];
+    this.displayedColumns = ['srNo',this.langTypeName == 'English' ? 'district' : 'm_District', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka',this.langTypeName == 'English' ? 'center' : 'm_Center',this.langTypeName == 'English' ? 'village' : 'm_Village',this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName',
+     this.langTypeName == 'English' ? 'cctvType' : 'm_CCTVType', this.langTypeName == 'English' ? 'cctvLocation' : 'm_CCTVLocation', this.langTypeName == 'English' ? 'cctvName' : 'cctvName', this.langTypeName == 'English' ? 'cctvModel' : 'cctvModel', 'registerDate'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",

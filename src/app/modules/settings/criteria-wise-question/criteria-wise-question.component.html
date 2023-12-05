@@ -46,8 +46,61 @@
                 </div>
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label> {{'Labels.standard'| translate}}</mat-label>
+                        <mat-select formControlName="standardId">
+                            <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
+                                {{languageFlag == 'English' ? standard.standard : standard.m_Standard}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                        <mat-select formControlName="subjectId">
+                            <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
+                                {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
+                        <mat-select formControlName="questionTypeId">
+                            <mat-option *ngFor="let que of questionArr" [value]="que.id">
+                                {{languageFlag == 'English' ? que.questionType : que.m_QuestionType}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.EducationalYear' | translate}}</mat-label>
+                        <mat-select formControlName="educationalYearId">
+                            <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
+                                {{languageFlag == 'English' ? educationYear.eductionYear :
+                                educationYear.eductionYear_M}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.Criteria' | translate}}</mat-label>
+                        <mat-select formControlName="criteriaId">
+                            <mat-option *ngFor="let criteria of criteriaArr" [value]="criteria.id">
+                                {{languageFlag == 'EN' ? criteria.question : criteria.m_Question}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label> {{'Labels.criteriawisequestion' | translate}}</mat-label>
-                        <input matInput>
+                        <input matInput formControlName="textSearch">
                     </mat-form-field>
                 </div>
                 <div class="col-sm-auto">

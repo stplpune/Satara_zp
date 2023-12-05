@@ -27,6 +27,11 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   highLightFlag: any;
   stateArr = new Array();
   districtArr = new Array();
+  standardArr = new Array();
+  subjectArr = new Array();
+  questionArr = new Array();
+  educationYearArr = new Array();
+  criteriaArr = new Array();
 
   displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Question Type', 'Educational Year','Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'कृती'];
@@ -45,6 +50,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   ngOnInit(): void {
     this.defaultForm();
     this.getState();
+    this.getSubject(); this.getQuestion(); this.getStandard(); this.getEducatioYear();
     this.getTableData();
     this.languageFlag = this.webService.languageFlag;
     this.webService.langNameOnChange.subscribe(lang => {
@@ -63,9 +69,10 @@ export class CriteriaWiseQuestionComponent implements OnInit{
       educationalYearId : [0],
       subjectId: [0],
       questionTypeId: [0],
+      criteriaId: [0],
       textSearch: [''],
     })
-  }
+  }  
 
   languageChange() {
     this.highLightFlag = true;
@@ -111,11 +118,84 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     else{ this.districtArr = [];}
   }
 
+  getStandard(){
+    this.standardArr = [];
+    this.masterService.GetAllStandardClassWise(this.webService.languageFlag).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.standardArr.push({"groupId": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
+        }
+        else {
+          this.standardArr = [];
+        }
+      }
+    });
+  }
+
+  getSubject() {
+    this.subjectArr = [];
+    this.masterService.getAllSubject(this.webService.languageFlag).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.subjectArr.push({"id": 0, "subject": "All", "m_Subject": "सर्व"}, ...res.responseData);
+        }
+        else {
+          this.subjectArr = [];
+        }
+      },
+    });
+  }
+
+  getQuestion() {
+    this.questionArr = [];
+    this.masterService.getAllQuestionType(this.webService.languageFlag).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.questionArr.push({"id": 0, "questionType": "All", "m_QuestionType": "सर्व"}, ...res.responseData);
+        }
+        else {
+          this.questionArr = [];
+        }
+      },
+    });
+  }
+
+  getEducatioYear() {
+    this.educationYearArr = [];
+    this.masterService.getAcademicYears(this.webService.languageFlag).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.educationYearArr.push({"id": 0, "eductionYear": "All", "eductionYear_M": "सर्व"}, ...res.responseData);
+        }
+        else {
+          this.educationYearArr = [];
+        }
+      },
+    });
+  }
+
+  getCriteriaBySS_QuestionTypeId() {  
+    this.criteriaArr = [];
+    let formValue = this.filterForm.value; 
+    let obj = formValue.standardId + "&SubjectId=" + formValue.assesmentSubjectId + '&QuestionTypeId=' + formValue.questionTypeId + '&flag_lang=' + this.languageFlag
+    + '&StateId=' + formValue.stateId + '&DistrictId=' + formValue.districtId + '&EducationYearId=' + formValue.educationalYearId;
+    this.apiService.setHttp('get', 'zp-satara/master/GetCriteriaByStandardSubject?StandardId=' + obj , false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.criteriaArr = res.responseData;
+        }
+        else { this.criteriaArr = []; }
+      },
+    });
+  }
+
   clearFilter(flag: string){
     if(flag == 'state'){
       this.f['districtId'].setValue(0);
     }
   }
+
 
   getTableData(flag?: string) {
     this.ngxSpinner.show();

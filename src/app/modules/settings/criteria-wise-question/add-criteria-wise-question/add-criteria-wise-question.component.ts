@@ -54,7 +54,7 @@ export class AddCriteriaWiseQuestionComponent {
     this.getSubject();
     this.getQuestion();
 
-    this.data = 177
+    this.data = 131
     this.data ? this.callGetByIdApi(this.data) : '';
   }
 
@@ -74,9 +74,18 @@ export class AddCriteriaWiseQuestionComponent {
     })
   }
 
-  // questionTypeChange(){
+  questionTypeChange(){
+    // this.clearAddQueForm();this.addQuestionArray = [];
+  (this.f['questionTypeId'].value == 1 || this.f['questionTypeId'].value == 2) ? (this.clearAddQueForm(),this.addQuestionArray = []) : '';
+  }
 
-  // }
+  callCritetiaApi(){
+    if(this.f['stateId'].value && this.f['districtId'].value && this.f['educationYearId'].value && 
+    this.f['standardId'].value && this.f['assesmentSubjectId'].value && this.f['questionTypeId'].value){
+      this.f['criteriaId'].setValue('');
+      this.getCriteriaBySS_QuestionTypeId();
+    }
+  }
 
   getState() {
     this.masterService.getAllState('').subscribe({
@@ -179,7 +188,7 @@ export class AddCriteriaWiseQuestionComponent {
       let formValue = this.addCriteriaForm.value;
 
       let obj = {
-        ...this.webStorageS.createdByProps(),
+        ...this.createdByProps(),
         "id": formValue.id,
         "criteriaId": formValue.criteriaId,
         "introduction": formValue.introduction,
@@ -235,7 +244,7 @@ export class AddCriteriaWiseQuestionComponent {
 
     this.addQuestionArray = obj?.cQuestionModel.map((ele: any) => {
       let obj = {
-        ...this.webStorageS.createdByProps(),
+        ...this.createdByProps(),
         "id": ele?.cQuestionId,
         "criteriaId": ele?.criteriaId,
         "cQuestion": ele?.cQuestion,
@@ -245,6 +254,16 @@ export class AddCriteriaWiseQuestionComponent {
       }
       return ele = obj;
     })
+  }
+
+  createdByProps(): any {  //"isDeleted": true
+    return {
+      "createdBy": this.webStorageS.getUserId() || 0,
+      "modifiedBy": this.webStorageS.getUserId() || 0,
+      "createdDate": new Date(),
+      "modifiedDate": new Date(),
+      "isDeleted": false,
+    }
   }
 
   //............................................INside FormArray Form Code Start Here ......................................//
@@ -277,7 +296,7 @@ export class AddCriteriaWiseQuestionComponent {
       let formData = this.addQuestionForm.value;
       let obj =
       {
-        ...this.webStorageS.createdByProps(),
+        ...this.createdByProps(),
         "id": formData.id,
         "criteriaId": this.addCriteriaForm.value.criteriaId,
         "cQuestion": formData.cQuestion,
@@ -317,9 +336,16 @@ export class AddCriteriaWiseQuestionComponent {
       expectedAns: obj?.expectedAns,
     });
     this.imgArray = obj?.documentModel;
+
+    this.imgArray.map((ele: any) => { // only For Showing Doc Icon
+      let extension = ele.documentPath.split('.');
+      if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+        ele['docFlag'] = true;
+      }
+    });
   }
 
-  globalDialogOpen(index: number) {
+  globalDialogOpen(obj:any,index: number) {
     let dialoObj = {
       header: 'Delete',
       title: this.webStorageS.languageFlag == 'EN' ? 'Do you want to delete record?' : 'तुम्हाला रेकॉर्ड हटवायचा आहे का?',
@@ -334,13 +360,19 @@ export class AddCriteriaWiseQuestionComponent {
     })
     deleteDialogRef.afterClosed().subscribe((result: any) => {
       if (result == 'yes') {
-        this.deleteAddQuestion(index);
+        this.deleteAddQuestion(obj,index);
       }
     })
   }
 
-  deleteAddQuestion(index: number) {
-    this.addQuestionArray?.splice(index, 1);
+  deleteAddQuestion(obj:any,index: number) {
+    if(obj?.id == 0){
+      this.addQuestionArray?.splice(index, 1);
+    } else{
+      obj.isDeleted = true;
+      this.addQuestionArray[index] = obj;
+    }
+    
     this.clearAddQueForm();
   }
 
@@ -369,7 +401,7 @@ export class AddCriteriaWiseQuestionComponent {
   }
 
   viewDocoment(index: any) {
-    window.open(this.imgArray[index].docPath, 'blank');
+    window.open(this.imgArray[index].documentPath, 'blank');
   }
 
   deleteDocoment(index: any) {

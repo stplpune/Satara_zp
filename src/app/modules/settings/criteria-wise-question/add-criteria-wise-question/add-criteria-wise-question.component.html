@@ -17,7 +17,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="getDistrict();">
+                        <mat-select formControlName="stateId" (selectionChange)="getDistrict();callCritetiaApi()">
                             <mat-option *ngFor="let state of stateArr" [value]="state.id">
                                 {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
                             </mat-option>
@@ -27,7 +27,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
-                        <mat-select formControlName="districtId">
+                        <mat-select formControlName="districtId" (selectionChange)="callCritetiaApi()">
                             <mat-option *ngFor="let district of districtArr" [value]="district.id">
                                 {{webStorageS.getLangauge() == 'EN' ?
                                 district.district : district.m_District}}
@@ -38,7 +38,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.EducationalYear'| translate}}</mat-label>
-                        <mat-select formControlName="educationYearId">
+                        <mat-select formControlName="educationYearId" (selectionChange)="callCritetiaApi()">
                             <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
                                 {{webStorageS.getLangauge() == 'EN' ? educationYear.eductionYear :
                                 educationYear.eductionYear_M}}
@@ -49,7 +49,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.standard' | translate}}</mat-label>
-                        <mat-select formControlName="standardId">
+                        <mat-select formControlName="standardId" (selectionChange)="callCritetiaApi()">
                             <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
                                 {{webStorageS.getLangauge() == 'EN' ? standard.standard : standard.m_Standard}}
                             </mat-option>
@@ -59,7 +59,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                        <mat-select formControlName="assesmentSubjectId">
+                        <mat-select formControlName="assesmentSubjectId" (selectionChange)="callCritetiaApi()">
                             <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
                                 {{webStorageS.getLangauge() == 'EN' ? sub.subject : sub.m_Subject}}
                             </mat-option>
@@ -69,7 +69,7 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
-                        <mat-select formControlName="questionTypeId" (selectionChange)="getCriteriaBySS_QuestionTypeId()">
+                        <mat-select formControlName="questionTypeId" (selectionChange)="questionTypeChange();callCritetiaApi()">
                             <mat-option *ngFor="let que of questionArr" [value]="que.id">
                                 {{webStorageS.getLangauge() == 'EN' ? que.questionType : que.m_QuestionType}}
                             </mat-option>
@@ -166,7 +166,7 @@
                     <table class="table dashboard-table">
                         <thead>
                             <tr>
-                                <th>Sr. No.</th>
+                                <!-- <th>Sr. No.</th> -->
                                 <th>Question</th>
                                 <th>Question (Marathi)</th>
                                 <th>Expect Answer</th>
@@ -175,7 +175,8 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let AddQ of addQuestionArray; let i=index">
-                                <td>{{i+1}}</td>
+                                <ng-container *ngIf="AddQ?.isDeleted == false">
+                                <!-- <td>{{i+1}}</td> -->
                                 <td>{{AddQ?.cQuestion}}</td>
                                 <td>{{AddQ?.m_CQuestion}}</td>
                                 <td>{{AddQ?.expectedAns}}</td>
@@ -184,10 +185,11 @@
                                         matTooltipClass="tooltip" (click)="editAddQuestion(AddQ, i)">
                                         <mat-icon class="text-main">edit</mat-icon>
                                     </button>
-                                    <button mat-icon-button type="button" (click)="globalDialogOpen(i)">
+                                    <button mat-icon-button type="button" (click)="globalDialogOpen(AddQ,i)">
                                         <mat-icon class="text-danger"> delete </mat-icon>
                                     </button>
                                 </td>
+                            </ng-container>
                             </tr>
                         </tbody>
                     </table>

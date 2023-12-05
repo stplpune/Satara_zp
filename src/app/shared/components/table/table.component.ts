@@ -65,6 +65,8 @@ export class TableComponent implements OnInit {
       this.tableInfo = res;    
       
       if (this.tableInfo) {
+        console.log("this.tableInfo", this.tableInfo);
+        
         this.highlightedRow = this.tableInfo.highlightedRow;
         this.displayedColumns = this.tableInfo.displayedColumns;
         this.tableSize = this.tableInfo.tableSize;

@@ -53,8 +53,6 @@ export class AddCriteriaWiseQuestionComponent {
     this.getStandard();
     this.getSubject();
     this.getQuestion();
-
-    this.data = 131
     this.data ? this.callGetByIdApi(this.data) : '';
   }
 

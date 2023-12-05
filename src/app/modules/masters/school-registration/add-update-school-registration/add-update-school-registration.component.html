@@ -226,6 +226,28 @@
                                 </mat-error> -->
                     </mat-form-field>
                 </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.TypeOfArea' | translate}}</mat-label>
+                        <mat-select formControlName="s_AreaId">
+                            <mat-option *ngFor="let area of areaArray" [value]="area.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                area.area : area.m_Area}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.SchoolMedium' | translate}}</mat-label>
+                        <mat-select formControlName="s_MediumId">
+                            <mat-option *ngFor="let medium of mediumArray" [value]="medium.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                medium.medium : medium.m_Medium}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">

@@ -40,7 +40,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     private fb: FormBuilder,
     private apiService: ApiService,
     private masterService: MasterService,
-    private webService: WebStorageService,
+    public webService: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
     private commonMethodS: CommonMethodsService,
     private errors: ErrorsService,
@@ -106,7 +106,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   getDistrict() {
     this.districtArr = [];
     if(this.filterForm.value.stateId > 0){
-      this.masterService.getAllDistrict(this.webService.languageFlag, this.filterForm.value.stateId).subscribe({
+      this.masterService.getAllDistrict('', this.filterForm.value.stateId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
@@ -120,7 +120,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getStandard(){
     this.standardArr = [];
-    this.masterService.GetAllStandardClassWise(this.webService.languageFlag).subscribe({
+    this.masterService.GetAllStandardClassWise('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.standardArr.push({"groupId": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
@@ -134,7 +134,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getSubject() {
     this.subjectArr = [];
-    this.masterService.getAllSubject(this.webService.languageFlag).subscribe({
+    this.masterService.getAllSubject('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subjectArr.push({"id": 0, "subject": "All", "m_Subject": "सर्व"}, ...res.responseData);
@@ -148,7 +148,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getQuestion() {
     this.questionArr = [];
-    this.masterService.getAllQuestionType(this.webService.languageFlag).subscribe({
+    this.masterService.getAllQuestionType('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.questionArr.push({"id": 0, "questionType": "All", "m_QuestionType": "सर्व"}, ...res.responseData);
@@ -162,7 +162,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getEducatioYear() {
     this.educationYearArr = [];
-    this.masterService.getAcademicYears(this.webService.languageFlag).subscribe({
+    this.masterService.getAcademicYears('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.educationYearArr.push({"id": 0, "eductionYear": "All", "eductionYear_M": "सर्व"}, ...res.responseData);
@@ -268,7 +268,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     const dialogRef = this.dialog.open(AddCriteriaWiseQuestionComponent,{
       width: '700px',
       disableClose:true,
-      data: obj.criteriaId
+      data: obj?.criteriaId
     });
 
     dialogRef.afterClosed().subscribe(result => {

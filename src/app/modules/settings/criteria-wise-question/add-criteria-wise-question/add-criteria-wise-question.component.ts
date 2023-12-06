@@ -380,28 +380,34 @@ export class AddCriteriaWiseQuestionComponent {
   //.................................... Document Upload Code Start Here ....................................//
 
   documentUpload(event: any) {
-    let documentUrl: any = this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt')
-    documentUrl.subscribe({
-      next: (ele: any) => {
-        if (ele.responseData != null) {
-          let urlString = ele.responseData.split(',');
-          urlString.forEach((res:any) => {
-            let obj = {
-              "id": 0,
-              "cQuestionId": this.f['questionTypeId'].value,
-              "documentPath": res,
-              "createdBy": this.webStorageS.getUserId()
-            }
-            let extension = res.split('.');
-            if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
-              obj['docFlag'] = true;
-            }
-            this.imgArray.push(obj);
-          })
-          this.commonMethod.showPopup(ele.statusMessage, 0);
-        }
-      },
-    })
+    if(this.imgArray.length >= 5){
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Cannot upload More than five Document/Image into Question Master ': 'प्रश्न मास्टरमध्ये पाचपेक्षा जास्त दस्तऐवज/प्रतिमा अपलोड करू शकत नाही', 3);
+      return
+    }else{
+      let documentUrl: any = this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt')
+      documentUrl.subscribe({
+        next: (ele: any) => {
+          if (ele.responseData != null) {
+            let urlString = ele.responseData.split(',');
+            urlString.forEach((res:any) => {
+              let obj = {
+                "id": 0,
+                "cQuestionId": this.f['questionTypeId'].value,
+                "documentPath": res,
+                "createdBy": this.webStorageS.getUserId()
+              }
+              let extension = res.split('.');
+              if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+                obj['docFlag'] = true;
+              }
+              this.imgArray.push(obj);
+            })
+            this.commonMethod.showPopup(ele.statusMessage, 0);
+          }
+        },
+      })
+  
+    }
   }
 
   viewDocoment(index: any) {

@@ -94,6 +94,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   optionArr = new Array();
   commonDataResArray = new Array();
   questionArray = new Array();
+  stateData = new Array();
+  districtData = new Array();
 
   constructor(public translate: TranslateService, private masterService: MasterService,
     public webStorage: WebStorageService, private fb: FormBuilder, private apiService: ApiService,
@@ -121,7 +123,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (val == 'initial') {
       this.createFilterForm();
       this.getPieChart();
-      this.getTalukas();
+      this.getState();
       this.getExamType();
       setTimeout(() => {
         this.getdashboardCount(val);
@@ -150,6 +152,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   createFilterForm() {
     this.filterForm = this.fb.group({
       acYearId: [],
+      stateId:[1],
+      districtId:[1],
       talukaId: [0],
       villageId:[0],
       centerId: [0],
@@ -182,6 +186,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.f['acYearId'].patchValue(this.educationYear);
     })
   }
+
+  getState(){
+    this.stateData = [];
+    this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
+     this.stateData = res.responseData;
+     this.getDistrict()
+    })
+  }
+  getDistrict(){
+    this.districtData = [];
+    this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
+     this.districtData = res.responseData;
+     this.getTalukas()
+    })
+  }
+
+
   getTalukas() {
     this.talukaData = [];
     this.centerData = [];
@@ -191,7 +212,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       centerId: 0,
       schoolId: 0
     })
-    this.masterService.getAllTaluka('').subscribe((res: any) => {
+    this.masterService.getAllTaluka('',this.filterForm.value.districtId).subscribe((res: any) => {
       this.talukaData.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
       // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
       this.getCenters();

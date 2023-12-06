@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { ApiService } from 'src/app/core/services/api.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-criteria-wise-question',
@@ -174,6 +175,15 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     });
   }
 
+  callCritetiaApi(){
+    if(this.f['stateId'].value && this.f['districtId'].value && this.f['educationalYearId'].value && 
+    this.f['standardId'].value && this.f['subjectId'].value && this.f['questionTypeId'].value){
+      this.f['criteriaId'].setValue('');
+      this.getCriteriaBySS_QuestionTypeId();
+    }
+  }
+
+
   getCriteriaBySS_QuestionTypeId() {  
     this.criteriaArr = [];
     let formValue = this.filterForm.value; 
@@ -257,7 +267,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
         this.openDialog(obj);
         break;
       case 'Delete':
-        // this.globalDialogOpen(obj);
+        this.globalDialogOpen(obj);
         break;
       case 'Block':
       // this.openBlockDialog(obj);
@@ -275,5 +285,52 @@ export class CriteriaWiseQuestionComponent implements OnInit{
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  globalDialogOpen(obj: any) {
+    let dialoObj = {
+      img: 'assets/images/trash.gif',
+      header: 'Delete',
+      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Criteria Wise Question?' : 'तुम्हाला निकषानुसार प्रश्न हटवायचा आहे?',
+      cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onClickDelete(obj);
+      }
+      this.highLightFlag = false;
+      this.languageChange();
+    })
+  }
+
+  onClickDelete(obj?: any){
+    let webStorageMethod = this.webService.createdByProps();
+    let deleteObj = {
+      "id": obj?.criteriaId,
+      "deletedBy": webStorageMethod.modifiedBy,
+      "modifiedDate": webStorageMethod.modifiedDate,
+      "lan": this.webService.languageFlag
+    }
+    this.apiService.setHttp('delete', 'zp-satara/AssessmentQuestion/DeleteQuestion', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200"){
+          this.commonMethodS.showPopup(res.statusMessage, 0);
+          this.getTableData();
+        }
+      },
+      error: (error: any) => {
+        this.commonMethodS.checkEmptyData(error.statusText) == false ? this.errors.handelError(error.statusCode) : this.commonMethodS.showPopup(error.statusText, 1);
+      }
+    })
+  }
+  
+
 
 }

@@ -449,7 +449,7 @@
         "RegistrationDate": "Registration Date",
         "teacherId": "Teacher ID",
         "PhotoIsRequired": "Photo Is Required",
-        "cctv": "CCTV",
+        "cctv": "CCTV Monitoring",
         "ListofCCTV": "List Of CCTV",
         "cctvdetails": "CCTV Details",
         "UpdateCCTVDetails": "Update CCTV Details",

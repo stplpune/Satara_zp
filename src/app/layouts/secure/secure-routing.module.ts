@@ -29,6 +29,7 @@ const routes: Routes = [
   { path: 'officer-report', loadChildren: () => import('../../modules/reports/student-report/student-report.module').then(m => m.StudentReportModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Officer Report', m_title: 'अधिकारी अहवाल', active: true }] } },
   { path: 'school-report', loadChildren: () => import('../../modules/reports/school-report/school-report.module').then(m => m.SchoolReportModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'School Report', m_title: 'शाळेचा अहवाल', active: true }] } },
   { path: 'dashboard2', loadChildren: () => import('../../modules/dashbaord2/dashbaord2.module').then(m => m.Dashbaord2Module),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Dashboard-2', m_title: 'डॅशबोर्ड-2', active: true }] }  },
+  { path: 'dashboard-student-data', loadChildren: () => import('../../modules/dashbaord2/dashboard2-dashboard-detail/dashboard2-dashboard-detail.module').then(m => m.Dashboard2DashboardDetailModule), data: { breadcrumb: [{ title: 'Dashboard Student Data',m_title: 'डॅशबोर्ड विद्यार्थी तपशील', active: true }] }  }  ,
 
   //------infrastructure-routing--------//
 

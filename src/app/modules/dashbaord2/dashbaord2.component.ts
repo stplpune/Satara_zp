@@ -196,11 +196,12 @@ export class Dashbaord2Component {
 
   getDistrict() {
     this.districtData = [];
-    this.masterService.getAllDistrict(this.selectedLang, this.f['stateId'].value).subscribe((res: any) => {
-      this.districtData = res.responseData;
-      this.getTalukas()
-    })
+    this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
+     this.districtData = res.responseData;
+     this.getTalukas()
+    });
   }
+  
 
   getYearArray() {
     this.acYear = [];
@@ -675,12 +676,9 @@ export class Dashbaord2Component {
         toolbar: {
           show: false
         },
-        events: {          
-          click: (_event: any, _chartContext: any, config: any) => {
-              console.log(_event);
-              console.log(_chartContext);
-              console.log(config);
-              
+        events: {
+          dataPointSelection: (event, chartContext, config) => {
+            console.log(event,chartContext, config);
           }
         }
       },

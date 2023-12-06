@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { ApiService } from 'src/app/core/services/api.service';
+import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 
 @Component({
   selector: 'app-criteria-wise-question',
@@ -33,14 +34,14 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   educationYearArr = new Array();
   criteriaArr = new Array();
 
-  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Question Type', 'Educational Year','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'District',  'Standard', 'Subject','Question Type', 'Educational Year', 'Criteria', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा','इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'निकष', 'कृती'];
 
   constructor(public dialog: MatDialog,
     private fb: FormBuilder,
     private apiService: ApiService,
     private masterService: MasterService,
-    private webService: WebStorageService,
+    public webService: WebStorageService,
     private ngxSpinner: NgxSpinnerService,
     private commonMethodS: CommonMethodsService,
     private errors: ErrorsService,
@@ -76,7 +77,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumns = ['srNo', 'standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear','action'];
+    let displayedColumns = ['srNo', 'district','standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'criteria', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
@@ -106,7 +107,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   getDistrict() {
     this.districtArr = [];
     if(this.filterForm.value.stateId > 0){
-      this.masterService.getAllDistrict(this.webService.languageFlag, this.filterForm.value.stateId).subscribe({
+      this.masterService.getAllDistrict('', this.filterForm.value.stateId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
@@ -120,7 +121,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getStandard(){
     this.standardArr = [];
-    this.masterService.GetAllStandardClassWise(this.webService.languageFlag).subscribe({
+    this.masterService.GetAllStandardClassWise('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.standardArr.push({"groupId": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
@@ -134,7 +135,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getSubject() {
     this.subjectArr = [];
-    this.masterService.getAllSubject(this.webService.languageFlag).subscribe({
+    this.masterService.getAllSubject('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subjectArr.push({"id": 0, "subject": "All", "m_Subject": "सर्व"}, ...res.responseData);
@@ -148,7 +149,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getQuestion() {
     this.questionArr = [];
-    this.masterService.getAllQuestionType(this.webService.languageFlag).subscribe({
+    this.masterService.getAllQuestionType('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.questionArr.push({"id": 0, "questionType": "All", "m_QuestionType": "सर्व"}, ...res.responseData);
@@ -162,7 +163,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   getEducatioYear() {
     this.educationYearArr = [];
-    this.masterService.getAcademicYears(this.webService.languageFlag).subscribe({
+    this.masterService.getAcademicYears('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.educationYearArr.push({"id": 0, "eductionYear": "All", "eductionYear_M": "सर्व"}, ...res.responseData);
@@ -174,10 +175,19 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     });
   }
 
+  callCritetiaApi(){
+    if(this.f['stateId'].value && this.f['districtId'].value && this.f['educationalYearId'].value && 
+    this.f['standardId'].value && this.f['subjectId'].value && this.f['questionTypeId'].value){
+      this.f['criteriaId'].setValue('');
+      this.getCriteriaBySS_QuestionTypeId();
+    }
+  }
+
+
   getCriteriaBySS_QuestionTypeId() {  
     this.criteriaArr = [];
     let formValue = this.filterForm.value; 
-    let obj = formValue.standardId + "&SubjectId=" + formValue.assesmentSubjectId + '&QuestionTypeId=' + formValue.questionTypeId + '&flag_lang=' + this.languageFlag
+    let obj = formValue.standardId + "&SubjectId=" + formValue.subjectId + '&QuestionTypeId=' + formValue.questionTypeId + '&flag_lang=' + this.languageFlag
     + '&StateId=' + formValue.stateId + '&DistrictId=' + formValue.districtId + '&EducationYearId=' + formValue.educationalYearId;
     this.apiService.setHttp('get', 'zp-satara/master/GetCriteriaByStandardSubject?StandardId=' + obj , false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -190,9 +200,23 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     });
   }
 
-  clearFilter(flag: string){
+  clearFilter(flag?: string){
+    // switch(flag){
+    //   case 'state':
+    //   this.f['districtId'].setValue(0);
+    //   this.f['criteriaId'].setValue(0);
+    //   this.criteriaArr = [];
+    //   break;
+    //   case 'district': 
+    //   this.f['criteriaId'].setValue(0);
+    // }
     if(flag == 'state'){
       this.f['districtId'].setValue(0);
+      this.f['criteriaId'].setValue(0);
+      this.criteriaArr = [];
+    }else{
+      this.f['criteriaId'].setValue(0);
+      this.criteriaArr = [];
     }
   }
 
@@ -211,9 +235,9 @@ export class CriteriaWiseQuestionComponent implements OnInit{
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          this.tableDataArray = res.responseData;
-          // this.totalCount = res.responseData1.pageCount;
-          // this.tableDatasize = res.responseData1.pageCount;
+          this.tableDataArray = res.responseData?.responseData1;
+          this.totalCount = res.responseData?.responseData2.pageCount;
+          this.tableDatasize = res.responseData?.responseData2.pageCount;
         }
         else {
           this.ngxSpinner.hide();
@@ -240,25 +264,73 @@ export class CriteriaWiseQuestionComponent implements OnInit{
         this.getTableData();
         break;
       case 'Edit':
-        // this.openDialog(obj);
+        this.openDialog(obj);
         break;
       case 'Delete':
-        // this.globalDialogOpen(obj);
+        this.globalDialogOpen(obj);
         break;
       case 'Block':
       // this.openBlockDialog(obj);
     }
   }
 
-  openDialog() {
+  openDialog(obj?: any) {    
     const dialogRef = this.dialog.open(AddCriteriaWiseQuestionComponent,{
       width: '700px',
       disableClose:true,
+      data: obj?.criteriaId
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  globalDialogOpen(obj: any) {
+    let dialoObj = {
+      img: 'assets/images/trash.gif',
+      header: 'Delete',
+      title: this.webService.languageFlag == 'EN' ? 'Do you want to delete Criteria Wise Question?' : 'तुम्हाला निकषानुसार प्रश्न हटवायचा आहे?',
+      cancelButton: this.webService.languageFlag == 'EN' ? 'Cancel' : 'रद्द करा',
+      okButton: this.webService.languageFlag == 'EN' ? 'Ok' : 'ओके'
+    }
+    const deleteDialogRef = this.dialog.open(GlobalDialogComponent, {
+      width: '320px',
+      data: dialoObj,
+      disableClose: true,
+      autoFocus: false
+    })
+    deleteDialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 'yes') {
+        this.onClickDelete(obj);
+      }
+      this.highLightFlag = false;
+      this.languageChange();
+    })
+  }
+
+  onClickDelete(obj?: any){
+    let webStorageMethod = this.webService.createdByProps();
+    let deleteObj = {
+      "id": obj?.criteriaId,
+      "deletedBy": webStorageMethod.modifiedBy,
+      "modifiedDate": webStorageMethod.modifiedDate,
+      "lan": this.webService.languageFlag
+    }
+    this.apiService.setHttp('delete', 'zp-satara/AssessmentQuestion/DeleteQuestion', false, deleteObj, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200"){
+          this.commonMethodS.showPopup(res.statusMessage, 0);
+          this.getTableData();
+        }
+      },
+      error: (error: any) => {
+        this.commonMethodS.checkEmptyData(error.statusText) == false ? this.errors.handelError(error.statusCode) : this.commonMethodS.showPopup(error.statusText, 1);
+      }
+    })
+  }
+  
+
 
 }

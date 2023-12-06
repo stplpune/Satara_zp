@@ -528,7 +528,10 @@
         "Question":"Question",
         "Criteria" :"Criteria",
         "QuestionMarathi":"Question (Marathi)",
-        "ExpAnswer":"Expect Answer"
+        "ExpAnswer":"Expected Answer",
+        "DateOfBirth": "Date Of Birth",
+        "TypeOfArea": "Type Of Area",
+        "SchoolMedium": "School Medium"
 
     }
 }

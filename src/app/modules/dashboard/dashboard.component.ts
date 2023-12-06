@@ -94,6 +94,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   optionArr = new Array();
   commonDataResArray = new Array();
   questionArray = new Array();
+  stateData = new Array();
+  districtData = new Array();
 
   constructor(public translate: TranslateService, private masterService: MasterService,
     public webStorage: WebStorageService, private fb: FormBuilder, private apiService: ApiService,
@@ -121,7 +123,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (val == 'initial') {
       this.createFilterForm();
       this.getPieChart();
-      this.getTalukas();
+      this.getState();
       this.getExamType();
       setTimeout(() => {
         this.getdashboardCount(val);
@@ -150,6 +152,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   createFilterForm() {
     this.filterForm = this.fb.group({
       acYearId: [],
+      stateId:[1],
+      districtId:[1],
       talukaId: [0],
       villageId:[0],
       centerId: [0],
@@ -182,26 +186,63 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.f['acYearId'].patchValue(this.educationYear);
     })
   }
+
+  getState(){
+    this.stateData = [];
+    this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
+     this.stateData = res.responseData;
+     this.getDistrict()
+    })
+  }
+
+  getDistrict(){
+    this.districtData = [];
+    this.talukaData = [];
+    this.centerData = [];
+    this.villageData = [];
+    this.schoolData = [];
+    this.filterForm.patchValue({
+      districtId: 0,
+      talukaId: 0,
+      centerId: 0,
+      villageId : 0,
+      schoolId: 0
+    });
+    if(this.filterForm.value.stateId > 0){
+      this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
+        this.districtData = res.responseData;
+        this.getTalukas()
+       })   
+    }
+  }
+
+
   getTalukas() {
     this.talukaData = [];
     this.centerData = [];
+    this.villageData = [];
     this.schoolData = [];
     this.filterForm.patchValue({
       talukaId: 0,
       centerId: 0,
+      villageId : 0,
       schoolId: 0
     })
-    this.masterService.getAllTaluka('').subscribe((res: any) => {
-      this.talukaData.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-      // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
-      this.getCenters();
-    })
+    if(this.filterForm.value.districtId > 0){
+      this.masterService.getAllTaluka('',this.filterForm.value.districtId).subscribe((res: any) => {
+        this.talukaData.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+        // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
+        this.getCenters();
+      })  
+    }
   }
   getCenters() {
     this.centerData = [];
+    this.villageData = [];
     this.schoolData = [];
     this.filterForm.patchValue({
       centerId: 0,
+      villageId : 0,
       schoolId: 0
     })
     this.selectedTaluka = this.talukaData.find((x: any) => x.id == this.f['talukaId'].value);
@@ -216,6 +257,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getVillage() {
     this.villageData = [];
+    this.schoolData = [];
+    this.filterForm.patchValue({
+      villageId : 0,
+      schoolId: 0
+    });
     if(this.f['centerId'].value > 0){
       this.masterService.getAllVillage('', (this.f['centerId'].value | 0)).subscribe((res : any)=>{
         this.villageData.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
@@ -229,13 +275,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.schoolData = [];
     this.selectedCenter = this.centerData.find((x: any) => x.id == this.f['centerId'].value);
     // if(this.f['centerId'].value){
-
+    this.filterForm.controls['schoolId'].setValue(0);
     this.fBgraph['filtercenterId'].patchValue(this.f['centerId'].value)
-    if(this.f['centerId'].value > 0){
+    if(this.f['villageId'].value > 0){
       this.masterService.getAllSchoolByCriteria('', (this.f['talukaId'].value | 0), (this.f['villageId'].value | 0), (this.f['centerId'].value | 0)).subscribe((res: any) => {
         this.schoolData.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
         this.selectedSchool();
-      })
+      });
     }
     
     // }

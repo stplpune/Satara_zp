@@ -31,6 +31,9 @@ export class DownloadPdfExcelService {
           doc.setFontSize(8);
           doc.text(objData.timePeriod, 11, 14, "left");
         }
+        
+        doc.setFontSize(8);
+        doc.text(objData.name, 200, 10, "right");
 
         doc.setFontSize(8);
         doc.text(objData.createdDate, 200, 14, "right");
@@ -324,7 +327,13 @@ export class DownloadPdfExcelService {
  
      worksheet.getCell('E5').value = objData.createdDate
      worksheet.getCell('E5').font = { name: 'Calibri', family: 3, size: 12, bold: true, };
- 
+
+     if(objData.name){
+      worksheet.mergeCells('A6', 'B6');
+      worksheet.getCell('A6').value = objData.name
+      worksheet.getCell('A6').font = { name: 'Calibri', family: 3, size: 12, bold: true, };
+     }
+
     //  const response = await fetch('../../../../assets/images/samadhanLogo.jpeg');
     //  const buffer = await response.arrayBuffer();
     //  const imageId1 = workbook.addImage({

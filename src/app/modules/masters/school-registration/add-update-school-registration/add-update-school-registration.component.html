@@ -62,7 +62,7 @@
                         <span class="small form-label">{{'Labels.Yes' | translate}}</span>
                     </div>
                 </div>
-                <ng-container *ngIf="schoolRegForm.value.isKendraSchool == false">
+                <ng-container>
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.kendra' | translate}}</mat-label>
@@ -224,6 +224,28 @@
                                     *ngIf="f['s_CategoryId'].hasError('required') || f['s_CategoryId'].hasError('touched')">
                                     {{'Labels.schoolCategoryIsRequired' | translate}}
                                 </mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.TypeOfArea' | translate}}</mat-label>
+                        <mat-select formControlName="s_AreaId">
+                            <mat-option *ngFor="let area of areaArray" [value]="area.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                area.area : area.m_Area}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.SchoolMedium' | translate}}</mat-label>
+                        <mat-select formControlName="s_MediumId">
+                            <mat-option *ngFor="let medium of mediumArray" [value]="medium.id">
+                                {{webStorageS.getLangauge() == 'EN' ?
+                                medium.medium : medium.m_Medium}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
             </div>

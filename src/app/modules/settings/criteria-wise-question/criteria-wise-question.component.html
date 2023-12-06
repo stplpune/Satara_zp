@@ -27,9 +27,9 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state' | translate}}</mat-label>
                         <mat-select formControlName="stateId"
-                            (selectionChange)="clearFilter('state'); getDistrict();">
-                            <mat-option *ngFor="let state of stateArr" [value]="state.id">
-                                {{languageFlag == 'English' ? state.state : state.m_State}}
+                            (selectionChange)="clearFilter('state'); getDistrict();callCritetiaApi()">
+                            <mat-option *ngFor="let data of stateArr" [value]="data.id">
+                                {{webService.getLangauge() == 'EN' ? data.state : data.m_State}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -37,9 +37,9 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.district' | translate}}</mat-label>
-                        <mat-select formControlName="districtId">
-                            <mat-option *ngFor="let district of districtArr" [value]="district.id">
-                                {{languageFlag == 'English' ? district.district : district.m_District}}
+                        <mat-select formControlName="districtId" (selectionChange)="clearFilter('district');callCritetiaApi()">
+                            <mat-option *ngFor="let data of districtArr" [value]="data.id">
+                                {{webService.getLangauge() == 'EN' ?  data.district : data.m_District}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -47,9 +47,9 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label> {{'Labels.standard'| translate}}</mat-label>
-                        <mat-select formControlName="standardId">
-                            <mat-option *ngFor="let standard of standardArr" [value]="standard.groupId">
-                                {{languageFlag == 'English' ? standard.standard : standard.m_Standard}}
+                        <mat-select formControlName="standardId" (selectionChange)="clearFilter();callCritetiaApi()">
+                            <mat-option *ngFor="let data of standardArr" [value]="data.id">
+                                {{webService.getLangauge() == 'EN' ?  data.standard : data.m_Standard}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -58,9 +58,9 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.Subject' | translate}}</mat-label>
-                        <mat-select formControlName="subjectId">
+                        <mat-select formControlName="subjectId" (selectionChange)="clearFilter();callCritetiaApi()">
                             <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
-                                {{languageFlag == 'English' ? sub.subject : sub.m_Subject}}
+                                {{webService.getLangauge() == 'EN' ?  sub.subject : sub.m_Subject}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -68,9 +68,9 @@
                 <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
-                        <mat-select formControlName="questionTypeId">
+                        <mat-select formControlName="questionTypeId" (selectionChange)="clearFilter();callCritetiaApi()">
                             <mat-option *ngFor="let que of questionArr" [value]="que.id">
-                                {{languageFlag == 'English' ? que.questionType : que.m_QuestionType}}
+                                {{webService.getLangauge() == 'EN' ?  que.questionType : que.m_QuestionType}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -78,9 +78,9 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.EducationalYear' | translate}}</mat-label>
-                        <mat-select formControlName="educationalYearId">
+                        <mat-select formControlName="educationalYearId" (selectionChange)="clearFilter();callCritetiaApi()">
                             <mat-option *ngFor="let educationYear of educationYearArr" [value]="educationYear.id">
-                                {{languageFlag == 'English' ? educationYear.eductionYear :
+                                {{webService.getLangauge() == 'EN' ?  educationYear.eductionYear :
                                 educationYear.eductionYear_M}}
                             </mat-option>
                         </mat-select>
@@ -91,7 +91,7 @@
                         <mat-label>{{'Labels.Criteria' | translate}}</mat-label>
                         <mat-select formControlName="criteriaId">
                             <mat-option *ngFor="let criteria of criteriaArr" [value]="criteria.id">
-                                {{languageFlag == 'EN' ? criteria.question : criteria.m_Question}}
+                                {{webService.getLangauge() == 'EN' ?  criteria.question : criteria.m_Question}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

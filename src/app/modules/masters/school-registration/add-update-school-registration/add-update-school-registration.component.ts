@@ -29,6 +29,8 @@ export class AddUpdateSchoolRegistrationComponent {
   categoryArr = new Array();
   schoolMngArr = new Array();
   bitArr = new Array();
+  areaArray = new Array();
+  mediumArray = new Array();
   schoolRegForm !: FormGroup;
   uploadImg: any;
   uploadMultipleImg: any;
@@ -71,6 +73,8 @@ export class AddUpdateSchoolRegistrationComponent {
       this.onEdit();
     } else {
       this.getState();
+      this.getSchoolArea();
+      this.getMedium();
       this.getSchoolType();
       this.getLowestGroupClass();
     }
@@ -97,6 +101,8 @@ export class AddUpdateSchoolRegistrationComponent {
       "s_ManagementId": ['', Validators.required],
       "s_TypeId": ['', Validators.required],
       "g_ClassId": 0,
+      "s_MediumId": 0,
+      "s_AreaId": 0,
       "lan": this.webStorageS.languageFlag,
       "localID": 0,
       "lowestClass": ['', Validators.required],
@@ -187,7 +193,7 @@ export class AddUpdateSchoolRegistrationComponent {
       next: (res: any) => {
         res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
         // this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getCenter()) : this.f['talukaId'].setValue(0);
-        this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), this.getBitOrCenter()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getBitOrCenter()) : this.f['talukaId'].setValue(0);
+        this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.f['talukaId'].setValue(0);
         this.data?.obj?.isKendraSchool == true ? this.getVillage() : ''
       }
     });
@@ -274,6 +280,24 @@ export class AddUpdateSchoolRegistrationComponent {
         res.statusCode == "200" ? (this.bitArr = res.responseData, this.editFlag ? (this.f['bitId'].setValue(this.data?.obj.bitId)) : null) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.bitArr = []);
       }
     });
+  }
+
+  getSchoolArea(){
+    this.areaArray = [
+      { id: 1, area: 'Urban', m_Area: 'शहरी' },
+      { id: 2, area: 'Rural', m_Area: 'ग्रामीण' }
+    ];
+    this.editObj ? this.f['s_AreaId'].setValue(this.editObj.s_AreaId) : '';
+  }
+
+  getMedium(){
+    this.mediumArray = [
+      { id: 1, medium: 'Marathi', m_Medium: 'मराठी' },
+      { id: 2, medium: 'Hindi', m_Medium: 'हिंदी' },
+      { id: 3, medium: 'English', m_Medium: 'इंग्रजी' },
+      { id: 4, medium: 'Urdu', m_Medium: 'उर्दू' }
+    ];
+    this.editObj ? this.f['s_MediumId'].setValue(this.editObj.s_MediumId) : '';
   }
 
   //#endregion ------------------------------------------- School Registration Dropdown end here ----------------------------------------// 
@@ -381,10 +405,10 @@ export class AddUpdateSchoolRegistrationComponent {
     formValue.uploadImage = this.schoolRegForm.value.uploadImage;
     formValue.schoolDocument = this.docArray;
 
-    if (formValue.isKendraSchool == true) {
-      this.f['centerId'].clearValidators();
-      this.f['centerId'].updateValueAndValidity();
-    } else {
+    if (formValue.isKendraSchool != true) {
+    //   this.f['centerId'].clearValidators();
+    //   this.f['centerId'].updateValueAndValidity();
+    // } else {
       this.f['bitId'].clearValidators();
       this.f['bitId'].updateValueAndValidity();
     }
@@ -435,6 +459,8 @@ export class AddUpdateSchoolRegistrationComponent {
       this.docArray.push(schoolDocumentObj);
     })
     this.getState();
+    this.getSchoolArea();
+    this.getMedium();
   }
   //#endregiongion ---------------------------------------------- Edit Record end here --------------------------------------------//
 
@@ -491,12 +517,12 @@ export class AddUpdateSchoolRegistrationComponent {
     if (eventValue == true) {
       this.f['bitId'].setValidators(Validators.required);
       this.f['bitId'].updateValueAndValidity();
-      this.f['centerId'].clearValidators();
-      this.f['centerId'].updateValueAndValidity();
+      // this.f['centerId'].clearValidators();
+      // this.f['centerId'].updateValueAndValidity();
     }
     else if (eventValue == false) {
-      this.f['centerId'].setValidators(Validators.required);
-      this.f['centerId'].updateValueAndValidity();
+      // this.f['centerId'].setValidators(Validators.required);
+      // this.f['centerId'].updateValueAndValidity();
 
       this.f['bitId'].clearValidators();
       this.f['bitId'].updateValueAndValidity();

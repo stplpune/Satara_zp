@@ -56,10 +56,7 @@ export class CctvComponent {
     private masterService: MasterService,
     public dialog: MatDialog,
     // private router: Router,
-  ) {
-
-  }
-
+  ) {}
 
   ngOnInit() {
     this.webStorageS.langNameOnChange.subscribe(lang => {
@@ -72,14 +69,25 @@ export class CctvComponent {
     this.getTableData();
   }
 
+  getFormValue(){
+    return {
+     "stateId" : this.loginData ? this.loginData.stateId : 0,
+     "districtId" : this.loginData ? this.loginData.districtId : 0,
+     "centerId" : this.loginData ? this.loginData.centerId : 0,
+     "talukaId" : this.loginData ? this.loginData.talukaId : 0,
+     "villageId" : this.loginData ? this.loginData.villageId : 0,
+     "schoolId" : this.loginData ? this.loginData.schoolId : 0
+    }
+ }
+
   filterFormData() {
     this.filterForm = this.fb.group({
-      stateId: [''],
-      districtId: [''],
-      talukaId: [''],
-      centerId: [''],
-      villageId: [''],
-      schoolId: [''],
+      stateId: [this.getFormValue().stateId],
+      districtId: [this.getFormValue().districtId],
+      talukaId: [this.getFormValue().talukaId],
+      centerId: [this.getFormValue().centerId],
+      villageId: [this.getFormValue().villageId],
+      schoolId: [this.getFormValue().schoolId],
       cCTVLocationId: [''],
       textSearch: [''],
     })
@@ -348,6 +356,7 @@ export class CctvComponent {
     this.centerArr = [];
     this.schoolArr = [];
     this.CCTVLocationArr = [];
+    this.filterFormData();
     this.getState();
     this.getTableData();
   }

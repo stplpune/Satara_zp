@@ -47,8 +47,8 @@ export class SchoolRegistrationComponent implements OnInit {
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
   userId!: number;
-  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'Kendra', 'Village', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र', 'गाव', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'isKedra', 'Kendra', 'Village', 'Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र आहे', 'केंद्र', 'गाव', 'कृती'];
   viewStatus = 'Table';
   loginData = this.webStorageS.getLoggedInLocalstorageData();
 
@@ -94,8 +94,8 @@ export class SchoolRegistrationComponent implements OnInit {
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
-    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
+    let displayedColumnsReadMode = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', 'isKendraSchool', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village'];
+    this.displayedColumns = ['srNo', 'uploadImage', this.langTypeName == 'English' ? 'schoolName' : 'm_SchoolName', this.langTypeName == 'English' ? 'taluka' : 'm_Taluka', 'isKendraSchool', this.langTypeName == 'English' ? 'center' : 'm_Center', this.langTypeName == 'English' ? 'village' : 'm_Village', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: 'uploadImage', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "defaultSchoolImg",
@@ -103,7 +103,7 @@ export class SchoolRegistrationComponent implements OnInit {
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
-      edit: true
+      edit: true, checkBox1: 'isKendraSchool'
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
       this.apiService.tableData.next(this.tableData);

@@ -11,7 +11,7 @@
                         <ng-container *ngIf="'srNo' == columns">{{((pageNumber + 1) * 10 + i + 1)-20 |
                             numberTranformPipe}}</ng-container>
                         <ng-container
-                            *ngIf="'srNo' != columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns && tableInfo?.isManual != columns && tableInfo?.isManualAppr != columns && tableInfo?.isManSubmit != columns && tableInfo?.attendanceStatus != columns && tableInfo?.approvalStatus != columns && tableInfo?.attendance != columns  ">
+                            *ngIf="'srNo' != columns && tableInfo?.img != columns && tableInfo?.blink != columns && tableInfo?.badge !=  columns && tableInfo?.checkBox != columns && tableInfo?.status != columns && tableInfo?.isBlock != columns && tableInfo?.email != columns && tableInfo?.date != columns && tableInfo?.isManual != columns && tableInfo?.isManualAppr != columns && tableInfo?.isManSubmit != columns && tableInfo?.attendanceStatus != columns && tableInfo?.approvalStatus != columns && tableInfo?.attendance != columns && tableInfo?.checkBox1 != columns ">
                             <div class="text-ellipsis-250-L2">{{element[columns] | dash }}</div>
                         </ng-container>
                         <ng-container *ngIf="tableInfo?.img == columns"><img class="table-img" routerLink="[../details]"
@@ -34,6 +34,13 @@
                                 (change)="action(element, 'checkBox', $event, 'readCheck')">
                             </mat-checkbox> 
                             <label for="checkbox1" class="pb-0">R</label>
+                        </ng-container>
+
+                        <ng-container *ngIf="tableInfo?.checkBox1 == columns">
+                            <mat-checkbox [disabled]="true"
+                                [checked]="tableInfo.tableData[i]?.isKendraSchool"
+                                (change)="action(element, 'checkBox', $event, 'writeCheck')">
+                            </mat-checkbox>
                         </ng-container>
                     </div>
                     <ng-container *ngIf="tableInfo?.isBlock == columns">

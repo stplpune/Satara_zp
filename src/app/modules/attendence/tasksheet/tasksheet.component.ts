@@ -173,7 +173,7 @@ export class TasksheetComponent {
           'createdDate': 'Created on:' + this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a'),
           'name': 'Name: ' + (loginData.userTypeId == 4 ? loginData.name : '')
         }
-        let headerKeySize = [7, 15, 15, 15, 15, 40]
+        let headerKeySize = [7, 20, 15, 15, 20, 40]
         flag == 'pdfFlag' ? this.excelpdfService.downLoadPdf(keyPDFHeader, ValueData, objData) :this.excelpdfService.allGenerateExcel(keyPDFHeader, ValueData, objData, headerKeySize)
     }
   }
@@ -253,9 +253,7 @@ export class TasksheetComponent {
       tableSize: this.totalItem,
       apply:true,
       isSubmitted: this.submitFlag,
-      // attendanceStatus: 'attendance',
       attendance: 'attendance',
-      // edit: true, delete: true,
       // date:'holidayDate',
       // tableHeaders: displayedColumnsReadMode,
       tableHeaders: this.langTypeName == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,
@@ -263,10 +261,6 @@ export class TasksheetComponent {
     // this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
     this.apiService.tableData.next(tableData);
   }
-
-
- 
-
 }
 
 

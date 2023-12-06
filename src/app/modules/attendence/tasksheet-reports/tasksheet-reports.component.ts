@@ -103,8 +103,8 @@ export class TasksheetReportsComponent {
 
   formField() {
     this.filterForm = this.fb.group({
-      stateId: [0],
-      districtId: [0],
+      stateId: [this.loginData?.stateId  == '' ? 0 :  this.loginData?.stateId ],
+      districtId: [this.loginData?.districtId  == '' ? 0 :  this.loginData?.districtId ],
       talukaId: [this.loginData?.talukaId  == '' ? 0 :  this.loginData?.talukaId ],
       centerId: [this.loginData?.centerId == '' ? 0 : this.loginData?.centerId],
       villageId: [this.loginData?.villageId == '' ? 0 : this.loginData?.villageId],
@@ -123,8 +123,8 @@ export class TasksheetReportsComponent {
     let yearMonth = moment(date).format('YYYY-MM');
     // MonthYear=2023&TalukaId=1&CenterId=1&VillageId=1&SchoolId=1&UserId=0&TextSearch=tt&PageNo=1&RowCount=10&lan=EN
     // let str =  `MonthYear=2023-08&TalukaId=0&CenterId=0&VillageId=0&SchoolId=0&UserId=398&lan=EN`;
-    let str = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
-    let reportStr = `MonthYear=${yearMonth}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
+    let str = `MonthYear=${yearMonth}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `MonthYear=${yearMonth}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&UserId=${this.webStorageS.getUserId()}&TextSearch=${formValue?.textSearch.trim() || ''}&PageNo=${this.pageNumber}&RowCount=${this.totalCount * 10}&lan=${this.webStorageS.languageFlag}`;
 
     // this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAllTeacherAttendance?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl'); 
     this.apiService.setHttp('GET', 'zp-satara/Attendance/GetAttendanceReport?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl'); 

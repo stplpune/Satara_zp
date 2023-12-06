@@ -12,8 +12,8 @@
     </mat-card-header>
     <form [formGroup]="addCriteriaForm" (ngSubmit)="onSubmit()">
         <mat-card-content class="card-body card-height-mid scrollbar">
-            <div class="row gx-2 w-100">
-              
+            <div class="row gx-2">
+
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
@@ -69,7 +69,8 @@
                 <div class="col-sm-4">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.QuestionType' | translate}}</mat-label>
-                        <mat-select formControlName="questionTypeId" (selectionChange)="questionTypeChange();callCritetiaApi()">
+                        <mat-select formControlName="questionTypeId"
+                            (selectionChange)="questionTypeChange();callCritetiaApi()">
                             <mat-option *ngFor="let que of questionArr" [value]="que.id">
                                 {{webStorageS.getLangauge() == 'EN' ? que.questionType : que.m_QuestionType}}
                             </mat-option>
@@ -92,110 +93,128 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.introduction'| translate}}</mat-label>
                         <textarea matInput formControlName="introduction"
-                        (keypress)="validation.noFirstSpaceAllow($event)"
-                        maxlength="100"></textarea>
-                        <mat-error *ngIf="f['introduction'].hasError('pattern')">Please Enter Valid Introduction</mat-error>
+                            (keypress)="validation.noFirstSpaceAllow($event)" maxlength="100"></textarea>
+                        <mat-error *ngIf="f['introduction'].hasError('pattern')">Please Enter Valid
+                            Introduction</mat-error>
                     </mat-form-field>
                 </div>
             </div>
-
-          <ng-container *ngIf="f['questionTypeId'].value == 3 || f['questionTypeId'].value == 4">
-            <form [formGroup]="addQuestionForm" #addQueFormDirective="ngForm" (ngSubmit)="addQueForm()">
-            <div class="row gx-2 ">
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.Question'| translate}}</mat-label>
-                        <input matInput formControlName="cQuestion"
-                        (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
-                        <mat-error *ngIf="aq['cQuestion'].hasError('pattern')">Please Enter Valid Question</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
-                        <input matInput formControlName="m_CQuestion" (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
-                        <mat-error *ngIf="aq['m_CQuestion'].hasError('pattern')">Please Enter Valid Marathi Question</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                        <mat-label>{{'Labels.ExpAnswer'| translate}}</mat-label>
-                        <input matInput formControlName="expectedAns"
-                        (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
-                        <mat-error *ngIf="aq['expectedAns'].hasError('pattern')">Please Enter Valid Expected Answer</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
-
-            <div class="col-sm-6 mb-3">
-                <div class="d-flex justify-content-between1 align-items-center gap-2">
-                    <div class="upload-btn-wrapper">
-                        <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
-                            matTooltipClass="tooltip" (click)="fileInput.click()">{{'Labels.UploadPhotoDocument' | translate}}</button>
-                        <input type="file" multiple name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
-                        (change)="documentUpload($event);fileInput.value = ''" #fileInput />
-                    </div>
-                    <button mat-flat-button type="submit" class="btn-main btn-icon">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </div>
-                <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p>
-            </div>
-            <div class="col-sm-12 mt-3">
-                <div class="d-flex flex-wrap gap-4">
-                    <ng-container>
-                        <div class="gallery position-relative" *ngFor="let imgObj of imgArray;let i = index">
-                            <img height="70px" width="70px" class="border" [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath"
-                            (click)="viewDocoment(i)">
-                            <span class="position-absolute" style="top:-17px;right:-17px;">
-                                <button type="button" mat-icon-button class="bg-danger bg-opacity-25 text-danger material-icons"
-                                    matTooltip="{{'Labels.delete' | translate}}" matTooltipPosition="right"
-                                    matTooltipClass="tooltip" (click)="deleteDocoment(i);fileInput.value = ''">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </span>
+            <mat-divider class="mb-3"></mat-divider>
+            <ng-container *ngIf="f['questionTypeId'].value == 3 || f['questionTypeId'].value == 4">
+                <form [formGroup]="addQuestionForm" #addQueFormDirective="ngForm" (ngSubmit)="addQueForm()">
+                    <div class="row gx-2 ">
+                        <div class="col-sm-4">
+                            <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                                <mat-label>{{'Labels.Question'| translate}}</mat-label>
+                                <input matInput formControlName="cQuestion"
+                                    (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
+                                <mat-error *ngIf="aq['cQuestion'].hasError('pattern')">
+                                    {{'Labels.PleaseEnterValidQuestion' | translate}}
+                                </mat-error>
+                            </mat-form-field>
                         </div>
-                    </ng-container>
-                </div>
-            </div>
-        </form>
+                        <div class="col-sm-4">
+                            <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                                <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
+                                <input matInput formControlName="m_CQuestion"
+                                    (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
+                                <mat-error *ngIf="aq['m_CQuestion'].hasError('pattern')">
+                                    {{'Labels.PleaseEnterValidMarathiQuestion' | translate}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-4">
+                            <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                                <mat-label>{{'Labels.ExpAnswer'| translate}}</mat-label>
+                                <input matInput formControlName="expectedAns"
+                                    (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
+                                <mat-error *ngIf="aq['expectedAns'].hasError('pattern')">
+                                    {{'Labels.PleaseEnterValidExpectedAnswer' | translate}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
 
-            <div class="col-sm-12" *ngIf="addQuestionArray?.length">
-                <div class="table-responsive table-height-xs scrollbar mb-2">
-                    <table class="table dashboard-table">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Question</th>
-                                <th>Question (Marathi)</th>
-                                <th>Expected Answer</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let AddQ of addQuestionArray; let i=index">
-                                <ng-container *ngIf="AddQ?.isDeleted == false">
-                                <td>{{i+1}}</td>
-                                <td>{{AddQ?.cQuestion}}</td>
-                                <td>{{AddQ?.m_CQuestion}}</td>
-                                <td>{{AddQ?.expectedAns}}</td>
-                                <td>
-                                    <button mat-icon-button type="button" id="tooltip" matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
-                                        matTooltipClass="tooltip" (click)="editAddQuestion(AddQ, i)">
-                                        <mat-icon class="text-main">edit</mat-icon>
+                    <div class="row gx-2">
+                        <div class="col-sm-11 mb-3">
+                            <div class="d-flex justify-content-between1 align-items-center1 gap-3">
+                                <div class="upload-btn-wrapper">
+                                    <button mat-flat-button type="button" class="upload-btn btn-main btn-icon"
+                                        matTooltip="{{'Labels.UploadPhotoDocument' | translate}}" matTooltipPosition="right" matTooltipClass="tooltip"
+                                        (click)="fileInput.click()">
+                                        <mat-icon>upload</mat-icon>
                                     </button>
-                                    <button mat-icon-button type="button" (click)="globalDialogOpen(AddQ,i)">
-                                        <mat-icon class="text-danger"> delete </mat-icon>
-                                    </button>
-                                </td>
-                            </ng-container>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </ng-container>
+                                    <input type="file" multiple name="myfile" multiple
+                                        accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
+                                        (change)="documentUpload($event);fileInput.value = ''" #fileInput />
+                                </div>
+                                <div class="d-flex flex-wrap gap-4 mt-3">
+                                    <ng-container>
+                                        <div class="gallery position-relative"
+                                            *ngFor="let imgObj of imgArray;let i = index">
+                                            <img height="70px" width="70px" class="border"
+                                                [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath"
+                                                (click)="viewDocoment(i)">
+                                            <span class="position-absolute" style="top:-17px;right:-17px;">
+                                                <button type="button" mat-icon-button
+                                                    class="bg-danger bg-opacity-25 text-danger material-icons"
+                                                    matTooltip="{{'Labels.delete' | translate}}"
+                                                    matTooltipPosition="right" matTooltipClass="tooltip"
+                                                    (click)="deleteDocoment(i);fileInput.value = ''">
+                                                    <mat-icon>delete</mat-icon>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <!-- <p style="font-size: 11px;" class="mb-0 pt-1">{{'Labels.NoteImgPdfFormat' | translate}}</p> -->
+                        </div>
+                        <div class="col-sm text-end">
+                            <button mat-flat-button type="submit" class="btn-main btn-icon"
+                                matTooltip="{{'Labels.add' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
+                <div class="col-sm-12" *ngIf="addQuestionArray?.length">
+                    <div class="table-responsive table-height-xs scrollbar mb-2">
+                        <table class="table dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr. No.</th>
+                                    <th>Question</th>
+                                    <th>Question (Marathi)</th>
+                                    <th>Expected Answer</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let AddQ of addQuestionArray; let i=index">
+                                    <ng-container *ngIf="AddQ?.isDeleted == false">
+                                        <td>{{i+1}}</td>
+                                        <td>{{AddQ?.cQuestion}}</td>
+                                        <td>{{AddQ?.m_CQuestion}}</td>
+                                        <td>{{AddQ?.expectedAns}}</td>
+                                        <td>
+                                            <button mat-icon-button type="button" id="tooltip"
+                                                matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"
+                                                matTooltipClass="tooltip" (click)="editAddQuestion(AddQ, i)">
+                                                <mat-icon class="text-main">edit</mat-icon>
+                                            </button>
+                                            <button mat-icon-button type="button" (click)="globalDialogOpen(AddQ,i)">
+                                                <mat-icon class="text-danger"> delete </mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ng-container>
         </mat-card-content>
         <mat-card-footer align="end" class="card-footer d-flex justify-content-end">
             <button type="button" mat-flat-button mat-dialog-close class="btn-second me-2">{{'Labels.cancel' |

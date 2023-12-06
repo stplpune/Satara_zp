@@ -531,7 +531,10 @@
         "ExpAnswer":"Expected Answer",
         "DateOfBirth": "Date Of Birth",
         "TypeOfArea": "Type Of Area",
-        "SchoolMedium": "School Medium"
+        "SchoolMedium": "School Medium",
+        "PleaseEnterValidQuestion":"Please Enter Valid Question",
+        "PleaseEnterValidMarathiQuestion":"Please Enter Valid Marathi Question",
+        "PleaseEnterValidExpectedAnswer":"Please Enter Valid Expected Answer"
 
     }
 }

@@ -100,7 +100,6 @@
             </div>
 
           <ng-container *ngIf="f['questionTypeId'].value == 3 || f['questionTypeId'].value == 4">
-
             <form [formGroup]="addQuestionForm" #addQueFormDirective="ngForm" (ngSubmit)="addQueForm()">
             <div class="row gx-2 ">
                 <div class="col-sm-4">
@@ -146,7 +145,7 @@
                 <div class="d-flex flex-wrap gap-4">
                     <ng-container>
                         <div class="gallery position-relative" *ngFor="let imgObj of imgArray;let i = index">
-                            <img height="110px" width="110px" class="border" [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath"
+                            <img height="70px" width="70px" class="border" [src]="imgObj.docFlag ? 'assets/images/pdf-image.png' : imgObj?.documentPath"
                             (click)="viewDocoment(i)">
                             <span class="position-absolute" style="top:-17px;right:-17px;">
                                 <button type="button" mat-icon-button class="bg-danger bg-opacity-25 text-danger material-icons"
@@ -166,17 +165,17 @@
                     <table class="table dashboard-table">
                         <thead>
                             <tr>
-                                <!-- <th>Sr. No.</th> -->
+                                <th>Sr. No.</th>
                                 <th>Question</th>
                                 <th>Question (Marathi)</th>
-                                <th>Expect Answer</th>
+                                <th>Expected Answer</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let AddQ of addQuestionArray; let i=index">
                                 <ng-container *ngIf="AddQ?.isDeleted == false">
-                                <!-- <td>{{i+1}}</td> -->
+                                <td>{{i+1}}</td>
                                 <td>{{AddQ?.cQuestion}}</td>
                                 <td>{{AddQ?.m_CQuestion}}</td>
                                 <td>{{AddQ?.expectedAns}}</td>

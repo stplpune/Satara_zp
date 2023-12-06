@@ -199,8 +199,9 @@ export class Dashbaord2Component {
     this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
      this.districtData = res.responseData;
      this.getTalukas()
-    })
+    });
   }
+  
 
   getYearArray() {
     this.acYear = [];

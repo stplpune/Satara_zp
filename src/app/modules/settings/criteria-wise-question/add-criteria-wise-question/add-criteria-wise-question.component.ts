@@ -285,12 +285,15 @@ export class AddCriteriaWiseQuestionComponent {
   }
 
   addQueForm() {
-    if (!this.addQuestionForm.valid) {
+    if (!this.addQuestionForm.valid){
       return;
-    } else if (!this.imgArray?.length) {
-      this.commonMethod.showPopup(this.webStorageS.getLangauge() == 'EN' ? 'Please Upload at Least One Document' : 'कृपया किमान एक दस्तऐवज अपलोड करा', 1);
-      return;
-    } else {
+    }
+    // else 
+    // if (!this.imgArray?.length) {
+    //   this.commonMethod.showPopup(this.webStorageS.getLangauge() == 'EN' ? 'Please Upload at Least One Document' : 'कृपया किमान एक दस्तऐवज अपलोड करा', 1);
+    //   return;
+    // }
+     else {
       let formData = this.addQuestionForm.value;
       let obj =
       {

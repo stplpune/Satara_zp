@@ -539,6 +539,9 @@
         "ExpAnswer":"अपेक्षित उत्तर",
         "DateOfBirth": "जन्मतारीख",
         "TypeOfArea": "क्षेत्र प्रकार",
-        "SchoolMedium": "शाळा माध्यम"
+        "SchoolMedium": "शाळा माध्यम",
+        "PleaseEnterValidQuestion":"कृपया वैध प्रश्न टाका",
+        "PleaseEnterValidMarathiQuestion":"कृपया वैध मराठी प्रश्न टाका",
+        "PleaseEnterValidExpectedAnswer":"कृपया वैध अपेक्षित उत्तर टाका"
     }
 }

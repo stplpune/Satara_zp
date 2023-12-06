@@ -23,6 +23,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import {MatDividerModule} from '@angular/material/divider';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
     MatChipsModule,
     CdkDropList,
     CdkDrag,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDividerModule
   ]
 })
 export class CriteriaWiseQuestionModule { }

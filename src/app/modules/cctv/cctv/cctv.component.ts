@@ -19,7 +19,7 @@ export class CctvComponent {
   viewStatus = 'Table';
   pageNumber: number = 1;
   displayedheadersEnglish = ['Sr. No.', 'District', 'Taluka', 'Center','Village','School', 'CCTV Type','CCTV Location', 'CCTV Name', 'CCTV Model', 'Register Date', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र','गाव','शाळा', 'cctv प्रकार', 'cctv स्थान', 'cctv नाव', 'cctv मॉडेल', 'नोंदणी तारीख', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र','गाव','शाळा', 'CCTV प्रकार', 'CCTV स्थान', 'CCTV नाव', 'CCTV मॉडेल', 'नोंदणी तारीख', 'कृती'];
   filterForm!: FormGroup;
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   tableDataArray = new Array();

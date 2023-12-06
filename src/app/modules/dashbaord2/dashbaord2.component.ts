@@ -51,15 +51,15 @@ export class Dashbaord2Component {
   evaluatorDataArray = new Array();
   examTypeData = new Array();
   allTeacherOfficerData = new Array();
-  talukaLabel:any;
-  districtLabel:any;
-  totalStudentCountSchoolwise :number= 0;
-  totalStudentCountTeacharwise:number = 0;
+  talukaLabel: any;
+  districtLabel: any;
+  totalStudentCountSchoolwise: number = 0;
+  totalStudentCountTeacharwise: number = 0;
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
 
-   @ViewChild("teacherwiseChart") teacherwiseChart!: ChartComponent;
+  @ViewChild("teacherwiseChart") teacherwiseChart!: ChartComponent;
   public teacherwiseChartOptions!: Partial<ChartOptions> | any;
 
   @ViewChild("classwiseChart") classwiseChart!: ChartComponent;
@@ -79,7 +79,7 @@ export class Dashbaord2Component {
 
   ) { }
   ngOnInit() {
-   this.allDefultFormAPi();
+    this.allDefultFormAPi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       console.log(lang);
       this.selectedLang = lang;
@@ -89,8 +89,8 @@ export class Dashbaord2Component {
       this.showSvgMap(this.commonMethods.mapRegions());
       this.allDropdownApi();
       this.allChartApi();
-      
-    });   
+
+    });
     // this.showSvgMap(this.commonMethods.mapRegions());
     this.getdashboardCount();
 
@@ -98,7 +98,7 @@ export class Dashbaord2Component {
     // this.allChartApi();
   }
 
-  allDefultFormAPi(){
+  allDefultFormAPi() {
     this.mainFillterDefaultFormat();
     this.defaultSchoolwiseFormat();
     this.defaultTeacherwiseFormat()
@@ -117,7 +117,7 @@ export class Dashbaord2Component {
   allChartApi() {
     this.clickOnSvgMap();
     this.getPieChart();
-    this.getPieChartData();
+   // this.getPieChartData();
     this.getSchoolwiseBarDetails();
     this.getTeacherwiseBarDetails();
     this.getClasswiseBarDetails();
@@ -141,8 +141,8 @@ export class Dashbaord2Component {
   mainFillterDefaultFormat() {
     this.mainFilterForm = this.fb.group({
       acYearId: [''],
-      stateId:[1],
-      districtId:[1],
+      stateId: [1],
+      districtId: [1],
       talukaId: [0],
       centerId: [0],
       villageId: [0],
@@ -155,7 +155,7 @@ export class Dashbaord2Component {
   defaultSchoolwiseFormat() {
     this.filterForm = this.fb.group({
       evaluatorId: [1],
-      userId:[0],
+      userId: [0],
       classId: [0],
       subjectId: [0],
     })
@@ -186,19 +186,19 @@ export class Dashbaord2Component {
 
   // ----------------------------------dropdown start here----------------------
 
-  getState(){
+  getState() {
     this.stateData = [];
-    this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
-     this.stateData = res.responseData;
-     this.getDistrict()
+    this.masterService.getAllState(this.selectedLang).subscribe((res: any) => {
+      this.stateData = res.responseData;
+      this.getDistrict()
     })
   }
 
-  getDistrict(){
+  getDistrict() {
     this.districtData = [];
-    this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
-     this.districtData = res.responseData;
-     this.getTalukas()
+    this.masterService.getAllDistrict(this.selectedLang, this.f['stateId'].value).subscribe((res: any) => {
+      this.districtData = res.responseData;
+      this.getTalukas()
     })
   }
 
@@ -211,7 +211,7 @@ export class Dashbaord2Component {
   }
 
   getTalukas() {
-    this.districtLabel = this.districtData.find((res:any) => res.id == this.f['districtId'].value);
+    this.districtLabel = this.districtData.find((res: any) => res.id == this.f['districtId'].value);
     this.talukaData = [];
     // if(this.f['talukaId'].value){
     this.masterService.getAllTaluka(this.selectedLang, this.f['districtId'].value).subscribe((res: any) => {
@@ -226,7 +226,7 @@ export class Dashbaord2Component {
   }
 
   getCenters() {
-    this.talukaLabel = this.talukaData.find((res:any) => res.id == this.f['talukaId'].value);
+    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value);
     this.centerData = [{ "id": 0, "center": "All", "m_Center": "सर्व" }];
     this.f['centerId'].setValue(0);
     if (this.f['talukaId'].value) {
@@ -304,7 +304,7 @@ export class Dashbaord2Component {
     });
   }
 
-  getAllGraphLevel(){
+  getAllGraphLevel() {
     this.masterService.GetAllGraphLevel(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
@@ -334,31 +334,31 @@ export class Dashbaord2Component {
 
   }
 
-  getExamType(){
+  getExamType() {
     this.examTypeData = [];
-    this.masterService.getExamType().subscribe((res:any)=>{
-      this.examTypeData = [  {id: 0, examType: "All", m_ExamType: "सर्व", isDeleted: false},...res.responseData];
+    this.masterService.getExamType(this.selectedLang).subscribe((res: any) => {
+      this.examTypeData = [{ id: 0, examType: "All", m_ExamType: "सर्व", isDeleted: false }, ...res.responseData];
     })
   }
 
-  getAllTeacherOfficerByEvaluatorId(){
-    this.allTeacherOfficerData = [{ "id": 0, "teacherOfficer": "All","m_TeacherOfficer": "सर्व"}]
+  getAllTeacherOfficerByEvaluatorId() {
+    this.allTeacherOfficerData = [{ "id": 0, "teacherOfficer": "All", "m_TeacherOfficer": "सर्व" }]
     let formValue = this.filterForm.value
     let mainFormValue = this.mainFilterForm.value;
-   if(formValue.evaluatorId != 0){
-    let url =`EvaluatorId=${formValue.evaluatorId}&StateId=${mainFormValue.stateId}&DistrictId=${mainFormValue.districtId}&TalukaId=${mainFormValue.talukaId}`
-    url +=`&CenterId=${mainFormValue.centerId}&VillageId=${mainFormValue.villageId}&SchoolId=${mainFormValue.schoolId}&flag_lang=${this.selectedLang}`
-    this.apiService.setHttp('get', 'zp-satara/master/GetAllTeacherOfficerByEvaluatorId?'+url, false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == '200') {
-          this.allTeacherOfficerData.push(...res.responseData);
-          // this.getSchoolwiseBarDetails();
-        } 
-      },
-      error: (() => {  })
-    })
-   }
+    if (formValue.evaluatorId != 0) {
+      let url = `EvaluatorId=${formValue.evaluatorId}&StateId=${mainFormValue.stateId}&DistrictId=${mainFormValue.districtId}&TalukaId=${mainFormValue.talukaId}`
+      url += `&CenterId=${mainFormValue.centerId}&VillageId=${mainFormValue.villageId}&SchoolId=${mainFormValue.schoolId}&flag_lang=${this.selectedLang}`
+      this.apiService.setHttp('get', 'zp-satara/master/GetAllTeacherOfficerByEvaluatorId?' + url, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          if (res.statusCode == '200') {
+            this.allTeacherOfficerData.push(...res.responseData);
+            // this.getSchoolwiseBarDetails();
+          }
+        },
+        error: (() => { })
+      })
+    }
   }
 
 
@@ -399,12 +399,15 @@ export class Dashbaord2Component {
 
         } else {
           this.dashboardCountData = [];
+          this.piechartOptions = '';
           // this.totalStudentSurveyData = [];
         }
         this.spinner.hide();
       },
       error: (error: any) => {
         this.spinner.hide();
+        this.piechartOptions = '';
+        this.dashboardCountData = [];
         this.error.handelError(error.message)
       }
     });
@@ -557,7 +560,7 @@ export class Dashbaord2Component {
           return w.config.chart.parameters[seriesIndex] + '%'
         },
         style: {
-          fontSize: '10px',
+          fontSize: '12px',
           fontFamily: 'Helvetica, Arial, sans-serif',
           fontWeight: 'bold',
         },
@@ -671,11 +674,19 @@ export class Dashbaord2Component {
         height: 300,
         toolbar: {
           show: false
+        },
+        events: {          
+          click: (_event: any, _chartContext: any, config: any) => {
+              console.log(_event);
+              console.log(_chartContext);
+              console.log(config);
+              
+          }
         }
       },
       colors: [
-        '#b51d31',
-        '#75562e',
+        xAxiaArray[0] == 'Slow Learner' ? '#b51d31' : xAxiaArray[0] == 'Good' ?  '#75562e': '#50c77b',
+        xAxiaArray[1] == 'Good' ?  '#75562e': '#50c77b',
         '#50c77b',
         // '#2b908f',
         // '#f9a3a4',
@@ -708,7 +719,7 @@ export class Dashbaord2Component {
     let fd = this.filterFormTeacherWise.value;
     let mainFV = this.mainFilterForm.value;
     let url = `StateId=${mainFV.stateId}&DistrictId=${mainFV.districtId}`
-     url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
+    url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
     url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardTeacherWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -787,7 +798,7 @@ export class Dashbaord2Component {
     let fd = this.classwiseFilterForm.value;
     let mainFV = this.mainFilterForm.value;
     let url = `StateId=${mainFV.stateId}&DistrictId=${mainFV.districtId}`
-     url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
+    url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
     url += `&SubjectId=${fd.subjectId}&EducationYearId=${+mainFV.acYearId || 0}&GraphLevelId=${fd.levelId}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardStandardWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -799,17 +810,28 @@ export class Dashbaord2Component {
           let brilliantLearnerArray: any = [];
           let goodLearnerArray: any = [];
 
-          classwiseBarDetails.map((x: any) => {
-            xAxiaArray.includes(this.selectedLang == 'English' ? x.standard : x.m_Standard) ? '':xAxiaArray.push(this.selectedLang == 'English' ? x.standard : x.m_Standard);
-            x.graphLevelId == 1 ? slowLearnerArray.push(x.studentCount) : x.graphLevelId == 2 ?  goodLearnerArray.push(x.studentCount) : brilliantLearnerArray.push(x.studentCount)
-            // totalStudentCount.push(x.totalStudentCount)
-          });
+          let modifyArray = this.groupBy(classwiseBarDetails,'standardId');          
+          for(let key in modifyArray){
+            modifyArray[key].map((x: any) => {
+              xAxiaArray.includes(this.selectedLang == 'English' ? x.standard : x.m_Standard) ? '' : xAxiaArray.push(this.selectedLang == 'English' ? x.standard : x.m_Standard);
+              x.graphLevelId == 1 ? slowLearnerArray.push(x.studentCount) : x.graphLevelId == 2 ? goodLearnerArray.push(x.studentCount) : brilliantLearnerArray.push(x.studentCount)
+              // totalStudentCount.push(x.totalStudentCount)
+            });
+          }
+
+          // classwiseBarDetails.map((x: any) => {
+          //   xAxiaArray.includes(this.selectedLang == 'English' ? x.standard : x.m_Standard) ? '' : xAxiaArray.push(this.selectedLang == 'English' ? x.standard : x.m_Standard);
+          //   x.graphLevelId == 1 ? slowLearnerArray.push(x.studentCount) : x.graphLevelId == 2 ? goodLearnerArray.push(x.studentCount) : brilliantLearnerArray.push(x.studentCount)
+          //   // totalStudentCount.push(x.totalStudentCount)
+          // });
+        
+         
 
           // let isAllZero = yAxisArray.every(res => res == 0);
           // isAllZero ? this.classwiseChartOptions = '' :  this.classwiseBarChart(xAxiaArray, yAxisArray);
           // this.classwiseBarChart(xAxiaArray, yAxisArray);
-          this.classwiseBarChart(xAxiaArray, slowLearnerArray,brilliantLearnerArray,goodLearnerArray)
-         
+          this.classwiseBarChart(xAxiaArray, slowLearnerArray, brilliantLearnerArray, goodLearnerArray)
+
         } else {
           this.classwiseChartOptions = '';
         }
@@ -820,22 +842,33 @@ export class Dashbaord2Component {
       },
     });
   }
-  classwiseBarChart(xAxiaArray?: any, slowLearnerArray?:any,brilliantLearnerArray?:any,goodLearnerArray?:any) {
+
+  groupBy(objectArray:any, property:any) {
+    return objectArray.reduce((acc:any, obj:any)=> {
+        let key = obj[property]
+        if (!acc[key]) {
+            acc[key] = []
+        }
+        acc[key].push(obj)
+        return acc
+    }, {})
+}
+  classwiseBarChart(xAxiaArray?: any, slowLearnerArray?: any, brilliantLearnerArray?: any, goodLearnerArray?: any) {
     this.classwiseChartOptions = {
       series: [
         {
-          name: this.selectedLang == 'English' ? 'Slow Learner' :'हळू शिकणारा',
+          name: this.selectedLang == 'English' ? 'Slow Learner' : 'हळू शिकणारा',
           data: slowLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
         {
-          name: this.selectedLang == 'English' ? 'Good Learner':'चांगला शिकणारा',
+          name: this.selectedLang == 'English' ? 'Good Learner' : 'चांगला शिकणारा',
           data: goodLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
         {
-          name: this.selectedLang == 'English' ? 'Brilliant':'हुशार',
+          name: this.selectedLang == 'English' ? 'Brilliant' : 'हुशार',
           data: brilliantLearnerArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
         },
-         
+
       ],
       chart: {
         type: 'bar',
@@ -844,7 +877,7 @@ export class Dashbaord2Component {
           show: false
         }
       },
-      
+
       colors: [
         '#b51d31',
         '#b39536',

@@ -133,7 +133,7 @@
                     <div class="upload-btn-wrapper">
                         <button class="upload-btn" type="button" matTooltip="" matTooltipPosition="below"
                             matTooltipClass="tooltip" (click)="fileInput.click()">{{'Labels.UploadPhotoDocument' | translate}}</button>
-                        <input type="file" name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
+                        <input type="file" multiple name="myfile" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
                         (change)="documentUpload($event);fileInput.value = ''" #fileInput />
                     </div>
                     <button mat-flat-button type="submit" class="btn-main btn-icon">

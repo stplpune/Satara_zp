@@ -52,8 +52,6 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     this.getStateDrop();
     this.getGender();
     (!this.data) ? (this.getLevelDrop()) : '';   
-    console.log("this.data", this.data);
-     
   }
 
   defaultForm() {
@@ -92,7 +90,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "dob": [this.data ? this.data.dob : ''],
         "officeCenterSchoolModel":[]
       })
-    this.data ? (this.data, this.getLevelDrop(), this.getGender(), this.getStateDrop(),this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(), this.getVillage(),this.getAgencyDrop(), this.getBitDrop(),this.onEdit()) : ''
+    this.data ? (this.data, this.getLevelDrop(), this.getGender(), this.getStateDrop(),this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(),this.onEdit(), this.getVillage(),this.getAgencyDrop(), this.getBitDrop()) : ''
   }
 
   get fc() { return this.officeForm.controls }
@@ -126,7 +124,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     let levelId = this.officeForm.value.designationLevelId;
     this.masterService.GetDesignationByLevelId(this.webStorageService.languageFlag, levelId).subscribe({
       next: (resp: any) => {
-        resp.statusCode == "200" ? this.designations = resp.responseData : this.designations = [];
+        resp.statusCode == "200" ? (this.designations = resp.responseData) : this.designations = [];
       },
       // error: (error: any) => {
       //   { this.error.handelError(error) };
@@ -243,7 +241,9 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   // }
 
   getCenterDrop(data?:any) {
-    if(this.officeForm.value.talukaId && this.officeForm.value.designationLevelId == 3 && this.officeForm.value.designationId == 18){     
+    console.log("data:", data);
+    
+    if(this.officeForm.value.talukaId && this.officeForm.value.designationLevelId == 8 && this.officeForm.value.designationId == 18){     
       this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (resp: any) => { 
@@ -269,9 +269,9 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   onEdit(){
     if(this.officeForm.value.designationId == 18){
-      let getcenter = this.data.officeCenterSchoolResponseModel   
+      let getcenter = this.data?.officeCenterSchoolResponseModel;   
       let arr = new Array;
-      if(getcenter.length){
+      if(getcenter?.length){
         for(let i =0; i< getcenter.length;i++){
           let obj ={
             id: getcenter[i].id,
@@ -293,7 +293,6 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     this.submitted = true;
     let formData = this.officeForm.value;
     formData.dob = this.datePipe.transform(formData.dob, 'yyyy-MM-dd' + 'T' + 'HH:mm:ss.ms');
-    console.log("formData: ", formData);
     
     // return;
     let kendramobLength = this.officeForm.value.kendraMobileNo.length;
@@ -319,6 +318,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     if (this.officeForm.valid) {
       if (this.officeForm.value.designationId == 18) {
         let arrr = this.officeForm.value.centerId;
+        
        this.officeCenterSchoolModelArr=[];
         for (let i = 0; i < arrr.length; i++) {
           const filterData= this.data?.officeCenterSchoolResponseModel?.length > 0? (this.data?.officeCenterSchoolResponseModel.find((x:any)=> x.centerId==arrr[i]?.centerId)):'';

@@ -193,7 +193,7 @@ export class AddUpdateSchoolRegistrationComponent {
       next: (res: any) => {
         res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
         // this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getCenter()) : this.f['talukaId'].setValue(0);
-        this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), this.getBitOrCenter()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getBitOrCenter()) : this.f['talukaId'].setValue(0);
+        this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.f['talukaId'].setValue(0);
         this.data?.obj?.isKendraSchool == true ? this.getVillage() : ''
       }
     });

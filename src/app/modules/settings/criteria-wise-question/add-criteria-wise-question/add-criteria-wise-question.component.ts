@@ -303,9 +303,9 @@ export class AddCriteriaWiseQuestionComponent {
         "documentModel": this.imgArray
       }
 
-      let checkDublicate = this.addQuestionArray?.some((x: any) => (x.cQuestion == formData.cQuestion || x.m_CQuestion == formData.m_CQuestion));
+      let checkDublicate = this.addQuestionArray?.some((x: any,index:any) => ((x.cQuestion == formData.cQuestion || x.m_CQuestion == formData.m_CQuestion) && this.index != index));
 
-      if (checkDublicate == true && this.addQueEditFlag != true) {
+      if (checkDublicate == true) {
         this.commonMethod.snackBar(this.webStorageS.getLangauge() == 'EN' ? 'Parameter is already exist' : 'पॅरामीटर आधीपासून अस्तित्वात आहे', 1);
         return
       } else if (this.addQueEditFlag == true) {
@@ -381,18 +381,21 @@ export class AddCriteriaWiseQuestionComponent {
     documentUrl.subscribe({
       next: (ele: any) => {
         if (ele.responseData != null) {
-          let obj = {
-            "id": 0,
-            "cQuestionId": this.f['questionTypeId'].value,
-            "documentPath": ele.responseData,
-            "createdBy": this.webStorageS.getUserId()
-          }
-          let extension = ele.responseData.split('.');
-          if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
-            obj['docFlag'] = true;
-          }
+          let urlString = ele.responseData.split(',');
+          urlString.forEach((res:any) => {
+            let obj = {
+              "id": 0,
+              "cQuestionId": this.f['questionTypeId'].value,
+              "documentPath": res,
+              "createdBy": this.webStorageS.getUserId()
+            }
+            let extension = res.split('.');
+            if (extension[3] == 'pdf' || extension[3] == 'doc' || extension[3] == 'txt') {
+              obj['docFlag'] = true;
+            }
+            this.imgArray.push(obj);
+          })
           this.commonMethod.showPopup(ele.statusMessage, 0);
-          this.imgArray.push(obj);
         }
       },
     })

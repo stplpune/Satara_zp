@@ -76,7 +76,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   languageChange() {
     this.highLightFlag = true;
-    let displayedColumns = ['srNo', 'state','standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'criteria', 'action'];
+    let displayedColumns = ['srNo', 'district','standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'criteria', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",

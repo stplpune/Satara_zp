@@ -68,7 +68,7 @@ export class AddCriteriaWiseQuestionComponent {
       assesmentSubjectId: ['', [Validators.required]],
       questionTypeId: ['', [Validators.required]],
       criteriaId: ['', [Validators.required]],
-      introduction: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
+      introduction: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
     })
   }
 
@@ -179,7 +179,7 @@ export class AddCriteriaWiseQuestionComponent {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Mandatory Fields' : 'कृपया अनिवार्य फील्ड प्रविष्ट करा', 1);
       return;
     } else if ((this.f['questionTypeId'].value == 3 || this.f['questionTypeId'].value == 4) && !this.addQuestionArray?.length) {
-      this.commonMethod.showPopup('Please Add at Least One Question', 1);
+      this.commonMethod.showPopup(this.webStorageS.getLangauge() == 'EN' ? 'Please Add at Least One Question' : 'कृपया किमान एक प्रश्न जोडा', 1);
       return;
     } else {
       this.ngxSpinner.show();
@@ -278,9 +278,9 @@ export class AddCriteriaWiseQuestionComponent {
   addQuestion_Form() {
     this.addQuestionForm = this.fb.group({
       id: [0],
-      cQuestion: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
-      m_CQuestion: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]],
-      expectedAns: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
+      cQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      m_CQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      expectedAns: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
     })
   }
 
@@ -288,7 +288,7 @@ export class AddCriteriaWiseQuestionComponent {
     if (!this.addQuestionForm.valid) {
       return;
     } else if (!this.imgArray?.length) {
-      this.commonMethod.showPopup("Please Upload at Least One Document", 1);
+      this.commonMethod.showPopup(this.webStorageS.getLangauge() == 'EN' ? 'Please Upload at Least One Document' : 'कृपया किमान एक दस्तऐवज अपलोड करा', 1);
       return;
     } else {
       let formData = this.addQuestionForm.value;

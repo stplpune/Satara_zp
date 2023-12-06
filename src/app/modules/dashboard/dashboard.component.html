@@ -19,8 +19,30 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
                             <mat-select formControlName="acYearId">
-                                <mat-option *ngFor="let year of acYear" [value]="year.educationYearId">
+                                <mat-option *ngFor="let year of acYear" [value]="year.id">
                                     {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectState' | translate}}</mat-label>
+                            <mat-select formControlName="stateId" (selectionChange)="getDistrict()">
+                                <mat-option *ngFor="let state of stateData" [value]="state.id">
+                                    {{webStorage.languageFlag == 'EN' ? state.state:state.m_State}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="mb-0">
+                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.selectDistrict' | translate}}</mat-label>
+                            <mat-select formControlName="districtId" (selectionChange)="getTalukas()">
+                                <mat-option *ngFor="let district of districtData" [value]="district.id">
+                                    {{webStorage.languageFlag == 'EN' ? district.district:district.m_District}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -132,7 +154,7 @@
                                         <mat-label>Select</mat-label>
                                         <mat-select [formControl]="searchAcadamicYear"
                                             (selectionChange)="initialApiCall('sigleField')">
-                                            <mat-option *ngFor="let year of acYear" [value]="year.educationYearId">
+                                            <mat-option *ngFor="let year of acYear" [value]="year.id">
                                                 {{webStorage.languageFlag ==
                                                 'EN'?year.eductionYear:year.eductionYear_M}}</mat-option>
                                         </mat-select>

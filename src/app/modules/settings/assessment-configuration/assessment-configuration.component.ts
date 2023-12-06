@@ -36,8 +36,8 @@ export class AssessmentConfigurationComponent {
   subjectArr = new Array();
   questionArr = new Array();
   educationYearArr = new Array();
-  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Assessment Criteria', 'Educational Year', 'Unblock/Block','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','मूल्यांकन निकष', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'District', 'Standard', 'Subject', 'Question Type', 'Assessment Criteria', 'Educational Year', 'Unblock/Block','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'इयत्ता', 'विषय', 'प्रश्न प्रकार', 'मूल्यांकन निकष', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(public dialog: MatDialog,
@@ -112,8 +112,8 @@ export class AssessmentConfigurationComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    // let displayedColumnsReadMode = ['srNo', 'standard', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
-    let displayedColumns = ['srNo', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
+    // let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
+    let displayedColumns = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",

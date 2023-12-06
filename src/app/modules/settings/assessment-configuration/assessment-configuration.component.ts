@@ -36,8 +36,8 @@ export class AssessmentConfigurationComponent {
   subjectArr = new Array();
   questionArr = new Array();
   educationYearArr = new Array();
-  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Question Type', 'Educational Year', 'Unblock/Block','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
+  displayedheadersEnglish = ['Sr. No.', 'Standard', 'Subject','Assessment Criteria', 'Educational Year', 'Unblock/Block','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'इयत्ता', 'विषय','मूल्यांकन निकष', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
   @ViewChild('formDirective') private formDirective!: NgForm;
 
   constructor(public dialog: MatDialog,
@@ -351,7 +351,7 @@ export class AssessmentConfigurationComponent {
     let dialoObj = {
       img: 'assets/images/unblock-gif.gif',
       header: this.languageFlag == 'English' ? userEng + ' Question Type' : userMara + ' प्रश्नाचा प्रकार',
-      title: this.languageFlag == 'English' ? 'Do You Want To '+userEng+' Question Type?' : 'आपण प्रश्न प्रकार '+userMara+' करू इच्छिता?',
+      title: this.languageFlag == 'English' ? 'Do You Want To '+userEng+' Assessment Criteria?' : 'आपण मूल्यांकन निकष '+userMara+' करू इच्छिता?',
       cancelButton: this.languageFlag == 'English' ? 'Cancel' : 'रद्द करा',
       okButton: this.languageFlag == 'English' ? 'Ok' : 'ओके'
     }

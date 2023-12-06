@@ -79,17 +79,27 @@ export class CctvLocationRegistrationComponent {
     (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
 
+  getFormValue(){
+     return {
+      "stateId" : this.loginData ? this.loginData.stateId : 0,
+      "districtId" : this.loginData ? this.loginData.districtId : 0,
+      "centerId" : this.loginData ? this.loginData.centerId : 0,
+      "talukaId" : this.loginData ? this.loginData.talukaId : 0,
+      "villageId" : this.loginData ? this.loginData.villageId : 0,
+      "schoolId" : this.loginData ? this.loginData.schoolId : 0
+     }
+  }
+
   filterFormData() {
     this.filterForm = this.fb.group({  
-      stateId: [''],
-      districtId: [''],
-      centerId : [''],
-      TalukaId: [''],
-      villageId: [''],  
-      SchoolId: [''],
+      stateId: [this.getFormValue().stateId],
+      districtId: [this.getFormValue().districtId],
+      centerId : [this.getFormValue().centerId],
+      TalukaId: [this.getFormValue().talukaId],
+      villageId: [this.getFormValue().villageId],  
+      SchoolId: [this.getFormValue().schoolId],
       cctvLocation :[''],
       textSearch : ['']
-    
     });
   }
   
@@ -123,7 +133,6 @@ export class CctvLocationRegistrationComponent {
           }
         },
       });
-  
     }
   }
 
@@ -143,7 +152,6 @@ export class CctvLocationRegistrationComponent {
         },
         // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
       });
-  
     }
   }
 
@@ -203,7 +211,6 @@ export class CctvLocationRegistrationComponent {
           },
           // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
         });
-  
       }
     }
 
@@ -225,7 +232,9 @@ export class CctvLocationRegistrationComponent {
     }
   
   getTableData(flag?: string) {
-    let formValue = this.filterForm?.value
+    let formValue = this.filterForm?.value;
+    console.log("formValue", formValue);
+    
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     
@@ -417,6 +426,7 @@ export class CctvLocationRegistrationComponent {
     this.villageArr = [];
     this.centerArr = [];
     this.schoolArr = [];
+    this.filterFormData();
     this.getTableData();
     this.getState();
   }

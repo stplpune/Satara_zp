@@ -51,7 +51,7 @@
 
 
                     <ng-container *ngIf="tableInfo?.attendance == columns">
-                        <span [ngClass]="{'text-bg-success' : tableInfo.tableData[i]?.attendance == 'Present', 'text-bg-warning' : tableInfo.tableData[i]?.attendance == 'Week Off', ' text-bg-danger' : tableInfo.tableData[i]?.attendance == 'Absent', 'text-bg-primary': tableInfo.tableData[i]?.attendance != 'Present' && tableInfo.tableData[i]?.attendance != 'Week Off' && tableInfo.tableData[i]?.attendance != 'Absent' }" class="badge rounded-pill px-2 mb-1">
+                        <span [ngClass]="{'text-bg-success' : tableInfo.tableData[i]?.attendance == 'Present', 'text-bg-warning' : tableInfo.tableData[i]?.attendance == 'Week Off', ' text-bg-danger' : tableInfo.tableData[i]?.attendance == 'Absent', 'text-bg-primary': tableInfo.tableData[i]?.attendance != 'Present' && tableInfo.tableData[i]?.attendance != 'Week Off' && tableInfo.tableData[i]?.attendance != 'Absent' }" class="badge rounded-pill1 px-2 mb-1">
                             {{element[columns]}}
                         </span>
                     </ng-container>

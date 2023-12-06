@@ -152,7 +152,8 @@
 .main-menu .sub-menu li.sub-menu-item a.sub-menu-link.active,
 .main-menu .sub-menu li.sub-menu-item a.sub-menu-link:hover,
 .main-menu .sub-menu .sub-submenu a.sub-submenu-link:hover {
-  color: var(--main-dark-color);
+  // color: var(--main-dark-color);
+  color: #353535;
 }
 
 .main-menu .sub-menu a.sub-menu-link img {

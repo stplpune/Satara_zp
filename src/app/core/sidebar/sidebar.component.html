@@ -39,7 +39,6 @@
           <div [class]="!pages.isCollapsed ? 'collapse' : 'collapse show'" id="collapseMaster1{{i}}" *ngIf="showSubmenu && pages.isCollapsed">
             <ul class="sub-menu" >
               <ng-container *ngFor="let a of pages.array; let j = index">
-
                 <ng-container *ngIf="a.pageSubMenuView">
                   <li class="sub-menu-item">
                     <a class="sub-menu-link" data-bs-toggle="collapse" href="#collapseOfficeMaster{{i}}{{j}}"
@@ -47,7 +46,7 @@
                       [attr.aria-controls]="'collapseOfficeMaster'+i+j" [class.active]="pages?.isCollapsed"
                       routerLinkActive="active">
                       <div class="d-flex align-items-center">
-                        <img src="../../../../assets/images/menu-icons/circle.svg" class="sub-menu-icon">
+                        <img src="../../../assets/images/menu-icons/priority-check.svg" class="sub-menu-icon">
                         <span>{{WebStorageService.languageFlag == 'EN' ? a.pageSubMenuView :
                           a.m_PageSubMenuView}}</span>
                       </div>
@@ -77,7 +76,7 @@
                   <li class="sub-menu-item" *ngFor="let page of a?.pageURL; let pageUrlIndex = index">
                     <a class="sub-menu-link" routerLink="/{{page}}">
                       <div class="d-flex align-items-center">
-                        <img src=".././../../assets/images/menu-icons/circle.svg" class="sub-menu-icon">
+                        <img src="../../../assets/images/menu-icons/priority-check.svg" class="sub-menu-icon">
                         <ng-container *ngFor="let pageName of WebStorageService.languageFlag == 'EN' ? a.pageName : a.m_PageName; let pageNameIndex = index">
                           <span *ngIf="pageNameIndex == pageUrlIndex">{{pageName}}</span>
                         </ng-container>
@@ -85,15 +84,18 @@
                     </a>
                   </li>
                 </ng-container>
-
               </ng-container>
             </ul>
           </div>
         </li>
       </ng-container>
     </ul>
+  </div>
+</div>
 
-    <!-- <ul class="main-menu">
+
+<!-- 
+      <ul class="main-menu">
       <ng-container *ngFor="let pages of loginPages; let i = index">
         <!-- FOR ONLY ONE DASHBOARD MENU  --
         <ng-container *ngIf="pages.pageURL.length <= 1">
@@ -154,9 +156,9 @@
         </ng-container>
         <!-- END FOR ONLY ONE MENU PART  ---
       </ng-container>
-    </ul> -->
-  </div>
-</div>
+    </ul> 
+---->
+
 
 
 

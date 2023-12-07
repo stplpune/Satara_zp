@@ -411,47 +411,61 @@ export class AddUpdateTeacherRegistrationComponent {
   getTaluka() {
     this.talukaArray = [];
     let districtId = this.teacherRegForm.value.districtId;
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.talukaArray = res.responseData;
-          this.editFlag ? (this.teacherRegForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getCluster()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getCluster()) : this.f['talukaId'].setValue(0);
-        } else {
-          this.talukaArray = [];
-        }
-      }),
-    });
+    if(districtId > 0){
+      this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.talukaArray = res.responseData;
+            this.editFlag ? (this.teacherRegForm.controls['talukaId'].setValue(this.editObj?.talukaId), this.getCluster()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getCluster()) : this.f['talukaId'].setValue(0);
+          } else {
+            this.talukaArray = [];
+          }
+        }),
+      });
+    }
+    else{
+      this.talukaArray = [];
+    }
   }
 
   getCluster() {
     this.clusterArray = [];
     let talukaId = this.teacherRegForm.value.talukaId;
-    this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.clusterArray = res.responseData;
-          this.editFlag ? (this.teacherRegForm.controls['centerId'].setValue(this.editObj?.centerId), this.getVillage()) : this.loginData ? (this.teacherRegForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.teacherRegForm.controls['centerId'].setValue(0);
-        } else {
-          this.clusterArray = [];
-        }
-      }), 
-    })
+    if(talukaId > 0){
+      this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.clusterArray = res.responseData;
+            this.editFlag ? (this.teacherRegForm.controls['centerId'].setValue(this.editObj?.centerId), this.getVillage()) : this.loginData ? (this.teacherRegForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.teacherRegForm.controls['centerId'].setValue(0);
+          } else {
+            this.clusterArray = [];
+          }
+        }), 
+      })
+    }
+    else{
+      this.clusterArray = [];
+    }
   }
 
   getVillage() {
     this.villageArray = [];
     let centerId = this.teacherRegForm.value.centerId;
-    
-    this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.villageArray = res.responseData;
-          (this.editFlag ? (this.teacherRegForm.controls['villageId'].setValue(this.editObj?.villageId)) : this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId)) : this.f['villageId'].setValue(0), this.getEducationQualification());
-        } else {
-          this.districtArrayTeacherDeatails = [];
-        }
-      }),
-    })
+    if(centerId > 0){
+      this.masterService.getAllVillage(this.webStorageS.languageFlag, centerId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.villageArray = res.responseData;
+            (this.editFlag ? (this.teacherRegForm.controls['villageId'].setValue(this.editObj?.villageId)) : this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId)) : this.f['villageId'].setValue(0), this.getEducationQualification());
+          } else {
+            this.villageArray = [];
+          }
+        }),
+      })
+    }
+    else{
+      this.villageArray = [];
+    }
   }
   getEducationQualification() {
     this.educationQualificationArray = [];
@@ -554,31 +568,40 @@ export class AddUpdateTeacherRegistrationComponent {
   getAllTalukaTeacherDeatails() {
     this.talukaArrayTeacherDetails = [];
     let districtId = this.teacherRegForm.value.teacherDetails.districtId;
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.talukaArrayTeacherDetails = res.responseData;
-          this.editFlag ? (this.td['talukaId'].setValue(this.editObj.teacherDetails?.talukaId), this.getClusterTeacherDeatails()) : this.loginData ? (this.td['talukaId'].setValue(this.loginData.talukaId), this.getClusterTeacherDeatails()) : this.td['talukaId'].setValue(0);
-        } else {
-          this.talukaArrayTeacherDetails = [];
-        }
-      }),
-    })
+    if(districtId > 0){
+      this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.talukaArrayTeacherDetails = res.responseData;
+            this.editFlag ? (this.td['talukaId'].setValue(this.editObj.teacherDetails?.talukaId), this.getClusterTeacherDeatails()) : this.loginData ? (this.td['talukaId'].setValue(this.loginData.talukaId), this.getClusterTeacherDeatails()) : this.td['talukaId'].setValue(0);
+          } else {
+            this.talukaArrayTeacherDetails = [];
+          }
+        }),
+      })
+    }
+    else{
+      this.talukaArrayTeacherDetails = [];
+    }
   }
 
   getClusterTeacherDeatails() {
     this.clusterArrayTeacherDeatails = [];
     let talukaId = this.teacherRegForm.value.teacherDetails.talukaId;
-    this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.clusterArrayTeacherDeatails = res.responseData;
-          this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllVillageTeacherDeatails()) : this.loginData ? (this.td['clusterId'].setValue(this.loginData.centerId), this.getAllVillageTeacherDeatails()) : this.td['clusterId'].setValue(0);
-        } else {
-          this.clusterArrayTeacherDeatails = [];
-        }
-      }), 
-    })
+    if(talukaId > 0){
+      this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.clusterArrayTeacherDeatails = res.responseData;
+            this.editFlag ? (this.td['clusterId'].setValue(this.editObj.teacherDetails?.clusterId), this.getAllVillageTeacherDeatails()) : this.loginData ? (this.td['clusterId'].setValue(this.loginData.centerId), this.getAllVillageTeacherDeatails()) : this.td['clusterId'].setValue(0);
+          } else {
+            this.clusterArrayTeacherDeatails = [];
+          }
+        }), 
+      })
+    }else{
+      this.clusterArrayTeacherDeatails = [];
+    }
   }
 
   getAllVillageTeacherDeatails() {
@@ -596,22 +619,26 @@ export class AddUpdateTeacherRegistrationComponent {
     })
   }
 
-
   getAllSchool() {
     this.schoolArray = [];
     let talukaId = this.teacherRegForm.value.teacherDetails.talukaId;
     let clusterId = this.teacherRegForm.value.teacherDetails.clusterId;
     let villageId = this.teacherRegForm.value.teacherDetails.villageId;
-    this.masterService.getAllSchoolByCriteria(this.webStorageS.languageFlag, talukaId, villageId, clusterId).subscribe({
-      next: ((res: any) => {
-        if (res.statusCode == "200" && res.responseData.length) {
-          this.schoolArray = res.responseData;
-          this.editFlag ? (this.td['schoolId'].setValue(this.editObj.teacherDetails?.schoolId)) : this.loginData ? this.td['schoolId'].setValue(this.loginData.schoolId) : this.td['schoolId'].setValue(0);
-        } else {
-          this.schoolArray = [];
-        }
-      }), 
-    })
+    if(talukaId > 0 && clusterId > 0 && villageId > 0){
+      this.masterService.getAllSchoolByCriteria(this.webStorageS.languageFlag, talukaId, villageId, clusterId).subscribe({
+        next: ((res: any) => {
+          if (res.statusCode == "200" && res.responseData.length) {
+            this.schoolArray = res.responseData;
+            this.editFlag ? (this.td['schoolId'].setValue(this.editObj.teacherDetails?.schoolId)) : this.loginData ? this.td['schoolId'].setValue(this.loginData.schoolId) : this.td['schoolId'].setValue(0);
+          } else {
+            this.schoolArray = [];
+          }
+        }), 
+      })
+    }
+    else{
+      this.schoolArray = [];
+    }
   }
   getRole() {
     this.teacherRoleArray = [];
@@ -834,9 +861,30 @@ export class AddUpdateTeacherRegistrationComponent {
       this.td['schoolId'].setValue('');
       this.td['villageId'].setValue('');
       this.schoolArray = [];
-    
     }else if (dropdown == 'school') {
       this.assignClassArray = [];
+    }else if(dropdown == 'State'){
+      this.f['districtId'].setValue('');
+      this.f['talukaId'].setValue('');
+      this.f['centerId'].setValue('');
+      this.f['villageId'].setValue('');
+      this.talukaArray = [];
+      this.clusterArray = [];
+      this.villageArray = [];
+    }else if(dropdown == 'District'){
+      this.f['talukaId'].setValue('');
+      this.f['centerId'].setValue('');
+      this.f['villageId'].setValue('');
+      this.clusterArray = [];
+      this.villageArray = [];
+    }else if(dropdown == 'Taluka'){
+      this.f['centerId'].setValue('');
+      this.f['villageId'].setValue('');
+      this.villageArray = [];
+    }else{
+      this.f['villageId'].setValue('');
     }
+
+
   }
 }

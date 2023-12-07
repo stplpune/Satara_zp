@@ -76,20 +76,30 @@ export class AddUpdateAgencyRegistrationComponent {
 
   getAllDistricts() {
     let stateId = this.agencyRegisterForm.value.stateId;
-    this.master.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe((res: any) => {
-      res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
-      // this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
-      this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
-    })
+    if(stateId > 0){
+      this.master.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe((res: any) => {
+        res.statusCode == 200 ? this.districtData = res.responseData : this.districtData = [];
+        // this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
+        this.editData ? (this.fc['districtId'].setValue(this.editData?.districtId), this.getAllTalukas()) : this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getAllTalukas()) : this.fc['districtId'].setValue(0);
+      })
+    }
+    else{
+      this.districtData = [];
+    }
   }
 
   getAllTalukas() {
     let districtId = this.agencyRegisterForm.value.districtId;
-    this.master.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe((res: any) => {
-      res.statusCode == 200 ? this.talukaData = res.responseData : this.talukaData = [];
-      // this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
-      this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
-    })
+    if(districtId > 0){
+      this.master.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe((res: any) => {
+        res.statusCode == 200 ? this.talukaData = res.responseData : this.talukaData = [];
+        // this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
+        this.editData ? this.fc['talukaId'].setValue(this.editData.talukaId) : this.loginData ? this.fc['talukaId'].setValue(this.loginData.talukaId) : this.fc['talukaId'].setValue(0);
+      })
+    }
+    else{
+      this.talukaData = [];
+    }
   }
 
   onSubmit(clear: any) {

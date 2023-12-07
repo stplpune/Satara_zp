@@ -178,47 +178,64 @@ export class AddUpdateSchoolRegistrationComponent {
   
   getDistrict() {
     let stateId = this.schoolRegForm.value.stateId;
-    this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
-      next: (res: any) => {
-        res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
-        // this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
-        this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
-      }
-    });
+    if(stateId > 0){
+      this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
+        next: (res: any) => {
+          res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.districtArr = []);
+          this.editFlag ? (this.f['districtId'].setValue(this.data?.obj.districtId), this.getTaluka()) : this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
+        }
+      });
+    }
+    else{
+      this.districtArr = [];
+    }
   }
 
   getTaluka() {
     let districtId = this.schoolRegForm.value.districtId;
-    this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
-      next: (res: any) => {
-        res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
-        // this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), this.getCenter()) : this.f['talukaId'].setValue(0);
-        this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.f['talukaId'].setValue(0);
-        this.data?.obj?.isKendraSchool == true ? this.getVillage() : ''
-      }
-    });
+    if(districtId > 0){
+      this.masterService.getAllTaluka(this.webStorageS.languageFlag, districtId).subscribe({
+        next: (res: any) => {
+          res.statusCode == "200" ? this.talukaArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.talukaArr = []);
+          this.editFlag ? (this.f['talukaId'].setValue(this.data?.obj.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.loginData ? (this.f['talukaId'].setValue(this.loginData.talukaId), (this.schoolRegForm.value.isKendraSchool == true ? this.getBitOrCenter() : ''), this.getCenter()) : this.f['talukaId'].setValue(0);
+          this.data?.obj?.isKendraSchool == true ? this.getVillage() : ''
+        }
+      });
+    }
+    else{
+      this.talukaArr = [];
+    }
   }
 
   getCenter() {
-    this.masterService.getAllCenter(this.webStorageS.languageFlag, this.schoolRegForm.value.talukaId).subscribe({
-      next: (res: any) => {
-        res.statusCode == "200" ? this.centerArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.centerArr = []);
-        // this.loginData ? (this.f['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.f['centerId'].setValue(0);
-        this.editFlag ? (this.f['centerId'].setValue(this.data?.obj.centerId), this.getVillage()) : this.loginData ? (this.f['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.f['centerId'].setValue(0);
-      }
-    });
+    let talukaId = this.schoolRegForm.value.talukaId;
+    if(talukaId > 0){
+      this.masterService.getAllCenter(this.webStorageS.languageFlag, talukaId).subscribe({
+        next: (res: any) => {
+          res.statusCode == "200" ? this.centerArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.centerArr = []);
+          this.editFlag ? (this.f['centerId'].setValue(this.data?.obj.centerId), this.getVillage()) : this.loginData ? (this.f['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.f['centerId'].setValue(0);
+        }
+      });
+    }
+    else{
+      this.centerArr = [];
+    }
   }
 
   getVillage() {
     let cId = this.schoolRegForm.value.centerId;
     let tId = this.schoolRegForm.value.talukaId;
-    this.masterService.getAllVillage(this.webStorageS.languageFlag,this.isKendra ? tId : cId).subscribe({
-      next: (res: any) => {
-        res.statusCode == "200" ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
-        // this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId), this.getSchoolType()) : this.f['villageId'].setValue(0);
-        this.editFlag ? (this.f['villageId'].setValue(this.data?.obj.villageId), this.getSchoolType()) : this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId), this.getSchoolType()) : this.f['villageId'].setValue(0);
-      }
-    });
+    if(cId > 0 && tId > 0){
+      this.masterService.getAllVillage(this.webStorageS.languageFlag,this.isKendra ? tId : cId).subscribe({
+        next: (res: any) => {
+          res.statusCode == "200" ? this.villageArr = res.responseData : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.villageArr = []);
+          this.editFlag ? (this.f['villageId'].setValue(this.data?.obj.villageId), this.getSchoolType()) : this.loginData ? (this.f['villageId'].setValue(this.loginData.villageId), this.getSchoolType()) : this.f['villageId'].setValue(0);
+        }
+      });
+    }
+    else{
+      this.villageArr = [];
+    }
   }
 
   getSchoolType() {
@@ -275,11 +292,17 @@ export class AddUpdateSchoolRegistrationComponent {
   }
 
   getBit() {
-    this.masterService.GetBit(this.webStorageS.languageFlag, this.schoolRegForm.value.talukaId).subscribe({
-      next: (res: any) => {
-        res.statusCode == "200" ? (this.bitArr = res.responseData, this.editFlag ? (this.f['bitId'].setValue(this.data?.obj.bitId)) : null) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.bitArr = []);
-      }
-    });
+    let talukaId = this.schoolRegForm.value.talukaId;
+    if(talukaId > 0){
+      this.masterService.GetBit(this.webStorageS.languageFlag, talukaId).subscribe({
+        next: (res: any) => {
+          res.statusCode == "200" ? (this.bitArr = res.responseData, this.editFlag ? (this.f['bitId'].setValue(this.data?.obj.bitId)) : null) : (this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1), this.bitArr = []);
+        }
+      });
+    }
+    else{
+      this.bitArr = [];
+    }
   }
 
   getSchoolArea(){

@@ -174,7 +174,7 @@
                             Password</mat-error>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-4" *ngIf="cameraDetailsForm.value.cctvTypeId == 1">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.urlLink'| translate}}</mat-label>
                         <input matInput formControlName="link" (keypress)="validators.noFirstSpaceAllow($event);"

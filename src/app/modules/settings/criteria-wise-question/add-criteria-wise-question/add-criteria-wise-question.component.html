@@ -88,14 +88,25 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-
-                <div class="col-sm-8">
+            </div>
+            <div class="row gx-2">
+                <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.introduction'| translate}}</mat-label>
                         <textarea matInput formControlName="introduction"
                             (keypress)="validation.noFirstSpaceAllow($event)" maxlength="100"></textarea>
                         <mat-error *ngIf="f['introduction'].hasError('pattern')">Please Enter Valid
                             Introduction</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                        <mat-label>{{'Labels.introductionMarathi'| translate}}</mat-label>
+                        <textarea matInput formControlName="m_introduction"
+                            (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);" maxlength="100"></textarea>
+                        <!-- <mat-error *ngIf="f['m_introduction'].hasError('pattern')">Please Enter Valid
+                            Introduction</mat-error> -->
                     </mat-form-field>
                 </div>
             </div>
@@ -117,7 +128,7 @@
                             <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                                 <mat-label>{{'Labels.QuestionMarathi'| translate}}</mat-label>
                                 <input matInput formControlName="m_CQuestion"
-                                    (keypress)="validation.noFirstSpaceAllow($event)" maxlength="50">
+                                    (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);" maxlength="50">
                                 <mat-error *ngIf="aq['m_CQuestion'].hasError('pattern')">
                                     {{'Labels.PleaseEnterValidMarathiQuestion' | translate}}
                                 </mat-error>
@@ -145,7 +156,7 @@
                                         <mat-icon>upload</mat-icon>
                                     </button>
                                     <input type="file" multiple name="myfile" multiple
-                                        accept=".png, .jpg, .jpeg, .pdf, .doc, .txt"
+                                        accept=".png, .jpg, .jpeg"
                                         (change)="documentUpload($event);fileInput.value = ''" #fileInput />
                                 </div>
                                 <div class="d-flex flex-wrap gap-4 mt-3">

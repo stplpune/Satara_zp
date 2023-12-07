@@ -69,6 +69,7 @@ export class AddCriteriaWiseQuestionComponent {
       questionTypeId: ['', [Validators.required]],
       criteriaId: ['', [Validators.required]],
       introduction: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      m_introduction: ['', [Validators.required]]
     })
   }
 
@@ -279,7 +280,7 @@ export class AddCriteriaWiseQuestionComponent {
     this.addQuestionForm = this.fb.group({
       id: [0],
       cQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
-      m_CQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      m_CQuestion: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]],
       expectedAns: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
     })
   }

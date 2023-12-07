@@ -543,6 +543,7 @@
         "SchoolMedium": "शाळा माध्यम",
         "PleaseEnterValidQuestion":"कृपया वैध प्रश्न टाका",
         "PleaseEnterValidMarathiQuestion":"कृपया वैध मराठी प्रश्न टाका",
-        "PleaseEnterValidExpectedAnswer":"कृपया वैध अपेक्षित उत्तर टाका"
+        "PleaseEnterValidExpectedAnswer":"कृपया वैध अपेक्षित उत्तर टाका",
+        "introductionMarathi": "प्रस्तावना(मराठी)"
     }
 }

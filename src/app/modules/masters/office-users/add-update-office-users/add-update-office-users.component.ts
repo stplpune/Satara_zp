@@ -165,47 +165,63 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   getDistrictDrop() {
     let stateId = this.officeForm.value.stateId;
-    this.masterService.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe({
-      next: (resp: any) => {
-        resp.statusCode == "200" ? this.districts = resp.responseData : this.districts = [];
-        // this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getTalukaDrop()) : this.fc['districtId'].setValue(0);
-      },
-      error: (error: any) => {
-        { this.error.handelError(error) };
-      }
-    });
+    this.districts = [];
+    if(stateId > 0){
+      this.masterService.getAllDistrict(this.webStorageService.languageFlag, stateId).subscribe({
+        next: (resp: any) => {
+          resp.statusCode == "200" ? this.districts = resp.responseData : this.districts = [];
+          // this.loginData ? (this.fc['districtId'].setValue(this.loginData.districtId), this.getTalukaDrop()) : this.fc['districtId'].setValue(0);
+        },
+        error: (error: any) => {
+          { this.error.handelError(error) };
+        }
+      });
+    }
+    else{
+      this.districts = [];
+    }
   }
 
   getTalukaDrop() {
     let districtId = this.officeForm.value.districtId;
-    this.masterService.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe({
-      next: (resp: any) => {
-        resp.statusCode == "200" ? (this.talukas = resp.responseData) : this.talukas = [];
-        // this.loginData ? (this.fc['talukaId'].setValue(this.loginData.talukaId), this.getVillage()) : this.fc['talukaId'].setValue(0);
-      },
-      error: (error: any) => {
-        { this.error.handelError(error) };
-      }
-    });
+    this.talukas = [];
+    if(districtId > 0){
+      this.masterService.getAllTaluka(this.webStorageService.languageFlag, districtId).subscribe({
+        next: (resp: any) => {
+          resp.statusCode == "200" ? (this.talukas = resp.responseData) : this.talukas = [];
+          // this.loginData ? (this.fc['talukaId'].setValue(this.loginData.talukaId), this.getVillage()) : this.fc['talukaId'].setValue(0);
+        },
+        error: (error: any) => {
+          { this.error.handelError(error) };
+        }
+      });
+    }
+    else{
+      this.talukas = [];
+    }
   }
 
   getVillage(){
-    this.villageArr = [];
     let tId = this.officeForm.value.talukaId;
-    // let Cid = 0;
-    this.masterService.getAllVillageByTaluka('', tId).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.villageArr = res.responseData;
-          // this.loginData ? this.fc['villageId'].setValue(this.loginData.villageId) : this.fc['villageId'].setValue(0);
-          this.data ? (this.officeForm.controls['villageId'].setValue(this.data.villageId)) :'';
-        } else {
-          this.commonService.checkEmptyData(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
-          this.villageArr = [];
-        }
-      },
-      // error: ((err: any) => { this.errors.handelError(err.statusCode) })
-    });
+    this.villageArr = [];
+    if(tId > 0){
+      this.masterService.getAllVillageByTaluka('', tId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.villageArr = res.responseData;
+            // this.loginData ? this.fc['villageId'].setValue(this.loginData.villageId) : this.fc['villageId'].setValue(0);
+            this.data ? (this.officeForm.controls['villageId'].setValue(this.data.villageId)) :'';
+          } else {
+            this.commonService.checkEmptyData(res.statusMessage) == false ? this.error.handelError(res.statusCode) : this.commonService.showPopup(res.statusMessage, 1);
+            this.villageArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+    else{
+      this.villageArr = [];
+    }
   }
 
 

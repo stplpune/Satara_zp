@@ -540,9 +540,9 @@ export class Dashbaord2Component {
       },
       fill: {
         type: "solid",
-        colors: ['#E98754', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'],
+        colors: ['#b39536', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'],
       },
-      colors: ['#E98754', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'],
+      colors: ['#b39536', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'],
       labels: [],
       responsive: [
         {
@@ -599,7 +599,7 @@ export class Dashbaord2Component {
           height: 12,
           strokeWidth: 0,
           strokeColor: '#fff',
-          fillColors: ['#E98754', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'],
+          fillColors: ['#b39536', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'],
         }
       }
     };
@@ -616,7 +616,7 @@ export class Dashbaord2Component {
     serriesArrayTotal[1] = this.dashboardCountData[0]?.privateSchoolCount | 0;
     serriesArrayTotal[2] = this.dashboardCountData[0]?.otherSchoolCount | 0;
 
-    this.piechartOptions.colors = ['#E98754', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'];
+    this.piechartOptions.colors = ['#b39536', '#EFB45B', '#65C889', '#CB4B4B', '#E76A63'];
     this.piechartOptions.series = serriesArray;
     this.piechartOptions.series1 = serriesArrayTotal;
     this.piechartOptions.chart.parameters = [this.dashboardCountData[0]?.govtSchool, this.dashboardCountData[0]?.privateSchool, this.dashboardCountData[0]?.otherSchool]
@@ -685,16 +685,16 @@ export class Dashbaord2Component {
             let mainFilter = this.mainFilterForm.value;
             let selectedFilter = this.filterForm.value
             let label = config.config.xaxis.categories[config.dataPointIndex]
-            selectedFilter.levelId = label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
-            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
+            let obj = this.returnObjectOfChart(mainFilter, selectedFilter);
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+            this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
           }
         }
       },
       colors: [
-        xAxiaArray[0] == 'Slow Learner' ? '#b51d31' : xAxiaArray[0] == 'Good' ? '#75562e' : '#50c77b',
-        xAxiaArray[1] == 'Good' ? '#75562e' : '#50c77b',
+        xAxiaArray[0] == 'Slow Learner' ? '#b51d31' : xAxiaArray[0] == 'Good' ? '#E98754' : '#50c77b',
+        xAxiaArray[1] == 'Good' ? '#E98754' : '#50c77b',
         '#50c77b',
         // '#2b908f',
         // '#f9a3a4',
@@ -773,18 +773,20 @@ export class Dashbaord2Component {
           show: false
         },
         events: {
-          dataPointSelection: (_event: any, _chartContext: any, _config: any) => {
+          click: (_event: any, _chartContext: any, config: any) => {
             let mainFilter = this.mainFilterForm.value;
             let selectedFilter = this.filterFormTeacherWise.value;
-            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            let label = config.config.xaxis.categories[config.dataPointIndex]
+            selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id;
+            let obj = this.returnObjectOfChart(mainFilter, selectedFilter);
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-           this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+            this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
           }
         }
       },
       colors: [
         '#b51d31',
-        '#75562e',
+        '#E98754',
         '#50c77b',
         // '#2b908f',
         // '#f9a3a4',
@@ -799,7 +801,7 @@ export class Dashbaord2Component {
         },
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
       xaxis: {
         categories: xAxiaArray,
@@ -894,19 +896,22 @@ export class Dashbaord2Component {
           show: false
         },
         events: {
-          dataPointSelection: (_event: any, _chartContext: any, _config: any) => {
+          click: (_event: any, _chartContext: any, config: any) => {
             let mainFilter = this.mainFilterForm.value;
             let selectedFilter = this.classwiseFilterForm.value;
-            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            selectedFilter.levelId = config.seriesIndex + 1;
+            let lable = config.config.xaxis.categories[config.dataPointIndex];
+            selectedFilter.classId = this.standardResp.find(res => lable == (this.selectedLang == 'English' ? res.standard : res.m_Standard)).id;
+            let obj = this.returnObjectOfChart(mainFilter, selectedFilter);
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-           this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+            this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
           }
         }
       },
 
       colors: [
         '#b51d31',
-        '#b39536',
+       '#E98754', // '#b39536',
         '#50c77b',
         // '#2b908f',
         // '#f9a3a4',
@@ -990,18 +995,20 @@ export class Dashbaord2Component {
           show: false
         },
         events: {
-          dataPointSelection: (_event: any, _chartContext: any, _config: any) => {
+          click: (_event: any, _chartContext: any, config: any) => {
             let mainFilter = this.mainFilterForm.value;
             let selectedFilter = this.subjectWiseFilterForm.value;
-            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            let lable = config.config.xaxis.categories[config.dataPointIndex];
+            selectedFilter.subjectId = this.subjectResp.find(res => lable == (this.selectedLang == 'English' ? res.subject : res.m_Subject)).id;
+            let obj = this.returnObjectOfChart(mainFilter, selectedFilter);
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-           this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+            this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
           }
         }
       },
       colors: [
         '#b51d31',
-        '#b39536',
+        '#E98754',//'#b39536',
         '#50c77b',
         // '#2b908f',
         // '#f9a3a4',
@@ -1016,7 +1023,7 @@ export class Dashbaord2Component {
         },
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
       xaxis: {
         categories: xAxiaArray,
@@ -1049,8 +1056,8 @@ export class Dashbaord2Component {
   }
 
   returnObjectOfChart(mainFilter: any, selectedFilter: any) {
-   // let obj: any;
-    return  {
+    // let obj: any;
+    return {
       StateId: mainFilter?.stateId,
       DistrictId: mainFilter?.districtId,
       TalukaId: mainFilter?.talukaId,
@@ -1061,7 +1068,7 @@ export class Dashbaord2Component {
       SubjectId: selectedFilter?.subjectId || 0,
       TeacherId_OfficerId: selectedFilter?.userId,
       IsInspection: false,
-      EvaluatorId: selectedFilter?.evaluatorId ,
+      EvaluatorId: selectedFilter?.evaluatorId,
       GraphLevelId: selectedFilter?.levelId,
       ExamTypeId: this.examType?.value,
       EducationYearId: mainFilter?.acYearId || 0,

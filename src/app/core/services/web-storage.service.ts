@@ -99,6 +99,16 @@ export class WebStorageService {
     return data.subUserTypeId;
   }
 
+  getState(){
+    let data = this.getLoggedInLocalstorageData();
+    return data.stateId;
+  }
+
+  getDistrict(){
+    let data = this.getLoggedInLocalstorageData();
+    return data.districtId;
+  }
+
   createdByProps(): any {
     return {
       "createdBy": this.getUserId() || 0,

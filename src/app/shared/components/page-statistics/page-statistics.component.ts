@@ -55,7 +55,9 @@ export class PageStatisticsComponent implements OnInit {
   }
 
   getStatisticsDetails(){
-    this.apiService.setHttp('get', 'zp-satara/Dashboard/GetMasterDataCount', false, false, false, 'baseUrl');
+    let stateId = this.webStorage.getState() || 1; //pass hardcore cz backend not given in Login obj
+    let districtId = this.webStorage.getDistrict() || 1;
+    this.apiService.setHttp('get', 'zp-satara/Dashboard/GetMasterDataCount?StateId='+stateId+'&DistrictId='+districtId+'&lan=EN', false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {

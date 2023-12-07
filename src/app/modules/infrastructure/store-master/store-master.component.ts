@@ -87,8 +87,8 @@ export class StoreMasterComponent {
       // centerId:[this.loginData.userTypeId > 2 ? this.loginData.centerId : ''],
       // villageId:[this.loginData.userTypeId > 2 ? this.loginData.villageId : ''],
       // schoolId:[this.loginData.userTypeId > 2 ? this.loginData.schoolId : ''],
-      stateId: [0],
-      districtId: [0],
+      stateId: [''],
+      districtId: [''],
       talukaId :[''],
       centerId:[''],
       villageId:[''],
@@ -105,9 +105,9 @@ export class StoreMasterComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
    
-    let str =`SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=1&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
+    let str =`SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=${formValue?.districtId || 0}&StateId=${formValue?.stateId || 0}&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.languageFlag}`
     // let str=`CategoryId=${formValue?.CategoryId || 0}&SubCategoryId=${formValue?.SubCategoryId || 0}&pageno=${pageNo}&pagesize=10&TextSearch=${formValue?.textSearch || ''}&lan=${this.languageFlag}`   
-    let reportStr = `SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=1&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=1&PageSize=${this.tableDatasize*10}&lan=${this.languageFlag}`
+    let reportStr = `SchoolId=${formValue?.schoolId || 0}&CategoryId=${formValue?.CategoryId ||0}&SubCategoryId=${formValue?.SubCategoryId || 0}&ItemId=${formValue?.ItemsId || 0}&DistrictId=${formValue?.districtId || 0}&StateId=${formValue?.stateId || 0}&CenterId=${formValue?.centerId || 0}&TalukaId=${formValue?.talukaId || 0}&VillageId=${formValue?.villageId || 0}&PageNo=1&PageSize=${this.tableDatasize*10}&lan=${this.languageFlag}`
 
     this.apiService.setHttp('GET', 'zp-satara/InwardOutwardReport/GetInwardOutwardReport?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');     
     this.apiService.getHttp().subscribe({
@@ -276,7 +276,7 @@ export class StoreMasterComponent {
   }
 
   openDetailsDialog(obj: any) {  
-      let id:any = obj.schoolId+'.'+obj.categoryId+'.'+obj.subCategoryId+'.'+obj.itemId;
+      let id:any = obj.stateId+'.'+obj.districtId+'.'+obj.talukaId+'.'+obj.centerId+'.'+obj.villageId+'.'+obj.schoolId+'.'+obj.categoryId+'.'+obj.subCategoryId+'.'+obj.itemId;
       let formdata:any = this.encrypt.encrypt(`${id}`);
        this.router.navigate(['/view-stock-details'], {
          queryParams: { id: formdata },

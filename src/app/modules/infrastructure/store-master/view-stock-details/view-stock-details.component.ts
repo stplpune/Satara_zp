@@ -51,7 +51,9 @@ export class ViewStockDetailsComponent {
 
   getViewData() {
     this.ngxSpinner.show();
-    let str =`SchoolId=${this.storeObj[0]}&CategoryId=${this.storeObj[1]}&SubCategoryId=${this.storeObj[2]}&ItemId=${this.storeObj[3]}`
+    // let str =`SchoolId=${this.storeObj[0]}&CategoryId=${this.storeObj[1]}&SubCategoryId=${this.storeObj[2]}&ItemId=${this.storeObj[3]}`
+    let str =`StateId=${this.storeObj[0]}&DistrictId=${this.storeObj[1]}&TalukaId=${this.storeObj[2]}&CenterId=${this.storeObj[3]}&VillageId=${this.storeObj[4]}&SchoolId=${this.storeObj[5]}&CategoryId=${this.storeObj[6]}&SubCategoryId=${this.storeObj[7]}&ItemId=0&lan=${this.languageFlag}`
+
     this.apiService.setHttp('GET', 'zp-satara/InwardOutwardReport/GetInwardOutwardReportDetail?' +  str, false, false, false, 'baseUrl');     
     this.apiService.getHttp().subscribe({
       next: (res: any) => {   

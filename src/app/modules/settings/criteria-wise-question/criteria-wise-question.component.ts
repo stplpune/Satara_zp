@@ -282,7 +282,14 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if(result == 'yes' && obj){
+        this.getTableData();
+        this.pageNumber = obj.pageNumber;
+      }else if(result == 'yes'){
+        this.getTableData();
+        this.pageNumber = 1;
+      }
+      this.languageChange();
     });
   }
 

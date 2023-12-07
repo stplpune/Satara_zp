@@ -20,11 +20,17 @@ export class ValidationService {
   numericWithdecimaluptotwoDigits='^[0-9][0-9]*[.]?[0-9]{0,2}$';
   numericWithDotVal = '[+-]?([0-9]*[.])?[0-9]+';
   IpAddress = '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$';
-  marathiAlphanumeric=('^[\u0900-\u09650-9 .,\/()_-][\u0900-\u09650-9 .,\/()_-]+$');
+  marathiAlphanumeric=('^[\u0900-\u09650-9 \/()_-][\u0900-\u09650-9 \/()_-]+$');
+  marathiAlphaNumericSpecialChar=('^[\u0900-\u09650-9 *%!/(,)&.+-_@#$]+$');
 
   alphabetsWithSpaces(event: any) {
     const maskSeperator = new RegExp('^([a-zA-Z ])', 'g');
     return maskSeperator.test(event.key);
+  }
+
+  alphaNumericSpecialCharMarathi(event: any) {
+    const maskSeperator = new RegExp('[^\u0900-\u09650-9 *%!/(,)&.+-_@#$]+$', 'm');
+    return !maskSeperator.test(event.key);
   }
 
   unicodeMarathiAlphanumberic(event: any) {

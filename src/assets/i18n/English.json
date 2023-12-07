@@ -534,7 +534,8 @@
         "SchoolMedium": "School Medium",
         "PleaseEnterValidQuestion":"Please Enter Valid Question",
         "PleaseEnterValidMarathiQuestion":"Please Enter Valid Marathi Question",
-        "PleaseEnterValidExpectedAnswer":"Please Enter Valid Expected Answer"
+        "PleaseEnterValidExpectedAnswer":"Please Enter Valid Expected Answer",
+        "totalAssessmentStudent":"Total Assessment Student"
 
     }
 }

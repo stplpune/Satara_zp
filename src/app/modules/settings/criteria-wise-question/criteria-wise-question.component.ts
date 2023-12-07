@@ -88,7 +88,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
       edit: true, delete: true
     };
     this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
-      this.apiService.tableData.next(this.tableData);
+    this.apiService.tableData.next(this.tableData);
   }
 
   getState(){

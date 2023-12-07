@@ -414,7 +414,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.dashboardCountData = [];
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -423,7 +423,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.totalStudentSurveyData.map((x: any) => {
             x.status = false;
             x.ischeckboxShow = true;
-          })
+          });
           if (val == 'mapClick') {
             this.totalStudentSurveyData[this.selectedGroupIdindex].status = true;
           } else {

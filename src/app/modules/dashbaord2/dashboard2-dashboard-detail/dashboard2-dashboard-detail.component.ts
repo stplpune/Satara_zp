@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
-// import { MasterService } from 'src/app/core/services/master.service';
+import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 
 @Component({
@@ -12,25 +13,82 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./dashboard2-dashboard-detail.component.scss']
 })
 export class Dashboard2DashboardDetailComponent {
+  filterForm !:FormGroup
   pageNumber = 1;
   chartObj:any;
   tableDataArray = new Array();
   tableDatasize:any;
+  viewDetailsObj:any;
+  acYear = new Array();
+  standardResp = new Array();
+  subjectResp = new Array();
+  selectedLang:any
 
   constructor(
+    private fb:FormBuilder,
     private apiService: ApiService,
     private ngxSpinner: NgxSpinnerService,
-    public webStorageS: WebStorageService,
+    public webStorage: WebStorageService,
     private errors: ErrorsService,
-   // private masterService: MasterService,
+    private masterService: MasterService,
     private commonMethodS: CommonMethodsService,
   ) { }
 
   ngOnInit() {
+    this.webStorage.langNameOnChange.subscribe((lang) => {
+      this.selectedLang = lang;
+      this.GetAllStandard();
+      this.getSubject();
+    });
      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
      console.log(this.chartObj);
      this.getTableData();
+     this.defaultFormat();
+     this.getYearArray();
+    
      
+  }
+
+  defaultFormat(){
+  this.filterForm = this.fb.group({
+    acYearId:[''],
+    classId:[0],
+    subjectId:[0]
+  })
+  }
+
+  getYearArray() {
+    this.acYear = [];
+    this.masterService.getAcademicYears().subscribe((res: any) => {
+      this.acYear = res.responseData;
+      //this.f['acYearId'].patchValue(this.educationYear);
+    })
+  }
+
+  GetAllStandard() {
+    this.masterService.GetAllStandardClassWise(this.selectedLang).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.standardResp = [{ id: 0, standard: "All", m_Standard: "सर्व" }, ...res.responseData];
+        }
+      },
+      error: (() => {
+        this.standardResp = [];
+      })
+    });
+  }
+
+  getSubject() {
+    this.masterService.getAllSubject(this.selectedLang).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.subjectResp = [{ id: 0, subject: "All", m_Subject: "सर्व" }, ...res.responseData];
+        }
+      },
+      error: (() => {
+        this.subjectResp = [];
+      })
+    });
   }
 
   childCompInfo(obj: any) {
@@ -45,9 +103,11 @@ export class Dashboard2DashboardDetailComponent {
       // case 'Delete':
       //   this.globalDialogOpen(obj);
       //   break;
-      // case 'View':
-      //   this.openDetailsDialog(obj);
-      //   break;
+      case 'View':
+        console.log(obj);
+        this.viewDetailsObj = obj;
+        //this.openDetailsDialog(obj);
+        break;
     }
   }
 
@@ -62,6 +122,7 @@ export class Dashboard2DashboardDetailComponent {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
           this.tableDataArray = res.responseData.responseData1;
+          this.viewDetailsObj = res.responseData.responseData1[0];
           this.tableDatasize = res.responseData.responseData2[0].totalCount;
           this.setTableData();
         }

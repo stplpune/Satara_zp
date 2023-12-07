@@ -1,0 +1,30 @@
+// .student-details {
+//     padding: 0 20px;
+// }
+
+.student-details img {
+    width: 100px;
+    height: 100px;
+    border-radius: 1rem;
+    border: solid 1px #ddd;
+}
+
+.student-bg {
+    height: 55px;
+    background-color: #ddfffc;
+}
+
+canvas {
+    image-rendering: pixelated;
+    width: 100px;
+    height: 100px;
+    /* Scale 10x */
+}
+
+@media screen and (max-width: 480px) {
+    .student-details {
+        padding: 0 0px;
+    }
+
+
+}

@@ -15,6 +15,7 @@
     height: 100%;
 }
 
+.card-users,
 .card-students,
 .card-teacher,
 .card-school {
@@ -28,6 +29,7 @@
     opacity: 0.278;
 }
 
+.card-users img,
 .card-students img,
 .card-teacher img,
 .card-school img {
@@ -131,6 +133,10 @@
     filter: invert(34%) sepia(93%) saturate(1810%) hue-rotate(309deg) brightness(93%) contrast(89%);
 }
 
+.card-users h1{
+    color: #8072e1;
+}
+
 .card-users .card-footer {
     background-color: #C7BFFF;
 }
@@ -156,21 +162,22 @@
     .card-designation .card-body {
         padding: 5px 14px !important;
     }
-    .card-agency img,
-.card-users img,
-.card-designation img {
-    height: 60px;
-    opacity: 0.278;
-}
 
-.card-students img,
-.card-teacher img,
-.card-school img {
-    width: 60px;
-    opacity: 0.278;
-    position: absolute;
-    left: 10px;
-    top: 6px;
-    height: 70px;
-}
+    .card-agency img,
+    .card-users img,
+    .card-designation img {
+        height: 60px;
+        opacity: 0.278;
+    }
+
+    .card-students img,
+    .card-teacher img,
+    .card-school img {
+        width: 60px;
+        opacity: 0.278;
+        position: absolute;
+        left: 10px;
+        top: 6px;
+        height: 70px;
+    }
 }

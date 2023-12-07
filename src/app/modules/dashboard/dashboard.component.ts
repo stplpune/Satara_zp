@@ -81,6 +81,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   barChartDataByClass = new Array();
   stackbarChartDataByClass = new Array();
   subjectforBarByCLass = new FormControl();
+  evaluatorId = new FormControl();
+
   selectedObjByClass: any;
   graphSubjectDataByClass = new Array();
   barchartOptionsByClass: any;
@@ -96,6 +98,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   questionArray = new Array();
   stateData = new Array();
   districtData = new Array();
+  evaluatorDataArray = new Array();
 
   constructor(public translate: TranslateService, private masterService: MasterService,
     public webStorage: WebStorageService, private fb: FormBuilder, private apiService: ApiService,
@@ -108,7 +111,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.userDetails = this.webStorage.getLoggedInLocalstorageData();
     this.educationYear = this.userDetails?.educationYearId;
-    this.asessmwntLavel.patchValue('1')
+    this.asessmwntLavel.patchValue('1');
+    this.getSubjectDropForClass();
+    this.bindEvaluator();
     this.initialApiCall('initial');
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
@@ -187,6 +192,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     })
   }
 
+  bindEvaluator() {
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.selectedLang, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.evaluatorDataArray = res.responseData;
+        } else {
+          this.evaluatorDataArray = [];
+        }
+      },
+      error: (() => { this.evaluatorDataArray = []; })
+    })
+
+  }
+
+
   getState(){
     this.stateData = [];
     this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
@@ -211,6 +232,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if(this.filterForm.value.stateId > 0){
       this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
         this.districtData = res.responseData;
+        this.f['districtId'].setValue(1)
         this.getTalukas()
        })   
     }
@@ -236,6 +258,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       })  
     }
   }
+
   getCenters() {
     this.centerData = [];
     this.villageData = [];
@@ -292,11 +315,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.ExamTypeArray.sort((a, b) => a.id - b.id);
     })
   }
+
   selectedSchool() {
     this.selectedschool = this.schoolData.find((x: any) => x.id == this.f['schoolId'].value);
   }
   selectedExamType() {
     this.selectedexamType = this.ExamTypeArray.find((x: any) => x.id == this.f['examTypeId'].value);
+  }
+
+  getSubjectDropdown(){
+
   }
  
   //--------------------------- pie/bar Chart declaration -----------------------------------//
@@ -842,23 +870,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // }
 
   chnageClasswiseSubjectDrp() {
-    this.getRefstandardTableArrayCount();
+    // this.getRefstandardTableArrayCount();
     // this.getchartDataByCLass();
+    this.checkDataByClass(this.selectedGroupIdindex, this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex]);
+
   }
 
   getSubjectDropForClass() {
-    const formData = this.filterForm.value;
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
+    this.subjectArrayByClass = [];
+    this.masterService.getAllSubject(this.webStorage.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.subjectArrayByClass = res.responseData.responseData2;
+          this.subjectArrayByClass = res.responseData;
           this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
         }
+        else {
+          this.subjectArrayByClass = [];
+        }
       },
-      error: (error: any) => {
-        this.error.handelError(error.message)
-      }
     });
   }
 
@@ -878,11 +907,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     })
   }
-
-  getRefstandardTableArrayCount() {
+  
+  getRefstandardTableArrayCount() { //total count and standard row 
     const formData = this.filterForm.value;
+    console.log("formData", formData);
+    
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -912,13 +943,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const formData = this.filterForm.value;
     val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCountClassWise?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.totalStudentSurveyDataByCLass = res.responseData.responseData1;
-          this.subjectArrayByClass = res.responseData.responseData2;
-          this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
+          this.totalStudentSurveyDataByCLass = res.responseData.responseData2;
+          // this.subjectArrayByClass = res.responseData.responseData2;
+          // this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
           
           this.totalStudentSurveyDataByCLass.map((x: any) => {
             x.status = false;
@@ -945,7 +976,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkDataByClass(index: number, obj: any) {
-    console.log("calling.... radio btn click", index);
+    console.log("calling.... radio btn click", index, obj);
     
     this.selectedObjByClass = obj;    
     // this.totalStudentSurveyDataByCLass.map((x: any) => {
@@ -955,15 +986,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.totalStudentSurveyDataByCLass[index].status = true;
     this.selectedSurveyData = this.selectedObjByClass?.assessmentCount + '/' + this.selectedObjByClass?.studentCount;
     // this.subjectforBarByCLass.value == 1 ? this.getchartDataByCLass() : '';
-    this.getchartDataByCLass();
+    setTimeout(() => {
+      this.getchartDataByCLass();
+    }, 1000);
 
   }
 
   getchartDataByCLass() {
     const formData = this.filterForm.value;
+    console.log("formDatagetchartDataByCLass", formData);
+    
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise' + '?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0) + '&GroupId=' + this.selectedObjByClass.groupId +  '&SubjectId=' + this.subjectforBarByCLass.value + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&AcademicYearId=' + (formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -987,10 +1022,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   constructStackBarChartByClass() {
     const subjectSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.question))];    //separte unique subjectlist
     const subjectSet_m = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
-    const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
-    const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
-        // this.graphSubjectData = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
-        this.graphSubjectDataByClass = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
+    // const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
+    // const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
+    this.graphSubjectDataByClass = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
 
     let dataArray: any[] = [];
     subjectSet.map((x: any, index: any) => { //crete list of same subjectname 
@@ -1011,10 +1045,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       })
       dataArray.push(dataObjArray);
     }) 
-    this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet, this.selectedLang == 'English' ? subjectSet : subjectSet_m, examIdSet)
+    // this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet, this.selectedLang == 'English' ? subjectSet : subjectSet_m, examIdSet)
+    this.constructSatackChartByCLass(dataArray, this.selectedLang == 'English' ? subjectSet : subjectSet_m)
+
   }
   /// --- stack bar for class level 
-  constructSatackChartByCLass(seriesData: any, categoryData: any, sub:any, examIdSet: any) {
+  // constructSatackChartByCLass(seriesData: any, categoryData: any, sub:any, examIdSet: any) {
+    constructSatackChartByCLass(seriesData: any, categoryData: any) {
     this.stackbarchartOptionsByClass = {
       series: [...seriesData],
       chart: {
@@ -1078,8 +1115,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         labels: {
           show: true,
         },
-        subjects:sub,
-        examSet: examIdSet,
+        // subjects:sub,
+        // examSet: examIdSet,
         categories: categoryData,
         parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
       },
@@ -1122,10 +1159,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       },
       dataLabels: {
-        enabled: false,
-        // formatter: function (val: any,) {
-        //   return val.toFixed(2) + ' %'
-        // }
+        enabled: true,
+        formatter: function (val: any,) {
+          return val.toFixed(2) + ' %'
+        }
       },
       tooltip: {
         custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
@@ -1145,33 +1182,32 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // -----------------------------------------  bar chart by class ------------------------------------------------//
 
   constructBarChartByClass() {
-    const filterData = this.barChartDataByClass.filter((x: any) => x.subjectId == this.subjectforBarByCLass.value);
-    const barSubjectSet = [...new Set(filterData.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName))];
-    const testSet = [...new Set(filterData.map((sub: any) => sub.examTypeId))];
-    let dataArray: any[] = [];
+    // const filterData = this.barChartDataByClass.filter((x: any) => x.subjectId == this.subjectforBarByCLass.value);
+    // const barSubjectSet = [...new Set(filterData.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName))];
+    // const testSet = [...new Set(filterData.map((sub: any) => sub.examTypeId))];
+    // let dataArray: any[] = [];
 
-    // this.subjectObjforClass = this.barChartDataByClass.find((x: any) => x.subjectId == this.subjectforBarByCLass.value);
-   testSet.map((t: any)=>{
-    const filterSub = filterData.filter((a: any)=>a.examTypeId == t);    
+  //  testSet.map((t: any)=>{
+  //   const filterSub = filterData.filter((a: any)=>a.examTypeId == t);    
+  //   const obj = {
+  //     examTypeId:filterSub[0]?.examTypeId,
+  //     name: filterSub[0]?.shortForm+'-'+filterSub[0]?.examType,
+  //     data: filterSub.map((d: any) => d.totalPercentage), //this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.totalPercentage),
+  //     dataValue: filterSub.map((d: any) => d.actualStudent),//this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.actualStudent),
+  //     totalStudent: filterSub.map((d: any) => d.totalStudent)
+  //   }
+  //   dataArray.push(obj);
+  //  })   
     const obj = {
-      examTypeId:filterSub[0]?.examTypeId,
-      name: filterSub[0]?.shortForm+'-'+filterSub[0]?.examType,
-      data: filterSub.map((d: any) => d.totalPercentage), //this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.totalPercentage),
-      dataValue: filterSub.map((d: any) => d.actualStudent),//this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.actualStudent),
-      totalStudent: filterSub.map((d: any) => d.totalStudent)
+      name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
+      data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
+      dataValue: this.barChartDataByClass.map((z: any) => z.totalStudent),
     }
-    dataArray.push(obj);
-   })   
-    // const obj = {
-    //   name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
-    //   data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
-    //   dataValue: this.barChartDataByClass.map((z: any) => z.totalStudent),
-    // }
-    // const barSubjectSet = this.barChartDataByClass.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName)
-    // let SeriesArray: any[] = [];
-    // SeriesArray.push(obj);
-    // this.createBarchartByClass(SeriesArray,barSubjectSet, obj?.name  );
-    this.createBarchartByClass(dataArray, barSubjectSet, this.selectedLang == 'English' ? filterData[0]?.subjectName : filterData[0]?.m_SubjectName);
+    const barSubjectSet = this.barChartDataByClass.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName)
+    let SeriesArray: any[] = [];
+    SeriesArray.push(obj);
+    this.createBarchartByClass(SeriesArray,barSubjectSet, obj?.name  );
+    // this.createBarchartByClass(dataArray, barSubjectSet, this.selectedLang == 'English' ? filterData[0]?.subjectName : filterData[0]?.m_SubjectName);
   }
   createBarchartByClass(SeriesArray: any, barSubjectSet: any, sub: any) {
     // createBarchartByClass(SeriesArray:any, barSubjectSet:any, sub:any){
@@ -1215,7 +1251,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
         formatter: function (val: any) {
           return val + "%";
         },

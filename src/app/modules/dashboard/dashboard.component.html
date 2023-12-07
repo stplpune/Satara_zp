@@ -285,14 +285,25 @@
                                             ' इयत्ता निहाय'}}</mat-radio-button>
                                     </mat-radio-group> -->
                                 </div>
+                                <div class="col-sm-3">
+                                    <mat-form-field appearance="outline" class="w-100 mb-0">
+                                        <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
+                                        <mat-select [formControl]="evaluatorId"
+                                           >
+                                            <mat-option *ngFor="let data of evaluatorDataArray"
+                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
+                                                :data.m_Evaluator}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100 mb-0">
                                         <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
                                         <mat-select [formControl]="subjectforBarByCLass"
                                             (selectionChange)="chnageClasswiseSubjectDrp()">
                                             <mat-option *ngFor="let sub of subjectArrayByClass" [value]="sub.id">
-                                                {{webStorage.languageFlag == 'EN'?sub.subjectName:
-                                                sub.m_SubjectName}}
+                                                {{webStorage.languageFlag == 'EN'?sub.subject:
+                                                sub.m_Subject}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>

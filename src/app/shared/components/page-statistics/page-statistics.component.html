@@ -14,11 +14,11 @@
                 <mat-card-footer class="card-footer border-top-0">
                     <div class="d-flex">
                         <div class="flex-fill text-center border-end border-secondary">
-                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.urban) }}</h5>
+                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.urbanSchool) }}</h5>
                             <p class="mb-0">{{'Labels.Urban' | translate}}</p>
                         </div>
                         <div class="flex-fill text-center">
-                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.rural) }}</h5>
+                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.ruralSchool) }}</h5>
                             <p class="mb-0">{{'Labels.Rural' | translate}}</p>
                         </div>
                     </div>
@@ -39,11 +39,11 @@
                 <mat-card-footer class="card-footer border-top-0">
                     <div class="d-flex">
                         <div class="flex-fill text-center border-end border-secondary">
-                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.female) }}</h5>
+                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.femaleTeacher) }}</h5>
                             <p class="mb-0">{{'Labels.Female' | translate}}</p>
                         </div>
                         <div class="flex-fill text-center">
-                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.male) }}</h5>
+                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.maleTeacher) }}</h5>
                             <p class="mb-0">{{'Labels.Male' | translate}}</p>
                         </div>
                     </div>
@@ -94,19 +94,29 @@
         </div>
         <div class="col-12 col-sm-2">
             <mat-card class="plain-card card-users">
-                <mat-card-content class="card-body">
-                    <div class="text-center">
-                        <img src="assets/images/menu-icons/User-grey.svg">
-                    </div>
-                </mat-card-content>
+                    <mat-card-content class="card-body">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <img src="assets/images/menu-icons/User-grey.svg">
+                            <div class="text-end">
+                                <h1 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.students) }}</h1>
+                                <p class="mb-0">{{'Labels.OfficeUsers' | translate}}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
                 <mat-card-footer class="card-footer border-top-0">
                     <div class="d-flex">
+                        <div class="flex-fill text-center border-end border-secondary">
+                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.femaleOfficer) }}</h5>
+                            <p class="mb-0">{{'Labels.Female' | translate}}</p>
+                        </div>
                         <div class="flex-fill text-center">
-                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.officeUser) }}</h5>
-                            <p class="mb-0">{{'Labels.OfficeUsers' | translate}}</p>
+                            <h5 class="mb-0">{{ webStorage.numberTransformFunction(statisticsArray[0]?.maleOfficer) }}</h5>
+                            <p class="mb-0">{{'Labels.Male' | translate}}</p>
                         </div>
                     </div>
                 </mat-card-footer>
+
+               
             </mat-card>
         </div>
         <div class="col-12 col-sm-2">

@@ -1,5 +1,6 @@
 import { Component, ViewChild, } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis, ChartComponent, } from 'ng-apexcharts';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -55,6 +56,8 @@ export class Dashbaord2Component {
   districtLabel: any;
   totalStudentCountSchoolwise: number = 0;
   totalStudentCountTeacharwise: number = 0;
+  totalStudentCountClasswise: number = 0;
+  totalStudentCountSubjectwise: number = 0;
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
@@ -76,6 +79,7 @@ export class Dashbaord2Component {
     private fb: FormBuilder,
     private masterService: MasterService,
     private commonMethods: CommonMethodsService,
+    private router: Router,
 
   ) { }
   ngOnInit() {
@@ -117,7 +121,7 @@ export class Dashbaord2Component {
   allChartApi() {
     this.clickOnSvgMap();
     this.getPieChart();
-   // this.getPieChartData();
+    // this.getPieChartData();
     this.getSchoolwiseBarDetails();
     this.getTeacherwiseBarDetails();
     this.getClasswiseBarDetails();
@@ -196,12 +200,12 @@ export class Dashbaord2Component {
 
   getDistrict() {
     this.districtData = [];
-    this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
-     this.districtData = res.responseData;
-     this.getTalukas()
+    this.masterService.getAllDistrict(this.selectedLang, this.f['stateId'].value).subscribe((res: any) => {
+      this.districtData = res.responseData;
+      this.getTalukas()
     });
   }
-  
+
 
   getYearArray() {
     this.acYear = [];
@@ -677,14 +681,20 @@ export class Dashbaord2Component {
           show: false
         },
         events: {
-          dataPointSelection: (event, chartContext, config) => {
-            console.log(event,chartContext, config);
+          click: (_event: any, _chartContext: any, config: any) => {
+            let mainFilter = this.mainFilterForm.value;
+            let selectedFilter = this.filterForm.value
+            let label = config.config.xaxis.categories[config.dataPointIndex]
+            selectedFilter.levelId = label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
+            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+            this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
           }
         }
       },
       colors: [
-        xAxiaArray[0] == 'Slow Learner' ? '#b51d31' : xAxiaArray[0] == 'Good' ?  '#75562e': '#50c77b',
-        xAxiaArray[1] == 'Good' ?  '#75562e': '#50c77b',
+        xAxiaArray[0] == 'Slow Learner' ? '#b51d31' : xAxiaArray[0] == 'Good' ? '#75562e' : '#50c77b',
+        xAxiaArray[1] == 'Good' ? '#75562e' : '#50c77b',
         '#50c77b',
         // '#2b908f',
         // '#f9a3a4',
@@ -699,11 +709,10 @@ export class Dashbaord2Component {
         },
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
       xaxis: {
         categories: xAxiaArray,
-
       },
     }
   }
@@ -762,6 +771,15 @@ export class Dashbaord2Component {
         height: 300,
         toolbar: {
           show: false
+        },
+        events: {
+          dataPointSelection: (_event: any, _chartContext: any, _config: any) => {
+            let mainFilter = this.mainFilterForm.value;
+            let selectedFilter = this.filterFormTeacherWise.value;
+            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+           this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+          }
         }
       },
       colors: [
@@ -803,13 +821,14 @@ export class Dashbaord2Component {
       next: (res: any) => {
         if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let classwiseBarDetails = res.responseData.responseData1;
+          this.totalStudentCountClasswise = res.responseData.responseData1[0].totalStudentCount
           let xAxiaArray: any = [];
           let slowLearnerArray: any = [];
           let brilliantLearnerArray: any = [];
           let goodLearnerArray: any = [];
 
-          let modifyArray = this.groupBy(classwiseBarDetails,'standardId');          
-          for(let key in modifyArray){
+          let modifyArray = this.groupBy(classwiseBarDetails, 'standardId');
+          for (let key in modifyArray) {
             modifyArray[key].map((x: any) => {
               xAxiaArray.includes(this.selectedLang == 'English' ? x.standard : x.m_Standard) ? '' : xAxiaArray.push(this.selectedLang == 'English' ? x.standard : x.m_Standard);
               x.graphLevelId == 1 ? slowLearnerArray.push(x.studentCount) : x.graphLevelId == 2 ? goodLearnerArray.push(x.studentCount) : brilliantLearnerArray.push(x.studentCount)
@@ -822,8 +841,8 @@ export class Dashbaord2Component {
           //   x.graphLevelId == 1 ? slowLearnerArray.push(x.studentCount) : x.graphLevelId == 2 ? goodLearnerArray.push(x.studentCount) : brilliantLearnerArray.push(x.studentCount)
           //   // totalStudentCount.push(x.totalStudentCount)
           // });
-        
-         
+
+
 
           // let isAllZero = yAxisArray.every(res => res == 0);
           // isAllZero ? this.classwiseChartOptions = '' :  this.classwiseBarChart(xAxiaArray, yAxisArray);
@@ -841,16 +860,16 @@ export class Dashbaord2Component {
     });
   }
 
-  groupBy(objectArray:any, property:any) {
-    return objectArray.reduce((acc:any, obj:any)=> {
-        let key = obj[property]
-        if (!acc[key]) {
-            acc[key] = []
-        }
-        acc[key].push(obj)
-        return acc
+  groupBy(objectArray: any, property: any) {
+    return objectArray.reduce((acc: any, obj: any) => {
+      let key = obj[property]
+      if (!acc[key]) {
+        acc[key] = []
+      }
+      acc[key].push(obj)
+      return acc
     }, {})
-}
+  }
   classwiseBarChart(xAxiaArray?: any, slowLearnerArray?: any, brilliantLearnerArray?: any, goodLearnerArray?: any) {
     this.classwiseChartOptions = {
       series: [
@@ -873,6 +892,15 @@ export class Dashbaord2Component {
         height: 350,
         toolbar: {
           show: false
+        },
+        events: {
+          dataPointSelection: (_event: any, _chartContext: any, _config: any) => {
+            let mainFilter = this.mainFilterForm.value;
+            let selectedFilter = this.classwiseFilterForm.value;
+            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+           this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+          }
         }
       },
 
@@ -923,6 +951,7 @@ export class Dashbaord2Component {
       next: (res: any) => {
         if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let subjectwiseBarDetails = res.responseData.responseData1;
+          this.totalStudentCountSubjectwise = res.responseData.responseData1[0].totalStudentCount;
           let xAxiaArray: any = [];
           let yAxisArray: any = [];
           //  let totalStudentCount :any=[];
@@ -959,6 +988,15 @@ export class Dashbaord2Component {
         height: 350,
         toolbar: {
           show: false
+        },
+        events: {
+          dataPointSelection: (_event: any, _chartContext: any, _config: any) => {
+            let mainFilter = this.mainFilterForm.value;
+            let selectedFilter = this.subjectWiseFilterForm.value;
+            let obj = this.returnObjectOfChart(mainFilter,selectedFilter);
+            localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+           this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+          }
         }
       },
       colors: [
@@ -1008,5 +1046,26 @@ export class Dashbaord2Component {
     this.getdashboardCount();
     this.allChartApi();
 
+  }
+
+  returnObjectOfChart(mainFilter: any, selectedFilter: any) {
+   // let obj: any;
+    return  {
+      StateId: mainFilter?.stateId,
+      DistrictId: mainFilter?.districtId,
+      TalukaId: mainFilter?.talukaId,
+      CenterId: mainFilter?.centerId,
+      VillageId: mainFilter?.villageId,
+      SchoolId: mainFilter?.schoolId,
+      StandardId: selectedFilter?.classId || 0,
+      SubjectId: selectedFilter?.subjectId || 0,
+      TeacherId_OfficerId: selectedFilter?.userId,
+      IsInspection: false,
+      EvaluatorId: selectedFilter?.evaluatorId ,
+      GraphLevelId: selectedFilter?.levelId,
+      ExamTypeId: this.examType?.value,
+      EducationYearId: mainFilter?.acYearId || 0,
+      lan: this.selectedLang
+    }
   }
 }

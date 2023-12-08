@@ -340,11 +340,11 @@ export class AddAssessmentConfigurationComponent {
     for(let i = 0; i < this.paramterArray.length; i++){
       this.paramterArray[i].optionGrade = i + 1;
     }
-    console.log("this.paramterArray : ", this.paramterArray);
-
+    
+    formValue.isOption = this.paramterArray.length ? 1 : 0;
+    formValue.grade = formValue.isOption == 0 ? 1 : this.paramterArray.length;
     formValue.questionSetUrls = this.imgArray;
     formValue.options = this.paramterArray;
-    formValue.isOption = this.paramterArray.length ? 1 : 0;
     !this.paramterArray.length ? formValue.expectedGrade = 1 : formValue.expectedGrade = formValue.expectedGrade;
 
     this.isExpectedCondition();

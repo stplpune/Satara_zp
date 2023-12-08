@@ -424,8 +424,8 @@ export class Dashbaord2Component {
     //let createMap: any = document.getElementById("#mapsvg1");
 
     this.graphInstance = $("#mapsvg1").mapSvg({
-      width: 400,
-      height: 300,
+      width: 550,
+      height: 430,
       colors: {
         baseDefault: "#0d4487",
         background: "#fff",
@@ -459,7 +459,7 @@ export class Dashbaord2Component {
         priority: "local",
         position: "top",
         centerOn: false,
-        width: 250,
+        width: 300,
         maxWidth: 50,
         maxHeight: 50,
         resetViewboxOnClose: false,

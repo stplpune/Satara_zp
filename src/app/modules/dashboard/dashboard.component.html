@@ -361,12 +361,12 @@
                             </div>
                             <!-- starting stack bar here  -->
                             <div class="col-sm-12">
-                                <!-- <div class="d-flex w-100 chart-container scrollbar" [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass?.series.length >3}"  > -->
-                                <div class="d-flex w-100 chart-container scrollbar">
-                                    <div class="text-start mx-3" 
+                                <div class="d-flex w-100"
+                                    [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass?.series?.length >3}">
+                                    <div class="text-start mx-2"
                                         *ngFor="let bar of stackbarchartOptionsByClass?.series; let i=index">
                                         <p class="fw-bold  mb-4">{{graphSubjectDataByClass[i]}}</p>
-                                        <apx-chart [series]="bar"  [chart]="stackbarchartOptionsByClass.chart"
+                                        <apx-chart [series]="bar" [chart]="stackbarchartOptionsByClass.chart"
                                             (mouseover)="selectedBar(graphSubjectDataByClass[i],i)"
                                             [dataLabels]="stackbarchartOptionsByClass.dataLabels"
                                             [plotOptions]="stackbarchartOptionsByClass.plotOptions"
@@ -387,10 +387,28 @@
                                     </div>
                                     <div class="col-sm-6 border-start border-3"
                                         *ngIf="barChartDataByClass.length && subjectforBarByCLass.value==1">
+                                        <!-- <div class="row justify-content-between align-items-center"
+                                            *ngIf="BarChartSubjectArray.length>1">
+                                            <div class="col-sm-4">
+                                                <p class="fw-bold">{{subjectforBar.value}}</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
+                                                    <mat-select [formControl]="subjectforBar"
+                                                        (selectionChange)="constructBarChart()">
+                                                        <mat-option *ngFor="let sub of BarChartSubjectArray"
+                                                            [value]="sub">
+                                                            {{sub}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div> -->
                                         <div class="d-flex justify-content-start">
                                             <div class="fw-bold text-start mb-0 mx-3"> {{this.webStorage.languageFlag ==
-                                                'EN'?this.subjectObjforClass?.question :
-                                                this.subjectObjforClass?.m_Question}}</div>
+                                                'EN'?this.subjectObjforClass.question :
+                                                this.subjectObjforClass.m_Question}}</div>
                                         </div>
 
                                         <p class="fw-bold">&nbsp;</p>
@@ -404,8 +422,7 @@
                                             [legend]="barchartOptionsByClass.legend"
                                             [colors]="barchartOptionsByClass.colors"
                                             [title]="barchartOptionsByClass.title"
-                                            [tooltip]="barchartOptionsByClass.tooltip"
-                                            [stroke]="barchartOptionsByClass.stroke">
+                                            [tooltip]="barchartOptionsByClass.tooltip">
                                         </apx-chart>
                                         <div *ngIf="isBarChartEmty">
                                             <div class="alert alert-danger text-center py-2 "
@@ -439,7 +456,7 @@
                             [xaxis]="barchartOptionsByClass?.xaxis" [fill]="barchartOptionsByClass?.fill"
                             [grid]="barchartOptionsByClass.grid" [legend]="barchartOptionsByClass.legend"
                             [colors]="barchartOptionsByClass.colors" [title]="barchartOptionsByClass.title"
-                            [tooltip]="barchartOptionsByClass.tooltip"  [stroke]="barchartOptionsByClass.stroke"></apx-chart>
+                            [tooltip]="barchartOptionsByClass.tooltip"></apx-chart>
                     </mat-card-content>
 
                 </mat-card>

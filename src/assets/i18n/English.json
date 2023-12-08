@@ -240,6 +240,7 @@
         "ok": "Ok",
         "readMore": "Read More",
         "edit": "Update",
+        "user":"User",
         "officeUser": "Office User",
         "addUser": "Add Office User",
         "searchByName": "Office User Name/Mobile No.",

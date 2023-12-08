@@ -103,7 +103,8 @@
                     <button mat-stroked-button class="btn-main btn-icon">
                         <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
                     <div class="d-flex justify-content-between w-100">
-                        <span class="mt-2">{{('Labels.dashboard2' | translate) + ' / '+(webStorage.languageFlag =='EN'? districtLabel?.district : districtLabel?.m_District) + ' / ' +(webStorage.languageFlag ==
+                        <span class="mt-2">{{('Labels.dashboard2' | translate) + ' / '+(webStorage.languageFlag =='EN'?
+                            districtLabel?.district : districtLabel?.m_District) + ' / ' +(webStorage.languageFlag ==
                             'EN'?talukaLabel?.taluka:talukaLabel?.m_Taluka)}} </span>
                         <div class="d-flex gap-2">
                             <!-- academicYear year dropdown -->
@@ -139,8 +140,7 @@
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
-                                        <mat-select [formControl]="examType"
-                                            (selectionChange)="onMainFilterSubmit()">
+                                        <mat-select [formControl]="examType" (selectionChange)="onMainFilterSubmit()">
                                             <mat-option *ngFor="let exam of examTypeData" [value]="exam.id">
                                                 {{webStorage.languageFlag ==
                                                 'EN'?exam.examType:exam.m_ExamType}}
@@ -219,42 +219,18 @@
         </div>
 
         <div class="row g-2">
-            <div class="col-sm-4 h-auto">
-                <div class="d-flex align-content-around flex-wrap">
-                    <mat-card class="plain-card mb-2 w-100 h-auto">
-                        <mat-card-header class="card-header">
-                            <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
-                        </mat-card-header>
-                        <mat-card-content class="card-body">
-                            <div id="mapsvg1"></div>
-                        </mat-card-content>
-                    </mat-card>
-
-                    <mat-card class="plain-card  w-100 h-auto">
-                        <mat-card-header class="card-header">
-                            <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
-                        </mat-card-header>
-                        <mat-card-content class="card-body">
-                            <div id="chart" *ngIf="piechartOptions">
-                                <apx-chart [series]="piechartOptions?.series"
-                                    [plotOptions]="piechartOptions?.plotOptions" [legend]="piechartOptions?.legend"
-                                    [chart]="piechartOptions?.chart" [theme]="piechartOptions?.theme"
-                                    [fill]="piechartOptions?.fill" [tooltip]="piechartOptions?.tooltip"
-                                    [labels]="piechartOptions?.labels" [responsive]="piechartOptions?.responsive"
-                                    [colors]="piechartOptions?.colors" [dataLabels]="piechartOptions?.dataLabels">
-                                </apx-chart>
-                            </div>
-                            <ng-container *ngIf="!piechartOptions">
-                                <div class="alert alert-danger text-center p-2" role="alert">
-                                    {{'Labels.dataNotFound' | translate}}
-                                </div>
-                            </ng-container>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
+            <div class="col-sm-4">
+                <mat-card class="plain-card w-100 h-100">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-content class="card-body h-100">
+                        <div id="mapsvg1"></div>
+                    </mat-card-content>
+                </mat-card>
             </div>
             <div class="col-sm-8">
-                <mat-card class="plain-card mb-2">
+                <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
                     </mat-card-header>
@@ -274,9 +250,9 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'User'}}</mat-label>
+                                        <mat-label>{{'Labels.user' | translate}}</mat-label>
                                         <mat-select formControlName="userId"
-                                        (selectionChange)="getSchoolwiseBarDetails()">
+                                            (selectionChange)="getSchoolwiseBarDetails()">
                                             <mat-option *ngFor="let data of allTeacherOfficerData"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.teacherOfficer
                                                 :data.m_TeacherOfficer}}</mat-option>
@@ -306,7 +282,8 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row g-2" *ngIf="totalStudentCountSchoolwise">{{('Labels.totalAssessmentStudent' | translate)+" : " +totalStudentCountSchoolwise}}</div>
+                            <div class="row g-2" *ngIf="totalStudentCountSchoolwise">{{('Labels.totalAssessmentStudent'
+                                | translate)+" : " +totalStudentCountSchoolwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body pt-0">
@@ -327,8 +304,32 @@
                         </div>
                     </mat-card-content>
                 </mat-card>
-
-                <mat-card class="plain-card pt-0">
+            </div>
+            <div class="col-sm-4">
+                <mat-card class="plain-card w-100 h-100">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-content class="card-body">
+                        <div id="chart" *ngIf="piechartOptions">
+                            <apx-chart [series]="piechartOptions?.series" [plotOptions]="piechartOptions?.plotOptions"
+                                [legend]="piechartOptions?.legend" [chart]="piechartOptions?.chart"
+                                [theme]="piechartOptions?.theme" [fill]="piechartOptions?.fill"
+                                [tooltip]="piechartOptions?.tooltip" [labels]="piechartOptions?.labels"
+                                [responsive]="piechartOptions?.responsive" [colors]="piechartOptions?.colors"
+                                [dataLabels]="piechartOptions?.dataLabels">
+                            </apx-chart>
+                        </div>
+                        <ng-container *ngIf="!piechartOptions">
+                            <div class="alert alert-danger text-center p-2" role="alert">
+                                {{'Labels.dataNotFound' | translate}}
+                            </div>
+                        </ng-container>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-sm-8">
+                <mat-card class="plain-card pt-0 w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.TeacherWisePerformance' | translate}}</h6>
                     </mat-card-header>
@@ -369,7 +370,8 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="row g-2" *ngIf="totalStudentCountTeacharwise">{{('Labels.totalAssessmentStudent' | translate)+" : " +totalStudentCountTeacharwise}}</div>
+                            <div class="row g-2" *ngIf="totalStudentCountTeacharwise">{{('Labels.totalAssessmentStudent'
+                                | translate)+" : " +totalStudentCountTeacharwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body">
@@ -391,7 +393,6 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-
             <div class="col-sm-6">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header">
@@ -401,25 +402,25 @@
                         <form class="w-100" [formGroup]="classwiseFilterForm">
                             <div class="row g-2">
                                 <!-- <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select formControlName="classId" (selectionChange)="getClasswiseBarDetails()">
-                                            <mat-option *ngFor="let data of standardResp"
-                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
-                                                :data.m_Standard}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.level' | translate}}</mat-label>
-                                        <mat-select formControlName="levelId"
-                                            (selectionChange)="getClasswiseBarDetails()">
-                                            <mat-option *ngFor="let data of graphLevelArr"
-                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.graphLevel
-                                                :data.m_GraphLevel}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div> -->
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
+                                            <mat-select formControlName="classId" (selectionChange)="getClasswiseBarDetails()">
+                                                <mat-option *ngFor="let data of standardResp"
+                                                    [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
+                                                    :data.m_Standard}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+    
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>{{'Labels.level' | translate}}</mat-label>
+                                            <mat-select formControlName="levelId"
+                                                (selectionChange)="getClasswiseBarDetails()">
+                                                <mat-option *ngFor="let data of graphLevelArr"
+                                                    [value]="data.id">{{webStorage.languageFlag == 'EN'?data.graphLevel
+                                                    :data.m_GraphLevel}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div> -->
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
@@ -430,9 +431,10 @@
                                                 :data.m_Subject}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>                               
+                                </div>
                             </div>
-                            <div class="row g-2" *ngIf="totalStudentCountClasswise">{{('Labels.totalAssessmentStudent' | translate)+" : " +totalStudentCountClasswise}}</div>
+                            <div class="row g-2" *ngIf="totalStudentCountClasswise">{{('Labels.totalAssessmentStudent' |
+                                translate)+" : " +totalStudentCountClasswise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body">
@@ -476,7 +478,8 @@
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select formControlName="classId" (selectionChange)="getSubjectwiseBarDetails()">
+                                        <mat-select formControlName="classId"
+                                            (selectionChange)="getSubjectwiseBarDetails()">
                                             <mat-option *ngFor="let data of standardResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
                                                 :data.m_Standard}}</mat-option>
@@ -484,19 +487,21 @@
                                     </mat-form-field>
                                 </div>
                                 <!-- <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select formControlName="subjectId"
-                                            (selectionChange)="getSubjectwiseBarDetails()">
-                                            <mat-option *ngFor="let data of subjectResp"
-                                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
-                                                :data.m_Subject}}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div> -->
-                                
+                                        <mat-form-field appearance="outline" class="w-100">
+                                            <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                                            <mat-select formControlName="subjectId"
+                                                (selectionChange)="getSubjectwiseBarDetails()">
+                                                <mat-option *ngFor="let data of subjectResp"
+                                                    [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
+                                                    :data.m_Subject}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div> -->
+
                             </div>
-                            <div class="row g-2" *ngIf="totalStudentCountSubjectwise">{{('Labels.totalAssessmentStudent' | translate)+" : " +totalStudentCountSubjectwise}}</div>
+                            <div class="row g-2" *ngIf="totalStudentCountSubjectwise">{{('Labels.totalAssessmentStudent'
+                                |
+                                translate)+" : " +totalStudentCountSubjectwise}}</div>
                         </form>
                     </mat-card-header>
                     <mat-card-content class="card-body">

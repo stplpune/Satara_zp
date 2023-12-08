@@ -220,19 +220,17 @@
 
         <div class="row g-2">
             <div class="col-sm-4">
-                <div class="d-flex align-content-around flex-wrap">
-                    <mat-card class="plain-card mb-2 w-100 h-100">
-                        <mat-card-header class="card-header">
-                            <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
-                        </mat-card-header>
-                        <mat-card-content class="card-body h-100">
-                            <div id="mapsvg1"></div>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
+                <mat-card class="plain-card w-100 h-100">
+                    <mat-card-header class="card-header">
+                        <h6 class="mb-0 fw-bold">{{'Labels.map' | translate}}</h6>
+                    </mat-card-header>
+                    <mat-card-content class="card-body h-100">
+                        <div id="mapsvg1"></div>
+                    </mat-card-content>
+                </mat-card>
             </div>
             <div class="col-sm-8">
-                <mat-card class="plain-card mb-2">
+                <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
                     </mat-card-header>
@@ -331,7 +329,7 @@
                 </mat-card>
             </div>
             <div class="col-sm-8">
-                <mat-card class="plain-card pt-0">
+                <mat-card class="plain-card pt-0 w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.TeacherWisePerformance' | translate}}</h6>
                     </mat-card-header>
@@ -442,7 +440,8 @@
                     <mat-card-content class="card-body">
                         <div id="classwiseChart">
                             <ng-container *ngIf="classwiseChartOptions">
-                                <apx-chart [series]="classwiseChartOptions?.series" [chart]="classwiseChartOptions?.chart"
+                                <apx-chart [series]="classwiseChartOptions?.series"
+                                    [chart]="classwiseChartOptions?.chart"
                                     [dataLabels]="classwiseChartOptions?.dataLabels"
                                     [plotOptions]="classwiseChartOptions?.plotOptions"
                                     [xaxis]="classwiseChartOptions?.xaxis"
@@ -498,9 +497,10 @@
                                             </mat-select>
                                         </mat-form-field>
                                     </div> -->
-    
+
                             </div>
-                            <div class="row g-2" *ngIf="totalStudentCountSubjectwise">{{('Labels.totalAssessmentStudent' |
+                            <div class="row g-2" *ngIf="totalStudentCountSubjectwise">{{('Labels.totalAssessmentStudent'
+                                |
                                 translate)+" : " +totalStudentCountSubjectwise}}</div>
                         </form>
                     </mat-card-header>

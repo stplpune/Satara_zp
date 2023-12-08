@@ -361,7 +361,7 @@
                             </div>
                             <!-- starting stack bar here  -->
                             <div class="col-sm-12">
-                                <div class="d-flex w-100"
+                                <div class="d-flex w-100" *ngIf="stackbarchartOptionsByClass?.series || barchartOptionsByClass?.series "
                                     [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass?.series?.length >3}">
                                     <div class="text-start mx-2"
                                         *ngFor="let bar of stackbarchartOptionsByClass?.series; let i=index">
@@ -386,7 +386,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6 border-start border-3"
-                                        *ngIf="barChartDataByClass.length && subjectforBarByCLass.value==1">
+                                        *ngIf="barChartDataByClass.length">
                                         <!-- <div class="row justify-content-between align-items-center"
                                             *ngIf="BarChartSubjectArray.length>1">
                                             <div class="col-sm-4">
@@ -433,7 +433,7 @@
                                     </div>
                                 </div>
 
-                                <div *ngIf="barChartDataByClass.length ==0 && stackbarChartDataByClass.length == 0 ">
+                                <div *ngIf="barChartDataByClass.length == 0 && stackbarChartDataByClass.length == 0 ">
                                     <div class="alert alert-danger text-center py-2 ">
                                         {{'Labels.dataNotFound' | translate}}
                                     </div>
@@ -445,7 +445,7 @@
             </div>
         </div>
 
-        <div class="row g-2 mb-2">
+        <!-- <div class="row g-2 mb-2">
             <div class="col-sm-12">
                 <mat-card class="plain-card h-100"
                     *ngIf="asessmwntLavel.value=='1' && subjectforBarByCLass.value==3 && this.barChartDataByClass.length">
@@ -461,7 +461,7 @@
 
                 </mat-card>
             </div>
-        </div>
+        </div> -->
 
         <mat-card class="plain-card h-100">
             <mat-card-header class="card-header border-bottom-0 pb-0">

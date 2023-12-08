@@ -1003,6 +1003,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
+          console.log( "GetDashboardDataClassWise", res.responseData.responseData1);  
           res.responseData.responseData1.map((x: any) => {
             x.isOption == true ? this.stackbarChartDataByClass.push(x) : this.barChartDataByClass.push(x);
           });          

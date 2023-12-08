@@ -198,6 +198,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.evaluatorDataArray = res.responseData;
+          this.evaluatorId.patchValue(this.evaluatorDataArray[0].id);
         } else {
           this.evaluatorDataArray = [];
         }
@@ -998,7 +999,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -1020,164 +1021,144 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // ----------------------------------------- stack bar chart by class ------------------------------------------------//
 
   constructStackBarChartByClass() {
-    const subjectSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.question))];    //separte unique subjectlist
-    const subjectSet_m = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
-    // const examIdSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.examTypeId))]; //examType
-    // const testSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.shortForm))]; //examType
-    this.graphSubjectDataByClass = this.selectedLang == 'English' ? subjectSet : subjectSet_m;
-
+    const questionSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.question))];
+    const m_QuestionSet = [...new Set(this.stackbarChartDataByClass.map((sub: any) => sub.m_Question))];
+    this.graphSubjectDataByClass = this.selectedLang == 'English' ? questionSet : m_QuestionSet;
     let dataArray: any[] = [];
-    subjectSet.map((x: any, index: any) => { //crete list of same subjectname 
+    questionSet.map((x: any, index: any) => {
       const filterSubject = this.stackbarChartDataByClass.filter((y: any) => y.question == x);
-      const optionalSubArray = [...new Set(filterSubject.map((sub: any) => sub.optionGrade))];
       let dataObjArray: any[] = [];
-      optionalSubArray.reverse().map((z: any) => {
-        const filterArray = filterSubject.filter((a: any) => a.optionGrade == z)
+      filterSubject.reverse().map((z: any) => {
         const subData = {
-          name: this.selectedLang == 'English' ? filterArray[0].optionName : filterArray[0].m_OptionName,
-          data: filterArray.map((b: any) => b.totalPercentage),//([z.totalPercentage]),
-          dataValue: filterArray.map((b: any) => b.totalStudent),//(z.totalStudent),
-          subject: (this.selectedLang == 'English' ? subjectSet[index] : subjectSet_m[index]),
-          totalStudent: filterArray.map((b: any) => b.totalStudent),//(z.totalStudent),
-
+          name: this.selectedLang == 'English' ? z.optionName : z.m_OptionName,
+          data: ([z.totalPercentage]),
+          dataValue: (z.totalStudent),
+          subject: (this.selectedLang == 'English' ? questionSet[index] : m_QuestionSet[index]),
         }
         dataObjArray.push(subData);
       })
       dataArray.push(dataObjArray);
-    }) 
-    // this.constructSatackChartByCLass(dataArray,this.selectedLang == 'English' ? testSet : testSet, this.selectedLang == 'English' ? subjectSet : subjectSet_m, examIdSet)
-    this.constructSatackChartByCLass(dataArray, this.selectedLang == 'English' ? subjectSet : subjectSet_m)
+    })
+    this.constructSatackChartByCLass(dataArray, this.selectedLang == 'English' ? questionSet : m_QuestionSet);
 
   }
   /// --- stack bar for class level 
   // constructSatackChartByCLass(seriesData: any, categoryData: any, sub:any, examIdSet: any) {
     constructSatackChartByCLass(seriesData: any, categoryData: any) {
-    this.stackbarchartOptionsByClass = {
-      series: [...seriesData],
-      chart: {
-        type: "bar",
-        offsetX: -30,
-        height: 350,
-        width: 300,
-        horizontal: false,
-        borderRadius: 10,
-        columnWidth: '45%',
-        stacked: true,
-        stackType: "100%",
-        toolbar: {
-          show: false,
-          enabled: false,
-        },
-        events: {
-          click: (_event: any, _chartContext: any, config: any) => {
-            if (config.seriesIndex >= 0) {
-              this.optionalSubjectindex = config.seriesIndex; // index of bar 
-
-              const index = this.stackbarchartOptionsByClass.xaxis.subjects.findIndex((i: any) => (i == this.selectedbar));
-              
-              // const data = this.stackbarChartDataByClass.find((x: any) =>
-              //   (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
-              //   (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
-                
-              const data = this.stackbarChartDataByClass.find((x: any) =>
-              (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
-              (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
-              const examTypeId = this.stackbarchartOptionsByClass.xaxis.examSet[config?.dataPointIndex]
-
-              this.selectedBarstatus = 'stack';
-              this.passingParameters(data, examTypeId)
+      this.stackbarchartOptionsByClass = {
+        series: [...seriesData],
+        chart: {
+          type: "bar",
+          offsetX: -30,
+          height: 350,
+          width: 300,
+          horizontal: false,
+          borderRadius: 10,
+          columnWidth: '45%',
+          stacked: true,
+          stackType: "100%",
+          toolbar: {
+            show: false,
+            enabled: false,
+          },
+          events: {
+            click: (_event: any, _chartContext: any, config: any) => {
+              if (config.seriesIndex >= 0) {
+                this.optionalSubjectindex = config.seriesIndex;
+                const index = this.stackbarchartOptionsByClass.xaxis.categories.findIndex((i: any) => i == this.selectedbar);
+                const data = this.stackbarChartDataByClass.find((x: any) =>
+                  (this.selectedLang == 'English' ? x.question : x.m_Question) == this.selectedbar &&
+                  (this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.stackbarchartOptionsByClass.series[index][this.optionalSubjectindex]?.name);
+                this.selectedBarstatus = 'stack';
+                const examTypeId = 0;
+                this.passingParameters(data, examTypeId)
+              }
             }
           }
-        }
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            legend: {
-              position: "bottom",
-              colors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#65C889'],
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              legend: {
+                position: "bottom",
+                colors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#65C889'],
+              }
             }
           }
-        }
-      ],
-      plotOptions: {
-        bar: {
-          rangeBarGroupRows: false,
-          barHeight: '40%',
-        }
-      },
-      xaxis: {
-        axisTicks: {
-          show: false
+        ],
+        plotOptions: {
+          bar: {
+            rangeBarGroupRows: false,
+            barHeight: '40%',
+          }
         },
-        show: true,
-        labels: {
+        xaxis: {
+          axisTicks: {
+            show: false
+          },
           show: true,
+          labels: {
+            show: false,
+          },
+          categories: categoryData,
+          parameters: this.selectedLang == 'English' ? ['Level', 'Total Student', 'Student(%)',] : ['स्तर', 'एकूण विद्यार्थी', 'विद्यार्थी (%)']
         },
-        // subjects:sub,
-        // examSet: examIdSet,
-        categories: categoryData,
-        parameters:  this.selectedLang == 'English' ? ['Level', 'Total Tested Students', 'Total student in level', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'स्तरातील एकुण विद्यार्थी', 'विद्यार्थी (%)'],
-      },
-      
-
-      grid: {
-        show: false,      // you can either change hear to disable all grids
-
-      },
-      yaxis: {
-        show: false,
-        showAlways: false,
-        floating: false,
-        axisTicks: {
-          show: false
+  
+        grid: {
+          show: false,      // you can either change hear to disable all grids
+  
         },
-        axisBorder: {
-          show: false
+        yaxis: {
+          show: false,
+          showAlways: false,
+          floating: false,
+          axisTicks: {
+            show: false
+          },
+          axisBorder: {
+            show: false
+          },
+          labels: {
+            show: false
+          },
         },
-        labels: {
-          show: false
+        fill: {
+          colors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#b64343'],
         },
-      },
-      fill: {
-        colors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#b64343'],
-      },
-      legend: {
-        offsetX: 17,
-        showForSingleSeries: true,
-        inverseOrder: true,
-        position: 'right',
-        fontSize: '12px',
-        show: true,
-        markers: {
-          width: 12,
-          height: 12,
-          strokeWidth: 0,
-          strokeColor: '#fff',
-          fillColors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#b64343'],
+        legend: {
+          offsetX: 17,
+          showForSingleSeries: true,
+          inverseOrder: true,
+          position: 'right',
+          fontSize: '12px',
+          show: true,
+          markers: {
+            width: 12,
+            height: 12,
+            strokeWidth: 0,
+            strokeColor: '#fff',
+            fillColors: ['#B02F2F', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#b64343'],
+          }
+        },
+        dataLabels: {
+          formatter: function (val: any,) {
+            return val.toFixed(2) + ' %'
+          }
+        },
+        tooltip: {
+          custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+            return (
+              '<div class="arrow_box" style="padding:10px;">' +
+              "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
+              "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue + '</b>' + "</div>" +
+              "<div>" + w.config.xaxis.parameters[2] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
+              "</div>"
+            );
+          },
         }
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: function (val: any,) {
-          return val.toFixed(2) + ' %'
-        }
-      },
-      tooltip: {
-        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-          return (
-            '<div class="arrow_box" style="padding:10px;">' +
-            "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[3] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
-            "</div>"
-          );
-        },
-      }
-    };
-
+      };
+  
   }
   // -----------------------------------------  bar chart by class ------------------------------------------------//
 
@@ -1198,123 +1179,115 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   //   }
   //   dataArray.push(obj);
   //  })   
-    const obj = {
-      name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
-      data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
-      dataValue: this.barChartDataByClass.map((z: any) => z.totalStudent),
-    }
-    const barSubjectSet = this.barChartDataByClass.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName)
-    let SeriesArray: any[] = [];
-    SeriesArray.push(obj);
-    this.createBarchartByClass(SeriesArray,barSubjectSet, obj?.name  );
-    // this.createBarchartByClass(dataArray, barSubjectSet, this.selectedLang == 'English' ? filterData[0]?.subjectName : filterData[0]?.m_SubjectName);
+  this.subjectObjforClass = this.barChartDataByClass.find((x: any) => x.subjectId == this.subjectforBarByCLass.value);
+  const obj = {
+    name: this.webStorage.languageFlag == 'EN' ? this.subjectObjforClass?.question : this.subjectObjforClass?.m_Question,
+    data: this.barChartDataByClass.map((z: any) => z.totalPercentage),
+    dataValue: this.barChartDataByClass.map((z: any) => z.totalStudent),
   }
-  createBarchartByClass(SeriesArray: any, barSubjectSet: any, sub: any) {
+  const barSubjectSet = this.barChartDataByClass.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName)
+  let SeriesArray: any[] = [];
+  SeriesArray.push(obj);
+  // this.createBarchartByClass(SeriesArray,barSubjectSet, obj?.name  );
+  this.createBarchartByClass(SeriesArray, barSubjectSet);
+
+}
+  createBarchartByClass(SeriesArray: any, barSubjectSet: any) {
     // createBarchartByClass(SeriesArray:any, barSubjectSet:any, sub:any){
-    this.barChaOptionHeight = 350;
-    const length = barSubjectSet.length;
-    let width = this.subjectforBarByCLass.getRawValue()==1?(length < 2 ? 200 : length < 3 ? 300 : 600) :1200 //length < 5 ? 600 : length < 8 ? 500 : 500
-    this.barchartOptionsByClass = {
-      series: SeriesArray,
-      chart: {
-        height: this.barChaOptionHeight,
-        type: "bar",
-        width: width,
-        // columnWidth: '10%',
-        toolbar: {
-          show: false
-        },
-        events: {
-          click: (_event: any, _chartContext: any, config: any) => {
-            if (config.seriesIndex >= 0) {
-              this.optionalSubjectindex = config.seriesIndex;
-              // const data = this.barChartDataByClass.find((x: any) => ((this.selectedLang == 'English' ? x.question : x.m_Question) === (this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex])));
-              // this.selectedBarstatus = 'bar';
-              // const examTypeId = 0;
-              const data = (this.barChartDataByClass.filter((x: any) => ((this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub == (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName ))).find((x: any) =>  this.barchartOptionsByClass?.series[config.seriesIndex]?.examTypeId == x.examTypeId);
-              this.selectedBarstatus = 'bar';
-             this.passingParameters(data, data?.examTypeId)
+      this.barChaOptionHeight = 350;
+      const length = this.barChartDataByClass.length;
+      let width = this.subjectforBarByCLass.getRawValue()==1?(length < 2 ? 200 : length < 3 ? 300 : 600) :1200 //length < 5 ? 600 : length < 8 ? 500 : 500
+      this.barchartOptionsByClass = {
+        series: SeriesArray,
+        chart: {
+          height: this.barChaOptionHeight,
+          type: "bar",
+          width: width,
+          toolbar: {
+            show: false
+          },
+          events: {
+            click: (_event: any, _chartContext: any, config: any) => {
+              if (config.seriesIndex >= 0) {
+                this.optionalSubjectindex = config.seriesIndex;
+                // const data = this.barChartDataByClass.find((x: any) => (this.selectedLang == 'English' ? x.optionName : x.m_OptionName == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub ==( this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName) );
+                const data = this.barChartDataByClass.find((x: any) => ((this.selectedLang == 'English' ? x.question : x.m_Question) === (this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex])));
+                this.selectedBarstatus = 'bar';
+                const examTypeId = 0;
+                this.passingParameters(data, examTypeId)
+              }
             }
           }
-        }
-      },
-      // colors: ["#fd7e14"],
-      colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#468C5F'],
-      plotOptions: {
-        bar: {
-          // columnWidth: "45%", // on condition
-          // barHeight: '50%',// on condition
-          distributed: false,
-          colors: {
-            backgroundBarColors: ['#f2f2f2'],
-          },
-        }
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: function (val: any) {
-          return val + "%";
         },
-        // offsetY: -20,
-        style: {
-          fontSize: "12px",
-          colors: ["#fff"],
-        }
-      },
-      legend: {
-        show: true
-      },
-      grid: {
-        show: false
-      },
-      xaxis: {
-        axisTicks: {
+        colors: ["#fd7e14"],
+        plotOptions: {
+          bar: {
+            // columnWidth: "45%", // on condition
+            // barHeight: '50%',// on condition
+            distributed: false,
+            horizontal: false,
+            colors: {
+              backgroundBarColors: ['#f2f2f2'],
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val: any) {
+            return val + "%";
+          },
+          // offsetY: -20,
+          style: {
+            fontSize: "12px",
+            colors: ["#fff"],
+          }
+        },
+        legend: {
           show: false
         },
-        position: 'top',
-        categories: barSubjectSet,
-        parameters: this.selectedLang == 'English' ? ['Level', 'Total Tested Student', 'Total Pass Student', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'एकूण पास विद्यार्थी', 'विद्यार्थी (%)'],
-
-        // parameters: this.selectedLang == 'English' ? ['Level', 'Total Student', 'Student(%)',] : ['स्तर', 'एकूण विद्यार्थी', 'विद्यार्थी (%)'],
-        labels: {
-          // hideOverlappingLabels: true,
-          rotate: -90,
-          show: true,
-          trim: true,
-          style: {
-            colors: ["#000"],
-            fontSize: '12px',
-            fontFamily: 'Noto Sans Devanagari, sans-serif',
-            fontWeight: 'bold',
-            // fontWeight: 600,
-            cssClass: 'apexcharts-xaxis-label',
+        grid: {
+          show: false
+        },
+        xaxis: {
+          axisTicks: {
+            show: false
+          },
+          position: 'top',
+          categories: barSubjectSet,
+          parameters: this.selectedLang == 'English' ? ['Level', 'Total Student', 'Student(%)',] : ['स्तर', 'एकूण विद्यार्थी', 'विद्यार्थी (%)'],
+          labels: {
+            hideOverlappingLabels: true,
+            rotate: -90,
+            show: true,
+            trim: true,
+            style: {
+              colors: ["#000"],
+              fontSize: '12px',
+              fontFamily: 'Noto Sans Devanagari, sans-serif',
+              fontWeight: 'bold',
+              // fontWeight: 600,
+              cssClass: 'apexcharts-xaxis-label',
+            },
+          }
+        },
+        yaxis: {
+          show: false,
+          min: 0,
+          max: 100
+        },
+        tooltip: {
+          custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+            return (
+              '<div class="arrow_box" style="padding:10px;">' +
+              "<div>" + w.globals.seriesNames[seriesIndex] + " : <b> " + w.config.xaxis.categories[dataPointIndex] + '</b>' + "</div>" +
+              "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
+              "<div>" + w.config.xaxis.parameters[2] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
+              "</div>"
+            );
           },
         }
-      },
-      yaxis: {
-        show: false,
-        min: 0,
-        max: 100
-      },
-      stroke: {
-        colors: ["transparent"],
-        width: 5
-      },
-      tooltip: {
-        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {          
-          return (
-            '<div class="arrow_box" style="padding:10px;">' +
-            "<div>" + w.config.xaxis.categories[dataPointIndex] + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[3] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
-            "</div>"
-          );
-        },
-      }
-      
-    };
-  }
+      };
+    }
   onStudentDetails(index: number, label: string) {
     if (this.asessmwntLavel.value == '1') {
       const formData = this.filterForm.value;

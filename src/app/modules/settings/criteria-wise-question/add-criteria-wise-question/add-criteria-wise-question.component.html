@@ -103,9 +103,9 @@
                 <div class="col-sm-6">
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.introductionMarathi'| translate}}</mat-label>
-                        <textarea matInput formControlName="m_introduction"
+                        <textarea matInput formControlName="m_Introduction"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);" maxlength="100"></textarea>
-                        <!-- <mat-error *ngIf="f['m_introduction'].hasError('pattern')">Please Enter Valid
+                        <!-- <mat-error *ngIf="f['m_Introduction'].hasError('pattern')">Please Enter Valid
                             Introduction</mat-error> -->
                     </mat-form-field>
                 </div>
@@ -142,6 +142,14 @@
                                 <mat-error *ngIf="aq['expectedAns'].hasError('pattern')">
                                     {{'Labels.PleaseEnterValidExpectedAnswer' | translate}}
                                 </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                                <mat-label>{{'Labels.ExpAnswerMarathi'| translate}}</mat-label>
+                                <input matInput formControlName="m_ExpectedAns"
+                                    (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);" maxlength="50">
                             </mat-form-field>
                         </div>
                     </div>
@@ -199,6 +207,7 @@
                                     <th>{{'Labels.Question' | translate}}</th>
                                     <th>{{'Labels.QuestionMarathi' | translate}}</th>
                                     <th>{{'Labels.ExpAnswer' | translate}}</th>
+                                    <th>{{'Labels.ExpAnswerMarathi' | translate}}</th>
                                     <th>{{'Labels.action' | translate}}</th>
                                 </tr>
                             </thead>
@@ -209,6 +218,7 @@
                                         <td>{{AddQ?.cQuestion}}</td>
                                         <td>{{AddQ?.m_CQuestion}}</td>
                                         <td>{{AddQ?.expectedAns}}</td>
+                                        <td>{{AddQ?.m_ExpectedAns}}</td>
                                         <td>
                                             <button mat-icon-button type="button" id="tooltip"
                                                 matTooltip="{{'Labels.edit' | translate}}" matTooltipPosition="right"

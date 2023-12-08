@@ -69,7 +69,7 @@ export class AddCriteriaWiseQuestionComponent {
       questionTypeId: ['', [Validators.required]],
       criteriaId: ['', [Validators.required]],
       introduction: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
-      m_introduction: ['', [Validators.required]]
+      m_Introduction: ['', [Validators.required]]
     })
   }
 
@@ -191,6 +191,7 @@ export class AddCriteriaWiseQuestionComponent {
         "id": formValue.id,
         "criteriaId": formValue.criteriaId,
         "introduction": formValue.introduction,
+        "m_Introduction": formValue.m_Introduction,
         "cQuestionListModel": this.addQuestionArray,
         "lan": this.webStorageS.getLangauge()
       }
@@ -238,6 +239,7 @@ export class AddCriteriaWiseQuestionComponent {
       questionTypeId: obj?.questionTypeId,
       criteriaId: obj?.criteriaId,
       introduction: obj?.introduction,
+      m_Introduction: obj?.m_Introduction,
     })
     this.getDistrict(); this.getCriteriaBySS_QuestionTypeId();
 
@@ -282,6 +284,7 @@ export class AddCriteriaWiseQuestionComponent {
       cQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
       m_CQuestion: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]],
       expectedAns: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      m_ExpectedAns: ['', [Validators.required]]
     })
   }
 
@@ -304,6 +307,7 @@ export class AddCriteriaWiseQuestionComponent {
         "cQuestion": formData.cQuestion,
         "m_CQuestion": formData.m_CQuestion,
         "expectedAns": formData.expectedAns,
+        "m_ExpectedAns": formData.m_ExpectedAns,
         "documentModel": this.imgArray
       }
 
@@ -336,6 +340,7 @@ export class AddCriteriaWiseQuestionComponent {
       cQuestion: obj?.cQuestion,
       m_CQuestion: obj?.m_CQuestion,
       expectedAns: obj?.expectedAns,
+      m_ExpectedAns: obj?.m_ExpectedAns
     });
     this.imgArray = obj?.documentModel;
 

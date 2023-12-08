@@ -85,7 +85,6 @@ export class AddAssessmentConfigurationComponent {
       options: [],
       questionSetUrls: []
     });
-
   }
 
   paratmeterFormField() {
@@ -337,11 +336,17 @@ export class AddAssessmentConfigurationComponent {
   //#region ---------------------------------------------- Submit and Update start here -----------------------------------------------------
   onSubmit(){
     let formValue = this.questionForm.value;
-    console.log("this.questionForm.value.expectedGrade : ", this.questionForm.value.expectedGrade);
+
+    for(let i = 0; i < this.paramterArray.length; i++){
+      this.paramterArray[i].optionGrade = i + 1;
+    }
+    console.log("this.paramterArray : ", this.paramterArray);
 
     formValue.questionSetUrls = this.imgArray;
     formValue.options = this.paramterArray;
     formValue.isOption = this.paramterArray.length ? 1 : 0;
+    !this.paramterArray.length ? formValue.expectedGrade = 1 : formValue.expectedGrade = formValue.expectedGrade;
+
     this.isExpectedCondition();
 
     let url = this.data ? 'UpdateCriteria' : 'AddCriteria';

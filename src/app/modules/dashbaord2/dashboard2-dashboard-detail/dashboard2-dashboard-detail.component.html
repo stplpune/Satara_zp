@@ -80,32 +80,37 @@
                                                                 <p class="data-text">Subject Details :</p>
                                                             </div>
                                                             <div class="col-sm">
-                                                                ZILLA PARISHAD PRIMARY SCHOOL,GOJWADA 
+                                                                ZILLA PARISHAD PRIMARY SCHOOL,GOJWADA
                                                             </div>
                                                         </div>
                                                         <div class="row gx-2">
                                                             <div class="col-sm">
-                                                               <table class="table dashboard-table">
-                                                                 <thead>
-                                                                   <tr>
-                                                                    <th scope="col">Sr No</th>
-                                                                    <th scope="col">Subject Name</th>
-                                                                    <th scope="col">Assessment Date</th>
-                                                                    <th scope="col">Is Assessed</th>
-                                                                   </tr>
-                                                                 </thead>
-                                                                 <tbody>
-                                                                    <tr *ngFor="let data of viewDetailsObj?.assessedSubjectListModel;let i =index">
-                                                                        <th scope="row">{{i+1}}</th>
-                                                                        <td>{{data?.subjectName}}</td>
-                                                                        <td>{{data?.assessmentDate || '-'}}</td>
-                                                                        <td>
-                                                                            <span *ngIf="data.isAssessed" class="material-symbols-outlined text-bg-success"> check </span>
-                                                                            <span *ngIf="!data.isAssessed" class="material-symbols-outlined text-bg-danger"> close  </span>
-                                                                        </td>
-                                                                      </tr>
-                                                                 </tbody>
-                                                               </table>
+                                                                <table class="table dashboard-table">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Sr No</th>
+                                                                            <th scope="col">Subject Name</th>
+                                                                            <th scope="col">Assessment Date</th>
+                                                                            <th scope="col">Is Assessed</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr
+                                                                            *ngFor="let data of viewDetailsObj?.assessedSubjectListModel;let i =index">
+                                                                            <th scope="row">{{i+1}}</th>
+                                                                            <td>{{data?.subjectName}}</td>
+                                                                            <td>{{data?.assessmentDate || '-'}}</td>
+                                                                            <td>
+                                                                                <span *ngIf="data.isAssessed"
+                                                                                    class="material-symbols-outlined text-bg-success">
+                                                                                    check </span>
+                                                                                <span *ngIf="!data.isAssessed"
+                                                                                    class="material-symbols-outlined text-bg-danger">
+                                                                                    close </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -120,49 +125,66 @@
                 </mat-card>
                 <mat-card class="plain-card border">
                     <mat-card-header class="card-header pe-2 pb-0 border-0">
-                        <form [formGroup]="filterForm">
+                        <!-- <form [formGroup]="filterForm"> -->    
                             <div class="row gx-2 w-100">
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
-                                <mat-select formControlName="acYearId" >
-                                    <mat-option *ngFor="let year of acYear" [value]="year.id">
-                                        {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
-                                    </mat-option>
-                                </mat-select>
-                                      </mat-form-field>
+                                        <mat-select [formControl]="academicYearId">
+                                            <mat-option *ngFor="let year of acYear" [value]="year.id">
+                                                {{webStorage.languageFlag ==
+                                                'EN'?year.eductionYear:year.eductionYear_M}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select formControlName="classId"
-                                            >
+                                        <mat-select [formControl]="standardId">
                                             <mat-option *ngFor="let data of standardResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
                                                 :data.m_Standard}}</mat-option>
                                         </mat-select>
-                                      </mat-form-field>
+                                    </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select formControlName="subjectId"
-                                            >
+                                        <mat-select [formControl]="subjectId">
                                             <mat-option *ngFor="let data of subjectResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
                                                 :data.m_Subject}}</mat-option>
                                         </mat-select>
-                                      </mat-form-field>
+                                    </mat-form-field>
                                 </div>
                             </div>
-                        </form>
+                        <!-- </form> -->
                     </mat-card-header>
                     <mat-card-content class="card-body">
                         tab
+
+                        <div>
+                            <ng-container *ngIf="questionwiseChartOptions">
+                                <apx-chart [series]="questionwiseChartOptions?.series"
+                                    [chart]="questionwiseChartOptions?.chart"
+                                    [dataLabels]="questionwiseChartOptions?.dataLabels"
+                                    [plotOptions]="questionwiseChartOptions?.plotOptions"
+                                    [xaxis]="questionwiseChartOptions?.xaxis"
+                                    [colors]="questionwiseChartOptions?.colors"></apx-chart>
+                            </ng-container>
+                            <ng-container *ngIf="!questionwiseChartOptions">
+                                <div class="alert alert-danger text-center p-2" role="alert">
+                                    {{'Labels.dataNotFound' | translate}}
+                                </div>
+                            </ng-container>
+
+                        </div>
+
+
                     </mat-card-content>
                 </mat-card>
             </div>
         </div>
     </mat-card-content>
 </mat-card>
-

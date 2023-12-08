@@ -63,6 +63,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   ExamTypeArray= new Array();
   totalMarksInSub : any;
   uniqueStudentCount!: number;
+  stateData = new Array();
+  districtData = new Array();
 
   @ViewChild('myDiv') myDiv!: ElementRef;
   constructor(
@@ -85,7 +87,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.formData();
     this.getGroupIdByTalukaCenterSchool();
     this.getYearArray();
-    this.getTaluka();
+    this.getState();
+    // this.getTaluka();
     this.getStandard();
     // this.getTableData();
     this.getExamType();
@@ -104,14 +107,12 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   formData() {
     this.filterForm = this.fb.group({
       acYearId:[],
+      stateId:[],
+      districtId:[],
       talukaId: [0],
+      villageId:[0],
       centerId: [0],
-      villageId: [0],
       schoolId: [0],
-      // groupByClass: [0],
-      // standardId: [0],
-    //  standardId: [],
-
       standardId: [(this.dashboardObj && this.assessmentLevelId == '0') ? this.dashboardObj?.standardArray[0] : this.dashboardObj?.StandardId],
       subjectId: [0],
       examTypeId: [0]
@@ -125,6 +126,25 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
       this.filterForm.controls['acYearId'].patchValue(this.educationYear)
     })
   }
+
+  getState(){
+    this.stateData = [];
+    this.masterService.getAllState(this.languageFlag).subscribe((res:any)=>{
+     this.stateData = res.responseData;
+     this.getDistrict()
+    })
+  }
+
+  getDistrict() {
+    this.districtData = [];
+    this.masterService.getAllDistrict(this.languageFlag, this.filterForm.controls['stateId'].value).subscribe((res: any) => {
+      this.districtData = res.responseData;
+      this.getTaluka()
+    });
+  }
+
+
+
   setTableData() {
     this.setViewData();
     this.getLineChartDetails();
@@ -499,11 +519,32 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
 
   clearDropdown(name?: any) {
     this.dashboardObj?.label == "table" ? '' :this.dashboardObj = '';
-    if (name == 'talukaId') {
+    if(name == 'state'){
+      this.filterForm.controls['districtId'].setValue('');
+      this.filterForm.controls['talukaId'].setValue('');
       this.filterForm.controls['centerId'].setValue('');
+      this.filterForm.controls['villageId'].setValue('');
       this.filterForm.controls['schoolId'].setValue('');
+
+    }
+    else if(name == 'districtId'){
+      this.filterForm.controls['talukaId'].setValue('');
+      this.filterForm.controls['centerId'].setValue('');
+      this.filterForm.controls['villageId'].setValue('');
+      this.filterForm.controls['schoolId'].setValue('');
+
+    }
+    else if (name == 'talukaId') {
+      this.filterForm.controls['centerId'].setValue('');
+      this.filterForm.controls['villageId'].setValue('');
+      this.filterForm.controls['schoolId'].setValue('');
+    
       this.selectedShcool='';
     } else if (name == 'centerId') {
+      this.filterForm.controls['villageId'].setValue('');
+      this.filterForm.controls['schoolId'].setValue('');
+    }
+    else if (name == 'villageId') {
       this.filterForm.controls['schoolId'].setValue('');
     }
   }

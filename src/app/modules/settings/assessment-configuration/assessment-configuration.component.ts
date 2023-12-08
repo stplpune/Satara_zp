@@ -280,13 +280,15 @@ export class AssessmentConfigurationComponent {
     dialogRef.afterClosed().subscribe(result => {
       if(result == 'yes' && obj){
         this.pageNumber = obj.pageNumber
+        this.getTableData();
+        this.formField();;
+
       }
       else if(result == 'yes'){
         this.pageNumber = 1;
-      }
-      this.formField();;
         this.getTableData();
-        this.languageChange();
+        this.formField();;
+      }
     });
   }
 

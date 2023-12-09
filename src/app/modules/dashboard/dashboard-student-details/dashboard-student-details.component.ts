@@ -85,11 +85,9 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.educationYear=this.dashboardObj?this.dashboardObj?.EducationYearId:this.webService.getLoggedInLocalstorageData()?.educationYearId;
     this.assessmentLevelId = this.dashboardObj?.asessmwntLavel;
     this.formData();
-    this.getGroupIdByTalukaCenterSchool();
     this.getYearArray();
     this.getState();
     // this.getTaluka();
-    this.getStandard();
     // this.getTableData();
     this.getExamType();
     this.getTableData();
@@ -106,9 +104,9 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
 
   formData() {
     this.filterForm = this.fb.group({
-      acYearId:[],
-      stateId:[],
-      districtId:[],
+      acYearId:[''],
+      stateId:[''],
+      districtId:[''],
       talukaId: [0],
       villageId:[0],
       centerId: [0],
@@ -139,7 +137,6 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.districtData = [];
     this.masterService.getAllDistrict(this.languageFlag, this.filterForm.controls['stateId'].value).subscribe((res: any) => {
       this.districtData = res.responseData;
-      this.getTaluka()
     });
   }
 
@@ -149,7 +146,6 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.setViewData();
     this.getLineChartDetails();
     // this.loadClassWisetable();
-    this.getSubjectData();
     let tableData = {
       pageNumber: this.pageNumber,
       pageName:'Profile',
@@ -183,6 +179,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   getTableData(flag?: any) {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
+    let StateId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.State;
+    let DistrictId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.District;
     let TalukaId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.TalukaId;
     let CenterId = flag == 'filter' ? this.filterForm.value?.centerId : this.dashboardObj?.CenterId;
     let villageId = flag == 'filter' ? this.filterForm.value?.villageId : this.dashboardObj?.VillageId;
@@ -222,7 +220,6 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
             (res.responseData.responseData1.length && this.assessmentLevelId == '1') ? this.loadClassWisetable() : '';
             // *********************************************************
             
-            this.getSubjectData();
             //this.getLineChartDetails();
           } else {
             this.ngxSpinner.hide();
@@ -239,7 +236,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     else {
       // let studentApi = 'GetDashboardDataStudentListForCommon'
       // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) +'&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId=' + AcademicYearId + '&ExamTypeId=' + examTypeId + '&lan='
-      let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + questionId + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&AcademicYearId=' + AcademicYearId + '&lan='
+      let classStr = 'zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?StateId='+StateId+'&DistrictId='+DistrictId+'&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + questionId + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&AcademicYearId=' + AcademicYearId+ '&EvaluatorId='+1+'&lan='
 
       this.apiService.setHttp('GET',classStr, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -253,7 +250,6 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
             obj.subjectId = flag == 'filter' ? this.filterForm.value.subjectId : this.dashboardObj?.SubjectId;
             this.selectedObj = obj;
             (res.responseData.responseData1.length && this.assessmentLevelId == '1') ? this.loadClassWisetable() : '';
-            this.getSubjectData();
             //this.getLineChartDetails();
           } else {
             this.ngxSpinner.hide();
@@ -313,19 +309,10 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  getSubjectData() {
-    // let subjectobj = this.subjectArr.filter((x: any)=> {
-    //   return (x.id == this.filterForm.value.subjectId);
-    // });
-    // console.log("subject OBJjj",subjectobj,this.subjectArr );
-    // this.subjectNameClassWise = this.languageFlag=='English' ? subjectobj[0].subjectName : subjectobj[0].m_SubjectName
-  }
-
-
   getExamType(){
     this.masterService.getExamType().subscribe((res: any) => {
       this.ExamTypeArray=[{ "id": 0, "examType": "All", "m_ExamType": "सर्व" }].concat(res.responseData);
-      this.ExamTypeArray.sort((a,b) => a.id - b.id );
+      // this.ExamTypeArray.sort((a,b) => a.id - b.id );
       this.dashboardObj ? this.filterForm.controls['examTypeId'].setValue(this.dashboardObj?.ExamTypeId) : '';
     })
   }
@@ -341,20 +328,24 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka(this.languageFlag).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.filterForm.controls['talukaId'].setValue(0);
-          this.dashboardObj ? (this.filterForm.controls['talukaId'].setValue(this.dashboardObj?.TalukaId), this.getAllCenter()) : this.getAllCenter();
-          // this.talukaArr = res.responseData;
-        } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-          this.talukaArr = [];
-        }
-      },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
-    });
+    let districtId = this.filterForm.controls['districtId'].value
+    if(districtId != 0){
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.filterForm.controls['talukaId'].setValue(0);
+            this.dashboardObj ? (this.filterForm.controls['talukaId'].setValue(this.dashboardObj?.TalukaId), this.getAllCenter()) : this.getAllCenter();
+            // this.talukaArr = res.responseData;
+          } else {
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+   
   }
 
   getAllCenter() {
@@ -362,7 +353,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.centerArr = [];
     let Tid = this.filterForm.value.talukaId;
     if (Tid != 0) {
-      this.masterService.getAllCenter(this.languageFlag, Tid).subscribe({
+      this.masterService.getAllCenter('', Tid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
@@ -373,14 +364,13 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
             this.centerArr = [];
           }
         },
-        error: ((err: any) => { this.errors.handelError(err.statusCode) })
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
     }
   }
 
   getVillage() {
     this.selectedCenter = this.centerArr.find((res: any) => this.filterForm.value.centerId ? this.filterForm.value.centerId == res.id : this.dashboardObj?.CenterId == res.id);
-
     this.villageArr = [];
     let centerId = this.filterForm.value.centerId;
     if(centerId != 0){
@@ -389,12 +379,11 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
           if(res.statusCode == "200"){
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
             this.filterForm.controls['villageId'].patchValue(0);
-            this.getAllSchoolsByCenterId();
           } else{
             this.villageArr = [];
           }
         },
-        error: ((err: any) => { this.errors.handelError(err.statusCode) })
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
     }
   }
@@ -405,8 +394,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     let Tid = this.filterForm.value.talukaId;
     let Cid = this.filterForm.value.centerId;
     let Vid = this.filterForm.value.villageId;
-    // if (Cid != 0) { removed - when navigate from  high low school table not patch schoolname in heading  
-      this.masterService.getAllSchoolByCriteria(this.languageFlag,Tid, Vid,Cid).subscribe({
+    if (Vid != 0) {  //removed - when navigate from  high low school table not patch schoolname in heading  
+      this.masterService.getAllSchoolByCriteria('',Tid, Vid,Cid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
@@ -420,58 +409,38 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         },
         // error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
-    // }
+    }
   }
 
-  getGroupIdByTalukaCenterSchool() {
-    this.groupByClassArray = [];
-    let formData = this.filterForm.value;
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId= '+ (formData?.villageId || 0)+ '&SchoolId=' + (formData?.schoolId || 0), false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.groupByClassArray = res.responseData.responseData2;
-          this.groupByClassArray.splice(0, 1);
-          // (this.dashboardObj && this.assessmentLevelId == '0' ) ? (this.filterForm.controls['groupByClass'].setValue(this.dashboardObj?.groupId), this.getStandard(), this.getSubject()) : this.filterForm.controls['groupByClass'].setValue(0), this.getStandard();
-        } else {
-          this.groupByClassArray = [];
-        }
-      },
-      error: (err: any) => { this.errors.handelError(err.statusCode); }
-    });
-
-  }
+ 
 
   getStandard() {
-    this.groupID = this.filterForm.value.groupByClass || 0;
-    // let groupId = this.groupID ? this.groupID : this.dashboardObj.groupId;
-
-    this.masterService.getAllStandard(0, 0, '').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == 200) {
-          this.standardArr = [];
-          this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
-          this.filterForm.controls['standardId'].setValue(0);
-          (this.dashboardObj && this.assessmentLevelId == '0') ? this.filterForm.controls['standardId'].setValue(this.dashboardObj?.standardArray[0]) : this.filterForm.controls['standardId'].setValue(this.dashboardObj?.StandardId)
-        } else {
-          this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-          this.standardArr = [];
-        }
-      },
-      error: ((err: any) => { this.errors.handelError(err.statusCode) })
-    });
+    this.standardArr =[];
+    let schoolId = this.filterForm.value.schoolId;
+    if(schoolId != 0){
+      this.masterService.GetStandardBySchool(schoolId, '').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.standardArr = [];
+            this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
+            (this.dashboardObj && this.assessmentLevelId == '0') ? this.filterForm.controls['standardId'].setValue(this.dashboardObj?.standardArray[0]) : this.filterForm.controls['standardId'].setValue(this.dashboardObj?.StandardId)
+          } else {
+            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.standardArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
   }
 
 
   getSubject() {
     this.subjectArr = [];
-    if(this.assessmentLevelId == '0'){
-      let groupId = this.groupID ? this.groupID : this.dashboardObj.groupId;
-      this.masterService.GetAllSubjectsByGroupClassId(this.languageFlag, groupId).subscribe({
+      this.masterService.getAllSubject('').subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.subjectArr.push({ "id": 0, "subjectName": "All", "m_SubjectName": "सर्व" }, ...res.responseData);
-            this.filterForm.controls['subjectId'].setValue(0);
+            this.subjectArr.push({ "id": 0, "subject": "All", "m_Subject": "सर्व" }, ...res.responseData);
             this.dashboardObj ? this.filterForm.controls['subjectId'].setValue(this.dashboardObj?.SubjectId) : '';
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
@@ -480,42 +449,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         },
         error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
-    }
-    else{
-      this.masterService.getClassWiseSubject(this.languageFlag).subscribe({
-        next: (res: any) => {
-          if (res.statusCode == 200) {
-            this.subjectArr.push({ "id": 0, "subjectName": "All", "m_SubjectName": "सर्व" }, ...res.responseData.responseData2);
-            // this.filterForm.controls['subjectId'].setValue(0);
-            this.dashboardObj ? this.filterForm.controls['subjectId'].setValue(this.dashboardObj?.SubjectId) : '';
-          } else {
-            this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-            this.subjectArr = [];
-          }
-        },
-        error: ((err: any) => { this.errors.handelError(err.statusCode) })
-      });
-    }
-    
   }
-
-  //patch this subject while class wise data
-  // getSubjectsByClass(){
-  //   this.subjectArr = [];
-  //   this.masterService.GetDashboardCountClassWise(this.languageFlag).subscribe({
-  //     next: (res: any) => {
-  //       if (res.statusCode == 200) {
-  //         this.subjectArr.push({ "id": 0, "subjectName": "All", "m_SubjectName": "सर्व" }, ...res.responseData);
-  //         this.filterForm.controls['subjectId'].setValue(0);
-  //         this.dashboardObj ? this.filterForm.controls['subjectId'].setValue(this.dashboardObj?.SubjectId) : '';
-  //       } else {
-  //         this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
-  //         this.subjectArr = [];
-  //       }
-  //     },
-  //     error: ((err: any) => { this.errors.handelError(err.statusCode) })
-  //   });
-  // }
 
   clearDropdown(name?: any) {
     this.dashboardObj?.label == "table" ? '' :this.dashboardObj = '';
@@ -525,27 +459,49 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
       this.filterForm.controls['centerId'].setValue('');
       this.filterForm.controls['villageId'].setValue('');
       this.filterForm.controls['schoolId'].setValue('');
-
+      this.districtData = [];
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
     }
     else if(name == 'districtId'){
       this.filterForm.controls['talukaId'].setValue('');
       this.filterForm.controls['centerId'].setValue('');
       this.filterForm.controls['villageId'].setValue('');
       this.filterForm.controls['schoolId'].setValue('');
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
 
     }
     else if (name == 'talukaId') {
       this.filterForm.controls['centerId'].setValue('');
       this.filterForm.controls['villageId'].setValue('');
       this.filterForm.controls['schoolId'].setValue('');
-    
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
       this.selectedShcool='';
     } else if (name == 'centerId') {
       this.filterForm.controls['villageId'].setValue('');
       this.filterForm.controls['schoolId'].setValue('');
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
     }
-    else if (name == 'villageId') {
+    else if (name == 'villageId'){
       this.filterForm.controls['schoolId'].setValue('');
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if(name == 'schoolId'){
+      this.filterForm.controls['standardId'].setValue('');
+      this.standardArr = [];
     }
   }
 
@@ -608,6 +564,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   getSchoolName(){
     this.selectedShcool = this.schoolArr.find((res: any) => this.filterForm.value.schoolId ? this.filterForm.value.schoolId == res.id : this.dashboardObj?.SchoolId == res.id);
   }
+
   downloadStudentDetails(){
     const DATA = this.myDiv.nativeElement;
     html2canvas(DATA).then(canvas => {        

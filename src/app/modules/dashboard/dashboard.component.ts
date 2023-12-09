@@ -313,7 +313,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getExamType() {
     this.masterService.getExamType('').subscribe((res: any) => {
       this.ExamTypeArray = [{ "id": 0, "examType": "All", "m_ExamType": "सर्व" }].concat(res.responseData);
-      this.ExamTypeArray.sort((a, b) => a.id - b.id);
+      // this.ExamTypeArray.sort((a, b) => a.id - b.id);
     })
   }
 
@@ -413,7 +413,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // const SelectedstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == true)).map((y: any) => y.standardId));
     const SelectedstandardArray = (this.totalStudentSurveyData.find((x: any) => x.status == true));
     this.SharingObject = {
-      groupId: this.asessmwntLavel.value == '0' ? this.selectedObj?.groupId | 0 : 0,
+      State: formData?.StateId,
+      District: formData?.districtId,
       TalukaId: formData?.talukaId | 0,
       CenterId: formData?.centerId | 0,
       SchoolId: formData?.schoolId | 0,

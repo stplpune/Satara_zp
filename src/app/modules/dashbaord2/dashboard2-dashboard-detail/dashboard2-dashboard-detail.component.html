@@ -175,11 +175,11 @@
                     
                     <mat-card-content class="card-body">
                     
-                        <div *ngFor="let res of questionArr">
+                        <div *ngFor="let res of questionwiseChartOptions?.series; let i = index">
                             <ng-container *ngIf="questionwiseChartOptions">
-                                <h6>{{webStorage.languageFlag == 'EN' ? res.question
-                                    : res.m_Question}}</h6>
-                                <apx-chart [series]="questionwiseChartOptions?.series"
+                                <h6>{{webStorage.languageFlag == 'EN' ? questionArr[i].question
+                                    : questionArr[i].m_Question}}</h6>
+                                <apx-chart [series]="res"
                                     [chart]="questionwiseChartOptions?.chart"
                                     [dataLabels]="questionwiseChartOptions?.dataLabels"
                                     [plotOptions]="questionwiseChartOptions?.plotOptions"
@@ -188,8 +188,9 @@
                                     [legend]="questionwiseChartOptions?.legend"
                                     [yaxis]="questionwiseChartOptions?.yaxis"
                                     [grid]="questionwiseChartOptions?.grid"></apx-chart>
-                                    <!--  -->
-                                    <p>1=true</p>
+                                    <span *ngFor="let param of questionArr[i].parameterArr">
+                                        {{param.optionGrade}}: {{param.optionName}}
+                                    </span>
                             </ng-container>
                             <ng-container *ngIf="!questionwiseChartOptions">
                                 <div class="alert alert-danger text-center p-2" role="alert">
@@ -197,8 +198,6 @@
                                 </div>
                             </ng-container>
                         </div>
-
-
                     </mat-card-content>
                 </mat-card>
             </div>

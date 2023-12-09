@@ -71,6 +71,8 @@ export class Dashbaord2Component {
   @ViewChild("subjectWiseChart") subjectWiseChart!: ChartComponent;
   public subjectWiseChartOptions!: Partial<ChartOptions> | any;
 
+  public chartOptions: Partial<any> = {} as Partial<any>;
+
 
   constructor(private spinner: NgxSpinnerService,
     private apiService: ApiService,

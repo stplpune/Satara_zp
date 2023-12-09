@@ -188,16 +188,11 @@ export class Dashboard2DashboardDetailComponent {
   }
 
 
-  schoolwiseBarChart(critearr?: any) { //xAxiaArray?: any, yAxisArray?: any
-    // console.log("xAxiaArray, yAxisArray", xAxiaArray, yAxisArray);
+  schoolwiseBarChart(critearr?: any) { //xAxiaArray?: any, yAxisArray?: anyz
+    console.log(critearr);
     
     this.questionwiseChartOptions = {
-      series: [
-        {
-          name: 'Percentage',
-          data: critearr?.data,
-        },
-      ],
+      series: critearr,
       chart: {
         type: 'bar',
         stacked: true,
@@ -232,7 +227,7 @@ export class Dashboard2DashboardDetailComponent {
         show: false
       },
       xaxis: {
-        categories: ['Nitin R ghorpade (Teacher)', ],  //'Officer'
+        categories: ['Nitin R ghorpade (Teacher)'],  //'Officer'
         axisTicks: {
           show: false
         },
@@ -257,7 +252,6 @@ export class Dashboard2DashboardDetailComponent {
       },
       yaxis: {
         min: -1,
-        max: 2,
         labels: {
           formatter: function (val: any) {
             return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
@@ -268,6 +262,7 @@ export class Dashboard2DashboardDetailComponent {
         },
       }
     }
+    console.log("questionwiseChartOptions",this.questionwiseChartOptions)
   }
 
   getProgressIndicatorData(){
@@ -283,7 +278,8 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   barChartData(){
-    console.log("this.graphResponse: ", this.graphResponse);
+    console.log("this.graphResponse", this.graphResponse);
+    
     let examId = this.examId.value;
     this.questionArr = [];
     this.graphResponse.map((x: any) => {
@@ -296,25 +292,30 @@ export class Dashboard2DashboardDetailComponent {
             questionId: res.questionId,
             question: res.question,
             m_Question: res.m_Question,
-            data: GrdeArr,
+            gradeArr: GrdeArr,
+            // max: Math.max(...GrdeArr),
+            parameterArr: res.parameterModel
           }
           this.questionArr.push(obj);
         });          
       }
-    });
-    console.log("tem", this.questionArr);
-    
+    });  
 
-    // this.schoolwiseBarChart();
-    console.log("this.questionwiseChartOptions", this.questionwiseChartOptions);
-    
-    console.log("questionArr", this.questionArr);
+  let arrayData=new Array();
+  this.questionArr.forEach((chart:any)=>{
+    const data=[{
+      name: 'Percentage',
+      // data: chart?.data.concat([2]),
+      data: chart?.gradeArr,
+      // max: chart.max
+    }]
+    arrayData.push(data)
+  });
 
-    this.questionArr.forEach((chart:any)=>{
-      this.schoolwiseBarChart(chart);
-    })
-    
-    
+  console.log("this.questionArr", arrayData, this.questionArr);
+  this.schoolwiseBarChart(arrayData);
   }
+
+
 
 }

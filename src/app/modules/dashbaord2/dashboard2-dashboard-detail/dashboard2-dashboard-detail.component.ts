@@ -57,7 +57,7 @@ export class Dashboard2DashboardDetailComponent {
      console.log(this.chartObj);
      this.getTableData();
      this.getYearArray();
-     this.schoolwiseBarChart();
+    //  this.schoolwiseBarChart();
 
      setTimeout(() => {
       this.getProgressIndicatorData();
@@ -188,14 +188,14 @@ export class Dashboard2DashboardDetailComponent {
   }
 
 
-  schoolwiseBarChart(data?: any) { //xAxiaArray?: any, yAxisArray?: any
+  schoolwiseBarChart(critearr?: any) { //xAxiaArray?: any, yAxisArray?: any
     // console.log("xAxiaArray, yAxisArray", xAxiaArray, yAxisArray);
     
     this.questionwiseChartOptions = {
       series: [
         {
           name: 'Percentage',
-          data: data,
+          data: critearr?.data,
         },
       ],
       chart: {
@@ -285,47 +285,34 @@ export class Dashboard2DashboardDetailComponent {
   barChartData(){
     console.log("this.graphResponse: ", this.graphResponse);
     let examId = this.examId.value;
-
     this.questionArr = [];
-
     this.graphResponse.map((x: any) => {
 
       if(examId == x.examTypeId){
-        
-        this.questionwiseChartOptions.series[0].data = [];
-        x.criteriaModel.forEach((res: any) => {
+        x.criteriaModel.map((res: any) => {
+          let GrdeArr: any = [];
+          res.assessedDataModel.map((gr:any)=>GrdeArr.push(gr.grade))
           let obj = {
             questionId: res.questionId,
             question: res.question,
             m_Question: res.m_Question,
-            // grade: res.grade
+            data: GrdeArr,
           }
-          let data: any = [] ;
           this.questionArr.push(obj);
-          res.assessedDataModel.map((a: any)=>{
-            data.push(a.grade);
-          })
-          this.schoolwiseBarChart(data);
-
-          // this.questionwiseChartOptions.series[0].data.push(res.grade);
-
-
-          // data.map((a: any) => {
-          //   this.schoolwiseBarChart(a);
-          // })
-
-          
-
-        });
+        });          
       }
     });
-    console.log("tem", this.graphResponse);
+    console.log("tem", this.questionArr);
     
 
     // this.schoolwiseBarChart();
     console.log("this.questionwiseChartOptions", this.questionwiseChartOptions);
     
     console.log("questionArr", this.questionArr);
+
+    this.questionArr.forEach((chart:any)=>{
+      this.schoolwiseBarChart(chart);
+    })
     
     
   }

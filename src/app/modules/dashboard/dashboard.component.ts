@@ -409,11 +409,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   passingParameters(data: any, examTypeId: any) {
     const formData = this.filterForm.value;
-    const SelectedstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == true)).map((y: any) => y.standardId));
-    const AllstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == false)).map((y: any) => y.standardId));
-
-    // const standardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == true)).map((y: any) => y.standardId));
-    // const AllstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == false)).map((y: any) => y.standardId));
+    
+    // const SelectedstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == true)).map((y: any) => y.standardId));
+    const SelectedstandardArray = (this.totalStudentSurveyData.find((x: any) => x.status == true));
     this.SharingObject = {
       groupId: this.asessmwntLavel.value == '0' ? this.selectedObj?.groupId | 0 : 0,
       TalukaId: formData?.talukaId | 0,
@@ -422,7 +420,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       SubjectId: data?.subjectId | 0,
       OptionGrade: this.asessmwntLavel.value == '0' ? this.selectedBarstatus == "stack" ? (data?.optionGrade || 0) : data?.questionId : (data?.optionGrade || 0),
       // standardArray: standardArray,
-      standardArray: SelectedstandardArray.length ? SelectedstandardArray : AllstandardArray,
+      standardArray: SelectedstandardArray?.standardId,
       EducationYearId: formData?.acYearId | 0,
       asessmwntLavel: this.asessmwntLavel.value,
       StandardId: this.selectedObjByClass?.standardId,

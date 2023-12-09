@@ -361,8 +361,8 @@
                             </div>
                             <!-- starting stack bar here  -->
                             <div class="col-sm-12">
-                                <div class="d-flex w-100" *ngIf="stackbarchartOptionsByClass?.series || barchartOptionsByClass?.series "
-                                    [ngClass]="{'chart-container scrollbar': stackbarchartOptionsByClass?.series?.length >3}">
+                                <div class="d-flex w-100 chart-container scrollbar" *ngIf="stackbarchartOptionsByClass?.series || barchartOptionsByClass?.series "
+                                    >
                                     <div class="text-start mx-2"
                                         *ngFor="let bar of stackbarchartOptionsByClass?.series; let i=index">
                                         <p class="fw-bold  mb-4">{{graphSubjectDataByClass[i]}}</p>

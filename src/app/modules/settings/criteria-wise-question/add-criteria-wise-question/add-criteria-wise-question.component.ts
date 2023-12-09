@@ -63,7 +63,7 @@ export class AddCriteriaWiseQuestionComponent {
       id: [0],
       stateId: ['', [Validators.required]],
       districtId: ['', Validators.required],
-      educationYearId: ['', Validators.required],
+      educationYearId: [1, Validators.required],
       standardId: ['', [Validators.required]],
       assesmentSubjectId: ['', [Validators.required]],
       questionTypeId: ['', [Validators.required]],

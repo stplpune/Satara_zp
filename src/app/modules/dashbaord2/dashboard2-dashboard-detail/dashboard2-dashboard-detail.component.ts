@@ -19,6 +19,7 @@ export class Dashboard2DashboardDetailComponent {
   academicYearId = new FormControl('');
   standardId = new FormControl('');
   subjectId = new FormControl('');
+  examId = new FormControl('');
 
   pageNumber = 1;
   chartObj:any;
@@ -30,6 +31,7 @@ export class Dashboard2DashboardDetailComponent {
   subjectResp = new Array();
   selectedLang:any;
   graphResponse: any;
+  questionArr: any;
 
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
@@ -186,43 +188,36 @@ export class Dashboard2DashboardDetailComponent {
   }
 
 
-  schoolwiseBarChart(xAxiaArray?: any, yAxisArray?: any) {
-    console.log("xAxiaArray, yAxisArray", xAxiaArray, yAxisArray);
+  schoolwiseBarChart(data?: any) { //xAxiaArray?: any, yAxisArray?: any
+    // console.log("xAxiaArray, yAxisArray", xAxiaArray, yAxisArray);
     
     this.questionwiseChartOptions = {
       series: [
         {
           name: 'Percentage',
-          data: [400, 430],
+          data: data,
         },
       ],
       chart: {
         type: 'bar',
+        stacked: true,
+        stackType: "150%",
         height: 300,
         toolbar: {
           show: false
         },
-        events: {
-          // click: (_event: any, _chartContext: any, config: any) => {
-          //   let mainFilter = this.mainFilterForm.value;
-          //   let selectedFilter = this.filterForm.value
-          //   let label = config.config.xaxis.categories[config.dataPointIndex]
-          //   selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
-          //   let obj = this.returnObjectOfChart(mainFilter, selectedFilter);
-          //   localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-          //   this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
-          // }
-        }
+        events: {}
+      },
+      title: {
+        text: "akshar",
+        align: "left"
       },
       colors: [
-        // xAxiaArray[0] == 'Slow Learner' ? '#b51d31' : xAxiaArray[0] == 'Good' ? '#E98754' : '#50c77b',
-        // xAxiaArray[1] == 'Good' ? '#E98754' : '#50c77b',
         '#50c77b',
-        '#2b908f',
-        '#f9a3a4',
-        '#90ee7e',
-        '#f48024',
-        // '#69d2e7',
+        // '#2b908f',
+        // '#f9a3a4',
+        // '#90ee7e',
+        // '#f48024',
       ],
       plotOptions: {
         bar: {
@@ -230,12 +225,48 @@ export class Dashboard2DashboardDetailComponent {
           distributed: true,
         },
       },
-      dataLabels: {
-        enabled: true,
+      // dataLabels: {
+      //   enabled: true,
+      // },
+      legend: {
+        show: false
       },
       xaxis: {
-        categories: ['slow', 'good'],
+        categories: ['Nitin R ghorpade (Teacher)', ],  //'Officer'
+        axisTicks: {
+          show: false
+        },
+        style: {
+          fontSize: '12px',
+          fontFamily: 'Noto Sans Devanagari, sans-serif',
+          cssClass: 'apexcharts-xaxis-label',
+        },
       },
+      grid: {
+        show:true,
+        xaxis: {
+            lines: {
+                show: false
+            }
+        },
+        yaxis: {
+          lines: {
+              show: false
+          }
+      }
+      },
+      yaxis: {
+        min: -1,
+        max: 2,
+        labels: {
+          formatter: function (val: any) {
+            return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
+          }
+        },
+        axisTicks: {
+          show: true,
+        },
+      }
     }
   }
 
@@ -245,11 +276,58 @@ export class Dashboard2DashboardDetailComponent {
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
-        console.log("res: ", res);
-
         this.graphResponse =  res.responseData?.responseData1;
+        console.log("res: ", this.graphResponse);
       }
     });
+  }
+
+  barChartData(){
+    console.log("this.graphResponse: ", this.graphResponse);
+    let examId = this.examId.value;
+
+    this.questionArr = [];
+
+    this.graphResponse.map((x: any) => {
+
+      if(examId == x.examTypeId){
+        
+        this.questionwiseChartOptions.series[0].data = [];
+        x.criteriaModel.forEach((res: any) => {
+          let obj = {
+            questionId: res.questionId,
+            question: res.question,
+            m_Question: res.m_Question,
+            // grade: res.grade
+          }
+          let data: any = [] ;
+          this.questionArr.push(obj);
+          res.assessedDataModel.map((a: any)=>{
+            data.push(a.grade);
+          })
+          this.schoolwiseBarChart(data);
+
+          // this.questionwiseChartOptions.series[0].data.push(res.grade);
+
+
+          // data.map((a: any) => {
+          //   this.schoolwiseBarChart(a);
+          // })
+
+          
+
+        });
+      }
+    });
+    console.log("tem", this.graphResponse);
+    
+
+    // this.schoolwiseBarChart();
+    console.log("this.questionwiseChartOptions", this.questionwiseChartOptions);
+    
+    console.log("questionArr", this.questionArr);
+    
+    
   }
 
 }

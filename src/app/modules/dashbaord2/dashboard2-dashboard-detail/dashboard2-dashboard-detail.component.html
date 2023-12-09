@@ -161,24 +161,41 @@
                             </div>
                         <!-- </form> -->
                     </mat-card-header>
-                    <mat-card-content class="card-body">
-                        tab
 
-                        <div>
+                    <div class="col-sm-4">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Exam Type</mat-label>
+                            <mat-select [formControl]="examId" (selectionChange)="barChartData()">
+                                <mat-option *ngFor="let res of graphResponse"
+                                    [value]="res.examTypeId">{{webStorage.languageFlag == 'EN'?res.examType
+                                    :res.m_ExamType}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    
+                    <mat-card-content class="card-body">
+                    
+                        <div *ngFor="let res of questionArr">
                             <ng-container *ngIf="questionwiseChartOptions">
+                                <h6>{{webStorage.languageFlag == 'EN' ? res.question
+                                    : res.m_Question}}</h6>
                                 <apx-chart [series]="questionwiseChartOptions?.series"
                                     [chart]="questionwiseChartOptions?.chart"
                                     [dataLabels]="questionwiseChartOptions?.dataLabels"
                                     [plotOptions]="questionwiseChartOptions?.plotOptions"
                                     [xaxis]="questionwiseChartOptions?.xaxis"
-                                    [colors]="questionwiseChartOptions?.colors"></apx-chart>
+                                    [colors]="questionwiseChartOptions?.colors"
+                                    [legend]="questionwiseChartOptions?.legend"
+                                    [yaxis]="questionwiseChartOptions?.yaxis"
+                                    [grid]="questionwiseChartOptions?.grid"></apx-chart>
+                                    <!--  -->
+                                    <p>1=true</p>
                             </ng-container>
                             <ng-container *ngIf="!questionwiseChartOptions">
                                 <div class="alert alert-danger text-center p-2" role="alert">
                                     {{'Labels.dataNotFound' | translate}}
                                 </div>
                             </ng-container>
-
                         </div>
 
 

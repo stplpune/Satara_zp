@@ -413,7 +413,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     // const SelectedstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == true)).map((y: any) => y.standardId));
     const SelectedstandardArray = (this.totalStudentSurveyData.find((x: any) => x.status == true));
     this.SharingObject = {
-      State: formData?.StateId,
+      State: formData?.stateId,
       District: formData?.districtId,
       TalukaId: formData?.talukaId | 0,
       CenterId: formData?.centerId | 0,

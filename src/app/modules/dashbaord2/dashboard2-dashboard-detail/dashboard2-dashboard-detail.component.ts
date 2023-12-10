@@ -84,10 +84,12 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   GetAllStandard() {
+    this.standardResp = []
     this.masterService.GetAllStandardClassWise(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.standardResp = [{ id: 0, standard: "All", m_Standard: "सर्व" }, ...res.responseData];
+          // this.standardResp = [{ id: 0, standard: "All", m_Standard: "सर्व" }, ...res.responseData];
+          this.standardResp = res.responseData;
           this.viewDetailsObj ? this.standardId.setValue(this.viewDetailsObj?.standardId) : '';
         }
       },
@@ -98,10 +100,12 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getSubject() {
+    this.subjectResp = [];
     this.masterService.getAllSubject(this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.subjectResp = [{ id: 0, subject: "All", m_Subject: "सर्व" }, ...res.responseData];
+          // this.subjectResp = [{ id: 0, subject: "All", m_Subject: "सर्व" }, ...res.responseData];
+          this.subjectResp = res.responseData;
           this.subjectId.setValue(this.subjectResp[1].id);
         }
       },
@@ -274,13 +278,19 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getProgressIndicatorData(){
+    this.graphResponse=[];
     // zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?StudentId=8006&AssessedClassId=1&SubjectId=1&ExamTypeId=0&EducationYearId=1&lan=EN
     let str = `StudentId=${this.viewDetailsObj?.studentId}&AssessedClassId=${this.standardId.value}&SubjectId=${this.subjectId.value}&ExamTypeId=0&EducationYearId=${this.academicYearId.value}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
+        if (res.statusCode == "200") {
         this.graphResponse =  res.responseData?.responseData1;
         console.log("res: ", this.graphResponse);
+        }
+        else{
+          this.graphResponse=[];
+        }
       }
     });
   }
@@ -331,6 +341,12 @@ export class Dashboard2DashboardDetailComponent {
   this.schoolwiseBarChart(arrayData, categoryArr);
   }
 
+
+  clearDropdown(){
+    this.graphResponse =[];
+    this.questionwiseChartOptions.series = [];
+    this.examId.setValue('');
+  }
 
 
 }

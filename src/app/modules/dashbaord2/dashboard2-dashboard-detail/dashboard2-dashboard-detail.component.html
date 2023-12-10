@@ -140,7 +140,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
-                                        <mat-select [formControl]="academicYearId">
+                                        <mat-select [formControl]="academicYearId" (selectionChange)="clearDropdown();getProgressIndicatorData()">
                                             <mat-option *ngFor="let year of acYear" [value]="year.id">
                                                 {{webStorage.languageFlag ==
                                                 'EN'?year.eductionYear:year.eductionYear_M}}
@@ -151,7 +151,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select [formControl]="standardId">
+                                        <mat-select [formControl]="standardId" (selectionChange)="clearDropdown();getProgressIndicatorData()">
                                             <mat-option *ngFor="let data of standardResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.standard
                                                 :data.m_Standard}}</mat-option>
@@ -161,7 +161,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select [formControl]="subjectId">
+                                        <mat-select [formControl]="subjectId" (selectionChange)="clearDropdown();getProgressIndicatorData()">
                                             <mat-option *ngFor="let data of subjectResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject
                                                 :data.m_Subject}}</mat-option>

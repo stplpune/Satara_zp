@@ -13,14 +13,14 @@
     <mat-card-content class="card-body">
         <div class="row gx-2">
             <div class="col-sm-4">
-                <h6 class="fw-bold">{{'Labels.TotalStudent' | translate}} :</h6>
+                <h6 class="fw-bold">{{'Labels.TotalStudent' | translate}} : {{tableDatasize}}</h6>
                 <ng-container>
                     <div class="table-responsive">
                         <app-table (recObjToChild)="childCompInfo($event)"></app-table>
                     </div>
                 </ng-container>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-8" *ngIf="viewDetailsObj">
                 <mat-card class="plain-card scrollbar pt-0">
                     <mat-card-content class="card-body pt-0 pe-0">
                         <div class="row">
@@ -29,11 +29,19 @@
                                     <div class="d-flex flex-lg-row flex-column">
                                         <div class="flex-shrink-0 text-center text-lg-start mb-2">
                                             <img alt="student-image" height="80px"
-                                                src="{{viewDetailsObj?.profilePhoto}}">
+                                                src="{{viewDetailsObj?.profilePhoto ? viewDetailsObj?.profilePhoto : 'https://zposmservices.mahamining.com/Uploads/Upload/image_2023_03_02T09_36_23_388Z.png'}}">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h5 class="mb-0 fw-bold">{{viewDetailsObj?.fullName}}</h5>
+                                                <span  *ngIf="viewDetailsObj?.graphLevelId == 1" class="material-symbols-outlined text-bg-danger">
+                                                    dangerous
+                                                    </span>
+                                                <span *ngIf="viewDetailsObj?.graphLevelId == 2" class="material-symbols-outlined text-bg-primary">
+                                                    check
+                                                    </span>
+                                                <span *ngIf="viewDetailsObj?.graphLevelId == 3" class="material-symbols-outlined text-bg-success"> star
+                                                    </span>
                                                 <button mat-flat-button class="btn-main-light btn-icon border"
                                                     title="Download" [routerLink]="['/print-student-details']">
                                                     <mat-icon class="text-main">download</mat-icon>
@@ -70,18 +78,19 @@
                                                         <span class="data-label">kendra:</span>
                                                         <div class="data-text">{{viewDetailsObj?.center}}</div>
                                                     </div>
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-6">
                                                         <span class="data-label">School Name :</span>
                                                         <div class="data-text">{{viewDetailsObj?.schoolName}}</div>
                                                     </div>
+                                                        
                                                     <div class="col-sm-12">
                                                         <div class="row gx-2">
                                                             <div class="col-sm-auto">
                                                                 <p class="data-text">Subject Details :</p>
                                                             </div>
-                                                            <div class="col-sm">
+                                                            <!-- <div class="col-sm">
                                                                 ZILLA PARISHAD PRIMARY SCHOOL,GOJWADA
-                                                            </div>
+                                                            </div> -->
                                                         </div>
                                                         <div class="row gx-2">
                                                             <div class="col-sm">
@@ -119,6 +128,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </mat-card-content>
@@ -177,8 +187,8 @@
                     
                         <div *ngFor="let res of questionwiseChartOptions?.series; let i = index">
                             <ng-container *ngIf="questionwiseChartOptions">
-                                <h6>{{webStorage.languageFlag == 'EN' ? questionArr[i].question
-                                    : questionArr[i].m_Question}}</h6>
+                                <h5>{{webStorage.languageFlag == 'EN' ? questionArr[i].question
+                                    : questionArr[i].m_Question}}</h5>
                                 <apx-chart [series]="res"
                                     [chart]="questionwiseChartOptions?.chart"
                                     [dataLabels]="questionwiseChartOptions?.dataLabels"
@@ -200,6 +210,12 @@
                         </div>
                     </mat-card-content>
                 </mat-card>
+            </div>
+            <div class="col-sm-7" *ngIf="!viewDetailsObj">
+                <div class="alert alert-danger text-center py-2 ">
+                    <span> {{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'
+                        }}</span>
+                </div>
             </div>
         </div>
     </mat-card-content>

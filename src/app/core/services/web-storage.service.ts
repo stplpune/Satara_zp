@@ -109,6 +109,10 @@ export class WebStorageService {
     return data.districtId;
   }
 
+  getYearId(){
+    let data = this.getLoggedInLocalstorageData();
+    return data.educationYearId;
+  }
   createdByProps(): any {
     return {
       "createdBy": this.getUserId() || 0,

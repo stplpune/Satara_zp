@@ -1194,6 +1194,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 }
   createBarchartByClass(SeriesArray: any, barSubjectSet: any) {
     // createBarchartByClass(SeriesArray:any, barSubjectSet:any, sub:any){
+      console.log("barSubjectSet",barSubjectSet);
+      
       this.barChaOptionHeight = 350;
       const length = this.barChartDataByClass.length;
       let width = this.subjectforBarByCLass.getRawValue()==1?(length < 2 ? 200 : length < 3 ? 300 : 600) :1200 //length < 5 ? 600 : length < 8 ? 500 : 500

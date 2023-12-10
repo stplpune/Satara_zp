@@ -54,14 +54,14 @@ export class Dashboard2DashboardDetailComponent {
       this.getSubject();
     });
      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
-     console.log(this.chartObj);
+     console.log("selected chart data",this.chartObj);
      this.getTableData();
      this.getYearArray();
     //  this.schoolwiseBarChart();
 
-     setTimeout(() => {
-      this.getProgressIndicatorData();
-     }, 2000);
+    //  setTimeout(() => {
+    //   this.getProgressIndicatorData();
+    //  }, 2000);
 
     //  console.log(this.webStorage.getLoggedInLocalstorageData());
      
@@ -151,16 +151,23 @@ export class Dashboard2DashboardDetailComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
-          this.tableDataArray = res.responseData.responseData1;
-          this.viewDetailsObj = res.responseData.responseData1[0];
+          this.tableDataArray = res.responseData?.responseData1;
+          this.viewDetailsObj = res.responseData?.responseData1[0];
           this.GetAllStandard();
+          setTimeout(() => {
+            this.getProgressIndicatorData();
+          }, 2000);
           console.log("viewDetailsObj", this.viewDetailsObj);
           this.tableDatasize = res.responseData.responseData2[0].totalCount;
-          this.setTableData();
         }
         else {
           this.ngxSpinner.hide();
+          this.tableDataArray = [];
+          this.tableDatasize = 0;
+          this.viewDetailsObj = ''
+
         }
+        this.setTableData();
       },
       error: ((err: any) => { this.ngxSpinner.hide(); this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
@@ -188,8 +195,8 @@ export class Dashboard2DashboardDetailComponent {
   }
 
 
-  schoolwiseBarChart(critearr?: any) { //xAxiaArray?: any, yAxisArray?: anyz
-    console.log(critearr);
+  schoolwiseBarChart(critearr?: any, category?:any) { //xAxiaArray?: any, yAxisArray?: anyz
+    console.log(category, critearr);
     
     this.questionwiseChartOptions = {
       series: critearr,
@@ -208,7 +215,8 @@ export class Dashboard2DashboardDetailComponent {
         align: "left"
       },
       colors: [
-        '#50c77b',
+        this.viewDetailsObj?.graphLevelId == 1 ? '#b51d31' : this.viewDetailsObj?.graphLevelId == 2 ? '#E98754' : '#50c77b'
+        // '#50c77b'
         // '#2b908f',
         // '#f9a3a4',
         // '#90ee7e',
@@ -227,7 +235,7 @@ export class Dashboard2DashboardDetailComponent {
         show: false
       },
       xaxis: {
-        categories: ['Nitin R ghorpade (Teacher)'],  //'Officer'
+        categories: category,  //'Officer'
         axisTicks: {
           show: false
         },
@@ -287,13 +295,15 @@ export class Dashboard2DashboardDetailComponent {
       if(examId == x.examTypeId){
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];
-          res.assessedDataModel.map((gr:any)=>GrdeArr.push(gr.grade))
+          let evaluatorArr:any = [];
+          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
           let obj = {
             questionId: res.questionId,
             question: res.question,
             m_Question: res.m_Question,
             gradeArr: GrdeArr,
             // max: Math.max(...GrdeArr),
+            evaluator: evaluatorArr,
             parameterArr: res.parameterModel
           }
           this.questionArr.push(obj);
@@ -302,18 +312,23 @@ export class Dashboard2DashboardDetailComponent {
     });  
 
   let arrayData=new Array();
+  let categoryArr = new Array();
   this.questionArr.forEach((chart:any)=>{
     const data=[{
       name: 'Percentage',
       // data: chart?.data.concat([2]),
       data: chart?.gradeArr,
       // max: chart.max
-    }]
-    arrayData.push(data)
+    }];
+    const categ = [...chart.evaluator]
+    arrayData.push(data);
+    categoryArr.push([categ])
   });
 
-  console.log("this.questionArr", arrayData, this.questionArr);
-  this.schoolwiseBarChart(arrayData);
+
+
+  console.log("this.questionArr", arrayData, categoryArr);
+  this.schoolwiseBarChart(arrayData, categoryArr);
   }
 
 

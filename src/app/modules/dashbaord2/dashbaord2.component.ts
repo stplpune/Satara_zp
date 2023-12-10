@@ -213,7 +213,8 @@ export class Dashbaord2Component {
     this.acYear = [];
     this.masterService.getAcademicYears().subscribe((res: any) => {
       this.acYear = res.responseData;
-      //this.f['acYearId'].patchValue(this.educationYear);
+      this.f['acYearId'].patchValue(this.webStorage.getYearId());
+      this.academicYear.patchValue(this.webStorage.getYearId())
     })
   }
 

@@ -430,7 +430,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       StandardId: this.selectedObjByClass?.standardId,
       ExamTypeId: examTypeId,
       // ExamTypeId: examTypeId,//formData?.examTypeId,
-      questionId: this.selectedBarstatus == "stack" ? data?.questionId : data?.questionId
+      questionId: this.selectedBarstatus == "stack" ? data?.questionId : data?.questionId,
+      evaluatorId: this.evaluatorId.value | 0
     }
 
 
@@ -1313,7 +1314,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         standardArray: [0],
         StandardId: 0,
         questionId: formValue?.questionId | 0,
-        optionId: formValue?.optionId | 0
+        optionId: formValue?.optionId | 0,
       }
       // questionId
 

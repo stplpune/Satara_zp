@@ -44,6 +44,7 @@ export class Dashboard2DashboardDetailComponent {
   mainFilterForm!: FormGroup
   subjectArr = new Array();
   StudentData: any;
+  get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
 
@@ -75,7 +76,7 @@ export class Dashboard2DashboardDetailComponent {
 
   formData() {
     this.mainFilterForm = this.fb.group({
-      acYearId:[''],
+      acYearId:[this.chartObj?.StateId],
       stateId:[''],
       districtId:[''],
       talukaId: [0],
@@ -93,12 +94,15 @@ export class Dashboard2DashboardDetailComponent {
     this.stateData = [];
     this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
      this.stateData = res.responseData;
+     this.chartObj?.StateId ? (this.mf['stateId'].setValue(this.chartObj?.StateId),this.getDistrict()) :''
     })
   }
   getDistrict() {
     this.districtData = [];
     this.masterService.getAllDistrict('', this.mainFilterForm.controls['stateId'].value).subscribe((res: any) => {
       this.districtData = res.responseData;
+      this.chartObj?.DistrictId ? (this.mf['districtId'].setValue(this.chartObj?.DistrictId),this.getTaluka()) :''
+
     });
   }
 
@@ -111,7 +115,7 @@ export class Dashboard2DashboardDetailComponent {
           if (res.statusCode == 200) {
             this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
             this.mainFilterForm.controls['talukaId'].setValue(0);
-            this.chartObj ? (this.mainFilterForm.controls['talukaId'].setValue(this.chartObj?.TalukaId), this.getAllCenter()) : this.getAllCenter();
+            this.chartObj?.TalukaId ? (this.mf['talukaId'].setValue(this.chartObj?.TalukaId), this.getAllCenter()) : this.getAllCenter();
             // this.talukaArr = res.responseData;
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
@@ -134,7 +138,7 @@ export class Dashboard2DashboardDetailComponent {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
             this.mainFilterForm.controls['centerId'].setValue(0);
-            this.chartObj ? (this.mainFilterForm.controls['centerId'].setValue(this.chartObj?.CenterId), this.getAllSchoolsByCenterId()) : this.getAllSchoolsByCenterId();
+            this.chartObj?.CenterId ? (this.mf['centerId'].setValue(this.chartObj?.CenterId), this.getVillage()) : this.getVillage();
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -154,7 +158,8 @@ export class Dashboard2DashboardDetailComponent {
         next : (res : any)=>{
           if(res.statusCode == "200"){
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.mainFilterForm.controls['villageId'].patchValue(0);
+            this.chartObj?.VillageId ? (this.mf['villageId'].setValue(this.chartObj?.VillageId), this.getAllSchoolsByCenterId()) :'';
+
           } else{
             this.villageArr = [];
           }
@@ -176,8 +181,7 @@ export class Dashboard2DashboardDetailComponent {
           if (res.statusCode == 200) {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
             this.mainFilterForm.controls['schoolId'].setValue(0);
-            // this.selectedShcool = this.schoolArr.find((res: any) => this.filterForm.value.schoolId ? this.filterForm.value.schoolId == res.id : this.dashboardObj?.SchoolId == res.id);            
-            this.chartObj ? this.mainFilterForm.controls['schoolId'].setValue(this.chartObj?.SchoolId) : '';
+            this.chartObj?.SchoolId ? (this.mf['schoolId'].setValue(this.chartObj?.SchoolId), this.getStandard()) : '';
           } else {
             // this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.schoolArr = [];
@@ -199,7 +203,7 @@ export class Dashboard2DashboardDetailComponent {
           if (res.statusCode == 200) {
             this.standardArr = [];
             this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
-            // (this.chartObj && this.assessmentLevelId == '0') ? this.filterForm.controls['standardId'].setValue(this.dashboardObj?.standardArray[0]) : this.filterForm.controls['standardId'].setValue(this.dashboardObj?.StandardId)
+            this.chartObj?.StandardId ? (this.mf['standardId'].setValue(this.chartObj?.StandardId), this.getSubjectMain()) : '';
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.standardArr = [];
@@ -269,7 +273,7 @@ export class Dashboard2DashboardDetailComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.subjectArr.push({ "id": 0, "subject": "All", "m_Subject": "सर्व" }, ...res.responseData);
-            // this.dashboardObj ? this.filterForm.controls['subjectId'].setValue(this.dashboardObj?.SubjectId) : '';
+            this.chartObj?.SubjectId ? this.filterForm.controls['subjectId'].setValue(this.chartObj?.SubjectId) : '';
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.subjectArr = [];
@@ -308,15 +312,13 @@ export class Dashboard2DashboardDetailComponent {
   getTableData(_flag?: string){
     // console.log("this.chartObj", this.chartObj);
     
-    this.chartObj.PageNo=1 
+    this.chartObj.PageNo=1;
     this.chartObj.RowCount=10;
     this.ngxSpinner.show();
-
     let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
 
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
-
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();

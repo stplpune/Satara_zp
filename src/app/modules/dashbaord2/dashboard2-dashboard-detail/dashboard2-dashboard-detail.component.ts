@@ -34,8 +34,16 @@ export class Dashboard2DashboardDetailComponent {
   questionArr: any;
   talukaLabel: any;
   districtLabel: any;
-
-
+  stateData = new Array();
+  districtData = new Array();
+  talukaArr = new Array();
+  centerArr = new Array();
+  schoolArr = new Array();
+  villageArr = new Array();
+  standardArr = new Array();
+  mainFilterForm!: FormGroup
+  subjectArr = new Array();
+  StudentData: any;
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
 
@@ -50,6 +58,8 @@ export class Dashboard2DashboardDetailComponent {
   ) { }
 
   ngOnInit() {
+    this.formData();
+    this.getState();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
@@ -60,16 +70,151 @@ export class Dashboard2DashboardDetailComponent {
      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
      console.log("selected chart data",this.chartObj);
      this.getTableData();
-     this.getYearArray();
-    //  this.schoolwiseBarChart();
-
-    //  setTimeout(() => {
-    //   this.getProgressIndicatorData();
-    //  }, 2000);
-
-    //  console.log(this.webStorage.getLoggedInLocalstorageData());
-     
+     this.getYearArray();     
   }
+
+  formData() {
+    this.mainFilterForm = this.fb.group({
+      acYearId:[''],
+      stateId:[''],
+      districtId:[''],
+      talukaId: [0],
+      villageId:[0],
+      centerId: [0],
+      schoolId: [0],
+      standardId: [''],
+      subjectId: [0],
+      examTypeId: [0]
+    });
+  }
+
+
+  getState(){
+    this.stateData = [];
+    this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
+     this.stateData = res.responseData;
+    })
+  }
+  getDistrict() {
+    this.districtData = [];
+    this.masterService.getAllDistrict('', this.mainFilterForm.controls['stateId'].value).subscribe((res: any) => {
+      this.districtData = res.responseData;
+    });
+  }
+
+  getTaluka() {
+    this.talukaArr = [];
+    let districtId = this.mainFilterForm.controls['districtId'].value
+    if(districtId != 0){
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['talukaId'].setValue(0);
+            this.chartObj ? (this.mainFilterForm.controls['talukaId'].setValue(this.chartObj?.TalukaId), this.getAllCenter()) : this.getAllCenter();
+            // this.talukaArr = res.responseData;
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+   
+  }
+
+  getAllCenter() {
+    // this.selectedTaluka = this.talukaArr.find((res: any) => this.filterForm.value.talukaId ? this.filterForm.value.talukaId == res.id : this.dashboardObj?.TalukaId == res.id);
+    this.centerArr = [];
+    let Tid = this.mainFilterForm.value.talukaId;
+    if (Tid != 0) {
+      this.masterService.getAllCenter('', Tid).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['centerId'].setValue(0);
+            this.chartObj ? (this.mainFilterForm.controls['centerId'].setValue(this.chartObj?.CenterId), this.getAllSchoolsByCenterId()) : this.getAllSchoolsByCenterId();
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.centerArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+  getVillage() {
+    // this.selectedCenter = this.centerArr.find((res: any) => this.filterForm.value.centerId ? this.filterForm.value.centerId == res.id : this.dashboardObj?.CenterId == res.id);
+    this.villageArr = [];
+    let centerId = this.mainFilterForm.value.centerId;
+    if(centerId != 0){
+      this.masterService.getAllVillage('', centerId).subscribe({
+        next : (res : any)=>{
+          if(res.statusCode == "200"){
+            this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['villageId'].patchValue(0);
+          } else{
+            this.villageArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+  getAllSchoolsByCenterId() {    
+    // this.selectedVillage = this.villageArr.find((res: any) => this.filterForm.value.villageId ? this.filterForm.value.villageId == res.id : this.dashboardObj?.VillageId == res.id);
+    this.schoolArr = [];
+    let Tid = this.mainFilterForm.value.talukaId;
+    let Cid = this.mainFilterForm.value.centerId;
+    let Vid = this.mainFilterForm.value.villageId;
+    if (Vid != 0) {  //removed - when navigate from  high low school table not patch schoolname in heading  
+      this.masterService.getAllSchoolByCriteria('',Tid, Vid,Cid).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['schoolId'].setValue(0);
+            // this.selectedShcool = this.schoolArr.find((res: any) => this.filterForm.value.schoolId ? this.filterForm.value.schoolId == res.id : this.dashboardObj?.SchoolId == res.id);            
+            this.chartObj ? this.mainFilterForm.controls['schoolId'].setValue(this.chartObj?.SchoolId) : '';
+          } else {
+            // this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.schoolArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+ 
+
+  getStandard() {
+    this.standardArr =[];
+    let schoolId = this.mainFilterForm.value.schoolId;
+    if(schoolId != 0){
+      this.masterService.GetStandardBySchool(schoolId, '').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.standardArr = [];
+            this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
+            // (this.chartObj && this.assessmentLevelId == '0') ? this.filterForm.controls['standardId'].setValue(this.dashboardObj?.standardArray[0]) : this.filterForm.controls['standardId'].setValue(this.dashboardObj?.StandardId)
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.standardArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+
+
+
+
+
 
   defaultFormat(){
   this.filterForm = this.fb.group({
@@ -118,6 +263,22 @@ export class Dashboard2DashboardDetailComponent {
       })
     });
   }
+  getSubjectMain() {
+    this.subjectArr = [];
+      this.masterService.getAllSubject('').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.subjectArr.push({ "id": 0, "subject": "All", "m_Subject": "सर्व" }, ...res.responseData);
+            // this.dashboardObj ? this.filterForm.controls['subjectId'].setValue(this.dashboardObj?.SubjectId) : '';
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.subjectArr = [];
+          }
+        },
+        error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+  }
+
 
   childCompInfo(obj: any) {
     switch (obj.label) {
@@ -144,7 +305,7 @@ export class Dashboard2DashboardDetailComponent {
     }
   }
 
-  getTableData(){
+  getTableData(_flag?: string){
     // console.log("this.chartObj", this.chartObj);
     
     this.chartObj.PageNo=1 
@@ -303,6 +464,7 @@ export class Dashboard2DashboardDetailComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
         this.graphResponse =  res.responseData?.responseData1;
+        this.StudentData = res.responseData?.responseData2[0]
         console.log("res: ", this.graphResponse);
         }
         else{
@@ -375,8 +537,63 @@ export class Dashboard2DashboardDetailComponent {
   this.schoolwiseBarChart(arrayData, categoryArr);
   }
 
+  clearDropdown(name?: any) {
+    // this.dashboardObj?.label == "table" ? '' :this.dashboardObj = '';
+    if(name == 'state'){
+      this.mainFilterForm.controls['districtId'].setValue('');
+      this.mainFilterForm.controls['talukaId'].setValue('');
+      this.mainFilterForm.controls['centerId'].setValue('');
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.districtData = [];
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if(name == 'districtId'){
+      this.mainFilterForm.controls['talukaId'].setValue('');
+      this.mainFilterForm.controls['centerId'].setValue('');
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
 
-  clearDropdown(){
+    }
+    else if (name == 'talukaId') {
+      this.mainFilterForm.controls['centerId'].setValue('');
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+      // this.selectedShcool='';
+    } else if (name == 'centerId') {
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if (name == 'villageId'){
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if(name == 'schoolId'){
+      this.mainFilterForm.controls['standardId'].setValue('');
+      this.standardArr = [];
+    }
+  }
+
+
+
+  clearDropdownGraph(){
     this.graphResponse =[];
     this.questionwiseChartOptions ? this.questionwiseChartOptions.series = [] :'';
     this.examId.setValue('');

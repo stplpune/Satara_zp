@@ -34,8 +34,17 @@ export class Dashboard2DashboardDetailComponent {
   questionArr: any;
   talukaLabel: any;
   districtLabel: any;
-
-
+  stateData = new Array();
+  districtData = new Array();
+  talukaArr = new Array();
+  centerArr = new Array();
+  schoolArr = new Array();
+  villageArr = new Array();
+  standardArr = new Array();
+  mainFilterForm!: FormGroup
+  subjectArr = new Array();
+  StudentData: any;
+  get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
 
@@ -50,6 +59,8 @@ export class Dashboard2DashboardDetailComponent {
   ) { }
 
   ngOnInit() {
+    this.formData();
+    this.getState();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
@@ -60,16 +71,154 @@ export class Dashboard2DashboardDetailComponent {
      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
      console.log("selected chart data",this.chartObj);
      this.getTableData();
-     this.getYearArray();
-    //  this.schoolwiseBarChart();
-
-    //  setTimeout(() => {
-    //   this.getProgressIndicatorData();
-    //  }, 2000);
-
-    //  console.log(this.webStorage.getLoggedInLocalstorageData());
-     
+     this.getYearArray();     
   }
+
+  formData() {
+    this.mainFilterForm = this.fb.group({
+      acYearId:[this.chartObj?.StateId],
+      stateId:[''],
+      districtId:[''],
+      talukaId: [0],
+      villageId:[0],
+      centerId: [0],
+      schoolId: [0],
+      standardId: [''],
+      subjectId: [0],
+      examTypeId: [0]
+    });
+  }
+
+
+  getState(){
+    this.stateData = [];
+    this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
+     this.stateData = res.responseData;
+     this.chartObj?.StateId ? (this.mf['stateId'].setValue(this.chartObj?.StateId),this.getDistrict()) :''
+    })
+  }
+  getDistrict() {
+    this.districtData = [];
+    this.masterService.getAllDistrict('', this.mainFilterForm.controls['stateId'].value).subscribe((res: any) => {
+      this.districtData = res.responseData;
+      this.chartObj?.DistrictId ? (this.mf['districtId'].setValue(this.chartObj?.DistrictId),this.getTaluka()) :''
+
+    });
+  }
+
+  getTaluka() {
+    this.talukaArr = [];
+    let districtId = this.mainFilterForm.controls['districtId'].value
+    if(districtId != 0){
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['talukaId'].setValue(0);
+            this.chartObj?.TalukaId ? (this.mf['talukaId'].setValue(this.chartObj?.TalukaId), this.getAllCenter()) : this.getAllCenter();
+            // this.talukaArr = res.responseData;
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+   
+  }
+
+  getAllCenter() {
+    // this.selectedTaluka = this.talukaArr.find((res: any) => this.filterForm.value.talukaId ? this.filterForm.value.talukaId == res.id : this.dashboardObj?.TalukaId == res.id);
+    this.centerArr = [];
+    let Tid = this.mainFilterForm.value.talukaId;
+    if (Tid != 0) {
+      this.masterService.getAllCenter('', Tid).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['centerId'].setValue(0);
+            this.chartObj?.CenterId ? (this.mf['centerId'].setValue(this.chartObj?.CenterId), this.getVillage()) : this.getVillage();
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.centerArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+  getVillage() {
+    // this.selectedCenter = this.centerArr.find((res: any) => this.filterForm.value.centerId ? this.filterForm.value.centerId == res.id : this.dashboardObj?.CenterId == res.id);
+    this.villageArr = [];
+    let centerId = this.mainFilterForm.value.centerId;
+    if(centerId != 0){
+      this.masterService.getAllVillage('', centerId).subscribe({
+        next : (res : any)=>{
+          if(res.statusCode == "200"){
+            this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
+            this.chartObj?.VillageId ? (this.mf['villageId'].setValue(this.chartObj?.VillageId), this.getAllSchoolsByCenterId()) :'';
+
+          } else{
+            this.villageArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+  getAllSchoolsByCenterId() {    
+    // this.selectedVillage = this.villageArr.find((res: any) => this.filterForm.value.villageId ? this.filterForm.value.villageId == res.id : this.dashboardObj?.VillageId == res.id);
+    this.schoolArr = [];
+    let Tid = this.mainFilterForm.value.talukaId;
+    let Cid = this.mainFilterForm.value.centerId;
+    let Vid = this.mainFilterForm.value.villageId;
+    if (Vid != 0) {  //removed - when navigate from  high low school table not patch schoolname in heading  
+      this.masterService.getAllSchoolByCriteria('',Tid, Vid,Cid).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
+            this.mainFilterForm.controls['schoolId'].setValue(0);
+            this.chartObj?.SchoolId ? (this.mf['schoolId'].setValue(this.chartObj?.SchoolId), this.getStandard()) : '';
+          } else {
+            // this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
+            this.schoolArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+ 
+
+  getStandard() {
+    this.standardArr =[];
+    let schoolId = this.mainFilterForm.value.schoolId;
+    if(schoolId != 0){
+      this.masterService.GetStandardBySchool(schoolId, '').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.standardArr = [];
+            this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
+            this.chartObj?.StandardId ? (this.mf['standardId'].setValue(this.chartObj?.StandardId), this.getSubjectMain()) : '';
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.standardArr = [];
+          }
+        },
+        // error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+    }
+  }
+
+
+
+
+
+
 
   defaultFormat(){
   this.filterForm = this.fb.group({
@@ -118,6 +267,22 @@ export class Dashboard2DashboardDetailComponent {
       })
     });
   }
+  getSubjectMain() {
+    this.subjectArr = [];
+      this.masterService.getAllSubject('').subscribe({
+        next: (res: any) => {
+          if (res.statusCode == 200) {
+            this.subjectArr.push({ "id": 0, "subject": "All", "m_Subject": "सर्व" }, ...res.responseData);
+            this.chartObj?.SubjectId ? this.filterForm.controls['subjectId'].setValue(this.chartObj?.SubjectId) : '';
+          } else {
+            this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
+            this.subjectArr = [];
+          }
+        },
+        error: ((err: any) => { this.errors.handelError(err.statusCode) })
+      });
+  }
+
 
   childCompInfo(obj: any) {
     switch (obj.label) {
@@ -144,18 +309,16 @@ export class Dashboard2DashboardDetailComponent {
     }
   }
 
-  getTableData(){
+  getTableData(_flag?: string){
     // console.log("this.chartObj", this.chartObj);
     
-    this.chartObj.PageNo=1 
+    this.chartObj.PageNo=1;
     this.chartObj.RowCount=10;
     this.ngxSpinner.show();
-
     let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
 
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + str, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
-
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.ngxSpinner.hide();
@@ -303,6 +466,7 @@ export class Dashboard2DashboardDetailComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
         this.graphResponse =  res.responseData?.responseData1;
+        this.StudentData = res.responseData?.responseData2[0]
         console.log("res: ", this.graphResponse);
         }
         else{
@@ -375,8 +539,63 @@ export class Dashboard2DashboardDetailComponent {
   this.schoolwiseBarChart(arrayData, categoryArr);
   }
 
+  clearDropdown(name?: any) {
+    // this.dashboardObj?.label == "table" ? '' :this.dashboardObj = '';
+    if(name == 'state'){
+      this.mainFilterForm.controls['districtId'].setValue('');
+      this.mainFilterForm.controls['talukaId'].setValue('');
+      this.mainFilterForm.controls['centerId'].setValue('');
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.districtData = [];
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if(name == 'districtId'){
+      this.mainFilterForm.controls['talukaId'].setValue('');
+      this.mainFilterForm.controls['centerId'].setValue('');
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.talukaArr = [];
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
 
-  clearDropdown(){
+    }
+    else if (name == 'talukaId') {
+      this.mainFilterForm.controls['centerId'].setValue('');
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.centerArr = [];
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+      // this.selectedShcool='';
+    } else if (name == 'centerId') {
+      this.mainFilterForm.controls['villageId'].setValue('');
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.villageArr = [];
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if (name == 'villageId'){
+      this.mainFilterForm.controls['schoolId'].setValue('');
+      this.schoolArr = [];
+      this.standardArr = [];
+    }
+    else if(name == 'schoolId'){
+      this.mainFilterForm.controls['standardId'].setValue('');
+      this.standardArr = [];
+    }
+  }
+
+
+
+  clearDropdownGraph(){
     this.graphResponse =[];
     this.questionwiseChartOptions ? this.questionwiseChartOptions.series = [] :'';
     this.examId.setValue('');

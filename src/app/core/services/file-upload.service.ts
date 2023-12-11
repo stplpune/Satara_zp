@@ -168,8 +168,8 @@ export class FileUploadService {
       else {
         obj.next('error');
         obj.error("Only " + allowedDocTypes + " file format allowed.");   
-        let convertString = JSON.stringify(allowedDocTypes);
-        this.commonService.showPopup('Only jpg, jpeg and png format is accepted... '+convertString, 1)
+        // let convertString = JSON.stringify(allowedDocTypes);
+        this.commonService.showPopup('Only jpg, jpeg and png format is accepted... ', 1); //+convertString
       }
     })
   }

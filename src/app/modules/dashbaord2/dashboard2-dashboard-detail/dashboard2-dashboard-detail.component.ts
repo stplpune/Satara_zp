@@ -240,8 +240,14 @@ export class Dashboard2DashboardDetailComponent {
       },
       xaxis: {
         categories: category,  //'Officer'
-        axisTicks: {
-          show: false
+        // axisTicks: {
+        //   show: false
+        // },
+        labels: {
+          hideOverlappingLabels: true,
+          rotate: 0,
+          show: true,
+          trim: true
         },
         style: {
           fontSize: '12px',
@@ -263,21 +269,26 @@ export class Dashboard2DashboardDetailComponent {
       }
       },
       yaxis: {
-        min: -1,
-        labels: {
-          formatter: function (val: any) {
-            return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
-          }
-        },
-        axisTicks: {
-          show: true,
-        },
+        // min: 0,
+        // labels: {
+        //   formatter: function (val: any) {
+        //     console.log(val)
+        //     return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
+        //   }
+        // },
+       
+  
+        // axisTicks: {
+        //   show: true,
+        // },
       }
     }
     console.log("questionwiseChartOptions",this.questionwiseChartOptions)
   }
 
   getProgressIndicatorData(){
+    console.log("jdhghdc");
+    
     this.graphResponse=[];
     // zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?StudentId=8006&AssessedClassId=1&SubjectId=1&ExamTypeId=0&EducationYearId=1&lan=EN
     let str = `StudentId=${this.viewDetailsObj?.studentId}&AssessedClassId=${this.standardId.value}&SubjectId=${this.subjectId.value}&ExamTypeId=0&EducationYearId=${this.academicYearId.value}&lan=${this.selectedLang}`
@@ -306,7 +317,7 @@ export class Dashboard2DashboardDetailComponent {
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];
           let evaluatorArr:any = [];
-          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
+           res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
           let obj = {
             questionId: res.questionId,
             question: res.question,
@@ -316,7 +327,7 @@ export class Dashboard2DashboardDetailComponent {
             evaluator: evaluatorArr,
             parameterArr: res.parameterModel
           }
-          this.questionArr.push(obj);
+          res.assessedDataModel.length > 0 ? this.questionArr.push(obj) : '';
         });          
       }
     });  
@@ -328,11 +339,28 @@ export class Dashboard2DashboardDetailComponent {
       name: 'Percentage',
       // data: chart?.data.concat([2]),
       data: chart?.gradeArr,
+      // data: [{
+      //   x:'',
+      //   y:[-1,chart?.gradeArr]
+      // }]
       // max: chart.max
     }];
     const categ = [...chart.evaluator]
     arrayData.push(data);
     categoryArr.push([categ])
+
+    // const barObj = {
+    //   name: x,
+    //   data:(barChartArrayData.filter((y: any) => (this.languageFlag == 'English' ? y.examType : y.m_ExamType) == x)).map((z: any) =>
+    //   {
+    //     const obj={
+    //       x:'',
+    //       y:[-1,z.actualGrade]
+    //     }
+    //     return obj
+    //   }
+    //   )
+    // }
   });
 
 
@@ -344,7 +372,7 @@ export class Dashboard2DashboardDetailComponent {
 
   clearDropdown(){
     this.graphResponse =[];
-    this.questionwiseChartOptions.series = [];
+    this.questionwiseChartOptions ? this.questionwiseChartOptions.series = [] :'';
     this.examId.setValue('');
   }
 

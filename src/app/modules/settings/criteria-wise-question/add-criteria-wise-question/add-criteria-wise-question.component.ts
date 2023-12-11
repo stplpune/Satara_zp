@@ -251,7 +251,8 @@ export class AddCriteriaWiseQuestionComponent {
         "cQuestion": ele?.cQuestion,
         "m_CQuestion": ele?.m_CQuestion,
         "expectedAns": ele?.expectedAns,
-        "documentModel": ele?.documentModel
+        "documentModel": ele?.documentModel,
+        "m_ExpectedAns": ele?.m_ExpectedAns
       }
       return ele = obj;
     })
@@ -284,7 +285,7 @@ export class AddCriteriaWiseQuestionComponent {
       cQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
       m_CQuestion: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]],
       expectedAns: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
-      m_ExpectedAns: ['', [Validators.required]]
+      m_ExpectedAns: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]]
     })
   }
 
@@ -390,7 +391,7 @@ export class AddCriteriaWiseQuestionComponent {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Cannot upload More than five Document/Image into Question Master ': 'प्रश्न मास्टरमध्ये पाचपेक्षा जास्त दस्तऐवज/प्रतिमा अपलोड करू शकत नाही', 3);
       return
     }else{
-      let documentUrl: any = this.fileUpload.uploadMultipleDocument(event, 'Upload', 'jpg, jpeg, png, pdf, doc, txt')
+      let documentUrl: any = this.fileUpload.uploadStudentDocuments(event, 'Upload', 'jpg, jpeg, png')
       documentUrl.subscribe({
         next: (ele: any) => {
           if (ele.responseData != null) {

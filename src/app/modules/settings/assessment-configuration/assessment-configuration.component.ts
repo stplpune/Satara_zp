@@ -136,15 +136,16 @@ export class AssessmentConfigurationComponent {
         srNo:  (i + 1),
         standard: ele.standard,
         subjectName: flag == 'excel' ? this.languageFlag == 'English' ? ele.subjectName : ele.m_SubjectName : ele.subjectName,
-        question: flag == 'excel' ? this.languageFlag == 'English' ? ele.question : ele.m_Question : ele.question,
+        question: flag == 'excel' ? this.languageFlag == 'English' ? ele.questionType : ele.m_QuestionType : ele.questionType,
+        criteria: flag == 'excel' ? this.languageFlag == 'English' ? ele.question : ele.m_Question : ele.question,
         educationYear: ele.educationYear,
       }
       resultDownloadArr.push(obj);
     });
     // download pdf call
     if (resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ['Sr. No.', 'Standard', 'Subject', 'Question Type', 'Educational Year'];
-      let marathikeyHeader = ['अनुक्रमांक', 'इयत्ता', 'विषय', 'प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष']
+      let keyPDFHeader = ['Sr. No.', 'Standard', 'Subject', 'Question Type', 'Assessment Criteria', 'Educational Year'];
+      let marathikeyHeader = ['अनुक्रमांक', 'इयत्ता', 'विषय', 'प्रश्नाचा प्रकार', 'मूल्यांकन निकष', 'शैक्षणिक वर्ष']
       let ValueData =
         resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -156,7 +157,7 @@ export class AssessmentConfigurationComponent {
         'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
       }
 
-      let headerKeySize = [7, 10, 50, 15, 15];
+      let headerKeySize = [7, 10, 50, 25, 40, 20];
       flag == 'pdfFlag' ? this.downloadFileService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadFileService.allGenerateExcel(this.languageFlag == 'English' ? keyPDFHeader : marathikeyHeader, ValueData, objData, headerKeySize);
     }
   }

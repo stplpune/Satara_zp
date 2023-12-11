@@ -59,6 +59,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedbar!: string;
   selectedTaluka: any;
   selectedCenter: any;
+  selectedVillage: any;
   selectedschool: any;
   selectedexamType: any;
   barchartOptions: any;
@@ -286,10 +287,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       villageId : 0,
       schoolId: 0
     });
+    this.selectedCenter = this.centerData.find((x: any) => x.id == this.f['centerId'].value);
     if(this.f['centerId'].value > 0){
       this.masterService.getAllVillage('', (this.f['centerId'].value | 0)).subscribe((res : any)=>{
         this.villageData.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
         this.f['villageId'].patchValue(0);
+        this.getschools();
       });
     }
   }
@@ -297,10 +300,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getschools() {
     this.schoolData = [];
-    this.selectedCenter = this.centerData.find((x: any) => x.id == this.f['centerId'].value);
     // if(this.f['centerId'].value){
     this.filterForm.controls['schoolId'].setValue(0);
-    this.fBgraph['filtercenterId'].patchValue(this.f['centerId'].value)
+    this.fBgraph['filtercenterId'].patchValue(this.f['centerId'].value);
+    this.selectedVillage = this.villageData.find((x: any) => x.id == this.f['villageId'].value);
     if(this.f['villageId'].value > 0){
       this.masterService.getAllSchoolByCriteria('', (this.f['talukaId'].value | 0), (this.f['villageId'].value | 0), (this.f['centerId'].value | 0)).subscribe((res: any) => {
         this.schoolData.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
@@ -442,7 +445,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.dashboardCountData = [];
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -745,7 +748,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.schoolData = [];
     this.villageData = [];
     this.filterForm.reset();
-    this.f['acYearId'].patchValue(this.educationYear)
+    this.f['acYearId'].patchValue(this.educationYear);
+    this.f['stateId'].patchValue(1);
+    this.f['districtId'].patchValue(1);
     this.f['talukaId'].patchValue(0);
   }
   //---------------------------------- svg Map ------------------------------------------------------------//
@@ -913,7 +918,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     console.log("formData", formData);
     
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0 )+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -943,7 +948,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const formData = this.filterForm.value;
     val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -998,7 +1003,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+formData?.stateId+'&DistrictId='+formData?.districtId+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

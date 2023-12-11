@@ -104,7 +104,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
-                            (click)="clearForm(); f['talukaId'].patchValue(0); clickOnSvgMap('select');resetFlag=true">{{'Labels.reset'
+                            (click)="clearForm(); clickOnSvgMap('select');resetFlag=true">{{'Labels.reset'
                             | translate}}</button>
                         <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' |
                             translate}}</button>
@@ -124,12 +124,31 @@
                     <div class="d-flex justify-content-between w-100">
                         <!-- {{'Labels.dashboard' | translate}}  -->
                         <span class="mt-2">
-                            {{(webStorage.languageFlag == 'EN'?'Dashboard':'डॅशबोर्ड')}} {{filterForm.value.talukaId ?
-                            (' / '+ (webStorage.languageFlag == 'EN'?'Satara':'सातारा')) : ''}}
+                            {{(webStorage.languageFlag == 'EN'?'Dashboard':'डॅशबोर्ड')}}
+
+                            {{filterForm.value.stateId ?
+                            (' / '+ (webStorage.languageFlag == 'EN'?'Maharashtra':'महाराष्ट्र')) : ''}}
+
+                            {{filterForm.value.districtId ?
+                            (' > '+ (webStorage.languageFlag == 'EN'?'Satara':'सातारा')) : ''}}
+
                             {{(f['talukaId'].value? (' > '+(webStorage.languageFlag ==
                             'EN'?selectedTaluka?.taluka:selectedTaluka?.m_Taluka)):'') +
+                            
                             (f['centerId'].value? (' > '+(webStorage.languageFlag ==
-                            'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') + (f['schoolId'].value? (' > '+(webStorage.languageFlag == 'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + (f['examTypeId'].value? (' > '+(webStorage.languageFlag == 'EN'?selectedexamType?.examType:selectedexamType?.m_ExamType)): '')}} </span>
+                            'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') +
+
+                            (f['villageId'].value? (' >
+                            '+(webStorage.languageFlag ==
+                            'EN' ? selectedVillage?.village : selectedVillage?.m_Village )):'') +
+                             
+                             (f['schoolId'].value? (' >
+                            '+(webStorage.languageFlag ==
+                            'EN'?selectedschool?.schoolName:selectedschool?.m_SchoolName)):'') + 
+                            
+                            (f['examTypeId'].value?
+                            (' > '+(webStorage.languageFlag ==
+                            'EN'?selectedexamType?.examType:selectedexamType?.m_ExamType)): '')}} </span>
                         <div class="d-flex gap-2">
                             <!-- academicYear year dropdown -->
                             <div class="row justify-content-between align-items-center">
@@ -140,7 +159,7 @@
                                         '+
                                         dashboardCountData[0]?.assessmentSchoolsCount+'/'+dashboardCountData[0]?.schoolCount}}
                                     </div> -->
-                                    <span  >
+                                    <span>
                                         {{webStorage.languageFlag == 'EN'?'Total schools assessed:' :
                                         'मुल्यांकन झाल्येल्या एकुण शाळा:' }}
                                     </span>
@@ -289,7 +308,7 @@
                                     <mat-form-field appearance="outline" class="w-100 mb-0">
                                         <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
                                         <mat-select [formControl]="evaluatorId"
-                                           >
+                                            (selectionChange)="chnageClasswiseSubjectDrp()">
                                             <mat-option *ngFor="let data of evaluatorDataArray"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
                                                 :data.m_Evaluator}}</mat-option>
@@ -361,8 +380,8 @@
                             </div>
                             <!-- starting stack bar here  -->
                             <div class="col-sm-12">
-                                <div class="d-flex w-100 chart-container scrollbar" *ngIf="stackbarchartOptionsByClass?.series || barchartOptionsByClass?.series "
-                                    >
+                                <div class="d-flex w-100 chart-container scrollbar"
+                                    *ngIf="stackbarchartOptionsByClass?.series || barchartOptionsByClass?.series ">
                                     <div class="text-start mx-2"
                                         *ngFor="let bar of stackbarchartOptionsByClass?.series; let i=index">
                                         <p class="fw-bold  mb-4">{{graphSubjectDataByClass[i]}}</p>
@@ -385,8 +404,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 border-start border-3"
-                                        *ngIf="barChartDataByClass.length">
+                                    <div class="col-sm-6 border-start border-3" *ngIf="barChartDataByClass.length">
                                         <!-- <div class="row justify-content-between align-items-center"
                                             *ngIf="BarChartSubjectArray.length>1">
                                             <div class="col-sm-4">
@@ -513,8 +531,9 @@
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.selectQuestion' | translate}}</mat-label>
                                         <mat-select formControlName="questionId"
-                                        (selectionChange)="clearDropLowHighFilter('question'); getOptionBySubjects(); getTabledataByTaluka();">
-                                            <mat-option *ngFor="let question of questionArray" [value]="question.questionId">
+                                            (selectionChange)="clearDropLowHighFilter('question'); getOptionBySubjects(); getTabledataByTaluka();">
+                                            <mat-option *ngFor="let question of questionArray"
+                                                [value]="question.questionId">
                                                 {{webStorage.languageFlag ==
                                                 'EN' ? question.question : question.m_Question }}
                                             </mat-option>

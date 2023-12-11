@@ -32,8 +32,10 @@ export class DownloadPdfExcelService {
           doc.text(objData.timePeriod, 11, 14, "left");
         }
         
-        doc.setFontSize(8);
-        doc.text(objData.name, 12, 14, "left");
+        if(objData.name){
+          doc.setFontSize(8);
+          doc.text(objData?.name, 12, 14, "left");
+        }
 
         doc.setFontSize(8);
         doc.text(objData.createdDate, 200, 14, "right");

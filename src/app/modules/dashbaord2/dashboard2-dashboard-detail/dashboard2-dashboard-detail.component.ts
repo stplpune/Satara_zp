@@ -44,6 +44,7 @@ export class Dashboard2DashboardDetailComponent {
   mainFilterForm!: FormGroup
   subjectArr = new Array();
   StudentData: any;
+  evaluatorDataArray = new Array();
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
@@ -61,6 +62,7 @@ export class Dashboard2DashboardDetailComponent {
   ngOnInit() {
     this.formData();
     this.getState();
+    this.getEvaluator();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
@@ -76,7 +78,7 @@ export class Dashboard2DashboardDetailComponent {
 
   formData() {
     this.mainFilterForm = this.fb.group({
-      acYearId:[this.chartObj?.StateId],
+      acYearId:[''],
       stateId:[''],
       districtId:[''],
       talukaId: [0],
@@ -85,6 +87,7 @@ export class Dashboard2DashboardDetailComponent {
       schoolId: [0],
       standardId: [''],
       subjectId: [0],
+      evaluatorId: [0],
       examTypeId: [0]
     });
   }
@@ -233,6 +236,7 @@ export class Dashboard2DashboardDetailComponent {
     this.masterService.getAcademicYears().subscribe((res: any) => {
       this.acYear = res.responseData;
       this.academicYearId.setValue(this.webStorage.getLoggedInLocalstorageData().educationYearId);
+      this.chartObj?.EducationYearId ? this.mf['acYearId'].setValue(this.chartObj?.EducationYearId) :''
     })
   }
 
@@ -259,7 +263,7 @@ export class Dashboard2DashboardDetailComponent {
         if (res.statusCode == '200') {
           // this.subjectResp = [{ id: 0, subject: "All", m_Subject: "सर्व" }, ...res.responseData];
           this.subjectResp = res.responseData;
-          this.subjectId.setValue(this.subjectResp[1].id);
+          this.subjectId.setValue(this.subjectResp[0].id);
         }
       },
       error: (() => {
@@ -281,6 +285,22 @@ export class Dashboard2DashboardDetailComponent {
         },
         error: ((err: any) => { this.errors.handelError(err.statusCode) })
       });
+  }
+
+  getEvaluator() {
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.selectedLang, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.evaluatorDataArray = res.responseData;
+          this.chartObj?.EvaluatorId ? this.mf['evaluatorId'].setValue(this.chartObj?.EvaluatorId) : '';
+        } else {
+          this.evaluatorDataArray = [];
+        }
+      },
+      error: (() => { this.evaluatorDataArray = []; })
+    })
+
   }
 
 
@@ -309,15 +329,16 @@ export class Dashboard2DashboardDetailComponent {
     }
   }
 
-  getTableData(_flag?: string){
+  getTableData(flag?: string){
     // console.log("this.chartObj", this.chartObj);
-    
+    let formData = this.mainFilterForm.value;
     this.chartObj.PageNo=1;
     this.chartObj.RowCount=10;
     this.ngxSpinner.show();
     let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
-
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + str, false, false, false, 'baseUrl');
+    let mainFilterstr = `StateId=${formData.stateId || 0}&DistrictId=${formData.districtId || 0}&TalukaId=${formData.talukaId || 0}&CenterId=${formData.centerId || 0}&VillageId=${formData.villageId || 0}&SchoolId=${formData.schoolId || 0}&StandardId=${formData?.standardId || 0}&SubjectId=${formData?.subjectId || 0}&EvaluatorId=${formData?.evaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${formData.acYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
+    let URL = (flag == undefined ? str : mainFilterstr)
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + URL, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
@@ -466,7 +487,9 @@ export class Dashboard2DashboardDetailComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
         this.graphResponse =  res.responseData?.responseData1;
-        this.StudentData = res.responseData?.responseData2[0]
+        this.StudentData = res.responseData?.responseData2[0];
+        this.examId.setValue(this.graphResponse[0]?.examTypeId);
+        this.barChartData();
         console.log("res: ", this.graphResponse);
         }
         else{
@@ -476,9 +499,7 @@ export class Dashboard2DashboardDetailComponent {
     });
   }
 
-  barChartData(){
-    console.log("this.graphResponse", this.graphResponse);
-    
+  barChartData(){    
     let examId = this.examId.value;
     this.questionArr = [];
     this.graphResponse.map((x: any) => {

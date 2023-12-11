@@ -49,6 +49,7 @@ export class Dashboard2DashboardDetailComponent {
   ngOnInit() {
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
+      this.setTableData();
       this.defaultFormat();
       this.GetAllStandard();
       this.getSubject();
@@ -180,9 +181,11 @@ export class Dashboard2DashboardDetailComponent {
 
   setTableData() {
    // this.highLightFlag = true;
-    let displayedColumns = ['srNo', 'fullName', 'standard', 'gender']
+    let displayedColumns = ['srNo', this.selectedLang == 'English' ? 'fullName' :'m_FullName', this.selectedLang == 'English' ? 'standard' : 'm_Standard', this.selectedLang == 'English' ? 'gender' : 'm_Gender']
   //  let marathiDisplayedColumns = ['docPath', 'srNo', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender'];
    let displayedheaders = ['SrNo', 'Full Name', 'Standard', 'Gender']
+   let displayedheadersMarathi = ['अ.क्र.', 'नाव', 'इयत्ता', 'लिंग']
+
     let tableData = {
       highlightedrow: true,
       edit: true,
@@ -192,7 +195,7 @@ export class Dashboard2DashboardDetailComponent {
       displayedColumns: displayedColumns,  // this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
-      tableHeaders: displayedheaders
+      tableHeaders: this.selectedLang == 'English' ? displayedheaders : displayedheadersMarathi
     };
  //   this.highLightFlag ? tableData.highlightedrow = true : tableData.highlightedrow = false,
       this.apiService.tableData.next(tableData);

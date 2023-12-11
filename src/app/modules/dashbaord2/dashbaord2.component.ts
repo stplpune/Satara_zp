@@ -1003,7 +1003,7 @@ export class Dashbaord2Component {
             let selectedFilter = this.subjectWiseFilterForm.value;
             let lable = config.config.xaxis.categories[config.dataPointIndex];
             selectedFilter.subjectId = this.subjectResp.find(res => lable == (this.selectedLang == 'English' ? res.subject : res.m_Subject)).id;
-            let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'subjectwise');
+            let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Subject');
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
             this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
           }

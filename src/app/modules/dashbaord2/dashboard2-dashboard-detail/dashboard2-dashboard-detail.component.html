@@ -20,6 +20,7 @@
                     </div>
                 </ng-container>
             </div>
+            
             <div class="col-sm-8" *ngIf="viewDetailsObj">
                 <mat-card class="plain-card scrollbar pt-0">
                     <mat-card-content class="card-body pt-0 pe-0">
@@ -34,15 +35,10 @@
                                         <div class="flex-grow-1 ms-3">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h5 class="mb-0 fw-bold">{{viewDetailsObj?.fullName}}</h5>
-                                                <span  *ngIf="viewDetailsObj?.graphLevelId == 1" class="material-symbols-outlined text-bg-danger">
-                                                    dangerous
-                                                    </span>
-                                                <span *ngIf="viewDetailsObj?.graphLevelId == 2" class="material-symbols-outlined text-bg-primary">
-                                                    check
-                                                    </span>
-                                                <span *ngIf="viewDetailsObj?.graphLevelId == 3" class="material-symbols-outlined text-bg-success"> star
-                                                    </span>
-                                                <button mat-flat-button class="btn-main-light btn-icon border"
+                                                <span  [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-bg-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-bg-primary' : 'text-bg-success'">
+                                                    {{selectedLang == 'English' ? viewDetailsObj?.graphLevel+' learner' : viewDetailsObj?.m_GraphLevel+' शिकणारा'}}
+                                                    </span>                                                
+                                                    <button mat-flat-button class="btn-main-light btn-icon border"
                                                     title="Download" [routerLink]="['/print-student-details']">
                                                     <mat-icon class="text-main">download</mat-icon>
                                                 </button>
@@ -97,17 +93,17 @@
                                                                 <table class="table dashboard-table">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th scope="col">Sr No</th>
-                                                                            <th scope="col">Subject Name</th>
-                                                                            <th scope="col">Assessment Date</th>
-                                                                            <th scope="col">Is Assessed</th>
+                                                                            <th scope="col">{{'Labels.SrNo' | translate}}</th>
+                                                                            <th scope="col">{{'Labels.Subject' | translate}}</th>
+                                                                            <th scope="col">{{'Labels.AssesDate' | translate}}</th>
+                                                                            <th scope="col">{{'Labels.iAssesed' | translate}}</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr
                                                                             *ngFor="let data of viewDetailsObj?.assessedSubjectListModel;let i =index">
                                                                             <th scope="row">{{i+1}}</th>
-                                                                            <td>{{data?.subjectName}}</td>
+                                                                            <td>{{selectedLang == 'English' ? data?.subjectName : data?.m_SubjectName}}</td>
                                                                             <td>{{data?.assessmentDate || '-'}}</td>
                                                                             <td>
                                                                                 <span *ngIf="data.isAssessed"
@@ -160,7 +156,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
                                         <mat-select [formControl]="subjectId" (selectionChange)="clearDropdown();getProgressIndicatorData()">
                                             <mat-option *ngFor="let data of subjectResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.subject

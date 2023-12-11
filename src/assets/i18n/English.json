@@ -538,7 +538,9 @@
         "PleaseEnterValidExpectedAnswer":"Please Enter Valid Expected Answer",
         "totalAssessmentStudent":"Total Assessed Student",
         "introductionMarathi": "Introduction(Marathi)",
-        "ExpAnswerMarathi": "Expected Answer(Marathi)"
+        "ExpAnswerMarathi": "Expected Answer(Marathi)",
+        "AssesDate": "Assessment Date",
+        "iAssesed": "Is Assessed?"
 
     }
 }

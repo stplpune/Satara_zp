@@ -32,6 +32,9 @@ export class Dashboard2DashboardDetailComponent {
   selectedLang:any;
   graphResponse: any;
   questionArr: any;
+  talukaLabel: any;
+  districtLabel: any;
+
 
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;

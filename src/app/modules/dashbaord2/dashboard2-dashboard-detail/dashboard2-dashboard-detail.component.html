@@ -20,7 +20,7 @@
                     </div>
                 </ng-container>
             </div>
-            
+
             <div class="col-sm-8" *ngIf="viewDetailsObj">
                 <mat-card class="plain-card scrollbar pt-0">
                     <mat-card-content class="card-body pt-0 pe-0">
@@ -198,6 +198,7 @@
                                         {{param.optionGrade}}: {{param.optionName}}
                                     </span>
                             </ng-container>
+                            <hr>
                             <ng-container *ngIf="!questionwiseChartOptions">
                                 <div class="alert alert-danger text-center p-2" role="alert">
                                     {{'Labels.dataNotFound' | translate}}

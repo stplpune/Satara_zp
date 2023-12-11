@@ -107,7 +107,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   formData() {
     this.filterForm = this.fb.group({
       acYearId:[''],
-      stateId:[1],
+      stateId:[this.dashboardObj ? this.dashboardObj?.StateId : 1],
       districtId:[1],
       talukaId: [0],
       villageId:[0],
@@ -131,21 +131,18 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.stateData = [];
     this.masterService.getAllState(this.languageFlag).subscribe((res:any)=>{
      this.stateData = res.responseData;
-     this.getDistrict()
+     this.dashboardObj ? this.filterForm.controls['stateId'].setValue(this.dashboardObj?.StateId) : this.filterForm.controls['stateId'].setValue(1);
+     this.getDistrict();
     })
   }
 
   getDistrict() {
     this.districtData = [];
-    let stateId = this.filterForm.controls['stateId'].value;
-    console.log("stateId", stateId);
-    
     this.masterService.getAllDistrict(this.languageFlag, this.filterForm.controls['stateId'].value).subscribe((res: any) => {
       this.districtData = res.responseData;
+      this.dashboardObj ? (this.filterForm.controls['districtId'].setValue(this.dashboardObj?.DistrictId), this.getTaluka()) : this.filterForm.controls['districtId'].setValue(1);
     });
   }
-
-
 
   setTableData() {
     this.setViewData();
@@ -184,8 +181,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   getTableData(flag?: any) {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
-    let StateId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.State;
-    let DistrictId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.District;
+    let StateId = flag == 'filter' ? this.filterForm.value?.StateId : this.dashboardObj?.StateId;
+    let DistrictId = flag == 'filter' ? this.filterForm.value?.DistrictId : this.dashboardObj?.DistrictId;
     let TalukaId = flag == 'filter' ? this.filterForm.value?.talukaId : this.dashboardObj?.TalukaId;
     let CenterId = flag == 'filter' ? this.filterForm.value?.centerId : this.dashboardObj?.CenterId;
     let villageId = flag == 'filter' ? this.filterForm.value?.villageId : this.dashboardObj?.VillageId;
@@ -284,7 +281,9 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     // let chartAPI = 'GetDashboardDataClassWise_StudentChart';    
     // let tableAPI = 'GetDashboardDataClassWise_StudentList';
  
-    let chartAPI = 'GetDashboardDataClassWise_StudentChart?StudentId='+this.selectedObj?.studentId+'&StandardId='+filterFormValue?.standardId+'&AssesmentSubjectId='+0+'&IsInspection='+this.inspectionBy.value+'&ExamTypeId='+(filterFormValue?.examTypeId || 0) +'&EducationYearId='+filterFormValue?.acYearId+'&lan=' + this.languageFlag;
+    // let chartAPI = 'GetDashboardDataClassWise_StudentChart?StudentId='+this.selectedObj?.studentId+'&StandardId='+filterFormValue?.standardId+'&AssesmentSubjectId='+0+'&IsInspection='+this.inspectionBy.value+'&ExamTypeId='+(filterFormValue?.examTypeId || 0) +'&EducationYearId='+filterFormValue?.acYearId+'&lan=' + this.languageFlag;
+    let chartAPI = 'GetDashboardDataClassWise_StudentChart?StudentId='+(this.selectedObj?.studentId)+'&StandardId='+ (this.dashboardObj?.StandardId || 0) +'&SubjectId='+ (this.dashboardObj?.SubjectId || 0) +'&EvaluatorId=' + (this.dashboardObj?.evaluatorId || 0) + '&ExamTypeId='+(filterFormValue?.examTypeId || 0) +'&EducationYearId='+(filterFormValue?.acYearId || 0)+'&lan=' + this.languageFlag;
+
 
     let tableAPI = 'GetDataForTopLowSchoolStudentChart?GroupId=' + studentObj?.groupId + '&StudentId=' + studentObj?.studentId + '&AssesmentSubjectId=' + studentObj?.assesmentSubjectId + '&IsInspection='+this.inspectionBy.value+'&ExamTypeId=' + (filterFormValue?.examTypeId || 0) + '&EducationYearId=' + studentObj?.academicYearId + '&lan=' + this.languageFlag;
     
@@ -363,7 +362,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
           if (res.statusCode == 200) {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
             this.filterForm.controls['centerId'].setValue(0);
-            this.dashboardObj ? (this.filterForm.controls['centerId'].setValue(this.dashboardObj?.CenterId), this.getAllSchoolsByCenterId()) : this.getAllSchoolsByCenterId();
+            this.dashboardObj ? (this.filterForm.controls['centerId'].setValue(this.dashboardObj?.CenterId), this.getVillage()) : this.filterForm.controls['centerId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -383,7 +382,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         next : (res : any)=>{
           if(res.statusCode == "200"){
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.filterForm.controls['villageId'].patchValue(0);
+            this.dashboardObj ? (this.filterForm.controls['villageId'].patchValue(this.dashboardObj?.VillageId), this.getAllSchoolsByCenterId()) : this.filterForm.controls['villageId'].patchValue(0) ;
           } else{
             this.villageArr = [];
           }
@@ -406,7 +405,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
             this.filterForm.controls['schoolId'].setValue(0);
             this.selectedShcool = this.schoolArr.find((res: any) => this.filterForm.value.schoolId ? this.filterForm.value.schoolId == res.id : this.dashboardObj?.SchoolId == res.id);            
-            this.dashboardObj ? this.filterForm.controls['schoolId'].setValue(this.dashboardObj?.SchoolId) : '';
+            this.dashboardObj ? (this.filterForm.controls['schoolId'].setValue(this.dashboardObj?.SchoolId), this.getStandard()) : this.filterForm.controls['schoolId'].setValue(0);
           } else {
             // this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.schoolArr = [];
@@ -428,7 +427,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
           if (res.statusCode == 200) {
             this.standardArr = [];
             this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
-            (this.dashboardObj && this.assessmentLevelId == '0') ? this.filterForm.controls['standardId'].setValue(this.dashboardObj?.standardArray[0]) : this.filterForm.controls['standardId'].setValue(this.dashboardObj?.StandardId)
+            (this.dashboardObj && this.assessmentLevelId == '0') ? this.filterForm.controls['standardId'].setValue(this.dashboardObj?.StandardId) : this.filterForm.controls['standardId'].setValue(0);
           } else {
             this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
             this.standardArr = [];

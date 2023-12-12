@@ -163,7 +163,7 @@
         </li>
     </ol>
 </nav>
-<mat-card class="plain-card scrollbar">
+<mat-card class="plain-card">
     <mat-card-content class="card-body">
         <div class="row gx-2">
             <div class="col-sm-4">
@@ -175,9 +175,9 @@
                 </ng-container>
             </div>
 
-            <div class="col-sm-8" *ngIf="viewDetailsObj || StudentData">
+            <div class="col-sm-8 scrollbar" *ngIf="viewDetailsObj || StudentData">
                 <mat-card class="plain-card pt-0">
-                    <mat-card-content class="card-body pt-0 pe-0">
+                    <mat-card-content class="card-body pt-0">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="student-details mt-lg-0 mt-4">
@@ -192,12 +192,13 @@
                                                     viewDetailsObj?.fullName :viewDetailsObj?.m_FullName}}</h5>
                                                 <span
                                                     [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-bg-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-bg-primary' : 'text-bg-success'">
-                                                    {{selectedLang == 'English' ? viewDetailsObj?.graphLevel : viewDetailsObj?.m_GraphLevel}}
+                                                    {{selectedLang == 'English' ? viewDetailsObj?.graphLevel :
+                                                    viewDetailsObj?.m_GraphLevel}}
                                                 </span>
                                                 <!-- <button mat-flat-button class="btn-main-light btn-icon border"
-                                                    title="Download" [routerLink]="['/print-student-details']">
-                                                    <mat-icon class="text-main">download</mat-icon>
-                                                </button> -->
+                                                        title="Download" [routerLink]="['/print-student-details']">
+                                                        <mat-icon class="text-main">download</mat-icon>
+                                                    </button> -->
                                             </div>
                                             <p class="text-muted mb-2">{{selectedLang == 'English' ?
                                                 viewDetailsObj?.gender : viewDetailsObj?.m_Gender}}</p>
@@ -210,11 +211,11 @@
                                                             StudentData?.gaurdianName : StudentData?.m_GaurdianName}} </div>
                                                     </div>
                                                     <!-- <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.motherName'| translate}}
-                                                            :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ?
-                                                            StudentData?.motherName : StudentData?.m_MotherName}}</div>
-                                                    </div> -->
+                                                            <span class="data-label">{{'Labels.motherName'| translate}}
+                                                                :</span>
+                                                            <div class="data-text">{{selectedLang == 'English' ?
+                                                                StudentData?.motherName : StudentData?.m_MotherName}}</div>
+                                                        </div> -->
                                                     <div class="col-sm-4">
                                                         <span class="data-label">{{'Labels.parentMobileNo'|
                                                             translate}}:</span>
@@ -279,14 +280,16 @@
                                                     data?.m_SubjectName}}</td>
                                                 <td>{{data?.assessmentDate || '-'}}</td>
                                                 <td>
-                                                    <mat-icon *ngIf="data.isAssessed" class="text-success">check_circle</mat-icon>
-                                                    <mat-icon *ngIf="!data.isAssessed" class="text-danger">cancel</mat-icon>
+                                                    <mat-icon *ngIf="data.isAssessed"
+                                                        class="text-success">check_circle</mat-icon>
+                                                    <mat-icon *ngIf="!data.isAssessed"
+                                                        class="text-danger">cancel</mat-icon>
                                                     <!-- <button mat-icon-button *ngIf="data.isAssessed" class="text-success bg-sucess">
-                                                        <mat-icon>check_circle</mat-icon>
-                                                    </button> -->
+                                                            <mat-icon>check_circle</mat-icon>
+                                                        </button> -->
                                                     <!-- <button mat-icon-button *ngIf="!data.isAssessed" class="text-danger bg-danger">
-                                                        <mat-icon>close</mat-icon>
-                                                    </button> -->
+                                                            <mat-icon>close</mat-icon>
+                                                        </button> -->
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -297,7 +300,7 @@
                     </mat-card-content>
                 </mat-card>
 
-                <mat-card class="plain-card border">
+                <mat-card class="plain-card border px-0">
                     <mat-card-header class="card-header pb-0 border-0">
                         <!-- <form [formGroup]="filterForm"> -->
                         <div class="row gx-2">
@@ -376,35 +379,36 @@
                             </div>
                         </div>
                         <!-- <div *ngFor="let res of questionwiseChartOptions?.series; let i = index">
-                            <ng-container *ngIf="questionwiseChartOptions">
-                                <h6 class="fw-bold">{{webStorage.languageFlag == 'EN' ? questionArr[i].question
-                                    : questionArr[i].m_Question}}</h6>
-                                <apx-chart [series]="res" [chart]="questionwiseChartOptions?.chart"
-                                    [dataLabels]="questionwiseChartOptions?.dataLabels"
-                                    [plotOptions]="questionwiseChartOptions?.plotOptions"
-                                    [xaxis]="questionwiseChartOptions?.xaxis"
-                                    [colors]="questionwiseChartOptions?.colors"
-                                    [legend]="questionwiseChartOptions?.legend"
-                                    [yaxis]="questionwiseChartOptions?.yaxis"
-                                    [grid]="questionwiseChartOptions?.grid"></apx-chart>
-                                <span *ngFor="let param of questionArr[i].parameterArr">
-                                    {{param.optionGrade}}: {{param.optionName}}
-                                </span>
-                            </ng-container>
-                            <hr>
-                            <ng-container *ngIf="!questionwiseChartOptions">
-                                <div class="alert alert-danger text-center p-2" role="alert">
-                                    {{'Labels.dataNotFound' | translate}}
-                                </div>
-                            </ng-container>
-                        </div> -->
+                                <ng-container *ngIf="questionwiseChartOptions">
+                                    <h6 class="fw-bold">{{webStorage.languageFlag == 'EN' ? questionArr[i].question
+                                        : questionArr[i].m_Question}}</h6>
+                                    <apx-chart [series]="res" [chart]="questionwiseChartOptions?.chart"
+                                        [dataLabels]="questionwiseChartOptions?.dataLabels"
+                                        [plotOptions]="questionwiseChartOptions?.plotOptions"
+                                        [xaxis]="questionwiseChartOptions?.xaxis"
+                                        [colors]="questionwiseChartOptions?.colors"
+                                        [legend]="questionwiseChartOptions?.legend"
+                                        [yaxis]="questionwiseChartOptions?.yaxis"
+                                        [grid]="questionwiseChartOptions?.grid"></apx-chart>
+                                    <span *ngFor="let param of questionArr[i].parameterArr">
+                                        {{param.optionGrade}}: {{param.optionName}}
+                                    </span>
+                                </ng-container>
+                                <hr>
+                                <ng-container *ngIf="!questionwiseChartOptions">
+                                    <div class="alert alert-danger text-center p-2" role="alert">
+                                        {{'Labels.dataNotFound' | translate}}
+                                    </div>
+                                </ng-container>
+                            </div> -->
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-7" *ngIf="!viewDetailsObj">
-                <div class="alert alert-danger text-center py-2 ">
-                    <span>{{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'}}</span>
-                </div>
+        </div>
+
+        <div class="col-sm-8" *ngIf="!viewDetailsObj">
+            <div class="alert alert-danger text-center py-2 ">
+                <span>{{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'}}</span>
             </div>
         </div>
     </mat-card-content>

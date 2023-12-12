@@ -22,8 +22,8 @@ canvas {
 }
 
 .plain-card .scrollbar{
-    height: 450px;
-    max-height: 450px;
+    height: 450px !important;
+    max-height: 450px !important;
     overflow-y: auto;
 }
 

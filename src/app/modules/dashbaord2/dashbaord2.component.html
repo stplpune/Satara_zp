@@ -11,7 +11,7 @@
             </mat-card-header>
             <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
                 <form [formGroup]="mainFilterForm" (ngSubmit)="onMainFilterSubmit();this.drawer.close()">
-                    <div class="mb-0">
+                    <!-- <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
                             <mat-select formControlName="acYearId" (selectionChange)="setAcadamicYearValue()">
@@ -20,7 +20,7 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
                     <div class="mb-0">
                         <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
@@ -110,7 +110,7 @@
                         </span>
                         <div class="d-flex gap-2">
                             <!-- academicYear year dropdown -->
-                            <div class="row">
+                            <div class="row gx-2">
                                 <!-- <div class="col-sm-6" type="button" (click)="navigateToReport()">
                                     <div class="mt-1">
                                         {{(webStorage.languageFlag == 'EN'?

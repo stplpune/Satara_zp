@@ -24,7 +24,8 @@
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectState' | translate}}</mat-label>
-                            <mat-select formControlName="stateId" (selectionChange)="clearDropdown('state') ; getDistrict()">
+                            <mat-select formControlName="stateId"
+                                (selectionChange)="clearDropdown('state') ; getDistrict()">
                                 <mat-option *ngFor="let state of stateData" [value]="state.id">
                                     {{webStorage.languageFlag == 'EN' ? state.state:state.m_State}}
                                 </mat-option>
@@ -34,7 +35,8 @@
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectDistrict' | translate}}</mat-label>
-                            <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId');getTaluka()">
+                            <mat-select formControlName="districtId"
+                                (selectionChange)="clearDropdown('districtId');getTaluka()">
                                 <mat-option *ngFor="let district of districtData" [value]="district.id">
                                     {{webStorage.languageFlag == 'EN' ? district.district:district.m_District}}
                                 </mat-option>
@@ -66,7 +68,8 @@
                     <div class="col-sm-12">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
-                            <mat-select formControlName="villageId" (selectionChange)="clearDropdown('villageId'); getAllSchoolsByCenterId()">
+                            <mat-select formControlName="villageId"
+                                (selectionChange)="clearDropdown('villageId'); getAllSchoolsByCenterId()">
                                 <mat-option *ngFor="let village of villageArr" [value]="village.id">
                                     {{selectedLang == 'English'? village.village:village.m_Village}}
                                 </mat-option>
@@ -76,14 +79,15 @@
                     <div class="col-sm-12">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                            <mat-select formControlName="schoolId" (selectionChange)="clearDropdown('schoolId') ; getStandard()">
+                            <mat-select formControlName="schoolId"
+                                (selectionChange)="clearDropdown('schoolId') ; getStandard()">
                                 <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{selectedLang ==
                                     'English' ?
                                     sch.schoolName:sch. m_SchoolName}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-                   
+
                     <div class="col-sm-12">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.standard'| translate}}</mat-label>
@@ -129,9 +133,11 @@
                     </div> -->
 
                     <div class="d-flex justify-content-end">
-                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close (click)="resetFilter()">{{'Labels.reset'|
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
+                            (click)="resetFilter()">{{'Labels.reset'|
                             translate}}</button>
-                        <button mat-flat-button  (click)="getTableData('filter');drawer.close()" class="btn-main btn">{{'Labels.filterclick' |
+                        <button mat-flat-button (click)="getTableData('filter');drawer.close()"
+                            class="btn-main btn">{{'Labels.filterclick' |
                             translate}}</button>
                     </div>
                 </form>
@@ -140,12 +146,11 @@
     </mat-drawer>
 </mat-drawer-container>
 
-
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb align-items-center">
         <li class="breadcrumb-item w-100 d-flex justify-content-between">
-            <button mat-stroked-button class="btn-main btn-icon" routerLink="/dashboard">
-                <mat-icon>home</mat-icon></button> &nbsp;&nbsp;
+            <button mat-stroked-button class="btn-main btn-icon me-2" routerLink="/dashboard">
+                <mat-icon>home</mat-icon></button>
             <div class="d-flex justify-content-between w-100">
                 <span class="mt-2">{{('Labels.dashboard2' | translate)}}
                 </span>
@@ -158,7 +163,7 @@
         </li>
     </ol>
 </nav>
-<mat-card class="plain-card">
+<mat-card class="plain-card scrollbar">
     <mat-card-content class="card-body">
         <div class="row gx-2">
             <div class="col-sm-4">
@@ -171,7 +176,7 @@
             </div>
 
             <div class="col-sm-8" *ngIf="viewDetailsObj || StudentData">
-                <mat-card class="plain-card scrollbar pt-0">
+                <mat-card class="plain-card pt-0">
                     <mat-card-content class="card-body pt-0 pe-0">
                         <div class="row">
                             <div class="col-sm-12">
@@ -183,112 +188,121 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <h5 class="mb-0 fw-bold">{{selectedLang == 'English' ? viewDetailsObj?.fullName :viewDetailsObj?.m_FullName}}</h5>
+                                                <h5 class="mb-0 fw-bold">{{selectedLang == 'English' ?
+                                                    viewDetailsObj?.fullName :viewDetailsObj?.m_FullName}}</h5>
                                                 <span
                                                     [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-bg-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-bg-primary' : 'text-bg-success'">
-                                                    {{selectedLang == 'English' ? viewDetailsObj?.graphLevel+' learner'
-                                                    : viewDetailsObj?.m_GraphLevel+' शिकणारा'}}
+                                                    {{selectedLang == 'English' ? viewDetailsObj?.graphLevel : viewDetailsObj?.m_GraphLevel}}
                                                 </span>
                                                 <!-- <button mat-flat-button class="btn-main-light btn-icon border"
                                                     title="Download" [routerLink]="['/print-student-details']">
                                                     <mat-icon class="text-main">download</mat-icon>
                                                 </button> -->
                                             </div>
-                                            <p class="text-muted mb-2">{{selectedLang == 'English' ? viewDetailsObj?.gender : viewDetailsObj?.m_Gender}}</p>
+                                            <p class="text-muted mb-2">{{selectedLang == 'English' ?
+                                                viewDetailsObj?.gender : viewDetailsObj?.m_Gender}}</p>
                                             <div class="data-container">
                                                 <div class="row mb-2 gy-2">
                                                     <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.fatherName'| translate}} :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.fatherName : StudentData?.m_FatherName}} </div>
+                                                        <span class="data-label">{{'Labels.parentName'| translate}}
+                                                            :</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.fatherName : StudentData?.m_FatherName}} </div>
+                                                    </div>
+                                                    <!-- <div class="col-sm-4">
+                                                        <span class="data-label">{{'Labels.motherName'| translate}}
+                                                            :</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.motherName : StudentData?.m_MotherName}}</div>
+                                                    </div> -->
+                                                    <div class="col-sm-4">
+                                                        <span class="data-label">{{'Labels.parentMobileNo'|
+                                                            translate}}:</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.parentMobileNo : StudentData?.m_FatherName}}
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.motherName'| translate}} :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.motherName : StudentData?.m_MotherName}}</div>
+                                                        <span class="data-label"> {{'Labels.academicYear'| translate}}
+                                                            :</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.educationYear : StudentData?.m_EducationYear}}
+                                                        </div>
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.mobileNo'| translate}}:</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.parentMobileNo : StudentData?.m_FatherName}}</div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label"> {{'Labels.academicYear'| translate}} :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.educationYear : StudentData?.m_EducationYear}}</div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.aadhaarNo'| translate}}:</span>
+                                                        <span class="data-label">{{'Labels.aadhaarNo'|
+                                                            translate}}:</span>
                                                         <div class="data-text">{{ StudentData?.aadharNo}}</div>
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.standard' | translate}} :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.standard : StudentData?.m_Standard}}</div>
+                                                        <span class="data-label">{{'Labels.standard' | translate}}
+                                                            :</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.standard : StudentData?.m_Standard}}</div>
                                                     </div>
                                                     <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.kendra' | translate}}:</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.center : StudentData?.m_Center}}</div>
+                                                        <span class="data-label">{{'Labels.kendra' | translate}}
+                                                            :</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.center : StudentData?.m_Center}}</div>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <span class="data-label">{{'Labels.SchoolName' | translate}} :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ? StudentData?.schoolName : StudentData?. m_SchoolName}}</div>
-                                                    </div>
-
-                                                    <div class="col-sm-12">
-                                                        <div class="row gx-2">
-                                                            <div class="col-sm-auto">
-                                                                <p class="data-text">Subject Details :</p>
-                                                            </div>
-                                                            <!-- <div class="col-sm">
-                                                                ZILLA PARISHAD PRIMARY SCHOOL,GOJWADA
-                                                            </div> -->
-                                                        </div>
-                                                        <div class="row gx-2">
-                                                            <div class="col-sm">
-                                                                <table class="table dashboard-table">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th scope="col">{{'Labels.SrNo' |
-                                                                                translate}}</th>
-                                                                            <th scope="col">{{'Labels.Subject' |
-                                                                                translate}}</th>
-                                                                            <th scope="col">{{'Labels.AssesDate' |
-                                                                                translate}}</th>
-                                                                            <th scope="col">{{'Labels.iAssesed' |
-                                                                                translate}}</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr
-                                                                            *ngFor="let data of viewDetailsObj?.assessedSubjectListModel;let i =index">
-                                                                            <th scope="row">{{i+1}}</th>
-                                                                            <td>{{selectedLang == 'English' ?
-                                                                                data?.subjectName :
-                                                                                data?.m_SubjectName}}</td>
-                                                                            <td>{{data?.assessmentDate || '-'}}</td>
-                                                                            <td>
-                                                                                <span *ngIf="data.isAssessed"
-                                                                                    class="material-symbols-outlined text-bg-success">
-                                                                                    check </span>
-                                                                                <span *ngIf="!data.isAssessed"
-                                                                                    class="material-symbols-outlined text-bg-danger">
-                                                                                    close </span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
+                                                        <span class="data-label">{{'Labels.SchoolName' | translate}}
+                                                            :</span>
+                                                        <div class="data-text">{{selectedLang == 'English' ?
+                                                            StudentData?.schoolName : StudentData?. m_SchoolName}}</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <mat-divider class="mb-2"></mat-divider>
+                            </div>
+
+                            <div class="col-sm-12 data-container">
+                                <h6 class="data-text">Subject Details</h6>
+                                <div class="table-responsive">
+                                    <table class="table dashboard-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">{{'Labels.SrNo' | translate}}</th>
+                                                <th scope="col">{{'Labels.Subject' | translate}}</th>
+                                                <th scope="col">{{'Labels.AssesDate' | translate}}</th>
+                                                <th scope="col">{{'Labels.iAssesed' | translate}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                *ngFor="let data of viewDetailsObj?.assessedSubjectListModel;let i =index">
+                                                <td scope="row">{{i+1}}</td>
+                                                <td>{{selectedLang == 'English' ?
+                                                    data?.subjectName :
+                                                    data?.m_SubjectName}}</td>
+                                                <td>{{data?.assessmentDate || '-'}}</td>
+                                                <td>
+                                                    <mat-icon *ngIf="data.isAssessed" class="text-success">check_circle</mat-icon>
+                                                    <mat-icon *ngIf="!data.isAssessed" class="text-danger">cancel</mat-icon>
+                                                    <!-- <button mat-icon-button *ngIf="data.isAssessed" class="text-success bg-sucess">
+                                                        <mat-icon>check_circle</mat-icon>
+                                                    </button> -->
+                                                    <!-- <button mat-icon-button *ngIf="!data.isAssessed" class="text-danger bg-danger">
+                                                        <mat-icon>close</mat-icon>
+                                                    </button> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </mat-card-content>
                 </mat-card>
+
                 <mat-card class="plain-card border">
-                    <mat-card-header class="card-header pe-2 pb-0 border-0">
+                    <mat-card-header class="card-header pb-0 border-0">
                         <!-- <form [formGroup]="filterForm"> -->
-                        <div class="row gx-2 w-100">
+                        <div class="row gx-2">
                             <div class="col-sm-3">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
@@ -333,19 +347,40 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            
+
                         </div>
                         <!-- </form> -->
                     </mat-card-header>
-
-                    
-
                     <mat-card-content class="card-body">
-
-                        <div *ngFor="let res of questionwiseChartOptions?.series; let i = index">
+                        <div class="row">
+                            <div class="col-sm-6" *ngFor="let res of questionwiseChartOptions?.series; let i = index">
+                                <ng-container *ngIf="questionwiseChartOptions">
+                                    <h6 class="fw-bold">{{webStorage.languageFlag == 'EN' ? questionArr[i].question
+                                        : questionArr[i].m_Question}}
+                                    </h6>
+                                    <apx-chart [series]="res" [chart]="questionwiseChartOptions?.chart"
+                                        [dataLabels]="questionwiseChartOptions?.dataLabels"
+                                        [plotOptions]="questionwiseChartOptions?.plotOptions"
+                                        [xaxis]="questionwiseChartOptions?.xaxis"
+                                        [colors]="questionwiseChartOptions?.colors"
+                                        [legend]="questionwiseChartOptions?.legend"
+                                        [yaxis]="questionwiseChartOptions?.yaxis"
+                                        [grid]="questionwiseChartOptions?.grid"></apx-chart>
+                                    <span *ngFor="let param of questionArr[i].parameterArr">
+                                        {{param.optionGrade}}: {{param.optionName}}
+                                    </span>
+                                </ng-container>
+                                <ng-container *ngIf="!questionwiseChartOptions">
+                                    <div class="alert alert-danger text-center p-2" role="alert">
+                                        {{'Labels.dataNotFound' | translate}}
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <!-- <div *ngFor="let res of questionwiseChartOptions?.series; let i = index">
                             <ng-container *ngIf="questionwiseChartOptions">
-                                <h5>{{webStorage.languageFlag == 'EN' ? questionArr[i].question
-                                    : questionArr[i].m_Question}}</h5>
+                                <h6 class="fw-bold">{{webStorage.languageFlag == 'EN' ? questionArr[i].question
+                                    : questionArr[i].m_Question}}</h6>
                                 <apx-chart [series]="res" [chart]="questionwiseChartOptions?.chart"
                                     [dataLabels]="questionwiseChartOptions?.dataLabels"
                                     [plotOptions]="questionwiseChartOptions?.plotOptions"
@@ -364,14 +399,13 @@
                                     {{'Labels.dataNotFound' | translate}}
                                 </div>
                             </ng-container>
-                        </div>
+                        </div> -->
                     </mat-card-content>
                 </mat-card>
             </div>
             <div class="col-sm-7" *ngIf="!viewDetailsObj">
                 <div class="alert alert-danger text-center py-2 ">
-                    <span> {{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'
-                        }}</span>
+                    <span>{{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'}}</span>
                 </div>
             </div>
         </div>

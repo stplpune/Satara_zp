@@ -21,6 +21,12 @@ canvas {
     /* Scale 10x */
 }
 
+.plain-card .scrollbar{
+    height: 450px;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
 @media screen and (max-width: 480px) {
     .student-details {
         padding: 0 0px;

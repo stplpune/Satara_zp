@@ -216,6 +216,7 @@
         "aadhaarNo": "Aadhaar No.",
         "aadhaarPhoto": "Upload Aadhaar Card",
         "parentMobileNo": "Parent Mobile No.",
+        "parentName":"Parent Name",
         "fatherName": "Father Name",
         "motherName": "Mother Name",
         "studentRegistration": "Student Registration",

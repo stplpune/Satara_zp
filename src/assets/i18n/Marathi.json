@@ -200,6 +200,7 @@
         "aadhaarNo" :"आधार क्र.",
         "aadhaarPhoto" : "आधार कार्ड अपलोड करा",
         "parentMobileNo" :"पालक मोबाईल क्र.",
+        "parentName":"पालकांचे नाव",
         "fatherName" : "वडीलचे नाव",
         "motherName" :"आईचे नाव",
         "studentRegistration":"विद्यार्थीची नोंदणी",

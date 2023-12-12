@@ -906,7 +906,8 @@ export class Dashbaord2Component {
             selectedFilter.levelId = config.seriesIndex + 1;
             let lable = config.config.xaxis.categories[config.dataPointIndex];
             selectedFilter.classId = this.standardResp.find(res => lable == (this.selectedLang == 'English' ? res.standard : res.m_Standard)).id;
-            let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Class');
+            let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Standard');
+
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
             this.router.navigate(['/dashboard-student-data']);     //{ queryParams: obj }       
           }

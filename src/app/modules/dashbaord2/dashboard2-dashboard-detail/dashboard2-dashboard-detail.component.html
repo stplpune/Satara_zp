@@ -129,7 +129,7 @@
                     </div> -->
 
                     <div class="d-flex justify-content-end">
-                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close>{{'Labels.reset'|
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close (click)="resetFilter()">{{'Labels.reset'|
                             translate}}</button>
                         <button mat-flat-button  (click)="getTableData('filter');drawer.close()" class="btn-main btn">{{'Labels.filterclick' |
                             translate}}</button>

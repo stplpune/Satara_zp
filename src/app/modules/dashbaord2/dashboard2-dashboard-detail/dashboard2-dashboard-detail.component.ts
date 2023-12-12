@@ -63,6 +63,7 @@ export class Dashboard2DashboardDetailComponent {
     this.formData();
     this.getState();
     this.getEvaluator();
+    this.getSubjectMain();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
@@ -477,26 +478,29 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getProgressIndicatorData(){
-    console.log("jdhghdc");
-    
-    this.graphResponse=[];
-    // zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?StudentId=8006&AssessedClassId=1&SubjectId=1&ExamTypeId=0&EducationYearId=1&lan=EN
-    let str = `StudentId=${this.viewDetailsObj?.studentId}&AssessedClassId=${this.standardId.value}&SubjectId=${this.subjectId.value}&ExamTypeId=0&EducationYearId=${this.academicYearId.value}&lan=${this.selectedLang}`
-    this.apiService.setHttp('get', 'zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?' + str, false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-        this.graphResponse =  res.responseData?.responseData1;
-        this.StudentData = res.responseData?.responseData2[0];
-        this.examId.setValue(this.graphResponse[0]?.examTypeId);
-        this.barChartData();
-        console.log("res: ", this.graphResponse);
+    console.log("jdhghdc", this.viewDetailsObj);
+    if(this.viewDetailsObj?.studentId){
+      this.graphResponse=[];
+      // zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?StudentId=8006&AssessedClassId=1&SubjectId=1&ExamTypeId=0&EducationYearId=1&lan=EN
+      let str = `StudentId=${this.viewDetailsObj?.studentId}&AssessedClassId=${this.standardId.value}&SubjectId=${this.subjectId.value}&ExamTypeId=0&EducationYearId=${this.academicYearId.value}&lan=${this.selectedLang}`
+      this.apiService.setHttp('get', 'zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?' + str, false, false, false, 'baseUrl');
+      this.apiService.getHttp().subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+          this.graphResponse =  res.responseData?.responseData1;
+          this.StudentData = res.responseData?.responseData2[0];
+          this.examId.setValue(this.graphResponse[0]?.examTypeId);
+          this.barChartData();
+          console.log("res: ", this.graphResponse);
+          }
+          else{
+            this.graphResponse=[];
+            this.StudentData = '';
+          }
         }
-        else{
-          this.graphResponse=[];
-        }
-      }
-    });
+      });
+  
+    }
   }
 
   barChartData(){    
@@ -620,6 +624,14 @@ export class Dashboard2DashboardDetailComponent {
     this.graphResponse =[];
     this.questionwiseChartOptions ? this.questionwiseChartOptions.series = [] :'';
     this.examId.setValue('');
+  }
+
+  resetFilter(){
+    this.formData();
+    this.mf['acYearId'].setValue(this.webStorage.getYearId())
+    this.mf['stateId'].setValue(this.webStorage.getState())
+    this.mf['districtId'].setValue(this.webStorage.getDistrict())
+    this.getDistrict();
   }
 
 

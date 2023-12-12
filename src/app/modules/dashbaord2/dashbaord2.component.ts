@@ -58,6 +58,8 @@ export class Dashbaord2Component {
   totalStudentCountTeacharwise: number = 0;
   totalStudentCountClasswise: number = 0;
   totalStudentCountSubjectwise: number = 0;
+  teacherRespFilteredList:any;
+  allTeacherOfficerDataList:any;
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
@@ -160,7 +162,7 @@ export class Dashbaord2Component {
 
   defaultSchoolwiseFormat() {
     this.filterForm = this.fb.group({
-      evaluatorId: [1],
+      evaluatorId: [0],
       userId: [0],
       classId: [0],
       subjectId: [0],
@@ -304,6 +306,7 @@ export class Dashbaord2Component {
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.teacherResp = [{ id: 0, teacherName: "All", m_TeacherName: "सर्व" }, ...res.responseData];
+          this.teacherRespFilteredList = this.teacherResp.slice();
         }
       },
       error: (() => {
@@ -326,11 +329,12 @@ export class Dashbaord2Component {
   }
 
   bindEvaluator() {
+    
     this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.selectedLang, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.evaluatorDataArray = res.responseData;
+          this.evaluatorDataArray = [{ "id": 0, "evaluator": "All", "m_Evaluator": "सर्व" },...res.responseData];
           // this.getSchoolwiseBarDetails();
           this.getAllTeacherOfficerByEvaluatorId()
         } else {
@@ -361,6 +365,7 @@ export class Dashbaord2Component {
         next: (res: any) => {
           if (res.statusCode == '200') {
             this.allTeacherOfficerData.push(...res.responseData);
+            this.allTeacherOfficerDataList =  this.allTeacherOfficerData.slice();
             // this.getSchoolwiseBarDetails();
           }
         },

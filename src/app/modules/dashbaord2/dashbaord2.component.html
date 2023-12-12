@@ -253,12 +253,19 @@
                                 <div class="col-sm-3">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.user' | translate}}</mat-label>
-                                        <mat-select formControlName="userId"
+                                        <mat-select formControlName="userId"  (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-select-filter [displayMember]="'teacherOfficer'" [array]="allTeacherOfficerData" (filteredReturn)="allTeacherOfficerDataList =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of allTeacherOfficerDataList" [value]="data.id">
+                                                {{webStorage.languageFlag == 'EN'?data.teacherOfficer
+                                                :data.m_TeacherOfficer}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <!-- <mat-select formControlName="userId"
                                             (selectionChange)="getSchoolwiseBarDetails()">
                                             <mat-option *ngFor="let data of allTeacherOfficerData"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.teacherOfficer
                                                 :data.m_TeacherOfficer}}</mat-option>
-                                        </mat-select>
+                                        </mat-select> -->
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-3">
@@ -341,12 +348,19 @@
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
-                                        <mat-select formControlName="evaluatorId"
+                                        <mat-select formControlName="evaluatorId"  (selectionChange)="getTeacherwiseBarDetails()">
+                                            <mat-select-filter [displayMember]="'teacherName'" [array]="teacherResp" (filteredReturn)="teacherRespFilteredList =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of teacherRespFilteredList" [value]="data.id">
+                                                {{webStorage.languageFlag == 'EN'?data.teacherName
+                                                :data.m_TeacherName}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <!-- <mat-select formControlName="evaluatorId"
                                             (selectionChange)="getTeacherwiseBarDetails()">
                                             <mat-option *ngFor="let data of teacherResp"
                                                 [value]="data.id">{{webStorage.languageFlag == 'EN'?data.teacherName
                                                 :data.m_TeacherName}}</mat-option>
-                                        </mat-select>
+                                        </mat-select> -->
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">

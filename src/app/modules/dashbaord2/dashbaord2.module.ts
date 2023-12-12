@@ -17,6 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DashboardRoutingModule } from '../dashboard/dashboard-routing.module';
+import { MatSelectFilterModule } from 'mat-select-filter';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { DashboardRoutingModule } from '../dashboard/dashboard-routing.module';
     MatRadioModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectFilterModule
   ]
 })
 export class Dashbaord2Module { }

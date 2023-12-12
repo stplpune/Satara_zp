@@ -355,6 +355,7 @@ export class Dashbaord2Component {
 
   getAllTeacherOfficerByEvaluatorId() {
     this.allTeacherOfficerData = [{ "id": 0, "teacherOfficer": "All", "m_TeacherOfficer": "सर्व" }]
+    this.allTeacherOfficerDataList =  this.allTeacherOfficerData.slice();
     let formValue = this.filterForm.value
     let mainFormValue = this.mainFilterForm.value;
     if (formValue.evaluatorId != 0) {

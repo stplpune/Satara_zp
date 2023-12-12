@@ -406,7 +406,7 @@
         "ExamType": "परीक्षेचा प्रकार",
         "ExamNameTxt": "परीक्षेचे नाव",
         "AssessmentType" : "मूल्यांकन प्रकार",
-        "totalAssessmentStudent":"मूल्यांकन केलेले विद्यार्थी",
+        "totalAssessmentStudent":"एकूण मूल्यांकन",
         "reports": "अहवाल",
         "studentReport": "विद्यार्थी अहवाल",
         "officerReport": "अधिकारी अहवाल",

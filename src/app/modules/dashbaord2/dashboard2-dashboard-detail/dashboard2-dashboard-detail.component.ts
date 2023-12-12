@@ -507,7 +507,6 @@ export class Dashboard2DashboardDetailComponent {
     let examId = this.examId.value;
     this.questionArr = [];
     this.graphResponse.map((x: any) => {
-
       if(examId == x.examTypeId){
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];

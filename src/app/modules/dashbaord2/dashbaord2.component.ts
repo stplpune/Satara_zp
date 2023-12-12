@@ -694,7 +694,7 @@ export class Dashbaord2Component {
               selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
               let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'School');
               localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-              this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
+              this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
             }            
           }
         }
@@ -781,7 +781,7 @@ export class Dashbaord2Component {
             selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id;
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Teacher');
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
+            this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
           }
         }
         }
@@ -908,7 +908,7 @@ export class Dashbaord2Component {
             selectedFilter.classId = this.standardResp.find(res => lable == (this.selectedLang == 'English' ? res.standard : res.m_Standard)).id;
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Class');
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data'],{queryParams:obj});            
+            this.router.navigate(['/dashboard-student-data']);     //{ queryParams: obj }       
           }
         }
         }
@@ -1008,7 +1008,7 @@ export class Dashbaord2Component {
             selectedFilter.subjectId = this.subjectResp.find(res => lable == (this.selectedLang == 'English' ? res.subject : res.m_Subject)).id;
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Subject');
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data'], { queryParams: obj });
+            this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
           }
         }
         }

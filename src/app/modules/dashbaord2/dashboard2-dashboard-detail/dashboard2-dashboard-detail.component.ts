@@ -31,6 +31,7 @@ export class Dashboard2DashboardDetailComponent {
   subjectResp = new Array();
   selectedLang:any;
   graphResponse: any;
+  chartArray = new Array;
   questionArr: any;
   talukaLabel: any;
   districtLabel: any;
@@ -347,8 +348,11 @@ export class Dashboard2DashboardDetailComponent {
           this.tableDataArray = res.responseData?.responseData1;
           this.viewDetailsObj = res.responseData?.responseData1[0];
           this.GetAllStandard();
+          this.chartArray = [];
           setTimeout(() => {
-            this.getProgressIndicatorData();
+            if(this.tableDataArray.length){
+              this.getProgressIndicatorData();
+            }
           }, 2000);
           console.log("viewDetailsObj", this.viewDetailsObj);
           this.tableDatasize = res.responseData.responseData2[0].totalCount;
@@ -357,7 +361,8 @@ export class Dashboard2DashboardDetailComponent {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
           this.tableDatasize = 0;
-          this.viewDetailsObj = ''
+          this.viewDetailsObj = null
+          this.StudentData = null
 
         }
         this.setTableData();
@@ -390,94 +395,95 @@ export class Dashboard2DashboardDetailComponent {
   }
 
 
-  schoolwiseBarChart(critearr?: any, category?:any) { //xAxiaArray?: any, yAxisArray?: anyz
-    console.log(category, critearr);
-    
-    this.questionwiseChartOptions = {
-      series: critearr,
-      chart: {
-        type: 'bar',
-        stacked: true,
-        stackType: "150%",
-        height: 300,
-        toolbar: {
-          show: false
+  schoolwiseBarChart(critearr?: any, maxgrade?:any, categoryArr?: any) { 
+    console.log("critearr", critearr, categoryArr);
+    //xAxiaArray?: any, yAxisArray?: anyz
+    let seriesArray=new Array();
+    if(critearr?.data?.length ){
+      critearr?.data.forEach((x:any, i: number)=>{
+        const obj={
+          x: [categoryArr[i]],
+          y: [-1, x]
+        }
+        seriesArray.push(obj)
+      })
+      console.log("seriesArray",seriesArray)
+      this.questionwiseChartOptions = {
+        series: [
+          {
+            // name: "blue",
+            data: seriesArray
+          },
+        ],
+        chart: {
+          type: "rangeBar",
+          height: 350,
         },
-        events: {}
-      },
-      title: {
-        text: "akshar",
-        align: "left"
-      },
-      colors: [
-        this.viewDetailsObj?.graphLevelId == 1 ? '#b51d31' : this.viewDetailsObj?.graphLevelId == 2 ? '#E98754' : '#50c77b'
-        // '#50c77b'
-        // '#2b908f',
-        // '#f9a3a4',
-        // '#90ee7e',
-        // '#f48024',
-      ],
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          distributed: true,
+        colors: this.viewDetailsObj?.graphLevelId == 1 ? ['#b51d31'] : this.viewDetailsObj?.graphLevelId == 2 ? ['#E98754'] : ['#50c77b']
+      ,
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          },
         },
-      },
-      // dataLabels: {
-      //   enabled: true,
-      // },
-      legend: {
-        show: false
-      },
-      xaxis: {
-        categories: category,  //'Officer'
-        // axisTicks: {
-        //   show: false
-        // },
-        labels: {
-          hideOverlappingLabels: true,
-          rotate: 0,
-          show: true,
-          trim: true
+        dataLabels: {
+          enabled: true,
+          formatter: function (val: any) {
+            console.log(val);
+            return val;
+          },
+          // offsetY: -20,
+          style: {
+            fontSize: "12px",
+            colors: ["#fff"],
+          }        
         },
-        style: {
-          fontSize: '12px',
-          fontFamily: 'Noto Sans Devanagari, sans-serif',
-          cssClass: 'apexcharts-xaxis-label',
-        },
-      },
-      grid: {
-        show:true,
         xaxis: {
-            lines: {
-                show: false
-            }
+          // categories: categoryArr,  //'Officer'
+          parameters: this.selectedLang == 'English' ? ['Evaluator Name', 'Answer'] : ['मूल्यांकनकर्त्याचे नाव', 'उत्तर'],
+          axisTicks: {
+            show: false
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'Noto Sans Devanagari, sans-serif',
+            cssClass: 'apexcharts-xaxis-label',
+          },
         },
         yaxis: {
-          lines: {
-              show: false
-          }
-      }
-      },
-      yaxis: {
-        // min: 0,
-        // labels: {
-        //   formatter: function (val: any) {
-        //     console.log(val)
-        //     return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
-        //   }
-        // },
-       
-  
-        // axisTicks: {
-        //   show: true,
-        // },
-      }
+              min: -1,
+              max: maxgrade,
+              labels: {
+                formatter: function (val: any) {
+                  return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
+                }
+              },
+              axisTicks: {
+                show: true,
+              },
+            },
+            tooltip: {
+              custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+                console.log(series,seriesIndex, dataPointIndex, w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]);
+                
+                return (
+                  '<div class="arrow_box" style="padding:10px;">' +
+                  "<div>" + w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0] + " : <b> "+
+                  "</div>"
+                );
+              },
+            }
+      };
+      console.log("this.questionwiseChartOptions", this.questionwiseChartOptions);
+      
+      this.chartArray.push(this.questionwiseChartOptions);
+      console.log(this.chartArray)
     }
-    console.log("questionwiseChartOptions",this.questionwiseChartOptions)
+  
   }
 
   getProgressIndicatorData(){
+    this.ngxSpinner.show();
     console.log("jdhghdc", this.viewDetailsObj);
     if(this.viewDetailsObj?.studentId){
       this.graphResponse=[];
@@ -487,81 +493,62 @@ export class Dashboard2DashboardDetailComponent {
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
+            this.ngxSpinner.hide();
           this.graphResponse =  res.responseData?.responseData1;
           this.StudentData = res.responseData?.responseData2[0];
           this.examId.setValue(this.graphResponse[0]?.examTypeId);
+          console.log("examId",this.examId.value);
+          
           this.barChartData();
           console.log("res: ", this.graphResponse);
           }
           else{
+            this.ngxSpinner.hide();
             this.graphResponse=[];
             this.StudentData = '';
           }
-        }
+        },
+        error: ((err: any) => { this.ngxSpinner.hide(); this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
       });
   
     }
   }
 
-  barChartData(){    
+  barChartData(){
+    console.log("this.graphResponse", this.graphResponse);
     let examId = this.examId.value;
     this.questionArr = [];
-    this.graphResponse.map((x: any) => {
+    this.graphResponse?.map((x: any) => {
       if(examId == x.examTypeId){
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];
           let evaluatorArr:any = [];
-           res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
+          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
+          // res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr=(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
           let obj = {
             questionId: res.questionId,
             question: res.question,
             m_Question: res.m_Question,
-            gradeArr: GrdeArr,
-            // max: Math.max(...GrdeArr),
+            data: GrdeArr,
             evaluator: evaluatorArr,
+            // evaluator: evaluatorArr,
             parameterArr: res.parameterModel
           }
-          res.assessedDataModel.length > 0 ? this.questionArr.push(obj) : '';
+          this.questionArr.push(obj);
         });          
       }
-    });  
-
-  let arrayData=new Array();
-  let categoryArr = new Array();
-  this.questionArr.forEach((chart:any)=>{
-    const data=[{
-      name: 'Percentage',
-      // data: chart?.data.concat([2]),
-      data: chart?.gradeArr,
-      // data: [{
-      //   x:'',
-      //   y:[-1,chart?.gradeArr]
-      // }]
-      // max: chart.max
-    }];
-    const categ = [...chart.evaluator]
-    arrayData.push(data);
-    categoryArr.push([categ])
-
-    // const barObj = {
-    //   name: x,
-    //   data:(barChartArrayData.filter((y: any) => (this.languageFlag == 'English' ? y.examType : y.m_ExamType) == x)).map((z: any) =>
-    //   {
-    //     const obj={
-    //       x:'',
-    //       y:[-1,z.actualGrade]
-    //     }
-    //     return obj
-    //   }
-    //   )
-    // }
-  });
-
-
-
-  console.log("this.questionArr", arrayData, categoryArr);
-  this.schoolwiseBarChart(arrayData, categoryArr);
+    });
+    console.log("this.questionArr", this.questionArr);
+    this.questionArr.forEach((chart:any)=>{
+      const maxGrade=Math.max(...chart?.data.map(o => o));      
+      this.schoolwiseBarChart(chart, (maxGrade!=-Infinity ? maxGrade:1), chart?.evaluator);
+    })
+    
+    // this.schoolwiseBarChart([1],5)
   }
+
+
+
 
   clearDropdown(name?: any) {
     // this.dashboardObj?.label == "table" ? '' :this.dashboardObj = '';
@@ -621,6 +608,7 @@ export class Dashboard2DashboardDetailComponent {
 
   clearDropdownGraph(){
     this.graphResponse =[];
+    this.chartArray = [];
     this.questionwiseChartOptions ? this.questionwiseChartOptions.series = [] :'';
     this.examId.setValue('');
   }

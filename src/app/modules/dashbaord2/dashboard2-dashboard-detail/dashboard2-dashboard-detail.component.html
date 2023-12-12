@@ -353,60 +353,36 @@
                         <!-- </form> -->
                     </mat-card-header>
                     <mat-card-content class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6" *ngFor="let res of questionwiseChartOptions?.series; let i = index">
-                                <ng-container *ngIf="questionwiseChartOptions">
-                                    <h6 class="fw-bold">{{webStorage.languageFlag == 'EN' ? questionArr[i].question
-                                        : questionArr[i].m_Question}}
-                                    </h6>
-                                    <apx-chart [series]="res" [chart]="questionwiseChartOptions?.chart"
-                                        [dataLabels]="questionwiseChartOptions?.dataLabels"
-                                        [plotOptions]="questionwiseChartOptions?.plotOptions"
-                                        [xaxis]="questionwiseChartOptions?.xaxis"
-                                        [colors]="questionwiseChartOptions?.colors"
-                                        [legend]="questionwiseChartOptions?.legend"
-                                        [yaxis]="questionwiseChartOptions?.yaxis"
-                                        [grid]="questionwiseChartOptions?.grid"></apx-chart>
-                                    <span *ngFor="let param of questionArr[i].parameterArr">
-                                        {{param.optionGrade}}: {{param.optionName}}
-                                    </span>
-                                </ng-container>
-                                <ng-container *ngIf="!questionwiseChartOptions">
-                                    <div class="alert alert-danger text-center p-2" role="alert">
-                                        {{'Labels.dataNotFound' | translate}}
-                                    </div>
-                                </ng-container>
+                        <div class="row" *ngIf="chartArray">
+                            <div class="col-sm-6"  *ngFor="let res of chartArray ; let i = index">
+                                <ng-container *ngIf="res">
+                                    <h5 *ngIf="questionArr">{{webStorage.languageFlag == 'EN' ? questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h5>
+                                        <apx-chart [series]="res.series" [chart]="res.chart" [dataLabels]="res.dataLabels"
+                                            [plotOptions]="res.plotOptions" [yaxis]="res?.yaxis" [colors]="res.colors"
+                                            [dataLabels]="res.dataLabels" 
+                                            [tooltip]="res.tooltip"></apx-chart>
+                                        <!--  -->
+                                        <div *ngIf="questionArr">
+                                            <span *ngFor="let param of questionArr?.[i]?.parameterArr">
+                                                {{param?.optionGrade}}: {{param?.optionName}}
+                                            </span>
+                                        </div>
+                                        
+                                </ng-container><hr>
+
+                                <ng-container *ngIf="!res">
+                                <div class="alert alert-danger text-center p-2" role="alert">
+                                    {{'Labels.dataNotFound' | translate}}
+                                </div>
+                            </ng-container>
                             </div>
                         </div>
-                        <!-- <div *ngFor="let res of questionwiseChartOptions?.series; let i = index">
-                                <ng-container *ngIf="questionwiseChartOptions">
-                                    <h6 class="fw-bold">{{webStorage.languageFlag == 'EN' ? questionArr[i].question
-                                        : questionArr[i].m_Question}}</h6>
-                                    <apx-chart [series]="res" [chart]="questionwiseChartOptions?.chart"
-                                        [dataLabels]="questionwiseChartOptions?.dataLabels"
-                                        [plotOptions]="questionwiseChartOptions?.plotOptions"
-                                        [xaxis]="questionwiseChartOptions?.xaxis"
-                                        [colors]="questionwiseChartOptions?.colors"
-                                        [legend]="questionwiseChartOptions?.legend"
-                                        [yaxis]="questionwiseChartOptions?.yaxis"
-                                        [grid]="questionwiseChartOptions?.grid"></apx-chart>
-                                    <span *ngFor="let param of questionArr[i].parameterArr">
-                                        {{param.optionGrade}}: {{param.optionName}}
-                                    </span>
-                                </ng-container>
-                                <hr>
-                                <ng-container *ngIf="!questionwiseChartOptions">
-                                    <div class="alert alert-danger text-center p-2" role="alert">
-                                        {{'Labels.dataNotFound' | translate}}
-                                    </div>
-                                </ng-container>
-                            </div> -->
                     </mat-card-content>
                 </mat-card>
             </div>
         </div>
 
-        <div class="col-sm-8" *ngIf="!viewDetailsObj">
+        <div class="col-sm-8" *ngIf="!viewDetailsObj || !StudentData">
             <div class="alert alert-danger text-center py-2 ">
                 <span>{{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'}}</span>
             </div>

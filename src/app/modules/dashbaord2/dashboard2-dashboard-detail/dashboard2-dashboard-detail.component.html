@@ -380,12 +380,13 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-        </div>
-
-        <div class="col-sm-8" *ngIf="!viewDetailsObj || !StudentData">
+             <div class="col-sm-8" *ngIf="!viewDetailsObj || !StudentData">
             <div class="alert alert-danger text-center py-2 ">
                 <span>{{ webStorage.languageFlag == 'EN' ? 'Data not available' : 'डेटा उपलब्ध नाही'}}</span>
             </div>
         </div>
+        </div>
+
+       
     </mat-card-content>
 </mat-card>

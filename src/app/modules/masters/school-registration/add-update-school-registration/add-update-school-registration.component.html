@@ -40,7 +40,7 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka' | translate}}</mat-label>
                         <mat-select formControlName="talukaId"
-                            (selectionChange)="clearDropdown('Taluka'); getBitOrCenter();">
+                            (selectionChange)="clearDropdown('Taluka'); getBitOrCenter(); getVillage();">
                             <mat-option *ngFor="let taluka of talukaArr" [value]="taluka.id">
                                 {{webStorageS.getLangauge() == 'EN' ?
                                 taluka.taluka : taluka.m_Taluka}}
@@ -58,7 +58,7 @@
                         <mat-label>{{'Labels.SchoolIsKendra' | translate}}</mat-label>
                         <input type="checkbox" name="check" id="check1" class="ms-2" style="accent-color: rgb(0 95 87);"
                         formControlName="isKendraSchool" (change)="updateValidation($event);getBitOrCenter()"
-                        [class.disabled]="editObj || !schoolRegForm.value.talukaId" />
+                        [class.disabled]="editObj?.isKendraSchool || !schoolRegForm.value.talukaId" />
                         <span class="small form-label">{{'Labels.Yes' | translate}}</span>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline" class="w-100 ">
                             <mat-label>{{'Labels.Bit' | translate}}</mat-label>
-                            <mat-select formControlName="bitId" (selectionChange)="getVillage();">
+                            <mat-select formControlName="bitId">
                                 <mat-option *ngFor="let bit of bitArr" [value]="bit.id">
                                     {{webStorageS.getLangauge() == 'EN' ?
                                     bit.bitName : bit.m_BitName}}

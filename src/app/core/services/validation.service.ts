@@ -15,6 +15,7 @@ export class ValidationService {
   aadhar_card = ('^[2-9][0-9]{11}$');
   valPassword = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,10}$';
   alphaNumericOnly = '^([ a-zA-Z])[- a-zA-Z0-9]+$';   //Valid - Manager 1, Manager / Invalid - 9865232     
+  alphaNumericSpecialCharOnly = '^([ a-zA-Z])[*%!/(,)&.+-_@# a-zA-Z0-9]+$';        
   alphanumericMarathi = '^[\u0900-\u096F ]+$';
   valLandlineNo = '(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})';
   numericWithdecimaluptotwoDigits='^[0-9][0-9]*[.]?[0-9]{0,2}$';
@@ -94,6 +95,13 @@ export class ValidationService {
     return maskSeperator.test(event.key);
   }
 
+  alphaNumericSpacesWithSpeical(event: any) {
+    // alphaNumeric With Spaces but first Space Not Allow
+    this.noFirstSpaceAllow(event);
+    const maskSeperator = new RegExp('^([a-zA-Z0-9 *%!/(,)&.+-_@#])', 'g');
+    return maskSeperator.test(event.key);
+  }
+
   emailRegex(event: any) { //Email Validation
     if (!this.noSpacesAtStart(event)) return false; // First Space not Accept
     if (event.currentTarget.value.split('..').length - 1 == 1 && (event.keyCode == 46)) return false;  // double .Dot not accept
@@ -116,5 +124,7 @@ export class ValidationService {
     const maskSeperator = new RegExp('^([a-zA-Z0-9(,)+-_@#$])', 'g');
     return maskSeperator.test(event.key);
   }
+
+  
 
 }

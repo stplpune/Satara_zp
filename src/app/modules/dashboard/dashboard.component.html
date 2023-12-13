@@ -492,11 +492,51 @@
 
                         <form [formGroup]="filterFormForBarGraph" class="w-100">
                             <div class="row w-100 gx-2  justify-content-start">
+
+                                <div class="col-sm-2 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
+                                        <mat-select formControlName="evaluatorId"
+                                            (selectionChange)="getTabledataByTaluka();">
+                                            <mat-option *ngFor="let evaluator of evaluatorDataArray" [value]="evaluator.id">
+                                                {{webStorage.languageFlag ==
+                                                'EN' ? evaluator.evaluator : evaluator.m_Evaluator }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-2 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100">
+                                        <mat-label>{{'Labels.standard' | translate}}</mat-label>
+                                        <mat-select formControlName="standardId"
+                                            (selectionChange)="getTabledataByTaluka();">
+                                            <mat-option *ngFor="let standard of standardDropDArray" [value]="standard.id">
+                                                {{webStorage.languageFlag ==
+                                                'EN' ? standard.standard : standard.m_Standard }}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-sm-2 mt-2">
+                                    <mat-form-field appearance="outline" class="w-100 mb-0">
+                                        <mat-label>{{'Labels.Subject' | translate}}</mat-label>
+                                        <mat-select formControlName="subjectId"
+                                            (selectionChange)="getTabledataByTaluka();">
+                                            <mat-option *ngFor="let sub of subjectArray" [value]="sub.id">
+                                                {{webStorage.languageFlag == 'EN'?sub.subject   :
+                                                sub.m_Subject}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
                                 <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
                                         <mat-select formControlName="examId" placeholder="All"
-                                            (selectionChange)="selectedExamType();getTabledataByTaluka();">
+                                            (selectionChange)="selectedExamType(); getTabledataByTaluka();">
                                             <mat-option *ngFor="let examType of ExamTypeArray" [value]="examType.id">
                                                 {{webStorage.languageFlag == 'EN'?examType.examType :
                                                 examType.m_ExamType }}
@@ -512,19 +552,6 @@
                                             (keypress)="validation.onlyDigits($event)" (input)="getTabledataByTaluka()">
                                     </mat-form-field>
                                 </div> -->
-
-                                <div class="col-sm-2 mt-2">
-                                    <mat-form-field appearance="outline" class="w-100 mb-0">
-                                        <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
-                                        <mat-select formControlName="subjectId"
-                                            (selectionChange)="clearDropLowHighFilter('subject'); getQuestion(); getTabledataByTaluka();">
-                                            <mat-option *ngFor="let sub of subjectArrayByClass" [value]="sub.id">
-                                                {{webStorage.languageFlag == 'EN'?sub.subjectName:
-                                                sub.m_SubjectName}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
 
                                 <!-- <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
@@ -552,6 +579,7 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div> -->
+
                             </div>
                         </form>
                     </div>

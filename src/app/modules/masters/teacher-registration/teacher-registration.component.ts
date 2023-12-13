@@ -24,11 +24,12 @@ import { MasterService } from 'src/app/core/services/master.service';
 export class TeacherRegistrationComponent implements OnInit {
   pageNumber: number = 1;
   searchContent = new FormControl('');
-  stateId = new FormControl(0);
-  districtId = new FormControl(0);
-  talukaId = new FormControl(0);
-  clusterId = new FormControl(0);
-  villageId = new FormControl(0);
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
+  stateId = new FormControl(this.loginData ? this.loginData.stateId : 0);
+  districtId = new FormControl(this.loginData ? this.loginData.districtId : 0);
+  talukaId = new FormControl(this.loginData ? this.loginData.talukaId : 0);
+  clusterId = new FormControl(this.loginData ? this.loginData.centerId : 0);
+  villageId = new FormControl(this.loginData ? this.loginData.villageId : 0);
   tableDataArray = new Array();
   totalCount: number = 0;
   cardCurrentPage: number = 0;
@@ -51,7 +52,6 @@ export class TeacherRegistrationComponent implements OnInit {
   clusterArray = new Array();
   villageArray = new Array();
   viewStatus = 'Table';
-  loginData = this.webStorageS.getLoggedInLocalstorageData();
   @HostBinding('class') className = '';
   constructor(private dialog: MatDialog, private overlay: OverlayContainer, private apiService: ApiService, private errors: ErrorsService,
     public webStorageS: WebStorageService, private downloadFileService: DownloadPdfExcelService, private commonMethodS: CommonMethodsService,
@@ -59,6 +59,8 @@ export class TeacherRegistrationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("loginData", this.loginData);
+    
     this.langChnge = this.webStorageS.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
       this.languageChange();
@@ -123,8 +125,8 @@ export class TeacherRegistrationComponent implements OnInit {
     // let tableDatasize!: Number;
     let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;
 
-    let str = `pageno=${pageNo}&pagesize=10&textSearch=${this.searchContent.value}&StateId=${this.stateId.value || 0}&DistrictId=${this.districtId.value || 0}&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
-    let reportStr = `pageno=${pageNo}&pagesize=${this.totalCount * 10}&textSearch=${this.searchContent.value}&DistrictId=1&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&lan=${this.webStorageS.languageFlag}`;
+    let str = `pageno=${pageNo}&pagesize=10&textSearch=${this.searchContent.value}&StateId=${this.stateId.value || 0}&DistrictId=${this.districtId.value || 0}&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&VillageId=${this.villageId.value || 0}&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `pageno=${pageNo}&pagesize=${this.totalCount * 10}&textSearch=${this.searchContent.value}&DistrictId=${this.districtId.value || 0}&TalukaId=${this.talukaId.value || 0}&CenterId=${this.clusterId.value || 0}&VillageId=${this.villageId.value || 0}&lan=${this.webStorageS.languageFlag}`;
 
     this.apiService.setHttp('GET', 'zp-satara/Teacher/GetAll?' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -500,7 +502,7 @@ export class TeacherRegistrationComponent implements OnInit {
   }
 
   clearFilterData() {
-    if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value) {
+    if (this.searchContent.value != null && this.searchContent.value != '' || this.talukaId.value || this.clusterId.value || this.villageId.value) {
       this.searchContent.setValue('');
       this.stateId.setValue(0);
       this.districtId.setValue(0);
@@ -510,6 +512,7 @@ export class TeacherRegistrationComponent implements OnInit {
       this.villageArray = [];
       this.talukaId.setValue(0);
       this.clusterId.setValue(0);
+      this.villageId.setValue(0);
       this.getTableData();
       this.getState();
     }

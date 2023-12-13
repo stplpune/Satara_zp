@@ -60,6 +60,8 @@ export class Dashbaord2Component {
   totalStudentCountSubjectwise: number = 0;
   teacherRespFilteredList:any;
   allTeacherOfficerDataList:any;
+  villageName:any;
+  centerName:any;
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
@@ -251,6 +253,8 @@ export class Dashbaord2Component {
   }
 
   getVillage() {
+    let obj = this.centerData.find((res: any) => res.id == this.f['centerId'].value);
+    this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
     this.villageData = [{ "id": 0, "village": "All", "m_Village": "सर्व" }];
     this.f['villageId'].patchValue(0);
     if (this.f['centerId'].value) {
@@ -264,6 +268,8 @@ export class Dashbaord2Component {
   }
 
   getschools() {
+    let obj = this.villageData.find((res: any) => res.id == this.f['villageId'].value);
+    this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
     this.schoolData = [{ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }];
     this.f['schoolId'].patchValue(0);
     if (this.f['villageId'].value) {
@@ -703,9 +709,6 @@ export class Dashbaord2Component {
               let label = config.config.xaxis.categories[config.dataPointIndex]
               selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
               let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'School');
-              console.log(obj);
-              return
-              
               localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
               this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
             }            

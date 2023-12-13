@@ -345,9 +345,9 @@ export class Dashboard2DashboardDetailComponent {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          this.ngxSpinner.hide();
           this.tableDataArray = res.responseData?.responseData1;
           this.viewDetailsObj = res.responseData?.responseData1[0];
+          this.ngxSpinner.hide();
           this.GetAllStandard();
           this.chartArray = [];
           setTimeout(() => {

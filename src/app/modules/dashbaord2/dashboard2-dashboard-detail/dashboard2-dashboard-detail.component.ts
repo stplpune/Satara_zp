@@ -381,11 +381,12 @@ export class Dashboard2DashboardDetailComponent {
    let displayedheadersMarathi = ['अ.क्र.', 'नाव', 'इयत्ता', 'लिंग']
 
     let tableData = {
-      highlightedrow: true,
       edit: true,
       delete: false,
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
+      highlightedrow:true,
+      pageName:'Profile',
       displayedColumns: displayedColumns,  // this.isWriteRight == true ? this.languageFlag == 'English' ? this.displayedColumns : this.marathiDisplayedColumns : this.languageFlag == 'English' ? displayedColumns : marathiDisplayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,

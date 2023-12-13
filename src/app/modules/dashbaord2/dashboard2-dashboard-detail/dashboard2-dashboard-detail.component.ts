@@ -320,6 +320,7 @@ export class Dashboard2DashboardDetailComponent {
       //   break;
       case 'View':
         this.viewDetailsObj = obj;
+        this.chartArray = [];
         console.log("viewDetailsObj", this.viewDetailsObj);
         this.GetAllStandard();
         setTimeout(() => {
@@ -418,6 +419,10 @@ export class Dashboard2DashboardDetailComponent {
         chart: {
           type: "rangeBar",
           height: 350,
+          toolbar: {
+            show: false
+          }
+      
         },
         colors: this.viewDetailsObj?.graphLevelId == 1 ? ['#b51d31'] : this.viewDetailsObj?.graphLevelId == 2 ? ['#E98754'] : ['#50c77b']
       ,
@@ -462,6 +467,11 @@ export class Dashboard2DashboardDetailComponent {
                 show: true,
               },
             },
+            grid: {
+              show: false
+          },
+          
+            
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
                 console.log(series,seriesIndex, dataPointIndex, w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]);
@@ -473,6 +483,7 @@ export class Dashboard2DashboardDetailComponent {
                 );
               },
             }
+            
       };
       console.log("this.questionwiseChartOptions", this.questionwiseChartOptions);
       

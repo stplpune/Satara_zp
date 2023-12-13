@@ -163,7 +163,7 @@ export class Dashbaord2Component {
   defaultSchoolwiseFormat() {
     this.filterForm = this.fb.group({
       evaluatorId: [0],
-      userId: [0],
+      userId: [{value:0,disabled:true}],
       classId: [0],
       subjectId: [0],
     })
@@ -329,14 +329,13 @@ export class Dashbaord2Component {
   }
 
   bindEvaluator() {
-    
     this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.selectedLang, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.evaluatorDataArray = [{ "id": 0, "evaluator": "All", "m_Evaluator": "सर्व" },...res.responseData];
           // this.getSchoolwiseBarDetails();
-          this.getAllTeacherOfficerByEvaluatorId()
+         // this.getAllTeacherOfficerByEvaluatorId()
         } else {
           this.evaluatorDataArray = [];
         }
@@ -354,11 +353,13 @@ export class Dashbaord2Component {
   }
 
   getAllTeacherOfficerByEvaluatorId() {
-    this.allTeacherOfficerData = [{ "id": 0, "teacherOfficer": "All", "m_TeacherOfficer": "सर्व" }]
-    this.allTeacherOfficerDataList =  this.allTeacherOfficerData.slice();
+    this.filterForm.controls['userId'].setValue(0);
+    this.allTeacherOfficerData = [{ "id": 0, "teacherOfficer": "All", "m_TeacherOfficer": "सर्व" }];
+    this.allTeacherOfficerDataList =  this.allTeacherOfficerData.slice();    
     let formValue = this.filterForm.value
     let mainFormValue = this.mainFilterForm.value;
     if (formValue.evaluatorId != 0) {
+      this.filterForm.controls['userId'].enable();
       let url = `EvaluatorId=${formValue.evaluatorId}&StateId=${mainFormValue.stateId}&DistrictId=${mainFormValue.districtId}&TalukaId=${mainFormValue.talukaId}`
       url += `&CenterId=${mainFormValue.centerId}&VillageId=${mainFormValue.villageId}&SchoolId=${mainFormValue.schoolId}&flag_lang=${this.selectedLang}`
       this.apiService.setHttp('get', 'zp-satara/master/GetAllTeacherOfficerByEvaluatorId?' + url, false, false, false, 'baseUrl');
@@ -372,7 +373,10 @@ export class Dashbaord2Component {
         },
         error: (() => { })
       })
+    }else{
+      this.filterForm.controls['userId'].disable();
     }
+    
   }
 
 
@@ -640,7 +644,7 @@ export class Dashbaord2Component {
 
 
   getSchoolwiseBarDetails() {
-    let fd = this.filterForm.value;
+    let fd = this.filterForm.getRawValue();
     let mainFV = this.mainFilterForm.value;
     let url = `StateId=${mainFV.stateId}&DistrictId=${mainFV.districtId}`
     url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
@@ -695,10 +699,13 @@ export class Dashbaord2Component {
           click: (_event: any, _chartContext: any, config: any) => {
             if(config.dataPointIndex != -1){
               let mainFilter = this.mainFilterForm.value;
-              let selectedFilter = this.filterForm.value;
+              let selectedFilter = this.filterForm.getRawValue();
               let label = config.config.xaxis.categories[config.dataPointIndex]
               selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
               let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'School');
+              console.log(obj);
+              return
+              
               localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
               this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
             }            

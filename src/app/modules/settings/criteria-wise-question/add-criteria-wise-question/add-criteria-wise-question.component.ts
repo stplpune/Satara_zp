@@ -68,8 +68,8 @@ export class AddCriteriaWiseQuestionComponent {
       assesmentSubjectId: ['', [Validators.required]],
       questionTypeId: ['', [Validators.required]],
       criteriaId: ['', [Validators.required]],
-      introduction: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
-      m_Introduction: ['', [Validators.required]]
+      introduction: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericSpecialCharOnly)]],
+      m_Introduction: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]]
     })
   }
 
@@ -282,9 +282,9 @@ export class AddCriteriaWiseQuestionComponent {
   addQuestion_Form() {
     this.addQuestionForm = this.fb.group({
       id: [0],
-      cQuestion: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      cQuestion: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericSpecialCharOnly)]],
       m_CQuestion: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]],
-      expectedAns: ['', [Validators.required, Validators.pattern('^[^[ ]+|[ ][gm]+$')]],
+      expectedAns: ['', [Validators.required, Validators.pattern(this.validation.alphaNumericSpecialCharOnly)]],
       m_ExpectedAns: ['', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]]
     })
   }

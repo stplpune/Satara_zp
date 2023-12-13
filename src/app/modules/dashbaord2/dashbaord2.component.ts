@@ -115,11 +115,6 @@ export class Dashbaord2Component {
     this.defaultClassrwiseFormat();
     this.defaultSubjectWiseFormat();
   }
-
-  // ngAfterViewInit() {
-  //   this.showSvgMap(this.commonMethods.mapRegions());
-  // }
-
   ngOnDestroy() {
     this.graphInstance ? this.graphInstance.destroy() : '';
   }
@@ -127,7 +122,6 @@ export class Dashbaord2Component {
   allChartApi() {
     this.clickOnSvgMap();
     this.getPieChart();
-    // this.getPieChartData();
     this.getSchoolwiseBarDetails();
     this.getTeacherwiseBarDetails();
     this.getClasswiseBarDetails();
@@ -137,11 +131,8 @@ export class Dashbaord2Component {
   allDropdownApi() {
     this.getYearArray();
     this.getState();
-    // this.getDistrict();
-    // this.getTalukas();
     this.getSubject();
     this.GetAllStandardClassWise();
-   // this.getTeacher();
     this.getAllGraphLevel();
     this.bindEvaluator();
     this.getExamType();
@@ -150,9 +141,9 @@ export class Dashbaord2Component {
 
   mainFillterDefaultFormat() {
     this.mainFilterForm = this.fb.group({
-      acYearId: [''],
-      stateId: [1],
-      districtId: [1],
+      acYearId: [this.webStorage.getYearId()],
+      stateId: [this.webStorage.getState()],
+      districtId: [this.webStorage.getDistrict()],
       talukaId: [0],
       centerId: [0],
       villageId: [0],

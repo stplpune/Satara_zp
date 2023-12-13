@@ -47,7 +47,7 @@ export class SchoolRegistrationComponent implements OnInit {
   isWriteRight!: boolean;
   highLightFlag: boolean = true;
   userId!: number;
-  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'isKedra', 'Kendra', 'Village', 'Action'];
+  displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'IsKedra', 'Kendra', 'Village', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र आहे', 'केंद्र', 'गाव', 'कृती'];
   viewStatus = 'Table';
   loginData = this.webStorageS.getLoggedInLocalstorageData();
@@ -380,12 +380,12 @@ export class SchoolRegistrationComponent implements OnInit {
       if (result == 'yes' && obj) {
         this.onClear();
         // this.getState();
-        this.getTableData();
+        // this.getTableData();
         this.pageNumber = obj.pageNumber;
       }
       else if (result == 'yes') {
         // this.getState();
-        this.getTableData();
+        // this.getTableData();
         this.onClear();
         this.pageNumber = 1;
       }

@@ -77,8 +77,8 @@ export class AddAssessmentConfigurationComponent {
       groupId: ['', [Validators.required]],
       assesmentSubjectId: ['', [Validators.required]],
       grade: [0],
-      question: [this.editObj ? this.editObj?.question : '', [Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]],
-      m_Question: [this.editObj ? this.editObj?.m_Question : '', [Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]],
+      question: [this.editObj ? this.editObj?.question : '', [Validators.required, Validators.pattern(this.validation.alphaNumericSpecialCharOnly)]],
+      m_Question: [this.editObj ? this.editObj?.m_Question : '', [Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]],
       isOption: [this.paramterArray.length ? 1 : 0],
       expectedGrade: [this.editObj ? this.editObj.expectedGrade : 0],
       questionTypeId: ['', [Validators.required]],
@@ -89,8 +89,8 @@ export class AddAssessmentConfigurationComponent {
 
   paratmeterFormField() {
     this.paramterForm = this.fb.group({
-      optionName: [this.questionEditObj ? this.questionEditObj.optionName : '', [Validators.pattern(this.validation.alphaNumericOnly)]],
-      m_OptionName: [this.questionEditObj ? this.questionEditObj.m_OptionName : '', [Validators.pattern(this.validation.marathiAlphanumeric)]]
+      optionName: [this.questionEditObj ? this.questionEditObj.optionName : '', [Validators.pattern(this.validation.alphaNumericSpecialCharOnly)]],
+      m_OptionName: [this.questionEditObj ? this.questionEditObj.m_OptionName : '', [Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]]
     })
   }
 
@@ -306,8 +306,8 @@ export class AddAssessmentConfigurationComponent {
 
   //#region ---------------------------------------------- Add and remove validation start here ---------------------------------------------
   addValidation(){
-    this.paramterForm.controls['optionName'].setValidators([Validators.required, Validators.pattern(this.validation.alphaNumericOnly)]);
-    this.paramterForm.controls['m_OptionName'].setValidators([Validators.required, Validators.pattern(this.validation.marathiAlphanumeric)]);
+    this.paramterForm.controls['optionName'].setValidators([Validators.required, Validators.pattern(this.validation.alphaNumericSpecialCharOnly)]);
+    this.paramterForm.controls['m_OptionName'].setValidators([Validators.required, Validators.pattern(this.validation.marathiAlphaNumericSpecialChar)]);
 
     this.paramterForm.controls['optionName'].updateValueAndValidity();
     this.paramterForm.controls['m_OptionName'].updateValueAndValidity();

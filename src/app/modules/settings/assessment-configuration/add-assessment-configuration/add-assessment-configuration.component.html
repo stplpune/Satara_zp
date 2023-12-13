@@ -88,7 +88,7 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.AssesmentCriteria' | translate}}</mat-label>
                         <textarea matInput formControlName="question"
-                            (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);"
+                            (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpacesWithSpeical($event);"
                             maxlength="50"></textarea>
                             <mat-error *ngIf="f['question'].hasError('pattern')">{{'Labels.PleaseEnterValidAssesmentCriteria'| translate}}</mat-error>
                     </mat-form-field>
@@ -97,7 +97,7 @@
                     <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                         <mat-label>{{'Labels.AssesmentCriteriaMarathi' | translate}}</mat-label>
                         <textarea matInput formControlName="m_Question"
-                            (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);"
+                            (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);"
                             maxlength="50"></textarea>
                             <mat-error *ngIf="f['m_Question'].hasError('pattern')">{{'Labels.PleaseEnterValidAssesmentCriteria(Marathi)'| translate}}</mat-error>
                     </mat-form-field>
@@ -111,7 +111,7 @@
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.Parameter'| translate}}</mat-label>
                                     <textarea matInput formControlName="optionName" maxlength="100"
-                                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericWithSpaces($event);">
+                                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpacesWithSpeical($event);">
                                         <mat-error *ngIf="paramterForm.controls['optionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter'| translate}}</mat-error>
                                     </textarea>
                                     </mat-form-field>
@@ -121,7 +121,7 @@
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.ParameterMarathi'| translate}}</mat-label>
                                     <textarea matInput formControlName="m_OptionName" maxlength="100"
-                                        (keypress)="validation.noFirstSpaceAllow($event); validation.unicodeMarathiAlphanumberic($event);">
+                                        (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);">
                                         <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter(Marathi)'| translate}}</mat-error>
                                     </textarea>
                                     </mat-form-field>

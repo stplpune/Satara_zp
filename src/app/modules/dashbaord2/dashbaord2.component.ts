@@ -60,6 +60,9 @@ export class Dashbaord2Component {
   totalStudentCountSubjectwise: number = 0;
   teacherRespFilteredList:any;
   allTeacherOfficerDataList:any;
+  villageName:any;
+  centerName:any;
+  schoolName:any
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
@@ -89,21 +92,13 @@ export class Dashbaord2Component {
   ngOnInit() {
     this.allDefultFormAPi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
-      console.log(lang);
       this.selectedLang = lang;
-      // this.tableHeadingArrayTop = this.selectedLang == 'English' ? ['Top Performing Schools'] : ['उत्तम कामगिरी करणाऱ्या शाळा'];
-      // this.tableHeadingArrayLow = this.selectedLang == 'English' ? ['Low Performing Schools'] : ['साधारण कामगिरी करणाऱ्या शाळा'];
-      // this.initialApiCall('languageChange');
       this.showSvgMap(this.commonMethods.mapRegions());
       this.allDropdownApi();
       this.allChartApi();
 
     });
-    // this.showSvgMap(this.commonMethods.mapRegions());
     this.getdashboardCount();
-
-    // this.allDropdownApi();
-    // this.allChartApi();
   }
 
   allDefultFormAPi() {
@@ -113,11 +108,6 @@ export class Dashbaord2Component {
     this.defaultClassrwiseFormat();
     this.defaultSubjectWiseFormat();
   }
-
-  // ngAfterViewInit() {
-  //   this.showSvgMap(this.commonMethods.mapRegions());
-  // }
-
   ngOnDestroy() {
     this.graphInstance ? this.graphInstance.destroy() : '';
   }
@@ -125,7 +115,6 @@ export class Dashbaord2Component {
   allChartApi() {
     this.clickOnSvgMap();
     this.getPieChart();
-    // this.getPieChartData();
     this.getSchoolwiseBarDetails();
     this.getTeacherwiseBarDetails();
     this.getClasswiseBarDetails();
@@ -135,11 +124,8 @@ export class Dashbaord2Component {
   allDropdownApi() {
     this.getYearArray();
     this.getState();
-    // this.getDistrict();
-    // this.getTalukas();
     this.getSubject();
     this.GetAllStandardClassWise();
-    this.getTeacher();
     this.getAllGraphLevel();
     this.bindEvaluator();
     this.getExamType();
@@ -251,6 +237,8 @@ export class Dashbaord2Component {
   }
 
   getVillage() {
+    let obj = this.centerData.find((res: any) => res.id == this.f['centerId'].value);
+    this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
     this.villageData = [{ "id": 0, "village": "All", "m_Village": "सर्व" }];
     this.f['villageId'].patchValue(0);
     if (this.f['centerId'].value) {
@@ -264,12 +252,17 @@ export class Dashbaord2Component {
   }
 
   getschools() {
+    let obj = this.villageData.find((res: any) => res.id == this.f['villageId'].value);
+    this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
     this.schoolData = [{ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }];
     this.f['schoolId'].patchValue(0);
     if (this.f['villageId'].value) {
       this.masterService.getAllSchoolByCriteria(this.selectedLang, (this.f['talukaId'].value), (this.f['villageId'].value), (this.f['centerId'].value)).subscribe((res: any) => {
         this.schoolData.push(...res.responseData);
+        this.getTeacher();
       })
+    }else{
+      this.getTeacher();
     }
   }
 
@@ -302,6 +295,8 @@ export class Dashbaord2Component {
 
   getTeacher() {
     let schoolId = this.mainFilterForm.value?.schoolId || 0;
+    let obj = this.schoolData.find((res: any) => res.id == schoolId);
+    this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
     this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
@@ -703,9 +698,6 @@ export class Dashbaord2Component {
               let label = config.config.xaxis.categories[config.dataPointIndex]
               selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
               let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'School');
-              console.log(obj);
-              return
-              
               localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
               this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
             }            
@@ -738,7 +730,7 @@ export class Dashbaord2Component {
     let mainFV = this.mainFilterForm.value;
     let url = `StateId=${mainFV.stateId}&DistrictId=${mainFV.districtId}`
     url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
-    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
+    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&TeacherId_OfficerId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardTeacherWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

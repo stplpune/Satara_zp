@@ -73,7 +73,6 @@ export class Dashboard2DashboardDetailComponent {
       this.getSubject();
     });
      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
-     console.log("selected chart data",this.chartObj);
      this.getTableData();
      this.getYearArray();     
   }
@@ -321,7 +320,6 @@ export class Dashboard2DashboardDetailComponent {
       case 'View':
         this.viewDetailsObj = obj;
         this.chartArray = [];
-        console.log("viewDetailsObj", this.viewDetailsObj);
         this.GetAllStandard();
         setTimeout(() => {
           this.getProgressIndicatorData();
@@ -333,7 +331,6 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getTableData(flag?: string){
-    // console.log("this.chartObj", this.chartObj);
     let formData = this.mainFilterForm.value;
     this.chartObj.PageNo=1;
     this.chartObj.RowCount=10;
@@ -355,7 +352,6 @@ export class Dashboard2DashboardDetailComponent {
               this.getProgressIndicatorData();
             }
           }, 2000);
-          console.log("viewDetailsObj", this.viewDetailsObj);
           this.tableDatasize = res.responseData.responseData2[0].totalCount;
         }
         else {
@@ -398,8 +394,6 @@ export class Dashboard2DashboardDetailComponent {
 
 
   schoolwiseBarChart(critearr?: any, maxgrade?:any, categoryArr?: any) { 
-    console.log("critearr", critearr, categoryArr);
-    //xAxiaArray?: any, yAxisArray?: anyz
     let seriesArray=new Array();
     if(critearr?.data?.length ){
       critearr?.data.forEach((x:any, i: number)=>{
@@ -409,7 +403,6 @@ export class Dashboard2DashboardDetailComponent {
         }
         seriesArray.push(obj)
       })
-      console.log("seriesArray",seriesArray)
       this.questionwiseChartOptions = {
         series: [
           {
@@ -435,7 +428,6 @@ export class Dashboard2DashboardDetailComponent {
         dataLabels: {
           enabled: true,
           formatter: function (val: any) {
-            console.log(val);
             return val;
           },
           // offsetY: -20,
@@ -475,7 +467,7 @@ export class Dashboard2DashboardDetailComponent {
             
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-                console.log(series,seriesIndex, dataPointIndex, w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]);
+                console.log(series);
                 
                 return (
                   '<div class="arrow_box" style="padding:10px;">' +
@@ -485,18 +477,14 @@ export class Dashboard2DashboardDetailComponent {
               },
             }
             
-      };
-      console.log("this.questionwiseChartOptions", this.questionwiseChartOptions);
-      
+      };      
       this.chartArray.push(this.questionwiseChartOptions);
-      console.log(this.chartArray)
     }
   
   }
 
   getProgressIndicatorData(){
     this.ngxSpinner.show();
-    console.log("jdhghdc", this.viewDetailsObj);
     if(this.viewDetailsObj?.studentId){
       this.graphResponse=[];
       // zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?StudentId=8006&AssessedClassId=1&SubjectId=1&ExamTypeId=0&EducationYearId=1&lan=EN
@@ -508,11 +496,8 @@ export class Dashboard2DashboardDetailComponent {
             this.ngxSpinner.hide();
           this.graphResponse =  res.responseData?.responseData1;
           this.StudentData = res.responseData?.responseData2[0];
-          this.examId.setValue(this.graphResponse[0]?.examTypeId);
-          console.log("examId",this.examId.value);
-          
+          this.examId.setValue(this.graphResponse[0]?.examTypeId);          
           this.barChartData();
-          console.log("res: ", this.graphResponse);
           }
           else{
             this.ngxSpinner.hide();
@@ -527,7 +512,6 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   barChartData(){
-    console.log("this.graphResponse", this.graphResponse);
     let examId = this.examId.value;
     this.questionArr = [];
     this.graphResponse?.map((x: any) => {
@@ -550,7 +534,6 @@ export class Dashboard2DashboardDetailComponent {
         });          
       }
     });
-    console.log("this.questionArr", this.questionArr);
     this.questionArr.forEach((chart:any)=>{
       const maxGrade=Math.max(...chart?.data.map(o => o));      
       this.schoolwiseBarChart(chart, (maxGrade!=-Infinity ? maxGrade:1), chart?.evaluator);

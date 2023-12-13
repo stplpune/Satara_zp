@@ -92,21 +92,13 @@ export class Dashbaord2Component {
   ngOnInit() {
     this.allDefultFormAPi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
-      console.log(lang);
       this.selectedLang = lang;
-      // this.tableHeadingArrayTop = this.selectedLang == 'English' ? ['Top Performing Schools'] : ['उत्तम कामगिरी करणाऱ्या शाळा'];
-      // this.tableHeadingArrayLow = this.selectedLang == 'English' ? ['Low Performing Schools'] : ['साधारण कामगिरी करणाऱ्या शाळा'];
-      // this.initialApiCall('languageChange');
       this.showSvgMap(this.commonMethods.mapRegions());
       this.allDropdownApi();
       this.allChartApi();
 
     });
-    // this.showSvgMap(this.commonMethods.mapRegions());
     this.getdashboardCount();
-
-    // this.allDropdownApi();
-    // this.allChartApi();
   }
 
   allDefultFormAPi() {
@@ -116,11 +108,6 @@ export class Dashbaord2Component {
     this.defaultClassrwiseFormat();
     this.defaultSubjectWiseFormat();
   }
-
-  // ngAfterViewInit() {
-  //   this.showSvgMap(this.commonMethods.mapRegions());
-  // }
-
   ngOnDestroy() {
     this.graphInstance ? this.graphInstance.destroy() : '';
   }
@@ -128,7 +115,6 @@ export class Dashbaord2Component {
   allChartApi() {
     this.clickOnSvgMap();
     this.getPieChart();
-    // this.getPieChartData();
     this.getSchoolwiseBarDetails();
     this.getTeacherwiseBarDetails();
     this.getClasswiseBarDetails();
@@ -138,11 +124,8 @@ export class Dashbaord2Component {
   allDropdownApi() {
     this.getYearArray();
     this.getState();
-    // this.getDistrict();
-    // this.getTalukas();
     this.getSubject();
     this.GetAllStandardClassWise();
-   // this.getTeacher();
     this.getAllGraphLevel();
     this.bindEvaluator();
     this.getExamType();

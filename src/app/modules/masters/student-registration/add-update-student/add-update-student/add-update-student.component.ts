@@ -840,11 +840,11 @@ export class AddUpdateStudentComponent {
       this.stuRegistrationForm.controls['standard'].setValue('');
     }
     else if (name == 'religionId') {
-      this.stuRegistrationForm.controls['casteCategoryId'].setValue('');
-      this.stuRegistrationForm.controls['casteId'].setValue('');
+      this.stuRegistrationForm.controls['casteCategoryId'].setValue(0);
+      this.stuRegistrationForm.controls['casteId'].setValue(0);
       this.casteArr = [];
     } else if (name == 'casteCategoryId') {
-      this.stuRegistrationForm.controls['casteId'].setValue('');
+      this.stuRegistrationForm.controls['casteId'].setValue(0);
     }
     else {
       this.stuRegistrationForm.controls['schoolId'].setValue('');

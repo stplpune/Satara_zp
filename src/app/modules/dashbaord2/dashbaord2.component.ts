@@ -36,7 +36,7 @@ export class Dashbaord2Component {
   dashboardCountData = new Array();
   acYear = new Array();
   graphInstance: any;
-  selectedLang: any;
+  selectedLang: any = this.webStorage.languageFlag == 'EN' ?'English':'Marathi';
   piechartOptions: any;
 
   stateData = new Array();
@@ -91,14 +91,21 @@ export class Dashbaord2Component {
   ) { }
   ngOnInit() {
     this.allDefultFormAPi();
+    this.allDropdownApi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.showSvgMap(this.commonMethods.mapRegions());
-      this.allDropdownApi();
+    //  this.allDropdownApi();
+      
       this.allChartApi();
+      this.getdashboardCount();
 
     });
-    this.getdashboardCount();
+    // this.showSvgMap(this.commonMethods.mapRegions());
+   
+
+     
+   //  this.allChartApi();
   }
 
   allDefultFormAPi() {
@@ -134,9 +141,9 @@ export class Dashbaord2Component {
 
   mainFillterDefaultFormat() {
     this.mainFilterForm = this.fb.group({
-      acYearId: [''],
-      stateId: [1],
-      districtId: [1],
+      acYearId: [this.webStorage.getYearId()],
+      stateId: [this.webStorage.getState()],
+      districtId: [this.webStorage.getDistrict()],
       talukaId: [0],
       centerId: [0],
       villageId: [0],
@@ -199,7 +206,7 @@ export class Dashbaord2Component {
 
   getYearArray() {
     this.acYear = [];
-    this.masterService.getAcademicYears().subscribe((res: any) => {
+    this.masterService.getAcademicYears(this.selectedLang).subscribe((res: any) => {
       this.acYear = res.responseData;
       this.f['acYearId'].patchValue(this.webStorage.getYearId());
       this.academicYear.patchValue(this.webStorage.getYearId())
@@ -237,8 +244,8 @@ export class Dashbaord2Component {
   }
 
   getVillage() {
-    let obj = this.centerData.find((res: any) => res.id == this.f['centerId'].value);
-    this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
+    this.centerName = this.centerData.find((res: any) => res.id == this.f['centerId'].value);
+   // this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
     this.villageData = [{ "id": 0, "village": "All", "m_Village": "सर्व" }];
     this.f['villageId'].patchValue(0);
     if (this.f['centerId'].value) {
@@ -252,8 +259,8 @@ export class Dashbaord2Component {
   }
 
   getschools() {
-    let obj = this.villageData.find((res: any) => res.id == this.f['villageId'].value);
-    this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
+    this.villageName= this.villageData.find((res: any) => res.id == this.f['villageId'].value);
+   // this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
     this.schoolData = [{ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }];
     this.f['schoolId'].patchValue(0);
     if (this.f['villageId'].value) {
@@ -295,8 +302,8 @@ export class Dashbaord2Component {
 
   getTeacher() {
     let schoolId = this.mainFilterForm.value?.schoolId || 0;
-    let obj = this.schoolData.find((res: any) => res.id == schoolId);
-    this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
+    this.schoolName = this.schoolData.find((res: any) => res.id == schoolId);
+   // this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
     this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {

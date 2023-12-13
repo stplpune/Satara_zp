@@ -109,7 +109,7 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.stateArr = res.responseData;
-          this.editObj ? (this.f['stateId'].setValue(this.editObj?.stateId), this.getDistrict()) : '';
+          this.editObj ? (this.f['stateId'].setValue(this.editObj?.stateId), this.getDistrict()) :(this.f['stateId'].setValue(this.webStorageS.getState()),this.getDistrict());
         }
         else {
           this.stateArr = [];
@@ -123,7 +123,7 @@ export class AddAssessmentConfigurationComponent {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag, stateId).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.districtArr = []);
-        this.editObj ? (this.f['districtId'].setValue(this.editObj?.districtId)) : '';
+        this.editObj ? (this.f['districtId'].setValue(this.editObj?.districtId)) : this.f['districtId'].setValue(this.webStorageS.getDistrict());
       }
     });
   }
@@ -134,7 +134,7 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.educationYearArr = res.responseData;
-          this.editObj ? (this.f['educationYearId'].setValue(this.editObj?.educationYearId)) : '';
+          this.editObj ? (this.f['educationYearId'].setValue(this.editObj?.educationYearId)) : this.f['educationYearId'].setValue(this.webStorageS.getYearId());
         }
         else {
           this.educationYearArr = [];

@@ -67,6 +67,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   acYear = new Array();
   selectedBarSub!: string;
   subjectArrayByClass = new Array();
+  subjectArray = new Array();
   subjectforBar = new FormControl();
   get f() { return this.filterForm.controls }
   get fBgraph() { return this.filterFormForBarGraph.controls }
@@ -79,6 +80,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedGroupIdindex!: number;
   asessmwntLavel = new FormControl();
   ExamTypeArray = new Array();
+  standardDropDArray = new Array();
   barChartDataByClass = new Array();
   stackbarChartDataByClass = new Array();
   subjectforBarByCLass = new FormControl();
@@ -131,6 +133,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getPieChart();
       this.getState();
       this.getExamType();
+      this.getStandard();
       setTimeout(() => {
         this.getdashboardCount(val);
       }, 1000);
@@ -179,6 +182,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       questionId: [0],
       optionId: [0],
       examId: [0],
+      evaluatorId: [0],
+      standardId: [0],
       filterSetNumber: ['', [this.validation.onlyDigits]]
     })
     this.getYearArray();
@@ -202,7 +207,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
-          this.evaluatorDataArray = res.responseData;
+          this.evaluatorDataArray.push({id: 0, "evaluator": "All", "m_Evaluator": "सर्व"}, ...res.responseData);
           // this.evaluatorId.patchValue(this.evaluatorDataArray[0].id);
           this.evaluatorId.setValue(1);
         } else {
@@ -322,6 +327,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.masterService.getExamType('').subscribe((res: any) => {
       this.ExamTypeArray = [{ "id": 0, "examType": "All", "m_ExamType": "सर्व" }].concat(res.responseData);
       // this.ExamTypeArray.sort((a, b) => a.id - b.id);
+    })
+  }
+
+  getStandard(){
+    this.masterService.getAllStandard(0, 0, '').subscribe((res: any) => {
+      this.standardDropDArray = [{ "id": 0, "standard": "All", "m_Standard": "सर्व"}].concat(res.responseData);
     })
   }
 
@@ -722,11 +733,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getTabledataByTaluka() {
     const filterformData = this.filterForm.value;
+    console.log("filterformData", filterformData);
+    
     this.tableDataTopPerformance = [];
     const formDatafilterbyTaluka = this.filterFormForBarGraph.value;
+    console.log("formDatafilterbyTaluka", formDatafilterbyTaluka);
+    
     // const TalukaId = filterformData?.talukaId ? filterformData?.talukaId : formDatafilterbyTaluka?.filtertalukaId;
 
-    let str = `StateId=${(filterformData?.stateId || 0)}&DistrictId=${(filterformData?.districtId || 0)}&TalukaId=${(filterformData?.talukaId || 0)}&CenterId=${(filterformData?.centerId || 0)}&VillageId=${(filterformData?.villageId || 0)}&StandardId=0&SubjectId=${(formDatafilterbyTaluka?.subjectId || 0)}&ExamTypeId=${(formDatafilterbyTaluka.examId || 0)}&EducationYearId=${this.searchAcadamicYear.value || 0}&EvaluatorId=${(this.evaluatorId.value || 0)}&lan=${this.selectedLang}`
+    let str = `StateId=${(filterformData?.stateId || 0)}&DistrictId=${(filterformData?.districtId || 0)}&TalukaId=${(filterformData?.talukaId || 0)}&CenterId=${(filterformData?.centerId || 0)}&VillageId=${(filterformData?.villageId || 0)}&StandardId=${formDatafilterbyTaluka?.standardId || 0}&SubjectId=${(formDatafilterbyTaluka?.subjectId || 0)}&ExamTypeId=${(formDatafilterbyTaluka.examId || 0)}&EducationYearId=${this.searchAcadamicYear.value || 0}&EvaluatorId=${(formDatafilterbyTaluka?.evaluatorId || 0)}&lan=${this.selectedLang}`
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool?' + str, false, false, false, 'baseUrl');
     // this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (filterformData?.talukaId || 0) + ('&CenterId=' + (filterformData?.centerId || 0)+'&VillageId=' + (filterformData?.villageId || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -751,7 +766,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   selectTable() {
     this.dataSource = this.tableDataTopPerformance;
-    this.displayedheaders = [{ label: '', m_label: '' }, { label: 'School Name', m_label: 'शाळेचे नाव' }, { label: 'Total Assessment', m_label: 'एकूण मूल्यांकन' }, { label: 'Percentage', m_label: 'टक्केवारी' }];
+    this.displayedheaders = [{ label: '', m_label: '' }, { label: 'School Name', m_label: 'शाळेचे नाव' }, { label: 'Assessed Student', m_label: 'मुल्यांकित विद्यार्थी' }, { label: 'Percentage', m_label: 'टक्केवारी' }];
   }
 
   clearForm() {
@@ -898,6 +913,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subjectArrayByClass = res.responseData;
+          this.subjectArray.push({"id": 0, "subject": "All", "m_Subject": "सर्व"}, ...res.responseData);
           this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
         }
         else {
@@ -907,22 +923,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getQuestion(){
-    const formData = this.filterFormForBarGraph.value;
-    this.questionArray = [];
-    this.apiService.setHttp('GET', 'zp-satara/master/GetQuestionListByGroupSubject?GroupId='+(this.selectedObjByClass.groupId || 0)+'&AssessmentSubjectId='+(formData?.subjectId || 0)+'&flag_lang='+ this.selectedLang, false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next : (res: any)=>{
-        if(res.statusCode == "200"){
-          this.questionArray.push({ "questionId": 0, "question": "All", "m_Question": "सर्व" }, ...res.responseData);
-          this.fBgraph['questionId'].setValue(0);
-        }
-        else{
-          this.questionArray = [];
-        }
-      }
-    })
-  }
+  // getQuestion(){
+  //   const formData = this.filterFormForBarGraph.value;
+  //   this.questionArray = [];
+  //   this.apiService.setHttp('GET', 'zp-satara/master/GetQuestionListByGroupSubject?GroupId='+(this.selectedObjByClass.groupId || 0)+'&AssessmentSubjectId='+(formData?.subjectId || 0)+'&flag_lang='+ this.selectedLang, false, false, false, 'baseUrl');
+  //   this.apiService.getHttp().subscribe({
+  //     next : (res: any)=>{
+  //       if(res.statusCode == "200"){
+  //         this.questionArray.push({ "questionId": 0, "question": "All", "m_Question": "सर्व" }, ...res.responseData);
+  //         this.fBgraph['questionId'].setValue(0);
+  //       }
+  //       else{
+  //         this.questionArray = [];
+  //       }
+  //     }
+  //   })
+  // }
   
   getRefstandardTableArrayCount() { //total count and standard row 
     const formData = this.filterForm.value;
@@ -1361,24 +1377,24 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getOptionBySubjects() {
-    let formValue = this.filterFormForBarGraph.value;
-    this.optionNameArr = [];
-    this.masterService.GetOptionListByGroupSubject(this.selectedObjByClass.groupId, (formValue?.subjectId || 0), (formValue?.questionId || 0), this.selectedLang).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          // this.optionNameArr = res.responseData
-          this.optionNameArr.push({ "optionId": 0, "optionName": "All", "m_OptionName": "सर्व" }, ...res.responseData);
+  // getOptionBySubjects() {
+  //   let formValue = this.filterFormForBarGraph.value;
+  //   this.optionNameArr = [];
+  //   this.masterService.GetOptionListByGroupSubject(this.selectedObjByClass.groupId, (formValue?.subjectId || 0), (formValue?.questionId || 0), this.selectedLang).subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == "200") {
+  //         // this.optionNameArr = res.responseData
+  //         this.optionNameArr.push({ "optionId": 0, "optionName": "All", "m_OptionName": "सर्व" }, ...res.responseData);
 
-        }
-        else {
-          this.optionNameArr = [];
-        }
-      },
+  //       }
+  //       else {
+  //         this.optionNameArr = [];
+  //       }
+  //     },
 
-    });
+  //   });
 
-  }
+  // }
 
   navigateToReport(){
     if(this.dashboardCountData[0]?.assessmentSchoolsCount){
@@ -1391,19 +1407,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  clearDropLowHighFilter(flag: string) {
-    switch (flag) {
-      case 'subject':
-        this.filterFormForBarGraph.controls['questionId'].setValue(0);
-        this.filterFormForBarGraph.controls['optionId'].setValue(0);
-        this.optionNameArr = [];
-        break;
-      case 'question':
-        this.filterFormForBarGraph.controls['optionId'].setValue(0);
-        break;
-      default:
-      // code block
-    }
+  // clearDropLowHighFilter(flag: string) {
+  //   switch (flag) {
+  //     case 'subject':
+  //       this.filterFormForBarGraph.controls['questionId'].setValue(0);
+  //       this.filterFormForBarGraph.controls['optionId'].setValue(0);
+  //       this.optionNameArr = [];
+  //       break;
+  //     case 'question':
+  //       this.filterFormForBarGraph.controls['optionId'].setValue(0);
+  //       break;
+  //     default:
+  //     // code block
+  //   }
 
-  }
+  // }
 }

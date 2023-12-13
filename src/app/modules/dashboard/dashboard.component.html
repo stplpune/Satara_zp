@@ -138,6 +138,8 @@
                             (f['centerId'].value? (' > '+(webStorage.languageFlag ==
                             'EN'?selectedCenter?.center:selectedCenter?.m_Center)):'') +
 
+                            (f['villageId'].value? (' > '+(webStorage.languageFlag ==
+                            'EN'?selectedVillage?.village:selectedVillage?.m_Village)):'') +
                              
                              (f['schoolId'].value? (' >
                             '+(webStorage.languageFlag ==
@@ -503,13 +505,13 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-sm-2 mt-2">
+                                <!-- <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100 ">
                                         <mat-label>{{'Labels.setNumber' | translate}}</mat-label>
                                         <input matInput formControlName="filterSetNumber"
                                             (keypress)="validation.onlyDigits($event)" (input)="getTabledataByTaluka()">
                                     </mat-form-field>
-                                </div>
+                                </div> -->
 
                                 <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100 mb-0">
@@ -524,7 +526,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-sm-2 mt-2">
+                                <!-- <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.selectQuestion' | translate}}</mat-label>
                                         <mat-select formControlName="questionId"
@@ -536,9 +538,9 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
+                                </div> -->
 
-                                <div class="col-sm-2 mt-2">
+                                <!-- <div class="col-sm-2 mt-2">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.selectOption' | translate}}</mat-label>
                                         <mat-select formControlName="optionId"
@@ -549,7 +551,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
+                                </div> -->
                             </div>
                         </form>
                     </div>

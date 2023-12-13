@@ -134,9 +134,9 @@ export class Dashbaord2Component {
 
   mainFillterDefaultFormat() {
     this.mainFilterForm = this.fb.group({
-      acYearId: [''],
-      stateId: [1],
-      districtId: [1],
+      acYearId: [this.webStorage.getYearId()],
+      stateId: [this.webStorage.getState()],
+      districtId: [this.webStorage.getDistrict()],
       talukaId: [0],
       centerId: [0],
       villageId: [0],

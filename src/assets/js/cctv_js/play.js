@@ -211,6 +211,7 @@ ConnectApi.onconnect = function (api_conn, code) {
 		ConnectApi.login(api_conn, api_conn.user, api_conn.pwd);
 	} else {
 		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + 'Connection failed  ' + 'Error code' + code);
+		alert("error code is here.")
 	}
 };
 /**
@@ -223,7 +224,7 @@ ConnectApi.onloginresult = function (api_conn, result) {
 	console.log(result);
 	if (result == 0) {
 		api_conn.logined = true;
-		console.log(api_conn.deviceid + '登录成功');
+		console.log(api_conn.deviceid + 'Login successful');
 		for (let i = 0; i < api_conn.streamlist.length; i++) {
 			if (api_conn.streamlist[i].winindex >= 0 && api_conn.connectType == 1) {
 				ConnectApi.open_stream(api_conn, i, api_conn.streamlist[i].streamid);
@@ -231,7 +232,9 @@ ConnectApi.onloginresult = function (api_conn, result) {
 			}
 		}
 	} else {
-		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + '登录失败 ' + '错误码：' + result);
+		console.log((api_conn.deviceid ? api_conn.deviceid : api_conn.ip) + 'Login failed' + 'error code:' + result);
+		alert("This is an error message")
+
 
 	}
 };
@@ -283,12 +286,12 @@ ConnectApi.ondisconnect = function (api_conn, code) {
  * @param {number} result 登录状态码
  */
 ConnectApi.onopenstream = function (api_conn, channel, streamid, result, cam_desc) {
-	console.log("play.js file",api_conn.deviceid + '打开码流成功,通道' + channel + '码流' + streamid);
+	console.log("play.js file",api_conn.deviceid + 'The code stream is opened successfully, channel' + channel + 'code stream ' + streamid);
 	console.log("hdhbhd",api_conn, channel , streamid);
 	// console.log(cam_desc);
 	// console.log(result);
 	if (result != 0) {
-		
+		console.log("not open stream ");
 	}
 };
 /**

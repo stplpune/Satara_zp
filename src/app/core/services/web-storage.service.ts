@@ -101,17 +101,17 @@ export class WebStorageService {
 
   getState(){
     let data = this.getLoggedInLocalstorageData();
-    return data.stateId;
+    return data.stateId || 0;
   }
 
   getDistrict(){
     let data = this.getLoggedInLocalstorageData();
-    return data.districtId;
+    return data.districtId || 0;
   }
 
   getYearId(){
     let data = this.getLoggedInLocalstorageData();
-    return data.educationYearId;
+    return data.educationYearId || 0;
   }
   createdByProps(): any {
     return {

@@ -51,7 +51,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     this.defaultForm();
     this.getStateDrop();
     this.getGender();
-    (!this.data) ? (this.getLevelDrop()) : '';   
+    (!this.data) ? (this.getLevelDrop()) : '';  
   }
 
   defaultForm() {
@@ -87,7 +87,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         "isBlock" : [true],
         "userId": [this.data ? this.data.userId : 0], 
         "genderId": [this.data ? this.data.genderId : '', [Validators.required]],
-        "dob": [this.data ? this.data.dob : '',  [Validators.required]],
+        "dob": [this.data ? new Date(this.data.dob) : '',  [Validators.required]],
         "officeCenterSchoolModel":[]
       })
     this.data ? (this.data, this.getLevelDrop(), this.getGender(), this.getStateDrop(),this.getDistrictDrop(), this.getTalukaDrop(), this.getDesignationByLevelId(),this.onEdit(), this.getVillage(),this.getAgencyDrop(), this.getBitDrop()) : ''

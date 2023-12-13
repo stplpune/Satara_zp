@@ -198,8 +198,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   bindEvaluator() {
-    console.log("call bindEvaluator...");
-    
     this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.selectedLang, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -458,6 +456,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
+        this.spinner.hide();
         if (res.statusCode == "200") {
           this.dashboardCountData.push(res.responseData.responseData1[0]);
           this.totalStudentSurveyData = res.responseData.responseData2;
@@ -479,7 +478,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dashboardCountData = [];
           this.totalStudentSurveyData = [];
         }
-        this.spinner.hide();
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -728,9 +726,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const formDatafilterbyTaluka = this.filterFormForBarGraph.value;
     // const TalukaId = filterformData?.talukaId ? filterformData?.talukaId : formDatafilterbyTaluka?.filtertalukaId;
 
-    console.log("evaluatorId: ", this.evaluatorId.getRawValue());
-    
-    let str = `StateId=${(filterformData?.stateId || 0)}&DistrictId=${(filterformData?.districtId || 0)}&TalukaId=${(filterformData?.talukaId || 0)}&CenterId=${(filterformData?.centerId || 0)}&VillageId=${(filterformData?.villageId || 0)}&StandardId=0&SubjectId=${(formDatafilterbyTaluka?.subjectId || 0)}&ExamTypeId=${(formDatafilterbyTaluka.examId || 0)}&EducationYearId=1&EvaluatorId=${(this.evaluatorId.value || 0)}&lan=${this.selectedLang}`
+    let str = `StateId=${(filterformData?.stateId || 0)}&DistrictId=${(filterformData?.districtId || 0)}&TalukaId=${(filterformData?.talukaId || 0)}&CenterId=${(filterformData?.centerId || 0)}&VillageId=${(filterformData?.villageId || 0)}&StandardId=0&SubjectId=${(formDatafilterbyTaluka?.subjectId || 0)}&ExamTypeId=${(formDatafilterbyTaluka.examId || 0)}&EducationYearId=${this.searchAcadamicYear.value || 0}&EvaluatorId=${(this.evaluatorId.value || 0)}&lan=${this.selectedLang}`
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool?' + str, false, false, false, 'baseUrl');
     // this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDataForTopLowSchool' + '?ExamTypeId=' + (formDatafilterbyTaluka.examId || 0) + '&TalukaId=' + (filterformData?.talukaId || 0) + ('&CenterId=' + (filterformData?.centerId || 0)+'&VillageId=' + (filterformData?.villageId || 0) + '&SetNo=' + (formDatafilterbyTaluka?.filterSetNumber || 0) + '&SubjectId=' + (formDatafilterbyTaluka?.subjectId || 0) + '&OptionId=' + (formDatafilterbyTaluka?.optionId || 0)), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -752,10 +748,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       error: (error: any) => { this.error.handelError(error.message) }
     });
   }
+
   selectTable() {
     this.dataSource = this.tableDataTopPerformance;
     this.displayedheaders = [{ label: '', m_label: '' }, { label: 'School Name', m_label: 'शाळेचे नाव' }, { label: 'Total Assessment', m_label: 'एकूण मूल्यांकन' }, { label: 'Percentage', m_label: 'टक्केवारी' }];
   }
+
   clearForm() {
     this.centerData = [];
     this.schoolData = [];
@@ -928,12 +926,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   
   getRefstandardTableArrayCount() { //total count and standard row 
     const formData = this.filterForm.value;
-    console.log("formData", formData);
-    
+
     this.spinner.show();
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0 )+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +'&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
+        this.spinner.hide();
         if (res.statusCode == "200") {
           this.totalStudentSurveyDataByCLass = res.responseData.responseData1;
           this.totalStudentSurveyDataByCLass.map((x: any) => {
@@ -964,6 +962,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (val == 'sigleField' ? this.searchAcadamicYear.value || 0 : formData?.acYearId || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
+        this.spinner.hide();
         if (res.statusCode == "200") {
           this.totalStudentSurveyDataByCLass = res.responseData.responseData2;
           // this.subjectArrayByClass = res.responseData.responseData2;
@@ -984,7 +983,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         } else {
           this.totalStudentSurveyDataByCLass = [];
         }
-        this.spinner.hide();
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -994,8 +992,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkDataByClass(index: number, obj: any) {
-    console.log("calling.... radio btn click", index, obj);
-    
     this.selectedObjByClass = obj;    
     // this.totalStudentSurveyDataByCLass.map((x: any) => {
     //   x.status = false;
@@ -1012,15 +1008,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getchartDataByCLass() {
     const formData = this.filterForm.value;
-    console.log("formDatagetchartDataByCLass", formData);
-    
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
-          console.log( "GetDashboardDataClassWise", res.responseData.responseData1);  
           res.responseData.responseData1.map((x: any) => {
             x.isOption == true ? this.stackbarChartDataByClass.push(x) : this.barChartDataByClass.push(x);
           });          
@@ -1212,8 +1205,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 }
   createBarchartByClass(SeriesArray: any, barSubjectSet: any) {
     // createBarchartByClass(SeriesArray:any, barSubjectSet:any, sub:any){
-      console.log("barSubjectSet",barSubjectSet);
-      
       this.barChaOptionHeight = 350;
       const length = this.barChartDataByClass.length;
       let width = this.subjectforBarByCLass.getRawValue()==1?(length < 2 ? 200 : length < 3 ? 300 : 600) :1200 //length < 5 ? 600 : length < 8 ? 500 : 500

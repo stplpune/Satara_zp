@@ -439,6 +439,7 @@
         "uploadPhotoBill": "Upload Photo/PDF",
         "UpdatedInwardItems": "Update Item Inward",
         "cctvregistration": "CCTV Location Registration",
+        "CCTVRegistrations" :"CCTV Registration",
         "cctvregistrationList": "CCTV Location List",
         "Addcctvrlocation": "Add CCTV Location",
         "CCTVLocation": "CCTV Location",

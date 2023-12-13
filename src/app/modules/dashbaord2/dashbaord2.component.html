@@ -105,9 +105,11 @@
                         <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
                     <div class="d-flex justify-content-between w-100">
                         <span class="mt-2">{{('Labels.dashboard2' | translate) + ' / '+(webStorage.languageFlag =='EN'?
-                            districtLabel?.district : districtLabel?.m_District) + ' / ' +(webStorage.languageFlag ==
-                            'EN'?talukaLabel?.taluka:talukaLabel?.m_Taluka) + ' / ' + centerName + ' / '+villageName
-                          + ' / '+schoolName}} 
+                            districtLabel?.district : districtLabel?.m_District)
+                            + ' / ' +(webStorage.languageFlag == 'EN'?talukaLabel?.taluka:talukaLabel?.m_Taluka)
+                            + ' / ' + (webStorage.languageFlag == 'EN'?centerName?.center:centerName?.m_Center) 
+                            + ' / ' +(webStorage.languageFlag == 'EN'? villageName?.village:villageName?.m_Village)
+                            + ' / '+ (webStorage.languageFlag == 'EN'? schoolName?.schoolName:schoolName?.m_SchoolName)}}
                         </span>
                         <div class="d-flex gap-2">
                             <!-- academicYear year dropdown -->
@@ -254,9 +256,13 @@
                                 <div class="col-sm-3">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.user' | translate}}</mat-label>
-                                        <mat-select formControlName="userId"  (selectionChange)="getSchoolwiseBarDetails()">
-                                            <mat-select-filter [displayMember]="'teacherOfficer'" [array]="allTeacherOfficerData" (filteredReturn)="allTeacherOfficerDataList =$event"></mat-select-filter>
-                                            <mat-option *ngFor="let data of allTeacherOfficerDataList" [value]="data.id">
+                                        <mat-select formControlName="userId"
+                                            (selectionChange)="getSchoolwiseBarDetails()">
+                                            <mat-select-filter [displayMember]="'teacherOfficer'"
+                                                [array]="allTeacherOfficerData"
+                                                (filteredReturn)="allTeacherOfficerDataList =$event"></mat-select-filter>
+                                            <mat-option *ngFor="let data of allTeacherOfficerDataList"
+                                                [value]="data.id">
                                                 {{webStorage.languageFlag == 'EN'?data.teacherOfficer
                                                 :data.m_TeacherOfficer}}
                                             </mat-option>
@@ -349,8 +355,10 @@
                                 <div class="col-sm-4">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.Teacher' | translate}}</mat-label>
-                                        <mat-select formControlName="evaluatorId"  (selectionChange)="getTeacherwiseBarDetails()">
-                                            <mat-select-filter [displayMember]="'teacherName'" [array]="teacherResp" (filteredReturn)="teacherRespFilteredList =$event"></mat-select-filter>
+                                        <mat-select formControlName="evaluatorId"
+                                            (selectionChange)="getTeacherwiseBarDetails()">
+                                            <mat-select-filter [displayMember]="'teacherName'" [array]="teacherResp"
+                                                (filteredReturn)="teacherRespFilteredList =$event"></mat-select-filter>
                                             <mat-option *ngFor="let data of teacherRespFilteredList" [value]="data.id">
                                                 {{webStorage.languageFlag == 'EN'?data.teacherName
                                                 :data.m_TeacherName}}

@@ -62,6 +62,7 @@ export class Dashbaord2Component {
   allTeacherOfficerDataList:any;
   villageName:any;
   centerName:any;
+  schoolName:any
 
   @ViewChild("schoolwiseChart") schoolwiseChart!: ChartComponent;
   public schoolwiseChartOptions!: Partial<ChartOptions> | any;
@@ -141,7 +142,7 @@ export class Dashbaord2Component {
     // this.getTalukas();
     this.getSubject();
     this.GetAllStandardClassWise();
-    this.getTeacher();
+   // this.getTeacher();
     this.getAllGraphLevel();
     this.bindEvaluator();
     this.getExamType();
@@ -275,7 +276,10 @@ export class Dashbaord2Component {
     if (this.f['villageId'].value) {
       this.masterService.getAllSchoolByCriteria(this.selectedLang, (this.f['talukaId'].value), (this.f['villageId'].value), (this.f['centerId'].value)).subscribe((res: any) => {
         this.schoolData.push(...res.responseData);
+        this.getTeacher();
       })
+    }else{
+      this.getTeacher();
     }
   }
 
@@ -308,6 +312,8 @@ export class Dashbaord2Component {
 
   getTeacher() {
     let schoolId = this.mainFilterForm.value?.schoolId || 0;
+    let obj = this.schoolData.find((res: any) => res.id == schoolId);
+    this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
     this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
@@ -741,7 +747,7 @@ export class Dashbaord2Component {
     let mainFV = this.mainFilterForm.value;
     let url = `StateId=${mainFV.stateId}&DistrictId=${mainFV.districtId}`
     url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
-    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&EvaluatorId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
+    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&TeacherId_OfficerId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardTeacherWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

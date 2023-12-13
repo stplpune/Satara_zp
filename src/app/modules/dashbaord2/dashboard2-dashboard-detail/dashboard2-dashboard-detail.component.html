@@ -190,8 +190,8 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h5 class="mb-0 fw-bold">{{selectedLang == 'English' ?
                                                     viewDetailsObj?.fullName :viewDetailsObj?.m_FullName}}</h5>
-                                                <span
-                                                    [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-bg-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-bg-primary' : 'text-bg-success'">
+                                                <span class="badge px-2 py-2 border"
+                                                    [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-primary' : 'text-success'">
                                                     {{selectedLang == 'English' ? viewDetailsObj?.graphLevel :
                                                     viewDetailsObj?.m_GraphLevel}}
                                                 </span>
@@ -356,19 +356,21 @@
                         <div class="row" *ngIf="chartArray">
                             <div class="col-sm-6"  *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
-                                    <h5 *ngIf="questionArr">{{webStorage.languageFlag == 'EN' ? questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h5>
+                                    <h6 class="fw-bold" *ngIf="questionArr">{{webStorage.languageFlag == 'EN' ? questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
                                         <apx-chart [series]="res.series" [chart]="res.chart" [dataLabels]="res.dataLabels"
                                             [plotOptions]="res.plotOptions" [yaxis]="res?.yaxis" [colors]="res.colors"
                                             [dataLabels]="res.dataLabels" 
-                                            [tooltip]="res.tooltip"></apx-chart>
+                                            [tooltip]="res.tooltip"
+                                            [grid]="res.grid"></apx-chart>
                                         <!--  -->
-                                        <div *ngIf="questionArr">
+
+                                        <div *ngIf="questionArr" class="mb-3">
                                             <span *ngFor="let param of questionArr?.[i]?.parameterArr">
                                                 {{param?.optionGrade}}: {{param?.optionName}}
                                             </span>
                                         </div>
                                         
-                                </ng-container><hr>
+                                </ng-container>
 
                                 <ng-container *ngIf="!res">
                                 <div class="alert alert-danger text-center p-2" role="alert">

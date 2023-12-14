@@ -119,7 +119,7 @@
                         <mat-label>{{'Labels.selectSubject' | translate}}</mat-label>
                         <mat-select formControlName="subjectId">
                             <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">
-                                {{languageFlag == 'English'?sub.subjectName: sub.m_SubjectName}}
+                                {{languageFlag == 'English'?sub.subject: sub.m_Subject}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

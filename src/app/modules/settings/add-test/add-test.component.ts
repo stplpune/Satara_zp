@@ -26,7 +26,7 @@ export class AddTestComponent {
   tableDatasize!: number;
   highLightFlag: any;
   displayedColumns = new Array();
-  // isWriteRight!: boolean;
+  isWriteRight!: boolean;
   districtArr = new Array();
   stateArr = new Array();
   loginData = this.webService.getLoggedInLocalstorageData();
@@ -46,6 +46,7 @@ export class AddTestComponent {
     private masterService: MasterService) { }
 
     ngOnInit(){
+      this.getIsWriteFunction();
       this.languageFlag = this.webService.languageFlag;
       this.webService.langNameOnChange.subscribe(lang => {
         this.languageFlag = lang;
@@ -54,6 +55,13 @@ export class AddTestComponent {
       this.getState();
       this.formField();
       this.getTableData();
+    }
+
+    getIsWriteFunction() {
+      let print = this.webService?.getAllPageName().find((x: any) => {
+        return x.pageURL == "exam-master"
+      });
+      (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
     }
 
     formField(){
@@ -98,7 +106,7 @@ export class AddTestComponent {
 
     setTableData() {
       this.highLightFlag = true;
-      // let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'examType' : 'm_ExamType'];
+      let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'examType' : 'm_ExamType', 'fromMonthFormatdate', 'toMonthFormatdate'];
       this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'examType' : 'm_ExamType', 'fromMonthFormatdate', 'toMonthFormatdate',  'action'];
       let tableData = {
         highlightedrow: true,
@@ -106,8 +114,7 @@ export class AddTestComponent {
         delete: true,
         pageNumber: this.pageNumber,
         img: '', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-        // displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
-        displayedColumns: this.displayedColumns,
+        displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
         tableData: this.tableDataArray,
         tableSize: this.tableDatasize,
         tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders

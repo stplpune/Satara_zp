@@ -279,11 +279,11 @@ export class StudentReportComponent {
 
   getClassWiseSubject() {
     this.subjectArr = [];
-    this.masterService.getClassWiseSubject(this.languageFlag).subscribe({
+    this.masterService.getAllSubject(this.languageFlag).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
           // this.subjectArr.push({ "id": 0, "subjectName": "All", "m_SubjectName": "सर्व" }, ...res.responseData.responseData2);
-          this.subjectArr = (res.responseData.responseData2);
+          this.subjectArr = (res.responseData);
           this.studentReportForm.controls['subjectId'].setValue(this.subjectArr[0].id);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);

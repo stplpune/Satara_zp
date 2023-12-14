@@ -79,12 +79,16 @@ export class OutwardItemComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      stateId: [0],
-      districtId: [0],
-      talukaId: [this.loginData.userTypeId > 2 ? this.loginData.talukaId : 0],
-      centerId: [this.loginData.userTypeId > 2 ? this.loginData.centerId : 0],
-      villageId: [this.loginData.userTypeId > 2 ? this.loginData.villageId : 0],
-      schoolId: [this.loginData.userTypeId > 2 ? this.loginData.schoolId : 0],
+      stateId: [this.loginData ? this.loginData?.stateId : 0],
+      districtId: [this.loginData ? this.loginData?.districtId : 0],
+      // talukaId: [this.loginData.userTypeId > 2 ? this.loginData.talukaId : 0],
+      // centerId: [this.loginData.userTypeId > 2 ? this.loginData.centerId : 0],
+      // villageId: [this.loginData.userTypeId > 2 ? this.loginData.villageId : 0],
+      // schoolId: [this.loginData.userTypeId > 2 ? this.loginData.schoolId : 0],
+      talukaId: [this.loginData ? this.loginData.talukaId : 0],
+      centerId: [this.loginData ? this.loginData.centerId : 0],
+      villageId: [this.loginData ? this.loginData.villageId : 0],
+      schoolId: [this.loginData ? this.loginData.schoolId : 0],
       CategoryId: [0],
       SubCategoryId: [''],
       ItemsId: [''],
@@ -114,42 +118,58 @@ export class OutwardItemComponent {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
     this.districtArr = [];
-    // let stateId = this.filterForm.value.stateId;
-    this.masterService.getAllDistrict('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-          this.filterForm.controls['districtId'].setValue(0);
-        }
-        else {
-          this.districtArr = [];
-        }
-      },
-      error: ((err: any) => { this.commonMethod.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusText, 1); })
-    });
+    let stateId = this.filterForm.value.stateId;
+    if(stateId > 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.loginData ? (this.filterForm.controls['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.filterForm.controls['districtId'].setValue(0);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+        error: ((err: any) => { this.commonMethod.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethod.showPopup(err.statusText, 1); })
+      });
+    }else{
+      this.districtArr = [];
+    }
   }
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
-        } else {
-          this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
-          this.talukaArr = [];
+    let districtId = this.filterForm.value.districtId;
+    if(districtId > 0){
+      this.masterService.getAllTaluka('', districtId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
+            this.filterForm?.value.talukaId ? this.getAllCenter() : '';
+          } else {
+            this.commonMethod.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethod.showPopup(res.statusMessage, 1);
+            this.talukaArr = [];
+          }
         }
-      }
-    });
+      });
+    }else{
+      this.talukaArr = [];
+    }
   }
 
   getAllCenter() {
@@ -307,8 +327,8 @@ export class OutwardItemComponent {
     this.ngxSipnner.show();
     status == 'filter' ? (this.filterFlag = true, (this.pageNumber = 1)) : '';
     let formData = this.filterForm.value;
-    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
-    let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&DistrictId=1&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=${this.totalItem * 10}&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
+    let str = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&StateId=${formData?.stateId || 0}&DistrictId=${formData?.districtId || 0}&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
+    let excel = `SchoolId=${formData?.schoolId || 0}&CategoryId=${formData?.CategoryId || 0}&SubCategoryId=${formData?.SubCategoryId || 0}&ItemId=${formData?.ItemsId || 0}&StateId=${formData?.stateId || 0}&DistrictId=${formData?.districtId || 0}&CenterId=${formData?.centerId || 0}&TalukaId=${formData?.talukaId || 0}&VillageId=${formData?.villageId || 0}&pageno=${this.pageNumber}&pagesize=${this.totalItem * 10}&TextSearch=${formData?.textSearch || ''}&lan=${this.webStorage.languageFlag}`
 
     this.apiService.setHttp('GET', 'zp-satara/Outward/GetAllOutward?' + ((status == 'excel' || status == 'pdfFlag') ? excel : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

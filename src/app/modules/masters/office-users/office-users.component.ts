@@ -21,13 +21,14 @@ import { MasterService } from 'src/app/core/services/master.service';
 })
 export class OfficeUsersComponent implements OnInit {
   cardViewFlag: boolean = false;
+  loginData = this.webStorageService.getLoggedInLocalstorageData();
   pageNumber: number = 1;
   resultDownloadArr = new Array();
   totalCount: number = 0;
   searchContent = new FormControl('');
-  stateId = new FormControl(0);
-  districtId = new FormControl(0);
-  talukaId = new FormControl(0);
+  stateId = new FormControl(this.loginData ? this.loginData?.stateId : 0);
+  districtId = new FormControl(this.loginData ? this.loginData?.districtId : 0);
+  talukaId = new FormControl(this.loginData ? this.loginData?.talukaId : 0);
   langTypeName: any;
   tableData: any;
   tableDataArray = new Array();
@@ -39,7 +40,6 @@ export class OfficeUsersComponent implements OnInit {
   isWriteRight!: boolean;
   highLightFlag: boolean =true;
   viewStatus='Table';
-  loginData = this.webStorageService.getLoggedInLocalstorageData();
   displayedheadersEnglish = ['Sr. No.', ' Office User Name', 'Designation', 'Taluka', 'Mobile No.', 'Email ID', 'Unblock/Block', 'action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'ऑफिस युजर नावे', 'पदनाम', 'तालुका', 'मोबाईल क्र.', 'ई-मेल आयडी', 'अनब्लॉक/ब्लॉक', 'कृती'];
   constructor(private apiService: ApiService, private errors: ErrorsService, private dialog: MatDialog, private commonService: CommonMethodsService,
@@ -53,8 +53,6 @@ export class OfficeUsersComponent implements OnInit {
     // this.getofficeReport();
     this.webStorageService.langNameOnChange.subscribe(lang => {
       this.langTypeName = lang;
-      console.log("langTypeName",this.langTypeName);
-      
       this.languageChange();
     });
   }

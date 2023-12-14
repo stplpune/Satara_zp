@@ -73,6 +73,7 @@ export class StudentRegistrationComponent {
     });
     this.getTableData();
     this.getIsWriteFunction();
+    console.log("login Data: ", this.loginData);
   }
 
   getIsWriteFunction() {
@@ -84,12 +85,12 @@ export class StudentRegistrationComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      stateId: [0],
-      districtId: [''],
-      talukaId: [''],
-      centerId: [''],
-      villageId: [''],
-      schoolId: [''],
+      stateId: [this.loginData ? this.loginData?.stateId : 0],
+      districtId: [this.loginData ? this.loginData?.districtId : ''],
+      talukaId: [this.loginData ? this.loginData?.talukaId : ''],
+      centerId: [this.loginData ? this.loginData?.centerId : ''],
+      villageId: [this.loginData ? this.loginData?.villageId : ''],
+      schoolId: [this.loginData ? this.loginData?.schoolId : ''],
       textSearch: ['']
     })
   }
@@ -100,8 +101,8 @@ export class StudentRegistrationComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let pageNo = this.pageNumber;
-    let str = `?pageno=${pageNo}&pagesize=10&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
-    let reportStr = `?pageno=1&pagesize=${this.totalCount * 10}&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
+    let str = `?pageno=${pageNo}&pagesize=10&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&StateId=${this.filterForm.value.stateId || 0}&DistrictId=${this.filterForm.value.districtId || 0}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
+    let reportStr = `?pageno=1&pagesize=${this.totalCount * 10}&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&StateId=${this.filterForm.value.stateId || 0}&DistrictId=${this.filterForm.value.districtId || 0}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
     this.apiService.setHttp('GET', 'zp-satara/Student/GetAll' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

@@ -50,6 +50,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
     ) {}
 
   ngOnInit(): void {
+    this.getIsWriteFunction();
     this.defaultForm();
     this.getState();
     this.getSubject(); this.getQuestion(); this.getStandard(); this.getEducatioYear();
@@ -62,6 +63,13 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   }
 
   get f(){ return this.filterForm.controls;}
+
+  getIsWriteFunction() {
+    let print = this.webService?.getAllPageName().find((x: any) => {
+      return x.pageURL == "criteria-wise-question"
+    });
+    (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
+  }
 
   defaultForm(){
     this.filterForm = this.fb.group({
@@ -78,11 +86,12 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   languageChange() {
     this.highLightFlag = true;
+    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District','standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', this.languageFlag == 'English' ? 'criteria' : 'm_Criteria'];
     let displayedColumns = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District','standard', this.languageFlag == 'English' ? 'subject' : 'm_Subject', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', this.languageFlag == 'English' ? 'criteria' : 'm_Criteria', 'action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
-      displayedColumns: displayedColumns,
+      displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,

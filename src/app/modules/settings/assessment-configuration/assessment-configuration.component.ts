@@ -288,7 +288,7 @@ export class AssessmentConfigurationComponent {
       else if(result == 'yes'){
         this.pageNumber = 1;
         this.getTableData();
-        this.formField();;
+        this.formField();
       }
     });
   }

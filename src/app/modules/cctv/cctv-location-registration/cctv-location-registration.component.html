@@ -26,7 +26,7 @@
                     matTooltipClass="tooltip" (click)="getTableData('excel')">
                     <mat-icon class="material-symbols-outlined">table</mat-icon>
                 </button>
-                <button mat-flat-button class="btn-main" (click)="openDialog()">
+                <button *ngIf="isWriteRight === true" mat-flat-button class="btn-main" (click)="openDialog()">
                     <mat-icon>add</mat-icon>
                     {{'Labels.Addcctvrlocation'| translate}}
                 </button>
@@ -147,7 +147,7 @@
                         <!-- <th>{{'Labels.Username'| translate}}</th>
                         <th>{{'Labels.Password'| translate}}</th> -->
                         <!-- <th>{{'Labels.remark'| translate}}</th> -->
-                        <th>{{'Labels.action'| translate}}</th>
+                        <th *ngIf="this.isWriteRight === true">{{'Labels.action'| translate}}</th>
                     </tr>
                 </thead>
                 <tbody *ngFor="let data of tableDataArray; let i=index;">
@@ -172,7 +172,7 @@
                                 {{data?.remark}}
                             </span>
                         </td> -->
-                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1">
+                        <td [attr.rowspan]="data.cctvDetailsModelResponse?.length+1" *ngIf="this.isWriteRight === true">
                             <button mat-icon-button 
                                 matTooltip="{{'Labels.edit' | translate}}"
                                 matTooltipPosition="left" matTooltipClass="tooltip" (click)="openDialog(data.id)">

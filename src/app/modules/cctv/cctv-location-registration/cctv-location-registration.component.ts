@@ -74,7 +74,7 @@ export class CctvLocationRegistrationComponent {
 
   getIsWriteFunction() {
     let print = this.webService?.getAllPageName().find((x: any) => {
-      return x.pageURL == "item"
+      return x.pageURL == "cctv-location-registration"
     });
     (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
   }
@@ -278,7 +278,7 @@ export class CctvLocationRegistrationComponent {
       highlightedrow: true,
       pageNumber: this.pageNumber,
       img: 'docPath', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-      displayedColumns: this.isWriteRight == true ? displayedColumns : displayedColumnsReadMode,
+      displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders,

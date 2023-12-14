@@ -36,6 +36,7 @@ export class AssessmentConfigurationComponent {
   subjectArr = new Array();
   questionArr = new Array();
   educationYearArr = new Array();
+  loginData = this.webService.getLoggedInLocalstorageData();
   displayedheadersEnglish = ['Sr. No.', 'District', 'Standard', 'Subject', 'Question Type', 'Assessment Criteria', 'Educational Year', 'Unblock/Block','Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'इयत्ता', 'विषय', 'प्रश्न प्रकार', 'मूल्यांकन निकष', 'शैक्षणिक वर्ष', 'अनब्लॉक/ब्लॉक', 'कृती'];
   @ViewChild('formDirective') private formDirective!: NgForm;
@@ -65,13 +66,13 @@ export class AssessmentConfigurationComponent {
 
     formField(){
       this.filterForm = this.fb.group({
-        stateId: [0],
-        districtId: [0],
+        stateId: [this.loginData ? this.loginData.stateId : 0],
+        districtId: [this.loginData ? this.loginData.districtId : 0],
         groupId: [0],
         standardId: [0],
         subjectId: [0],
         assessmentTypeId: [0],
-        educationalYearId : [0],
+        educationalYearId : [this.loginData ? this.loginData.educationYearId : 0],
         questionTypeId: [0],
       })
     }
@@ -169,7 +170,7 @@ export class AssessmentConfigurationComponent {
           next: (res: any) => {
             if(res.statusCode == "200"){
               this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
-              this.getDistrict()
+              this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
             }
             else{
               this.stateArr = [];
@@ -186,6 +187,7 @@ export class AssessmentConfigurationComponent {
           next: (res: any) => {
             if (res.statusCode == "200") {
               this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+              this.loginData ? this.filterForm.controls['districtId'].setValue(this.loginData?.districtId) : this.filterForm.controls['districtId'].setValue(0);
             }
             else {
               this.districtArr = [];
@@ -342,6 +344,7 @@ export class AssessmentConfigurationComponent {
   clearFilterForm() {
     this.formDirective?.resetForm();
     this.formField();
+    this.getState();
     this.getTableData();
     this.pageNumber = 1;
     this.districtArr = [];

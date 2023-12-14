@@ -19,6 +19,7 @@ export class AddAssessmentSubjectComponent {
   stateArr = new Array();
   districtArr = new Array();
   languageFlag: any;
+  loginData = this.webService.getLoggedInLocalstorageData();
   get f() { return this.subjectForm.controls }
 
   constructor(private masterService: MasterService,
@@ -58,7 +59,7 @@ export class AddAssessmentSubjectComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.stateArr = res.responseData;
-          this.data ? (this.f['stateId'].setValue(this.data?.stateId), this.getDistrict())  : '';
+          this.data ? (this.f['stateId'].setValue(this.data?.stateId), this.getDistrict())  : this.loginData ? (this.f['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
         }
         else{
           this.stateArr = [];
@@ -74,7 +75,7 @@ export class AddAssessmentSubjectComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr = res.responseData;
-          this.data ? (this.f['districtId'].setValue(this.data?.stateId))  : '';
+          this.data ? (this.f['districtId'].setValue(this.data?.districtId))  : this.loginData ? this.f['districtId'].setValue(this.loginData?.districtId) : this.f['districtId'].setValue(0);
         }
         else {
           this.districtArr = [];

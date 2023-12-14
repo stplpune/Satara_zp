@@ -229,7 +229,7 @@ export class Dashbaord2Component {
   }
 
   getCenters() {
-    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value);
+    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value !=0);
     this.centerData = [{ "id": 0, "center": "All", "m_Center": "सर्व" }];
     this.f['centerId'].setValue(0);
     if (this.f['talukaId'].value) {
@@ -244,7 +244,7 @@ export class Dashbaord2Component {
   }
 
   getVillage() {
-    this.centerName = this.centerData.find((res: any) => res.id == this.f['centerId'].value);
+    this.centerName = this.centerData.find((res: any) => res.id == this.f['centerId'].value && this.f['centerId'].value !=0);
    // this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
     this.villageData = [{ "id": 0, "village": "All", "m_Village": "सर्व" }];
     this.f['villageId'].patchValue(0);
@@ -259,7 +259,7 @@ export class Dashbaord2Component {
   }
 
   getschools() {
-    this.villageName= this.villageData.find((res: any) => res.id == this.f['villageId'].value);
+    this.villageName= this.villageData.find((res: any) => res.id == this.f['villageId'].value && this.f['villageId'].value !=0);
    // this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
     this.schoolData = [{ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }];
     this.f['schoolId'].patchValue(0);
@@ -302,7 +302,7 @@ export class Dashbaord2Component {
 
   getTeacher() {
     let schoolId = this.mainFilterForm.value?.schoolId || 0;
-    this.schoolName = this.schoolData.find((res: any) => res.id == schoolId);
+    this.schoolName = this.schoolData.find((res: any) => res.id == schoolId && schoolId !=0 );
    // this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
     this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
       next: (res: any) => {
@@ -888,6 +888,7 @@ export class Dashbaord2Component {
     }, {})
   }
   classwiseBarChart(xAxiaArray?: any, slowLearnerArray?: any, brilliantLearnerArray?: any, goodLearnerArray?: any) {
+    
     this.classwiseChartOptions = {
       series: [
         {
@@ -954,7 +955,9 @@ export class Dashbaord2Component {
       },
       xaxis: {
         categories: xAxiaArray,
-
+      },
+      yaxis: {
+         
       },
     }
   }
@@ -1047,8 +1050,11 @@ export class Dashbaord2Component {
       },
       xaxis: {
         categories: xAxiaArray,
-
       },
+      // yaxis :{
+      //     min:0,
+      //     max:10
+      // }
     }
   }
 

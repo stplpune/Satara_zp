@@ -545,7 +545,8 @@
         "introductionMarathi": "Introduction(Marathi)",
         "ExpAnswerMarathi": "Expected Answer(Marathi)",
         "AssesDate": "Assessment Date",
-        "iAssesed": "Is Assessed?"
+        "iAssesed": "Is Assessed?",
+        "biometricdeviceregistration":"Biometric Device Registration"
 
     }
 }

@@ -50,7 +50,8 @@ const routes: Routes = [
   { path: 'holiday-master', loadChildren: () => import('../../modules/attendence/hoilday-master/hoilday-master.module').then(m => m.HoildayMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Hoilday Master', m_title: 'हॉलिडे मास्टर', active: true }] }  },
   { path: 'cctv-location-registration', loadChildren: () => import('../../modules/cctv/cctv-location-registration/cctv-location-registration.module').then(m => m.CctvLocationRegistrationModule) ,canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV Location Registration', m_title: 'CCTV स्थान नोंदणी', active: true }]}},
   { path: 'cctv', loadChildren: () => import('../../modules/cctv/cctv/cctv.module').then(m => m.CctvModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'CCTV', m_title: 'CCTV स्थान', active: true }] }   },
-
+  { path: 'biometric-device-registration', loadChildren: () => import('../../modules/attendence/biometric-device-registration/biometric-device-registration.module').then(m => m.BiometricDeviceRegistrationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Biometric Device Registration', m_title: 'बायोमेट्रिक उपकरण नोंदणी', active: true }]}  },
+  
   //------setting-routing--------//
 
   { path: 'assessment-subject', loadChildren: () => import('../../modules/settings/add-subject/add-subject.module').then(m => m.AddSubjectModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Subject', m_title: 'मूल्यांकन विषय', active: true }] }    },
@@ -58,7 +59,7 @@ const routes: Routes = [
   { path: 'assessment-configuration', loadChildren: () => import('../../modules/settings/assessment-configuration/assessment-configuration.module').then(m => m.AssessmentConfigurationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Configuration', m_title: 'मूल्यांकन निकष', active: true }]}},
   { path: 'criteria-wise-question', loadChildren: () => import('../../modules/settings/criteria-wise-question/criteria-wise-question.module').then(m => m.CriteriaWiseQuestionModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Criteria Wise Question', m_title: 'निकषा नुसार प्रश्न', active: true }]} },
   { path: 'cctv-streaming', component:LiveStreamingComponent , data: { breadcrumb: [{ title: 'cctv',m_title: 'cctv-प्रवाह', active: true }] } },
-  { path: 'biometric-device-registration', loadChildren: () => import('../../modules/settings/biometric-device-registration/biometric-device-registration.module').then(m => m.BiometricDeviceRegistrationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Biometric Device Registration', m_title: 'बायोमेट्रिक उपकरण नोंदणी', active: true }]}  },
+  
 ]
   
 

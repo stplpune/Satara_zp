@@ -498,6 +498,7 @@ export class StoreMasterComponent {
     this.schoolArr = [];
     this.subCategoryArr = [];
     this.itemArr = [];
+    this.getState();
   }
 
   

@@ -393,13 +393,17 @@ export class Dashboard2DashboardDetailComponent {
   }
 
 
-  schoolwiseBarChart(critearr?: any, maxgrade?:any, categoryArr?: any) { 
+  schoolwiseBarChart(critearr?: any, _maxgrade?:any, categoryArr?: any) { 
+   let yAxisMaxValue = critearr?.parameterArr[critearr.parameterArr.length -1].optionGrade;
     let seriesArray=new Array();
+    const colurArray=['#b51d31', '#E98754'];
+    console.log(critearr)
     if(critearr?.data?.length ){
       critearr?.data.forEach((x:any, i: number)=>{
         const obj={
-          x: [categoryArr[i]],
-          y: [-1, x]
+          x: [categoryArr[i]['label']],
+          y: [-1, x] , // set Level Of which student answer ,
+          fillColor: categoryArr[i]['flag']? colurArray[1]:colurArray[0]
         }
         seriesArray.push(obj)
       })
@@ -418,8 +422,10 @@ export class Dashboard2DashboardDetailComponent {
           }
       
         },
-        colors: this.viewDetailsObj?.graphLevelId == 1 ? ['#b51d31'] : this.viewDetailsObj?.graphLevelId == 2 ? ['#E98754'] : ['#50c77b']
-      ,
+        colors: ['#b51d31', '#E98754'],
+
+        // colors: this.viewDetailsObj?.graphLevelId == 1 ? ['#b51d31'] : this.viewDetailsObj?.graphLevelId == 2 ? ['#E98754'] : ['#50c77b']
+      
         plotOptions: {
           bar: {
             horizontal: false,
@@ -449,13 +455,22 @@ export class Dashboard2DashboardDetailComponent {
           },
         },
         yaxis: {
-              min: -1,
-              max: maxgrade,
+              // min: -1,
+              max: yAxisMaxValue , // set Last Parameter in this criteria
               labels: {
                 formatter: function (val: any) {
                   return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
                 }
               },
+            //   labels: {
+            //   tickAmount: 2,
+            //   formatter: (value: any, _i: any) => {
+            //     console.log(value.toFixed(3))
+            //     const v=value.toFixed(0)
+            //     let val = v ==(-1) ? '' : v ==(+0) ?'No':v ==1?'Yes':'';
+            //     return val
+            //   },
+            // },
               axisTicks: {
                 show: true,
               },
@@ -480,6 +495,8 @@ export class Dashboard2DashboardDetailComponent {
       };      
       this.chartArray.push(this.questionwiseChartOptions);
     }
+    console.log("this.chartArray", this.chartArray);
+    
   
   }
 
@@ -519,7 +536,7 @@ export class Dashboard2DashboardDetailComponent {
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];
           let evaluatorArr:any = [];
-          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
+          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push({flag:gr.isInspection,label:this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer})})
           // res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr=(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
           let obj = {
             questionId: res.questionId,
@@ -530,12 +547,12 @@ export class Dashboard2DashboardDetailComponent {
             // evaluator: evaluatorArr,
             parameterArr: res.parameterModel
           }
-          this.questionArr.push(obj);
+          res.assessedDataModel.length ? this.questionArr.push(obj) :'';          
         });          
       }
     });
     this.questionArr.forEach((chart:any)=>{
-      const maxGrade=Math.max(...chart?.data.map(o => o));      
+      const maxGrade=Math.max(...chart?.data.map(o => o));            
       this.schoolwiseBarChart(chart, (maxGrade!=-Infinity ? maxGrade:1), chart?.evaluator);
     })
     

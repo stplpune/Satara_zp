@@ -238,7 +238,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     else {
       // let studentApi = 'GetDashboardDataStudentListForCommon'
       // let basicStr = 'zp-satara/Dashboard/' + studentApi + '?GroupId=' + GroupId + '&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) +'&SchoolId=' + (SchoolId || 0) + '&SubjectId=' + (SubjectId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&StandardId=' + (StandardId || 0) + '&AcademicYearId=' + AcademicYearId + '&ExamTypeId=' + examTypeId + '&lan='
-      let str = 'StateId='+StateId+'&DistrictId='+DistrictId+'&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + StandardId + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + (questionId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&EducationYearId=' + AcademicYearId+ '&EvaluatorId='+(this.dashboardObj?.evaluatorId)+ '&PageNo='+this.pageNumber+'&PageSize=10' + '&lan=' + this.languageFlag;
+      let str = 'StateId='+(StateId || 0)+'&DistrictId='+(DistrictId || 0)+'&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + (StandardId || 0) + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + (questionId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&EducationYearId=' + (AcademicYearId || 0)+ '&EvaluatorId='+(this.dashboardObj?.evaluatorId || 0)+ '&PageNo='+this.pageNumber+'&PageSize=10' + '&lan=' + this.languageFlag;
 
       this.apiService.setHttp('GET','zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?' + str, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
@@ -540,7 +540,9 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.selectedVillage = '';
     this.selectedTaluka = '';
     this.selectedShcool = '';
-    this.getTaluka();
+    this.formData();
+    this.getState();
+    // this.getTaluka();
     // this.dashboardObj.label == "table" ? this.filterForm.controls['groupByClass'].patchValue(1) :this.filterForm.controls['groupByClass'].patchValue(0)
     this.filterForm.controls['groupByClass'].patchValue(1)
     this.filterForm.controls['examTypeId'].patchValue(0)

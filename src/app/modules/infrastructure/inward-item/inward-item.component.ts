@@ -80,12 +80,16 @@ export class InwardItemComponent {
 
   filterFormData() {
     this.filterForm = this.fb.group({
-      stateId: [0],
-      districtId: [0],
-      talukaId: [this.loginData.userTypeId > 2 ? this.loginData.talukaId : 0],
-      centerId: [this.loginData.userTypeId > 2 ? this.loginData.centerId : 0],
-      villageId: [this.loginData.userTypeId > 2 ? this.loginData.villageId : 0],
-      schoolId: [this.loginData.userTypeId > 2 ? this.loginData.schoolId : 0],
+      stateId: [this.loginData ? this.loginData?.stateId : 0],
+      districtId: [this.loginData ? this.loginData?.districtId : 0],
+      // talukaId: [this.loginData.userTypeId > 2 ? this.loginData.talukaId : 0],
+      // centerId: [this.loginData.userTypeId > 2 ? this.loginData.centerId : 0],
+      // villageId: [this.loginData.userTypeId > 2 ? this.loginData.villageId : 0],
+      // schoolId: [this.loginData.userTypeId > 2 ? this.loginData.schoolId : 0],
+      talukaId: [this.loginData.userTypeId  ? this.loginData.talukaId : 0],
+      centerId: [this.loginData.userTypeId ? this.loginData.centerId : 0],
+      villageId: [this.loginData.userTypeId ? this.loginData.villageId : 0],
+      schoolId: [this.loginData.userTypeId ? this.loginData.schoolId : 0],
       categoryId: [''],
       subCategoryId: [''],
       itemsId: [''],
@@ -97,8 +101,8 @@ export class InwardItemComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let formValue = this.filterForm.value;
-    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&DistrictId=1&CenterId=${(formValue?.centerId || 0)}&TalukaId=${(formValue?.talukaId || 0)}&VillageId=${(formValue?.villageId || 0)}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
-    let reportStr = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&DistrictId=1&CenterId=${(formValue?.centerId || 0)}&TalukaId=${(formValue?.talukaId || 0)}&VillageId=${(formValue?.villageId || 0)}&pageno=${this.pageNumber}&pagesize=${this.totalCount * 10}&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
+    let str = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&CenterId=${(formValue?.centerId || 0)}&TalukaId=${(formValue?.talukaId || 0)}&VillageId=${(formValue?.villageId || 0)}&pageno=${this.pageNumber}&pagesize=10&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
+    let reportStr = `SchoolId=${(formValue?.schoolId || 0)}&CategoryId=${(formValue?.categoryId || 0)}&SubCategoryId=${(formValue?.subCategoryId || 0)}&ItemId=${(formValue?.itemsId || 0)}&StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&CenterId=${(formValue?.centerId || 0)}&TalukaId=${(formValue?.talukaId || 0)}&VillageId=${(formValue?.villageId || 0)}&pageno=${this.pageNumber}&pagesize=${this.totalCount * 10}&TextSearch=${(formValue?.textSearch.trim() || '')}&lan=${this.webStorageS.languageFlag}`;
 
     this.apiService.setHttp('GET', 'zp-satara/Inward/GetAllInward?' + ((flag == 'excel' || flag == 'pdfFlag') ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -219,37 +223,48 @@ export class InwardItemComponent {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if(res.statusCode == "200"){
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
+        }
+        else{
+          this.stateArr = [];
+        }
+      }
+    });
   }
 
   getDistrict() {
     this.districtArr = [];
-    // let stateId = this.filterForm.value.stateId;
-    this.masterService.getAllDistrict('').subscribe({
-      next: (res: any) => {
-        if (res.statusCode == "200") {
-          this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-          this.filterForm.controls['districtId'].setValue(0);
-        }
-        else {
-          this.districtArr = [];
-        }
-      },
-      error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
-    });
+    let stateId = this.filterForm.value.stateId;
+    if(stateId > 0){
+      this.masterService.getAllDistrict('', stateId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode == "200") {
+            this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.loginData ? (this.filterForm.controls['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.filterForm.controls['districtId'].setValue(0);
+          }
+          else {
+            this.districtArr = [];
+          }
+        },
+        error: ((err: any) => { this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+      });
+    }else{
+        this.districtArr = [];
+    }
   }
 
   getTaluka() {
     this.talukaArr = [];
-    this.masterService.getAllTaluka('').subscribe({
+    let districtId = this.filterForm.value.districtId;
+    this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-          // this.f['talukaId'].setValue(0);
-          this.filterForm?.value.talukaId ? this.getAllCenter() : '';
+          this.loginData ? (this.filterForm.controls['talukaId'].setValue(this.loginData.talukaId), this.getAllCenter()) : this.filterForm.controls['talukaId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.talukaArr = [];
@@ -266,7 +281,7 @@ export class InwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.filterForm?.value.centerId ? this.getVillage() : '';
+            this.loginData ? (this.filterForm.controls['centerId'].setValue(this.loginData.centerId), this.getVillage()) : this.filterForm.controls['centerId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.centerArr = [];
@@ -284,7 +299,7 @@ export class InwardItemComponent {
         next: (res: any) => {
           if (res.statusCode == 200) {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.filterForm?.value.villageId ? this.getAllSchools() : '';
+            this.loginData ? (this.filterForm.controls['villageId'].setValue(this.loginData.villageId), this.getAllSchools()) : this.filterForm.controls['villageId'].setValue(0);
           } else {
             this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
             this.villageArr = [];
@@ -303,7 +318,7 @@ export class InwardItemComponent {
       next: (res: any) => {
         if (res.statusCode == 200) {
           this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-          this.f['schoolId'].setValue(this.loginData.schoolId);
+          this.loginData ? this.filterForm.controls['schoolId'].setValue(this.loginData.schoolId) : this.filterForm.controls['schoolId'].setValue(0);
         } else {
           this.commonMethodS.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethodS.showPopup(res.statusMessage, 1);
           this.schoolArr = [];

@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'doc-download-for-android/:id', loadChildren: () => import('./modules/doc-download-for-android/doc-download-for-android-routing.module').then(m => m.DocDownloadForAndroidRoutingModule) },
   { path: 'school-report', loadChildren: () => import('./modules/reports/school-report/school-report.module').then(m => m.SchoolReportModule) },
   { path: 'share/:id', loadChildren: () => import('./modules/share-event-for-android/share-event-for-android.module').then(m => m.ShareEventForAndroidModule) },
+  
   // { path: 'cctv-streaming', loadChildren: () => import('./modules/cctv/cctv/cctv.module').then(m => m.CctvModule) },
 
 

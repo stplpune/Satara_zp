@@ -53,6 +53,7 @@ export class AssessmentConfigurationComponent {
     private datepipe: DatePipe) {}
 
     ngOnInit(){
+      this.getIsWriteFunction();
       this.formField();
       this.getTableData();
       this.getState(); 
@@ -62,6 +63,13 @@ export class AssessmentConfigurationComponent {
         this.languageFlag = lang;
         this.languageChange();
       });
+    }
+
+    getIsWriteFunction() {
+      let print = this.webService?.getAllPageName().find((x: any) => {
+        return x.pageURL == "assessment-configuration"
+      });
+      (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
     }
 
     formField(){
@@ -113,13 +121,13 @@ export class AssessmentConfigurationComponent {
 
   languageChange() {
     this.highLightFlag = true;
-    // let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
+    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear'];
     let displayedColumns = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', 'standard', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', this.languageFlag == 'English' ? 'questionType' : 'm_QuestionType', this.languageFlag == 'English' ? 'question' : 'm_Question', this.languageFlag == 'English' ? 'educationYear' : 'm_EducationYear', 'isBlock','action'];
     this.tableData = {
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: 'isBlock', pagintion: true, defaultImg: "",
-      // displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode,
-      displayedColumns: displayedColumns,
+      displayedColumns: this.isWriteRight === true ? displayedColumns : displayedColumnsReadMode,
+      // displayedColumns: displayedColumns,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheadersEnglish : this.displayedheadersMarathi,

@@ -33,6 +33,7 @@ export class AddSubjectComponent {
   loginData = this.webService.getLoggedInLocalstorageData();
   displayedheaders = ['Sr. No.', 'State', 'District', 'Subject', 'action'];
   marathiDisplayedheaders = ['अनुक्रमांक', 'राज्य', 'जिल्हा', 'विषय', 'कृती'];
+  isWriteRight!: boolean;
 
   constructor(public dialog: MatDialog,
     private fb: FormBuilder,
@@ -47,6 +48,7 @@ export class AddSubjectComponent {
     public validationService: ValidationService) { }
 
     ngOnInit(){
+      this.getIsWriteFunction();
       this.languageFlag = this.webService.languageFlag;
       this.webService.langNameOnChange.subscribe(lang => {
         this.languageFlag = lang;
@@ -55,6 +57,13 @@ export class AddSubjectComponent {
       this.getState();
       this.formField();
       this.getTableData();
+    }
+
+    getIsWriteFunction() {
+      let print = this.webService?.getAllPageName().find((x: any) => {
+        return x.pageURL == "assessment-subject"
+      });
+      (print.writeRight === true) ? this.isWriteRight = true : this.isWriteRight = false
     }
 
     formField(){
@@ -69,7 +78,6 @@ export class AddSubjectComponent {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let pageNo = this.pageNumber;
-    // zp-satara/AssessmentSubject/GetAll?StateId=0&DistrictId=0&TextSearch=l&PageNo=1&PageSize=10&lan=EN
 
     let str = `StateId=${this.filterForm.value.stateId || 0}&DistrictId=${this.filterForm.value.districtId || 0}&TextSearch=${this.filterForm.value.textSearch?.trim() || ''}&PageNo=${pageNo}&PageSize=10&lan=${this.languageFlag || ''}`;
     let reportStr = `?pageno=1&pagesize=${this.totalCount * 10}&textSearch=${this.filterForm.value.textSearch?.trim() || ''}&TalukaId=${this.filterForm.value.talukaId || 0}&CenterId=${this.filterForm.value.centerId || 0}&VillageId=${this.filterForm.value.villageId || 0}&SchoolId=${this.filterForm.value.schoolId || 0}&lan=${this.languageFlag || ''}`;
@@ -99,7 +107,7 @@ export class AddSubjectComponent {
 
   setTableData() {
     this.highLightFlag = true;
-    // let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName'];
+    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName'];
     this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'state' : 'm_State', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'subjectName' : 'm_SubjectName', 'action'];
     let tableData = {
       highlightedrow: true,
@@ -107,8 +115,7 @@ export class AddSubjectComponent {
       delete: true,
       pageNumber: this.pageNumber,
       img: '', blink: '', badge: '', isBlock: '', pagintion: this.tableDatasize > 10 ? true : false,
-      // displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
-      displayedColumns: this.displayedColumns,
+      displayedColumns: this.isWriteRight == true ? this.displayedColumns : displayedColumnsReadMode,
       tableData: this.tableDataArray,
       tableSize: this.tableDatasize,
       tableHeaders: this.languageFlag == 'English' ? this.displayedheaders : this.marathiDisplayedheaders

@@ -62,6 +62,7 @@ export class AddExamMasterComponent {
   submitArr = new Array();
   editCriteriaFlag:boolean =false;
   editCriteriaObj:any;
+  loginData = this.webService.getLoggedInLocalstorageData();
   get f() { return this.examForm.controls }
   get cf() { return this.assetCriteriaFrom.controls}
 
@@ -130,7 +131,7 @@ export class AddExamMasterComponent {
         next: (res: any) => {
           if(res.statusCode == "200"){
             this.stateArr = res.responseData;
-            this.data ? (this.f['stateId'].setValue(this.data?.stateId), this.getDistrict())  : '';
+            this.data ? (this.f['stateId'].setValue(this.data?.stateId), this.getDistrict())  : this.loginData ? (this.f['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
           }
           else{
             this.stateArr = [];
@@ -146,7 +147,7 @@ export class AddExamMasterComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr = res.responseData;
-            this.data ? (this.f['districtId'].setValue(this.data?.stateId))  : '';
+            this.data ? (this.f['districtId'].setValue(this.data?.districtId))  : this.loginData ? this.f['districtId'].setValue(this.loginData?.districtId) : this.f['districtId'].setValue(0);
           }
           else {
             this.districtArr = [];
@@ -160,9 +161,8 @@ export class AddExamMasterComponent {
       this.masterService.getAcademicYears(this.webService.languageFlag).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
-            this.educationYearArr=res.responseData;
-            this.data ? (this.f['educationYearId'].setValue(this.data?.educationYearId))  : '';
-
+            this.educationYearArr = res.responseData;
+            this.data ? (this.f['educationYearId'].setValue(this.data?.educationYearId))  : this.loginData ? this.f['educationYearId'].setValue(this.loginData?.educationYearId) : this.f['educationYearId'].setValue(0);
           }
           else {
             this.educationYearArr = [];

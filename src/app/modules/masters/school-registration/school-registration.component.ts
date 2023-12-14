@@ -21,14 +21,15 @@ import { AesencryptDecryptService } from 'src/app/core/services/aesencrypt-decry
   styleUrls: ['./school-registration.component.scss']
 })
 export class SchoolRegistrationComponent implements OnInit {
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
   pageNumber: number = 1;
   tableDataArray = new Array();
   // searchContent = new FormControl('');
-  stateId = new FormControl(0);
-  districtId = new FormControl(0);
-  talukaId = new FormControl(0);
-  centerId = new FormControl(0);
-  villageId = new FormControl(0);
+  stateId = new FormControl(this.loginData ? this.loginData.stateId : 0);
+  districtId = new FormControl(this.loginData ? this.loginData.districtId : 0);
+  talukaId = new FormControl(this.loginData ? this.loginData?.talukaId : 0);
+  centerId = new FormControl(this.loginData ? this.loginData?.centerId : 0);
+  villageId = new FormControl(this.loginData ? this.loginData?.villageId : 0);
   searchContent = new FormControl('');
   resultDownloadArr = new Array();
   stateArr = new Array();
@@ -50,7 +51,6 @@ export class SchoolRegistrationComponent implements OnInit {
   displayedheadersEnglish = ['Sr. No.', '', 'School Name', 'Taluka', 'IsKedra', 'Kendra', 'Village', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', '', 'शाळेचे नाव', 'तालुका', 'केंद्र आहे', 'केंद्र', 'गाव', 'कृती'];
   viewStatus = 'Table';
-  loginData = this.webStorageS.getLoggedInLocalstorageData();
 
   constructor(private dialog: MatDialog,
     private apiService: ApiService,
@@ -67,8 +67,8 @@ export class SchoolRegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.getIsWriteFunction();
-    this.getTableData();
     this.getState();
+    this.getTableData();
     // this.getofficeReport();
     this.userId = this.webStorageS.getUserTypeId();
 
@@ -114,10 +114,10 @@ export class SchoolRegistrationComponent implements OnInit {
     this.ngxSpinner.show();
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let pageNo = this.cardViewFlag ? (this.pageNumber) : this.pageNumber;
-    let str = `?pageno=${pageNo}&pagesize=10&DistrictId=${this.districtId.value ? this.districtId.value : 0}
+    let str = `?pageno=${pageNo}&pagesize=10&StateId=${this.stateId.value || 0}&DistrictId=${this.districtId.value ? this.districtId.value : 0}
     &TalukaId=${this.talukaId.value ? this.talukaId.value : 0}&VillageId=${this.villageId.value ? this.villageId.value : 0}&CenterId=${this.centerId.value ? this.centerId.value : 0}&TextSearch=${this.searchContent.value ? this.searchContent.value : ''}&lan=${this.webStorageS.languageFlag}`;
 
-    let reportStr = `?pageno=1&pagesize=` + (this.totalCount * 10) + `&DistrictId=${this.districtId.value ? this.districtId.value : 0}
+    let reportStr = `?pageno=1&pagesize=` + (this.totalCount * 10) + `&StateId=${this.stateId.value || 0}&DistrictId=${this.districtId.value ? this.districtId.value : 0}
     &TalukaId=${this.talukaId.value ? this.talukaId.value : 0}&VillageId=${this.villageId.value ? this.villageId.value : 0}&CenterId=${this.centerId.value ? this.centerId.value : 0}&TextSearch=${this.searchContent.value ? this.searchContent.value : ''}&lan=${this.webStorageS.languageFlag}`;
 
     this.apiService.setHttp('GET', 'zp-satara/School/GetAll' + ((flag == 'pdfFlag' || flag == 'excel') ? reportStr : str), false, false, false, 'baseUrl');

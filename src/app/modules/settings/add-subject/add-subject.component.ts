@@ -30,6 +30,7 @@ export class AddSubjectComponent {
   // isWriteRight!: boolean;
   districtArr = new Array();
   stateArr = new Array();
+  loginData = this.webService.getLoggedInLocalstorageData();
   displayedheaders = ['Sr. No.', 'State', 'District', 'Subject', 'action'];
   marathiDisplayedheaders = ['अनुक्रमांक', 'राज्य', 'जिल्हा', 'विषय', 'कृती'];
 
@@ -58,8 +59,8 @@ export class AddSubjectComponent {
 
     formField(){
       this.filterForm = this.fb.group({
-        stateId: [0],
-        districtId: [0],
+        stateId: [this.loginData ? this.loginData.stateId : 0],
+        districtId: [this.loginData ? this.loginData.districtId : 0],
         textSearch: ['']
       })
     }
@@ -149,10 +150,18 @@ export class AddSubjectComponent {
   }
 
   getState(){
-    this.stateArr = [
-      {"id": 0, "state": "All", "m_State": "सर्व"},
-      {"id": 1, "state": "Maharashtra", "m_State": "महाराष्ट्र"}
-    ];
+    this.masterService.getAllState('').subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200") {
+          this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+          this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
+
+        }
+        else { 
+          this.stateArr = []; 
+        }
+      }
+    });
   }
 
   getDistrict() {
@@ -162,7 +171,7 @@ export class AddSubjectComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-          this.filterForm.controls['districtId'].setValue(0);
+          this.loginData ? this.filterForm.controls['districtId'].setValue(this.loginData?.districtId) : this.filterForm.controls['districtId'].setValue(0);
         }
         else {
           this.districtArr = [];
@@ -196,12 +205,12 @@ export class AddSubjectComponent {
       if(result == 'yes' && obj){
         this.onClear();
         this.getState();
-        this.getTableData();
+        // this.getTableData();
         this.pageNumber = obj.pageNumber;
       }
       else if(result == 'yes'){
         this.getState();
-        this.getTableData();
+        // this.getTableData();
         this.onClear();
         this.pageNumber = 1;
       }

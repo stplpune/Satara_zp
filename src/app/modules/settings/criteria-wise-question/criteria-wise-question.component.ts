@@ -33,6 +33,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
   questionArr = new Array();
   educationYearArr = new Array();
   criteriaArr = new Array();
+  loginData = this.webService.getLoggedInLocalstorageData();
 
   displayedheadersEnglish = ['Sr. No.', 'District',  'Standard', 'Subject','Question Type', 'Educational Year', 'Criteria', 'Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'जिल्हा','इयत्ता', 'विषय','प्रश्नाचा प्रकार', 'शैक्षणिक वर्ष', 'निकष', 'कृती'];
@@ -64,10 +65,10 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   defaultForm(){
     this.filterForm = this.fb.group({
-      stateId: [0],
-      districtId: [0],
+      stateId: [this.loginData ? this.loginData?.stateId : 0],
+      districtId: [this.loginData ? this.loginData?.districtId : 0],
       standardId: [0],
-      educationalYearId : [0],
+      educationalYearId : [this.loginData ? this.loginData?.educationYearId : 0],
       subjectId: [0],
       questionTypeId: [0],
       criteriaId: [0],
@@ -97,7 +98,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
         next: (res: any) => {
           if(res.statusCode == "200"){
             this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
-            this.getDistrict();
+            this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
           }
           else{  this.stateArr = []; }
         }
@@ -111,6 +112,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
+            this.loginData ? this.filterForm.controls['districtId'].setValue(this.loginData?.districtId) : this.filterForm.controls['districtId'].setValue(0);
           }
           else { this.districtArr = []; }
         },
@@ -125,6 +127,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.standardArr.push({"groupId": 0, "standard": "All", "m_Standard": "सर्व"}, ...res.responseData);
+          // this.f['standardId'].setValue(0);
         }
         else {
           this.standardArr = [];
@@ -252,6 +255,7 @@ export class CriteriaWiseQuestionComponent implements OnInit{
 
   clearFilterForm() {
     this.defaultForm();
+    this.getState();
     this.getTableData();
     this.pageNumber = 1;
     this.districtArr = [];

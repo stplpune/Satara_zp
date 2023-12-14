@@ -29,6 +29,7 @@ export class AddCriteriaWiseQuestionComponent {
   questionArr = new Array();
   criteriaArr = new Array();
   editObj: any;
+  loginData = this.webStorageS.getLoggedInLocalstorageData();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -91,7 +92,7 @@ export class AddCriteriaWiseQuestionComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.stateArr = res.responseData;
-          this.editObj ? (this.f['stateId'].setValue(this.editObj?.stateId), this.getDistrict()) : '';
+          this.editObj ? (this.f['stateId'].setValue(this.editObj?.stateId), this.getDistrict()) : this.loginData ? (this.f['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
         }
         else { this.stateArr = []; }
       }
@@ -102,7 +103,7 @@ export class AddCriteriaWiseQuestionComponent {
     this.masterService.getAllDistrict(this.webStorageS.languageFlag, this.f['stateId'].value).subscribe({
       next: (res: any) => {
         res.statusCode == "200" ? (this.districtArr = res.responseData) : (this.districtArr = []);
-        this.editObj ? (this.f['districtId'].setValue(this.editObj?.districtId)) : '';
+        this.editObj ? (this.f['districtId'].setValue(this.editObj?.districtId)) : this.loginData ? this.f['districtId'].setValue(this.loginData?.districtId) : this.f['districtId'].setValue(0);
       }
     });
   }

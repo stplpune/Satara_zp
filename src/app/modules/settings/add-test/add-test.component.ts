@@ -29,6 +29,7 @@ export class AddTestComponent {
   // isWriteRight!: boolean;
   districtArr = new Array();
   stateArr = new Array();
+  loginData = this.webService.getLoggedInLocalstorageData();
   displayedheaders = ['Sr. No.', 'State', 'District', 'Exam', 'From Month' , 'To Month','action'];
   marathiDisplayedheaders = ['अनुक्रमांक', 'राज्य', 'जिल्हा', 'परीक्षा', 'महिन्यापासून', 'महिन्यापर्यंत', 'कृती'];
 
@@ -57,8 +58,8 @@ export class AddTestComponent {
 
     formField(){
       this.filterForm = this.fb.group({
-        stateId: [0],
-        districtId: [0],
+        stateId: [this.loginData ? this.loginData?.stateId : 0],
+        districtId: [this.loginData ? this.loginData?.districtId : 0],
         textSearch: [''],
         date: ['']
       })
@@ -153,6 +154,7 @@ export class AddTestComponent {
         next: (res: any) => {
           if(res.statusCode == "200"){
             this.stateArr.push({"id": 0, "state": "All", "m_State": "सर्व"}, ...res.responseData);
+            this.loginData ? (this.filterForm.controls['stateId'].setValue(this.loginData?.stateId), this.getDistrict()) : this.filterForm.controls['stateId'].setValue(0);
           }
           else{
             this.stateArr = [];
@@ -169,7 +171,7 @@ export class AddTestComponent {
           next: (res: any) => {
             if (res.statusCode == "200") {
               this.districtArr.push({"id": 0, "district": "All", "m_District": "सर्व"}, ...res.responseData);
-              this.filterForm.controls['districtId'].setValue(0);
+              this.loginData ? this.filterForm.controls['districtId'].setValue(this.loginData?.districtId) : this.filterForm.controls['districtId'].setValue(0);
             }
             else {
               this.districtArr = [];
@@ -261,6 +263,7 @@ export class AddTestComponent {
   onClear(){
     this.districtArr = [];
     this.formField();
+    this.getState();
     this.getTableData();
   }
 

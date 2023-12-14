@@ -89,7 +89,7 @@
                         <mat-label>{{'Labels.AssesmentCriteria' | translate}}</mat-label>
                         <textarea matInput formControlName="question"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpacesWithSpeical($event);"
-                            maxlength="50"></textarea>
+                            maxlength="500"></textarea>
                             <mat-error *ngIf="f['question'].hasError('pattern')">{{'Labels.PleaseEnterValidAssesmentCriteria'| translate}}</mat-error>
                     </mat-form-field>
                 </div>
@@ -98,7 +98,7 @@
                         <mat-label>{{'Labels.AssesmentCriteriaMarathi' | translate}}</mat-label>
                         <textarea matInput formControlName="m_Question"
                             (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);"
-                            maxlength="50"></textarea>
+                            maxlength="500"></textarea>
                             <mat-error *ngIf="f['m_Question'].hasError('pattern')">{{'Labels.PleaseEnterValidAssesmentCriteria(Marathi)'| translate}}</mat-error>
                     </mat-form-field>
                 </div>
@@ -110,7 +110,7 @@
                             <div class="col-md-6 d-flex gap-2">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.Parameter'| translate}}</mat-label>
-                                    <textarea matInput formControlName="optionName" maxlength="100"
+                                    <textarea matInput formControlName="optionName" maxlength="500"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpacesWithSpeical($event);">
                                         <mat-error *ngIf="paramterForm.controls['optionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter'| translate}}</mat-error>
                                     </textarea>
@@ -120,7 +120,7 @@
                             <div class="col-md-6 d-flex gap-2">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.ParameterMarathi'| translate}}</mat-label>
-                                    <textarea matInput formControlName="m_OptionName" maxlength="100"
+                                    <textarea matInput formControlName="m_OptionName" maxlength="500"
                                         (keypress)="validation.noFirstSpaceAllow($event); validation.alphaNumericSpecialCharMarathi($event);">
                                         <mat-error *ngIf="paramterForm.controls['m_OptionName'].hasError('pattern')">{{'Labels.PleaseEnterValidParameter(Marathi)'| translate}}</mat-error>
                                     </textarea>

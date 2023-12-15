@@ -222,7 +222,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getState(){
     this.stateData = [];
-    this.masterService.getAllState(this.selectedLang).subscribe((res:any)=>{
+    this.masterService.getAllState('').subscribe((res:any)=>{
      this.stateData = res.responseData;
      this.getDistrict()
     })
@@ -1026,10 +1026,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const formData = this.filterForm.value;
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
+    this.spinner.show();
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
+          this.spinner.hide();
           res.responseData.responseData1.map((x: any) => {
             x.isOption == true ? this.stackbarChartDataByClass.push(x) : this.barChartDataByClass.push(x);
           });          
@@ -1038,10 +1040,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.isBarChartEmty = this.barChartDataByClass.every((item: any) => item.totalPercentage === 0);
           this.constructStackBarChartByClass();
          this.constructBarChartByClass();
-
         }
       },
-      error: (error: any) => { this.error.handelError(error.message) }
+      error: (error: any) => {this.spinner.hide();
+        this.error.handelError(error.message) }
     });
   }
 

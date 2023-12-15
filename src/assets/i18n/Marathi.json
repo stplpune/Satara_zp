@@ -562,7 +562,7 @@
         "devicenamemarathi":"डिव्हाइसचे नाव(मराठी)",
         "shortnamemarathi":"संक्षिप्त नाव(मराठी)",
         "serialNumber":"अनुक्रमांक",
-        "commectionType":"जोडणी प्रकार",
+        "connectionType":"जोडणी प्रकार",
         "IPaddress":"IP पत्ता",
         "deviceDirection":"डिव्हाइस दिशा",
         "FaceDeviceType":"चेहरा डिव्हाइस प्रकार",

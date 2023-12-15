@@ -52,6 +52,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     this.getStateDrop();
     this.getGender();
     (!this.data) ? (this.getLevelDrop()) : '';  
+    console.log("onEdit: ", this.data);
   }
 
   defaultForm() {
@@ -256,19 +257,43 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   //   }
   // }
 
+  // getCenterDrop(data?:any) {
+  //   console.log("data:", data);
+    
+  //   if(this.officeForm.value.talukaId && this.officeForm.value.designationLevelId == 8 && this.officeForm.value.designationId == 18){     
+  //     this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
+  //     this.apiService.getHttp().subscribe({
+  //       next: (resp: any) => { 
+  //         resp.statusCode == "200" ? (this.centers = resp.responseData) : this.centers = [];
+  //         this.data ? (this.fc['centerId'].setValue(data)) : this.fc['centerId'].setValue(null);
+  //        },
+  //       error: (e: any) => { this.error.handelError(e) }
+  //     });
+
+  //   }
+  // }
+
   getCenterDrop(data?:any) {
     console.log("data:", data);
     
     if(this.officeForm.value.talukaId && this.officeForm.value.designationLevelId == 8 && this.officeForm.value.designationId == 18){     
-      this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
+      // this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
+      this.apiService.setHttp('GET', 'zp-satara/Office/GetAllCenterForClusterHead?TalukaId='+this.officeForm.value.talukaId+'&lan='+this.webStorageService.languageFlag, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (resp: any) => { 
-          resp.statusCode == "200" ? (this.centers = resp.responseData) : this.centers = [];
+          resp.statusCode == "200" ? (this.centers = resp.responseData?.responseData1) : this.centers = [];
           this.data ? (this.fc['centerId'].setValue(data)) : this.fc['centerId'].setValue(null);
+
+          data?.map((x: any) => {
+            this.centers.map((a: any) => {
+              if(x.centerId == a.id){
+                a.isPresent = false;
+              }
+            })
+          })
          },
         error: (e: any) => { this.error.handelError(e) }
       });
-
     }
   }
 
@@ -285,7 +310,9 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
   onEdit(){
     if(this.officeForm.value.designationId == 18){
-      let getcenter = this.data?.officeCenterSchoolResponseModel;   
+      let getcenter = this.data?.officeCenterSchoolResponseModel;  
+      console.log("getcenter", getcenter);
+      
       let arr = new Array;
       if(getcenter?.length){
         for(let i =0; i< getcenter.length;i++){
@@ -297,11 +324,10 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
             userId: this.webStorageService.getUserId(),
             isDeletedFlag: false    
              }
-             arr.push(obj)
+             arr.push(obj);
         }
         this.getCenterDrop(arr);
       }
-     
     }
   }
 
@@ -313,7 +339,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     // return;
     let kendramobLength = this.officeForm.value.kendraMobileNo.length;
     let mobileLength = this.officeForm.value.mobileNo.length;
-
+    
     if (this.officeForm.value.designationId == 18 && (kendramobLength > 0) && (mobileLength > 0) && (this.officeForm.value.kendraMobileNo == this.officeForm.value.mobileNo)) {
       this.commonService.showPopup(this.webStorageService.languageFlag == 'EN' ? 'Contact No.(Kendra) and Mobile No. Can Not Be Same' : 'संपर्क क्रमांक (केंद्र) आणि संपर्क क्रमांक एकच असू शकत नाही', 1);
       return
@@ -334,6 +360,8 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     if (this.officeForm.valid) {
       if (this.officeForm.value.designationId == 18) {
         let arrr = this.officeForm.value.centerId;
+        console.log("arrr : ", arrr);
+        
         
        this.officeCenterSchoolModelArr=[];
         for (let i = 0; i < arrr.length; i++) {
@@ -341,7 +369,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
           let obj = {
             id: filterData?filterData?.id :0 ,
             officerId: 0,
-            centerId: arrr[i].centerId,
+            centerId: arrr[i].id,
             centerSchoolId: arrr[i].centerSchoolId,
             userId: this.webStorageService.getUserId(),
             isDeletedFlag: false
@@ -355,6 +383,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         this.officeForm.value.officeCenterSchoolModel = []
         formData.centerId = 0;
       }
+      console.log("formData", formData);
       this.ngxSpinner.show();
       let submitUrl = this.data ? 'UpdateOffice' : 'AddOffice'
       this.ngxSpinner.hide()
@@ -630,7 +659,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   }
 
   compareFn(object1: any, object2: any) {
-    return object1 && object2 && object1.centerId === object2.centerId;
+    return object1 && object2 && object1.id === object2.centerId;
   }
 
 }

@@ -7,22 +7,27 @@
     </div>
 </div>
 
-<form>
+<form [formGroup]="biometricForm" (ngSubmit)="onSubmit()">
     <mat-dialog-content class="card-body scrollbar">
         <div class="row gx-2">
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.state' | translate}}</mat-label>
-                    <mat-select formControlName="stateId">
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="stateId" (selectionChange)="onChangeDropD('state'); getDistrict();">
+                        <mat-option *ngFor="let state of stateArr" [value]="state.id">
+                            {{webStorageS.getLangauge() == 'EN' ? state.state : state.m_State}}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.district' | translate}}</mat-label>
-                    <mat-select formControlName="districtId">
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="districtId"
+                        (selectionChange)="onChangeDropD('district'); getTaluka();">
+                        <mat-option *ngFor="let district of districtArr" [value]="district.id">
+                            {{webStorageS.getLangauge() == 'EN' ? district.district : district.m_District}}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -30,8 +35,10 @@
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label> {{'Labels.taluka'| translate}}</mat-label>
-                    <mat-select formControlName="standardId">
-                        <mat-option>Option-1</mat-option>
+                    <mat-select formControlName="talukaId" (selectionChange)="onChangeDropD('taluka'); getAllCenter();">
+                        <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{webStorageS.getLangauge() ==
+                            'EN' ?
+                            tal.taluka:tal.m_Taluka }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -39,105 +46,118 @@
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.center' | translate}}</mat-label>
-                    <mat-select formControlName="subjectId">
-                        <mat-option>option-1</mat-option>
+                    <mat-select formControlName="centerId" (selectionChange)="onChangeDropD('center'); getVillage();">
+                        <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{webStorageS.getLangauge() ==
+                            'EN' ? cen.center:cen.m_Center}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.village' | translate}}</mat-label>
-                    <mat-select formControlName="questionTypeId">
-                        <mat-option>option-1</mat-option>
+                    <mat-select formControlName="villageId"
+                        (selectionChange)="onChangeDropD('village'); getAllSchools();">
+                        <mat-option *ngFor="let village of villageArr" [value]="village.id">{{webStorageS.getLangauge()
+                            == 'EN' ?
+                            village.village:village.m_Village}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.school' | translate}}</mat-label>
-                    <mat-select formControlName="educationalYearId">
-                        <mat-option>option-1</mat-option>
+                    <mat-select formControlName="schoolId">
+                        <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{webStorageS.getLangauge() ==
+                            'EN' ?
+                            sch.schoolName:sch.m_SchoolName}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.devicename' | translate}}</mat-label>
-                    <textarea matInput></textarea>
+                    <textarea matInput formControlName="deviceName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
                 </mat-form-field>
             </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.devicenamemarathi' | translate}}</mat-label>
-                    <textarea matInput></textarea>
+                    <textarea matInput formControlName="m_DeviceName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
                 </mat-form-field>
             </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.shortname' | translate}}</mat-label>
-                    <textarea matInput></textarea>
+                    <textarea matInput formControlName="shortName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
                 </mat-form-field>
             </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.shortnamemarathi' | translate}}</mat-label>
-                    <textarea matInput></textarea>
+                    <textarea matInput formControlName="m_ShortName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.serialNumber' | translate}}</mat-label>
-                   <input matInput>
+                    <input matInput formControlName="serialNumber" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100">
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.connectionType' | translate}}</mat-label>
-                    <mat-select formControlName="educationalYearId">
-                        <mat-option>option-1</mat-option>
+                    <mat-select formControlName="connectionType">
+                        <mat-option *ngFor="let connection of connectionTypeArr" [value]="connection">{{connection}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.IPaddress' | translate}}</mat-label>
-                   <input matInput>
+                    <input matInput formControlName="ipAddress" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100">
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.deviceDirection' | translate}}</mat-label>
-                    <mat-select formControlName="educationalYearId">
-                        <mat-option>option-1</mat-option>
+                    <mat-select formControlName="deviceDirection">
+                        <mat-option *ngFor="let device of deviceDirectionArr" [value]="device.shortName">{{device.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.FaceDeviceType' | translate}}</mat-label>
-                    <mat-select formControlName="educationalYearId">
-                        <mat-option>option-1</mat-option>
+                    <mat-select formControlName="faceDeviceType">
+                        <mat-option *ngFor="let faceDevice of faceDeviceArr" [value]="faceDevice">{{faceDevice}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
-                <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
+                <!-- <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.DeviceType' | translate}}</mat-label>
-                    <mat-select formControlName="educationalYearId">
+                    <mat-select formControlName="deviceType">
                         <mat-option>option-1</mat-option>
                     </mat-select>
-                </mat-form-field>
+                </mat-form-field> -->
+                <mat-radio-group aria-label="Select an option" formControlName="deviceType">
+                    <mat-radio-button value="Attendance">Attendance</mat-radio-button>
+                    <mat-radio-button value="Canteen">Canteen</mat-radio-button>
+                    <mat-radio-button value="Access Control">Access Control</mat-radio-button>
+                </mat-radio-group>
             </div>
         </div>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" class="card-footer">
         <div class="d-flex w-100 align-items-center justify-content-end">
-            <button mat-flat-button mat-dialog-close class="btn-second me-2" type="button">{{'Labels.cancel' | translate}}</button>
-            <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate) : ('Labels.submit' | translate)}}</button>
+            <button mat-flat-button mat-dialog-close class="btn-second me-2" type="button">{{'Labels.cancel' |
+                translate}}</button>
+            <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate) :
+                ('Labels.submit' | translate)}}</button>
         </div>
     </mat-dialog-actions>
 </form>

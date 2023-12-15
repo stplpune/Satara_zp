@@ -719,7 +719,9 @@ export class Dashbaord2Component {
         },
       },
       dataLabels: {
-        enabled: true,
+        formatter: function (val: any,) {
+          return val.toFixed(0) + ' %'
+        }
       },
       xaxis: {
         categories: xAxiaArray,

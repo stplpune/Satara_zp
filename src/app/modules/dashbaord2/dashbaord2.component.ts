@@ -820,8 +820,14 @@ export class Dashbaord2Component {
       },
       xaxis: {
         categories: xAxiaArray,
-
       },
+      yaxis :{
+        labels: {
+          formatter: function (value:any) {          
+            return value.toFixed();
+          }
+        },
+      }
     }
   }
   // --------------------------------Teacherwise  Performance barChart  end here------------------------------
@@ -888,7 +894,6 @@ export class Dashbaord2Component {
     }, {})
   }
   classwiseBarChart(xAxiaArray?: any, slowLearnerArray?: any, brilliantLearnerArray?: any, goodLearnerArray?: any) {
-    
     this.classwiseChartOptions = {
       series: [
         {
@@ -956,11 +961,16 @@ export class Dashbaord2Component {
       xaxis: {
         categories: xAxiaArray,
       },
-      yaxis: {
-         
-      },
+      yaxis :{
+        labels: {
+          formatter: function (value:any) {          
+            return value.toFixed();
+          }
+        },
+      }
     }
   }
+ 
 
   // --------------------------------Classwise  Performance barChart  end here------------------------------
 
@@ -1051,10 +1061,13 @@ export class Dashbaord2Component {
       xaxis: {
         categories: xAxiaArray,
       },
-      // yaxis :{
-      //     min:0,
-      //     max:10
-      // }
+      yaxis :{
+        labels: {
+          formatter: function (value:any) {          
+            return value.toFixed();
+          }
+        },
+      }      
     }
   }
 

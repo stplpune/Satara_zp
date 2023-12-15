@@ -609,8 +609,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of tableDataTopPerformance; let j=index"
-                                        (click)="onStudentDetails(j, 'topPerformance')">
+                                    <!-- <tr *ngFor="let item of tableDataTopPerformance; let j=index"
+                                        (click)="onStudentDetails(j, 'topPerformance')"> -->
+                                        <tr *ngFor="let item of tableDataTopPerformance; let j=index">
                                         <td><img class="table-img"
                                                 src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
                                         </td>
@@ -658,8 +659,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let item of tableDataLowPerformance; let j=index"
-                                        (click)="onStudentDetails(j, 'lowPerformance')">
+                                    <!-- <tr *ngFor="let item of tableDataLowPerformance; let j=index"
+                                        (click)="onStudentDetails(j, 'lowPerformance')"> -->
+                                        <tr *ngFor="let item of tableDataLowPerformance; let j=index">
                                         <td><img class="table-img"
                                                 src="{{item['schoolImage'] ? item['schoolImage'] : 'assets/images/user.png'}}">
                                         </td>

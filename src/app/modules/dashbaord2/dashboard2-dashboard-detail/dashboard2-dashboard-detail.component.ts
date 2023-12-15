@@ -403,9 +403,10 @@ export class Dashboard2DashboardDetailComponent {
         const obj={
           x: [categoryArr[i]['label']],
           // y: [-1, x] , // set Level Of which student answer ,
-          y: critearr?.questionId == 34 ? [-1, x] : [0, x ], // set Level Of which student answer ,
+          y: (critearr?.questionTypeId == 3 || critearr?.questionTypeId == 4) ? [-1, x] : [0, x ], // set Level Of which student answer ,
           fillColor: categoryArr[i]['flag']? colurArray[1]:colurArray[0],
-          assDate:categoryArr[i]['date']
+          assDate:categoryArr[i]['date'],
+          parameter: categoryArr[i]['parameter']
         }
         seriesArray.push(obj)
       })
@@ -441,14 +442,9 @@ export class Dashboard2DashboardDetailComponent {
         },
         xaxis: {
           // categories: categoryArr,  //'Officer'
-          parameters: this.selectedLang == 'English' ? ['Evaluator Name', 'Assessment Date'] : ['मूल्यांकनकर्त्याचे नाव', 'मूल्यांकन तारीख'],
+          parameters: this.selectedLang == 'English' ? ['Evaluator', 'Assessment Date', 'Selected Level'] : ['मूल्यांकनकर्ता', 'मूल्यांकन तारीख', 'निवडलेला स्तर'],
           axisTicks: {
             show: false
-          },
-          style: {
-            fontSize: '12px',
-            fontFamily: 'Noto Sans Devanagari, sans-serif',
-            cssClass: 'apexcharts-xaxis-label',
           },
         },
         yaxis: {
@@ -482,9 +478,10 @@ export class Dashboard2DashboardDetailComponent {
                 console.log(series, w);
                 
                 return (
-                  '<div class="arrow_box" style="padding:2px;">' +
+                  '<div class="arrow_box" style="padding:2px;z-index:+999">' +
                   "<div>" + w.config.xaxis.parameters[0] + " :  <b> " +w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]  + '</b>'+ "</div>" +
-                  "<div>" + w.config.xaxis.parameters[1] + " :  <b> " + w?.config?.series[seriesIndex]?.data[dataPointIndex].assDate + "<b> "+
+                  "<div>" + w.config.xaxis.parameters[1] + " :  <b> " + w?.config?.series[seriesIndex]?.data[dataPointIndex].assDate + "</b> "+
+                  "<div>" + w.config.xaxis.parameters[2] + " :  <b> " + w?.config?.series[seriesIndex]?.data[dataPointIndex].parameter + "<b> "+
                   "</div>"
                 );
               },
@@ -534,10 +531,12 @@ export class Dashboard2DashboardDetailComponent {
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];
           let evaluatorArr:any = [];
-          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push({flag:gr.isInspection,label:this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer, date: gr.assessmentDate})})
-          // res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr=(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
+          res.assessedDataModel.map((gr:any)=>{
+            const para = res.parameterModel.find((p:any)=>p.optionGrade == gr.grade)            
+            GrdeArr.push(gr.grade);
+            evaluatorArr.push({flag:gr.isInspection,label:this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer, date: gr.assessmentDate,parameter: this.selectedLang == 'English' ? para.optionName : para.m_OptionName})})
           let obj = {
-            questionId: res.questionId,
+            questionTypeId: res.questionTypeId,
             question: res.question,
             m_Question: res.m_Question,
             data: GrdeArr,
@@ -545,10 +544,12 @@ export class Dashboard2DashboardDetailComponent {
             // evaluator: evaluatorArr,
             parameterArr: res.parameterModel
           }
-          res.assessedDataModel.length ? this.questionArr.push(obj) :'';          
+          res.assessedDataModel.length ? this.questionArr.push(obj) :'';    
+      
         });          
       }
     });
+    
     this.questionArr.forEach((chart:any)=>{
       const maxGrade=Math.max(...chart?.data.map(o => o));            
       this.schoolwiseBarChart(chart, (maxGrade!=-Infinity ? maxGrade:1), chart?.evaluator);

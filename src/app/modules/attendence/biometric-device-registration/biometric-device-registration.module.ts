@@ -22,6 +22,7 @@ import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/g
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { AddBiometricDeviceRegistrationComponent } from './add-biometric-device-registration/add-biometric-device-registration.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 @NgModule({
@@ -54,7 +55,8 @@ import { AddBiometricDeviceRegistrationComponent } from './add-biometric-device-
     MatChipsModule,
     CdkDropList,
     CdkDrag,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatRadioModule
   ]
 })
 export class BiometricDeviceRegistrationModule { }

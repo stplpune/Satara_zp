@@ -546,7 +546,19 @@
         "ExpAnswerMarathi": "Expected Answer(Marathi)",
         "AssesDate": "Assessment Date",
         "iAssesed": "Is Assessed?",
-        "biometricdeviceregistration":"Biometric Device Registration"
+        "biometricdeviceregistration":"Biometric Device Registration",
+        "Addbiometricdeviceregistration":"Add Biometric Device Registration",
+        "devicenameSerialNumber":"Device Name / Serial Number",
+        "devicename":"Device Name",
+        "shortname":"Short Name",
+        "devicenamemarathi":"Device Name(Marathi)",
+        "shortnamemarathi":"Short Name(Marathi)",
+        "serialNumber":"Serial Number",
+        "connectionType":"Connection Type",
+        "IPaddress":"IP Address",
+        "deviceDirection":"Device Direction",
+        "FaceDeviceType":"Face Device Type",
+        "DeviceType":"Device Type"
 
     }
 }

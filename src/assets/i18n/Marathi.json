@@ -554,6 +554,18 @@
         "ExpAnswerMarathi": "अपेक्षित उत्तर(मराठी)",
         "AssesDate": "मूल्यांकन तारीख",
         "iAssesed": "मूल्यमापन आहे?",
-        "biometricdeviceregistration":"बायोमेट्रिक उपकरण नोंदणी"
+        "biometricdeviceregistration":"बायोमेट्रिक उपकरण नोंदणी",
+        "Addbiometricdeviceregistration":"बायोमेट्रिक डिव्हाइस नोंदणी जोडा",
+        "devicenameSerialNumber":"डिव्हाइसचे नाव / अनुक्रमांक",
+        "devicename":"डिव्हाइसचे नाव",
+        "shortname":"संक्षिप्त नाव",
+        "devicenamemarathi":"डिव्हाइसचे नाव(मराठी)",
+        "shortnamemarathi":"संक्षिप्त नाव(मराठी)",
+        "serialNumber":"अनुक्रमांक",
+        "commectionType":"जोडणी प्रकार",
+        "IPaddress":"IP पत्ता",
+        "deviceDirection":"डिव्हाइस दिशा",
+        "FaceDeviceType":"चेहरा डिव्हाइस प्रकार",
+        "DeviceType":"डिव्हाइस प्रकार"
     }
 }

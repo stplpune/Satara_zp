@@ -171,7 +171,7 @@ export class SubCategoryComponent {
 
   getTableTranslatedData() {
     // this.highLightFlag=true;
-    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory' ];
+    let displayedColumnsReadMode = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory'];
     let displayedColumns = ['srNo', this.langTypeName == 'English' ? 'category' : 'm_Category', this.langTypeName == 'English' ? 'subCategory' : 'm_SubCategory', 'action'];
     let tableData = {
       pageNumber: this.pageNumber,

@@ -114,7 +114,7 @@ export class ItemRegistrationComponent {
 
   setTableData() {
     this.highLightFlag = true;
-    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', 'itemName', 'description'];
+    let displayedColumnsReadMode = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', this.languageFlag == 'English' ?'itemName':'m_ItemName', this.languageFlag == 'English' ?'description':'description'];
     this.displayedColumns = ['srNo', this.languageFlag == 'English' ? 'category' : 'm_Category', this.languageFlag == 'English' ? 'subCategory' : 'm_SubCategory', this.languageFlag == 'English' ?'itemName':'m_ItemName', this.languageFlag == 'English' ?'description':'description', 'action'];
 
     let tableData = {

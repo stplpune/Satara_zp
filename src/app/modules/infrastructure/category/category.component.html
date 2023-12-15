@@ -30,7 +30,7 @@
     </mat-card-header>
     <mat-card-content class="card-body p-0">
         <div class="row">
-            <div class="col-sm-8 border-end">
+            <div [ngClass]="!isWriteRight ? 'col-sm-12' : 'col-sm-8 border-end'">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header mb-0 pb-0 border-bottom-0">
                         <div class="row gx-2 w-100">
@@ -57,7 +57,7 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4" *ngIf="isWriteRight === true">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header border-bottom-0 ps-0">
                         <h6 class="text-main fw-bold my-2">

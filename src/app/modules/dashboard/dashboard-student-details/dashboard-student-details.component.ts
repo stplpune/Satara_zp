@@ -168,8 +168,8 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         headerImage: obj?.profilePhoto,
         header: this.languageFlag == 'Marathi' ? obj.m_FullName : obj.fullName,
         subheader: this.languageFlag == 'Marathi' ? obj.m_Gender : obj.gender,
-        labelHeader: this.languageFlag == 'Marathi' ? ['पालकाचे नाव', 'पालक मोबाईल क्र.', 'चाचणी क्र', 'शैक्षणिक वर्ष', 'आधार क्र.', 'इयत्ता', 'शाळेचे नाव'] : ['Guardian Name', 'Parent Mobile No.', 'Academic Year', 'Aadhaar No.', 'Standard', 'School Name'],
-        labelKey: this.languageFlag == 'Marathi' ? ['m_GaurdianName', 'mobileNo', '', 'm_AcademicYear', 'aadharNo', 'standard', 'm_SchoolName'] : ['gaurdianName', 'mobileNo', 'm_AcademicYear', 'aadharNo', 'standard', 'schoolName'],
+        labelHeader: this.languageFlag == 'Marathi' ? ['पालकाचे नाव', 'पालक मोबाईल क्र.', 'शैक्षणिक वर्ष', 'सरल क्र.', 'इयत्ता', 'केंद्र','शाळेचे नाव'] : ['Guardian Name', 'Parent Mobile No.', 'Academic Year', 'Saral No.', 'Standard', 'Center', 'School Name'],
+        labelKey: this.languageFlag == 'Marathi' ? ['m_GaurdianName', 'mobileNo', 'm_EducationYear', 'saralId', 'standard','m_Center', 'm_SchoolName'] : ['gaurdianName', 'mobileNo', 'educationYear', 'saralId',  'standard', 'center','schoolName'],
         Obj: obj,
         chart: false
       }
@@ -232,7 +232,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
       });
     }
     else {
-      let str = 'StateId='+(StateId || 0)+'&DistrictId='+(DistrictId || 0)+'&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + (StandardId || 0) + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + (questionId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&EducationYearId=' + (AcademicYearId || 0)+ '&EvaluatorId='+(this.dashboardObj?.evaluatorId || 0)+ '&PageNo='+this.pageNumber+'&PageSize=10' + '&lan=' + this.languageFlag;
+      let str = 'StateId='+(StateId || 0)+'&DistrictId='+(DistrictId || 0)+'&TalukaId=' + (TalukaId || 0) + '&CenterId=' + (CenterId || 0) + '&VillageId= '+ (villageId || 0) + '&SchoolId=' + (SchoolId || 0) + '&StandardId=' + (StandardId || 0) + '&SubjectId=' + (SubjectId || 0) + '&QuestionId=' + (questionId || 0) + '&OptionGrade=' + ((this.dashboardObj && flag == undefined) ? this.dashboardObj.OptionGrade : 0) + '&ExamTypeId=' + (examTypeId || 0) + '&EducationYearId=' + (AcademicYearId || 0)+ '&EvaluatorId='+(this.dashboardObj?.evaluatorId || 0)+ '&PageNo='+this.pageNumber+'&PageSize=10' + '&lan=' + '';
       this.apiService.setHttp('GET','zp-satara/Dashboard/GetDashboardDataClassWise_StudentList?' + str, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {

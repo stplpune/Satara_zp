@@ -133,8 +133,8 @@
                         <mat-label>{{'Labels.kendra' | translate}}</mat-label>
                         <mat-select multiple [compareWith]="compareFn" formControlName="centerId"
                             (selectionChange)="clearDropDown('Kendra')">
-                            <mat-option [value]="centr"
-                                *ngFor="let centr of centers">{{webStorageService.languageFlag =='mr-IN' ?
+                            <mat-option [value]="centr" 
+                                *ngFor="let centr of centers" [disabled]="centr.isPresent">{{webStorageService.languageFlag =='mr-IN' ?
                                 centr.m_Center : centr.center}}</mat-option>
                         </mat-select>
                         <!-- <mat-error *ngIf="fc['centerId'].hasError('required')">{{'Labels.kendraRequired' | translate}}</mat-error> -->

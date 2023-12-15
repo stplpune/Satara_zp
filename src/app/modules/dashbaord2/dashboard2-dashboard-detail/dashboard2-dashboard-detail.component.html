@@ -357,7 +357,7 @@
                         <div class="row">
                             <div class="col-sm-6" *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
-                                    <h6 class="fw-bold" *ngIf="questionArr">{{webStorage.languageFlag == 'EN' ?
+                                    <h6 class="fw-bold" *ngIf="questionArr">{{selectedLang == 'English' ?
                                         questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
                                     <apx-chart [series]="res.series" [chart]="res.chart" [dataLabels]="res.dataLabels"
                                         [plotOptions]="res.plotOptions" [yaxis]="res?.yaxis" [xaxis]="res.xaxis" [colors]="res.colors"
@@ -365,14 +365,14 @@
                                         [grid]="res.grid"></apx-chart>
                                     <div *ngIf="questionArr" class="mb-3">
                                         <span *ngFor="let param of questionArr?.[i]?.parameterArr">
-                                            {{param?.optionGrade}}: {{param?.optionName}}
+                                            {{ param?.optionGrade }}: {{selectedLang == 'English' ? param?.optionName : param?.m_OptionName}}
                                         </span>
                                     </div>
                                 </ng-container>
                             </div>
                         </div>
                     </mat-card-content>
-                    <ng-container *ngIf="!chartArray">
+                    <ng-container *ngIf="chartArray.length == 0">
                         <div class="alert alert-danger text-center p-2" role="alert">
                             {{'Labels.dataNotFound' | translate}}
                         </div>

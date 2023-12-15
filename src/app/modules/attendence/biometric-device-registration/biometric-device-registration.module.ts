@@ -21,11 +21,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GlobalDialogComponent } from 'src/app/shared/components/global-dialog/global-dialog.component';
 import { PageStatisticsComponent } from 'src/app/shared/components/page-statistics/page-statistics.component';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { AddBiometricDeviceRegistrationComponent } from './add-biometric-device-registration/add-biometric-device-registration.component';
 
 
 @NgModule({
   declarations: [
-    BiometricDeviceRegistrationComponent
+    BiometricDeviceRegistrationComponent,
+    AddBiometricDeviceRegistrationComponent
   ],
   imports: [
     CommonModule,

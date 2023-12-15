@@ -402,8 +402,10 @@ export class Dashboard2DashboardDetailComponent {
       critearr?.data.forEach((x:any, i: number)=>{
         const obj={
           x: [categoryArr[i]['label']],
-          y: [-1, x] , // set Level Of which student answer ,
-          fillColor: categoryArr[i]['flag']? colurArray[1]:colurArray[0]
+          // y: [-1, x] , // set Level Of which student answer ,
+          y: critearr?.questionId == 34 ? [-1, x] : [0, x ], // set Level Of which student answer ,
+          fillColor: categoryArr[i]['flag']? colurArray[1]:colurArray[0],
+          assDate:categoryArr[i]['date']
         }
         seriesArray.push(obj)
       })
@@ -420,12 +422,7 @@ export class Dashboard2DashboardDetailComponent {
           toolbar: {
             show: false
           }
-      
-        },
-        colors: ['#b51d31', '#E98754'],
-
-        // colors: this.viewDetailsObj?.graphLevelId == 1 ? ['#b51d31'] : this.viewDetailsObj?.graphLevelId == 2 ? ['#E98754'] : ['#50c77b']
-      
+        },      
         plotOptions: {
           bar: {
             horizontal: false,
@@ -444,7 +441,7 @@ export class Dashboard2DashboardDetailComponent {
         },
         xaxis: {
           // categories: categoryArr,  //'Officer'
-          parameters: this.selectedLang == 'English' ? ['Evaluator Name', 'Answer'] : ['मूल्यांकनकर्त्याचे नाव', 'उत्तर'],
+          parameters: this.selectedLang == 'English' ? ['Evaluator Name', 'Assessment Date'] : ['मूल्यांकनकर्त्याचे नाव', 'मूल्यांकन तारीख'],
           axisTicks: {
             show: false
           },
@@ -482,11 +479,12 @@ export class Dashboard2DashboardDetailComponent {
             
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-                console.log(series);
+                console.log(series, w);
                 
                 return (
-                  '<div class="arrow_box" style="padding:10px;">' +
-                  "<div>" + w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0] + " : <b> "+
+                  '<div class="arrow_box" style="padding:2px;">' +
+                  "<div>" + w.config.xaxis.parameters[0] + " :  <b> " +w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]  + '</b>'+ "</div>" +
+                  "<div>" + w.config.xaxis.parameters[1] + " :  <b> " + w?.config?.series[seriesIndex]?.data[dataPointIndex].assDate + "<b> "+
                   "</div>"
                 );
               },
@@ -505,7 +503,7 @@ export class Dashboard2DashboardDetailComponent {
     if(this.viewDetailsObj?.studentId){
       this.graphResponse=[];
       // zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?StudentId=8006&AssessedClassId=1&SubjectId=1&ExamTypeId=0&EducationYearId=1&lan=EN
-      let str = `StudentId=${this.viewDetailsObj?.studentId}&AssessedClassId=${this.standardId.value}&SubjectId=${this.subjectId.value}&ExamTypeId=0&EducationYearId=${this.academicYearId.value}&lan=${this.selectedLang}`
+      let str = `StudentId=${this.viewDetailsObj?.studentId}&AssessedClassId=${this.standardId.value}&SubjectId=${this.subjectId.value}&ExamTypeId=0&EducationYearId=${this.academicYearId.value}&lan=''`
       this.apiService.setHttp('get', 'zp-satara/Dashboard/GetStudentProgressIndicatorDataWeb?' + str, false, false, false, 'baseUrl');
       this.apiService.getHttp().subscribe({
         next: (res: any) => {
@@ -536,7 +534,7 @@ export class Dashboard2DashboardDetailComponent {
         x.criteriaModel.map((res: any) => {
           let GrdeArr: any = [];
           let evaluatorArr:any = [];
-          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push({flag:gr.isInspection,label:this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer})})
+          res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr.push({flag:gr.isInspection,label:this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer, date: gr.assessmentDate})})
           // res.assessedDataModel.map((gr:any)=>{GrdeArr.push(gr.grade);evaluatorArr=(this.selectedLang == 'English' ? gr.teacher_Officer: gr.m_Teacher_Officer)})
           let obj = {
             questionId: res.questionId,

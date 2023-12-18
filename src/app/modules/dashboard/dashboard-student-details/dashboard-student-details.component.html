@@ -214,14 +214,25 @@
                                         </div>
                                         <div *ngIf="assessmentLevelId == '1'">
                                             <div class="row w-100">
-                                                <div class="col-sm-10">
-                                                    <mat-radio-group aria-label="Select an option" [formControl]="inspectionBy"
+                                                <div class="col-sm-4">
+                                                    <!-- <mat-radio-group aria-label="Select an option" [formControl]="inspectionBy"
                                                         (change)="loadClassWisetable()">
                                                         <mat-radio-button value="0">{{webService.languageFlag == 'EN'?
                                                             'Teacher':'शिक्षक'}}</mat-radio-button>
                                                         <mat-radio-button value="1">{{webService.languageFlag == 'EN'? 'Officer':'
                                                             अधिकारी'}}</mat-radio-button>
-                                                    </mat-radio-group>
+                                                    </mat-radio-group> -->
+
+                                                        <mat-form-field appearance="outline" class="w-100 ">
+                                                            <mat-label>{{'Labels.Evaluator'| translate}}</mat-label>
+                                                            <mat-select [formControl]="evaluatorId" (selectionChange)="loadClassWisetable()">
+                                                                <mat-option *ngFor="let evaluator of evaluatorArr" [value]="evaluator.id">{{languageFlag ==
+                                                                    'English'
+                                                                    ? evaluator.name : evaluator.m_Name}}</mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+
+                                                    
                                                 </div>
                                                 <div *ngIf="false" class="col-sm-5">
                                                     <mat-form-field appearance="outline" class="w-100">
@@ -234,12 +245,11 @@
                                                     </mat-form-field>
                                                 </div>
                                                 
-                                                <div class="col-sm-2 fw-bold pt-2">
+                                                <!-- <div class="col-sm-2 fw-bold pt-2">
                                                     <div> 0 - {{webService.languageFlag == 'EN'? "Poor" : "	न्यूनतम"}}</div>
                                                     <div> 1 - {{webService.languageFlag == 'EN'? "Average" : "साधारण"}}</div>
                                                     <div> 2 - {{webService.languageFlag == 'EN' ?"Good": "उच्चतम"}}</div>
-
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <mat-card-header class="card-header pb-0 border-bottom-0">
                                                
@@ -268,11 +278,11 @@
                                                                     <tr>
                                                                         <td>{{i+1}}</td>
                                                                         <td>{{webService.languageFlag == 'EN'? item.question : item.m_Question}}</td>
+                                                                        <td>{{webService.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
                                                                         <td>{{webService.languageFlag == 'EN'? item.optionName : item.m_OptionName}}</td>
                                                                         <td>{{webService.languageFlag == 'EN'? item.level : item.m_Level}}</td>
                                                                         <td>{{webService.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td>
+                                                                        <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
 
                                                                     </tr> 
                                                                                                                         
@@ -306,11 +316,11 @@
                                                                 <tr *ngFor="let item of mathSubList; let i=index">
                                                                     <td>{{i+1}}</td>
                                                                     <td>{{webService.languageFlag == 'EN'? item.question : item.m_Question}}</td>
+                                                                    <td>{{webService.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
                                                                     <td>{{webService.languageFlag == 'EN'? item.optionName : item.m_OptionName}}</td>
                                                                     <td>{{webService.languageFlag == 'EN'? item.level : item.m_Level}}</td>
                                                                     <td>{{webService.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td>
+                                                                    <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
                                                                 </tr>                                         
                                                             </ng-container>
                                                             

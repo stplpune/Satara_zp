@@ -128,7 +128,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.FaceDeviceType' | translate}}</mat-label>
                     <mat-select formControlName="faceDeviceType">
@@ -136,17 +136,11 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
-                <!-- <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
-                    <mat-label>{{'Labels.DeviceType' | translate}}</mat-label>
-                    <mat-select formControlName="deviceType">
-                        <mat-option>option-1</mat-option>
-                    </mat-select>
-                </mat-form-field> -->
+            <div class="col-sm-8">
                 <mat-radio-group aria-label="Select an option" formControlName="deviceType">
-                    <mat-radio-button value="Attendance">Attendance</mat-radio-button>
-                    <mat-radio-button value="Canteen">Canteen</mat-radio-button>
-                    <mat-radio-button value="Access Control">Access Control</mat-radio-button>
+                    <mat-radio-button value="Attendance">{{'Labels.Attendance' | translate}}</mat-radio-button>
+                    <mat-radio-button value="Canteen"> {{'Labels.Canteen' | translate}}</mat-radio-button>
+                    <mat-radio-button value="Access Control"> {{'Labels.AccessControl' | translate}}</mat-radio-button>
                 </mat-radio-group>
             </div>
         </div>

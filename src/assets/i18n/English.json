@@ -561,7 +561,8 @@
         "IPaddress":"IP Address",
         "deviceDirection":"Device Direction",
         "FaceDeviceType":"Face Device Type",
-        "DeviceType":"Device Type"
+        "DeviceType":"Device Type",
+        "Device" :"Device"
 
     }
 }

@@ -15,7 +15,8 @@ export class ValidationService {
   aadhar_card = ('^[2-9][0-9]{11}$');
   valPassword = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,10}$';
   alphaNumericOnly = '^([ a-zA-Z])[- a-zA-Z0-9]+$';   //Valid - Manager 1, Manager / Invalid - 9865232     
-  alphaNumericSpecialCharOnly = '^([ a-zA-Z])[*%!/(,)&.+-_@# a-zA-Z0-9]+$';        
+  alphaNumericSpecialCharOnly = '^([a-zA-Z0-9 *%!/(,)&.+-_@#])+$';   
+       
   alphanumericMarathi = '^[\u0900-\u096F ]+$';
   valLandlineNo = '(([+][(]?[0-9]{1,3}[)]?)|([(]?[0-9]{4}[)]?))\s*[)]?[-\s\.]?[(]?[0-9]{1,3}[)]?([-\s\.]?[0-9]{3})([-\s\.]?[0-9]{3,4})';
   numericWithdecimaluptotwoDigits='^[0-9][0-9]*[.]?[0-9]{0,2}$';

@@ -55,8 +55,8 @@ export class TasksheetComponent {
   resultDownloadArr = new Array();
   submitFlag : boolean = false;
   pageNumber: number = 1;
-  displayedheadersEnglish = ['Sr. No.', ' Day', 'Check-In Time', 'Check-Out Time', 'Attendance', 'IsApproved', 'Task', 'Approval Remark','Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक-इन वेळ', 'चेक-आउट वेळ', 'उपस्थिती', 'मंजूर आहे', 'कार्य', 'मंजूरी शेरा','कृती'];
+  displayedheadersEnglish = ['Sr. No.', ' Day', 'Check-In Time', 'Check-Out Time', 'Present Hours','Attendance', 'IsApproved', 'Task', 'Approval Remark','Action'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक-इन वेळ', 'चेक-आउट वेळ', 'उपस्थित तास', 'उपस्थिती', 'मंजूर आहे', 'कार्य', 'मंजूरी शेरा', 'कृती'];
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   dataSource: any;
   viewStatus = 'Table';
@@ -156,6 +156,7 @@ export class TasksheetComponent {
               "Day": ele.day,
               "Check In Time": ele.checkInTime,
               "Check Out Time": ele.checkOutTime,
+              "Present Hours": ele.presentHour,
               "Attendence": ele.attendance,
               "Remark": ele.remark,
             }
@@ -164,7 +165,7 @@ export class TasksheetComponent {
 
     let loginData = this.webStorageS.getLoggedInLocalstorageData();
     if (this.resultDownloadArr?.length > 0) {
-      let keyPDFHeader = ['Sr.No.', 'Day', 'Check In Time', 'Check Out Time', 'Attendence', 'Task'];
+      let keyPDFHeader = ['Sr.No.', 'Day', 'Check In Time', 'Check Out Time', 'Present Hours','Attendence', 'Task'];
       let ValueData =
         this.resultDownloadArr.reduce(
           (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
@@ -240,8 +241,8 @@ export class TasksheetComponent {
 
   setTableData() {
     // let displayedColumnsReadMode = ['srNo', 'Category Name', 'Sub Category', 'Status', 'Action'];
-    let displayedColumns = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance', 'approvalStatus', 'remark', 'approvalRemark','action'];
-    let displayedColNavigateReport = ['srNo', 'day', 'checkInTime', 'checkOutTime','attendance', 'approvalStatus', 'remark','approvalRemark'];
+    let displayedColumns = ['srNo', 'day', 'checkInTime', 'checkOutTime', 'presentHour', 'attendance', 'approvalStatus', 'remark', 'approvalRemark','action'];
+    let displayedColNavigateReport = ['srNo', 'day', 'checkInTime', 'checkOutTime', 'presentHour', 'attendance', 'approvalStatus', 'remark','approvalRemark'];
 
     let tableData = {
       pageNumber: this.pageNumber,

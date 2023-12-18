@@ -228,7 +228,12 @@ export class AddOutwardItemComponent {
 
       let obj = {
         "id": this.editObj ? this.editObj.id : 0,
-        "schoolId": this.editObj ? this.editObj.schoolId : localSchoolId.schoolId,
+        "stateId": this.editObj ? this.editObj.stateId : localSchoolId?.stateId,
+        "districtId": this.editObj ? this.editObj.districtId : localSchoolId?.districtId,
+        "talukaId": this.editObj ? this.editObj.talukaId : localSchoolId?.talukaId,
+        "centerId": this.editObj ? this.editObj.centerId : localSchoolId?.centerId,
+        "villageId": this.editObj ? this.editObj.villageId : localSchoolId?.villageId,
+        "schoolId": this.editObj ? this.editObj.schoolId : localSchoolId?.schoolId,
         "categoryId": formData.categoryId,
         "subCategoryId": formData.subcategoryId,
         "itemId": formData.itemId,

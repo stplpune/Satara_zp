@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
@@ -47,31 +47,29 @@ export class AddBiometricDeviceRegistrationComponent {
   ngOnInit() {
     this.formField();
     this.getState();
-    console.log("edit: ", this.data);
   }
 
   formField() {
     this.biometricForm = this.fb.group({
-      // ... this.webStorageS.createdByProps(),
-      stateId: [''],
-      districtId: [''],
-      talukaId: [''],
-      centerId: [''],
-      villageId: [''],
+      stateId: ['', Validators.required],
+      districtId: ['', Validators.required],
+      talukaId: ['', Validators.required],
+      centerId: ['', Validators.required],
+      villageId: ['', Validators.required],
 
       id: [0],
-      schoolId: [0],
-      deviceName: [this.data ? this.data?.deviceName : ''],
-      m_DeviceName: [this.data ? this.data?.m_DeviceName : ''],
-      shortName: [this.data ? this.data?.shortName : ''],
-      m_ShortName: [this.data ? this.data?.m_ShortName : ''],
-      deviceDirection: [this.data ? this.data?.deviceDirection : ''],
-      serialNumber: [this.data ? this.data?.serialNumber : ''],
-      connectionType: [this.data ? this.data?.connectionType : ''],
-      ipAddress: [this.data ? this.data?.ipAddress : ''],
+      schoolId: ['', Validators.required],
+      deviceName: [this.data ? this.data?.deviceName : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericSpecialCharOnly)]],
+      m_DeviceName: [this.data ? this.data?.m_DeviceName : '', [Validators.required, Validators.pattern(this.validationService.marathiAlphaNumericSpecialChar)]],
+      shortName: [this.data ? this.data?.shortName : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericSpecialCharOnly)]],
+      m_ShortName: [this.data ? this.data?.m_ShortName : '', [Validators.required, Validators.pattern(this.validationService.marathiAlphaNumericSpecialChar)]],
+      deviceDirection: [this.data ? this.data?.deviceDirection : '', Validators.required],
+      serialNumber: [this.data ? this.data?.serialNumber : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericSpecialCharOnly)]],
+      connectionType: [this.data ? this.data?.connectionType : '', Validators.required],
+      ipAddress: [this.data ? this.data?.ipAddress : '', [Validators.required, Validators.pattern(this.validationService.IpAddress)]],
       lastPing: new Date(),
-      deviceType: [this.data ? this.data?.deviceType : ''],
-      faceDeviceType: [this.data ? this.data?.faceDeviceType : ''],
+      deviceType: [this.data ? this.data?.deviceType : 'Attendance'],
+      faceDeviceType: [this.data ? this.data?.faceDeviceType : '', Validators.required],
       lan: this.webStorageS.languageFlag
     })
   }
@@ -193,8 +191,6 @@ export class AddBiometricDeviceRegistrationComponent {
   //#region ------------------------------------------- Submit and Update start here ---------------------------------------------------------
   onSubmit() {
     let formValue = this.biometricForm.value;
-    console.log("formValue", formValue);
-
     let obj = {
       ... this.webStorageS.createdByProps(),
       id: this.data ? this.data?.id : 0,
@@ -239,39 +235,39 @@ export class AddBiometricDeviceRegistrationComponent {
   onChangeDropD(label: string) {
     switch (label) {
       case 'state':
-        this.f['districtId'].setValue(0);
-        this.f['talukaId'].setValue(0);
-        this.f['centerId'].setValue(0);
-        this.f['villageId'].setValue(0);
-        this.f['schoolId'].setValue(0);
+        this.f['districtId'].setValue('');
+        this.f['talukaId'].setValue('');
+        this.f['centerId'].setValue('');
+        this.f['villageId'].setValue('');
+        this.f['schoolId'].setValue('');
         this.talukaArr = [];
         this.centerArr = [];
         this.villageArr = [];
         this.schoolArr = [];
         break;
       case 'district':
-        this.f['talukaId'].setValue(0);
-        this.f['centerId'].setValue(0);
-        this.f['villageId'].setValue(0);
-        this.f['schoolId'].setValue(0);
+        this.f['talukaId'].setValue('');
+        this.f['centerId'].setValue('');
+        this.f['villageId'].setValue('');
+        this.f['schoolId'].setValue('');
         this.centerArr = [];
         this.villageArr = [];
         this.schoolArr = [];
         break;
       case 'taluka':
-        this.f['centerId'].setValue(0);
-        this.f['villageId'].setValue(0);
-        this.f['schoolId'].setValue(0);
+        this.f['centerId'].setValue('');
+        this.f['villageId'].setValue('');
+        this.f['schoolId'].setValue('');
         this.villageArr = [];
         this.schoolArr = [];
         break;
       case 'center':
-        this.f['villageId'].setValue(0);
-        this.f['schoolId'].setValue(0);
+        this.f['villageId'].setValue('');
+        this.f['schoolId'].setValue('');
         this.schoolArr = [];
         break;
       case 'village':
-        this.f['schoolId'].setValue(0);
+        this.f['schoolId'].setValue('');
         break;
     }
   }

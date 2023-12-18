@@ -76,34 +76,39 @@
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.devicename' | translate}}</mat-label>
-                    <textarea matInput formControlName="deviceName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
+                    <textarea matInput formControlName="deviceName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericSpacesWithSpeical($event);" maxlength="100"></textarea>
+                    <mat-error *ngIf="f['deviceName'].hasError('pattern')">Please Enter Valid Device Name</mat-error>
                 </mat-form-field>
             </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.devicenamemarathi' | translate}}</mat-label>
-                    <textarea matInput formControlName="m_DeviceName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
+                    <textarea matInput formControlName="m_DeviceName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericSpecialCharMarathi($event);" maxlength="100"></textarea>
+                    <mat-error *ngIf="f['m_DeviceName'].hasError('pattern')">Please Enter Valid Device Name (Marathi)</mat-error>
                 </mat-form-field>
             </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.shortname' | translate}}</mat-label>
-                    <textarea matInput formControlName="shortName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
+                    <textarea matInput formControlName="shortName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericSpacesWithSpeical($event);" maxlength="100"></textarea>
+                    <mat-error *ngIf="f['shortName'].hasError('pattern')">Please Enter Valid Short Name</mat-error>
                 </mat-form-field>
             </div>
 
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.shortnamemarathi' | translate}}</mat-label>
-                    <textarea matInput formControlName="m_ShortName" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100"></textarea>
+                    <textarea matInput formControlName="m_ShortName" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericSpecialCharMarathi($event);" maxlength="100"></textarea>
+                    <mat-error *ngIf="f['m_ShortName'].hasError('pattern')">Please Enter Valid Short Name (Marathi)</mat-error>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.serialNumber' | translate}}</mat-label>
-                    <input matInput formControlName="serialNumber" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100">
+                    <input matInput formControlName="serialNumber" (keypress)="validationService.noFirstSpaceAllow($event); validationService.alphaNumericSpacesWithSpeical($event);" maxlength="100">
+                    <mat-error *ngIf="f['serialNumber'].hasError('pattern')">Please Enter Valid Serial Number</mat-error>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">
@@ -117,7 +122,8 @@
             <div class="col-sm-6">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.IPaddress' | translate}}</mat-label>
-                    <input matInput formControlName="ipAddress" (keypress)="validationService.noFirstSpaceAllow($event);" maxlength="100">
+                    <input matInput formControlName="ipAddress" (keypress)="validationService.noFirstSpaceAllow($event); validationService.NumericWithDot($event)" maxlength="50">
+                    <mat-error *ngIf="f['ipAddress'].hasError('pattern')">Please Enter Valid IP Address</mat-error>
                 </mat-form-field>
             </div>
             <div class="col-sm-6">

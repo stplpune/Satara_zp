@@ -1,6 +1,6 @@
 <div mat-dialog-title class="card-header">
     <div class="d-flex align-items-center justify-content-between w-100">
-        <h6 class="text-main mb-0 fw-bold">{{('Labels.biometricdeviceregistration' | translate )}}</h6>
+        <h6 class="text-main mb-0 fw-bold">{{data ? ('Labels.updatebiometricdeviceregistration' | translate ) : ('Labels.biometricdeviceregistration' | translate )}}</h6>
         <button mat-icon-button mat-dialog-close class="btn-modal-close">
             <mat-icon>close</mat-icon>
         </button>
@@ -159,7 +159,7 @@
         <div class="d-flex w-100 align-items-center justify-content-end">
             <button mat-flat-button mat-dialog-close class="btn-second me-2" type="button">{{'Labels.cancel' |
                 translate}}</button>
-            <button mat-flat-button class="btn-main" type="submit">{{editFlag ?( 'Labels.update' | translate) :
+            <button mat-flat-button class="btn-main" type="submit">{{data ?( 'Labels.update' | translate) :
                 ('Labels.submit' | translate)}}</button>
         </div>
     </mat-dialog-actions>

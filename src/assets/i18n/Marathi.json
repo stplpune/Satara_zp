@@ -569,6 +569,7 @@
         "IPaddress":"IP पत्ता",
         "deviceDirection":"डिव्हाइस दिशा",
         "FaceDeviceType":"चेहरा डिव्हाइस प्रकार",
-        "DeviceType":"डिव्हाइस प्रकार"
+        "DeviceType":"डिव्हाइस प्रकार",
+        "Device" :"डिव्हाइस"
     }
 }

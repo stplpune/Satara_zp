@@ -37,7 +37,7 @@ export class BiometricDeviceRegistrationComponent {
   tableData: any;
   highLightFlag!: boolean;
   displayedheadersEnglish = ['Sr. No.', 'School Name', 'Device Name', 'Serial Number', 'IP Address', 'Connection Type', 'Action'];
-  displayedheadersMarathi = ['अनुक्रमांक', 'शाळेचे नाव', 'डिव्हाइसचे नाव', 'क्रम संख्या','आयपी अॅड्रेस', 'कनेक्शन प्रकार', 'कृती'];
+  displayedheadersMarathi = ['अनुक्रमांक', 'शाळेचे नाव', 'डिव्हाइसचे नाव', 'क्रम संख्या','आयपी ॲड्रेस', 'कनेक्शन प्रकार', 'कृती'];
 
   constructor(public dialog: MatDialog,
     private masterService: MasterService,

@@ -15,7 +15,7 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
   styleUrls: ['./add-biometric-device-registration.component.scss']
 })
 export class AddBiometricDeviceRegistrationComponent {
-  editFlag = true;
+  // editFlag = true;
   biometricForm!: FormGroup;
   stateArr = new Array();
   districtArr = new Array();

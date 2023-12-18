@@ -570,6 +570,12 @@
         "deviceDirection":"डिव्हाइस दिशा",
         "FaceDeviceType":"चेहरा डिव्हाइस प्रकार",
         "DeviceType":"डिव्हाइस प्रकार",
-        "Device" :"डिव्हाइस"
+        "Device" :"डिव्हाइस",
+        "PleaseEnterValidDeviceName": "कृपया वैध डिव्हाइस नाव प्रविष्ट करा",
+        "PleaseEnterValidDeviceNameMarathi": "कृपया वैध डिव्हाइस नाव प्रविष्ट करा (मराठी)",
+        "PleaseEnterValidShortName": "कृपया वैध संक्षिप्त नाव प्रविष्ट करा",
+        "PleaseEnterValidShortNameMarathi": "कृपया वैध संक्षिप्त नाव प्रविष्ट करा (मराठी)",
+        "PleaseEnterValidSerialNumber": "कृपया वैध अनुक्रमांक प्रविष्ट करा",
+        "PleaseEnterValidIPAddress": "कृपया वैध आयपी अॅड्रेस प्रविष्ट करा"
     }
 }

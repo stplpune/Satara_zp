@@ -562,7 +562,13 @@
         "deviceDirection":"Device Direction",
         "FaceDeviceType":"Face Device Type",
         "DeviceType":"Device Type",
-        "Device" :"Device"
+        "Device" :"Device",
+        "PleaseEnterValidDeviceName": "Please Enter Valid Device Name",
+        "PleaseEnterValidDeviceNameMarathi": "Please Enter Valid Device Name (Marathi)",
+        "PleaseEnterValidShortName": "Please Enter Valid Short Name",
+        "PleaseEnterValidShortNameMarathi": "Please Enter Valid Short Name (Marathi)",
+        "PleaseEnterValidSerialNumber": "Please Enter Valid Serial Number",
+        "PleaseEnterValidIPAddress": "Please Enter Valid IP Address"
 
     }
 }

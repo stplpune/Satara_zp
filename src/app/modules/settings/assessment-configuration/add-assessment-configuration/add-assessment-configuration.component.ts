@@ -358,7 +358,7 @@ export class AddAssessmentConfigurationComponent {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter At Least One Parameter' : 'कृपया किमान एक पॅरामीटर प्रविष्ट करा', 1);
       return
     }
-    else if(this.paramterArray.length == 1 && (formValue.questionTypeId == 1)){
+    else if(this.paramterArray.length == 1 && (formValue.questionTypeId == 1 || formValue.questionTypeId == 2)){
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Another One Parameter' : 'कृपया आणखी एक पॅरामीटर प्रविष्ट करा', 1);
       return
     }

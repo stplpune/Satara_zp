@@ -1,5 +1,6 @@
 {
     "Labels": {
+        "Select":"Select",
         "year": "Year",
         "Date": "Date",
         "Unit": "Unit",
@@ -394,7 +395,7 @@
         "students": "Students",
         "zpOfficer": "ZP Officers",
         "map": "Map",
-        "surveyStudent": "Total number of students surveyed",
+        "surveyStudent": "Student Qualitative Evaluation",
         "selectedCount": "Selected Count",
         "managementwiseSchools": "Management wise Schools",
         "mediunwiseSchools": "Medium wise Schools",

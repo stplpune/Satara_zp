@@ -98,3 +98,11 @@
     height: 440px !important;
     max-height: 450px !important;
  }
+
+
+.filter-drawer.mat-drawer.mat-drawer-end {
+    max-height: 80vh;
+    right: 0px;
+    top: 45px;
+    height: 75vh;
+ }

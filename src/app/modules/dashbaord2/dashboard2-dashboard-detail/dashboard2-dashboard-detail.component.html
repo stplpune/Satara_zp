@@ -1,4 +1,4 @@
-<mat-drawer-container class="example-container" hasBackdrop="false">
+<mat-drawer-container class="example-container scrollbar" hasBackdrop="false">
     <mat-drawer #drawer mode="over" position="end">
         <mat-card class="plain-card">
             <mat-card-header class="card-header pb-0">
@@ -9,9 +9,9 @@
                     </button>
                 </div>
             </mat-card-header>
-            <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
+            <mat-card-content class="card-body mt-lg-0 mb-0 pb-0 card-height-sm scrollbar">
                 <form [formGroup]="mainFilterForm">
-                    <div class="col-sm-12 mb-3">
+                    <div class="col-sm-12">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
                             <mat-select formControlName="acYearId">
@@ -132,7 +132,7 @@
 
                     </div> -->
 
-                    <div class="d-flex justify-content-end">
+                    <div class="card-footer px-0 d-flex justify-content-end">
                         <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
                             (click)="resetFilter()">{{'Labels.reset'|
                             translate}}</button>

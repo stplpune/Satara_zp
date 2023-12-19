@@ -1,5 +1,5 @@
 <mat-drawer-container class="example-container" hasBackdrop="false">
-    <mat-drawer #drawer mode="over" position="end">
+    <mat-drawer #drawer mode="over" position="end" class="filter-drawer">
         <mat-card class="plain-card">
             <mat-card-header class="card-header pb-0">
                 <div class="d-flex justify-content-between align-items-center w-100">
@@ -9,7 +9,7 @@
                     </button>
                 </div>
             </mat-card-header>
-            <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0">
+            <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0 card-height-sm scrollbar">
                 <form [formGroup]="mainFilterForm" (ngSubmit)="onMainFilterSubmit();this.drawer.close()">
                     <!-- <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
@@ -85,7 +85,7 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="d-flex justify-content-end">
+                    <div class="card-footer d-flex justify-content-end px-0">
                         <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
                             (click)="resetMainFilter()">{{'Labels.reset'|
                             translate}}</button>

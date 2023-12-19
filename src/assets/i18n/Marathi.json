@@ -1,5 +1,6 @@
 {
     "Labels": {
+        "Select":"निवडा",
         "year":"वर्ष",
         "Date":"दिनांक",
         "Unit":"युनिट",
@@ -385,7 +386,7 @@
         "studentDetailsdashboard" :"विद्यार्थी तपशील",
         "zpOfficer":"झेडपी अधिकारी",
         "map":"नकाशा",
-        "surveyStudent":"सर्वेक्षण केलेल्या विद्यार्थ्यांची एकूण संख्या",
+        "surveyStudent":" विद्यार्थ्यांचे गुणात्मक मूल्यमापन",
         "selectedCount":"निवडलेली संख्या",
         "managementwiseSchools":"व्यवस्थापनानुसार शाळा",
         "mediunwiseSchools":"माध्यम निहाय शाळा",

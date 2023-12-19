@@ -87,7 +87,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.dashboardObj = JSON.parse(localStorage.getItem('selectedBarchartObjData') || '');
     console.log("this.dashboardObj", this.dashboardObj);
 
-    this.evaluatorId.setValue(this.dashboardObj?.evaluatorId);
+    this.evaluatorId.setValue(this.dashboardObj?.evaluatorId == 0 ? 1 : this.dashboardObj?.evaluatorId > 1 ? 2 : this.dashboardObj?.evaluatorId);
     this.educationYear=this.dashboardObj?this.dashboardObj?.EducationYearId:this.webService.getLoggedInLocalstorageData()?.educationYearId;
     this.assessmentLevelId = this.dashboardObj?.asessmwntLavel;
     this.formData();

@@ -40,8 +40,8 @@ export class PrintStudentDetailsComponent {
     this.getSubjectData();
     this.classAsseResp = this.webStorage.classWiseDataStudentAssList;
 
-    this.displayedheadersClass=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Subject","m_label":"विषय"},{'label':"Grade","m_label":"स्तर"},{'label':"Marks","m_label":"गुण"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"},{'label':"Expected level","m_label":"अपेक्षित स्तर"}, {'label':"Obtained Grade","m_label":"प्राप्त स्तर"}]
-    // this.displayedheadersClass=[{'label':"Sr. No.","m_label":"अनुक्रमांक"}, {'label':"Subject","m_label":"विषय"},{'label':"Marks","m_label":"गुण"},{'label':"Grade","m_label":"स्तर"}, {'label':"ExamType","m_label":"परीक्षेचा प्रकार"}, {'label':"Expected level","m_label":"अपेक्षित स्तर"} ]
+    this.displayedheadersClass=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Criteria","m_label":"निकष"},{'label':"Expected","m_label":"अपेक्षित"},{'label':"Achieved","m_label":"साध्य"},{'label':"Performance","m_label":"कामगिरी"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"}]
+    // this.displayedheadersClass=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Subject","m_label":"विषय"},{'label':"Grade","m_label":"स्तर"},{'label':"Marks","m_label":"गुण"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"},{'label':"Expected level","m_label":"अपेक्षित स्तर"}, {'label':"Obtained Grade","m_label":"प्राप्त स्तर"}]
     this.dashboardObj?.asessmwntLavel == '1'  ? this.getClasswiseTable(): '';
     this.tableDataAssimentClassWise = this.classAsseResp?.responseData?.responseData2   
     this.tableDataAssimentBaseWise = this.webStorage.baseWiseDataStudentAssList;  

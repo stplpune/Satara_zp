@@ -133,12 +133,12 @@
                                     <tr>
                                         <td style="width:50px">{{i+1}}</td>
                                         <td style="width: 140px;">{{webStorage .languageFlag == 'EN'? item.question : item.m_Question}}</td>
+                                        <td style="width:130px">{{webStorage.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
                                         <td style="width: 130px;">{{webStorage .languageFlag == 'EN'? item.optionName : item.m_OptionName}}
                                         </td>
                                         <td style="width: 100px;">{{webStorage .languageFlag == 'EN'? item.level : item.m_Level}}</td>
                                         <td style="width: 100px;">{{webStorage.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
-                                        <td style="width:130px">{{webStorage.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
-                                        <td style="width:50px; text-align:center">{{webStorage .languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td>
+                                        <!-- <td style="width:50px; text-align:center">{{webStorage .languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
                                     </tr>
                                 </ng-container>
                             </tbody>

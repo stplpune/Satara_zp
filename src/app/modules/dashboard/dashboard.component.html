@@ -297,7 +297,7 @@
                                         <mat-form-field appearance="outline" class="w-100 mb-0">
                                             <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
                                             <mat-select [formControl]="evaluatorId"
-                                                (selectionChange)="chnageClasswiseSubjectDrp()">
+                                                (selectionChange)="chnageClasswiseSubjectDrp(); getdashboardCount();">
                                                 <mat-option *ngFor="let data of evaluatorDataArray"
                                                     [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
                                                     :data.m_Evaluator}}</mat-option>
@@ -306,9 +306,9 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <mat-form-field appearance="outline" class="w-100 mb-0">
-                                            <mat-label>{{'Labels.Select' | translate}}</mat-label>
+                                            <mat-label>{{'Labels.Subject' | translate}}</mat-label>
                                             <mat-select [formControl]="subjectforBarByCLass"
-                                                (selectionChange)="chnageClasswiseSubjectDrp()">
+                                                (selectionChange)="chnageClasswiseSubjectDrp(); getdashboardCount()">
                                                 <mat-option *ngFor="let sub of subjectArrayByClass" [value]="sub.id">
                                                     {{webStorage.languageFlag == 'EN'?sub.subject:
                                                     sub.m_Subject}}

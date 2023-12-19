@@ -332,14 +332,14 @@
                                                             {{'Labels.dataNotFound' | translate}}
                                                         </div>
                                                     </div>
-                                                    <div class="d-flex justify-content-between">
+                                                    <!-- <div class="d-flex justify-content-between">
                                                         <div class="fw-bold">
                                                            <span > Percentage:</span> {{totalMarksInSub?.percentage}}
                                                         </div>
                                                         <div class="fw-bold me-5" *ngIf="totalMarksInSub?.totalMarks > 0">
                                                             Total: {{totalMarksInSub?.actualMarks}} / {{totalMarksInSub?.totalMarks}}
                                                         </div>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                                 </div>
                                             </div>
@@ -355,7 +355,8 @@
 
                                             <!-- table for who taken assessment -->
                                             <h6 class="text-main fw-bold mt-3 mb-2" data-html2canvas-ignore="true">
-                                                {{inspectionBy.value=='0'?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
+                                                <!-- {{inspectionBy.value=='0'?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}} -->
+                                                {{evaluatorId.value==1?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
                                             </h6>
                                             <div class="table-responsive">
                                             <table class="table dashboard-table">

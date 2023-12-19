@@ -358,6 +358,10 @@ export class AddAssessmentConfigurationComponent {
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter At Least One Parameter' : 'कृपया किमान एक पॅरामीटर प्रविष्ट करा', 1);
       return
     }
+    else if(this.paramterArray.length == 1 && (formValue.questionTypeId == 1)){
+      this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Enter Another One Parameter' : 'कृपया आणखी एक पॅरामीटर प्रविष्ट करा', 1);
+      return
+    }
     else if(this.isExpectedFlag == true){
       this.commonMethod.showPopup(this.webStorageS.languageFlag == 'EN' ? 'Please Select isExpected From Any Parameter ' : 'कृपया कोणत्याही पॅरामीटरमधून इज एक्सपेक्टेड निवडा', 1);
       return

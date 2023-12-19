@@ -274,8 +274,6 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
   // }
 
   getCenterDrop(data?:any) {
-    console.log("data:", data);
-    
     if(this.officeForm.value.talukaId && this.officeForm.value.designationLevelId == 8 && this.officeForm.value.designationId == 18){     
       // this.apiService.setHttp('GET', 'zp-satara/master/GetAllCenterSchoolByTalukaId?flag_lang='+this.webStorageService.languageFlag+'&TalukaId='+this.officeForm.value.talukaId, false, false, false, 'baseUrl');
       this.apiService.setHttp('GET', 'zp-satara/Office/GetAllCenterForClusterHead?TalukaId='+this.officeForm.value.talukaId+'&lan='+this.webStorageService.languageFlag, false, false, false, 'baseUrl');
@@ -308,10 +306,20 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     });
   }
 
+  onSelectVillage(){
+    if(this.officeForm.value.designationLevelId == 5){
+      this.villageArr.filter((x: any) => {
+        if(this.officeForm.value.villageId == x.id){
+          this.officeForm.controls['centerId'].setValue(x.centerId);
+        }
+      })
+    }
+  }
+
   onEdit(){
     if(this.officeForm.value.designationId == 18){
       let getcenter = this.data?.officeCenterSchoolResponseModel;  
-      console.log("getcenter", getcenter);
+      // console.log("getcenter", getcenter);
       
       let arr = new Array;
       if(getcenter?.length){
@@ -328,6 +336,13 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         }
         this.getCenterDrop(arr);
       }
+    }
+    else if(this.officeForm.value.designationLevelId == 5){
+      this.villageArr.filter((x: any) => {
+        if(this.officeForm.value.villageId == x.id){
+          this.officeForm.controls['centerId'].setValue(x.centerId);
+        }
+      })
     }
   }
 
@@ -360,8 +375,7 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
     if (this.officeForm.valid) {
       if (this.officeForm.value.designationId == 18) {
         let arrr = this.officeForm.value.centerId;
-        console.log("arrr : ", arrr);
-        
+        // console.log("arrr : ", arrr);
         
        this.officeCenterSchoolModelArr=[];
         for (let i = 0; i < arrr.length; i++) {
@@ -379,9 +393,22 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
         this.officeForm.value.officeCenterSchoolModel = this.officeCenterSchoolModelArr
         formData.centerId = arrr[0].centerId;
 
-      } else {
+      }
+      // else if (this.officeForm.value.designationLevelId == 5){
+      //   // this.villageArr.filter((x: any) => {
+      //   //   if(this.officeForm.value.villageId == x.id){
+      //   //     this.officeForm.controls['centerId'].setValue(x.centerId);
+      //   //     console.log("hi....", this.officeForm.controls['centerId'].value);
+      //   //   }
+      //   // });
+        
+      //   this.villageArr.filter((x: any) => (this.officeForm.value.villageId == x.id) ? this.officeForm.controls['centerId'].setValue(x.centerId) : this.officeForm.value.officeCenterSchoolModel = []);
+
+      // }
+      
+      else {
         this.officeForm.value.officeCenterSchoolModel = []
-        formData.centerId = 0;
+        // formData.centerId = 0;
       }
       console.log("formData", formData);
       this.ngxSpinner.show();
@@ -514,7 +541,6 @@ export class AddUpdateOfficeUsersComponent implements OnInit {
 
     else if (event.value != 18 && label == 'Designation') { // Except Cluster Head
       // clear
-      console.log("Except Cluster Head");
       
       this.fc['beoMobileNo'].clearValidators();
       this.fc['beoMobileNo'].updateValueAndValidity();

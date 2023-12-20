@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   stackbarchartOptionsByClass: any;
   dashboardCountData = new Array();
   tableColumn = new Array();
-  barChartData = new Array();
   showBarChartF: boolean = false;
   selectedObj!: object | any;
   barChartByTalukaData = new Array();
@@ -44,7 +43,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   tableHeadingArrayLow = new Array();
   displayedheaders = new Array();
   graphSubjectData = new Array();
-  totalStudentSurveyData = new Array();
+  // totalStudentSurveyData = new Array();
   totalStudentSurveyDataByCLass = new Array();
   optionalSubjectindex!: number;
   SharingObject: any;
@@ -63,7 +62,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   selectedschool: any;
   selectedexamType: any;
   barchartOptions: any;
-  educationYear!: number;
   acYear = new Array();
   selectedBarSub!: string;
   subjectArrayByClass = new Array();
@@ -113,7 +111,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.userDetails = this.webStorage.getLoggedInLocalstorageData();
-    this.educationYear = this.userDetails?.educationYearId;
+    // this.educationYear = this.webStorage?.getYearId();
     this.asessmwntLavel.patchValue('1');
     this.getSubjectDropForClass();
     this.bindEvaluator();
@@ -124,6 +122,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.tableHeadingArrayTop = this.selectedLang == 'English' ? ['Top Performing Schools'] : ['उत्तम कामगिरी करणाऱ्या शाळा'];
       this.tableHeadingArrayLow = this.selectedLang == 'English' ? ['Low Performing Schools'] : ['साधारण कामगिरी करणाऱ्या शाळा'];
       this.initialApiCall('languageChange');
+      this.searchAcadamicYear.setValue(this.webStorage.getYearId());
     });
   }
 
@@ -134,9 +133,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getState();
       this.getExamType();
       this.getStandard();
-      setTimeout(() => {
-        this.getdashboardCount(val);
-      }, 1000);
+      // setTimeout(() => {
+      //   this.getdashboardCount(val);
+      // }, 1000);
       this.asessmwntLavel.value == '0' ? '' : (this.getstandardTableArrayCount(val), 
       setTimeout(() => {
       this.getTabledataByTaluka()
@@ -144,29 +143,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       );
     } else if (val == 'mapClick') {
       this.getCenters();
-      this.getdashboardCount(val);
+      // this.getdashboardCount(val);
       this.asessmwntLavel.value == '1' ? (this.getTabledataByTaluka(), this.getstandardTableArrayCount(val)) : '';
     } else if (val == 'languageChange') {
       this.showSvgMap(this.commonMethods.mapRegions());
       this.getPieChartData();
-      this.getBarChartSubject()
       setTimeout(() => {
         this.clickOnSvgMap('select');
       }, 70)
     } else if (val == 'form') {
       this.asessmwntLavel.value == '1' ? (this.getstandardTableArrayCount(val), this.getTabledataByTaluka()) : '';
-      this.getdashboardCount(val);
+      // this.getdashboardCount(val);
     } else if (val == 'sigleField') {
       this.asessmwntLavel.value == '1' ? (this.getstandardTableArrayCount(val), this.getTabledataByTaluka()) : '';
-      this.getdashboardCount(val);
+      // this.getdashboardCount(val);
     }
   }
 
   createFilterForm() {
     this.filterForm = this.fb.group({
       acYearId: [],
-      stateId:[1],
-      districtId:[1],
+      stateId:[this.webStorage.getState()],
+      districtId:[this.webStorage.getDistrict()],
       talukaId: [0],
       villageId:[0],
       centerId: [0],
@@ -198,7 +196,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.acYear = [];
     this.masterService.getAcademicYears().subscribe((res: any) => {
       this.acYear.push(...res.responseData);
-      this.f['acYearId'].patchValue(this.educationYear);
     })
   }
 
@@ -430,7 +427,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const formData = this.filterForm.value;
     
     // const SelectedstandardArray = ((this.totalStudentSurveyData.find((x: any) => x.status == true).standardDetails.filter((xx: any) => xx.status == true)).map((y: any) => y.standardId));
-    const SelectedstandardArray = (this.totalStudentSurveyData.find((x: any) => x.status == true));
+    const SelectedstandardArray = (this.totalStudentSurveyDataByCLass.find((x: any) => x.status == true));
     this.SharingObject = {
       StateId: formData?.stateId,
       DistrictId: formData?.districtId,
@@ -458,44 +455,48 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/dashboard-student-details']);
   }
   // ---------------------------- dashboard counts & assessemnt table click functionality -------------------------//
-  getdashboardCount(val?: any) {
-    const formData = this.filterForm.value;
-    val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
+  // getdashboardCount(val?: any) {
+  //   const formData = this.filterForm.value;
+  //   val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
 
-    this.dashboardCountData = [];
-    this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&EvaluatorId=' + (this.evaluatorId.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (this.searchAcadamicYear.value|| 0), false, false, false, 'baseUrl');
-    this.apiService.getHttp().subscribe({
-      next: (res: any) => {
-        this.spinner.hide();
-        if (res.statusCode == "200") {
-          this.dashboardCountData.push(res.responseData.responseData1[0]);
-          this.totalStudentSurveyData = res.responseData.responseData2;
-          this.totalStudentSurveyData.map((x: any) => {
-            x.status = false;
-            x.ischeckboxShow = true;
-          });
-          if (val == 'mapClick') {
-            this.totalStudentSurveyData[this.selectedGroupIdindex].status = true;
-          } else {
-            this.totalStudentSurveyData[1].status = true;
-          }
-          this.totalStudentSurveyData[0].ischeckboxShow = false;
-          setTimeout(() => {
-            this.getPieChartData();
-          }, 100)
+  //   this.dashboardCountData = [];
+  //   this.spinner.show();
+  //   this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) +'&VillageId='+(formData?.VillageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&EvaluatorId=' + (this.evaluatorId.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (this.searchAcadamicYear.value|| 0), false, false, false, 'baseUrl');
+  //   this.apiService.getHttp().subscribe({
+  //     next: (res: any) => {
+  //       this.spinner.hide();
+  //       if (res.statusCode == "200") {
+  //         this.dashboardCountData.push(res.responseData.responseData1[0]);
+  //         this.totalStudentSurveyDataByCLass = res.responseData.responseData2;
+  //         console.log("this.totalStudentSurveyData", this.totalStudentSurveyDataByCLass);
+          
+  //         this.totalStudentSurveyDataByCLass.map((x: any) => {
+  //           x.status = false;
+  //           x.ischeckboxShow = true;
+  //         });
+  //         if (val == 'mapClick') {
+  //           this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex].status = true;
+  //         } else {
+  //           this.totalStudentSurveyDataByCLass[1].status = true;
+  //         }
+  //         this.totalStudentSurveyDataByCLass[0].ischeckboxShow = false;
+  //                   // this.checkDataByClass(1, this.totalStudentSurveyDataByCLass[1]);
 
-        } else {
-          this.dashboardCountData = [];
-          this.totalStudentSurveyData = [];
-        }
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        this.error.handelError(error.message)
-      }
-    });
-  }
+  //         setTimeout(() => {
+  //           this.getPieChartData();
+  //         }, 100)
+
+  //       } else {
+  //         this.dashboardCountData = [];
+  //         this.totalStudentSurveyDataByCLass = [];
+  //       }
+  //     },
+  //     error: (error: any) => {
+  //       this.spinner.hide();
+  //       this.error.handelError(error.message)
+  //     }
+  //   });
+  // }
   // ----------------------------------Pie chart---------------------------------------------------------------//
   getPieChartData() {
     const serriesArray = [0, 0, 0];
@@ -517,150 +518,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.piechartOptions.labels = this.selectedLang == 'English' ? ['Government', 'Private', 'Other'] : ['सरकारी', 'खाजगी', 'इतर'];
   }
   // ---------------------------------- bar chart by group / standard ----------------------------------------//
-  getBarChartSubject() {
-    this.BarChartSubjectArray = [...new Set(this.barChartData.map((x: any) => this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName))];
-    this.subjectforBar.patchValue(this.BarChartSubjectArray[0]);
-    this.constructBarChart();
-  }
-  constructBarChart() {
-    const filterData = this.barChartData.filter((x: any) => (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName) == this.subjectforBar.value)
-    const barSubjectSet = [...new Set(filterData.map((x: any) => this.selectedLang == 'English' ? x.optionName : x.m_OptionName))];
-
-    const testSet = [...new Set(filterData.map((sub: any) => sub.examTypeId))];
-    let dataArray: any[] = [];
-    testSet.map((t: any) => {
-      const filterSub = filterData.filter((a: any) => a.examTypeId == t);
-      const obj = {
-        examTypeId:filterSub[0]?.examTypeId,
-        name: filterSub[0]?.shortForm+'-'+filterSub[0]?.examType,
-        data: filterSub.map((d: any) => d.totalPercentage), //this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.totalPercentage),
-        dataValue: filterSub.map((d: any) => d.actualStudent),//this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.actualStudent),
-        totalStudent: filterSub.map((d: any) => d.totalStudent)
-      }
-      dataArray.push(obj)
-    })
-
-
-    //let dataArray: any[] = [];
-
-    // barSubjectSet.map((x:any)=>{
-
-    //   const filterSub=this.barChartData.filter((a:any)=>a.optionName);
-    //   filterSub
-
-    //     const obj={
-    //       name: x,
-    //       data: filterSub.map((d:any)=>d.totalPercentage), //this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.totalPercentage),
-    //       dataValue:filterSub.map((d:any)=>d.actualStudent)//this.barChartData.filter((x:any)=>(this.selectedLang == 'English' ? x.subjectName :x.m_SubjectName)==this.subjectforBar.value).map((z:any)=>z.actualStudent),
-    //     }
-    //     dataArray.push(obj)
-
-    // })
-
-    //  let SeriesArray:any[]=[];
-    //   SeriesArray.push(dataArray);
-    this.createBarchart(dataArray, barSubjectSet, this.selectedLang == 'English' ? filterData[0]?.subjectName : filterData[0]?.m_SubjectName);
-  }
-  createBarchart(SeriesArray: any, barSubjectSet: any, sub: any) {
-    this.selectedObj?.groupId == 1 ? this.barChaOptionHeight = 375 : this.barChaOptionHeight = 333;
-    this.barchartOptions = {
-      series: SeriesArray,
-      chart: {
-        height: this.barChaOptionHeight,
-        type: "bar",
-        toolbar: {
-          show: false
-        },
-        events: {          
-          click: (_event: any, _chartContext: any, config: any) => {
-            if (config.seriesIndex >= 0) {
-              this.optionalSubjectindex = config.seriesIndex;
-              const data = (this.barChartData.filter((x: any) => ((this.selectedLang == 'English' ? x.optionName : x.m_OptionName) == this.barchartOptions.xaxis['categories'][config.dataPointIndex]) && sub == (this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName ))).find((x: any) =>  this.barchartOptions?.series[config.seriesIndex]?.examTypeId ==x.examTypeId);
-              this.selectedBarstatus = 'bar';
-             this.passingParameters(data, data?.examTypeId)
-            }
-          }
-        }
-      },
-      //colors: ["#fd7e14"],
-      colors: ['#CB4B4B', '#E76A63', '#E98754', '#EFB45B', '#65C889', '#468C5F'],
-      // colors: ['#fd7e14', '#fd9742', '#fda45a', '#febe89'],
-      plotOptions: {
-        bar: {
-          // columnWidth: "45%", // on condition
-          // barHeight: '50%',// on condition
-          distributed: false,
-          colors: {
-            backgroundBarColors: ['#f2f2f2'],
-          },
-        }
-      },
-      dataLabels: {
-        enabled: false,
-        formatter: function (val: any) {
-          return val + "%";
-        },
-        // offsetY: -20,
-        style: {
-          fontSize: "12px",//SeriesArray[0].data.length > 5 ?"9px ":"12px",
-          colors: ["#fff"],
-
-
-        }
-      },
-      legend: {
-        show: true
-      },
-      grid: {
-        show: false
-      },
-      xaxis: {
-        axisTicks: {
-          show: false
-        },
-        position: 'top',
-        categories: barSubjectSet,
-        // parameters: this.selectedLang == 'English' ? ['Level','Total Tested Student', 'Student(%)',] : ['स्तर','एकुण टेस्टेड विद्यार्थी', 'विद्यार्थी (%)'],
-
-        parameters: this.selectedLang == 'English' ? ['Level', 'Total Tested Student', 'Total Pass Student', 'Student(%)',] : ['स्तर', 'एकुण टेस्टेड विद्यार्थी', 'एकूण पास विद्यार्थी', 'विद्यार्थी (%)'],
-        labels: {
-          rotate: -90,
-          show: true,
-          style: {
-            colors: ["#000"],
-            fontSize: '12px',
-            fontFamily: 'Noto Sans Devanagari, sans-serif',
-            // fontWeight: 600,
-            cssClass: 'apexcharts-xaxis-label',
-          },
-        }
-      },
-      yaxis: {
-        show: false,
-        min: 0,
-        max: 100
-      },
-      stroke: {
-        colors: ["transparent"],
-        width: 0
-      },
-      tooltip: {
-        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-          return (
-            '<div class="arrow_box" style="padding:10px;">' +
-            "<div>" + w.config.xaxis.categories[dataPointIndex] + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent[dataPointIndex] + '</b>' + "</div>" +
-            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + '</b>' + "</div>" +
-
-            "<div>" + w.config.xaxis.parameters[3] + " : <b> " + series[seriesIndex][dataPointIndex] + '%</b>' + "</div>" +
-            "</div>"
-          );
-        },
-      }
-    };
-
-  }
-
 
 
   // --------- ----------------------- selected bar chart value for click event -----------------------------//
@@ -772,7 +629,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.schoolData = [];
     this.villageData = [];
     this.filterForm.reset();
-    this.f['acYearId'].patchValue(this.educationYear);
     this.f['stateId'].patchValue(1);
     this.f['districtId'].patchValue(1);
     this.f['talukaId'].patchValue(0);
@@ -898,12 +754,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   //   this.asessmwntLavel.value == "1" ? (this.getSubjectDropForClass(), this.getRefstandardTableArrayCount(), this.getdashboardCount('initial')) : '';
   // }
 
-  chnageClasswiseSubjectDrp() {
-    // this.getRefstandardTableArrayCount();
-    // this.getchartDataByCLass();
-    this.checkDataByClass(this.selectedGroupIdindex, this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex]);
+  // chnageClasswiseSubjectDrp() {
+  //   // this.getRefstandardTableArrayCount();
+  //   // this.getchartDataByCLass();
+  //   this.checkDataByClass(this.selectedGroupIdindex, this.totalStudentSurveyDataByCLass[this.selectedGroupIdindex]);
 
-  }
+  // }
 
   getSubjectDropForClass() {
     this.subjectArrayByClass = [];
@@ -947,7 +803,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       next: (res: any) => {
         this.spinner.hide();
         if (res.statusCode == "200") {
-          this.totalStudentSurveyDataByCLass = res.responseData.responseData1;
+          this.totalStudentSurveyDataByCLass = res.responseData.responseData2;
           this.totalStudentSurveyDataByCLass.map((x: any) => {
             x.status = false;
             x.ischeckboxShow = true;
@@ -969,10 +825,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   }
 
-  getstandardTableArrayCount(val: any) {
+  getstandardTableArrayCount(val?: any) {
     const formData = this.filterForm.value;
-    // val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
-    
+    this.dashboardCountData = [];
     this.spinner.show();
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) + '&SchoolId=' + (formData?.schoolId || 0) + '&SubjectId=' + (this.subjectforBarByCLass.value || 0) + '&EvaluatorId=' + (this.evaluatorId.value || 0) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (this.searchAcadamicYear.value || 0), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -981,7 +836,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         if (res.statusCode == "200") {
           this.totalStudentSurveyDataByCLass = res.responseData.responseData2;
           console.log("totalStudentSurveyDataByCLass", this.totalStudentSurveyDataByCLass);
-          
+          this.dashboardCountData.push(res.responseData.responseData1[0]);
+
           // this.subjectArrayByClass = res.responseData.responseData2;
           // this.subjectforBarByCLass.patchValue(this.subjectArrayByClass[0].id);
           
@@ -995,7 +851,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.totalStudentSurveyDataByCLass[1].status = true;
           }
           this.totalStudentSurveyDataByCLass[0].ischeckboxShow = false;
+          // let index = val  == 'chngeDrop' ? 1 : 
           this.checkDataByClass(1, this.totalStudentSurveyDataByCLass[1]);
+          setTimeout(() => {
+                      this.getPieChartData();
+                    }, 100)
           
         } else {
           this.totalStudentSurveyDataByCLass = [];
@@ -1030,7 +890,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.barChartDataByClass = [];
     this.stackbarChartDataByClass = [];
     this.spinner.show();
-    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (formData?.acYearId || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardDataClassWise?StateId='+(formData?.stateId || 0)+'&DistrictId='+(formData?.districtId || 0)+'&TalukaId=' + (formData?.talukaId || 0) + '&CenterId=' + (formData?.centerId || 0) + '&VillageId=' +(formData?.villageId || 0) +  '&SchoolId=' + (formData?.schoolId || 0)+'&StandardId='+this.selectedObjByClass?.standardId+'&SubjectId=' + (this.subjectforBarByCLass?.value ) + '&ExamTypeId=' + (formData?.examTypeId || 0) + '&EducationYearId=' + (this.searchAcadamicYear.value || 0) +'&EvaluatorId=' +this.evaluatorId.value, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {

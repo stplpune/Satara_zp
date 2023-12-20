@@ -529,7 +529,7 @@
                                         <mat-select formControlName="subjectId"
                                             (selectionChange)="getTabledataByTaluka();">
                                             <mat-option *ngFor="let sub of subjectArray" [value]="sub.id">
-                                                {{webStorage.languageFlag == 'EN'?sub.subject :
+                                                {{webStorage.languageFlag == 'EN' ?sub.subject :
                                                 sub.m_Subject}}
                                             </mat-option>
                                         </mat-select>

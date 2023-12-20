@@ -20,7 +20,7 @@
                     </mat-select>
                 </mat-form-field>
             </div> -->
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.state' | translate}}</mat-label>
                     <mat-select formControlName="stateId" (selectionChange)="getDistrict(); clearDependency('state');">
@@ -30,7 +30,7 @@
                       </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100 me-2 mb-0">
                     <mat-label>{{'Labels.district' | translate}}</mat-label>
                     <mat-select formControlName="districtId" (selectionChange)="getTaluka(); clearDependency('district')">
@@ -41,7 +41,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                     <mat-select formControlName="talukaId" (selectionChange)="getAllCenter();clearDependency('taluka')">
@@ -50,7 +50,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.center'| translate}}</mat-label>
                     <mat-select formControlName="centerId" (selectionChange)="getVillage();clearDependency('centerId')">
@@ -59,7 +59,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.village'| translate}}</mat-label>
                     <mat-select formControlName="villageId"
@@ -70,7 +70,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{'Labels.school'| translate}}</mat-label>
                     <mat-select formControlName="schoolId">

@@ -353,19 +353,23 @@
                         </div>
                         <!-- </form> -->
                     </mat-card-header>
-                    <mat-card-content class="card-body"*ngIf="chartArray">
+                    <mat-card-content class="card-body" *ngIf="chartArray">
                         <div class="row">
                             <div class="col-sm-6" *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
                                     <h6 class="fw-bold" *ngIf="questionArr">{{selectedLang == 'English' ?
                                         questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
-                                    <apx-chart [series]="res.series" [chart]="res.chart" [dataLabels]="res.dataLabels"
-                                        [plotOptions]="res.plotOptions" [yaxis]="res?.yaxis" [xaxis]="res.xaxis" [colors]="res.colors"
-                                        [dataLabels]="res.dataLabels" [tooltip]="res.tooltip"
-                                        [grid]="res.grid"></apx-chart>
+                                    <div class="chart-container">
+                                        <apx-chart [series]="res.series" [chart]="res.chart"
+                                            [dataLabels]="res.dataLabels" [plotOptions]="res.plotOptions"
+                                            [yaxis]="res?.yaxis" [xaxis]="res.xaxis" [colors]="res.colors"
+                                            [dataLabels]="res.dataLabels" [tooltip]="res.tooltip" [grid]="res.grid">
+                                        </apx-chart>
+                                    </div>
                                     <div *ngIf="questionArr" class="mb-3">
                                         <span *ngFor="let param of questionArr?.[i]?.parameterArr">
-                                            {{ param?.optionGrade }}: {{selectedLang == 'English' ? param?.optionName : param?.m_OptionName}}
+                                            {{ param?.optionGrade }}: {{selectedLang == 'English' ? param?.optionName :
+                                            param?.m_OptionName}}
                                         </span>
                                     </div>
                                 </ng-container>

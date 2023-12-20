@@ -33,10 +33,10 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   groupByClassArray: any = [];
   lineChartOptions: any;
   grapbhDetailsArray = new Array();
-  displayedColumns = ['srNo', 'profilePhoto','fullName', 'subjectName'];   //, 'actualGrade'
-  marathiDisplayedColumns = ['srNo', 'profilePhoto', 'm_FullName', 'm_SubjectName']; //, 'actualGrade'
-  displayedheaders = ['Sr. No.', '', 'Name', 'Subject' ]; //,'Status'
-  marathiDisplayedheaders = ['अ.क्र.', '', 'नाव', 'विषय']; //, 'स्तर',
+  displayedColumns = ['srNo', 'profilePhoto','fullName', 'standard'];   //, 'actualGrade'
+  marathiDisplayedColumns = ['srNo', 'profilePhoto', 'm_FullName', 'standard']; //, 'actualGrade'
+  displayedheaders = ['Sr. No.', '', 'Name', 'Standard' ]; //,'Status'
+  marathiDisplayedheaders = ['अ.क्र.', '', 'नाव', 'स्टँडर्ड']; //, 'स्तर',
   // displayedheadersClass:any=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Subject","m_label":"विषय"},{'label':"Grade","m_label":"स्तर"},{'label':"Marks","m_label":"गुण"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"},{'label':"Expected level","m_label":"अपेक्षित स्तर"}, {'label':"Obtained Grade","m_label":"प्राप्त स्तर"}]
   displayedheadersClass:any=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Criteria","m_label":"निकष"},{'label':"Expected","m_label":"अपेक्षित"},{'label':"Achieved","m_label":"साध्य"},{'label':"Performance","m_label":"कामगिरी"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"}]
   displayedheadersClassAsseTakenBy:any=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Name","m_label":"नाव"},{'label':"Designation","m_label":"पद"},{'label':"Assessment Date","m_label":"मूल्यांकन तारीख"} ]
@@ -67,7 +67,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
   stateData = new Array();
   districtData = new Array();
   evaluatorId = new FormControl(1);
-  evaluatorArr = [{id: 1, name: 'Teacher', m_Name: 'शिक्षक'}, {id: 2, name: 'Officer', m_Name: 'अधिकारी'}]
+  evaluatorDataArray = new Array();
 
   @ViewChild('myDiv') myDiv!: ElementRef;
   constructor(
@@ -87,9 +87,10 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.dashboardObj = JSON.parse(localStorage.getItem('selectedBarchartObjData') || '');
     console.log("this.dashboardObj", this.dashboardObj);
 
-    this.evaluatorId.setValue(this.dashboardObj?.evaluatorId == 0 ? 1 : this.dashboardObj?.evaluatorId > 1 ? 2 : this.dashboardObj?.evaluatorId);
+    this.evaluatorId.setValue(this.dashboardObj?.evaluatorId ? this.dashboardObj?.evaluatorId : 0);
     this.educationYear=this.dashboardObj?this.dashboardObj?.EducationYearId:this.webService.getLoggedInLocalstorageData()?.educationYearId;
     this.assessmentLevelId = this.dashboardObj?.asessmwntLavel;
+    this.bindEvaluator();
     this.formData();
     this.getYearArray();
     this.getState();
@@ -145,6 +146,19 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     this.masterService.getAllDistrict(this.languageFlag, this.filterForm.controls['stateId'].value).subscribe((res: any) => {
       this.districtData = res.responseData;
       this.dashboardObj ? (this.filterForm.controls['districtId'].setValue(this.dashboardObj?.DistrictId), this.getTaluka()) : (this.filterForm.controls['districtId'].setValue(this.webService.getDistrict()), this.getTaluka());
+    });
+  }
+
+  bindEvaluator() {
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.languageFlag, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.evaluatorDataArray.push({id: 0, "evaluator": "All", "m_Evaluator": "सर्व"}, ...res.responseData);
+        } else {
+          this.evaluatorDataArray = [];
+        }
+      },
     });
   }
 
@@ -269,7 +283,7 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
     let filterFormValue = this.filterForm.value;
     let studentObj = this.selectedObj;
 
-    let chartAPI = 'GetDashboardDataClassWise_StudentChart?StudentId='+(this.selectedObj?.studentId)+'&StandardId='+ (this.dashboardObj?.StandardId || 0) +'&SubjectId='+ (this.dashboardObj?.SubjectId || 0) +'&EvaluatorId=' + (this.evaluatorId.value || 0) + '&ExamTypeId='+(filterFormValue?.examTypeId || 0) +'&EducationYearId='+(filterFormValue?.acYearId || 0)+'&lan=' + this.languageFlag;
+    let chartAPI = 'GetDashboardDataClassWise_StudentChart?StudentId='+(this.selectedObj?.studentId)+'&StandardId='+ (this.dashboardObj?.StandardId || 0) +'&SubjectId='+ 0 +'&EvaluatorId=' + (this.evaluatorId.value || 0) + '&ExamTypeId='+(filterFormValue?.examTypeId || 0) +'&EducationYearId='+(filterFormValue?.acYearId || 0)+'&lan=' + this.languageFlag;
     let tableAPI = 'GetDataForTopLowSchoolStudentChart?GroupId=' + studentObj?.groupId + '&StudentId=' + studentObj?.studentId + '&AssesmentSubjectId=' + studentObj?.assesmentSubjectId + '&IsInspection='+this.inspectionBy.value+'&ExamTypeId=' + (filterFormValue?.examTypeId || 0) + '&EducationYearId=' + studentObj?.academicYearId + '&lan=' + this.languageFlag;
     let str = this.dashboardObj?.label == "table" ? tableAPI : chartAPI;
     

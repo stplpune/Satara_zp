@@ -907,7 +907,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getSubjectDropForClass() {
     this.subjectArrayByClass = [];
-    this.masterService.getAllSubject(this.webStorage.languageFlag).subscribe({
+    this.masterService.getAllSubject('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.subjectArrayByClass = res.responseData;

@@ -28,7 +28,8 @@
                             <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>{{'Labels.selectState' | translate}}</mat-label>
-                                <mat-select formControlName="stateId" (selectionChange)="clearDropdown('state') ; getDistrict()">
+                                <mat-select formControlName="stateId"
+                                    (selectionChange)="clearDropdown('state') ; getDistrict()">
                                     <mat-option *ngFor="let state of stateData" [value]="state.id">
                                         {{webService.languageFlag == 'EN' ? state.state:state.m_State}}
                                     </mat-option>
@@ -39,7 +40,8 @@
                             <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>{{'Labels.selectDistrict' | translate}}</mat-label>
-                                <mat-select formControlName="districtId" (selectionChange)="clearDropdown('districtId');getTaluka()">
+                                <mat-select formControlName="districtId"
+                                    (selectionChange)="clearDropdown('districtId');getTaluka()">
                                     <mat-option *ngFor="let district of districtData" [value]="district.id">
                                         {{webService.languageFlag == 'EN' ? district.district:district.m_District}}
                                     </mat-option>
@@ -71,7 +73,8 @@
                         <div class="col-sm-12">
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
-                                <mat-select formControlName="villageId" (selectionChange)="clearDropdown('villageId'); getAllSchoolsByCenterId()">
+                                <mat-select formControlName="villageId"
+                                    (selectionChange)="clearDropdown('villageId'); getAllSchoolsByCenterId()">
                                     <mat-option *ngFor="let village of villageArr" [value]="village.id">
                                         {{languageFlag == 'English'? village.village:village.m_Village}}
                                     </mat-option>
@@ -81,14 +84,15 @@
                         <div class="col-sm-12">
                             <mat-form-field appearance="outline" class="w-100 ">
                                 <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                                <mat-select formControlName="schoolId" (selectionChange)="clearDropdown('schoolId'); getSchoolName() ; getStandard()">
+                                <mat-select formControlName="schoolId"
+                                    (selectionChange)="clearDropdown('schoolId'); getSchoolName() ; getStandard()">
                                     <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag ==
                                         'English' ?
                                         sch.schoolName:sch. m_SchoolName}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                       
+
                         <div class="col-sm-12">
                             <mat-form-field appearance="outline" class="w-100 ">
                                 <mat-label>{{'Labels.standard'| translate}}</mat-label>
@@ -120,7 +124,7 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-    
+
                         </div>
                         <div class="col-sm-auto">
                             <button mat-flat-button class="btn-main"
@@ -152,9 +156,9 @@
                         'Marathi' ?
                         selectedCenter?.m_Center :selectedCenter?.center }}</li>
 
-                        <li *ngIf="selectedVillage" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
-                            'Marathi' ?
-                            selectedVillage?.m_Village :selectedVillage?.village }}</li>
+                    <li *ngIf="selectedVillage" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
+                        'Marathi' ?
+                        selectedVillage?.m_Village :selectedVillage?.village }}</li>
 
                     <li *ngIf="selectedShcool" class="breadcrumb-item active" aria-current="page">{{languageFlag ==
                         'Marathi' ?
@@ -171,7 +175,9 @@
             <mat-card-content class="card-body">
                 <div class="row gx-2">
                     <div class="col-sm-4">
-                        <h5 class="mb-0 fw-bold">{{'Labels.totalStudent' | translate}} : {{this.dashboardObj.label == "table" ? uniqueStudentCount  : webService.numberTransformFunction(tableDataArray.length)}} </h5>
+                        <h5 class="mb-0 fw-bold">{{'Labels.totalStudent' | translate}} : {{this.dashboardObj.label ==
+                            "table" ? uniqueStudentCount : webService.numberTransformFunction(tableDataArray.length)}}
+                        </h5>
                         <div class="scrollbar table-height table-responsive">
                             <app-table (recObjToChild)="childTableCompInfo($event)"></app-table>
                         </div>
@@ -184,12 +190,14 @@
                                         <div class="student-details mt-lg-0 mt-4">
                                             <div class="d-flex flex-lg-row flex-column">
                                                 <div class="flex-shrink-0 text-center text-lg-start mb-2">
-                                                    <img [src]="data?.headerImage ? data?.headerImage : 'https://zposmservices.mahamining.com/Uploads/Upload/image_2023_03_02T09_36_23_388Z.png'" alt="student-image" height="80px">
+                                                    <img [src]="data?.headerImage ? data?.headerImage : 'https://zposmservices.mahamining.com/Uploads/Upload/image_2023_03_02T09_36_23_388Z.png'"
+                                                        alt="student-image" height="80px">
                                                 </div>
                                                 <div class="flex-grow-1 ms-3">
                                                     <div class="d-flex align-items-center justify-content-between">
-                                                        <h5 class="mb-0 fw-bold">{{ data?.header || '-' }}</h5> 
-                                                        <button mat-flat-button class="btn-main-light btn-icon border" title="Download" [routerLink]="['/print-student-details']" >
+                                                        <h5 class="mb-0 fw-bold">{{ data?.header || '-' }}</h5>
+                                                        <button mat-flat-button class="btn-main-light btn-icon border"
+                                                            title="Download" [routerLink]="['/print-student-details']">
                                                             <mat-icon class="text-main">download</mat-icon>
                                                         </button>
                                                     </div>
@@ -223,28 +231,32 @@
                                                             अधिकारी'}}</mat-radio-button>
                                                     </mat-radio-group> -->
 
-                                                        <mat-form-field appearance="outline" class="w-100 ">
-                                                            <mat-label>{{'Labels.Evaluator'| translate}}</mat-label>
-                                                            <mat-select [formControl]="evaluatorId" (selectionChange)="loadClassWisetable()">
-                                                                <mat-option *ngFor="let evaluator of evaluatorArr" [value]="evaluator.id">{{languageFlag ==
-                                                                    'English'
-                                                                    ? evaluator.name : evaluator.m_Name}}</mat-option>
-                                                            </mat-select>
-                                                        </mat-form-field>
+                                                    <mat-form-field appearance="outline" class="w-100 ">
+                                                        <mat-label>{{'Labels.Evaluator'| translate}}</mat-label>
+                                                        <mat-select [formControl]="evaluatorId"
+                                                            (selectionChange)="loadClassWisetable()">
+                                                            <mat-option *ngFor="let data of evaluatorDataArray"
+                                                                [value]="data.id">{{languageFlag ==
+                                                                    'English' ? data.evaluator
+                                                                : data.m_Evaluator}}</mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
 
-                                                    
+
                                                 </div>
                                                 <div *ngIf="false" class="col-sm-5">
                                                     <mat-form-field appearance="outline" class="w-100">
                                                         <mat-label>{{'Labels.Subject'| translate}}</mat-label>
                                                         <!-- <mat-select [formControl]="subjectControl" (selectionChange)="constuctLineChart()"> -->
-                                                            <mat-select >
-                                                                <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">{{languageFlag ==
-                                                                    'English'
-                                                                    ?sub.subjectName:sub.m_SubjectName}}</mat-option>                                                                                                    </mat-select>
+                                                        <mat-select>
+                                                            <mat-option *ngFor="let sub of subjectArr"
+                                                                [value]="sub.id">{{languageFlag ==
+                                                                'English'
+                                                                ?sub.subjectName:sub.m_SubjectName}}</mat-option>
+                                                        </mat-select>
                                                     </mat-form-field>
                                                 </div>
-                                                
+
                                                 <!-- <div class="col-sm-2 fw-bold pt-2">
                                                     <div> 0 - {{webService.languageFlag == 'EN'? "Poor" : "	न्यूनतम"}}</div>
                                                     <div> 1 - {{webService.languageFlag == 'EN'? "Average" : "साधारण"}}</div>
@@ -252,87 +264,111 @@
                                                 </div> -->
                                             </div>
                                             <mat-card-header class="card-header pb-0 border-bottom-0">
-                                               
+
                                             </mat-card-header>
-                                        <!-- table start here for language   -->
-                                        <div class=" overflow-auto">
-                                            <div class="col-sm-12">
-                                                <div>
-                                                    <div class="w-100">
-                                                        <h6 class="my-2 px-1 fw-bold text-main">{{webService.languageFlag == 'EN'? ('Language'):('भाषा ')}} </h6>
-                                                        <!-- <h6 class="my-2 px-1 fw-bold text-main">{{webService.languageFlag == 'EN'? ('Expected level in subject ' +
+                                            <!-- table start here for language   -->
+                                            <div class=" overflow-auto">
+                                                <div class="col-sm-12">
+                                                    <div>
+                                                        <div class="w-100">
+                                                            <h6 class="my-2 px-1 fw-bold text-main">
+                                                                {{webService.languageFlag == 'EN'? ('Language'):('भाषा
+                                                                ')}} </h6>
+                                                            <!-- <h6 class="my-2 px-1 fw-bold text-main">{{webService.languageFlag == 'EN'? ('Expected level in subject ' +
                                                             subjectNameClassWise + ' : '):(subjectNameClassWise+' विषयात अपेक्षित असलेला स्तर : ')}} </h6> -->
-                                                        
-                                                    </div>
-                                                    <div class="table-responsive ">
-                                                        <table class="table dashboard-table">
-                                                            <thead class="bg-main-light">
+
+                                                        </div>
+                                                        <div class="table-responsive ">
+                                                            <table class="table dashboard-table">
+                                                                <thead class="bg-main-light">
                                                                     <tr>
-                                                                        <th *ngFor="let header of displayedheadersClass">
-                                                                            {{webService.languageFlag == 'EN'?header.label :header.m_label }}
+                                                                        <th
+                                                                            *ngFor="let header of displayedheadersClass">
+                                                                            {{webService.languageFlag ==
+                                                                            'EN'?header.label :header.m_label }}
                                                                         </th>
                                                                     </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <ng-container *ngFor="let item of langSubList; let i=index">
-                                                                    <tr>
-                                                                        <td>{{i+1}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.question : item.m_Question}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.optionName : item.m_OptionName}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.level : item.m_Level}}</td>
-                                                                        <td>{{webService.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
-                                                                        <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
+                                                                </thead>
+                                                                <tbody>
+                                                                    <ng-container
+                                                                        *ngFor="let item of langSubList; let i=index">
+                                                                        <tr>
+                                                                            <td>{{i+1}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.question : item.m_Question}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.expectedLevel :
+                                                                                item.m_ExpectedLevel}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.optionName : item.m_OptionName}}
+                                                                            </td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.level : item.m_Level}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.examType : item.m_ExamType}}</td>
+                                                                            <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
 
-                                                                    </tr> 
-                                                                                                                        
-                                                                </ng-container>
-                                                                 
-                                                            </tbody>
-                                                        </table>
-                                                        <div *ngIf="langSubList?.length ==0">
-                                                            <div class="alert alert-danger text-center py-2 ">
-                                                                {{'Labels.dataNotFound' | translate}}
+                                                                        </tr>
+
+                                                                    </ng-container>
+
+                                                                </tbody>
+                                                            </table>
+                                                            <div *ngIf="langSubList?.length ==0">
+                                                                <div class="alert alert-danger text-center py-2 ">
+                                                                    {{'Labels.dataNotFound' | translate}}
+                                                                </div>
                                                             </div>
-                                                        </div>  
-                                                    </div>
-                                                                             
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div>
-                                                    <h6 class="my-2 px-1 fw-bold text-main">{{webService.languageFlag == 'EN'? (' Mathematics'):('गणित')}} </h6>
-                                                    <div class="table-responsive ">
-                                                    <table class="table dashboard-table">
-                                                        <thead class="bg-main-light">
-                                                                <tr>
-                                                                    <th *ngFor="let header of displayedheadersClass">
-                                                                        {{webService.languageFlag == 'EN'?header.label :header.m_label }}
-                                                                    </th>
-                                                                </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <ng-container>
-                                                                <tr *ngFor="let item of mathSubList; let i=index">
-                                                                    <td>{{i+1}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.question : item.m_Question}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.expectedLevel : item.expectedLevel}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.optionName : item.m_OptionName}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.level : item.m_Level}}</td>
-                                                                    <td>{{webService.languageFlag == 'EN'? item.examType : item.m_ExamType}}</td>
-                                                                    <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
-                                                                </tr>                                         
-                                                            </ng-container>
-                                                            
-                                                        </tbody>
-                                                    </table>
-                                                  
-                                                    <div *ngIf="mathSubList?.length == 0">
-                                                        <div class="alert alert-danger text-center py-2 ">
-                                                            {{'Labels.dataNotFound' | translate}}
                                                         </div>
+
                                                     </div>
-                                                    <!-- <div class="d-flex justify-content-between">
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <div>
+                                                        <h6 class="my-2 px-1 fw-bold text-main">
+                                                            {{webService.languageFlag == 'EN'? ('
+                                                            Mathematics'):('गणित')}} </h6>
+                                                        <div class="table-responsive ">
+                                                            <table class="table dashboard-table">
+                                                                <thead class="bg-main-light">
+                                                                    <tr>
+                                                                        <th
+                                                                            *ngFor="let header of displayedheadersClass">
+                                                                            {{webService.languageFlag ==
+                                                                            'EN'?header.label :header.m_label }}
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <ng-container>
+                                                                        <tr
+                                                                            *ngFor="let item of mathSubList; let i=index">
+                                                                            <td>{{i+1}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.question : item.m_Question}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.expectedLevel :
+                                                                                item.m_ExpectedLevel}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.optionName : item.m_OptionName}}
+                                                                            </td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.level : item.m_Level}}</td>
+                                                                            <td>{{webService.languageFlag == 'EN'?
+                                                                                item.examType : item.m_ExamType}}</td>
+                                                                            <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
+                                                                        </tr>
+                                                                    </ng-container>
+
+                                                                </tbody>
+                                                            </table>
+
+                                                            <div *ngIf="mathSubList?.length == 0">
+                                                                <div class="alert alert-danger text-center py-2 ">
+                                                                    {{'Labels.dataNotFound' | translate}}
+                                                                </div>
+                                                            </div>
+                                                            <!-- <div class="d-flex justify-content-between">
                                                         <div class="fw-bold">
                                                            <span > Percentage:</span> {{totalMarksInSub?.percentage}}
                                                         </div>
@@ -340,53 +376,59 @@
                                                             Total: {{totalMarksInSub?.actualMarks}} / {{totalMarksInSub?.totalMarks}}
                                                         </div>
                                                     </div> -->
-                                                </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                       
-                                
+
+
                                             <!-- end here language  -->
 
-                                             <!-- table Mathamatic start here   -->
-                                      
-                                
+                                            <!-- table Mathamatic start here   -->
+
+
                                             <!-- table Mathamatic end here  -->
 
                                             <!-- table for who taken assessment -->
                                             <h6 class="text-main fw-bold mt-3 mb-2" data-html2canvas-ignore="true">
                                                 <!-- {{inspectionBy.value=='0'?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}} -->
-                                                {{evaluatorId.value==1?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
+                                                {{evaluatorId.value==1?(webService.languageFlag == 'EN'?'Assessment by
+                                                Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag ==
+                                                'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
                                             </h6>
                                             <div class="table-responsive">
-                                            <table class="table dashboard-table">
-                                                <thead class="bg-main-light">
+                                                <table class="table dashboard-table">
+                                                    <thead class="bg-main-light">
                                                         <tr>
                                                             <th *ngFor="let header of displayedheadersClassAsseTakenBy">
-                                                                {{webService.languageFlag == 'EN'?header.label :header.m_label }}
+                                                                {{webService.languageFlag == 'EN'?header.label
+                                                                :header.m_label }}
                                                             </th>
                                                         </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <ng-container *ngFor="let item of classwiseAsseTakenList; let i=index">
-                                                        <tr>
-                                                            <td>{{i+1}}</td>
-                                                            <td>{{webService.languageFlag == 'EN'? item.name : item.m_Name}}</td>
-                                                            <td>{{webService.languageFlag == 'EN'? item.designationType : item.m_DesignationType}}</td>
-                                                            <td>{{item.assessmentDate}}</td>
-                                                        </tr>                                                       
-                                                    </ng-container>
-                                                </tbody>
-                                            </table>
-                                            <div *ngIf="classwiseAsseTakenList?.length ==0">
-                                                <!-- <div *ngIf="langSubList?.length ==0"> -->
-                                                <div class="alert alert-danger text-center py-2 ">
-                                                    {{'Labels.dataNotFound' | translate}}
+                                                    </thead>
+                                                    <tbody>
+                                                        <ng-container
+                                                            *ngFor="let item of classwiseAsseTakenList; let i=index">
+                                                            <tr>
+                                                                <td>{{i+1}}</td>
+                                                                <td>{{webService.languageFlag == 'EN'? item.name :
+                                                                    item.m_Name}}</td>
+                                                                <td>{{webService.languageFlag == 'EN'?
+                                                                    item.designationType : item.m_DesignationType}}</td>
+                                                                <td>{{item.assessmentDate}}</td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </tbody>
+                                                </table>
+                                                <div *ngIf="classwiseAsseTakenList?.length ==0">
+                                                    <!-- <div *ngIf="langSubList?.length ==0"> -->
+                                                    <div class="alert alert-danger text-center py-2 ">
+                                                        {{'Labels.dataNotFound' | translate}}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            </div>
                                         </div>
-                            
+
                                         <!-- table for class  -->
                                     </div>
                                 </div>

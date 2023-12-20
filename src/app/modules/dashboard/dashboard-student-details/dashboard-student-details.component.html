@@ -92,7 +92,6 @@
                                 </mat-select>
                             </mat-form-field>
                         </div>
-
                         <div class="col-sm-12">
                             <mat-form-field appearance="outline" class="w-100 ">
                                 <mat-label>{{'Labels.standard'| translate}}</mat-label>
@@ -124,7 +123,6 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-
                         </div>
                         <div class="col-sm-auto">
                             <button mat-flat-button class="btn-main"
@@ -137,7 +135,6 @@
                 </form>
             </mat-card-content>
         </mat-card>
-
     </mat-drawer>
     <mat-drawer-content>
         <nav aria-label="breadcrumb">
@@ -164,7 +161,6 @@
                         'Marathi' ?
                         selectedShcool?.m_SchoolName :selectedShcool?.schoolName }}</li>
                 </ol>
-
                 <button mat-stroked-button class="btn-main btn-icon" (click)="drawer.toggle()">
                     <mat-icon>filter_alt</mat-icon>
                 </button>
@@ -173,7 +169,7 @@
 
         <mat-card class="plain-card h-100">
             <mat-card-content class="card-body">
-                <div class="row gx-2">
+                <div class="row">
                     <div class="col-sm-4">
                         <h5 class="mb-0 fw-bold">{{'Labels.totalStudent' | translate}} : {{this.dashboardObj.label ==
                             "table" ? uniqueStudentCount : webService.numberTransformFunction(tableDataArray.length)}}
@@ -182,11 +178,11 @@
                             <app-table (recObjToChild)="childTableCompInfo($event)"></app-table>
                         </div>
                     </div>
-                    <div class="col-sm-8" *ngIf="data" #myDiv>
+                    <div class="col-sm-8 scrollbar card-height-sm" *ngIf="data" #myDiv>
                         <mat-card class="plain-card h-100">
                             <mat-card-content class="card-body p-0">
                                 <div class="row">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12 px-0">
                                         <div class="student-details mt-lg-0 mt-4">
                                             <div class="d-flex flex-lg-row flex-column">
                                                 <div class="flex-shrink-0 text-center text-lg-start mb-2">
@@ -241,8 +237,6 @@
                                                                 : data.m_Evaluator}}</mat-option>
                                                         </mat-select>
                                                     </mat-form-field>
-
-
                                                 </div>
                                                 <div *ngIf="false" class="col-sm-5">
                                                     <mat-form-field appearance="outline" class="w-100">
@@ -256,27 +250,21 @@
                                                         </mat-select>
                                                     </mat-form-field>
                                                 </div>
-
                                                 <!-- <div class="col-sm-2 fw-bold pt-2">
                                                     <div> 0 - {{webService.languageFlag == 'EN'? "Poor" : "	न्यूनतम"}}</div>
                                                     <div> 1 - {{webService.languageFlag == 'EN'? "Average" : "साधारण"}}</div>
                                                     <div> 2 - {{webService.languageFlag == 'EN' ?"Good": "उच्चतम"}}</div>
                                                 </div> -->
                                             </div>
-                                            <mat-card-header class="card-header pb-0 border-bottom-0">
-
-                                            </mat-card-header>
                                             <!-- table start here for language   -->
                                             <div class=" overflow-auto">
                                                 <div class="col-sm-12">
                                                     <div>
                                                         <div class="w-100">
                                                             <h6 class="my-2 px-1 fw-bold text-main">
-                                                                {{webService.languageFlag == 'EN'? ('Language'):('भाषा
-                                                                ')}} </h6>
+                                                                {{webService.languageFlag == 'EN'? ('Language'):('भाष')}} </h6>
                                                             <!-- <h6 class="my-2 px-1 fw-bold text-main">{{webService.languageFlag == 'EN'? ('Expected level in subject ' +
                                                             subjectNameClassWise + ' : '):(subjectNameClassWise+' विषयात अपेक्षित असलेला स्तर : ')}} </h6> -->
-
                                                         </div>
                                                         <div class="table-responsive ">
                                                             <table class="table dashboard-table">
@@ -320,7 +308,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12">
@@ -359,10 +346,8 @@
                                                                             <!-- <td>{{webService.languageFlag == 'EN'? item.actualMarks : item.actualMarks}}</td> -->
                                                                         </tr>
                                                                     </ng-container>
-
                                                                 </tbody>
                                                             </table>
-
                                                             <div *ngIf="mathSubList?.length == 0">
                                                                 <div class="alert alert-danger text-center py-2 ">
                                                                     {{'Labels.dataNotFound' | translate}}
@@ -380,8 +365,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                             <!-- end here language  -->
 
                                             <!-- table Mathamatic start here   -->
@@ -392,9 +375,7 @@
                                             <!-- table for who taken assessment -->
                                             <h6 class="text-main fw-bold mt-3 mb-2" data-html2canvas-ignore="true">
                                                 <!-- {{inspectionBy.value=='0'?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}} -->
-                                                {{evaluatorId.value==1?(webService.languageFlag == 'EN'?'Assessment by
-                                                Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag ==
-                                                'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
+                                                {{evaluatorId.value==1?(webService.languageFlag == 'EN'?'Assessment by Teacher':'शिक्षकाने घेतलेले मूल्यांकन '):(webService.languageFlag == 'EN'?'Assessment by Officer':'अधिकाऱ्याने घेतलेले मूल्यांकन')}}
                                             </h6>
                                             <div class="table-responsive">
                                                 <table class="table dashboard-table">
@@ -428,7 +409,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <!-- table for class  -->
                                     </div>
                                 </div>

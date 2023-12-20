@@ -394,12 +394,12 @@ export class Dashboard2DashboardDetailComponent {
 
 
   schoolwiseBarChart(critearr?: any, _maxgrade?:any, categoryArr?: any) { 
-   let yAxisMaxValue = critearr?.parameterArr[critearr.parameterArr.length -1].optionGrade;
+   let yAxisMaxValue = critearr?.parameterArr[critearr.parameterArr.length - 1].optionGrade;   
     let seriesArray=new Array();
     const colurArray=['#b51d31', '#E98754'];
-    console.log(critearr)
     if(critearr?.data?.length ){
       critearr?.data.forEach((x:any, i: number)=>{
+        
         const obj={
           x: [categoryArr[i]['label']],
           // y: [-1, x] , // set Level Of which student answer ,
@@ -449,7 +449,7 @@ export class Dashboard2DashboardDetailComponent {
         },
         yaxis: {
               // min: -1,
-              max: yAxisMaxValue , // set Last Parameter in this criteria
+              max: critearr?.questionTypeId == 3 || critearr?.questionTypeId == 4 ? _maxgrade : yAxisMaxValue, // set Last Parameter in this criteria
               labels: {
                 formatter: function (val: any) {
                   return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
@@ -475,7 +475,7 @@ export class Dashboard2DashboardDetailComponent {
             
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-                console.log(series, w);
+                console.log(series);
                 
                 return (
                   '<div class="arrow_box" style="padding:2px;z-index:+999">' +
@@ -489,9 +489,7 @@ export class Dashboard2DashboardDetailComponent {
             
       };      
       this.chartArray.push(this.questionwiseChartOptions);
-    }
-    console.log("this.chartArray", this.chartArray);
-    
+    }    
   
   }
 

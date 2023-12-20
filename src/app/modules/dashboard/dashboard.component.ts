@@ -446,10 +446,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       // ExamTypeId: examTypeId,//formData?.examTypeId,
       questionId: this.selectedBarstatus == "stack" ? data?.questionId : data?.questionId,
       evaluatorId: this.evaluatorId.value | 0
-    }
-
-    console.log("SharingObject", this.SharingObject);
-    
+    }    
     this.webStorage.selectedBarchartObjData.next(this.SharingObject);
     localStorage.setItem('selectedBarchartObjData', JSON.stringify(this.SharingObject))
     this.router.navigate(['/dashboard-student-details']);
@@ -835,7 +832,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.spinner.hide();
         if (res.statusCode == "200") {
           this.totalStudentSurveyDataByCLass = res.responseData.responseData2;
-          console.log("totalStudentSurveyDataByCLass", this.totalStudentSurveyDataByCLass);
           this.dashboardCountData.push(res.responseData.responseData1[0]);
 
           // this.subjectArrayByClass = res.responseData.responseData2;
@@ -869,9 +865,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkDataByClass(index: number, obj: any) {
-    this.selectedObjByClass = obj;    
-    console.log("selectedObjByClass", this.selectedObjByClass);
-    
+    this.selectedObjByClass = obj;        
     // this.totalStudentSurveyDataByCLass.map((x: any) => {
     //   x.status = false;
     // })

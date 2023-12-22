@@ -50,8 +50,8 @@ export class AddAssessmentSubjectComponent {
       subjectName: [this.data ? this.data.subjectName : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericOnly)]],
       m_SubjectName: [this.data ? this.data.m_SubjectName : '', [Validators.required, Validators.pattern(this.validationService.alphanumericMarathi)]],
       isConsiderForAssessed: [this.data ? this.data?.isConsiderForAssessed : false],
-      createdBy: 0,
-      modifiedBy: 0,
+      createdBy: this.webService?.createdByProps().createdBy,
+      modifiedBy: this.webService?.createdByProps().modifiedBy,
       lan: this.languageFlag
     })
   }

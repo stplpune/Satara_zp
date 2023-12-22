@@ -201,7 +201,7 @@
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SubjectWisePerformance' | translate}}</h6>
                     </mat-card-header>
-                    <mat-card-header class="card-header border-0 mb-0 pb-0">
+                    <!-- <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100">
                             <div class="row g-2">
                                 <div class="col-sm-6">
@@ -221,11 +221,8 @@
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <!-- <div class="row g-2" *ngIf="totalStudentCountSubjectwise">
-                                {{('Labels.totalAssessmentStudent'| translate)+" : " +totalStudentCountSubjectwise}}
-                            </div> -->
                         </form>
-                    </mat-card-header>
+                    </mat-card-header> -->
                     <mat-card-content class="card-body">
                         <div id="subjectWiseChart">
                             <ng-container>
@@ -233,11 +230,6 @@
                                     <p>chart</p>
                                 </ng-container>
                             </ng-container>
-                            <!-- <ng-container *ngIf="!subjectWiseChartOptions">
-                                <div class="alert alert-danger text-center p-2" role="alert">
-                                    {{'Labels.dataNotFound' | translate}}
-                                </div>
-                            </ng-container> -->
                         </div>
                     </mat-card-content>
                 </mat-card>

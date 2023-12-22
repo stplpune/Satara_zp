@@ -134,7 +134,7 @@ export class Dashbaord2Component {
     this.getSubject();
     this.GetAllStandardClassWise();
     this.getAllGraphLevel();
-    this.bindEvaluator();
+    // this.bindEvaluator();
     this.getExamType();
     this.getAllTeacherOfficerByEvaluatorId();
   }

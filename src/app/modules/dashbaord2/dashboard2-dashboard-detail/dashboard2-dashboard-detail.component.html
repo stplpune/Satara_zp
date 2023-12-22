@@ -164,6 +164,139 @@
     </ol>
 </nav>
 <mat-card class="plain-card">
+    <mat-card-header class="card-header border-bottom-0 pb-0">
+        <div class="d-flex align-items-center flex-wrap justify-content-between w-100">
+            <h6 class="text-main fw-bold">{{'Labels.studentReportCard' | translate}} </h6>
+        </div>
+    </mat-card-header>
+    <mat-card-header class="card-header border-bottom-0 pb-0">
+        <form [formGroup]="mainFilterForm">
+            <div class="row gx-2">
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
+                        <mat-select formControlName="acYearId">
+                            <mat-option *ngFor="let year of acYear" [value]="year.id">
+                                {{webStorage.languageFlag == 'EN'? year.eductionYear:year.eductionYear_M}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.selectState' | translate}}</mat-label>
+                        <mat-select formControlName="stateId"
+                            (selectionChange)="clearDropdown('state') ; getDistrict()">
+                            <mat-option *ngFor="let state of stateData" [value]="state.id">
+                                {{webStorage.languageFlag == 'EN' ? state.state:state.m_State}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.selectDistrict' | translate}}</mat-label>
+                        <mat-select formControlName="districtId"
+                            (selectionChange)="clearDropdown('districtId');getTaluka()">
+                            <mat-option *ngFor="let district of districtData" [value]="district.id">
+                                {{webStorage.languageFlag == 'EN' ? district.district:district.m_District}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.taluka'| translate}}</mat-label>
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="clearDropdown('talukaId');getAllCenter()">
+                            <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{selectedLang ==
+                                'English' ?
+                                tal.taluka:tal.m_Taluka }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.kendra'| translate}}</mat-label>
+                        <mat-select formControlName="centerId"
+                            (selectionChange)="clearDropdown('centerId');getVillage()">
+                            <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{selectedLang ==
+                                'English'
+                                ?cen.center:cen.m_Center}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
+                        <mat-select formControlName="villageId"
+                            (selectionChange)="clearDropdown('villageId'); getAllSchoolsByCenterId()">
+                            <mat-option *ngFor="let village of villageArr" [value]="village.id">
+                                {{selectedLang == 'English'? village.village:village.m_Village}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
+                        <mat-select formControlName="schoolId"
+                            (selectionChange)="clearDropdown('schoolId') ; getStandard()">
+                            <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{selectedLang ==
+                                'English' ?
+                                sch.schoolName:sch. m_SchoolName}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.standard'| translate}}</mat-label>
+                        <mat-select formControlName="standardId">
+                            <mat-option *ngFor="let stan of standardArr" [value]="stan.id">{{selectedLang ==
+                                'English'
+                                ?stan.standard:stan.m_Standard}}</mat-option>
+                        </mat-select>
+                        <!-- <mat-error *ngIf="fc['standard'].hasError('required')"> {{'Labels.pleaseSelectStandard'| translate}} </mat-error> -->
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.Subject'| translate}}</mat-label>
+                        <mat-select formControlName="subjectId">
+                            <mat-option *ngFor="let sub of subjectArr" [value]="sub.id">{{selectedLang ==
+                                'English'
+                                ?sub.subject:sub.m_Subject}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm">
+                    <mat-form-field appearance="outline" class="w-100 mb-0">
+                        <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
+                        <mat-select formControlName="evaluatorId">
+                            <mat-option *ngFor="let data of evaluatorDataArray"
+                                [value]="data.id">{{webStorage.languageFlag == 'EN'?data.evaluator
+                                :data.m_Evaluator}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 mb-2 mb-lg-0 text-end">
+                    <button mat-flat-button class="btn-main">{{'Labels.filter' | translate}}</button>
+                    <button mat-flat-button class="btn-second ms-2">{{'Labels.clear' |translate}}</button>
+                </div>
+            </div>
+        </form>
+    </mat-card-header>
+
     <mat-card-content class="card-body">
         <div class="row gx-2">
             <div class="col-sm-4">
@@ -187,9 +320,18 @@
                                                 src="{{viewDetailsObj?.profilePhoto ? viewDetailsObj?.profilePhoto : 'https://zposmservices.mahamining.com/Uploads/Upload/image_2023_03_02T09_36_23_388Z.png'}}">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <h5 class="mb-0 fw-bold">{{selectedLang == 'English' ?
-                                                    viewDetailsObj?.fullName :viewDetailsObj?.m_FullName}}</h5>
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <div class="d-flex align-items-center gap-2 mb-2">
+                                                    <h5 class="mb-0 fw-bold">
+                                                        {{selectedLang == 'English' ? viewDetailsObj?.fullName
+                                                        :viewDetailsObj?.m_FullName}}
+                                                    </h5>
+                                                    <small class="text-muted mt-1">
+                                                        ( {{selectedLang == 'English' ? viewDetailsObj?.gender :
+                                                        viewDetailsObj?.m_Gender}} )
+                                                    </small>
+                                                </div>
+
                                                 <!-- <span class="badge px-2 py-2 border"
                                                     [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-primary' : 'text-success'">
                                                     {{selectedLang == 'English' ? viewDetailsObj?.graphLevel :
@@ -199,58 +341,102 @@
                                                         title="Download" [routerLink]="['/print-student-details']">
                                                         <mat-icon class="text-main">download</mat-icon>
                                                     </button> -->
+                                                <div class="d-flex justify-content-between gap-2 data-container">
+                                                    <span class="data-label"> {{'Labels.academicYear'|
+                                                        translate}}:</span>
+                                                    <div class="data-text">
+                                                        <!-- {{selectedLang == 'English' ? StudentData?.educationYear : StudentData?.m_EducationYear}} -->
+                                                        2015 - 2023
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <p class="text-muted mb-2">{{selectedLang == 'English' ?
-                                                viewDetailsObj?.gender : viewDetailsObj?.m_Gender}}</p>
+
                                             <div class="data-container">
                                                 <div class="row mb-2 gy-2">
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.parentName'| translate}}
-                                                            :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ?
-                                                            StudentData?.gaurdianName : StudentData?.m_GaurdianName}}
+                                                    <div class="col-sm-8 mb-2">
+                                                        <div class="d-flex gap-1">
+                                                            <span class="data-label">
+                                                                {{'Labels.parentName'| translate}} :
+                                                            </span>
+                                                            <p class="data-text mb-0">
+                                                                {{selectedLang == 'English' ? StudentData?.gaurdianName
+                                                                : StudentData?.m_GaurdianName}} hfsdfhidsufu
+                                                            </p>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="col-sm-4">
-                                                            <span class="data-label">{{'Labels.motherName'| translate}}
-                                                                :</span>
-                                                            <div class="data-text">{{selectedLang == 'English' ?
-                                                                StudentData?.motherName : StudentData?.m_MotherName}}</div>
-                                                        </div> -->
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.parentMobileNo'|
-                                                            translate}}:</span>
-                                                        <div class="data-text">{{StudentData?.mobileNo}}</div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label"> {{'Labels.academicYear'| translate}}
-                                                            :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ?
-                                                            StudentData?.educationYear : StudentData?.m_EducationYear}}
+
+                                                    <div class="col-sm-4 mb-2">
+                                                        <div class="d-flex gap-1">
+                                                            <span class="data-label">
+                                                                {{'Labels.parentMobileNo'| translate}} :
+                                                            </span>
+                                                            <p class="data-text mb-0">
+                                                                {{StudentData?.mobileNo}}
+                                                            </p>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.saralId'|
-                                                            translate}}:</span>
-                                                        <div class="data-text">{{ StudentData?.saralId}}</div>
+
+                                                    <div class="col-sm-5 mb-2">
+                                                        <div class="row gx-0">
+                                                            <div class="col-sm-3">
+                                                                <span class="data-label">
+                                                                    {{'Labels.saralId'|translate}} :
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-sm-9">
+                                                                <p class="data-text mb-0">
+                                                                    {{ StudentData?.saralId}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.standard' | translate}}
-                                                            :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ?
-                                                            StudentData?.standard : StudentData?.m_Standard}}</div>
+
+                                                    <div class="col-sm-3 mb-2">
+                                                        <div class="row gx-0">
+                                                            <div class="col-sm-6">
+                                                                <span class="data-label">
+                                                                    {{'Labels.standard' | translate}} :
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <p class="data-text mb-0">
+                                                                    {{selectedLang == 'English' ? StudentData?.standard :
+                                                                    StudentData?.m_Standard}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-4">
-                                                        <span class="data-label">{{'Labels.kendra' | translate}}
-                                                            :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ?
-                                                            StudentData?.center : StudentData?.m_Center}}</div>
+
+                                                    <div class="col-sm-4 mb-2">
+                                                        <div class="row gx-0">
+                                                            <div class="col-sm-4">
+                                                                <span class="data-label">
+                                                                    {{'Labels.kendra' | translate}} :
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-sm-8">
+                                                                <p class="data-text mb-0 text-break">
+                                                                    {{selectedLang == 'English' ? StudentData?.center :
+                                                                    StudentData?.m_Center}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-sm-6">
-                                                        <span class="data-label">{{'Labels.SchoolName' | translate}}
-                                                            :</span>
-                                                        <div class="data-text">{{selectedLang == 'English' ?
-                                                            StudentData?.schoolName : StudentData?. m_SchoolName}}</div>
+
+                                                    <div class="col-sm-12 mb-2">
+                                                        <div class="row gx-2">
+                                                            <div class="col-sm-auto">
+                                                                <span class="data-label">
+                                                                    {{'Labels.SchoolName' | translate}} :
+                                                                </span>
+                                                            </div>
+                                                            <div class="col-sm">
+                                                                <p class="data-text mb-0 text-break">
+                                                                    {{selectedLang == 'English' ? StudentData?.schoolName :
+                                                                    StudentData?. m_SchoolName}}
+                                                                </p>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

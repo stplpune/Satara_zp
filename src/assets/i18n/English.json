@@ -216,7 +216,7 @@
         "saralId": "Saral ID",
         "aadhaarNo": "Aadhaar No.",
         "aadhaarPhoto": "Upload Aadhaar Card",
-        "parentMobileNo": "Parent Mobile No.",
+        "parentMobileNo": "Mobile No.",
         "parentName":"Parent Name",
         "fatherName": "Father Name",
         "motherName": "Mother Name",
@@ -571,7 +571,8 @@
         "PleaseEnterValidShortName": "Please Enter Valid Short Name",
         "PleaseEnterValidShortNameMarathi": "Please Enter Valid Short Name (Marathi)",
         "PleaseEnterValidSerialNumber": "Please Enter Valid Serial Number",
-        "PleaseEnterValidIPAddress": "Please Enter Valid IP Address"
+        "PleaseEnterValidIPAddress": "Please Enter Valid IP Address",
+        "studentReportCard":"Student Report Card"
 
     }
 }

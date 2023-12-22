@@ -49,6 +49,9 @@ export class AddAssessmentSubjectComponent {
       districtId: ['', Validators.required],
       subjectName: [this.data ? this.data.subjectName : '', [Validators.required, Validators.pattern(this.validationService.alphaNumericOnly)]],
       m_SubjectName: [this.data ? this.data.m_SubjectName : '', [Validators.required, Validators.pattern(this.validationService.alphanumericMarathi)]],
+      isConsiderForAssessed: [this.data ? this.data?.isConsiderForAssessed : false],
+      createdBy: 0,
+      modifiedBy: 0,
       lan: this.languageFlag
     })
   }

@@ -45,6 +45,11 @@ export class Dashboard2DashboardDetailComponent {
   mainFilterForm!: FormGroup
   subjectArr = new Array();
   StudentData: any;
+  districtLable: any;
+  talukaLable: any;
+  centerLable: any;
+  villageLable: any;
+  schoolLable: any;
   evaluatorDataArray = new Array();
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
@@ -75,6 +80,8 @@ export class Dashboard2DashboardDetailComponent {
      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
      this.getTableData();
      this.getYearArray();     
+     console.log("chartObj: ", this.chartObj);
+     
   }
 
   formData() {
@@ -111,6 +118,9 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getTaluka() {
+    this.districtLable = this.districtData.find((res: any) => res.id == this.mf['districtId'].value);
+    console.log("districtLable", this.districtLable);
+    
     this.talukaArr = [];
     let districtId = this.mainFilterForm.controls['districtId'].value
     if(districtId != 0){
@@ -133,7 +143,8 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getAllCenter() {
-    // this.selectedTaluka = this.talukaArr.find((res: any) => this.filterForm.value.talukaId ? this.filterForm.value.talukaId == res.id : this.dashboardObj?.TalukaId == res.id);
+    this.talukaLable = this.talukaArr.find((res: any) => res.id == this.mf['talukaId'].value);
+    console.log("talukaLable", this.talukaLable);
     this.centerArr = [];
     let Tid = this.mainFilterForm.value.talukaId;
     if (Tid != 0) {
@@ -154,7 +165,9 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getVillage() {
-    // this.selectedCenter = this.centerArr.find((res: any) => this.filterForm.value.centerId ? this.filterForm.value.centerId == res.id : this.dashboardObj?.CenterId == res.id);
+    this.centerLable = this.centerArr.find((res: any) => res.id == this.mf['centerId'].value);
+    console.log("centerLable", this.centerLable);
+
     this.villageArr = [];
     let centerId = this.mainFilterForm.value.centerId;
     if(centerId != 0){
@@ -174,7 +187,9 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getAllSchoolsByCenterId() {    
-    // this.selectedVillage = this.villageArr.find((res: any) => this.filterForm.value.villageId ? this.filterForm.value.villageId == res.id : this.dashboardObj?.VillageId == res.id);
+    this.villageLable = this.villageArr.find((res: any) => res.id == this.mf['villageId'].value);
+    console.log("villageLable", this.villageLable);
+
     this.schoolArr = [];
     let Tid = this.mainFilterForm.value.talukaId;
     let Cid = this.mainFilterForm.value.centerId;
@@ -199,6 +214,9 @@ export class Dashboard2DashboardDetailComponent {
  
 
   getStandard() {
+    this.schoolLable = this.schoolArr.find((res: any) => res.id == this.mf['schoolId'].value);
+    console.log("schoolLable", this.schoolLable);
+
     this.standardArr =[];
     let schoolId = this.mainFilterForm.value.schoolId;
     if(schoolId != 0){

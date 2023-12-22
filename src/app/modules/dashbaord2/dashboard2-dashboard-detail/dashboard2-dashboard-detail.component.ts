@@ -236,12 +236,6 @@ export class Dashboard2DashboardDetailComponent {
     }
   }
 
-
-
-
-
-
-
   defaultFormat(){
   this.filterForm = this.fb.group({
     acYearId:[''],

@@ -152,7 +152,29 @@
             <button mat-stroked-button class="btn-main btn-icon me-2" routerLink="/dashboard">
                 <mat-icon>home</mat-icon></button>
             <div class="d-flex justify-content-between w-100">
-                <span class="mt-2">{{('Labels.dashboard2' | translate)}}
+                <span class="mt-2">
+                    <!-- {{('Labels.dashboard2' | translate)}} -->
+                    {{(webStorage.languageFlag == 'EN'?'Dashboard 2':'डॅशबोर्ड 2')}}
+
+                    {{mainFilterForm.value.stateId ?
+                    (' / '+ (webStorage.languageFlag == 'EN'?'Maharashtra':'महाराष्ट्र')) : ''}}
+
+                    {{(mf['districtId'].value ? (' / '+(webStorage.languageFlag ==
+                    'EN' ? districtLable?.district : districtLable?.m_District)) : '') + 
+                
+                    (mf['talukaId'].value? (' / '+(webStorage.languageFlag ==
+                            'EN' ? talukaLable?.taluka : talukaLable?.m_Taluka)):'') +
+                        
+                    (mf['centerId'].value? (' / '+(webStorage.languageFlag ==
+                            'EN' ? centerLable?.center : centerLable?.m_Center)):'') +
+                            
+                    (mf['villageId'].value? (' / '+(webStorage.languageFlag ==
+                                    'EN' ? villageLable?.village : villageLable?.m_Village)):'') +
+                    
+                    (mf['schoolId'].value? (' / '+(webStorage.languageFlag ==
+                                    'EN' ? schoolLable?.schoolName : schoolLable?.m_SchoolName)):'') 
+                    }}
+
                 </span>
                 <div class="d-flex gap-2">
                     <button mat-stroked-button class="btn-main btn-icon" (click)="drawer.toggle()">
@@ -360,7 +382,7 @@
                                                             </span>
                                                             <p class="data-text mb-0">
                                                                 {{selectedLang == 'English' ? StudentData?.gaurdianName
-                                                                : StudentData?.m_GaurdianName}} hfsdfhidsufu
+                                                                : StudentData?.m_GaurdianName}}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -400,7 +422,8 @@
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <p class="data-text mb-0">
-                                                                    {{selectedLang == 'English' ? StudentData?.standard :
+                                                                    {{selectedLang == 'English' ? StudentData?.standard
+                                                                    :
                                                                     StudentData?.m_Standard}}
                                                                 </p>
                                                             </div>
@@ -432,7 +455,8 @@
                                                             </div>
                                                             <div class="col-sm">
                                                                 <p class="data-text mb-0 text-break">
-                                                                    {{selectedLang == 'English' ? StudentData?.schoolName :
+                                                                    {{selectedLang == 'English' ?
+                                                                    StudentData?.schoolName :
                                                                     StudentData?. m_SchoolName}}
                                                                 </p>
                                                             </div>

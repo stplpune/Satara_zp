@@ -572,7 +572,7 @@
         "PleaseEnterValidShortNameMarathi": "Please Enter Valid Short Name (Marathi)",
         "PleaseEnterValidSerialNumber": "Please Enter Valid Serial Number",
         "PleaseEnterValidIPAddress": "Please Enter Valid IP Address",
-        "studentReportCard":"Student Report Card"
-
+        "studentReportCard":"Student Report Card",
+        "IsConsiderforAssessment" : "Is Consider for Assessment ?"
     }
 }

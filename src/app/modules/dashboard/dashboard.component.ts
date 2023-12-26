@@ -439,7 +439,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       OptionGrade: this.asessmwntLavel.value == '0' ? this.selectedBarstatus == "stack" ? (data?.optionGrade || 0) : data?.questionId : (data?.optionGrade || 0),
       // standardArray: standardArray,
       standardArray: SelectedstandardArray?.standardId,
-      EducationYearId: formData?.acYearId | 0,
+      EducationYearId: this.searchAcadamicYear.value,
       asessmwntLavel: this.asessmwntLavel.value,
       StandardId: this.selectedObjByClass?.standardId,
       ExamTypeId: examTypeId,
@@ -1176,7 +1176,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   onStudentDetails(index: number, label: string) {
     if (this.asessmwntLavel.value == '1') {
-      const formData = this.filterForm.value;
       const formValue = this.filterFormForBarGraph.value;
       this.SharingObject = {
         groupId: 0,
@@ -1186,7 +1185,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         SchoolId: label == 'topPerformance' ? this.tableDataTopPerformance[index].schoolId : this.tableDataLowPerformance[index].schoolId,
         SubjectId: formValue?.subjectId | 0,
         ExamTypeId: formValue?.examId | 0,
-        EducationYearId: formData?.acYearId | 0,
+        EducationYearId: this.searchAcadamicYear.value,
         asessmwntLavel: this.asessmwntLavel.value,
         label: 'table',
         standardArray: [0],
@@ -1258,7 +1257,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   navigateToReport(){
     if(this.dashboardCountData[0]?.assessmentSchoolsCount){
     let filterObj = this.filterForm.value;
-    let id:any = filterObj.acYearId+'.'+filterObj.centerId+'.'+filterObj.schoolId+'.'+filterObj.talukaId+'.'+filterObj.villageId;
+    console.log("filterObj", filterObj);
+    
+    let id:any = filterObj?.stateId+'.'+filterObj?.districtId+'.'+filterObj?.talukaId+'.'+filterObj?.centerId+'.'+filterObj?.villageId+'.'+filterObj?.schoolId+'.'+this.searchAcadamicYear.value;
     let formdata:any = this.encDec.encrypt(`${id}`);
      this.router.navigate(['/school-report'], {
        queryParams: { id: formdata },

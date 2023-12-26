@@ -8,6 +8,7 @@ import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 import { ChartOptions } from '../dashbaord2.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard2-dashboard-detail',
@@ -51,6 +52,7 @@ export class Dashboard2DashboardDetailComponent {
   villageLable: any;
   schoolLable: any;
   evaluatorDataArray = new Array();
+  pageUrl: any;
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
@@ -63,13 +65,18 @@ export class Dashboard2DashboardDetailComponent {
     private errors: ErrorsService,
     private masterService: MasterService,
     private commonMethodS: CommonMethodsService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+    this.pageUrl = this.router.url;
+    console.log("pageUrl", this.pageUrl);
     this.formData();
     this.getState();
     this.getEvaluator();
     this.getSubjectMain();
+    this.getYearArray();     
+
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
@@ -77,10 +84,13 @@ export class Dashboard2DashboardDetailComponent {
       this.GetAllStandard();
       this.getSubject();
     });
-     this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
+    if(this.pageUrl == '/dashboard-student-data'){
+      this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
+    }else{
+      this.chartObj = null;
+    }
      this.getTableData();
-     this.getYearArray();     
-     console.log("chartObj: ", this.chartObj);
+     console.log("chartObj: ", this.chartObj, );
      
   }
 
@@ -176,7 +186,6 @@ export class Dashboard2DashboardDetailComponent {
           if(res.statusCode == "200"){
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
             this.chartObj?.VillageId ? (this.mf['villageId'].setValue(this.chartObj?.VillageId), this.getAllSchoolsByCenterId()) :'';
-
           } else{
             this.villageArr = [];
           }
@@ -244,7 +253,7 @@ export class Dashboard2DashboardDetailComponent {
   });
   }
 
-  getYearArray() {
+  getYearArray() {    
     this.acYear = [];
     this.masterService.getAcademicYears().subscribe((res: any) => {
       this.acYear = res.responseData;
@@ -343,13 +352,15 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   getTableData(flag?: string){
+
     let formData = this.mainFilterForm.value;
-    this.chartObj.PageNo=1;
-    this.chartObj.RowCount=10;
+    this.chartObj ? (this.chartObj.PageNo=1,this.chartObj.RowCount=10) :'';
     this.ngxSpinner.show();
-    let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
-    let mainFilterstr = `StateId=${formData.stateId || 0}&DistrictId=${formData.districtId || 0}&TalukaId=${formData.talukaId || 0}&CenterId=${formData.centerId || 0}&VillageId=${formData.villageId || 0}&SchoolId=${formData.schoolId || 0}&StandardId=${formData?.standardId || 0}&SubjectId=${formData?.subjectId || 0}&EvaluatorId=${formData?.evaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${formData.acYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
-    let URL = (flag == undefined ? str : mainFilterstr)
+    let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&TeacherId_OfficerId=${this.chartObj?.TeacherId_OfficerId || 0}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
+    let mainFilterstr = `StateId=${formData.stateId || 0}&DistrictId=${formData.districtId || 0}&TalukaId=${formData.talukaId || 0}&CenterId=${formData.centerId || 0}&VillageId=${formData.villageId || 0}&SchoolId=${formData.schoolId || 0}&StandardId=${formData?.standardId || 0}&SubjectId=${formData?.subjectId || 0}&TeacherId_OfficerId=${this.chartObj?.TeacherId_OfficerId || 0}&EvaluatorId=${formData?.evaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${formData.acYearId || 0}&GraphType=${this.chartObj? this.chartObj?.graphName : 'ReportCard'}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
+    let URL = ((flag == undefined && this.chartObj) ? str : mainFilterstr)
+    console.log("URL", flag +URL);
+    
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + URL, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

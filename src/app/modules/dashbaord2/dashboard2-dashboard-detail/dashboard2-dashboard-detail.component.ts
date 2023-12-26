@@ -431,7 +431,7 @@ export class Dashboard2DashboardDetailComponent {
         ],
         chart: {
           type: "rangeBar",
-          height: 350,
+          height: 180,
           toolbar: {
             show: false
           }
@@ -439,6 +439,7 @@ export class Dashboard2DashboardDetailComponent {
         plotOptions: {
           bar: {
             horizontal: false,
+            columnWidth: '10%',
           },
         },
         dataLabels: {
@@ -481,7 +482,7 @@ export class Dashboard2DashboardDetailComponent {
               },
             },
             grid: {
-              show: false
+              show: false,
           },
           
             

@@ -565,7 +565,7 @@
                     </mat-card-header>
                     <mat-card-content class="card-body" *ngIf="chartArray">
                         <div class="row">
-                            <div class="col-sm-6" *ngFor="let res of chartArray ; let i = index">
+                            <div class="col-sm-6  mb-0" *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
                                     <h6 class="fw-bold" *ngIf="questionArr">{{selectedLang == 'English' ?
                                         questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
@@ -576,8 +576,8 @@
                                             [dataLabels]="res.dataLabels" [tooltip]="res.tooltip" [grid]="res.grid">
                                         </apx-chart>
                                     </div>
-                                    <div *ngIf="questionArr" class="mb-3">
-                                        <span *ngFor="let param of questionArr?.[i]?.parameterArr">
+                                    <div *ngIf="questionArr" class="mb-3 text-center">
+                                        <span *ngFor="let param of questionArr?.[i]?.parameterArr" class="small fw-bold">
                                             {{ param?.optionGrade }}: {{selectedLang == 'English' ? param?.optionName :
                                             param?.m_OptionName}}
                                         </span>

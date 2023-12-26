@@ -706,7 +706,9 @@ export class Dashbaord2Component {
               selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
               let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'School');
               localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+              if(this.f['schoolId'].value > 0){
               this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              }
             }            
           }
         }
@@ -795,7 +797,7 @@ export class Dashbaord2Component {
             selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id;
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Teacher');
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
           }
         }
         }

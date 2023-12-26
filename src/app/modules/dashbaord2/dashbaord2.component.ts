@@ -336,8 +336,6 @@ export class Dashbaord2Component {
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.evaluatorDataArray = [{ "id": 0, "evaluator": "All", "m_Evaluator": "सर्व" },...res.responseData];
-          // this.getSchoolwiseBarDetails();
-         // this.getAllTeacherOfficerByEvaluatorId()
         } else {
           this.evaluatorDataArray = [];
         }
@@ -726,6 +724,21 @@ export class Dashbaord2Component {
       xaxis: {
         categories: xAxiaArray,
       },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+          console.log("series : ",series);
+          console.log("seriesIndex : ",seriesIndex);
+          console.log("dataPointIndex : ",dataPointIndex);
+          console.log("w : ",w);
+          
+          return (
+            '<div class="arrow_box" style="padding:10px;">' +
+            // "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
+            "<div>" + 'Hiiiiiii' + '</b>' + "</div>" +
+            "</div>"
+          );
+        },
+      }
     }
   }
 

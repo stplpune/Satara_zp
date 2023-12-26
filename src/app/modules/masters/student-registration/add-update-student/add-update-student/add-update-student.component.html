@@ -309,7 +309,7 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.name' | translate}}</mat-label>
                             <input matInput formControlName="name"
-                            (keypress)="validators.noFirstSpaceAllow($event);">
+                            (keypress)="validators.noFirstSpaceAllow($event); validators.alphabetsWithSpaces($event);">
                         </mat-form-field>
                     </div>
 

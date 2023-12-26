@@ -152,7 +152,7 @@ export class AddUpdateStudentComponent {
       modifiedDate: new Date(),
       isDeleted: false,
       id: 0,
-      name: ['', [Validators.pattern(this.validators.name)]],
+      name: ['', [Validators.pattern('^[\n() a-zA-Z]+$')]],
       m_Name: ['', [Validators.pattern('^[.,\n()\u0900-\u096F ]+$')]],
       mobileNo: ['', [Validators.pattern(this.validators.mobile_No)]],
       relationId: ['', []],
@@ -281,7 +281,7 @@ export class AddUpdateStudentComponent {
   // }
   addValidations(status: any) {
     if (status) {
-      this.gf['name'].setValidators([Validators.required, Validators.pattern(this.validators.name)]);
+      this.gf['name'].setValidators([Validators.required, Validators.pattern('^[\n() a-zA-Z]+$')]);
       this.gf['m_Name'].setValidators([Validators.required]);
       this.gf['mobileNo'].setValidators([Validators.required, Validators.pattern(this.validators.mobile_No)]);
       this.gf['relationId'].setValidators([Validators.required]);

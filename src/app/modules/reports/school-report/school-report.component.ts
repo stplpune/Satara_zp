@@ -46,6 +46,8 @@ export class SchoolReportComponent {
   dashBordFilterFlag!:boolean;
   loginData = this.webService.getLoggedInLocalstorageData();
   maxDate = new Date();
+  evaluatorDataArray = new Array();
+  subjectArray = new Array();
   
   constructor(private fb: FormBuilder,
     private masterService: MasterService,
@@ -57,7 +59,7 @@ export class SchoolReportComponent {
     private downloadFileService: DownloadPdfExcelService,
     private activatedRoute :ActivatedRoute,
     private ngxSpinner : NgxSpinnerService,
-   private encDec: AesencryptDecryptService){
+    private encDec: AesencryptDecryptService){
     let studentObj: any;
     let decryptData:any
     this.activatedRoute.queryParams.subscribe((queryParams: any) => { studentObj = queryParams['id'] });
@@ -74,29 +76,31 @@ export class SchoolReportComponent {
     this.schoofilterData();
     this.getState();
     this.getExamType();
+    this.getEvaluator();
+    this.getSubject();
     // this.geAssessmentType();
     this.getAcademicYears();
     setTimeout(() => {
       this.searchAssessMent();
     }, 1000);
-    console.log("loginData:", this.loginData);
-    
   }
 
   schoofilterData(){
     this.schoolReportForm = this.fb.group({
-      educationYearId: [this.dashBordFilterFlag ? Number(this.dashBordObj[0]) : 0],
-      stateId: [0],
-      districtId: [0],
-      talukaId: [this.dashBordFilterFlag ? Number(this.dashBordObj[3]):0],
-      centerId: [this.dashBordFilterFlag ? Number(this.dashBordObj[1]):0],
+      educationYearId: [this.dashBordFilterFlag ? Number(this.dashBordObj[6]) : 0],
+      stateId: [this.dashBordFilterFlag ? Number(this.dashBordObj[0]):0],
+      districtId: [this.dashBordFilterFlag ? Number(this.dashBordObj[1]):0],
+      talukaId: [this.dashBordFilterFlag ? Number(this.dashBordObj[2]):0],
+      centerId: [this.dashBordFilterFlag ? Number(this.dashBordObj[3]):0],
       villageId: [this.dashBordFilterFlag ? Number(this.dashBordObj[4]):0],
-      schoolId: [this.dashBordFilterFlag ? Number(this.dashBordObj[2]):0],
+      schoolId: [this.dashBordFilterFlag ? Number(this.dashBordObj[5]):0],
       fromDate: [(new Date(new Date().setDate(new Date().getDate() - 30)))],
       toDate: [new Date()],
       standardId: [0],
       examTypeId: [0],
-      IsInspection: ['']
+      IsInspection: [''],
+      evaluatorId: [0],
+      subjectId: [0]
     });
 
   }
@@ -146,7 +150,7 @@ export class SchoolReportComponent {
     this.masterService.getAllTaluka('', districtId).subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.talukaArr.push({ "id": 0, "taluka": "All taluka", "m_Taluka": "सर्व तालुके" }, ...res.responseData);
+          this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
           this.loginData ? (this.schoolReportForm.controls['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter()): this.schoolReportForm.controls['talukaId'].setValue(0);
           // let talukaObj = this.talukaArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[3]) });         
           // this.dashBordFilterFlag ? (this.f['talukaId'].setValue(talukaObj[0].id),this.getAllCenter()): this.loginData?.talukaId ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter()) : this.f['talukaId'].setValue(0);
@@ -166,7 +170,7 @@ export class SchoolReportComponent {
       this.masterService.getAllCenter('', talukaid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.centerArr.push({ "id": 0, "center": "All center", "m_Center": "सर्व केंद्र" }, ...res.responseData);           
+            this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);           
             // this.dashBordFilterFlag ? (this.f['centerId'].setValue(Number(this.dashBordObj[1])),this.getVillageDrop()):this.loginData?.centerId ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDrop()) : this.f['centerId'].setValue(0);
             this.loginData ? (this.schoolReportForm.controls['centerId'].setValue(this.loginData?.centerId), this.getVillageDrop()): this.schoolReportForm.controls['centerId'].setValue(0);
           } else {
@@ -209,7 +213,7 @@ export class SchoolReportComponent {
       this.masterService.getAllSchoolByCriteria('', Tid, Vid, Cid).subscribe({
         next: (res: any) => {
           if (res.statusCode == 200) {
-            this.schoolArr.push({ "id": 0, "schoolName": "All school", "m_SchoolName": "सर्व शाळा" }, ...res.responseData);
+            this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
             // this.schoolReportForm.controls['schoolId'].setValue(0);
             // let schoolObj = this.schoolArr.filter((res:any)=>{return res.id == Number(this.dashBordObj[2]) });
             // this.dashBordFilterFlag ? (this.f['schoolId'].setValue(Number(this.dashBordObj[2]))):this.loginData?.schoolId ? (this.f['schoolId'].setValue(this.loginData?.schoolId)) : this.f['schoolId'].setValue(0);
@@ -230,7 +234,7 @@ export class SchoolReportComponent {
     this.masterService.GetStandardBySchool(schId, '').subscribe({
       next: (res: any) => {
         if (res.statusCode == 200) {
-          this.standardArr.push({ "id": 0, "standard": "All standard", "m_Standard": "सर्व इयत्ता" }, ...res.responseData);
+          this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
           this.f['standardId'].setValue(0);
         } else {
           this.commonMethods.checkEmptyData(res.statusMessage) == false ? this.errors.handelError(res.statusCode) : this.commonMethods.showPopup(res.statusMessage, 1);
@@ -238,6 +242,35 @@ export class SchoolReportComponent {
         }
       },
       // error: ((err: any) => { this.errors.handelError(err.statusCode || err.status) })
+    });
+  }
+
+  getEvaluator() {
+    this.apiService.setHttp('get', 'zp-satara/master/GetAllEvaluator?flag_lang=' + this.languageFlag, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.evaluatorDataArray = [{ "id": 0, "evaluator": "All", "m_Evaluator": "सर्व" },...res.responseData];
+          // this.getSchoolwiseBarDetails();
+         // this.getAllTeacherOfficerByEvaluatorId()
+        } else {
+          this.evaluatorDataArray = [];
+        }
+      },
+      error: (() => { this.evaluatorDataArray = []; })
+    });
+  }
+
+  getSubject() {
+    this.masterService.getAllSubject(this.languageFlag).subscribe({
+      next: (res: any) => {
+        if (res.statusCode == '200') {
+          this.subjectArray = [{ id: 0, subject: "All", m_Subject: "सर्व" }, ...res.responseData];
+        }
+      },
+      error: (() => {
+        this.subjectArray = [];
+      })
     });
   }
 
@@ -362,9 +395,9 @@ export class SchoolReportComponent {
     let formData = this.schoolReportForm.value;
     let fromDate = this.datepipe.transform(formData.fromDate, 'yyyy-MM-dd')
     let toDate = this.datepipe.transform(formData.toDate, 'yyyy-MM-dd')
-    let reportStr = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&VilllageId=${formData.villageId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${1}&RowCount=0`;
+    let reportStr = `StateId=${formData?.stateId || 0}&DistrictId=${formData?.districtId || 0}&TalukaId=${formData?.talukaId || 0}&CenterId=${formData?.centerId || 0}&VilllageId=${formData?.villageId || 0}&SchoolId=${formData?.schoolId || 0}&StandardId=${formData?.standardId || 0}&SubjectId=${formData?.subjectId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EvaluatorId=${formData?.evaluatorId || 0}&ExamTypeId=${formData?.examTypeId || 0}&EducationYearId=${formData?.educationYearId || 0}&PageNo=${1}&RowCount=0&lan=${this.languageFlag}`;
     this.pageNumber =  flag == 'filter'? 1 :this.pageNumber;
-    let str = `TalukaId=${formData?.talukaId}&CenterId=${formData?.centerId}&VilllageId=${formData.villageId}&SchoolId=${formData.schoolId}&StandardId=${formData.standardId}&FromDate=${fromDate}&ToDate=${toDate}&IsInspection=${formData.IsInspection}&ExamTypeId=${formData.examTypeId}&EducationYearId=${formData.educationYearId}&PageNo=${this.pageNumber}&RowCount=10`;
+    let str = `StateId=${formData?.stateId || 0}&DistrictId=${formData?.districtId || 0}&TalukaId=${formData?.talukaId || 0}&CenterId=${formData?.centerId || 0}&VilllageId=${formData.villageId || 0}&SchoolId=${formData.schoolId || 0}&StandardId=${formData.standardId || 0}&SubjectId=${formData?.subjectId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EvaluatorId=${formData?.evaluatorId || 0}&ExamTypeId=${formData?.examTypeId || 0}&EducationYearId=${formData?.educationYearId || 0}&PageNo=${this.pageNumber}&RowCount=10&lan=${this.languageFlag}`;
     this.apiService.setHttp('GET', 'zp-satara/assessment-report/Download_AssessmentReport_SchoolWise?' + (flag == 'pdfFlag' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -411,6 +444,8 @@ export class SchoolReportComponent {
   clearForm(){
     this.schoofilterData();
     this.getState();
+    this.getEvaluator();
+    this.getSubject();
     this.searchAssessMent();
 
   }

@@ -98,7 +98,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div> -->
-                <div class="col-sm-2">
+                <!-- <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.assessedBy' | translate}}</mat-label>
                         <mat-select formControlName="IsInspection">
@@ -106,8 +106,30 @@
                             <mat-option [value]="1">Teacher</mat-option>
                         </mat-select>
                     </mat-form-field>
+                </div> -->
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.Evaluator' | translate}}</mat-label>
+                        <mat-select formControlName="evaluatorId">
+                            <mat-option *ngFor="let data of evaluatorDataArray"
+                                [value]="data.id">{{languageFlag ==
+                                    'English' ? data.evaluator
+                                : data.m_Evaluator}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
                 <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
+                        <mat-select formControlName="subjectId">
+                            <mat-option *ngFor="let data of subjectArray"
+                                [value]="data.id">{{languageFlag ==
+                                    'English' ? data.subject
+                                : data.m_Subject}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2" *ngIf="schoolReportForm.value.evaluatorId < 1">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
                         <mat-select formControlName="examTypeId">

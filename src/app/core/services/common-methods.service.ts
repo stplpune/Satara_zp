@@ -71,8 +71,6 @@ export class CommonMethodsService {
     }
   }
 
-
-
   getkeyValueByArrayOfObj(array: any, key: string, val: any) {
     let res = array.find((ele: any) => {
       if (ele[key] == val) {
@@ -82,6 +80,25 @@ export class CommonMethodsService {
     return res
   }
 
+  setDate(date: any) {
+    if (date) {
+      let d = new Date(date);
+      d.setHours(d.getHours() + 5);
+      d.setMinutes(d.getMinutes() + 30);
+      return d.toISOString();
+    } else {
+      return '';
+    }
+  } 
+
+  isOver18() { // find Date toDay date to 18 year old Date
+    let year = new Date().getFullYear() - 18;
+    let month = new Date().getMonth() + 1;
+    let date = new Date().getDate();
+    let fullDate = month + '-' + date + '-' + year;
+    let asd = this.setDate(new Date(fullDate));
+    return asd;
+  }
 
   mapRegions() {
     let regions_m = {

@@ -94,18 +94,10 @@ export class Dashbaord2Component {
     this.allDropdownApi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
-      this.showSvgMap(this.commonMethods.mapRegions());
-    //  this.allDropdownApi();
-      
+      this.showSvgMap(this.commonMethods.mapRegions());      
       this.allChartApi();
       this.getdashboardCount();
-
-    });
-    // this.showSvgMap(this.commonMethods.mapRegions());
-   
-
-     
-   //  this.allChartApi();
+    });   
   }
 
   allDefultFormAPi() {

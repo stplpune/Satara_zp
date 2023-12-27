@@ -7,6 +7,7 @@ import { AddSchoolProfileComponent } from 'src/app/modules/masters/school-regist
 import { TasksheetReportDetailsComponent } from 'src/app/modules/attendence/tasksheet-reports/tasksheet-report-details/tasksheet-report-details.component';
 import { ViewStockDetailsComponent } from 'src/app/modules/infrastructure/store-master/view-stock-details/view-stock-details.component';
 import { LiveStreamingComponent } from 'src/app/modules/cctv/cctv/live-streaming/live-streaming.component';
+import { Dashboard2DashboardDetailComponent } from 'src/app/modules/dashbaord2/dashboard2-dashboard-detail/dashboard2-dashboard-detail.component';
 
 const routes: Routes = [
   { path: '', component: SecureComponent },
@@ -59,7 +60,7 @@ const routes: Routes = [
   { path: 'assessment-configuration', loadChildren: () => import('../../modules/settings/assessment-configuration/assessment-configuration.module').then(m => m.AssessmentConfigurationModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Assessment Configuration', m_title: 'मूल्यांकन निकष', active: true }]}},
   { path: 'criteria-wise-question', loadChildren: () => import('../../modules/settings/criteria-wise-question/criteria-wise-question.module').then(m => m.CriteriaWiseQuestionModule),canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Criteria Wise Question', m_title: 'निकषा नुसार प्रश्न', active: true }]} },
   { path: 'cctv-streaming', component:LiveStreamingComponent , data: { breadcrumb: [{ title: 'cctv',m_title: 'cctv-प्रवाह', active: true }] } },
-  
+  { path: 'student-report-card', component:Dashboard2DashboardDetailComponent , data: { breadcrumb: [{ title: 'student-report-card',m_title: 'विद्यार्थी-रिपोर्ट कार्ड', active: true }] } },
 ]
   
 

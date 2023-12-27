@@ -164,7 +164,7 @@ export class Dashbaord2Component {
 
   defaultTeacherwiseFormat() {
     this.filterFormTeacherWise = this.fb.group({
-      evaluatorId: [0],
+      teacherId_OfficerId: [0],
       classId: [0],
       subjectId: [0],
     })
@@ -704,7 +704,9 @@ export class Dashbaord2Component {
               selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id; //label == 'Slow Learner' ? 1 : label == 'Good' ? 2 : 3
               let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'School');
               localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+              if(this.f['schoolId'].value > 0){
               this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              }
             }            
           }
         }
@@ -752,7 +754,7 @@ export class Dashbaord2Component {
     let mainFV = this.mainFilterForm.value;
     let url = `StateId=${mainFV.stateId}&DistrictId=${mainFV.districtId}`
     url += `&TalukaId=${mainFV.talukaId}&CenterId=${mainFV.centerId}&VillageId=${mainFV.villageId}&SchoolId=${mainFV.schoolId}`
-    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&TeacherId_OfficerId=${fd.evaluatorId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
+    url += `&StandardId=${fd.classId}&SubjectId=${fd.subjectId}&TeacherId_OfficerId=${fd.teacherId_OfficerId}&EducationYearId=${+mainFV.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
     this.apiService.setHttp('get', 'zp-satara/Dashboard/GetDashboardTeacherWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -807,8 +809,10 @@ export class Dashbaord2Component {
             let label = config.config.xaxis.categories[config.dataPointIndex]
             selectedFilter.levelId = this.graphLevelArr.find(res => label == (this.selectedLang == 'English' ? res.graphLevel : res.m_GraphLevel)).id;
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Teacher');
+            console.log("selectedF", selectedFilter);
+            
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
           }
         }
         }
@@ -1114,6 +1118,8 @@ export class Dashbaord2Component {
 
   returnObjectOfChart(mainFilter: any, selectedFilter: any, graphName?: any) {
     // let obj: any;
+    console.log("selectedFilter", selectedFilter);
+    
     return {
       StateId: mainFilter?.stateId,
       DistrictId: mainFilter?.districtId,
@@ -1123,7 +1129,7 @@ export class Dashbaord2Component {
       SchoolId: mainFilter?.schoolId,
       StandardId: selectedFilter?.classId || 0,
       SubjectId: selectedFilter?.subjectId || 0,
-      TeacherId_OfficerId: selectedFilter?.userId,
+      TeacherId_OfficerId:  selectedFilter?.teacherId_OfficerId, //selectedFilter?.userId
       IsInspection: false,
       EvaluatorId: selectedFilter?.evaluatorId,
       GraphLevelId: selectedFilter?.levelId,

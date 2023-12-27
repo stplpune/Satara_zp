@@ -241,7 +241,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if(this.filterForm.value.stateId > 0){
       this.masterService.getAllDistrict(this.selectedLang,this.f['stateId'].value).subscribe((res:any)=>{
         this.districtData = res.responseData;
-        this.f['districtId'].setValue(1)
+        this.f['districtId'].setValue(this.webStorage.getDistrict())
         this.getTalukas()
        })   
     }

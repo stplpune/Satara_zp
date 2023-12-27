@@ -354,10 +354,10 @@
                                            <div class="d-flex justify-content-center flex-column">
                                             <img alt="student-image" height="80px" class="mb-2"
                                             src="{{viewDetailsObj?.profilePhoto ? viewDetailsObj?.profilePhoto : 'https://zposmservices.mahamining.com/Uploads/Upload/image_2023_03_02T09_36_23_388Z.png'}}">
-                                            <small class=" mx-auto fw-bold mt-1">
+                                            <!-- <small class=" mx-auto fw-bold mt-1">
                                                 ( {{selectedLang == 'English' ? viewDetailsObj?.gender :
                                                 viewDetailsObj?.m_Gender}} )
-                                            </small>
+                                            </small> -->
                                            </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
@@ -367,10 +367,14 @@
                                                         {{selectedLang == 'English' ? viewDetailsObj?.fullName
                                                         :viewDetailsObj?.m_FullName}}
                                                     </h5>
+                                                    <small class=" mx-auto mt-1">
+                                                        ( {{selectedLang == 'English' ? viewDetailsObj?.gender :
+                                                        viewDetailsObj?.m_Gender}} )
+                                                    </small>
                                                    
-                                                    <div class="data-text">
+                                                    <!-- <div class="data-text">
                                                         ({{selectedLang == 'English' ? StudentData?.educationYear : StudentData?.m_EducationYear}})
-                                                    </div>
+                                                    </div> -->
                                                 </div>
 
                                                 <!-- <span class="badge px-2 py-2 border"
@@ -583,7 +587,7 @@
                         <div class="row">
                             <div class="col-sm-6  mb-0" *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
-                                    <h6 class="fw-bold" *ngIf="questionArr">{{selectedLang == 'English' ?
+                                    <h6 class="fw-bold ms-3" *ngIf="questionArr">{{selectedLang == 'English' ?
                                         questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
                                     <div class="chart-container">
                                         <apx-chart [series]="res.series" [chart]="res.chart"

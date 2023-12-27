@@ -209,6 +209,16 @@
             <div class="row gx-2">
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
+                        <mat-select formControlName="acYearId">
+                            <mat-option *ngFor="let year of acYear" [value]="year.id">
+                                {{webStorage.languageFlag == 'EN'? year.eductionYear:year.eductionYear_M}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.selectState' | translate}}</mat-label>
                         <mat-select formControlName="stateId"
                             (selectionChange)="clearDropdown('state');getDistrict()">
@@ -231,7 +241,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
@@ -255,7 +265,7 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
                         <mat-select formControlName="villageId"
@@ -313,16 +323,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div> -->
-                <div class="col-sm-2">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
-                        <mat-select formControlName="acYearId">
-                            <mat-option *ngFor="let year of acYear" [value]="year.id">
-                                {{webStorage.languageFlag == 'EN'? year.eductionYear:year.eductionYear_M}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+                
 
                 <div class="col-sm-auto mb-2 mb-lg-0 text-end">
                     <button mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' | translate}}</button>
@@ -354,24 +355,27 @@
                                            <div class="d-flex justify-content-center flex-column">
                                             <img alt="student-image" height="80px" class="mb-2"
                                             src="{{viewDetailsObj?.profilePhoto ? viewDetailsObj?.profilePhoto : 'https://zposmservices.mahamining.com/Uploads/Upload/image_2023_03_02T09_36_23_388Z.png'}}">
-                                            <small class=" mx-auto fw-bold mt-1">
+                                            <!-- <small class=" mx-auto fw-bold mt-1">
                                                 ( {{selectedLang == 'English' ? viewDetailsObj?.gender :
                                                 viewDetailsObj?.m_Gender}} )
-                                            </small>
+                                            </small> -->
                                            </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <div class="d-flex align-items-center gap-2 mb-2">
-                                                    <h5 class="mb-0 fw-bold">
+                                                    <h6 class="mb-0 fw-bold">
                                                         {{selectedLang == 'English' ? viewDetailsObj?.fullName
                                                         :viewDetailsObj?.m_FullName}}
-                                                    </h5>
+                                                    </h6>
+                                                    <small class=" mx-auto mt-1">
+                                                        ( {{selectedLang == 'English' ? viewDetailsObj?.gender :
+                                                        viewDetailsObj?.m_Gender}} )
+                                                    </small>
                                                    
-                                                    <div class="data-text">
-                                                        <!-- {{selectedLang == 'English' ? StudentData?.educationYear : StudentData?.m_EducationYear}} -->
-                                                       ( 2015 - 2023 )
-                                                    </div>
+                                                    <!-- <div class="data-text">
+                                                        ({{selectedLang == 'English' ? StudentData?.educationYear : StudentData?.m_EducationYear}})
+                                                    </div> -->
                                                 </div>
 
                                                 <!-- <span class="badge px-2 py-2 border"
@@ -532,7 +536,7 @@
                     <mat-card-header class="card-header pb-0 border-0">
                         <!-- <form [formGroup]="filterForm"> -->
                         <div class="row gx-2">
-                            <div class="col-sm-3">
+                            <!-- <div class="col-sm-3">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
                                     <mat-select [formControl]="academicYearId"
@@ -543,8 +547,8 @@
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
-                            </div>
-                            <div class="col-sm-3">
+                            </div> -->
+                            <div class="col-sm-auto">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
                                     <mat-select [formControl]="standardId"
@@ -555,7 +559,7 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-auto">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.Subject' | translate}}</mat-label>
                                     <mat-select [formControl]="subjectId"
@@ -566,7 +570,7 @@
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-auto">
                                 <mat-form-field appearance="outline" class="w-100">
                                     <mat-label>{{'Labels.ExamType' | translate}}</mat-label>
                                     <mat-select [formControl]="examId" (selectionChange)="barChartData()">
@@ -584,13 +588,15 @@
                         <div class="row">
                             <div class="col-sm-6  mb-0" *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
-                                    <h6 class="fw-bold" *ngIf="questionArr">{{selectedLang == 'English' ?
+                                    <!-- <h6 class="fw-bold ms-3 data-text">{{'Labels.AssessmentSubject' | translate}}</h6> -->
+
+                                    <h6 class="data-text" *ngIf="questionArr">{{selectedLang == 'English' ?
                                         questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
                                     <div class="chart-container">
                                         <apx-chart [series]="res.series" [chart]="res.chart"
                                             [dataLabels]="res.dataLabels" [plotOptions]="res.plotOptions"
                                             [yaxis]="res?.yaxis" [xaxis]="res.xaxis" [colors]="res.colors"
-                                            [dataLabels]="res.dataLabels" [tooltip]="res.tooltip" [grid]="res.grid">
+                                           [tooltip]="res.tooltip" [grid]="res.grid">
                                         </apx-chart>
                                     </div>
                                     <div *ngIf="questionArr" class="mb-3 text-center">

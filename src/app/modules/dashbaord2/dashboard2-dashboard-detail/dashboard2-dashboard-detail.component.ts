@@ -505,8 +505,8 @@ export class Dashboard2DashboardDetailComponent {
                 console.log(series);
                 
                 return (
-                  '<div class="arrow_box" style="padding:2px;z-index:+999">' +
-                  "<div>" + w.config.xaxis.parameters[0] + " :  <b> " +w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]  + '</b>'+ "</div>" +
+                  '<div class="arrow_box" style="padding:2px;z-index:+999;font-size:12px">' +
+                  // "<div>" + w.config.xaxis.parameters[0] + " :  <b> " +w?.config?.series[seriesIndex]?.data[dataPointIndex].x[0]  + '</b>'+ "</div>" +
                   "<div>" + w.config.xaxis.parameters[1] + " :  <b> " + w?.config?.series[seriesIndex]?.data[dataPointIndex].assDate + "</b> "+
                   "<div>" + w.config.xaxis.parameters[2] + " :  <b> " + w?.config?.series[seriesIndex]?.data[dataPointIndex].parameter + "<b> "+
                   "</div>"

@@ -54,6 +54,7 @@ export class Dashboard2DashboardDetailComponent {
   evaluatorDataArray = new Array();
   pageUrl: any;
   loginData = this.webStorage.getLoggedInLocalstorageData();
+  ExamTypeArray= new Array();
 
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
@@ -77,7 +78,7 @@ export class Dashboard2DashboardDetailComponent {
     this.getEvaluator();
     this.getSubjectMain();
     this.getYearArray();     
-
+    // this.getExamType();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
@@ -90,9 +91,7 @@ export class Dashboard2DashboardDetailComponent {
     }else{
       this.chartObj = null;
     }
-     this.getTableData();
-     console.log("chartObj: ", this.chartObj, );
-     
+     this.getTableData();     
   }
 
   formData() {
@@ -242,6 +241,13 @@ export class Dashboard2DashboardDetailComponent {
       });
     }
   }
+
+  getExamType() {
+    this.masterService.getExamType('').subscribe((res: any) => {
+      this.ExamTypeArray = [{ "id": 0, "examType": "All", "m_ExamType": "सर्व" }].concat(res.responseData);
+    })
+  }
+
 
   defaultFormat(){
   this.filterForm = this.fb.group({
@@ -649,6 +655,7 @@ export class Dashboard2DashboardDetailComponent {
     this.mf['stateId'].setValue(this.webStorage.getState())
     this.mf['districtId'].setValue(this.webStorage.getDistrict())
     this.getDistrict();
+    this.getTableData();
   }
 
 

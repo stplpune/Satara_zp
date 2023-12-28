@@ -52,7 +52,7 @@ export class Dashboard3Component {
     this.mainFilterForm = this.fb.group({
       stateId: [this.webStorage.getState()],
       districtId: [this.webStorage.getDistrict()],
-      talukaId: [0],
+      talukaId: [this.webStorage.getTaluka()],
       centerId: [0],
       villageId: [0],
       schoolId: [0],
@@ -151,7 +151,6 @@ export class Dashboard3Component {
     this.acYear = [];
     this.masterService.getAcademicYears(this.selectedLang).subscribe((res: any) => {
       this.acYear = res.responseData;
-      this.f['acYearId'].patchValue(this.webStorage.getYearId());
       this.academicYear.patchValue(this.webStorage.getYearId())
 
     })
@@ -189,11 +188,32 @@ export class Dashboard3Component {
       next: (res: any) => {
         if (res.statusCode == "200" && res.responseData.responseData1.length) {
           this.spinner.hide();
-          // let centerWiseGraphData = res.responseData.responseData1;
-          // let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => item.centerId))];
-          // uniqueCenterArr.map((center:any, index: any)=>{})          
-          // let filterSubject = 
-          this.centerwiseBarChart();
+          let centerWiseGraphData = res.responseData.responseData1;
+          let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => item.centerId))];          
+          let dataArray: any[] = [];
+          uniqueCenterArr.map((center:any, _index: any)=>{
+            let filterCenter = centerWiseGraphData.filter((y:any)=>y.centerId == center);
+            let dataObjArray: any[] = [];
+            console.log("filterSubject",filterCenter);
+            filterCenter.map((z:any)=>{
+              const subData = {
+                name: this.selectedLang == 'English' ? z.subjectName : z.m_SubjectName,
+                data: z.studentCount,
+                centerId: z.centerId
+              }
+              dataObjArray.push(subData);
+            })
+            dataArray.push(dataObjArray);
+          })   
+
+        
+          
+          
+          
+
+         
+          console.log("dataArray", dataArray);
+          this.centerwiseBarChart(dataArray);
         }
       },
       error: (error: any) => {
@@ -204,23 +224,17 @@ export class Dashboard3Component {
 
   }
 
-  centerwiseBarChart(){
+  centerwiseBarChart(_arry?: any){
     this.centerChartOption = {
-      series: [
-        {
-          name: this.selectedLang == 'English' ? 'center1' : 'हळू शिकणारा',
-          data:   [2, 3, 7],
+      series: [{
+        name: 'language',
+        data: [2,4,5]
         },
         {
-          name: this.selectedLang == 'English' ? 'center2' : 'चांगला शिकणारा',
-          data:  [4, 4],
-        },
-        {
-          name: this.selectedLang == 'English' ? 'center2' : 'हुशार',
-          data:  [4, 4, 4],
-        },
-
-      ],
+        name: 'Math',
+        data: [2,4,5]
+        }
+        ],
       chart: {
         type: 'bar',
         height: 350,
@@ -273,6 +287,9 @@ export class Dashboard3Component {
       subtitle: {
         text: "(Click on bar to see details)",
         offsetX: 15
+      },
+      xaxis: {
+        categories: ['c1', 'c2', 'c3'],
       },
       yaxis: {
         labels: {

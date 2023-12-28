@@ -194,7 +194,7 @@
             <div class="col-sm-6">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
+                        <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100">
@@ -217,7 +217,19 @@
                     <mat-card-content class="card-body pt-0">
                         <div id="schoolwiseChart">
                             <ng-container>
-                                <p>chart</p>
+                                <apx-chart
+                                [series]="centerChartOption?.series"
+                                [chart]="centerChartOption?.chart"
+                                [dataLabels]="centerChartOption?.dataLabels"
+                                [plotOptions]="centerChartOption?.plotOptions"
+                                [yaxis]="centerChartOption?.yaxis"
+                                [xaxis]="centerChartOption?.xaxis"
+                                [subtitle]="centerChartOption?.subtitle"
+                                [colors]="centerChartOption?.colors"
+                                [states]="centerChartOption?.states"
+                                [title]="centerChartOption?.title"
+                                [tooltip]="centerChartOption?.tooltip"
+                              ></apx-chart>
                             </ng-container>
                         </div>
                     </mat-card-content>

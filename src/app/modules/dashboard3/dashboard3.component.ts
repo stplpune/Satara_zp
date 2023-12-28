@@ -1,19 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexPlotOptions, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis } from 'ng-apexcharts';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ApiService } from 'src/app/core/services/api.service';
+import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 declare var $: any;
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  yaxis: ApexYAxis;
-  stroke: ApexStroke;
-  tooltip: ApexTooltip;
-  dataLabels: ApexDataLabels;
-  plotOptions: ApexPlotOptions
-};
 @Component({
   selector: 'app-dashboard3',
   templateUrl: './dashboard3.component.html',
@@ -22,10 +14,10 @@ export type ChartOptions = {
 export class Dashboard3Component {
   selectedLang: any;
   graphLevelArr = new Array();
-  levelId = new FormControl();
+  levelId = new FormControl(1);
   mainFilterForm!: FormGroup;
-  academicYear = new FormControl('');
-  stateData= new Array();
+  academicYear = new FormControl(this.webStorage.getYearId());
+  stateData = new Array();
   districtData = new Array();
   talukaData = new Array();
   centerData = new Array();
@@ -34,27 +26,30 @@ export class Dashboard3Component {
   acYear = new Array();
   districtLabel: any;
   talukaLabel: any;
-  centerName : any;
-  villageName : any;
+  centerName: any;
+  villageName: any;
   examTypeData = new Array();
+  centerChartOption : any;
   get f() { return this.mainFilterForm.controls }
 
   constructor(private masterService: MasterService,
-              public webStorage: WebStorageService,
-              private fb: FormBuilder){}
+    public webStorage: WebStorageService,
+    private fb: FormBuilder,
+    private apiService: ApiService,
+    private spinner: NgxSpinnerService,
+    private error: ErrorsService) { }
 
-  ngOnInit(){
-    this.allmainDropdownApi();
+  ngOnInit() {
     this.mainFillterDefaultFormat();
+    this.allmainDropdownApi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
-    });   
+    });
 
   }
 
-  mainFillterDefaultFormat() {
+  mainFillterDefaultFormat(){
     this.mainFilterForm = this.fb.group({
-      acYearId: [this.webStorage.getYearId()],
       stateId: [this.webStorage.getState()],
       districtId: [this.webStorage.getDistrict()],
       talukaId: [0],
@@ -65,10 +60,12 @@ export class Dashboard3Component {
   }
 
   allmainDropdownApi() {
+    this.getAllGraphLevel();
     this.getYearArray();
     this.getState();
-    this.getAllGraphLevel();
     this.getExamType();
+    this.getCenterwiseBarDetails();
+
   }
 
   // All dropdown starte here 
@@ -104,7 +101,7 @@ export class Dashboard3Component {
   }
 
   getCenters() {
-    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value !=0);
+    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value != 0);
     this.centerData = [{ "id": 0, "center": "All", "m_Center": "सर्व" }];
     this.f['centerId'].setValue(0);
     if (this.f['talukaId'].value) {
@@ -118,8 +115,8 @@ export class Dashboard3Component {
   }
 
   getVillage() {
-    this.centerName = this.centerData.find((res: any) => res.id == this.f['centerId'].value && this.f['centerId'].value !=0);
-   // this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
+    this.centerName = this.centerData.find((res: any) => res.id == this.f['centerId'].value && this.f['centerId'].value != 0);
+    // this.centerName = this.selectedLang == 'English' ? obj.center : obj.m_Center
     this.villageData = [{ "id": 0, "village": "All", "m_Village": "सर्व" }];
     this.f['villageId'].patchValue(0);
     if (this.f['centerId'].value) {
@@ -133,8 +130,8 @@ export class Dashboard3Component {
   }
 
   getschools() {
-    this.villageName= this.villageData.find((res: any) => res.id == this.f['villageId'].value && this.f['villageId'].value !=0);
-   // this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
+    this.villageName = this.villageData.find((res: any) => res.id == this.f['villageId'].value && this.f['villageId'].value != 0);
+    // this.villageName = this.selectedLang == 'English' ? obj.village : obj.m_Village
     this.schoolData = [{ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }];
     this.f['schoolId'].patchValue(0);
     if (this.f['villageId'].value) {
@@ -150,13 +147,6 @@ export class Dashboard3Component {
     })
   }
 
-
-
-
-
-
-
-
   getYearArray() {
     this.acYear = [];
     this.masterService.getAcademicYears(this.selectedLang).subscribe((res: any) => {
@@ -167,14 +157,12 @@ export class Dashboard3Component {
     })
   }
 
-
-
-
   getAllGraphLevel() {
-    this.masterService.GetAllGraphLevel(this.selectedLang).subscribe({
+    this.masterService.GetAllGraphLevel('').subscribe({
       next: (res: any) => {
         if (res.statusCode == '200') {
           this.graphLevelArr = res.responseData;
+          this.levelId.patchValue(this.graphLevelArr[0].id)
         }
       },
       error: (() => {
@@ -190,11 +178,109 @@ export class Dashboard3Component {
     }
     this.getdashboardCount();
     this.getCenterwiseBarDetails();
+  }
+
+  getCenterwiseBarDetails() {
+    this.spinner.show()
+    let formValue = this.mainFilterForm.value;
+    let url = `StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&TalukaId=${formValue?.talukaId}&CenterId=${formValue?.centerId}&VillageId=${formValue?.villageId}&SchoolId=${formValue?.schoolId}&StandardId=${0}&SubjectId=${0}&ExamTypeId=${0}&EducationYearId=${this.academicYear.value}&GraphLevelId=${this.levelId.value}&lan=`
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetTalukaDashboardCenterWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200" && res.responseData.responseData1.length) {
+          this.spinner.hide();
+          // let centerWiseGraphData = res.responseData.responseData1;
+          // let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => item.centerId))];
+          // uniqueCenterArr.map((center:any, index: any)=>{})          
+          // let filterSubject = 
+          this.centerwiseBarChart();
+        }
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        this.error.handelError(error.message);
+      }
+    });
 
   }
 
-  getCenterwiseBarDetails(){
+  centerwiseBarChart(){
+    this.centerChartOption = {
+      series: [
+        {
+          name: this.selectedLang == 'English' ? 'center1' : 'हळू शिकणारा',
+          data:   [2, 3, 7],
+        },
+        {
+          name: this.selectedLang == 'English' ? 'center2' : 'चांगला शिकणारा',
+          data:  [4, 4],
+        },
+        {
+          name: this.selectedLang == 'English' ? 'center2' : 'हुशार',
+          data:  [4, 4, 4],
+        },
 
+      ],
+      chart: {
+        type: 'bar',
+        height: 350,
+        toolbar: {
+          show: false
+        },
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          // barHeight: "75%",
+          dataLabels: {
+            enabled: false,
+          }
+        }
+      },
+      dataLabels: {
+        enabled: false,
+      },
+
+
+      colors: [ '#b51d31','#E98754', '#50c77b'],
+
+      states: {
+        normal: {
+          filter: {
+            type: "desaturate"
+          }
+        },
+        active: {
+          allowMultipleDataPointsSelection: true,
+          filter: {
+            type: "darken",
+            value: 1
+          }
+        }
+      },
+      tooltip: {
+        x: {
+          show: true
+        },
+        y: {
+          title: {
+            formatter: function(_val, opts) {
+              return opts.w.globals.labels[opts.dataPointIndex];
+            }
+          }
+        }
+      },
+      subtitle: {
+        text: "(Click on bar to see details)",
+        offsetX: 15
+      },
+      yaxis: {
+        labels: {
+          show: false
+        }
+      }
+
+    }
   }
 
   getdashboardCount() {
@@ -229,8 +315,8 @@ export class Dashboard3Component {
     // });
   }
 
-  resetMainFilter(){
-    
+  resetMainFilter() {
+
   }
 
 

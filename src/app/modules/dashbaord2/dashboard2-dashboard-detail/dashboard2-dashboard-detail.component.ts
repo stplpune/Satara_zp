@@ -551,6 +551,7 @@ export class Dashboard2DashboardDetailComponent {
   barChartData(){
     let examId = this.examId.value;
     this.questionArr = [];
+    this.chartArray = [];
     this.graphResponse?.map((x: any) => {
       if(examId == x.examTypeId){
         x.criteriaModel.map((res: any) => {

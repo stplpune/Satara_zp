@@ -55,7 +55,7 @@ export class Dashboard2DashboardDetailComponent {
   pageUrl: any;
   loginData = this.webStorage.getLoggedInLocalstorageData();
   ExamTypeArray= new Array();
-
+  selectedLevel: any;
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
@@ -88,6 +88,11 @@ export class Dashboard2DashboardDetailComponent {
     });
     if(this.pageUrl == '/dashboard-student-data'){
       this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
+      // not api for this level 
+      this.selectedLevel = this.chartObj?.GraphLevelId == 1 ?  this.webStorage.languageFlag ==
+      'EN' ? 'Slow Learner': 'हळू शिकणारा': this.chartObj?.GraphLevelId == 2 ? this.webStorage.languageFlag ==
+      'EN' ? 'Good Learner' :'चांगला शिकणारा' : this.webStorage.languageFlag ==
+      'EN' ? 'Brilliant': 'हुशार'
     }else{
       this.chartObj = null;
     }
@@ -551,6 +556,7 @@ export class Dashboard2DashboardDetailComponent {
   barChartData(){
     let examId = this.examId.value;
     this.questionArr = [];
+    this.chartArray = [];
     this.graphResponse?.map((x: any) => {
       if(examId == x.examTypeId){
         x.criteriaModel.map((res: any) => {

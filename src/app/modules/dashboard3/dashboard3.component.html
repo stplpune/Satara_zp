@@ -10,63 +10,90 @@
                 </div>
             </mat-card-header>
             <mat-card-content class="card-body mt-2 mt-lg-0 mb-0 pb-0 card-height-sm scrollbar">
-                <form>
+                <form [formGroup]="mainFilterForm" (ngSubmit)="onMainFilterSubmit();this.drawer.close()">
+                    <!-- <div class="mb-0">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{'Labels.academicYear' | translate}}</mat-label>
+                            <mat-select formControlName="acYearId" (selectionChange)="setAcadamicYearValue()">
+                                <mat-option *ngFor="let year of acYear" [value]="year.id">
+                                    {{webStorage.languageFlag == 'EN'?year.eductionYear:year.eductionYear_M}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+
                     <div class="mb-0">
                         <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectState' | translate}}</mat-label>
-                            <mat-select>
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="stateId" (selectionChange)="getDistrict()">
+                                <mat-option *ngFor="let state of stateData" [value]="state.id">
+                                    {{webStorage.languageFlag == 'EN' ? state.state:state.m_State}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
+                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectDistrict' | translate}}</mat-label>
-                            <mat-select>
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="districtId" (selectionChange)="getTalukas()">
+                                <mat-option *ngFor="let district of districtData" [value]="district.id">
+                                    {{webStorage.languageFlag == 'EN' ? district.district:district.m_District}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
+                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
-                            <mat-select>
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="talukaId" (selectionChange)="getCenters();">
+                                <mat-option *ngFor="let taluka of talukaData" [value]="taluka.id">
+                                    {{webStorage.languageFlag == 'EN' ? taluka.taluka:taluka.m_Taluka}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
-                            <mat-select>
-                                <mat-option>option-2</mat-option>
+                            <mat-select formControlName="centerId" (selectionChange)="getVillage()">
+                                <mat-option *ngFor="let center of centerData" [value]="center.id">
+                                    {{webStorage.languageFlag == 'EN'?center.center:center.m_Center}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectVillage' | translate}}</mat-label>
-                            <mat-select>
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="villageId" (selectionChange)="getschools()">
+                                <mat-option *ngFor="let village of villageData" [value]="village.id">
+                                    {{webStorage.languageFlag == 'EN'? village.village:village.m_Village}}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectSchool' | translate}}</mat-label>
-                            <mat-select>
-                                <mat-option>Option-2</mat-option>
+                            <mat-select formControlName="schoolId">
+                                <mat-option *ngFor="let school of schoolData" [value]="school.id">
+                                    {{webStorage.languageFlag == 'EN'?school.schoolName :school.m_SchoolName }}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="card-footer d-flex justify-content-end px-0">
-                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close>
-                            {{'Labels.reset'| translate}}</button>
-                        <button mat-flat-button type="submit" class="btn-main btn">
-                            {{'Labels.filterclick' | translate}}</button>
+                        <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
+                            (click)="resetMainFilter()">{{'Labels.reset'|
+                            translate}}</button>
+                        <button mat-flat-button type="submit" class="btn-main btn">{{'Labels.filterclick' |
+                            translate}}</button>
                     </div>
                 </form>
+
             </mat-card-content>
         </mat-card>
     </mat-drawer>
@@ -84,8 +111,12 @@
                                 <div class="col-sm">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label> {{'Labels.academicYear' | translate}}</mat-label>
-                                        <mat-select >
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-select [formControl]="academicYear"
+                                            (selectionChange)="onMainFilterSubmit('year')">
+                                            <mat-option *ngFor="let year of acYear" [value]="year.id">
+                                                {{webStorage.languageFlag ==
+                                                'EN'?year.eductionYear:year.eductionYear_M}}
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -163,34 +194,42 @@
             <div class="col-sm-6">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
+                        <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100">
                             <div class="row g-2">
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
+                                        <mat-label>{{'Labels.level' | translate}}</mat-label>
+                                        <mat-select [formControl]="levelId">
+                                            <mat-option *ngFor="let data of graphLevelArr"
+                                                [value]="data.id">{{selectedLang == 'English'?data.graphLevel
+                                                :data.m_GraphLevel}}</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.AllSubject' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
+                                
                             </div>
                         </form>
                     </mat-card-header>
+                    <!-- centerwise graph start from here  -->
                     <mat-card-content class="card-body pt-0">
                         <div id="schoolwiseChart">
                             <ng-container>
-                                <p>chart</p>
+                                <apx-chart
+                                [series]="centerChartOption?.series"
+                                [chart]="centerChartOption?.chart"
+                                [dataLabels]="centerChartOption?.dataLabels"
+                                [plotOptions]="centerChartOption?.plotOptions"
+                                [yaxis]="centerChartOption?.yaxis"
+                                [xaxis]="centerChartOption?.xaxis"
+                                [subtitle]="centerChartOption?.subtitle"
+                                [colors]="centerChartOption?.colors"
+                                [states]="centerChartOption?.states"
+                                [title]="centerChartOption?.title"
+                                [tooltip]="centerChartOption?.tooltip"
+                              ></apx-chart>
                             </ng-container>
                         </div>
                     </mat-card-content>
@@ -201,28 +240,7 @@
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SubjectWisePerformance' | translate}}</h6>
                     </mat-card-header>
-                    <!-- <mat-card-header class="card-header border-0 mb-0 pb-0">
-                        <form class="w-100">
-                            <div class="row g-2">
-                                <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.level' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-6">
-                                    <mat-form-field appearance="outline" class="w-100">
-                                        <mat-label>{{'Labels.AllClass' | translate}}</mat-label>
-                                        <mat-select>
-                                            <mat-option>Option-2</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </form>
-                    </mat-card-header> -->
+                    
                     <mat-card-content class="card-body">
                         <div id="subjectWiseChart">
                             <ng-container>

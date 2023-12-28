@@ -258,10 +258,7 @@ export class Dashbaord2Component {
     if (this.f['villageId'].value) {
       this.masterService.getAllSchoolByCriteria(this.selectedLang, (this.f['talukaId'].value), (this.f['villageId'].value), (this.f['centerId'].value)).subscribe((res: any) => {
         this.schoolData.push(...res.responseData);
-        this.getTeacher();
       })
-    }else{
-      this.getTeacher();
     }
   }
 
@@ -292,22 +289,22 @@ export class Dashbaord2Component {
     });
   }
 
-  getTeacher() {
-    let schoolId = this.mainFilterForm.value?.schoolId || 0;
-    this.schoolName = this.schoolData.find((res: any) => res.id == schoolId && schoolId !=0 );
-   // this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
-    this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
-      next: (res: any) => {
-        if (res.statusCode == '200') {
-          this.teacherResp = [{ id: 0, teacherName: "All", m_TeacherName: "सर्व" }, ...res.responseData];
-          this.teacherRespFilteredList = this.teacherResp.slice();
-        }
-      },
-      error: (() => {
-        this.teacherResp = [];
-      })
-    });
-  }
+  // getTeacher() {
+  //   let schoolId = this.mainFilterForm.value?.schoolId || 0;
+  //   this.schoolName = this.schoolData.find((res: any) => res.id == schoolId && schoolId !=0 );
+  //  // this.schoolName = this.selectedLang == 'English' ? obj.schoolName : obj.m_SchoolName
+  //   this.masterService.getTeacherBySchoolId(schoolId, this.selectedLang).subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode == '200') {
+  //         this.teacherResp = [{ id: 0, teacherName: "All", m_TeacherName: "सर्व" }, ...res.responseData];
+  //         this.teacherRespFilteredList = this.teacherResp.slice();
+  //       }
+  //     },
+  //     error: (() => {
+  //       this.teacherResp = [];
+  //     })
+  //   });
+  // }
 
   getAllGraphLevel() {
     this.masterService.GetAllGraphLevel(this.selectedLang).subscribe({
@@ -378,9 +375,6 @@ export class Dashbaord2Component {
   // ----------------------------------drop end here----------------------
 
   getdashboardCount() {
-    // const formData = this.filterForm.value;
-    // val == 'sigleField' ? this.filterForm.controls['acYearId'].setValue(this.searchAcadamicYear.value) : this.searchAcadamicYear.setValue(formData.acYearId);
-
     let fv = this.mainFilterForm.value;
     let url = `StateId=${fv.stateId}&DistrictId=${fv.districtId}`
     url += `&TalukaId=${fv.talukaId}&CenterId=${fv.centerId}&VillageId=${fv.villageId}`
@@ -392,17 +386,6 @@ export class Dashbaord2Component {
       next: (res: any) => {
         if (res.statusCode == "200" && res.responseData.responseData1.length) {
           this.dashboardCountData.push(res.responseData.responseData1[0]);
-          // this.totalStudentSurveyData = res.responseData.responseData2;
-          // this.totalStudentSurveyData.map((x: any) => {
-          //   x.status = false;
-          //   x.ischeckboxShow = true;
-          // })
-          // if (val == 'mapClick') {
-          //   this.totalStudentSurveyData[this.selectedGroupIdindex].status = true;
-          // } else {
-          //   this.totalStudentSurveyData[1].status = true;
-          // }
-          // this.totalStudentSurveyData[0].ischeckboxShow = false;
           setTimeout(() => {
             this.getPieChartData();
           }, 100)
@@ -718,21 +701,21 @@ export class Dashbaord2Component {
       xaxis: {
         categories: xAxiaArray,
       },
-      tooltip: {
-        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-          console.log("series : ",series);
-          console.log("seriesIndex : ",seriesIndex);
-          console.log("dataPointIndex : ",dataPointIndex);
-          console.log("w : ",w);
+      // tooltip: {
+      //   custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+      //     console.log("series : ",series);
+      //     console.log("seriesIndex : ",seriesIndex);
+      //     console.log("dataPointIndex : ",dataPointIndex);
+      //     console.log("w : ",w);
           
-          return (
-            '<div class="arrow_box" style="padding:10px;">' +
-            // "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-            "<div>" + 'Hiiiiiii' + '</b>' + "</div>" +
-            "</div>"
-          );
-        },
-      }
+      //     return (
+      //       '<div class="arrow_box" style="padding:10px;">' +
+      //       "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
+      //       // "<div>" + '' + '</b>' + "</div>" +
+      //       "</div>"
+      //     );
+      //   },
+      // }
     }
   }
 

@@ -205,6 +205,7 @@
         "studentMiddelNameMarathi": "Middle Name (Marathi)",
         "studentLastNameMarathi": "Last Name (Marathi)",
         "standard": "Standard",
+        "std": "Std",
         "birthDate": "Birth Date",
         "gender": "Gender",
         "religion": "Religion",
@@ -573,6 +574,7 @@
         "PleaseEnterValidSerialNumber": "Please Enter Valid Serial Number",
         "PleaseEnterValidIPAddress": "Please Enter Valid IP Address",
         "studentReportCard":"Student Report Card",
-        "IsConsiderforAssessment" : "Is Consider for Assessment ?"
+        "IsConsiderforAssessment" : "Is Consider for Assessment ?",
+        "OfficerVisitReport" : "Officer Visit Report"
     }
 }

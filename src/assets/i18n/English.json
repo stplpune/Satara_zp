@@ -576,6 +576,7 @@
         "PleaseEnterValidIPAddress": "Please Enter Valid IP Address",
         "studentReportCard":"Student Report Card",
         "IsConsiderforAssessment" : "Is Consider for Assessment ?",
-        "OfficerVisitReport" : "Officer Visit Report"
+        "OfficerVisitReport" : "Officer Visit Report",
+        "officerName" : "Officer Name"
     }
 }

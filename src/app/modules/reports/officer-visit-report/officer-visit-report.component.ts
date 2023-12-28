@@ -1,5 +1,7 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
@@ -7,7 +9,14 @@ import { WebStorageService } from 'src/app/core/services/web-storage.service';
 @Component({
   selector: 'app-officer-visit-report',
   templateUrl: './officer-visit-report.component.html',
-  styleUrls: ['./officer-visit-report.component.scss']
+  styleUrls: ['./officer-visit-report.component.scss'],
+  animations: [
+      trigger('detailExpand', [
+      state('collapsed,void', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class OfficerVisitReportComponent {
   officerVisitReportForm!: FormGroup;
@@ -23,13 +32,36 @@ export class OfficerVisitReportComponent {
   examTypeArr = new Array();
   academicYearArr = new Array();
   maxDate = new Date();
-
   get f() { return this.officerVisitReportForm.controls }
+
+  columnsToDisplay = ['srNo', 'officerName', 'contactNo', 'designation', 'district', 'taluka', 'center', 'schoolCount'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+  expandedElement!: PeriodicElement | null;
+
+  displayedColumns: string[] = ['srNo', 'schoolName', 'studentCount'];
+  schoolDataSource =[
+    {
+      position: 1,
+      description: `hi.`,
+    },
+  ];
+
+  dataSource = [
+    {
+      position: 1,
+      description: `hi.`,
+    },
+    {
+      position: 2,
+      description: `hi.`,
+    }
+  ];
 
   constructor(private masterService: MasterService,
     private fb: FormBuilder,
     private webService: WebStorageService,
-    public validation: ValidationService){}
+    public validation: ValidationService,
+    private router: Router){}
 
   ngOnInit(){
     this.webService.langNameOnChange.subscribe(lang => {
@@ -217,6 +249,15 @@ export class OfficerVisitReportComponent {
   }
   //#endregion ------------------------------------------- Filter dropdown dependencies end here --------------------------------------------
 
+  onClickSchoolList(){
+    let filterValue = this.officerVisitReportForm.value;
+    console.log("filterValue: ", filterValue);
+
+    localStorage.setItem('selectedOfficerObj', JSON.stringify(filterValue));
+    // localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(filterValue));
+    this.router.navigate(['/dashboard-student-data']);
+  }
+
   onClear(){
     this.formField();
     // this.getTableData();
@@ -224,4 +265,12 @@ export class OfficerVisitReportComponent {
 
 
 
+}
+
+export interface PeriodicElement {
+  name: string;
+  position: number;
+  weight: number;
+  symbol: string;
+  description: string;
 }

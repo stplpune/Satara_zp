@@ -583,6 +583,7 @@
         "PleaseEnterValidSerialNumber": "कृपया वैध अनुक्रमांक प्रविष्ट करा",
         "PleaseEnterValidIPAddress": "कृपया वैध आयपी अॅड्रेस प्रविष्ट करा",
         "studentReportCard":"विद्यार्थी अहवाल कार्ड",
-        "OfficerVisitReport" : "अधिकारी भेट अहवाल"
+        "OfficerVisitReport" : "अधिकारी भेट अहवाल",
+        "officerName" : "अधिकाऱ्याचे नाव"
     }
 }

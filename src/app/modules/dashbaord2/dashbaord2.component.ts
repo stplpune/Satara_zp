@@ -701,21 +701,22 @@ export class Dashbaord2Component {
       xaxis: {
         categories: xAxiaArray,
       },
-      // tooltip: {
-      //   custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-      //     console.log("series : ",series);
-      //     console.log("seriesIndex : ",seriesIndex);
-      //     console.log("dataPointIndex : ",dataPointIndex);
-      //     console.log("w : ",w);
+      tooltip: {
+        enabled: false
+        // custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+        //   console.log("series : ",series);
+        //   console.log("seriesIndex : ",seriesIndex);
+        //   console.log("dataPointIndex : ",dataPointIndex);
+        //   console.log("w : ",w);
           
-      //     return (
-      //       '<div class="arrow_box" style="padding:10px;">' +
-      //       "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-      //       // "<div>" + '' + '</b>' + "</div>" +
-      //       "</div>"
-      //     );
-      //   },
-      // }
+        //   return (
+        //     '<div class="arrow_box" style="padding:10px;">' +
+        //     "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
+        //     // "<div>" + '' + '</b>' + "</div>" +
+        //     "</div>"
+        //   );
+        // },
+      }
     }
   }
 

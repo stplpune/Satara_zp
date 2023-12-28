@@ -824,6 +824,7 @@ export class Dashbaord2Component {
         },
       }
     }
+    
   }
   // --------------------------------Teacherwise  Performance barChart  end here------------------------------
 

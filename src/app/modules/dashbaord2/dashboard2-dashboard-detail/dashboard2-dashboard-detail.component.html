@@ -174,9 +174,9 @@
                                     'EN' ? villageLable?.village : villageLable?.m_Village)):'') +
                     
                     (mf['schoolId'].value? (' / '+(webStorage.languageFlag ==
-                                    'EN' ? schoolLable?.schoolName : schoolLable?.m_SchoolName)):'') 
+                                    'EN' ? schoolLable?.schoolName : schoolLable?.m_SchoolName)):'') +
+                                    (this.chartObj?.GraphLevelId ? (' / '+(selectedLevel)):'') 
                     }}
-
                 </span>
                 <!-- <div *ngIf="!chartObj" class="d-flex align-items-center flex-wrap justify-content-between w-100">
                     <h6 class="text-main fw-bold">{{'Labels.studentReportCard' | translate}} </h6>
@@ -585,12 +585,12 @@
                         <!-- </form> -->
                     </mat-card-header>
                     <mat-card-content class="card-body" *ngIf="chartArray">
-                        <div class="row">
+                        <div class="row data-container">
                             <div class="col-sm-6  mb-0" *ngFor="let res of chartArray ; let i = index">
                                 <ng-container *ngIf="res">
                                     <!-- <h6 class="fw-bold ms-3 data-text">{{'Labels.AssessmentSubject' | translate}}</h6> -->
 
-                                    <h6 class="data-text" *ngIf="questionArr">{{selectedLang == 'English' ?
+                                    <h6 class="data-text ms-3" *ngIf="questionArr">{{selectedLang == 'English' ?
                                         questionArr?.[i]?.question: questionArr?.[i]?.m_Question}}</h6>
                                     <div class="chart-container">
                                         <apx-chart [series]="res.series" [chart]="res.chart"

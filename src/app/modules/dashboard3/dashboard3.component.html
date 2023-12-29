@@ -202,7 +202,7 @@
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.level' | translate}}</mat-label>
-                                        <mat-select [formControl]="levelId">
+                                        <mat-select [formControl]="levelId" (selectionChange)="getCenterwiseBarDetails()">
                                             <mat-option *ngFor="let data of graphLevelArr"
                                                 [value]="data.id">{{selectedLang == 'English'?data.graphLevel
                                                 :data.m_GraphLevel}}</mat-option>
@@ -215,15 +215,15 @@
                     </mat-card-header>
                     <!-- centerwise graph start from here  -->
                     <mat-card-content class="card-body pt-0">
-                        <div id="schoolwiseChart">
+                        <div>
                             <ng-container>
                                 <apx-chart
                                 [series]="centerChartOption?.series"
                                 [chart]="centerChartOption?.chart"
                                 [dataLabels]="centerChartOption?.dataLabels"
                                 [plotOptions]="centerChartOption?.plotOptions"
-                                [yaxis]="centerChartOption?.yaxis"
                                 [xaxis]="centerChartOption?.xaxis"
+                                [yaxis]="centerChartOption?.yaxis"
                                 [subtitle]="centerChartOption?.subtitle"
                                 [colors]="centerChartOption?.colors"
                                 [states]="centerChartOption?.states"

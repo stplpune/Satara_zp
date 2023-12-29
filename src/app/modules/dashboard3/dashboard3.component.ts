@@ -29,7 +29,7 @@ export class Dashboard3Component {
   centerName: any;
   villageName: any;
   examTypeData = new Array();
-  centerChartOption : any;
+  centerChartOption: any;
   get f() { return this.mainFilterForm.controls }
 
   constructor(private masterService: MasterService,
@@ -48,7 +48,7 @@ export class Dashboard3Component {
 
   }
 
-  mainFillterDefaultFormat(){
+  mainFillterDefaultFormat() {
     this.mainFilterForm = this.fb.group({
       stateId: [this.webStorage.getState()],
       districtId: [this.webStorage.getDistrict()],
@@ -189,31 +189,40 @@ export class Dashboard3Component {
         if (res.statusCode == "200" && res.responseData.responseData1.length) {
           this.spinner.hide();
           let centerWiseGraphData = res.responseData.responseData1;
-          let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => item.centerId))];          
-          let dataArray: any[] = [];
-          uniqueCenterArr.map((center:any, _index: any)=>{
-            let filterCenter = centerWiseGraphData.filter((y:any)=>y.centerId == center);
-            let dataObjArray: any[] = [];
-            console.log("filterSubject",filterCenter);
-            filterCenter.map((z:any)=>{
-              const subData = {
-                name: this.selectedLang == 'English' ? z.subjectName : z.m_SubjectName,
-                data: z.studentCount,
-                centerId: z.centerId
-              }
-              dataObjArray.push(subData);
-            })
-            dataArray.push(dataObjArray);
-          })   
+          let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => item.center))];
+          // let dataArray: any[] = [];
+          //   let filterCenter = centerWiseGraphData.filter((y:any)=>y.centerId == center);
+          //   let dataObjArray: any[] = [];
+          //   console.log("filterSubject",filterCenter);
+          //   filterCenter.map((z:any)=>{
+          //     const subData = {
+          //       name: this.selectedLang == 'English' ? z.subjectName : z.m_SubjectName,
+          //       data: z.studentCount,
+          //       centerId: z.centerId
+          //     }
+          //     dataObjArray.push(subData);
+          //   })
+          //   dataArray.push(dataObjArray);
+          // })   
+          const subjectsObj = {};
 
-        
-          
-          
-          
+          centerWiseGraphData.forEach(x => {
+            const subjectId = x.subjectId;
+            if (!subjectsObj[subjectId]) {
+              subjectsObj[subjectId] = {
+                subjectId: subjectId,
+                totalStudent: x.totalStudentCount,
+                name: this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName,
+                data: []
+              };
+            }
+            subjectsObj[subjectId].data.push(
+              x.studentCount,
+            );
+          });
+          const subjectsArray = Object.values(subjectsObj);
+          this.centerwiseBarChart(subjectsArray, uniqueCenterArr);
 
-         
-          console.log("dataArray", dataArray);
-          this.centerwiseBarChart(dataArray);
         }
       },
       error: (error: any) => {
@@ -224,17 +233,18 @@ export class Dashboard3Component {
 
   }
 
-  centerwiseBarChart(_arry?: any){
+  centerwiseBarChart(subArray?: any, XArray?: any) {
     this.centerChartOption = {
-      series: [{
-        name: 'language',
-        data: [2,4,5]
-        },
-        {
-        name: 'Math',
-        data: [2,4,5]
-        }
-        ],
+      series: subArray,
+      // [{
+      //   name: 'language',
+      //   data: [2,4,5]
+      //   },
+      //   {
+      //   name: 'Math',
+      //   data: [2,4,5]
+      //   }
+      //   ],
       chart: {
         type: 'bar',
         height: 350,
@@ -245,18 +255,27 @@ export class Dashboard3Component {
       plotOptions: {
         bar: {
           horizontal: false,
-          // barHeight: "75%",
+          barHeight: "50%",
+          columnWidth: '30%',
           dataLabels: {
             enabled: false,
           }
         }
       },
-      dataLabels: {
-        enabled: false,
+      dataLabels: { //OnYBar Show Count
+        enabled: true,
+        formatter: function (val: any) {
+          return val;
+        },
+        // offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#fff"],
+        }
       },
 
 
-      colors: [ '#b51d31','#E98754', '#50c77b'],
+      colors: ['#b51d31', '#E98754', '#50c77b'],
 
       states: {
         normal: {
@@ -272,29 +291,49 @@ export class Dashboard3Component {
           }
         }
       },
-      tooltip: {
-        x: {
-          show: true
-        },
-        y: {
-          title: {
-            formatter: function(_val, opts) {
-              return opts.w.globals.labels[opts.dataPointIndex];
-            }
-          }
-        }
-      },
+      // tooltip: {
+      //   x: {
+      //     show: true
+      //   },
+      //   y: {
+      //     title: {
+      //       formatter: function(_val, opts) {
+      //         return opts.w.globals.labels[opts.dataPointIndex];
+      //       }
+      //     }
+      //   }
+      // },
       subtitle: {
         text: "(Click on bar to see details)",
-        offsetX: 15
+        offsetY: 5
       },
       xaxis: {
-        categories: ['c1', 'c2', 'c3'],
+        axisTicks: {
+          show: false
+        },
+        categories: XArray,
+        parameters: this.selectedLang == 'English' ? ['Subject', 'Student Assessed Count', 'Total Student'] : ['विषय', 'मूल्यमापन केलेली संख्या', 'एकूण विद्यार्थी'],
       },
       yaxis: {
+        min: 0,
         labels: {
-          show: false
-        }
+          formatter: function (val: any) {
+            return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
+          }
+        },
+      },
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+          console.log("tooltip", series, seriesIndex, dataPointIndex, w);
+
+          return (
+            '<div class="arrow_box" style="padding:10px;">' +
+            "<div>" + w.config.xaxis.parameters[0] + " : <b> " + w.globals.initialSeries[seriesIndex].name + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].data[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent + '</b>' + "</div>" +
+            "</div>"
+          );
+        },
       }
 
     }

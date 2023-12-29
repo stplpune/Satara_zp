@@ -191,7 +191,7 @@
         </div>
 
         <div class="row g-2">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
@@ -215,7 +215,7 @@
                     </mat-card-header>
                     <!-- centerwise graph start from here  -->
                     <mat-card-content class="card-body pt-0">
-                        <div>
+                        <div *ngIf="centerChartOption">
                             <ng-container>
                                 <apx-chart
                                 [series]="centerChartOption?.series"
@@ -235,19 +235,26 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-7">
                 <mat-card class="plain-card">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.SubjectWisePerformance' | translate}}</h6>
+                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
                     </mat-card-header>
                     
                     <mat-card-content class="card-body">
-                        <div id="subjectWiseChart">
+                        <div *ngIf="schoolChartEnable">
                             <ng-container>
-                                <ng-container>
-                                    <p>chart</p>
-                                </ng-container>
-                            </ng-container>
+                                        <apx-chart
+                                        [series]="schoolChartOption?.series"
+                                        [chart]="schoolChartOption?.chart"
+                                        [dataLabels]="schoolChartOption?.dataLabels"
+                                        [plotOptions]="schoolChartOption?.plotOptions"
+                                        [xaxis]="schoolChartOption?.xaxis"
+                                        [yaxis]="schoolChartOption?.yaxis"
+                                        [colors]="schoolChartOption?.colors"
+                                        [tooltip]="schoolChartOption?.tooltip"
+                                      ></apx-chart>
+                                    </ng-container>
                         </div>
                     </mat-card-content>
                 </mat-card>

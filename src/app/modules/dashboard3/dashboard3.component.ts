@@ -423,15 +423,27 @@ export class Dashboard3Component {
           show: false
         },
         events: {
-          click: (_event: any, _chartContext: any, config: any) => {
-            if (config.seriesIndex >= 0) {
-              let optionalSubjectindex = config.seriesIndex;
-              console.log("event click on bar ",optionalSubjectindex);
-              // this.getSchoolwiseBarDetails();
-              // const data = this.barChartDataByClass.find((x: any) => (this.selectedLang == 'English' ? x.optionName : x.m_OptionName == this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex]) && sub ==( this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName) );
-              // const data = this.barChartDataByClass.find((x: any) => ((this.selectedLang == 'English' ? x.question : x.m_Question) === (this.barchartOptionsByClass.xaxis['categories'][config.dataPointIndex])));
-            }
+        //   click: (_event: any, chartContext: any, config: any) => {
+        //     if (config.seriesIndex >= 0) {
+        //       let optionalSubjectindex = config.seriesIndex;
+        //       console.log("event click on school bar ",optionalSubjectindex);
+        //       // series.w.globals.initialSeries
+        //       // series.w.config.series[0]
+        //       let schoolId = chartContext?.series?.w.config.series[config?.seriesIndex].schoolId[config?.dataPointIndex];
+
+        //       this.getSchoolWisedata(schoolId);
+        //     }
+        //   }
+        // }
+        click: (_config: any, _event: any, chartContext: any) => {
+          if(chartContext?.seriesIndex >= 0){
+            console.log("onclick center", chartContext);
+            return
+            let schoolId = chartContext?.config.series[chartContext?.seriesIndex].schoolId[chartContext?.dataPointIndex];
+            this.getSchoolWiseTeachdata(schoolId);
           }
+        }
+          
         }
       },
       plotOptions: {
@@ -489,9 +501,26 @@ export class Dashboard3Component {
       }
 
     }
-    this.schoolChartEnable = true;
 console.log("this.schoolChartOption", this.schoolChartOption);
 
+
+  }
+
+
+  getSchoolWiseTeachdata(schoolId?: number){
+    this.spinner.show();
+    let url = `SchoolId=${schoolId}&SubjectId=0&lan=EN`
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetTalukaDashboardSchoolWiseTeacherDetailsWeb?' + url, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next:(res:any)=>{
+        console.log(res);
+        
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        this.error.handelError(error.message);
+      }
+    })
 
   }
 

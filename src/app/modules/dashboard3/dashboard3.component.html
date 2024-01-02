@@ -45,17 +45,17 @@
                         </mat-form-field>
                     </div>
                     <div class="mb-0">
-                        <!-- [ngClass]="{'disabledContent': this.userDetails?.userTypeId > 2}" -->
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
-                            <mat-select formControlName="talukaId" (selectionChange)="getCenters();">
+                            <!-- <mat-select formControlName="talukaId" (selectionChange)="getCenters();"> -->
+                                <mat-select formControlName="talukaId" (selectionChange)="getSeletedTaluka()">
                                 <mat-option *ngFor="let taluka of talukaData" [value]="taluka.id">
                                     {{webStorage.languageFlag == 'EN' ? taluka.taluka:taluka.m_Taluka}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="mb-0">
+                    <!-- <div class="mb-0">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectCenter' | translate}}</mat-label>
                             <mat-select formControlName="centerId" (selectionChange)="getVillage()">
@@ -84,7 +84,7 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
+                    </div> -->
                     <div class="card-footer d-flex justify-content-end px-0">
                         <button mat-flat-button type="button" class="me-2 btn-second" mat-dialog-close
                             (click)="resetMainFilter()">{{'Labels.reset'|
@@ -105,7 +105,13 @@
                     <button mat-stroked-button class="btn-main btn-icon">
                         <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
                     <div class="d-flex justify-content-between w-100">
-                        <span class="mt-2">{{('Labels.dashboard2' | translate)}}</span>
+                        <span class="mt-2">{{('Labels.dashboard3' | translate) + ' / '
+                        +(webStorage.languageFlag =='EN'? stateLabel?.state : stateLabel?.m_State) + ' / ' +(webStorage.languageFlag =='EN'?
+                            districtLabel?.district : districtLabel?.m_District) 
+                            + (talukaLabel ?  ' / '+ (webStorage.languageFlag == 'EN'? talukaLabel?.taluka:talukaLabel?.m_Taluka):'')
+                           }}
+                        </span>
+
                         <div class="d-flex gap-2">
                             <div class="row gx-2">
                                 <div class="col-sm">
@@ -137,7 +143,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/School-white.svg" class="bg-image">
                             <p>{{'Labels.SchoolName' | translate}}</p>
-                            <h3>125</h3>
+                            <h3>{{dashboardCountData[0]?.schoolCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/School.svg">
@@ -151,7 +157,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/Teacher-white.svg" class="bg-image">
                             <p>{{'Labels.teachers' | translate}}</p>
-                            <h3>1263</h3>
+                            <h3>{{dashboardCountData[0]?.teacherCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/Teacher.svg">
@@ -165,7 +171,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/Student-white.svg" class="bg-image">
                             <p>{{'Labels.students' | translate}}</p>
-                            <h3>4556</h3>
+                            <h3>{{dashboardCountData[0]?.studentCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/Student.svg">
@@ -180,7 +186,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/ZP-Officer-white.svg" class="bg-image">
                             <p>{{'Labels.zpOfficer' | translate}}</p>
-                            <h3>025</h3>
+                            <h3>{{dashboardCountData[0]?.zpOfficerCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/ZP-Officer.svg">
@@ -191,7 +197,7 @@
         </div>
 
         <div class="row g-2">
-            <div class="col-sm-5" *ngIf="centerChartOption">
+            <div class="col-sm-5">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
@@ -232,17 +238,23 @@
                               ></apx-chart>
                             </ng-container>
                         </div>
+
+                        <ng-container *ngIf="!centerChartOption">
+                            <div class="alert alert-danger text-center p-2" role="alert">
+                                {{'Labels.dataNotFound' | translate}}
+                            </div>
+                        </ng-container>
+
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-7" *ngIf="schoolChartOptionFlag">
+            <div class="col-sm-7">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}} - {{selectedCenter}}</h6>
                     </mat-card-header>
                     
                     <mat-card-content class="card-body">
-                        {{schoolChartOptionFlag}}
                         <div *ngIf="schoolChartOptionFlag">
                             <ng-container>
                                         <apx-chart  id="Schoolchart"
@@ -257,6 +269,11 @@
                                       ></apx-chart>
                                     </ng-container>
                         </div>
+                        <ng-container *ngIf="!schoolChartOption">
+                            <div class="alert alert-danger text-center p-2" role="alert">
+                                {{'Labels.dataNotFound' | translate}}
+                            </div>
+                        </ng-container>
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -265,7 +282,7 @@
                 <mat-card class="plain-card">
                     <mat-card-content class="card-body">
                         <div class="table-responsive">
-                            <h6>{{'Labels.teacherList' | translate}} - {{selectedSchool}}</h6>
+                            <h6 class="mb-0 fw-bold">{{'Labels.teacherList' | translate}} - {{selectedSchool}}</h6>
                             <app-table></app-table>
                         </div>
                     </mat-card-content>

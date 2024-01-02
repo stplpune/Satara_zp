@@ -965,6 +965,8 @@ export class Dashbaord2Component {
         },
       }
     }
+    console.log("classwiseChartOptions", this.classwiseChartOptions);
+    
   }
  
 

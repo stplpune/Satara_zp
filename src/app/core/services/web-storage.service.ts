@@ -108,6 +108,11 @@ export class WebStorageService {
     let data = this.getLoggedInLocalstorageData();
     return data.districtId || 0;
   }
+  getTaluka(){
+    let data = this.getLoggedInLocalstorageData();
+    return data.talukaId || 0;
+  }
+
 
   getYearId(){
     let data = this.getLoggedInLocalstorageData();

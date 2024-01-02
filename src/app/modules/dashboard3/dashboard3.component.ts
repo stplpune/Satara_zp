@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import ApexCharts from 'apexcharts';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
@@ -29,7 +30,16 @@ export class Dashboard3Component {
   centerName: any;
   villageName: any;
   examTypeData = new Array();
-  centerChartOption : any;
+  centerChartOption: any;
+  schoolChartOption: any;
+  schoolChartOptionFlag:boolean=false;
+  selectedCenter: any;
+  selectedSchool: any;
+  schoolChartEnable:boolean = false;
+  tableDataArray = new Array();
+  tableDatasize : any;
+  pageNumber: number = 1;
+
   get f() { return this.mainFilterForm.controls }
 
   constructor(private masterService: MasterService,
@@ -37,22 +47,24 @@ export class Dashboard3Component {
     private fb: FormBuilder,
     private apiService: ApiService,
     private spinner: NgxSpinnerService,
-    private error: ErrorsService) { }
+    private error: ErrorsService
+    ,) { }
 
   ngOnInit() {
     this.mainFillterDefaultFormat();
     this.allmainDropdownApi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
+      this.setTableData();
     });
 
   }
 
-  mainFillterDefaultFormat(){
+  mainFillterDefaultFormat() {
     this.mainFilterForm = this.fb.group({
       stateId: [this.webStorage.getState()],
       districtId: [this.webStorage.getDistrict()],
-      talukaId: [0],
+      talukaId: [this.webStorage.getTaluka()],
       centerId: [0],
       villageId: [0],
       schoolId: [0],
@@ -151,7 +163,6 @@ export class Dashboard3Component {
     this.acYear = [];
     this.masterService.getAcademicYears(this.selectedLang).subscribe((res: any) => {
       this.acYear = res.responseData;
-      this.f['acYearId'].patchValue(this.webStorage.getYearId());
       this.academicYear.patchValue(this.webStorage.getYearId())
 
     })
@@ -181,6 +192,8 @@ export class Dashboard3Component {
   }
 
   getCenterwiseBarDetails() {
+    this.schoolChartOption = ''
+    this.tableDataArray = [];
     this.spinner.show()
     let formValue = this.mainFilterForm.value;
     let url = `StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&TalukaId=${formValue?.talukaId}&CenterId=${formValue?.centerId}&VillageId=${formValue?.villageId}&SchoolId=${formValue?.schoolId}&StandardId=${0}&SubjectId=${0}&ExamTypeId=${0}&EducationYearId=${this.academicYear.value}&GraphLevelId=${this.levelId.value}&lan=`
@@ -189,11 +202,47 @@ export class Dashboard3Component {
       next: (res: any) => {
         if (res.statusCode == "200" && res.responseData.responseData1.length) {
           this.spinner.hide();
-          // let centerWiseGraphData = res.responseData.responseData1;
-          // let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => item.centerId))];
-          // uniqueCenterArr.map((center:any, index: any)=>{})          
-          // let filterSubject = 
-          this.centerwiseBarChart();
+          let centerWiseGraphData = res.responseData.responseData1;
+          let uniqueCenterArr = [...new Set(centerWiseGraphData.map(item => this.selectedLang == 'English' ? item.center : item.m_Center))];
+          // let dataArray: any[] = [];
+          //   let filterCenter = centerWiseGraphData.filter((y:any)=>y.centerId == center);
+          //   let dataObjArray: any[] = [];
+          //   console.log("filterSubject",filterCenter);
+          //   filterCenter.map((z:any)=>{
+          //     const subData = {
+          //       name: this.selectedLang == 'English' ? z.subjectName : z.m_SubjectName,
+          //       data: z.studentCount,
+          //       centerId: z.centerId
+          //     }
+          //     dataObjArray.push(subData);
+          //   })
+          //   dataArray.push(dataObjArray);
+          // })   
+          const subjectsObj = {};
+
+          centerWiseGraphData.forEach(x => {
+            const subjectId = x.subjectId;
+            if (!subjectsObj[subjectId]) {
+              subjectsObj[subjectId] = {
+                centerName: this.selectedLang == 'English' ? x.center : x.m_Center,
+                center: [],
+                totalStudent: x.totalStudentCount,
+                name: this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName,
+                data: []
+              };
+            }
+            subjectsObj[subjectId].data.push(
+              x.studentCount,
+            );
+            subjectsObj[subjectId].center.push(
+              x.centerId,
+            );
+          });
+          const subjectsArray = Object.values(subjectsObj);
+          console.log("subjectsArray", subjectsArray);
+          
+          this.centerwiseBarChart(subjectsArray, uniqueCenterArr);
+
         }
       },
       error: (error: any) => {
@@ -204,83 +253,107 @@ export class Dashboard3Component {
 
   }
 
-  centerwiseBarChart(){
+  centerwiseBarChart(subArray?: any, XArray?: any) {
     this.centerChartOption = {
-      series: [
-        {
-          name: this.selectedLang == 'English' ? 'center1' : 'हळू शिकणारा',
-          data:   [2, 3, 7],
-        },
-        {
-          name: this.selectedLang == 'English' ? 'center2' : 'चांगला शिकणारा',
-          data:  [4, 4],
-        },
-        {
-          name: this.selectedLang == 'English' ? 'center2' : 'हुशार',
-          data:  [4, 4, 4],
-        },
-
-      ],
+      series: subArray,
+      // [{
+      //   name: 'language',
+      //   data: [2,4,5]
+      //   },
+      //   {
+      //   name: 'Math',
+      //   data: [2,4,5]
+      //   }
+      //   ],
       chart: {
         type: 'bar',
-        height: 350,
+        height: 250,
         toolbar: {
           show: false
         },
+        events: {
+          click: (_config: any, _event: any, chartContext: any) => {
+            if(chartContext?.seriesIndex >= 0){
+              let centerId = chartContext?.config.series[chartContext?.seriesIndex].center[chartContext?.dataPointIndex];
+              // w.config.xaxis.categories[dataPointIndex]
+              let Center = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]
+              this.selectedCenter = this.selectedLang == 'English'   ? Center +'Center' : Center +' केंद्र'
+              console.log("onclick center", chartContext, _config, this.selectedCenter);
+              this.schoolChartOptionFlag=false;
+              this.schoolChartOption = null;
+              this.getSchoolwiseBarDetails(centerId);
+            }
+            
+          }
+          // dataPointSelection: (_e, chartContext, opts) => {
+          //   if(opts?.seriesIndex >= 0){
+          //     console.log("centerEvent",chartContext, opts);
+          //     let centerId = chartContext?.w.globals.initialSeries[opts?.seriesIndex].center[opts?.dataPointIndex];
+          //     this.getSchoolwiseBarDetails(centerId);              
+          //   }            
+          // },
+        }
       },
       plotOptions: {
         bar: {
           horizontal: false,
-          // barHeight: "75%",
+          barHeight: "50%",
+          columnWidth: '30%',
           dataLabels: {
             enabled: false,
           }
         }
       },
-      dataLabels: {
-        enabled: false,
-      },
-
-
-      colors: [ '#b51d31','#E98754', '#50c77b'],
-
-      states: {
-        normal: {
-          filter: {
-            type: "desaturate"
-          }
+      dataLabels: { //OnYBar Show Count
+        enabled: true,
+        formatter: function (val: any) {
+          return val;
         },
-        active: {
-          allowMultipleDataPointsSelection: true,
-          filter: {
-            type: "darken",
-            value: 1
-          }
+        // offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#fff"],
         }
       },
-      tooltip: {
-        x: {
-          show: true
-        },
-        y: {
-          title: {
-            formatter: function(_val, opts) {
-              return opts.w.globals.labels[opts.dataPointIndex];
-            }
-          }
-        }
-      },
+
+
+      colors: ['#b51d31', '#E98754', '#50c77b'],
       subtitle: {
         text: "(Click on bar to see details)",
-        offsetX: 15
+        offsetY: 5
+      },
+      xaxis: {
+        axisTicks: {
+          show: true
+        },
+        categories: XArray,
+        parameters: this.selectedLang == 'English' ? ['Subject', 'Student Assessed Count', 'Total Student'] : ['विषय', 'मूल्यमापन केलेली संख्या', 'एकूण विद्यार्थी'],
       },
       yaxis: {
+        min: 0,
         labels: {
-          show: false
-        }
+          formatter: function (val: any) {
+            return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
+          }
+        },
+      },
+      tooltip: {
+        custom: function ({seriesIndex, dataPointIndex, w }: any) {
+          // console.log("tooltip", series);
+          return (
+            '<div class="arrow_box" style="padding:10px;">' +
+            "<div>" + w.config.xaxis.parameters[0] + " : <b> " + w.globals.initialSeries[seriesIndex].name + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].data[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent + '</b>' + "</div>" +
+            "</div>"
+          );
+        },
       }
 
     }
+    this.getSchoolwiseBarDetails(subArray[0]['center'][0]); //default loaded first center 
+    this.selectedCenter = this.selectedLang == 'English'   ? XArray[0] +'Center' : XArray[0] +' केंद्र'
+
   }
 
   getdashboardCount() {
@@ -313,6 +386,197 @@ export class Dashboard3Component {
     //     this.error.handelError(error.message)
     //   }
     // });
+  }
+
+  getSchoolwiseBarDetails(centerId?:any){
+    this.spinner.show()
+    let formValue = this.mainFilterForm.value;
+    let url = `StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&TalukaId=${formValue?.talukaId}&CenterId=${centerId}&VillageId=${0}&SchoolId=${0}&StandardId=${0}&SubjectId=${0}&ExamTypeId=${0}&EducationYearId=${this.academicYear.value}&GraphLevelId=${this.levelId.value}&lan=`
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetTalukaDashboardSchoolWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200" && res.responseData.responseData1.length) {
+          let schoolWiseGraphData = res.responseData.responseData1;
+          let uniqueSchoolArr = [...new Set(schoolWiseGraphData.map(item => this.selectedLang== 'English' ?  item.schoolName :  item.m_SchoolName))];
+          const subjectsObj = {};
+          schoolWiseGraphData.forEach(x => {
+            const subjectId = x.subjectId;
+            if (!subjectsObj[subjectId]) {
+              subjectsObj[subjectId] = {
+                school:[],
+                totalStudent: x.totalStudentCount,
+                name: this.selectedLang == 'English' ? x.subjectName : x.m_SubjectName,
+                data: []
+              };
+            }
+            subjectsObj[subjectId].data.push(
+              x.studentCount,
+            );
+            subjectsObj[subjectId].school.push(x.schoolId);
+          });
+          const schoolsubArray = Object.values(subjectsObj);
+          this.schoolChartOption = ''
+          this.schoolwiseBarChart(schoolsubArray, uniqueSchoolArr);
+
+        }
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        this.error.handelError(error.message);
+      }
+    });
+
+
+
+  }
+
+  schoolwiseBarChart(_schholSubArr?: any, _SchoolNameArray?: any){
+    this.spinner.hide();
+    this.schoolChartOptionFlag=false;
+    console.log("_schholSubArr", _schholSubArr);
+    this.schoolChartOption = {
+      series: _schholSubArr,
+      chart: {
+        type: 'bar',
+        height: 250,
+        toolbar: {
+          show: false
+        },
+        events: {
+        //   click: (_event: any, chartContext: any, config: any) => {
+        //     if (config.seriesIndex >= 0) {
+        //       let optionalSubjectindex = config.seriesIndex;
+        //       console.log("event click on school bar ",optionalSubjectindex);
+        //       // series.w.globals.initialSeries
+        //       // series.w.config.series[0]
+        //       let schoolId = chartContext?.series?.w.config.series[config?.seriesIndex].schoolId[config?.dataPointIndex];
+
+        //       this.getSchoolWisedata(schoolId);
+        //     }
+        //   }
+        // }
+        click: (_config: any, _event: any, chartContext: any) => {
+          if(chartContext?.seriesIndex >= 0){
+            console.log("onclick school", chartContext, _config);
+            let schoolId = chartContext?.config.series[chartContext?.seriesIndex].school[chartContext?.dataPointIndex];
+            let school = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]
+            this.selectedSchool = this.selectedLang == 'English'   ? school +'School' : school +' शाळा'
+            // let schoolId = chartContext?.config.series[chartContext?.seriesIndex].schoolId;
+            this.getSchoolWiseTeachdata(schoolId);
+          }
+        }
+          
+        }
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          barHeight: "50%",
+          columnWidth: '30%',
+          dataLabels: {
+            enabled: false,
+          }
+        }
+      },
+      dataLabels: { //OnYBar Show Count
+        enabled: true,
+        formatter: function (val: any) {
+          return val;
+        },
+        // offsetY: -20,
+        style: {
+          fontSize: "12px",
+          colors: ["#fff"],
+        }
+      },
+
+
+      colors: ['#b51d31', '#E98754', '#50c77b'],
+    
+      xaxis: {
+        axisTicks: {
+          show: true
+        },
+        categories: _SchoolNameArray,
+        parameters: this.selectedLang == 'English' ? ['Subject', 'Student Assessed Count', 'Total Student'] : ['विषय', 'मूल्यमापन केलेली संख्या', 'एकूण विद्यार्थी'],
+      },
+      yaxis: {
+        min: 0,
+        labels: {
+          formatter: function (val: any) {
+            return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
+          }
+        },
+      },
+      tooltip: {
+        custom: function ({seriesIndex, dataPointIndex, w }: any) {
+          // console.log("tooltip", series);
+
+          return (
+            '<div class="arrow_box" style="padding:10px;">' +
+            "<div>" + w.config.xaxis.parameters[0] + " : <b> " + w.globals.initialSeries[seriesIndex].name + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].data[dataPointIndex] + '</b>' + "</div>" +
+            "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent + '</b>' + "</div>" +
+            "</div>"
+          );
+        },
+      }
+
+    }
+    var chartOrigin = document.querySelector('#Schoolchart');
+    if(chartOrigin){
+      let chart = new ApexCharts(chartOrigin, this.schoolChartOption);
+      chart.render();
+    
+    }
+    this.schoolChartOptionFlag=true;
+    this.getSchoolWiseTeachdata(_schholSubArr[0]['school'][0]);
+    this.selectedSchool = this.selectedLang == 'English'   ? _SchoolNameArray[0] +'School' : _SchoolNameArray +' शाळा'
+  }
+
+
+  getSchoolWiseTeachdata(schoolId?: number){
+    this.spinner.show();
+    let url = `SchoolId=${schoolId}&SubjectId=0&lan=EN`
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetTalukaDashboardSchoolWiseTeacherDetailsWeb?' + url, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next:(res:any)=>{
+        this.spinner.hide();
+        if(res.statusCode == '200' && res.responseData.responseData1.length){
+          this.tableDataArray = res.responseData.responseData1;
+          this.tableDatasize = res.responseData?.responseData2?.pageCount;
+        }
+        else{
+          this.spinner.hide();
+          this.tableDataArray = [];
+          this.tableDatasize = 0;
+        }
+        this.setTableData();        
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        this.error.handelError(error.message);
+      }
+    })
+
+  }
+
+  setTableData(){
+    let displayedColumns = ['srNo', 'profilePhoto',this.selectedLang == 'English' ? 'name' : 'm_Name' ,this.selectedLang == 'English' ? 'teacherRole' : 'm_TeacherRole', this.selectedLang == 'English' ?'standard':'m_Standard', 'mobileNo', 'emailId' ];
+    let displayedheaders = ['Sr. No.', '' , 'Teacher Name', 'Teacher Role', 'Standard', 'Mobile No', 'EmailId'];
+    let marathiDisplayedheaders = ['अ.क्र.', '', 'शिक्षकाचे नाव', 'शिक्षकाची भूमिका', 'इयत्ता', 'मोबाईल क्र','ई - मेल आयडी'];
+    let tableData = {
+      pageNumber: this.pageNumber,
+      pageName:'Profile',
+      highlightedrow:true,
+      img: 'profilePhoto', blink: true, badge: '', isBlock: '', pagintion: false, status: 'actualGrade',
+      displayedColumns: displayedColumns,
+      tableData: this.tableDataArray,
+      tableSize: this.tableDatasize,
+      tableHeaders: this.selectedLang == 'English' ? displayedheaders : marathiDisplayedheaders
+    };
+    this.apiService.tableData.next(tableData);
+    
   }
 
   resetMainFilter() {

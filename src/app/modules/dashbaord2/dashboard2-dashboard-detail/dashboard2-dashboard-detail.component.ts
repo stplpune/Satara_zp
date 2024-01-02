@@ -470,7 +470,7 @@ export class Dashboard2DashboardDetailComponent {
           style: {
             fontSize: "12px",
             colors: ["#fff"],
-          }        
+          } 
         },
         xaxis: {
           // categories: categoryArr,  //'Officer'

@@ -17,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DashboardRoutingModule } from '../dashboard/dashboard-routing.module';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { DashboardRoutingModule } from '../dashboard/dashboard-routing.module';
     CommonModule,
     Dashboard3RoutingModule,
     FormsModule,
+    TableComponent,
     ReactiveFormsModule,
     DashboardRoutingModule,
     MatSelectModule,

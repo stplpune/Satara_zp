@@ -191,7 +191,7 @@
         </div>
 
         <div class="row g-2">
-            <div class="col-sm-6">
+            <div class="col-sm-5" *ngIf="centerChartOption">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
@@ -202,7 +202,7 @@
                                 <div class="col-sm-6">
                                     <mat-form-field appearance="outline" class="w-100">
                                         <mat-label>{{'Labels.level' | translate}}</mat-label>
-                                        <mat-select [formControl]="levelId">
+                                        <mat-select [formControl]="levelId" (selectionChange)="getCenterwiseBarDetails()">
                                             <mat-option *ngFor="let data of graphLevelArr"
                                                 [value]="data.id">{{selectedLang == 'English'?data.graphLevel
                                                 :data.m_GraphLevel}}</mat-option>
@@ -215,15 +215,15 @@
                     </mat-card-header>
                     <!-- centerwise graph start from here  -->
                     <mat-card-content class="card-body pt-0">
-                        <div id="schoolwiseChart">
+                        <div *ngIf="centerChartOption">
                             <ng-container>
                                 <apx-chart
                                 [series]="centerChartOption?.series"
                                 [chart]="centerChartOption?.chart"
                                 [dataLabels]="centerChartOption?.dataLabels"
                                 [plotOptions]="centerChartOption?.plotOptions"
-                                [yaxis]="centerChartOption?.yaxis"
                                 [xaxis]="centerChartOption?.xaxis"
+                                [yaxis]="centerChartOption?.yaxis"
                                 [subtitle]="centerChartOption?.subtitle"
                                 [colors]="centerChartOption?.colors"
                                 [states]="centerChartOption?.states"
@@ -235,19 +235,27 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-6">
-                <mat-card class="plain-card">
+            <div class="col-sm-7" *ngIf="schoolChartOptionFlag">
+                <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.SubjectWisePerformance' | translate}}</h6>
+                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}} - {{selectedCenter}}</h6>
                     </mat-card-header>
                     
                     <mat-card-content class="card-body">
-                        <div id="subjectWiseChart">
+                        {{schoolChartOptionFlag}}
+                        <div *ngIf="schoolChartOptionFlag">
                             <ng-container>
-                                <ng-container>
-                                    <p>chart</p>
-                                </ng-container>
-                            </ng-container>
+                                        <apx-chart  id="Schoolchart"
+                                        [series]="schoolChartOption?.series"
+                                        [chart]="schoolChartOption?.chart"
+                                        [dataLabels]="schoolChartOption?.dataLabels"
+                                        [plotOptions]="schoolChartOption?.plotOptions"
+                                        [xaxis]="schoolChartOption?.xaxis"
+                                        [yaxis]="schoolChartOption?.yaxis"
+                                        [colors]="schoolChartOption?.colors"
+                                        [tooltip]="schoolChartOption?.tooltip"
+                                      ></apx-chart>
+                                    </ng-container>
                         </div>
                     </mat-card-content>
                 </mat-card>
@@ -257,7 +265,8 @@
                 <mat-card class="plain-card">
                     <mat-card-content class="card-body">
                         <div class="table-responsive">
-                            <p>Table</p>
+                            <h6>{{'Labels.teacherList' | translate}} - {{selectedSchool}}</h6>
+                            <app-table></app-table>
                         </div>
                     </mat-card-content>
                 </mat-card>

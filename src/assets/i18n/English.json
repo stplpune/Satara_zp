@@ -554,6 +554,7 @@
         "ExpAnswerMarathi": "Expected Answer(Marathi)",
         "AssesDate": "Assessment Date",
         "iAssesed": "Is Assessed?",
+        "Level": "Level",
         "biometricdeviceList":"Biometric Device List",
         "biometricdeviceregistration":"Biometric Device Registration",
         "updatebiometricdeviceregistration":"Update Biometric Device Details",

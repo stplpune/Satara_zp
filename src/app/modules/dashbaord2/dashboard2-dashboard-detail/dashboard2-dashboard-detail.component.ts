@@ -56,6 +56,7 @@ export class Dashboard2DashboardDetailComponent {
   loginData = this.webStorage.getLoggedInLocalstorageData();
   ExamTypeArray= new Array();
   selectedLevel: any;
+  isStudentCardShow: boolean = false;
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
@@ -77,15 +78,12 @@ export class Dashboard2DashboardDetailComponent {
     this.getState();
     this.getEvaluator();
     this.getSubjectMain();
-    this.getYearArray();     
+    this.getYearArray();   
+    this.defaultFormat();
+    this.GetAllStandard();
+    this.getSubject();  
     // this.getExamType();
-    this.webStorage.langNameOnChange.subscribe((lang) => {
-      this.selectedLang = lang;
-      this.setTableData();
-      this.defaultFormat();
-      this.GetAllStandard();
-      this.getSubject();
-    });
+   
     if(this.pageUrl == '/dashboard-student-data'){
       this.chartObj = JSON.parse(localStorage.getItem('selectedChartObjDashboard2') || '');
       // not api for this level 
@@ -96,7 +94,12 @@ export class Dashboard2DashboardDetailComponent {
     }else{
       this.chartObj = null;
     }
-     this.getTableData();     
+     this.chartObj ? this.getTableData() : (this.chartObj = null && this.mf['schoolId'].value > 0)?  this.getTableData() :'';     
+     this.webStorage.langNameOnChange.subscribe((lang) => {
+      this.selectedLang = lang;
+      this.setTableData();
+      
+    });
   }
 
   formData() {
@@ -359,6 +362,10 @@ export class Dashboard2DashboardDetailComponent {
         break;
     }
   }
+  getStudentTableData(){
+    let formData = this.mainFilterForm.value;
+    formData?.schoolId > 0 ? this.getTableData('filter') : '';
+  }
 
   getTableData(flag?: string){
     let formData = this.mainFilterForm.value;
@@ -367,8 +374,6 @@ export class Dashboard2DashboardDetailComponent {
     let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&TeacherId_OfficerId=${this.chartObj?.TeacherId_OfficerId || 0}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
     let mainFilterstr = `StateId=${formData.stateId || 0}&DistrictId=${formData.districtId || 0}&TalukaId=${formData.talukaId || 0}&CenterId=${formData.centerId || 0}&VillageId=${formData.villageId || 0}&SchoolId=${formData.schoolId || 0}&StandardId=${formData?.standardId || 0}&SubjectId=${formData?.subjectId || 0}&TeacherId_OfficerId=${this.chartObj?.TeacherId_OfficerId || 0}&EvaluatorId=${formData?.evaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${formData.acYearId || 0}&GraphType=${this.chartObj? this.chartObj?.graphName : 'ReportCard'}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
     let URL = ((flag == undefined && this.chartObj) ? str : mainFilterstr)
-    console.log("URL", flag +URL);
-    
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + URL, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
@@ -393,14 +398,15 @@ export class Dashboard2DashboardDetailComponent {
           this.StudentData = null
 
         }
-        this.setTableData();
+        this.setTableData('data');
       },
-      error: ((err: any) => { this.ngxSpinner.hide(); this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
+      error: ((err: any) => { this.ngxSpinner.hide(); 
+        this.commonMethodS.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodS.showPopup(err.statusText, 1); })
     });
   }
 
 
-  setTableData() {
+  setTableData(flag?: string) {
    // this.highLightFlag = true;
     let displayedColumns = ['srNo', this.selectedLang == 'English' ? 'fullName' :'m_FullName', this.selectedLang == 'English' ? 'standard' : 'm_Standard', this.selectedLang == 'English' ? 'gender' : 'm_Gender']
   //  let marathiDisplayedColumns = ['docPath', 'srNo', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender'];
@@ -421,6 +427,11 @@ export class Dashboard2DashboardDetailComponent {
     };
  //   this.highLightFlag ? tableData.highlightedrow = true : tableData.highlightedrow = false,
       this.apiService.tableData.next(tableData);
+      // flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
+      flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
+
+      console.log("this.isStudentCardShow", this.isStudentCardShow);
+      
   }
 
 
@@ -656,12 +667,24 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   resetFilter(){
+    this.tableDataArray =[];
+    this.schoolArr = [];
+    this.setTableData();
+    this.viewDetailsObj = null;
+    this.StudentData = null ;
+    this.chartArray = [];
     this.formData();
     this.mf['acYearId'].setValue(this.webStorage.getYearId())
     this.mf['stateId'].setValue(this.webStorage.getState())
     this.mf['districtId'].setValue(this.webStorage.getDistrict())
     this.getDistrict();
-    this.getTableData();
+    let formData = this.mainFilterForm.value;
+    this.chartObj ? this.getTableData() : (this.chartObj = null && formData?.schoolId > 0) ?  this.getTableData('filter') :'';     
+    // this.getTableData();
+  }
+
+  resetStudentcardFilter(){
+
   }
 
 

@@ -326,18 +326,17 @@
                 
 
                 <div class="col-sm-auto mb-2 mb-lg-0 text-end">
-                    <button mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' | translate}}</button>
+                    <button mat-flat-button class="btn-main" (click)="getStudentTableData()">{{'Labels.filter' | translate}}</button>
                     <button mat-flat-button class="btn-second ms-2" (click)="resetFilter()">{{'Labels.clear' |translate}}</button>
                 </div>
             </div>
         </form>
     </mat-card-header>
-
-    <mat-card-content class="card-body">
+        <mat-card-content class="card-body" [hidden]="!isStudentCardShow">
         <div class="row gx-2">
             <div class="col-sm-4">
                 <h6 class="fw-bold">{{'Labels.TotalStudent' | translate}} : {{tableDatasize}}</h6>
-                <ng-container>
+                <ng-container >
                     <div class="table-responsive">
                         <app-table (recObjToChild)="childCompInfo($event)"></app-table>
                     </div>
@@ -378,11 +377,11 @@
                                                     </div> -->
                                                 </div>
 
-                                                <!-- <span class="badge px-2 py-2 border"
+                                                <span class="badge px-2 py-2 border"
                                                     [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-primary' : 'text-success'">
                                                     {{selectedLang == 'English' ? viewDetailsObj?.graphLevel :
                                                     viewDetailsObj?.m_GraphLevel}}
-                                                </span> -->
+                                                </span>
                                                 <!-- <button mat-flat-button class="btn-main-light btn-icon border"
                                                         title="Download" [routerLink]="['/print-student-details']">
                                                         <mat-icon class="text-main">download</mat-icon>
@@ -501,6 +500,7 @@
                                                 <th scope="col">{{'Labels.Subject' | translate}}</th>
                                                 <th scope="col">{{'Labels.AssesDate' | translate}}</th>
                                                 <th scope="col">{{'Labels.iAssesed' | translate}}</th>
+                                                <th>{{'Labels.Level' | translate}}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -523,6 +523,7 @@
                                                             <mat-icon>close</mat-icon>
                                                         </button> -->
                                                 </td>
+                                                <td>{{selectedLang == 'English' ? data?.graphLevel ||  '-' : data?.m_GraphLevel ||  '-' }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -623,4 +624,9 @@
             </div>
         </div>
     </mat-card-content>
+    <div class="col-sm-12" *ngIf="!isStudentCardShow">
+        <div class="alert alert-danger text-center py-2 mx-2 ">
+            <span>{{ webStorage.languageFlag == 'EN' ? 'Please select a school to view student report details' : 'कृपया विद्यार्थी अहवाल तपशील पाहण्यासाठी शाळा निवडा'}}</span>
+        </div>
+    </div>
 </mat-card>

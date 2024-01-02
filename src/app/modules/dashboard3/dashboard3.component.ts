@@ -104,16 +104,14 @@ export class Dashboard3Component {
   getTalukas() {
     this.districtLabel = this.districtData.find((res: any) => res.id == this.f['districtId'].value);
     this.talukaData = [];
-    // if(this.f['talukaId'].value){
+    if(this.f['districtId'].value){
     this.masterService.getAllTaluka(this.selectedLang, this.f['districtId'].value).subscribe((res: any) => {
     this.talukaData = [{ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData];
     this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value != 0);
       // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
       // this.getCenters();
     })
-    // }else{
-    //   this.getCenters();
-    // }   
+    }
 
   }
 

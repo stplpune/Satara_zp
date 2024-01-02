@@ -22,8 +22,7 @@ import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [
-    Dashboard2DashboardDetailComponent,
-    
+    Dashboard2DashboardDetailComponent,  
   ],
   imports: [
     CommonModule,

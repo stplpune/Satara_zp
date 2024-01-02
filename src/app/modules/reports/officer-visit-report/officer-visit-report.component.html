@@ -25,8 +25,29 @@
                 </div>
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.level' | translate}}</mat-label>
+                        <mat-select formControlName="designationLevelId"
+                            (selectionChange)="onClearDropDown('level'); getDesignationByLevelId();">
+                            <mat-option [value]="level.id" *ngFor="let level of levelsArr">{{languageFlag == 'English' ?
+                                level.designationLevel : level.m_DesignationLevel }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
+                        <mat-label>{{'Labels.designation' | translate}}</mat-label>
+                        <mat-select formControlName="designationId">
+                            <mat-option [value]="desig.id" *ngFor="let desig of designationsArr">{{languageFlag ==
+                                'English' ?
+                                desig.designationType : desig.m_DesignationType }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-2">
+                    <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
-                        <mat-select formControlName="stateId" (selectionChange)="getDistrict();">
+                        <mat-select formControlName="stateId"
+                            (selectionChange)="onClearDropDown('state'); getDistrict();">
                             <mat-option *ngFor="let state of stateArr" [value]="state.id">
                                 {{languageFlag == 'English' ? state.state : state.m_State}}
                             </mat-option>
@@ -36,7 +57,8 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
-                        <mat-select formControlName="districtId" (selectionChange)="getTaluka();">
+                        <mat-select formControlName="districtId"
+                            (selectionChange)="onClearDropDown('district'); getTaluka();">
                             <mat-option *ngFor="let dist of districtArr" [value]="dist.id">{{languageFlag ==
                                 'English' ?
                                 dist.district : dist.m_District}}</mat-option>
@@ -46,7 +68,8 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
-                        <mat-select formControlName="talukaId" (selectionChange)="getAllCenter();">
+                        <mat-select formControlName="talukaId"
+                            (selectionChange)="onClearDropDown('taluka'); getAllCenter();">
                             <mat-option *ngFor="let tal of talukaArr" [value]="tal.id">{{languageFlag == 'English' ?
                                 tal.taluka:tal.m_Taluka }}</mat-option>
                         </mat-select>
@@ -55,7 +78,8 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
-                        <mat-select formControlName="centerId" (selectionChange)="getVillageDrop()">
+                        <mat-select formControlName="centerId"
+                            (selectionChange)="onClearDropDown('center'); getVillageDrop();">
                             <mat-option *ngFor="let cen of centerArr" [value]="cen.id">{{languageFlag == 'English'
                                 ?cen.center:cen.m_Center}}</mat-option>
                         </mat-select>
@@ -64,7 +88,8 @@
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
-                        <mat-select formControlName="villageId" (selectionChange)="getAllSchoolsByCenterId()">
+                        <mat-select formControlName="villageId"
+                            (selectionChange)="onClearDropDown('village'); getAllSchoolsByCenterId();">
                             <mat-option *ngFor="let village of villageArr" [value]="village.id">{{languageFlag ==
                                 'English'
                                 ?village.village:village.m_Village}}</mat-option>
@@ -74,7 +99,8 @@
                 <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
-                        <mat-select formControlName="schoolId" (selectionChange)="getStandard()">
+                        <mat-select formControlName="schoolId"
+                            (selectionChange)="onClearDropDown('school'); getStandard();">
                             <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
                                 sch.schoolName:sch.m_SchoolName}}</mat-option>
                         </mat-select>
@@ -89,7 +115,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <!-- <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
                         <mat-select formControlName="examTypeId">
@@ -98,7 +124,7 @@
                                 exam.examType:exam. m_ExamType}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-sm-auto">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.YearFromTo'| translate}}</mat-label>
@@ -120,9 +146,15 @@
 
                 <div class="col-sm-1 mb-2 mb-lg-0 text-end">
                     <div class="d-flex gap-1">
-                        <button mat-flat-button class="btn-main">{{'Labels.filter' | translate}}</button>
+                        <button mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' |
+                            translate}}</button>
                         <button mat-flat-button class="btn-second ms-2" (click)="onClear()">{{'Labels.clear'
                             |translate}}</button>
+                        <button mat-flat-button class="bg-success btn-icon text-white ms-2"
+                            matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
+                            matTooltipClass="tooltip" (click)="getTableData('excel')">
+                            <mat-icon class="material-symbols-outlined">table</mat-icon>
+                        </button>
                     </div>
                 </div>
 
@@ -137,39 +169,52 @@
 
                     <!-- Table start -->
 
-                    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+                    <table mat-table [dataSource]="tableDataArray" multiTemplateDataRows class="mat-elevation-z8">
 
                         <ng-container matColumnDef="srNo">
-                            <th mat-header-cell *matHeaderCellDef>Sr.No.</th>
-                            <td mat-cell *matCellDef="let element"> {{1}} </td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Sr.No.' :
+                                'अनुक्रमांक' }}</th>
+                            <td mat-cell *matCellDef="let element; let i=index">{{element?.srNo}}</td>
                         </ng-container>
                         <ng-container matColumnDef="officerName">
-                            <th mat-header-cell *matHeaderCellDef>Officer Name</th>
-                            <td mat-cell *matCellDef="let element">Ram</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Officer Name' :
+                                'अधिकाऱ्याचे नाव' }}</th>
+                            <td mat-cell *matCellDef="let element">{{languageFlag =='English' ? element?.officerName :
+                                element?.m_OfficerName }}</td>
                         </ng-container>
                         <ng-container matColumnDef="contactNo">
-                            <th mat-header-cell *matHeaderCellDef>Contact No.</th>
-                            <td mat-cell *matCellDef="let element">{{9876777777}}</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Contact No.' :
+                                'संपर्क क्र.' }}</th>
+                            <td mat-cell *matCellDef="let element">{{element?.mobileNo}}</td>
                         </ng-container>
                         <ng-container matColumnDef="designation">
-                            <th mat-header-cell *matHeaderCellDef>Designation</th>
-                            <td mat-cell *matCellDef="let element">Officer</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Designation' :
+                                'पदनाम' }}</th>
+                            <td mat-cell *matCellDef="let element">{{languageFlag =='English' ? element?.designation :
+                                element?.m_Designation}}</td>
                         </ng-container>
                         <ng-container matColumnDef="district">
-                            <th mat-header-cell *matHeaderCellDef>District</th>
-                            <td mat-cell *matCellDef="let element">Satara</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'District' :
+                                'जिल्हा' }}</th>
+                            <td mat-cell *matCellDef="let element">{{languageFlag =='English' ? element?.district :
+                                element?.m_District}}</td>
                         </ng-container>
                         <ng-container matColumnDef="taluka">
-                            <th mat-header-cell *matHeaderCellDef>Taluka</th>
-                            <td mat-cell *matCellDef="let element">Jaoli</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Taluka' :
+                                'तालुका' }}</th>
+                            <td mat-cell *matCellDef="let element">{{languageFlag =='English' ? element?.taluka :
+                                element?.m_Taluka}}</td>
                         </ng-container>
                         <ng-container matColumnDef="center">
-                            <th mat-header-cell *matHeaderCellDef>Center</th>
-                            <td mat-cell *matCellDef="let element">Ambi</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Center' :
+                                'केंद्र' }}</th>
+                            <td mat-cell *matCellDef="let element">{{languageFlag =='English' ? element?.centers :
+                                element?.m_Centers}}</td>
                         </ng-container>
                         <ng-container matColumnDef="schoolCount">
-                            <th mat-header-cell *matHeaderCellDef>School Count</th>
-                            <td mat-cell *matCellDef="let element">{{10}}</td>
+                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'School Count' :
+                                'शाळेची संख्या' }}</th>
+                            <td mat-cell *matCellDef="let element">{{element?.officerVisitSchools.length}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="expand">
@@ -183,36 +228,52 @@
                             </td>
                         </ng-container>
 
-                        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                        <!-- Collapse Table start here -->
                         <ng-container matColumnDef="expandedDetail">
                             <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
                                 <div class="example-element-detail"
                                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 
-                                    <table mat-table [dataSource]="schoolDataSource" class="mat-elevation-z8">
+                                    <table mat-table [dataSource]="element?.officerVisitSchools"
+                                        class="mat-elevation-z8">
                                         <ng-container matColumnDef="srNo">
-                                          <th mat-header-cell *matHeaderCellDef>Sr.No.</th>
-                                          <td mat-cell *matCellDef="let element">{{1}}</td>
+                                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Sr.No.'
+                                                :
+                                                'अनुक्रमांक' }}</th>
+                                            <td mat-cell *matCellDef="let data">{{data?.srNo}}</td>
                                         </ng-container>
-                                      
+
+                                        <ng-container matColumnDef="schoolCode">
+                                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'School
+                                                Code' :
+                                                'शाळेचा कोड' }}</th>
+                                            <td mat-cell *matCellDef="let data">
+                                                {{data?.schoolCode}}
+                                            </td>
+                                        </ng-container>
+
                                         <ng-container matColumnDef="schoolName">
-                                          <th mat-header-cell *matHeaderCellDef>School Name </th>
-                                          <td mat-cell *matCellDef="let element" (click)="onClickSchoolList()"> New English Medium School </td>
+                                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'School
+                                                Name' :
+                                                'शाळेचे नाव' }}</th>
+                                            <td mat-cell *matCellDef="let data" (click)="onClickSchoolList()">
+                                                {{languageFlag =='English' ? data?.schoolName : data?.m_SchoolName}}
+                                            </td>
                                         </ng-container>
-                                      
+
                                         <ng-container matColumnDef="studentCount">
-                                          <th mat-header-cell *matHeaderCellDef> Student Count </th>
-                                          <td mat-cell *matCellDef="let element"> {{25}} </td>
+                                            <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Student
+                                                Count' :
+                                                'विद्यार्थ्यांची संख्या' }}</th>
+                                            <td mat-cell *matCellDef="let data">{{data?.totalAssessedStudent}}</td>
                                         </ng-container>
-                                      
+
                                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                                      </table>
-
+                                    </table>
                                 </div>
                             </td>
                         </ng-container>
-
                         <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
                         <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;"
                             class="example-element-row" [class.example-expanded-row]="expandedElement === element"
@@ -220,11 +281,17 @@
                         </tr>
                         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
                     </table>
-
-
-                    <!-- Table end here -->
-
-
+                    <!-- Collapse Table end here -->
+                </div>
+                <mat-paginator *ngIf="tableDataArray.length > 10" showFirstLastButtons
+                    [length]="tableDataArray.length" [pageSizeOptions]="[10]"
+                    aria-label="Select page" class="m-0">
+                </mat-paginator>
+                <div *ngIf="tableDataArray.length == 0">
+                    <div class="alert alert-danger text-center py-2 ">
+                        <span *ngIf="languageFlag =='English'">Data not available</span>
+                        <span *ngIf="languageFlag =='Marathi'">डेटा उपलब्ध नाही</span>
+                    </div>
                 </div>
             </div>
         </div>

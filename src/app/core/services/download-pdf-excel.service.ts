@@ -17,7 +17,7 @@ export class DownloadPdfExcelService {
       startY: 25,
       rowPageBreak: 'avoid',
       // margin: { horizontal: 7 , verticle: 10},
-      margin: { horizontal: 10,top: 25 },
+      margin: { horizontal: 10, top: 25 },
 
       didDrawPage: function (_data: any) {
         // var imgWidth = 33;
@@ -31,8 +31,8 @@ export class DownloadPdfExcelService {
           doc.setFontSize(8);
           doc.text(objData.timePeriod, 11, 14, "left");
         }
-        
-        if(objData.name){
+
+        if (objData.name) {
           doc.setFontSize(8);
           doc.text(objData?.name, 12, 14, "left");
         }
@@ -55,13 +55,13 @@ export class DownloadPdfExcelService {
     doc.save(objData.topHedingName);
   }
 
-  generateExcel(keyData: any, apiKeys: any, data: any, name: any, headerKeySize?: any) {    
+  generateExcel(keyData: any, apiKeys: any, data: any, name: any, headerKeySize?: any) {
     // console.log("keyData: ", keyData);
     // console.log("apiKeys: ", apiKeys);
     // console.log("data: ", data);
     // console.log("name: ", name);
     // console.log("headerKeySize: ", headerKeySize);
-    
+
     // Create workbook and worksheet
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(name[0].sheet_name);
@@ -83,7 +83,7 @@ export class DownloadPdfExcelService {
 
     worksheet.mergeCells('C1:F1');
     let heading = worksheet.getCell('C1');
-    heading.value = (name[0].languageFlag == 'English' ? 'School Level Response Record Table ' : 'शाळास्तर प्रतिसाद नोंद तक्ता ') + (name[0].standard == '' ? '' : (name[0].languageFlag == 'English' ? '(Standard ' : '(इयत्ता  ') + name[0].standard + ')') ;
+    heading.value = (name[0].languageFlag == 'English' ? 'School Level Response Record Table ' : 'शाळास्तर प्रतिसाद नोंद तक्ता ') + (name[0].standard == '' ? '' : (name[0].languageFlag == 'English' ? '(Standard ' : '(इयत्ता  ') + name[0].standard + ')');
     heading.font = { name: 'Calibri', size: 14, bold: true, color: { argb: '0000' } };
     heading.alignment = { vertical: 'middle', horizontal: 'center' };
 
@@ -160,13 +160,13 @@ export class DownloadPdfExcelService {
     totalCount.alignment = { vertical: 'middle', horizontal: 'left' };
 
     worksheet.mergeCells('A9:C9');
-    if(name[0].assessmentType == 'Class Wise' || name[0].assessmentType == 'इयत्ता निहाय') {
+    if (name[0].assessmentType == 'Class Wise' || name[0].assessmentType == 'इयत्ता निहाय') {
       let subject = worksheet.getCell('A9');
       subject.value = (name[0].languageFlag == 'English' ? 'Subject: ' : 'विषय : ') + name[0].subject;
       subject.font = { name: 'Calibri', size: 11, bold: true, color: { argb: '0000' } };
       subject.alignment = { vertical: 'middle', horizontal: 'left' };
     }
-    else if(name[0].assessmentType == 'Base Level' || name[0].assessmentType == 'पायाभूत स्तर'){
+    else if (name[0].assessmentType == 'Base Level' || name[0].assessmentType == 'पायाभूत स्तर') {
       let groupOfClass = worksheet.getCell('A9');
       groupOfClass.value = (name[0].languageFlag == 'English' ? 'Group of Class: ' : 'वर्ग गट : ') + name[0].groupOfClass;
       groupOfClass.font = { name: 'Calibri', size: 11, bold: true, color: { argb: '0000' } };
@@ -222,7 +222,7 @@ export class DownloadPdfExcelService {
 
   // chool wise report 
 
-  generateExcelSchool(keyData: any, apiKeys: any, data: any, name: any) {        
+  generateExcelSchool(keyData: any, apiKeys: any, data: any, name: any) {
     // Create workbook and worksheet
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(name[0].sheet_name);
@@ -237,17 +237,17 @@ export class DownloadPdfExcelService {
       underline: 'single',
       bold: true,
       color: { argb: '3208' },
-      
+
     };
     titleRow.alignment = { vertical: 'middle', horizontal: 'center' };
-    
+
     //filter
     worksheet.mergeCells('A6:C6');
     let talukaName = worksheet.getCell('A6');
     talukaName.value = (name[0].languageFlag == 'English' ? 'Taluka: ' : 'तालुका: ') + name[0].taluka;
     talukaName.font = { name: 'Calibri', size: 11, bold: true, color: { argb: '0000' } };
     talukaName.alignment = { vertical: 'middle', horizontal: 'left' };
-    
+
     worksheet.mergeCells('E6:F6');
     let centerName = worksheet.getCell('E6');
     centerName.value = (name[0].languageFlag == 'English' ? 'Center: ' : 'केंद्र: ') + name[0].center;
@@ -265,7 +265,7 @@ export class DownloadPdfExcelService {
       }
       return filterObj;
     });
-    
+
     headerRow.eachCell((cell: any) => { // Cell Style : Fill and Border
       cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
       cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
@@ -284,7 +284,7 @@ export class DownloadPdfExcelService {
     // Add Data
     result.map((d: any) => {
       const dataStyle = worksheet.addRow(Object.values(d));
-      dataStyle.eachCell((cell: any)=> {
+      dataStyle.eachCell((cell: any) => {
         cell.font = {
           align: 'left'
         };
@@ -307,73 +307,140 @@ export class DownloadPdfExcelService {
 
 
   // common excel function 
-  async allGenerateExcel(keyData: any, ValueData: any, objData: any,headerKeySize?: any) {
+  async allGenerateExcel(keyData: any, ValueData: any, objData: any, headerKeySize?: any) {
     // console.log("keyData: ", keyData);
     // console.log("ValueData: ", ValueData);
     console.log("objData: ", objData);
     // console.log("headerKeySize: ", headerKeySize);
-    
-    // 1:keyHeader,2:values,3:Data-heading time date ,4:column size width
-     // Create workbook and worksheet
-     const workbook = new Workbook();
-     const worksheet = workbook.addWorksheet('Sharing Data');
- 
-     worksheet.addRow([]);
-     worksheet.getCell('C4').value = objData.topHedingName
-     worksheet.getCell('C4').font = { name: 'Calibri', family: 3, size: 13, bold: true, };
- 
-     if (objData?.timePeriod != null) {
-       worksheet.getCell('C5').value = objData.timePeriod
-       worksheet.getCell('C5').font = { name: 'Calibri', family: 3, size: 13, bold: true, };
-     }
- 
-     worksheet.getCell('E5').value = objData.createdDate
-     worksheet.getCell('E5').font = { name: 'Calibri', family: 3, size: 12, bold: true, };
 
-     if(objData.name){
+    // 1:keyHeader,2:values,3:Data-heading time date ,4:column size width
+    // Create workbook and worksheet
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Sharing Data');
+
+    worksheet.addRow([]);
+    worksheet.getCell('C4').value = objData.topHedingName
+    worksheet.getCell('C4').font = { name: 'Calibri', family: 3, size: 13, bold: true, };
+
+    if (objData?.timePeriod != null) {
+      worksheet.getCell('C5').value = objData.timePeriod
+      worksheet.getCell('C5').font = { name: 'Calibri', family: 3, size: 13, bold: true, };
+    }
+
+    worksheet.getCell('E5').value = objData.createdDate
+    worksheet.getCell('E5').font = { name: 'Calibri', family: 3, size: 12, bold: true, };
+
+    if (objData.name) {
       worksheet.mergeCells('A6', 'B6');
       worksheet.getCell('A6').value = objData.name
       worksheet.getCell('A6').font = { name: 'Calibri', family: 3, size: 12, bold: true, };
-     }
+    }
 
     //  const response = await fetch('../../../../assets/images/samadhanLogo.jpeg');
     //  const buffer = await response.arrayBuffer();
     //  const imageId1 = workbook.addImage({
     //    buffer: buffer, extension: 'jpeg',
     //  });
- 
+
     //  worksheet.addImage(imageId1, 'B1:B5');
- 
- 
-     worksheet.addRow([]);// Blank Row
-     const headerRow = worksheet.addRow(keyData); // Add Header Row
- 
-     headerRow.eachCell((cell) => { // Cell Style : Fill and Border
-       cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
-       cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-     });
 
-     for(var i = 0; i < headerKeySize.length; i++){      
-      worksheet.getColumn(i+1).width = headerKeySize[i];
+
+    worksheet.addRow([]);// Blank Row
+    const headerRow = worksheet.addRow(keyData); // Add Header Row
+
+    headerRow.eachCell((cell) => { // Cell Style : Fill and Border
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
+      cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+    });
+
+    for (var i = 0; i < headerKeySize.length; i++) {
+      worksheet.getColumn(i + 1).width = headerKeySize[i];
     }
- 
-     // Add Data and Conditional Formatting
-     ValueData.forEach((d: any) => {
-       let row = worksheet.addRow(d); row
-     });
 
-     worksheet.addRow([]);
- 
-     // Generate Excel File with given name
-     workbook.xlsx.writeBuffer().then((data: any) => {
-       const blob = new Blob([data], {
-         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-       });
-       FileSaver.saveAs(blob, objData.topHedingName);
-     });
+    // Add Data and Conditional Formatting
+    ValueData.forEach((d: any) => {
+      let row = worksheet.addRow(d); row
+    });
+
+    worksheet.addRow([]);
+
+    // Generate Excel File with given name
+    workbook.xlsx.writeBuffer().then((data: any) => {
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      FileSaver.saveAs(blob, objData.topHedingName);
+    });
   }
 
+  downloadExcelWithRowSpan(data: any, apiKeys: any, columnName: any, pageName: any, headerWidth: any, subHeader?: any) {
+    console.log("data", data);
+    console.log("apiKeys", apiKeys);
+    console.log("columnName", columnName);
+    console.log("pageName", pageName);
+    console.log("headerWidth", headerWidth);
+    console.log("subHeader", subHeader);
 
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet(pageName);
+
+    worksheet.mergeCells('C2', 'F5');
+
+    let titleRow = worksheet.getCell('C2');
+    titleRow.value = pageName;
+    titleRow.font = {
+      name: 'Calibri',
+      size: 16,
+      underline: 'single',
+      bold: true,
+      color: { argb: '3208' },
+    };
+    titleRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+    // excel download for collapse table
+
+    let resObject:any=[];let resData:any=[];   //Create array of array
+    data.map((ele: any) => {
+      if(pageName == 'Officer Visit Report'){
+        resObject.push(ele.srNo, ele.officerName, ele.mobileNo, ele.designation, ele.district, ele.taluka, ele.centers);
+        resData.push(resObject);
+        resObject = [];
+        if(ele.officerVisitSchools){
+          ele.officerVisitSchools.map((x: any) => {
+            columnName.forEach((column: any) => {
+              x[column] = (x[column]?.length == 0 || x[column] == null || x[column] == undefined)
+            });
+            // subHeader.forEach((column: any) => {
+            //   x[column] = (x[column]?.length == 0 || x[column] == null || x[column] == undefined)
+            // })
+            resObject.push(x.srNo, x.schoolCode, x.schoolName, x.totalAssessedStudent);
+            resData.push(resObject);
+            resObject = [];
+          })
+        }
+      }
+    })
+
+    worksheet.addTable({
+      name: 'Satara',
+      ref: 'A6',
+      columns: columnName,
+      rows: resData,
+    });
+
+    var headerSize;
+         headerSize = headerWidth;
+        for (var i = 0; i < headerSize?.length; i++) {
+          worksheet.getColumn(i + 1).width = headerSize[i];
+        }
+      workbook.xlsx.writeBuffer().then((data: any) => {
+        const blob = new Blob([data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        FileSaver.saveAs(blob, pageName);
+      });
+
+  }
 
 
 

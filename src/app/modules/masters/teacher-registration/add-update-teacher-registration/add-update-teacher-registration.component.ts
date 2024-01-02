@@ -47,8 +47,7 @@ export class AddUpdateTeacherRegistrationComponent {
   districtArrayTeacherDeatails = new Array();
   talukaArrayTeacherDetails = new Array();
   img: boolean = false;
-  checked: boolean = false
-  maxDate = new Date();
+  checked: boolean = false;
   seniorityDate = new Date();
   schoolDate = new Date();
   TalukaDate = new Date()
@@ -56,6 +55,8 @@ export class AddUpdateTeacherRegistrationComponent {
   isSubmitted: boolean = false;
   teacherDetailsVillageArray = new Array()
   assignClass: boolean = false;
+  maxDate: any;
+  minDate = new Date('01-01-1901');
   casteVerification = [
     { id: 1, name: 'Yes', isCastVarificationDone: true, _name: 'होय' },
     { id: 2, name: 'No', isCastVarificationDone: false, _name: 'नाही' }
@@ -96,15 +97,27 @@ export class AddUpdateTeacherRegistrationComponent {
   loginData = this.webStorageS.getLoggedInLocalstorageData();
 
   constructor(private masterService: MasterService,
-    private datePipe:DatePipe, private commonMethod: CommonMethodsService, private errorHandler: ErrorsService,
-    private fileUpload: FileUploadService, public validation: ValidationService, public webStorageS: WebStorageService, private ngxSpinner: NgxSpinnerService,
-    private fb: FormBuilder, private service: ApiService, public dialogRef: MatDialogRef<AddUpdateTeacherRegistrationComponent>,
+    private datePipe:DatePipe, 
+    private commonMethod: CommonMethodsService, 
+    private errorHandler: ErrorsService,
+    private fileUpload: FileUploadService, 
+    public validation: ValidationService, 
+    public webStorageS: WebStorageService, 
+    private ngxSpinner: NgxSpinnerService,
+    private fb: FormBuilder, 
+    private service: ApiService, 
+    public dialogRef: MatDialogRef<AddUpdateTeacherRegistrationComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
     this.formData();
+    this.onSelectBirthDate();
     (!this.data) ? this.getGender() : (this.editObj = this.data, this.onEdit());
     console.log("this.editObj ", this.editObj );
+  }
+
+  onSelectBirthDate(){
+    this.maxDate = this.commonMethod.isOver18();
   }
 
   getClassBySchoolId(Id: any) {  

@@ -191,7 +191,7 @@
         </div>
 
         <div class="row g-2">
-            <div class="col-sm-5">
+            <div class="col-sm-5" *ngIf="centerChartOption">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
@@ -235,16 +235,17 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-7" *ngIf="schoolChartOptionFlag">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}}</h6>
+                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}} - {{selectedCenter}}</h6>
                     </mat-card-header>
                     
                     <mat-card-content class="card-body">
-                        <div *ngIf="schoolChartOption">
+                        {{schoolChartOptionFlag}}
+                        <div *ngIf="schoolChartOptionFlag">
                             <ng-container>
-                                        <apx-chart
+                                        <apx-chart  id="Schoolchart"
                                         [series]="schoolChartOption?.series"
                                         [chart]="schoolChartOption?.chart"
                                         [dataLabels]="schoolChartOption?.dataLabels"
@@ -264,7 +265,8 @@
                 <mat-card class="plain-card">
                     <mat-card-content class="card-body">
                         <div class="table-responsive">
-                            <p>Table</p>
+                            <h6>{{'Labels.teacherList' | translate}} - {{selectedSchool}}</h6>
+                            <app-table></app-table>
                         </div>
                     </mat-card-content>
                 </mat-card>

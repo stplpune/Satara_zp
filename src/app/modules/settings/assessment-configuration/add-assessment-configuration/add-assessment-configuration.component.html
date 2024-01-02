@@ -139,7 +139,7 @@
                                                 </th>
                                                 <th>{{webStorageS.getLangauge() == 'EN' ? 'Parameter (Marathi)' :
                                                     'पॅरामीटर (मराठी)'}}</th>
-                                                <th>{{webStorageS.getLangauge() == 'EN' ? 'isExpected' : 'अपेक्षित आहे'}}</th>
+                                                <th>{{webStorageS.getLangauge() == 'EN' ? 'Is Expected' : 'अपेक्षित आहे'}}</th>
                                                 <th>{{webStorageS.getLangauge() == 'EN' ? 'Action' : 'कृती'}}</th>
                                             </tr>
                                         </thead>
@@ -156,10 +156,10 @@
                                                     <button
                                                         mat-icon-button id="tooltip"
                                                         matTooltip="{{'Labels.edit' | translate}}"
-                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditParameter(paramter, i)" [disabled]="editObj?.isAssessed == 1">
+                                                        matTooltipPosition="right" matTooltipClass="tooltip" (click)="onEditParameter(paramter, i)" [disabled]="editObj?.isAssessed == 1 && paramter.id > 0">
                                                         <mat-icon class="text-main">edit</mat-icon>
                                                     </button>
-                                                    <button mat-icon-button (click)="globalDialogOpen(i)" [disabled]="editObj?.isAssessed == 1">
+                                                    <button mat-icon-button (click)="globalDialogOpen(i)" [disabled]="editObj?.isAssessed == 1 && paramter.id > 0">
                                                         <mat-icon class="text-danger">
                                                             delete
                                                         </mat-icon>

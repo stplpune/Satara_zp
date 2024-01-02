@@ -250,7 +250,7 @@ export class AddAssessmentConfigurationComponent {
   addParametereData() {
     this.addValidation();
     let formValue = this.paramterForm.value;
-
+    
     let obj = {
       id: this.questionEditObj ? this.questionEditObj.id : 0,
       questionId: this.questionEditObj ? this.questionEditObj.questionId : 0,
@@ -321,10 +321,6 @@ export class AddAssessmentConfigurationComponent {
   //#endregion ------------------------------------------- Add and remove validation end here -----------------------------------------------
 
   isExpectedCondition(){
-    console.log("this.questionForm.value.expectedGrade : ", this.questionForm.value.expectedGrade);
-    console.log("this.editObj ? this.editObj?.expectedGrade ",this.editObj?.expectedGrade);
-    
-    
     if(this.questionForm.value.expectedGrade == 0 && (this.questionForm.value.questionTypeId == 1 || this.questionForm.value.questionTypeId == 2)){
       this.isExpectedFlag = true;
     }
@@ -390,7 +386,6 @@ export class AddAssessmentConfigurationComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.editObj = res.responseData;
-          console.log("editObj: ", this.editObj);
           // this.questionForm.value.expectedGrade = this.editObj.expectedGrade;
           
           this.formField();

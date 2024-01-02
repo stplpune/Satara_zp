@@ -630,20 +630,24 @@ export class Dashbaord2Component {
         if (res.statusCode == '200' && res.responseData.responseData1.length) {
           let schoolwiseBarDetails = res.responseData.responseData1;
           let xAxiaArray: any = [];
-          let yAxisArray: any = [];
+          // let yAxisArray: any = [];
           let colorArray: any = [];
           this.totalStudentCountSchoolwise = schoolwiseBarDetails[0]?.totalStudentCount;
 
+          let percentArray: any = [];
+          let dataValueArray: any = [];
+
           schoolwiseBarDetails.map((x: any) => {
+            percentArray.push(x.percentage);
+            dataValueArray.push(x.studentCount);
+
             xAxiaArray.push(this.selectedLang == 'English' ? x.graphLevel : x.m_GraphLevel);
-            yAxisArray.push(x.percentage);
             x.graphLevelId == 1 ? colorArray.push('#b51d31') : x.graphLevelId == 2 ? colorArray.push('#E98754') : colorArray.push('#50c77b');
             // totalStudentCount.push(x.totalStudentCount)
           });
           // let isAllZero = yAxisArray.every(res => res == 0);
           // isAllZero ? this.schoolwiseChartOptions = '' : this.schoolwiseBarChart(xAxiaArray, yAxisArray);
-          this.schoolwiseBarChart(xAxiaArray, yAxisArray,colorArray);
-
+          this.schoolwiseBarChart(xAxiaArray, dataValueArray,colorArray, percentArray);
         } else {
           this.totalStudentCountSchoolwise = 0;
           this.schoolwiseChartOptions = '';
@@ -656,12 +660,14 @@ export class Dashbaord2Component {
       },
     });
   }
-  schoolwiseBarChart(xAxiaArray?: any, yAxisArray?: any,colorArray?:any) {
+  schoolwiseBarChart(xAxiaArray?: any, tooltipData?: any, colorArray?:any, percentData?: any) {
+    let studentcount = this.selectedLang == 'English' ?  'Student Count: ' : 'विद्यार्थी संख्या: ';
     this.schoolwiseChartOptions = {
-      series: [
+      series: [ 
         {
           name: 'Percentage',
-          data: yAxisArray // [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+          data: percentData,
+          dataValue: tooltipData
         },
       ],
       chart: {
@@ -702,24 +708,18 @@ export class Dashbaord2Component {
         categories: xAxiaArray,
       },
       tooltip: {
-        enabled: true
-        // custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
-        //   console.log("series : ",series);
-        //   console.log("seriesIndex : ",seriesIndex);
-        //   console.log("dataPointIndex : ",dataPointIndex);
-        //   console.log("w : ",w);
-          
-        //   return (
-        //     '<div class="arrow_box" style="padding:10px;">' +
-        //     "<div>" + w.globals.initialSeries[seriesIndex].subject + " : <b> " + w.globals.seriesNames[seriesIndex] + '</b>' + "</div>" +
-        //     // "<div>" + '' + '</b>' + "</div>" +
-        //     "</div>"
-        //   );
-        // },
+        // enabled: true
+        custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+          console.log("series : ",series);
+          return (
+            '<div class="arrow_box" style="padding:10px;">' +
+            "<div>" + "<b> " + studentcount + " </b>" + w.globals.initialSeries[seriesIndex].dataValue[dataPointIndex] + "</div>" +
+            "</div>"
+          );
+        },
       }
     }
   }
-
   // --------------------------------Schoolwise Performance barChart  end here------------------------------
 
   // --------------------------------Teacherwise  Performance barChart  Start here------------------------------

@@ -20,23 +20,13 @@ const routes: Routes = [
   { path: 'app-help', loadChildren: () => import('./modules/app-help/app-help.module').then(m => m.AppHelpModule) },
   // { path: 'doc-download-for-android/:ed', loadChildren: () => import('./modules/doc-download-for-android/doc-download-for-android.module').then(m => m.DocDownloadForAndroidModule) },
   { path: 'doc-download-for-android/:id', loadChildren: () => import('./modules/doc-download-for-android/doc-download-for-android-routing.module').then(m => m.DocDownloadForAndroidRoutingModule) },
-  { path: 'school-report', loadChildren: () => import('./modules/reports/school-report/school-report.module').then(m => m.SchoolReportModule) },
   { path: 'share/:id', loadChildren: () => import('./modules/share-event-for-android/share-event-for-android.module').then(m => m.ShareEventForAndroidModule) },
-  
   
   // { path: 'cctv-streaming', loadChildren: () => import('./modules/cctv/cctv/cctv.module').then(m => m.CctvModule) },
 
-
-  
-  
- 
-  
-  
   // { path: 'web-help', loadChildren: () => import('./modules/settings/web-help/web-help.module').then(m => m.WebHelpModule) },
 
-
   { path: '**', loadChildren: () => import('./modules/error/error.module').then(m => m.ErrorModule)}
-
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

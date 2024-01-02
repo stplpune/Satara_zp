@@ -55,7 +55,7 @@ export class TasksheetComponent {
   resultDownloadArr = new Array();
   submitFlag : boolean = false;
   pageNumber: number = 1;
-  displayedheadersEnglish = ['Sr. No.', ' Day', 'Check-In Time', 'Check-Out Time', 'Present Hours','Attendance', 'IsApproved', 'Task', 'Approval Remark','Action'];
+  displayedheadersEnglish = ['Sr. No.', ' Day', 'Check-In Time', 'Check-Out Time', 'Present Hours','Attendance', 'Is Approved', 'Task', 'Approval Remark','Action'];
   displayedheadersMarathi = ['अनुक्रमांक', 'दिवस', 'चेक-इन वेळ', 'चेक-आउट वेळ', 'उपस्थित तास', 'उपस्थिती', 'मंजूर आहे', 'कार्य', 'मंजूरी शेरा', 'कृती'];
   // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol', 'Attendence', 'Remark', 'Action'];
   dataSource: any;

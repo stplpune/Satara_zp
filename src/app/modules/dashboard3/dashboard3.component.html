@@ -105,7 +105,13 @@
                     <button mat-stroked-button class="btn-main btn-icon">
                         <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
                     <div class="d-flex justify-content-between w-100">
-                        <span class="mt-2">{{('Labels.dashboard3' | translate)}}</span>
+                        <span class="mt-2">{{('Labels.dashboard3' | translate) + ' / '
+                        +(webStorage.languageFlag =='EN'? stateLabel?.state : stateLabel?.m_State) + ' / ' +(webStorage.languageFlag =='EN'?
+                            districtLabel?.district : districtLabel?.m_District) 
+                            + (talukaLabel ?  ' / '+ (webStorage.languageFlag == 'EN'? talukaLabel?.taluka:talukaLabel?.m_Taluka):'')
+                           }}
+                        </span>
+
                         <div class="d-flex gap-2">
                             <div class="row gx-2">
                                 <div class="col-sm">

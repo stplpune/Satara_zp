@@ -48,7 +48,7 @@
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{'Labels.selectTaluka' | translate}}</mat-label>
                             <!-- <mat-select formControlName="talukaId" (selectionChange)="getCenters();"> -->
-                                <mat-select formControlName="talukaId">
+                                <mat-select formControlName="talukaId" (selectionChange)="getSeletedTaluka()">
                                 <mat-option *ngFor="let taluka of talukaData" [value]="taluka.id">
                                     {{webStorage.languageFlag == 'EN' ? taluka.taluka:taluka.m_Taluka}}
                                 </mat-option>
@@ -105,7 +105,7 @@
                     <button mat-stroked-button class="btn-main btn-icon">
                         <mat-icon>autorenew</mat-icon></button> &nbsp;&nbsp;
                     <div class="d-flex justify-content-between w-100">
-                        <span class="mt-2">{{('Labels.dashboard2' | translate)}}</span>
+                        <span class="mt-2">{{('Labels.dashboard3' | translate)}}</span>
                         <div class="d-flex gap-2">
                             <div class="row gx-2">
                                 <div class="col-sm">
@@ -137,7 +137,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/School-white.svg" class="bg-image">
                             <p>{{'Labels.SchoolName' | translate}}</p>
-                            <h3>125</h3>
+                            <h3>{{dashboardCountData[0]?.schoolCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/School.svg">
@@ -151,7 +151,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/Teacher-white.svg" class="bg-image">
                             <p>{{'Labels.teachers' | translate}}</p>
-                            <h3>1263</h3>
+                            <h3>{{dashboardCountData[0]?.teacherCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/Teacher.svg">
@@ -165,7 +165,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/Student-white.svg" class="bg-image">
                             <p>{{'Labels.students' | translate}}</p>
-                            <h3>4556</h3>
+                            <h3>{{dashboardCountData[0]?.studentCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/Student.svg">
@@ -180,7 +180,7 @@
                         <div class="position-relative">
                             <img src="assets/images/statistical-icons/ZP-Officer-white.svg" class="bg-image">
                             <p>{{'Labels.zpOfficer' | translate}}</p>
-                            <h3>025</h3>
+                            <h3>{{dashboardCountData[0]?.zpOfficerCount ||0}}</h3>
                         </div>
                         <div class="right-img">
                             <img src="assets/images/statistical-icons/ZP-Officer.svg">

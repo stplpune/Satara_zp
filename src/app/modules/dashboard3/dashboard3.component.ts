@@ -25,6 +25,7 @@ export class Dashboard3Component {
   villageData = new Array();
   schoolData = new Array();
   acYear = new Array();
+  stateLabel: any;
   districtLabel: any;
   talukaLabel: any;
   centerName: any;
@@ -39,6 +40,7 @@ export class Dashboard3Component {
   tableDataArray = new Array();
   tableDatasize: any;
   pageNumber: number = 1;
+  dashboardCountData = new Array();
 
   get f() { return this.mainFilterForm.controls }
 
@@ -76,6 +78,7 @@ export class Dashboard3Component {
     this.getYearArray();
     this.getState();
     // this.getExamType();
+    this.getdashboardCount();
     this.getCenterwiseBarDetails();
 
   }
@@ -90,6 +93,7 @@ export class Dashboard3Component {
   }
 
   getDistrict() {
+    this.stateLabel = this.stateData.find((res: any) => res.id == this.f['stateId'].value);
     this.districtData = [];
     this.masterService.getAllDistrict(this.selectedLang, this.f['stateId'].value).subscribe((res: any) => {
       this.districtData = res.responseData;
@@ -110,6 +114,10 @@ export class Dashboard3Component {
     //   this.getCenters();
     // }   
 
+  }
+
+  getSeletedTaluka(){
+    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value != 0);
   }
 
   // getCenters() {
@@ -349,35 +357,28 @@ export class Dashboard3Component {
   }
 
   getdashboardCount() { 
-    // let fv = this.mainFilterForm.value;
-    // let url = `StateId=${fv.stateId}&DistrictId=${fv.districtId}`
-    // url += `&TalukaId=${fv.talukaId}&CenterId=${fv.centerId}&VillageId=${fv.villageId}`
-    // url += `&SchoolId=${fv.schoolId}&EducationYearId=${+fv.acYearId || 0}&ExamTypeId=${this.examType.value}&lan=${this.selectedLang}`
-    // this.dashboardCountData = [];
-    // this.spinner.show();
-    // this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?' + url, false, false, false, 'baseUrl');
-    // this.apiService.getHttp().subscribe({
-    //   next: (res: any) => {
-    //     if (res.statusCode == "200" && res.responseData.responseData1.length) {
-    //       this.dashboardCountData.push(res.responseData.responseData1[0]);
-    //       setTimeout(() => {
-    //         this.getPieChartData();
-    //       }, 100)
-
-    //     } else {
-    //       this.dashboardCountData = [];
-    //       this.piechartOptions = '';
-    //       // this.totalStudentSurveyData = [];
-    //     }
-    //     this.spinner.hide();
-    //   },
-    //   error: (error: any) => {
-    //     this.spinner.hide();
-    //     this.piechartOptions = '';
-    //     this.dashboardCountData = [];
-    //     this.error.handelError(error.message)
-    //   }
-    // });
+    let fv = this.mainFilterForm.value;
+    let url = `StateId=${fv.stateId}&DistrictId=${fv.districtId}`
+    url += `&TalukaId=${fv.talukaId}&EducationYearId=${+this.academicYear.value || 0}`
+    this.dashboardCountData = [];
+    this.spinner.show();
+    this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetDashboardCount?' + url, false, false, false, 'baseUrl');
+    this.apiService.getHttp().subscribe({
+      next: (res: any) => {
+        if (res.statusCode == "200" && res.responseData.responseData1.length) {
+          this.dashboardCountData.push(res.responseData.responseData1[0]);
+        } else {
+          this.dashboardCountData = [];
+          // this.totalStudentSurveyData = [];
+        }
+        this.spinner.hide();
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        this.dashboardCountData = [];
+        this.error.handelError(error.message)
+      }
+    });
   }
 
   getSchoolwiseBarDetails(centerId?: any) {

@@ -425,6 +425,7 @@ export class Dashboard2DashboardDetailComponent {
       this.apiService.tableData.next(tableData);
       // flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
       flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
+      flag == 'data' ? this.isStudentCardShow = true : '' ;      
   }
 
 
@@ -674,11 +675,9 @@ export class Dashboard2DashboardDetailComponent {
     let formData = this.mainFilterForm.value;
     this.chartObj ? this.getTableData() : (this.chartObj = null && formData?.schoolId > 0) ?  this.getTableData('filter') :'';     
     // this.getTableData();
+    this.isStudentCardShow = false;
   }
 
-  resetStudentcardFilter(){
-
-  }
 
 
 }

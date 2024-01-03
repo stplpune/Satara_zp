@@ -41,6 +41,8 @@ export class Dashboard3Component {
   tableDatasize: any;
   pageNumber: number = 1;
   dashboardCountData = new Array();
+  isTeacherTable: boolean = false;
+
 
   get f() { return this.mainFilterForm.controls }
 
@@ -194,6 +196,11 @@ export class Dashboard3Component {
     this.getCenterwiseBarDetails();
   }
 
+  chngeLevel(){
+    this.schoolChartOptionFlag = false;
+    this.isTeacherTable = false;
+    this.getCenterwiseBarDetails();
+  }
   getCenterwiseBarDetails() {    
     this.schoolChartOption = ''
     this.tableDataArray = [];
@@ -268,7 +275,7 @@ export class Dashboard3Component {
       series: subArray,
       chart: {
         type: 'bar',
-        height: 250,
+        height: 300,
         toolbar: {
           show: false
         },
@@ -281,6 +288,7 @@ export class Dashboard3Component {
               console.log("onclick center", chartContext, _config, this.selectedCenter);
               this.schoolChartOptionFlag = false;
               this.schoolChartOption = null;
+              this.isTeacherTable = false;
               this.getSchoolwiseBarDetails(centerId);
             }
 
@@ -351,8 +359,8 @@ export class Dashboard3Component {
       }
 
     }
-    this.getSchoolwiseBarDetails(subArray?.[0]['center'][0]); //default loaded first center 
-    this.selectedCenter = this.selectedLang == 'English' ? XArray?.[0] + 'Center' : XArray?.[0] + ' केंद्र'
+    // this.getSchoolwiseBarDetails(subArray?.[0]['center'][0]); //default loaded first center 
+    // this.selectedCenter = this.selectedLang == 'English' ? XArray?.[0] + 'Center' : XArray?.[0] + ' केंद्र'
   }
 
   getdashboardCount() { 
@@ -408,7 +416,7 @@ export class Dashboard3Component {
           });
           const schoolsubArray = Object.values(subjectsObj);
           this.schoolChartOption = ''
-          this.schoolwiseBarChart(schoolsubArray, uniqueSchoolArr);
+          schoolsubArray.length > 0 ? this.schoolwiseBarChart(schoolsubArray, uniqueSchoolArr) : '';
 
         }
         else {
@@ -524,8 +532,8 @@ export class Dashboard3Component {
       chart.render();
     }
     this.schoolChartOptionFlag = true;
-    this.getSchoolWiseTeachdata(_schholSubArr?.[0]['school'][0]);
-    this.selectedSchool = this.selectedLang == 'English' ? _SchoolNameArray?.[0] + ' School' : _SchoolNameArray?.[0] + ' शाळा'
+    // this.getSchoolWiseTeachdata(_schholSubArr?.[0]['school'][0]);
+    // this.selectedSchool = this.selectedLang == 'English' ? _SchoolNameArray?.[0] + ' School' : _SchoolNameArray?.[0] + ' शाळा'
   }
 
 
@@ -545,7 +553,7 @@ export class Dashboard3Component {
           this.tableDataArray = [];
           this.tableDatasize = 0;
         }
-        this.setTableData();
+        this.setTableData('data');
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -556,7 +564,7 @@ export class Dashboard3Component {
 
   }
 
-  setTableData() {
+  setTableData(flag?: string) {
     let displayedColumns = ['srNo', 'profilePhoto', this.selectedLang == 'English' ? 'name' : 'm_Name', this.selectedLang == 'English' ? 'teacherRole' : 'm_TeacherRole', this.selectedLang == 'English' ? 'standard' : 'm_Standard', 'mobileNo', 'emailId'];
     let displayedheaders = ['Sr. No.', '', 'Teacher Name', 'Teacher Role', 'Standard', 'Mobile No', 'EmailId'];
     let marathiDisplayedheaders = ['अ.क्र.', '', 'शिक्षकाचे नाव', 'शिक्षकाची भूमिका', 'इयत्ता', 'मोबाईल क्र', 'ई - मेल आयडी'];
@@ -571,6 +579,7 @@ export class Dashboard3Component {
       tableHeaders: this.selectedLang == 'English' ? displayedheaders : marathiDisplayedheaders
     };
     this.apiService.tableData.next(tableData);
+    flag == 'data' ? this.isTeacherTable = true : '' ;
 
   }
 
@@ -578,7 +587,9 @@ export class Dashboard3Component {
       this.mainFillterDefaultFormat();
       this.getState();
       // this.onMainFilterSubmit();
-      this.academicYear.setValue(this.webStorage.getYearId())
+      this.academicYear.setValue(this.webStorage.getYearId());
+      this.isTeacherTable = false;
+
     }
   
 

@@ -399,7 +399,7 @@ export class DownloadPdfExcelService {
       if(element.officerVisitSchools?.length > 0){
         const headerRow = worksheet.addRow(subKeyData); 
         headerRow.eachCell((cell: any) => { 
-          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E8E8E8' }, bgColor: { argb: 'E8E8E8' } };
           cell.border = { top: { style: 'sol' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }, color: {argb:'000000'} };
           cell.font = { bold: true, color: {argb: '000000'}},
           cell.alignment = {horizontal: 'center'}

@@ -707,6 +707,16 @@ export class Dashbaord2Component {
       xaxis: {
         categories: xAxiaArray,
       },
+      yaxis: {
+        min: 0,
+        max: 100,
+        labels: {
+          formatter: function (val: any) {
+            return val < 0 ? '' : val.toFixed(0) +'%'; // y axis  values 0 1 2
+          }
+        },
+      },
+      
       tooltip: {
         // enabled: true
         custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {

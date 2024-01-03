@@ -33,7 +33,7 @@ export class Dashboard3Component {
   examTypeData = new Array();
   centerChartOption: any;
   schoolChartOption: any;
-  schoolChartOptionFlag: boolean = false;
+  schoolChartOptionFlag:boolean = false;
   selectedCenter: any;
   selectedSchool: any;
   schoolChartEnable: boolean = false;
@@ -42,6 +42,10 @@ export class Dashboard3Component {
   pageNumber: number = 1;
   dashboardCountData = new Array();
   isTeacherTable: boolean = false;
+  schoolNamelabelArr = new Array();
+  schoolchartDiv:any;
+  chartBind:any;
+  schoolChartOptionObs!:any;
 
 
   get f() { return this.mainFilterForm.controls }
@@ -55,13 +59,13 @@ export class Dashboard3Component {
     ,) { }
 
   ngOnInit() {
+
     this.mainFillterDefaultFormat();
     this.allmainDropdownApi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
     });
-
   }
 
   mainFillterDefaultFormat() {
@@ -95,7 +99,7 @@ export class Dashboard3Component {
   }
 
   getDistrict() {
-    this.stateLabel = this.stateData?.find((res: any) => res.id == this.f['stateId'].value);    
+    this.stateLabel = this.stateData?.find((res: any) => res.id == this.f['stateId'].value);
     this.districtData = [];
     this.masterService.getAllDistrict(this.selectedLang, this.f['stateId'].value).subscribe((res: any) => {
       this.districtData = res.responseData;
@@ -106,18 +110,18 @@ export class Dashboard3Component {
   getTalukas() {
     this.districtLabel = this.districtData.find((res: any) => res.id == this.f['districtId'].value);
     this.talukaData = [];
-    if(this.f['districtId'].value){
-    this.masterService.getAllTaluka(this.selectedLang, this.f['districtId'].value).subscribe((res: any) => {
-    this.talukaData = [{ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData];
-    this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value != 0);
-      // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
-      // this.getCenters();
-    })
+    if (this.f['districtId'].value) {
+      this.masterService.getAllTaluka(this.selectedLang, this.f['districtId'].value).subscribe((res: any) => {
+        this.talukaData = [{ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData];
+        this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value != 0);
+        // this.f['talukaId'].patchValue(this.userDetails?.userTypeId < 3 ? 0 : this.userDetails?.talukaId);
+        // this.getCenters();
+      })
     }
 
   }
 
-  getSeletedTaluka(){
+  getSeletedTaluka() {
     this.talukaLabel = this.talukaData.find((res: any) => res.id == this.f['talukaId'].value && this.f['talukaId'].value != 0);
   }
 
@@ -196,14 +200,15 @@ export class Dashboard3Component {
     this.getCenterwiseBarDetails();
   }
 
-  chngeLevel(){
-    this.schoolChartOptionFlag = false;
+  chngeLevel() {
+    // this.schoolChartOptionFlag = false;
+    if (this.schoolChartOption) {
+      this.schoolChartOption = ''
+    }
     this.isTeacherTable = false;
     this.getCenterwiseBarDetails();
   }
-  getCenterwiseBarDetails() {    
-    this.schoolChartOption = ''
-    this.tableDataArray = [];
+  getCenterwiseBarDetails() {
     this.spinner.show()
     let formValue = this.mainFilterForm.value;
     let url = `StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&TalukaId=${formValue?.talukaId}&CenterId=${formValue?.centerId}&VillageId=${formValue?.villageId}&SchoolId=${formValue?.schoolId}&StandardId=${0}&SubjectId=${0}&ExamTypeId=${0}&EducationYearId=${this.academicYear.value}&GraphLevelId=${this.levelId.value}&lan=`
@@ -250,12 +255,12 @@ export class Dashboard3Component {
           });
           const subjectsArray = Object.values(subjectsObj);
           console.log("subjectsArrayCenter", subjectsArray);
-          subjectsArray.length ? this.centerwiseBarChart(subjectsArray, uniqueCenterArr):'';
+          subjectsArray.length ? this.centerwiseBarChart(subjectsArray, uniqueCenterArr) : '';
         }
         else {
           this.spinner.hide();
           this.centerChartOption = null;
-          this.schoolChartOption = null;
+          // this.schoolChartOption = null;
           this.tableDataArray = [];
         }
       },
@@ -263,7 +268,7 @@ export class Dashboard3Component {
         this.spinner.hide();
         this.error.handelError(error.message);
         this.centerChartOption = null;
-        this.schoolChartOption = null;
+        // this.schoolChartOption = null;
         this.tableDataArray = [];
       }
     });
@@ -281,14 +286,26 @@ export class Dashboard3Component {
         },
         events: {
           click: (_config: any, _event: any, chartContext: any) => {
+            this.schoolChartOptionFlag = true;
+            this.isTeacherTable = false;
+            let selCenter:any  =  document.getElementById('selectedCenter');
+            // let selParaSchool:any = document.getElementById('selectedschoolPara');
+            if(this.schoolchartDiv?.hasChildNodes()){
+              this.schoolchartDiv.innerHTML = '';
+              selCenter.innerHTML='';
+            }
+            // this.schoolChartOptionFlag = false;
             if (chartContext?.seriesIndex >= 0) {
               let centerId = chartContext?.config.series[chartContext?.seriesIndex].center[chartContext?.dataPointIndex];
               let Center = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]
-              this.selectedCenter = this.selectedLang == 'English' ? Center + ' Center' : Center + ' केंद्र'
-              console.log("onclick center", chartContext, _config, this.selectedCenter);
-              this.schoolChartOptionFlag = false;
-              this.schoolChartOption = null;
-              this.isTeacherTable = false;
+              selCenter.innerHTML = this.selectedLang == 'English' ? Center + ' Center' : Center + ' केंद्र';
+              // this.schoolChartOptionFlag = false;
+              // this.schoolChartOption = null;
+                  // let chartOrigin: any = document.querySelector('#Schoolchart');
+                  // if(chartOrigin){
+                  //   var chart = new ApexCharts(chartOrigin, this.schoolChartOption);
+                  //   chart.destroy();    
+                  // }
               this.getSchoolwiseBarDetails(centerId);
             }
 
@@ -363,7 +380,7 @@ export class Dashboard3Component {
     // this.selectedCenter = this.selectedLang == 'English' ? XArray?.[0] + 'Center' : XArray?.[0] + ' केंद्र'
   }
 
-  getdashboardCount() { 
+  getdashboardCount() {
     let fv = this.mainFilterForm.value;
     let url = `StateId=${fv.stateId}&DistrictId=${fv.districtId}`
     url += `&TalukaId=${fv.talukaId}&EducationYearId=${+this.academicYear.value || 0}`
@@ -389,7 +406,8 @@ export class Dashboard3Component {
   }
 
   getSchoolwiseBarDetails(centerId?: any) {
-    this.spinner.show()
+    this.schoolChartOptionFlag = true;
+    this.spinner.show();
     let formValue = this.mainFilterForm.value;
     let url = `StateId=${formValue?.stateId}&DistrictId=${formValue?.districtId}&TalukaId=${formValue?.talukaId}&CenterId=${centerId}&VillageId=${0}&SchoolId=${0}&StandardId=${0}&SubjectId=${0}&ExamTypeId=${0}&EducationYearId=${this.academicYear.value}&GraphLevelId=${this.levelId.value}&lan=`
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetTalukaDashboardSchoolWiseGraphDataWeb?' + url, false, false, false, 'baseUrl');
@@ -415,19 +433,22 @@ export class Dashboard3Component {
             subjectsObj[subjectId].school.push(x.schoolId);
           });
           const schoolsubArray = Object.values(subjectsObj);
-          this.schoolChartOption = ''
-          schoolsubArray.length > 0 ? this.schoolwiseBarChart(schoolsubArray, uniqueSchoolArr) : '';
+          console.log("schoolsubArray", schoolsubArray);
+
+          const newArray = uniqueSchoolArr.map((_name, index) => `s${index + 1}`);
+                   
+          schoolsubArray.length > 0 ? this.schoolwiseBarChart(schoolsubArray, newArray ,uniqueSchoolArr) : '';
 
         }
         else {
-          this.schoolChartOption = null;
-          this.tableDataArray = [];
+          // this.schoolChartOption = null;
+          // this.tableDataArray = [];
         }
       },
       error: (error: any) => {
         this.spinner.hide();
         this.error.handelError(error.message);
-        this.schoolChartOption = null;
+        // this.schoolChartOption = null;
         this.tableDataArray = [];
       }
     });
@@ -436,10 +457,14 @@ export class Dashboard3Component {
 
   }
 
-  schoolwiseBarChart(_schholSubArr?: any, _SchoolNameArray?: any) {
+  schoolwiseBarChart(_schholSubArr?: any, _SchoolNameArray?: any,schoolArr?: any) {
     this.spinner.hide();
-    this.schoolChartOptionFlag = false;
-    console.log("_schholSubArr", _schholSubArr);
+
+    if (this.schoolChartOption) {
+      this.schoolChartOption = ''
+    }
+  
+
     this.schoolChartOption = {
       series: _schholSubArr,
       chart: {
@@ -449,18 +474,6 @@ export class Dashboard3Component {
           show: false
         },
         events: {
-          //   click: (_event: any, chartContext: any, config: any) => {
-          //     if (config.seriesIndex >= 0) {
-          //       let optionalSubjectindex = config.seriesIndex;
-          //       console.log("event click on school bar ",optionalSubjectindex);
-          //       // series.w.globals.initialSeries
-          //       // series.w.config.series[0]
-          //       let schoolId = chartContext?.series?.w.config.series[config?.seriesIndex].schoolId[config?.dataPointIndex];
-
-          //       this.getSchoolWisedata(schoolId);
-          //     }
-          //   }
-          // }
           click: (_config: any, _event: any, chartContext: any) => {
             if (chartContext?.seriesIndex >= 0) {
               console.log("onclick school", chartContext, _config);
@@ -526,14 +539,16 @@ export class Dashboard3Component {
       }
 
     }
-    var chartOrigin = document.querySelector('#Schoolchart');
-    if (chartOrigin) {
-      let chart = new ApexCharts(chartOrigin, this.schoolChartOption);
-      chart.render();
-    }
-    this.schoolChartOptionFlag = true;
-    // this.getSchoolWiseTeachdata(_schholSubArr?.[0]['school'][0]);
-    // this.selectedSchool = this.selectedLang == 'English' ? _SchoolNameArray?.[0] + ' School' : _SchoolNameArray?.[0] + ' शाळा'
+    // var chartOrigin: any = document.getElementById("Schoolchart");
+
+    this.schoolchartDiv = document.querySelector('#Schoolchart');
+
+    this.chartBind = new ApexCharts(this.schoolchartDiv, this.schoolChartOption);
+    this.chartBind.render();
+    this.schoolNamelabelArr = _SchoolNameArray.map((value, index)=>({[value]:schoolArr[index]}));
+    this.getKey(this.schoolNamelabelArr); 
+    console.log("neww", this.schoolNamelabelArr);
+
   }
 
 
@@ -565,6 +580,7 @@ export class Dashboard3Component {
   }
 
   setTableData(flag?: string) {
+    this.spinner.show();
     let displayedColumns = ['srNo', 'profilePhoto', this.selectedLang == 'English' ? 'name' : 'm_Name', this.selectedLang == 'English' ? 'teacherRole' : 'm_TeacherRole', this.selectedLang == 'English' ? 'standard' : 'm_Standard', 'mobileNo', 'emailId'];
     let displayedheaders = ['Sr. No.', '', 'Teacher Name', 'Teacher Role', 'Standard', 'Mobile No', 'EmailId'];
     let marathiDisplayedheaders = ['अ.क्र.', '', 'शिक्षकाचे नाव', 'शिक्षकाची भूमिका', 'इयत्ता', 'मोबाईल क्र', 'ई - मेल आयडी'];
@@ -579,19 +595,24 @@ export class Dashboard3Component {
       tableHeaders: this.selectedLang == 'English' ? displayedheaders : marathiDisplayedheaders
     };
     this.apiService.tableData.next(tableData);
-    flag == 'data' ? this.isTeacherTable = true : '' ;
+    flag == 'data' ? this.isTeacherTable = true : '';
+    this.spinner.hide();
 
   }
 
-    resetMainFilter() {
-      this.mainFillterDefaultFormat();
-      this.getState();
-      // this.onMainFilterSubmit();
-      this.academicYear.setValue(this.webStorage.getYearId());
-      this.isTeacherTable = false;
+  resetMainFilter() {
+    this.mainFillterDefaultFormat();
+    this.getState();
+    // this.onMainFilterSubmit();
+    this.academicYear.setValue(this.webStorage.getYearId());
+    this.isTeacherTable = false;
 
-    }
-  
+  }
+
+  getKey(obj: any): string {
+    return Object.keys(obj)[0];
+  }
+
 
 
 

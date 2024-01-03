@@ -427,11 +427,7 @@ export class Dashboard2DashboardDetailComponent {
     };
  //   this.highLightFlag ? tableData.highlightedrow = true : tableData.highlightedrow = false,
       this.apiService.tableData.next(tableData);
-      // flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
-      flag == 'data' ? this.isStudentCardShow = true : '' ;
-
-      console.log("this.isStudentCardShow", this.isStudentCardShow);
-      
+      flag == 'data' ? this.isStudentCardShow = true : '' ;      
   }
 
 

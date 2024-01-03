@@ -587,6 +587,7 @@
         "PleaseEnterValidIPAddress": "कृपया वैध आयपी अॅड्रेस प्रविष्ट करा",
         "studentReportCard":"विद्यार्थी अहवाल कार्ड",
         "OfficerVisitReport" : "अधिकारी भेट अहवाल",
+        "teacherReport": "शिक्षक अहवाल",
         "officerName" : "अधिकाऱ्याचे नाव"
     }
 }

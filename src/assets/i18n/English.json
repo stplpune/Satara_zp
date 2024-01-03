@@ -580,6 +580,7 @@
         "studentReportCard":"Student Report Card",
         "IsConsiderforAssessment" : "Is Consider for Assessment ?",
         "OfficerVisitReport" : "Officer Visit Report",
+        "teacherReport": "Teacher Report",
         "officerName" : "Officer Name"
     }
 }

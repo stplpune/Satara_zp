@@ -213,8 +213,9 @@ body {
   font-size: 0.85rem;
 }
 
-.inner-table thead th {
-  background-color: var(--main-light-color);
+.inner-table thead th,
+.inner-table .mat-mdc-header-cell {
+  background-color: var(--main-light-color) !important;
   width: 300px !important;
 }
 
@@ -223,9 +224,9 @@ body {
   vertical-align: top;
 }
 
-.inner-table tbody td {
-  text-align: center;
-}
+// .inner-table tbody td {
+//   text-align: center;
+// }
 
 .inner-table thead tr th:first-child,
 .inner-table tbody tr td:first-child {

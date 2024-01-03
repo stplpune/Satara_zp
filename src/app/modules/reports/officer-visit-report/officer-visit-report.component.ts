@@ -48,26 +48,9 @@ export class OfficerVisitReportComponent {
 
   columnsToDisplay = ['srNo', 'officerName', 'contactNo', 'designation', 'district', 'taluka', 'center', 'schoolCount'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement!: PeriodicElement | null;
+  expandedElement!: null;
 
   displayedColumns: string[] = ['srNo', 'schoolCode', 'schoolName', 'studentCount'];
-  schoolDataSource = [
-    {
-      position: 1,
-      description: `hi.`,
-    },
-  ];
-
-  dataSource = [
-    {
-      position: 1,
-      description: `hi.`,
-    },
-    {
-      position: 2,
-      description: `hi.`,
-    }
-  ];
 
   constructor(private masterService: MasterService,
     private fb: FormBuilder,
@@ -307,8 +290,6 @@ export class OfficerVisitReportComponent {
   //#region ---------------------------------------------- Table start here -----------------------------------------------------------------
 
   getTableData(flag?: any) {
-    console.log("flag", flag);
-    
     this.ngxSpinner.show();
     let formValue = this.officerVisitReportForm.value;
     let fromDate = this.datepipe.transform(formValue?.fromDate || new Date(), 'yyyy-MM-dd');
@@ -327,10 +308,6 @@ export class OfficerVisitReportComponent {
 
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
           flag == 'excel' ? this.downloadExcel(data) : '';
-
-          console.log("totalCount", this.totalCount);
-          
-          // flag == 'excel' ? this.downloadExcel(res.responseData.responseData1) : '';
         }else{
           this.tableDataArray = [];
           this.totalCount = 0;
@@ -347,8 +324,6 @@ export class OfficerVisitReportComponent {
   //#endregion ------------------------------------------- Table end here -------------------------------------------------------------------
 
   downloadExcel(data?: any){
-    console.log("excel data: ", data);
-
     let obj = {
       column: ['srNo', 'officerName', 'mobileNo', 'designation', 'district', 'taluka', 'centers'],
       subColumn: ['srNo', 'schoolCode', 'schoolName', 'totalAssessedStudent'],
@@ -357,17 +332,32 @@ export class OfficerVisitReportComponent {
       pageName: 'Officer Visit Report',
       headerWidth:[7, 50, 50, 25, 20, 20, 20]
     }
-    // this.excelPdfService.downloadExcelWithRowSpan(data, obj?.column, obj?.header, obj?.pageName, obj?.headerWidth, obj?.subHeader);
     this.excelPdfService.downloadExcelTable(obj?.header, obj?.column, data, obj?.subHeader, obj?.subColumn, obj?.pageName, obj?.headerWidth);
   }
 
-  onClickSchoolList() {
+  onClickSchoolList(officerId?: number, schoolData?: any) {
     let filterValue = this.officerVisitReportForm.value;
-    // localStorage.setItem('selectedOfficerObj', JSON.stringify(filterValue));
-    localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(filterValue));
+    let obj = {
+        StateId: schoolData?.stateId,
+        DistrictId: schoolData?.districtId,
+        TalukaId: schoolData?.talukaId,
+        CenterId: schoolData?.centerId,
+        VillageId: schoolData?.villageId,
+        SchoolId: schoolData?.id,
+        StandardId: filterValue?.standardId,
+        ExamTypeId: filterValue?.examTypeId,
+        EducationYearId: filterValue?.educationYearId,
+        GraphLevelId: 0,
+        graphName: 'Report',
+        TeacherId_OfficerId: officerId,  
+        EvaluatorId: 0,           
+        IsInspection: true,
+    }
+    localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj));
     this.router.navigate(['/dashboard-student-data']);
   }
 
+  //#region ----------------------------------------- clear filter and onChange dropdown methods start here ---------------------------------
   onClear() {
     this.designationsArr = [];
     this.districtArr = [];
@@ -429,15 +419,5 @@ export class OfficerVisitReportComponent {
       this.f['designationId'].setValue(0);
     }
   }
-
-
-
-}
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  description: string;
+  //#endregion ----------------------------------------- clear filter and onChange dropdown methods end here -------------------------------
 }

@@ -315,7 +315,7 @@ export class OfficerVisitReportComponent {
     let toDate = this.datepipe.transform(formValue?.toDate || new Date(), 'yyyy-MM-dd');
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
     let str = `DesignationLevelId=${formValue?.designationLevelId || 0}&DesignationId=${formValue?.designationId || 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=` + this.languageFlag
-    let reportStr = `DesignationLevelId=${formValue?.designationLevelId || 0}&DesignationId=${formValue?.designationId || 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=1&RowCount=${this.totalCount * 10}&lan=` + this.languageFlag
+    let reportStr = `DesignationLevelId=${formValue?.designationLevelId || 0}&DesignationId=${formValue?.designationId || 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=1&RowCount=${0}&lan=` + this.languageFlag
 
     this.apiService.setHttp('get', 'zp-satara/assessment-report/Download_OfficerVisitReport?' + (flag == 'excel' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
@@ -351,20 +351,14 @@ export class OfficerVisitReportComponent {
 
     let obj = {
       column: ['srNo', 'officerName', 'mobileNo', 'designation', 'district', 'taluka', 'centers'],
-      header: [{name: 'Sr.No.'},
-               {name: 'Officer Name'},
-               {name: 'Contact No.'},
-               {name: 'Designation'},
-               {name: 'District'},
-               {name: 'Taluka'},
-               {name: 'Center'}],
-      subHeader: [{name: 'Sr.No.'},
-                  {name: 'School Code'},
-                  {name: 'School Name'}],
+      subColumn: ['srNo', 'schoolCode', 'schoolName', 'totalAssessedStudent'],
+      header: ['Sr.No.', 'Officer Name', 'Contact No.', 'Designation', 'District', 'Taluka', 'Center'],
+      subHeader: ['Sr.No.', 'School Code', 'School Name', 'Student Count'],
       pageName: 'Officer Visit Report',
       headerWidth:[7, 50, 50, 25, 20, 20, 20]
     }
-    this.excelPdfService.downloadExcelWithRowSpan(data, obj?.column, obj?.header, obj?.pageName, obj?.headerWidth, obj?.subHeader);
+    // this.excelPdfService.downloadExcelWithRowSpan(data, obj?.column, obj?.header, obj?.pageName, obj?.headerWidth, obj?.subHeader);
+    this.excelPdfService.downloadExcelTable(obj?.header, obj?.column, data, obj?.subHeader, obj?.subColumn, obj?.pageName, obj?.headerWidth);
   }
 
   onClickSchoolList() {

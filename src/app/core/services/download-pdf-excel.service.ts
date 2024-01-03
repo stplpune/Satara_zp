@@ -308,11 +308,7 @@ export class DownloadPdfExcelService {
 
   // common excel function 
   async allGenerateExcel(keyData: any, ValueData: any, objData: any, headerKeySize?: any) {
-    // console.log("keyData: ", keyData);
-    // console.log("ValueData: ", ValueData);
-    console.log("objData: ", objData);
-    // console.log("headerKeySize: ", headerKeySize);
-
+    
     // 1:keyHeader,2:values,3:Data-heading time date ,4:column size width
     // Create workbook and worksheet
     const workbook = new Workbook();
@@ -373,73 +369,66 @@ export class DownloadPdfExcelService {
     });
   }
 
-  downloadExcelWithRowSpan(data: any, apiKeys: any, columnName: any, pageName: any, headerWidth: any, subHeader?: any) {
-    console.log("data", data);
-    console.log("apiKeys", apiKeys);
-    console.log("columnName", columnName);
-    console.log("pageName", pageName);
-    console.log("headerWidth", headerWidth);
-    console.log("subHeader", subHeader);
-
+  downloadExcelTable(keyData:any, apiKeys:any, tableData:any, subKeyData:any, subApiKeys:any, pageName?: any, headerSize?: any){
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(pageName);
-
-    worksheet.mergeCells('C2', 'F5');
-
-    let titleRow = worksheet.getCell('C2');
-    titleRow.value = pageName;
-    titleRow.font = {
-      name: 'Calibri',
-      size: 16,
-      underline: 'single',
-      bold: true,
-      color: { argb: '3208' },
-    };
-    titleRow.alignment = { vertical: 'middle', horizontal: 'center' };
-
-    // excel download for collapse table
-
-    let resObject:any=[];let resData:any=[];   //Create array of array
-    data.map((ele: any) => {
-      if(pageName == 'Officer Visit Report'){
-        resObject.push(ele.srNo, ele.officerName, ele.mobileNo, ele.designation, ele.district, ele.taluka, ele.centers);
-        resData.push(resObject);
-        resObject = [];
-        if(ele.officerVisitSchools){
-          ele.officerVisitSchools.map((x: any) => {
-            columnName.forEach((column: any) => {
-              x[column] = (x[column]?.length == 0 || x[column] == null || x[column] == undefined)
-            });
-            // subHeader.forEach((column: any) => {
-            //   x[column] = (x[column]?.length == 0 || x[column] == null || x[column] == undefined)
-            // })
-            resObject.push(x.srNo, x.schoolCode, x.schoolName, x.totalAssessedStudent);
-            resData.push(resObject);
-            resObject = [];
-          })
-        }
-      }
-    })
-
-    worksheet.addTable({
-      name: 'Satara',
-      ref: 'A6',
-      columns: columnName,
-      rows: resData,
+    const headerRow = worksheet.addRow(keyData); 
+    headerRow.eachCell((cell: any) => { 
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
+      cell.border = { top: { style: 'sol' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }, color: {argb:'000000'} };
+      cell.font = { bold: true, color: {argb: '000000'}},
+      cell.alignment = {horizontal: 'center'}
     });
+    var headerSize = headerSize;
+    for (var i = 0; i < headerSize.length; i++) {
+      worksheet.getColumn(i + 1).width = headerSize[i];
+    }
 
-    var headerSize;
-         headerSize = headerWidth;
-        for (var i = 0; i < headerSize?.length; i++) {
-          worksheet.getColumn(i + 1).width = headerSize[i];
-        }
-      workbook.xlsx.writeBuffer().then((data: any) => {
-        const blob = new Blob([data], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        });
-        FileSaver.saveAs(blob, pageName);
+    tableData.forEach((element: any) => {
+      const eachRow: any = [];
+      apiKeys.forEach((column: any) => {
+        (element[column]?.length == 0 || element[column] == null) ?element[column]='N/A': element[column];
+         eachRow.push(element[column]);
+      })
+      let dataRow = worksheet.addRow(eachRow);
+      dataRow.eachCell((cell: any) => { 
+        cell.border = { top: { style: 'sol' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }, color: {argb:'000000'} };
+        cell.alignment = {horizontal: 'left'}
       });
 
+      if(element.officerVisitSchools?.length > 0){
+        const headerRow = worksheet.addRow(subKeyData); 
+        headerRow.eachCell((cell: any) => { 
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
+          cell.border = { top: { style: 'sol' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }, color: {argb:'000000'} };
+          cell.font = { bold: true, color: {argb: '000000'}},
+          cell.alignment = {horizontal: 'center'}
+        });
+
+        element.officerVisitSchools?.forEach((ele: any) => {
+          const subEachRow: any = [];
+          subApiKeys.forEach((col: any) => {
+            (ele[col]?.length== 0 || ele[col] == null) ?ele[col]='N/A': ele[col];
+            subEachRow.push(ele[col]);
+          })
+        
+          let subDataRow = worksheet.addRow(subEachRow);
+          subDataRow.eachCell((cell: any) => { 
+            cell.border = { top: { style: 'sol' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }, color: {argb:'000000'} };
+            cell.alignment = {horizontal: 'left'}
+          });
+        })
+      }
+      worksheet.addRow([])
+    })
+    
+     // Generate Excel File with given name
+     workbook.xlsx.writeBuffer().then((data: any) => {
+      const blob = new Blob([data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      FileSaver.saveAs(blob, pageName);
+    });
   }
 
 

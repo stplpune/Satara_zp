@@ -156,9 +156,8 @@ export class Dashboard3Component {
   }
 
   chngeLevel() {
-    if (this.schoolChartOption) {
-      this.schoolChartOption = ''
-    }
+    this.schoolChartOptionFlag = false;
+    this.isTeacherData = false;
     this.getCenterwiseBarDetails();
   }
   // centerwise assesment API start here 
@@ -230,7 +229,6 @@ export class Dashboard3Component {
             this.disEvent();
             this.schoolChartOptionFlag = true;
             this.isTeacherData = false;
-            debugger
             // let selCenter:any  =  document.getElementById('selectedCenter');
             if(this.schoolchartDiv?.hasChildNodes()){
               this.schoolchartDiv.innerHTML = '';
@@ -399,7 +397,12 @@ export class Dashboard3Component {
         },
         events: {
           click: (_config: any, _event: any, chartContext: any) => {
-
+            // if(this.schoolchartDiv?.hasChildNodes()){
+            //   this.schoolchartDiv.innerHTML = '';
+            //   // selCenter.innerHTML='';
+            // }
+            console.log("this.schoolchartDiv", this.schoolchartDiv);
+            
             if (chartContext?.seriesIndex >= 0) {
               console.log("onclick school", chartContext, _config);
               let schoolId = chartContext?.config.series[chartContext?.seriesIndex].school[chartContext?.dataPointIndex];
@@ -522,8 +525,9 @@ export class Dashboard3Component {
       tableHeaders: this.selectedLang == 'English' ? displayedheaders : marathiDisplayedheaders
     };
     this.apiService.tableData.next(tableData);
-    this.disEvent();
     flag == 'data' ? this.isTeacherData = true : '';
+    this.disEvent();
+
     this.spinner.hide();
 
   }
@@ -541,7 +545,7 @@ export class Dashboard3Component {
   disEvent() {
     setTimeout(() => {
       document.dispatchEvent(new KeyboardEvent("keydown"));
-    },0);
+    },500);
   }
 
 

@@ -69,7 +69,7 @@ export class OfficerVisitReportComponent {
 
     this.formField();
     this.getLevel();
-    this.getState();
+    this.getState(true);
     this.getExamType();
     this.getAcademicYears();
     this.getTableData();
@@ -77,8 +77,8 @@ export class OfficerVisitReportComponent {
 
   formField() {
     this.officerVisitReportForm = this.fb.group({
-      designationLevelId: [this.loginData ? this.loginData?.userTypeId : 0],
-      designationId: [this.loginData ? this.loginData?.subUserTypeId  : 0],
+      designationLevelId: [0], //this.loginData ? this.loginData?.userTypeId : 0
+      designationId: [0], //this.loginData ? this.loginData?.subUserTypeId  : 0
       stateId: [this.loginData ? this.loginData?.stateId : 0],
       districtId: [this.loginData ? this.loginData?.districtId : ''],
       talukaId: [this.loginData ? this.loginData?.talukaId : ''],
@@ -101,7 +101,7 @@ export class OfficerVisitReportComponent {
       next: (res: any) => {
         if(res.statusCode == "200"){
           this.levelsArr.push({ "id": 0, "designationLevel": "All", "m_DesignationLevel": "सर्व" }, ...res.responseData);
-          this.loginData ? (this.f['designationLevelId'].setValue(this.loginData.userTypeId), this.getDesignationByLevelId()) : this.f['designationLevelId'].setValue(0);
+          // (this.loginData && flag == true) ? (this.f['designationLevelId'].setValue(this.loginData.userTypeId), this.getDesignationByLevelId(flag)) : this.f['designationLevelId'].setValue(0);
         }else{
           this.levelsArr = [];
         }
@@ -117,7 +117,7 @@ export class OfficerVisitReportComponent {
         next: (res: any) => {
           if(res.statusCode == "200"){
             this.designationsArr.push({ "id": 0, "designationType": "All", "m_DesignationType": "सर्व" }, ...res.responseData);
-            this.loginData ? this.f['designationId'].setValue(this.loginData.subUserTypeId) : this.f['designationId'].setValue(0);
+            // (this.loginData && flag == true) ? this.f['designationId'].setValue(this.loginData.subUserTypeId) : this.f['designationId'].setValue(0);
           }else{
             this.designationsArr = [];
           }
@@ -128,13 +128,13 @@ export class OfficerVisitReportComponent {
     }
   }
 
-  getState() {
+  getState(flag?: any) {
     this.stateArr = [];
     this.masterService.getAllState('').subscribe({
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.stateArr.push({ "id": 0, "state": "All", "m_State": "सर्व" }, ...res.responseData);
-          this.loginData ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict()) : this.f['stateId'].setValue(0);
+          (this.loginData && flag == true) ? (this.f['stateId'].setValue(this.loginData.stateId), this.getDistrict(flag)) : this.f['stateId'].setValue(0);
         } else {
           this.stateArr = [];
         }
@@ -142,7 +142,7 @@ export class OfficerVisitReportComponent {
     });
   }
 
-  getDistrict() {
+  getDistrict(flag?: any) {
     this.districtArr = [];
     let stateId: any = this.officerVisitReportForm.value.stateId;
     if (stateId > 0) {
@@ -150,7 +150,7 @@ export class OfficerVisitReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.districtArr.push({ "id": 0, "district": "All", "m_District": "सर्व" }, ...res.responseData);
-            this.loginData ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka()) : this.f['districtId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['districtId'].setValue(this.loginData.districtId), this.getTaluka(flag)) : this.f['districtId'].setValue(0);
           } else {
             this.districtArr = [];
           }
@@ -161,7 +161,7 @@ export class OfficerVisitReportComponent {
     }
   }
 
-  getTaluka() {
+  getTaluka(flag?: any) {
     this.talukaArr = [];
     let districtId: any = this.officerVisitReportForm.value.districtId;
     if (districtId > 0) {
@@ -169,7 +169,7 @@ export class OfficerVisitReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.talukaArr.push({ "id": 0, "taluka": "All", "m_Taluka": "सर्व" }, ...res.responseData);
-            this.loginData ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter()) : this.f['talukaId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['talukaId'].setValue(this.loginData?.talukaId), this.getAllCenter(flag)) : this.f['talukaId'].setValue(0);
           } else {
             this.talukaArr = [];
           }
@@ -180,7 +180,7 @@ export class OfficerVisitReportComponent {
     }
   }
 
-  getAllCenter() {
+  getAllCenter(flag?: any) {
     this.centerArr = [];
     let talukaid = this.officerVisitReportForm.value.talukaId;
     if (talukaid > 0) {
@@ -188,7 +188,7 @@ export class OfficerVisitReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.centerArr.push({ "id": 0, "center": "All", "m_Center": "सर्व" }, ...res.responseData);
-            this.loginData ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDrop()) : this.f['centerId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['centerId'].setValue(this.loginData?.centerId), this.getVillageDrop(flag)) : this.f['centerId'].setValue(0);
           } else {
             this.centerArr = [];
           }
@@ -199,7 +199,7 @@ export class OfficerVisitReportComponent {
     }
   }
 
-  getVillageDrop() {
+  getVillageDrop(flag?: any) {
     this.villageArr = [];
     let centerId = this.officerVisitReportForm.value.centerId;
     if (centerId > 0) {
@@ -207,7 +207,7 @@ export class OfficerVisitReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            this.loginData ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getAllSchoolsByCenterId()) : this.f['villageId'].setValue(0);
+            (this.loginData && flag) ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getAllSchoolsByCenterId(flag)) : this.f['villageId'].setValue(0);
           } else {
             this.villageArr = [];
           }
@@ -218,7 +218,7 @@ export class OfficerVisitReportComponent {
     }
   }
 
-  getAllSchoolsByCenterId() {
+  getAllSchoolsByCenterId(flag?: any) {
     this.schoolArr = [];
     let talukaId = this.officerVisitReportForm.value.talukaId;
     let centerId = this.officerVisitReportForm.value.centerId;
@@ -228,7 +228,7 @@ export class OfficerVisitReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-            this.loginData ? (this.f['schoolId'].setValue(this.loginData?.schoolId)) : this.f['schoolId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['schoolId'].setValue(this.loginData?.schoolId), this.getStandard()) : this.f['schoolId'].setValue(0);
           } else {
             this.schoolArr = [];
           }
@@ -303,7 +303,6 @@ export class OfficerVisitReportComponent {
         if (res.statusCode == "200") {
           flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.totalCount = res.responseData.responseData2.totalCount;
-          console.log("tableDataArray", this.tableDataArray);
           
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
           flag == 'excel' ? this.downloadExcel(data) : '';
@@ -366,7 +365,7 @@ export class OfficerVisitReportComponent {
     this.schoolArr = [];
     this.standardArr = [];
     this.getLevel();
-    this.getState();
+    this.getState(true);
     this.formField();
     this.getTableData();
   }

@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ApiService } from 'src/app/core/services/api.service';
 import { CommonMethodsService } from 'src/app/core/services/common-methods.service';
+import { DownloadPdfExcelService } from 'src/app/core/services/download-pdf-excel.service';
 import { ErrorsService } from 'src/app/core/services/errors.service';
 import { MasterService } from 'src/app/core/services/master.service';
 import { ValidationService } from 'src/app/core/services/validation.service';
@@ -37,10 +39,12 @@ export class TeacherReportComponent {
   displayedColumns = new Array();
   tableData: any;
   get f() { return this.teacherReportForm.controls }
-  teacherheadersEnglish = ['Sr. No.', 'District', 'Taluka', 'Center', 'Standard', 'Student Count'];
-  teacherheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र', 'स्टँडर्ड', 'विद्यार्थी संख्या'];
-  headMasterheadersEnglish = ['Sr. No.', 'District', 'Taluka', 'Center', 'Teacher Name', 'Student Count'];
-  headMasterheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र', 'शिक्षकाचे नाव', 'विद्यार्थी संख्या'];
+  teacherheadersEnglish = ['Sr. No.', 'Standard', 'Student Count'];
+  teacherheadersMarathi = ['अनुक्रमांक', 'स्टँडर्ड', 'विद्यार्थी संख्या'];
+  // headMasterheadersEnglish = ['Sr. No.', 'District', 'Taluka', 'Center', 'Teacher Name', 'Student Count'];
+  // headMasterheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र', 'शिक्षकाचे नाव', 'विद्यार्थी संख्या'];
+  headMasterheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Designation','Mobile No.', 'Student Count'];
+  headMasterheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड','शिक्षकाचे नाव', 'पदनाम', 'मोबाईल क्र.', 'विद्यार्थी संख्या'];
 
   constructor(private fb: FormBuilder,
     private masterService: MasterService,
@@ -50,7 +54,9 @@ export class TeacherReportComponent {
     private ngxSpinner: NgxSpinnerService,
     private datepipe: DatePipe,
     private apiService: ApiService,
-    private errors: ErrorsService){}
+    private errors: ErrorsService,
+    private downloadService: DownloadPdfExcelService,
+    private router: Router){}
 
   ngOnInit(){
     this.webService.langNameOnChange.subscribe(lang => {
@@ -182,7 +188,7 @@ export class TeacherReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-            (this.loginData && flag == true) ? (this.f['schoolId'].setValue(this.loginData?.schoolId)) : this.f['schoolId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['schoolId'].setValue(this.loginData?.schoolId), this.getStandard()) : this.f['schoolId'].setValue(0);
           } else {
             this.schoolArr = [];
           }
@@ -247,19 +253,19 @@ export class TeacherReportComponent {
     let fromDate = this.datepipe.transform(formValue?.fromDate || new Date(), 'yyyy-MM-dd');
     let toDate = this.datepipe.transform(formValue?.toDate || new Date(), 'yyyy-MM-dd');
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
-    let str = `StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${0}&PageNo=${this.pageNumber}&PageSize=10&lan=` + this.languageFlag;
-    let reportStr = `StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${0}&PageNo=1&PageSize=${0}&lan=` + this.languageFlag;
+    let str = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=${this.pageNumber}&PageSize=10&lan=` + this.languageFlag;
+    let reportStr = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=1&PageSize=${0}&lan=` + this.languageFlag;
 
     this.apiService.setHttp('get', 'zp-satara/assessment-report/Download_TeacherAssessedReport?' + (flag == 'excel' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         this.ngxSpinner.hide();
         if (res.statusCode == "200") {
-          flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          this.teacherReportForm.value.schoolId != 0 ? flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray : this.tableDataArray = [];
           this.totalCount = res.responseData.responseData2.totalCount;
 
           let data: [] = (flag == 'excel') ? res.responseData.responseData1 : [];
-          flag == 'excel' ? this.downloadExcel(data) : '';
+          flag == 'pdfFlag' ? this.downloadPdfExcel(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdfExcel(data, 'excel') : '';
         }else{
           this.tableDataArray = [];
           this.totalCount = 0;
@@ -275,15 +281,47 @@ export class TeacherReportComponent {
   }
   //#endregion ------------------------------------------- Table end here -------------------------------------------------------------------
 
-  downloadExcel(data?: any){
-    console.log("data", data);
+  downloadPdfExcel(data?: any, flag?: any){
+    let resultDownloadArr: any = [];
+    data.find((ele: any, i: any) => {
+      let teacherObj = {
+        "Sr.No": i + 1,
+        "Standard" : ele.standard,
+        "Student Count": ele.totalAssessedStudent
+      }
+
+      let headMasterObj = {
+        "Sr.No": i + 1,
+        "Teacher Code" : ele.teacherCode,
+        "Teacher Name": flag == 'excel' ? this.languageFlag == 'English' ? ele.name : ele.m_Name : ele.name,
+        "Designation": flag == 'excel' ? this.languageFlag == 'English' ? ele.designation : ele.m_Designation : ele.designation,
+        "Mobile No.": ele.mobileNo,
+        "Student Count": ele.totalAssessedStudent
+      }
+      resultDownloadArr.push(this.loginData.subUserTypeId == 15 ? teacherObj : headMasterObj);
+    });
+
+    if (resultDownloadArr?.length > 0) {
+      let keyPDFHeader = this.loginData.subUserTypeId == 15 ? this.teacherheadersEnglish : this.headMasterheadersEnglish;
+      let MarathikeyPDFHeader = this.loginData.subUserTypeId == 15 ? this.teacherheadersMarathi : this.headMasterheadersMarathi;
+      let ValueData = resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );        
+      let objData: any
+      objData = {
+        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'Teacher Report' : 'शिक्षक अहवाल' : 'Teacher Report',
+        'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+      let headerKeySize = [10, 15, 20, 20, 20, 20, 15, 20]
+      flag == 'pdfFlag' ? this.downloadService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadService.allGenerateExcel(this.languageFlag == 'English' ? keyPDFHeader : MarathikeyPDFHeader, ValueData, objData, headerKeySize);
+    }
   }
 
   languageChange() {
     this.highLightFlag = true;
 
-    let teacherKeys = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'taluka' : 'm_Taluka', this.languageFlag == 'English' ? 'center' : 'm_Center', this.languageFlag == 'English' ? 'standard' : 'm_Standard', 'totalAssessedStudent'];
-    let headerMasterKeys = ['srNo', this.languageFlag == 'English' ? 'district' : 'm_District', this.languageFlag == 'English' ? 'taluka' : 'm_Taluka', this.languageFlag == 'English' ? 'center' : 'm_Center', this.languageFlag == 'English' ? 'name' : 'm_Name', 'totalAssessedStudent'];
+    let teacherKeys = ['srNo', this.languageFlag == 'English' ? 'standard' : 'm_Standard', 'totalAssessedStudent'];
+    let headerMasterKeys = ['srNo', 'teacherCode', this.languageFlag == 'English' ? 'name' : 'm_Name', this.languageFlag == 'English' ? 'designation' : 'm_Designation', 'mobileNo', 'totalAssessedStudent'];
 
     this.displayedColumns = this.loginData.subUserTypeId == 15 ? teacherKeys : headerMasterKeys;
     let englishHeading = this.loginData.subUserTypeId == 15 ? this.teacherheadersEnglish : this.headMasterheadersEnglish;
@@ -308,7 +346,34 @@ export class TeacherReportComponent {
         // this.pageNumber = obj.pageNumber;
         this.getTableData();
         break;
+        case 'View':
+          this.onClickStudentCount(obj);
+          break;
     }
+  }
+
+  onClickStudentCount(data?: any){
+    let filterValue = this.teacherReportForm.value;
+    let obj = {
+        StateId: data?.stateId,
+        DistrictId: data?.districtId,
+        TalukaId: data?.talukaId,
+        CenterId: data?.centerId,
+        VillageId: data?.villageId,
+        SchoolId: filterValue?.schoolId,
+        StandardId: filterValue?.standardId ? filterValue?.standardId : 0,
+        ExamTypeId: filterValue?.examTypeId,
+        EducationYearId: filterValue?.educationYearId,
+        GraphLevelId: 0,
+        graphName: 'ReportCard',
+        TeacherId_OfficerId: data?.id,  
+        EvaluatorId: 0,           
+        IsInspection: false,
+    }
+    console.log("obj:", obj);
+    
+    localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj));
+    this.router.navigate(['/dashboard-student-data']);
   }
 
   //#region ----------------------------------------- clear filter and onChange dropdown methods start here ---------------------------------
@@ -319,8 +384,8 @@ export class TeacherReportComponent {
     this.villageArr = [];
     this.schoolArr = [];
     this.standardArr = [];
-    this.getState();
     this.formField();
+    this.getState(true);
     this.getTableData();
   }
 

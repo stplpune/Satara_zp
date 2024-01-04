@@ -153,6 +153,9 @@ export class Dashboard3Component {
   onMainFilterSubmit(_flag?: any) {
     this.getdashboardCount();
     this.getCenterwiseBarDetails();
+    this.schoolChartOptionFlag = false;
+    this.isTeacherData = false;
+
   }
 
   chngeLevel() {
@@ -406,8 +409,10 @@ export class Dashboard3Component {
             if (chartContext?.seriesIndex >= 0) {
               console.log("onclick school", chartContext, _config);
               let schoolId = chartContext?.config.series[chartContext?.seriesIndex].school[chartContext?.dataPointIndex];
-              let school = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]
-              this.selectedSchool = this.selectedLang == 'English' ? school + ' School' : school + ' शाळा'
+              let school = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]              
+              this.selectedSchool = this.schoolNamelabelArr?.[chartContext?.dataPointIndex][school]
+              console.log("this.selectedSchool", this.selectedSchool);
+              
               // let schoolId = chartContext?.config.series[chartContext?.seriesIndex].schoolId;
               this.getSchoolWiseTeachdata(schoolId);
             }

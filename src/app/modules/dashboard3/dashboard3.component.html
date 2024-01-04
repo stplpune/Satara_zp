@@ -249,15 +249,15 @@
                 </mat-card>
             </div>
             <!-- [class.d-none]="!schoolChartOptionFlag" -->
-            <div class="col-sm-12">
+            <div class="col-sm-12"  [hidden]="!schoolChartOptionFlag">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
                         <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}} -  <span id="selectedCenter"></span></h6>
                     </mat-card-header>
                     
                     <mat-card-content class="card-body">
-                        <div  id="Schoolchart">
-                            <ng-container>
+                        <div>
+                            <ng-container id="Schoolchart">
                                         <apx-chart 
                                         [series]="schoolChartOption?.series"
                                         [chart]="schoolChartOption?.chart"
@@ -284,7 +284,7 @@
                 </mat-card>
             </div>
 
-            <div class="col-sm-12" >
+            <div class="col-sm-12" [hidden]="!isTeacherData" >
                 <mat-card class="plain-card">
                     <mat-card-content class="card-body">
                         <div class="table-responsive">

@@ -42,6 +42,8 @@ export class Dashboard3Component {
   schoolNamelabelArr = new Array(); //for show school array in html 
   schoolchartDiv:any;
   chartBind:any;
+  schoolChartOptionFlag: boolean = false;
+  isTeacherData: boolean = false;
 
 
   get f() { return this.mainFilterForm.controls }
@@ -154,9 +156,8 @@ export class Dashboard3Component {
   }
 
   chngeLevel() {
-    if (this.schoolChartOption) {
-      this.schoolChartOption = ''
-    }
+    this.schoolChartOptionFlag = false;
+    this.isTeacherData = false;
     this.getCenterwiseBarDetails();
   }
   // centerwise assesment API start here 
@@ -223,15 +224,20 @@ export class Dashboard3Component {
         },
         events: {
           click: (_config: any, _event: any, chartContext: any) => {
-            let selCenter:any  =  document.getElementById('selectedCenter');
+            console.log("centerclick");
+            
+            this.disEvent();
+            this.schoolChartOptionFlag = true;
+            this.isTeacherData = false;
+            // let selCenter:any  =  document.getElementById('selectedCenter');
             if(this.schoolchartDiv?.hasChildNodes()){
               this.schoolchartDiv.innerHTML = '';
-              selCenter.innerHTML='';
+              // selCenter.innerHTML='';
             }
             if (chartContext?.seriesIndex >= 0) {
               let centerId = chartContext?.config.series[chartContext?.seriesIndex].center[chartContext?.dataPointIndex];
               let Center = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]
-              selCenter.innerHTML = this.selectedLang == 'English' ? Center + ' Center' : Center + ' केंद्र';
+              this.selectedCenter = this.selectedLang == 'English' ? Center + ' Center' : Center + ' केंद्र';
               this.getSchoolwiseBarDetails(centerId);
             }
 
@@ -391,6 +397,12 @@ export class Dashboard3Component {
         },
         events: {
           click: (_config: any, _event: any, chartContext: any) => {
+            // if(this.schoolchartDiv?.hasChildNodes()){
+            //   this.schoolchartDiv.innerHTML = '';
+            //   // selCenter.innerHTML='';
+            // }
+            console.log("this.schoolchartDiv", this.schoolchartDiv);
+            
             if (chartContext?.seriesIndex >= 0) {
               console.log("onclick school", chartContext, _config);
               let schoolId = chartContext?.config.series[chartContext?.seriesIndex].school[chartContext?.dataPointIndex];
@@ -497,7 +509,7 @@ export class Dashboard3Component {
 
   }
 
-  setTableData(_flag?: string) {
+  setTableData(flag?: string) {
     this.spinner.show();
     let displayedColumns = ['srNo', 'profilePhoto', this.selectedLang == 'English' ? 'name' : 'm_Name', this.selectedLang == 'English' ? 'teacherRole' : 'm_TeacherRole', this.selectedLang == 'English' ? 'standard' : 'm_Standard', 'mobileNo', 'emailId'];
     let displayedheaders = ['Sr. No.', '', 'Teacher Name', 'Teacher Role', 'Standard', 'Mobile No', 'EmailId'];
@@ -513,7 +525,9 @@ export class Dashboard3Component {
       tableHeaders: this.selectedLang == 'English' ? displayedheaders : marathiDisplayedheaders
     };
     this.apiService.tableData.next(tableData);
-    // flag == 'data' ? this.isTeacherTable = true : '';
+    flag == 'data' ? this.isTeacherData = true : '';
+    this.disEvent();
+
     this.spinner.hide();
 
   }
@@ -527,6 +541,13 @@ export class Dashboard3Component {
   getKey(obj: any): string {
     return Object.keys(obj)[0];
   }
+
+  disEvent() {
+    setTimeout(() => {
+      document.dispatchEvent(new KeyboardEvent("keydown"));
+    },500);
+  }
+
 
 
 

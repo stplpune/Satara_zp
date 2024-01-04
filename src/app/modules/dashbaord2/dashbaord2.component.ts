@@ -701,7 +701,7 @@ export class Dashbaord2Component {
       },
       dataLabels: {
         formatter: function (val: any,) {
-          return val.toFixed(0) + ' %'
+          return val + ' %'
         }
       },
       xaxis: {

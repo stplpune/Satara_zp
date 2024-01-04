@@ -43,14 +43,12 @@ export class OfficerVisitReportComponent {
   pageNumber: number = 1;
   totalCount: number = 0;
   tableDataArray = new Array();
-
   get f() { return this.officerVisitReportForm.controls }
 
   columnsToDisplay = ['srNo', 'officerName', 'contactNo', 'designation', 'district', 'taluka', 'center', 'schoolCount'];
+  displayedColumns: string[] = ['srNo', 'schoolCode', 'schoolName', 'studentCount'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
   expandedElement!: null;
-
-  displayedColumns: string[] = ['srNo', 'schoolCode', 'schoolName', 'studentCount'];
 
   constructor(private masterService: MasterService,
     private fb: FormBuilder,
@@ -305,7 +303,8 @@ export class OfficerVisitReportComponent {
         if (res.statusCode == "200") {
           flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
           this.totalCount = res.responseData.responseData2.totalCount;
-
+          console.log("tableDataArray", this.tableDataArray);
+          
           let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
           flag == 'excel' ? this.downloadExcel(data) : '';
         }else{
@@ -419,5 +418,5 @@ export class OfficerVisitReportComponent {
       this.f['designationId'].setValue(0);
     }
   }
-  //#endregion ----------------------------------------- clear filter and onChange dropdown methods end here -------------------------------
+  //#endregion ----------------------------------------- clear filter and onChange dropdown methods end here ------------------------------- 
 }

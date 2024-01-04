@@ -168,11 +168,11 @@
             </div>
         </form>
     </mat-card-header>
-
+    
     <mat-card-content>
         <div class="row">
             <div class="col-sm-12">
-                <div class="table-responsive">
+                <div >
                     <table mat-table [dataSource]="tableDataArray" multiTemplateDataRows class="dashboard-table">
                         <ng-container matColumnDef="srNo">
                             <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Sr.No.' :
@@ -221,19 +221,19 @@
                         </ng-container>
 
                         <ng-container matColumnDef="expand">
-                            <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+                            <th mat-header-cell *matHeaderCellDef aria-label="row actions"></th>
                             <td mat-cell *matCellDef="let element">
                                 <button mat-icon-button aria-label="expand row"
                                     (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-                                    <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-                                    <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+                                    <mat-icon *ngIf="expandedElement !== element && element?.officerVisitSchools.length">keyboard_arrow_down</mat-icon>
+                                    <mat-icon *ngIf="expandedElement === element && element?.officerVisitSchools.length">keyboard_arrow_up</mat-icon>
                                 </button>
                             </td>
                         </ng-container>
 
                         <!-- Collapse Table start here -->
                         <ng-container matColumnDef="expandedDetail">
-                            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+                            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length" >
                                 <div class="example-element-detail"
                                     [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 
@@ -292,5 +292,4 @@
             </div>
         </div>
     </mat-card-content>
-
 </mat-card>

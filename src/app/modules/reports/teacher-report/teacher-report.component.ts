@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -13,19 +12,12 @@ import { ValidationService } from 'src/app/core/services/validation.service';
 import { WebStorageService } from 'src/app/core/services/web-storage.service';
 
 @Component({
-  selector: 'app-officer-visit-report',
-  templateUrl: './officer-visit-report.component.html',
-  styleUrls: ['./officer-visit-report.component.scss'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed,void', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ]
+  selector: 'app-teacher-report',
+  templateUrl: './teacher-report.component.html',
+  styleUrls: ['./teacher-report.component.scss']
 })
-export class OfficerVisitReportComponent {
-  officerVisitReportForm!: FormGroup;
+export class TeacherReportComponent {
+  teacherReportForm!: FormGroup;
   languageFlag: any;
   loginData = this.webService.getLoggedInLocalstorageData();
   stateArr = new Array();
@@ -37,48 +29,49 @@ export class OfficerVisitReportComponent {
   standardArr = new Array();
   examTypeArr = new Array();
   academicYearArr = new Array();
-  designationsArr = new Array();
-  levelsArr = new Array();
   maxDate = new Date();
   pageNumber: number = 1;
   totalCount: number = 0;
   tableDataArray = new Array();
-  get f() { return this.officerVisitReportForm.controls }
+  highLightFlag: boolean = true;
+  isWriteRight!: boolean;
+  tableDatasize!: Number;
+  displayedColumns = new Array();
+  tableData: any;
+  get f() { return this.teacherReportForm.controls }
+  teacherheadersEnglish = ['Sr. No.', 'Standard', 'Student Count'];
+  teacherheadersMarathi = ['अनुक्रमांक', 'स्टँडर्ड', 'विद्यार्थी संख्या'];
+  // headMasterheadersEnglish = ['Sr. No.', 'District', 'Taluka', 'Center', 'Teacher Name', 'Student Count'];
+  // headMasterheadersMarathi = ['अनुक्रमांक', 'जिल्हा', 'तालुका', 'केंद्र', 'शिक्षकाचे नाव', 'विद्यार्थी संख्या'];
+  headMasterheadersEnglish = ['Sr. No.', 'Teacher Code','Teacher Name', 'Designation','Mobile No.', 'Student Count'];
+  headMasterheadersMarathi = ['अनुक्रमांक', 'शिक्षक कोड','शिक्षकाचे नाव', 'पदनाम', 'मोबाईल क्र.', 'विद्यार्थी संख्या'];
 
-  columnsToDisplay = ['srNo', 'officerName', 'contactNo', 'designation', 'district', 'taluka', 'center', 'schoolCount'];
-  displayedColumns: string[] = ['srNo', 'schoolCode', 'schoolName', 'studentCount'];
-  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-  expandedElement!: null;
-
-  constructor(private masterService: MasterService,
-    private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
+    private masterService: MasterService,
     private webService: WebStorageService,
     public validation: ValidationService,
-    private router: Router,
-    private ngxSpinner: NgxSpinnerService,
-    private apiService: ApiService,
-    private datepipe: DatePipe,
     private commonMethodService: CommonMethodsService,
+    private ngxSpinner: NgxSpinnerService,
+    private datepipe: DatePipe,
+    private apiService: ApiService,
     private errors: ErrorsService,
-    private excelPdfService: DownloadPdfExcelService) { }
+    private downloadService: DownloadPdfExcelService,
+    private router: Router){}
 
-  ngOnInit() {
+  ngOnInit(){
     this.webService.langNameOnChange.subscribe(lang => {
       this.languageFlag = lang;
+      this.languageChange();
     });
-
     this.formField();
-    this.getLevel();
     this.getState(true);
     this.getExamType();
     this.getAcademicYears();
     this.getTableData();
   }
 
-  formField() {
-    this.officerVisitReportForm = this.fb.group({
-      designationLevelId: [0], //this.loginData ? this.loginData?.userTypeId : 0
-      designationId: [0], //this.loginData ? this.loginData?.subUserTypeId  : 0
+  formField(){
+    this.teacherReportForm = this.fb.group({
       stateId: [this.loginData ? this.loginData?.stateId : 0],
       districtId: [this.loginData ? this.loginData?.districtId : ''],
       talukaId: [this.loginData ? this.loginData?.talukaId : ''],
@@ -95,39 +88,6 @@ export class OfficerVisitReportComponent {
   }
 
   //#region ------------------------------------------- Filter dropdown dependencies start here --------------------------------------------
-  getLevel() {
-    this.levelsArr = [];
-    this.masterService.GetDesignationLevel(this.webService.languageFlag).subscribe({
-      next: (res: any) => {
-        if(res.statusCode == "200"){
-          this.levelsArr.push({ "id": 0, "designationLevel": "All", "m_DesignationLevel": "सर्व" }, ...res.responseData);
-          // (this.loginData && flag == true) ? (this.f['designationLevelId'].setValue(this.loginData.userTypeId), this.getDesignationByLevelId(flag)) : this.f['designationLevelId'].setValue(0);
-        }else{
-          this.levelsArr = [];
-        }
-      }
-    });
-  }
-
-  getDesignationByLevelId() {
-    this.designationsArr = [];
-    let levelId = this.officerVisitReportForm.value.designationLevelId;
-    if (levelId > 0) {
-      this.masterService.GetDesignationByLevelId(this.webService.languageFlag, levelId).subscribe({
-        next: (res: any) => {
-          if(res.statusCode == "200"){
-            this.designationsArr.push({ "id": 0, "designationType": "All", "m_DesignationType": "सर्व" }, ...res.responseData);
-            // (this.loginData && flag == true) ? this.f['designationId'].setValue(this.loginData.subUserTypeId) : this.f['designationId'].setValue(0);
-          }else{
-            this.designationsArr = [];
-          }
-        },
-      })
-    } else {
-      this.designationsArr = [];
-    }
-  }
-
   getState(flag?: any) {
     this.stateArr = [];
     this.masterService.getAllState('').subscribe({
@@ -144,7 +104,7 @@ export class OfficerVisitReportComponent {
 
   getDistrict(flag?: any) {
     this.districtArr = [];
-    let stateId: any = this.officerVisitReportForm.value.stateId;
+    let stateId: any = this.teacherReportForm.value.stateId;
     if (stateId > 0) {
       this.masterService.getAllDistrict('', stateId).subscribe({
         next: (res: any) => {
@@ -163,7 +123,7 @@ export class OfficerVisitReportComponent {
 
   getTaluka(flag?: any) {
     this.talukaArr = [];
-    let districtId: any = this.officerVisitReportForm.value.districtId;
+    let districtId: any = this.teacherReportForm.value.districtId;
     if (districtId > 0) {
       this.masterService.getAllTaluka('', districtId).subscribe({
         next: (res: any) => {
@@ -182,7 +142,7 @@ export class OfficerVisitReportComponent {
 
   getAllCenter(flag?: any) {
     this.centerArr = [];
-    let talukaid = this.officerVisitReportForm.value.talukaId;
+    let talukaid = this.teacherReportForm.value.talukaId;
     if (talukaid > 0) {
       this.masterService.getAllCenter('', talukaid).subscribe({
         next: (res: any) => {
@@ -201,13 +161,13 @@ export class OfficerVisitReportComponent {
 
   getVillageDrop(flag?: any) {
     this.villageArr = [];
-    let centerId = this.officerVisitReportForm.value.centerId;
+    let centerId = this.teacherReportForm.value.centerId;
     if (centerId > 0) {
       this.masterService.getAllVillage('', centerId).subscribe({
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.villageArr.push({ "id": 0, "village": "All", "m_Village": "सर्व" }, ...res.responseData);
-            (this.loginData && flag) ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getAllSchoolsByCenterId(flag)) : this.f['villageId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['villageId'].setValue(this.loginData?.villageId), this.getAllSchoolsByCenterId(flag)) : this.f['villageId'].setValue(0);
           } else {
             this.villageArr = [];
           }
@@ -220,9 +180,9 @@ export class OfficerVisitReportComponent {
 
   getAllSchoolsByCenterId(flag?: any) {
     this.schoolArr = [];
-    let talukaId = this.officerVisitReportForm.value.talukaId;
-    let centerId = this.officerVisitReportForm.value.centerId;
-    let villageId = this.officerVisitReportForm.value.villageId;
+    let talukaId = this.teacherReportForm.value.talukaId;
+    let centerId = this.teacherReportForm.value.centerId;
+    let villageId = this.teacherReportForm.value.villageId;
     if (talukaId > 0 && villageId > 0 && centerId > 0) {
       this.masterService.getAllSchoolByCriteria('', talukaId, villageId, centerId).subscribe({
         next: (res: any) => {
@@ -241,7 +201,7 @@ export class OfficerVisitReportComponent {
 
   getStandard() {
     this.standardArr = [];
-    let schoolId = this.officerVisitReportForm.value.schoolId;
+    let schoolId = this.teacherReportForm.value.schoolId;
     if (schoolId > 0) {
       this.masterService.GetStandardBySchool(schoolId, '').subscribe({
         next: (res: any) => {
@@ -289,84 +249,143 @@ export class OfficerVisitReportComponent {
 
   getTableData(flag?: any) {
     this.ngxSpinner.show();
-    let formValue = this.officerVisitReportForm.value;
+    let formValue = this.teacherReportForm.value;
     let fromDate = this.datepipe.transform(formValue?.fromDate || new Date(), 'yyyy-MM-dd');
     let toDate = this.datepipe.transform(formValue?.toDate || new Date(), 'yyyy-MM-dd');
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
-    let str = `DesignationLevelId=${formValue?.designationLevelId || 0}&DesignationId=${formValue?.designationId || 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=${this.pageNumber}&RowCount=10&lan=` + this.languageFlag
-    let reportStr = `DesignationLevelId=${formValue?.designationLevelId || 0}&DesignationId=${formValue?.designationId || 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch || ''}&PageNo=1&RowCount=${0}&lan=` + this.languageFlag
+    let str = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=${this.pageNumber}&PageSize=10&lan=` + this.languageFlag;
+    let reportStr = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=1&PageSize=${0}&lan=` + this.languageFlag;
 
-    this.apiService.setHttp('get', 'zp-satara/assessment-report/Download_OfficerVisitReport?' + (flag == 'excel' ? reportStr : str), false, false, false, 'baseUrl');
+    this.apiService.setHttp('get', 'zp-satara/assessment-report/Download_TeacherAssessedReport?' + (flag == 'excel' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {
         this.ngxSpinner.hide();
         if (res.statusCode == "200") {
-          flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray;
+          this.teacherReportForm.value.schoolId != 0 ? flag != 'excel' ? this.tableDataArray = res.responseData.responseData1 : this.tableDataArray = this.tableDataArray : this.tableDataArray = [];
           this.totalCount = res.responseData.responseData2.totalCount;
-          
-          let data: [] = (flag == 'pdfFlag' || flag == 'excel') ? res.responseData.responseData1 : [];
-          flag == 'excel' ? this.downloadExcel(data) : '';
+
+          let data: [] = (flag == 'excel') ? res.responseData.responseData1 : [];
+          flag == 'pdfFlag' ? this.downloadPdfExcel(data, 'pdfFlag') : flag == 'excel' ? this.downloadPdfExcel(data, 'excel') : '';
         }else{
           this.tableDataArray = [];
           this.totalCount = 0;
         }
+        this.languageChange();
       },error: ((err: any) => {
         this.ngxSpinner.hide();
         this.tableDataArray = [];
         this.totalCount = 0;
         this.commonMethodService.checkEmptyData(err.statusText) == false ? this.errors.handelError(err.statusCode) : this.commonMethodService.snackBar(err.statusText, 1);
       })
-    })
+    });
   }
-
   //#endregion ------------------------------------------- Table end here -------------------------------------------------------------------
 
-  downloadExcel(data?: any){
-    let obj = {
-      column: ['srNo', 'officerName', 'mobileNo', 'designation', 'district', 'taluka', 'centers'],
-      subColumn: ['srNo', 'schoolCode', 'schoolName', 'totalAssessedStudent'],
-      header: ['Sr.No.', 'Officer Name', 'Contact No.', 'Designation', 'District', 'Taluka', 'Center'],
-      subHeader: ['Sr.No.', 'School Code', 'School Name', 'Student Count'],
-      pageName: 'Officer Visit Report',
-      headerWidth:[7, 50, 50, 25, 20, 20, 20]
+  downloadPdfExcel(data?: any, flag?: any){
+    let resultDownloadArr: any = [];
+    data.find((ele: any, i: any) => {
+      let teacherObj = {
+        "Sr.No": i + 1,
+        "Standard" : ele.standard,
+        "Student Count": ele.totalAssessedStudent
+      }
+
+      let headMasterObj = {
+        "Sr.No": i + 1,
+        "Teacher Code" : ele.teacherCode,
+        "Teacher Name": flag == 'excel' ? this.languageFlag == 'English' ? ele.name : ele.m_Name : ele.name,
+        "Designation": flag == 'excel' ? this.languageFlag == 'English' ? ele.designation : ele.m_Designation : ele.designation,
+        "Mobile No.": ele.mobileNo,
+        "Student Count": ele.totalAssessedStudent
+      }
+      resultDownloadArr.push(this.loginData.subUserTypeId == 15 ? teacherObj : headMasterObj);
+    });
+
+    if (resultDownloadArr?.length > 0) {
+      let keyPDFHeader = this.loginData.subUserTypeId == 15 ? this.teacherheadersEnglish : this.headMasterheadersEnglish;
+      let MarathikeyPDFHeader = this.loginData.subUserTypeId == 15 ? this.teacherheadersMarathi : this.headMasterheadersMarathi;
+      let ValueData = resultDownloadArr.reduce(
+          (acc: any, obj: any) => [...acc, Object.values(obj).map((value) => value)], []
+        );        
+      let objData: any
+      objData = {
+        'topHedingName': flag == 'excel' ? this.languageFlag == 'English' ? 'Teacher Report' : 'शिक्षक अहवाल' : 'Teacher Report',
+        'createdDate': (flag == 'excel' ? this.languageFlag == 'English' ? 'Created on:' : 'रोजी तयार केले :' : 'Created on:')+ this.datepipe.transform(new Date(), 'yyyy-MM-dd, h:mm a')
+      }
+      let headerKeySize = [10, 15, 20, 20, 20, 20, 15, 20]
+      flag == 'pdfFlag' ? this.downloadService.downLoadPdf(keyPDFHeader, ValueData, objData) : this.downloadService.allGenerateExcel(this.languageFlag == 'English' ? keyPDFHeader : MarathikeyPDFHeader, ValueData, objData, headerKeySize);
     }
-    this.excelPdfService.downloadExcelTable(obj?.header, obj?.column, data, obj?.subHeader, obj?.subColumn, obj?.pageName, obj?.headerWidth);
   }
 
-  onClickSchoolList(officerId?: number, schoolData?: any) {
-    let filterValue = this.officerVisitReportForm.value;
+  languageChange() {
+    this.highLightFlag = true;
+
+    let teacherKeys = ['srNo', this.languageFlag == 'English' ? 'standard' : 'm_Standard', 'totalAssessedStudent'];
+    let headerMasterKeys = ['srNo', 'teacherCode', this.languageFlag == 'English' ? 'name' : 'm_Name', this.languageFlag == 'English' ? 'designation' : 'm_Designation', 'mobileNo', 'totalAssessedStudent'];
+
+    this.displayedColumns = this.loginData.subUserTypeId == 15 ? teacherKeys : headerMasterKeys;
+    let englishHeading = this.loginData.subUserTypeId == 15 ? this.teacherheadersEnglish : this.headMasterheadersEnglish;
+    let marathiHeading = this.loginData.subUserTypeId == 15 ? this.teacherheadersMarathi : this.headMasterheadersMarathi;
+    this.tableData = {
+      pageNumber: this.pageNumber,
+      img: '', blink: '', badge: '', isBlock: '', pagintion: true, defaultImg: "",
+      date: '',
+      displayedColumns: this.displayedColumns,
+      tableData: this.tableDataArray,
+      tableSize: this.tableDatasize,
+      tableHeaders: this.languageFlag == 'English' ? englishHeading : marathiHeading,
+      edit: true, delete: true,
+    };
+    this.highLightFlag ? this.tableData.highlightedrow = true : this.tableData.highlightedrow = false,
+      this.apiService.tableData.next(this.tableData);
+  }
+
+  childCompInfo(obj: any) {
+    switch (obj.label) {
+      case 'Pagination':
+        // this.pageNumber = obj.pageNumber;
+        this.getTableData();
+        break;
+        case 'View':
+          this.onClickStudentCount(obj);
+          break;
+    }
+  }
+
+  onClickStudentCount(data?: any){
+    let filterValue = this.teacherReportForm.value;
     let obj = {
-        StateId: schoolData?.stateId,
-        DistrictId: schoolData?.districtId,
-        TalukaId: schoolData?.talukaId,
-        CenterId: schoolData?.centerId,
-        VillageId: schoolData?.villageId,
-        SchoolId: schoolData?.id,
-        StandardId: filterValue?.standardId,
+        StateId: data?.stateId,
+        DistrictId: data?.districtId,
+        TalukaId: data?.talukaId,
+        CenterId: data?.centerId,
+        VillageId: data?.villageId,
+        SchoolId: filterValue?.schoolId,
+        StandardId: filterValue?.standardId ? filterValue?.standardId : 0,
         ExamTypeId: filterValue?.examTypeId,
         EducationYearId: filterValue?.educationYearId,
         GraphLevelId: 0,
-        graphName: 'Report',
-        TeacherId_OfficerId: officerId,  
+        graphName: 'ReportCard',
+        TeacherId_OfficerId: data?.id,  
         EvaluatorId: 0,           
-        IsInspection: true,
+        IsInspection: false,
     }
+    console.log("obj:", obj);
+    
     localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj));
     this.router.navigate(['/dashboard-student-data']);
   }
 
   //#region ----------------------------------------- clear filter and onChange dropdown methods start here ---------------------------------
   onClear() {
-    this.designationsArr = [];
     this.districtArr = [];
     this.talukaArr = [];
     this.centerArr = [];
     this.villageArr = [];
     this.schoolArr = [];
     this.standardArr = [];
-    this.getLevel();
-    this.getState(true);
     this.formField();
+    this.getState(true);
     this.getTableData();
   }
 
@@ -411,11 +430,9 @@ export class OfficerVisitReportComponent {
       this.f['schoolId'].setValue('');
       this.f['standardId'].setValue('');
       this.standardArr = [];
-    }else if(label == 'school'){
-      this.f['standardId'].setValue('');
     }else{
-      this.f['designationId'].setValue(0);
+      this.f['standardId'].setValue('');
     }
   }
-  //#endregion ----------------------------------------- clear filter and onChange dropdown methods end here ------------------------------- 
+  //#endregion ----------------------------------------- clear filter and onChange dropdown methods end here -------------------------------
 }

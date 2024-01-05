@@ -200,7 +200,9 @@
             <div class="col-sm-12">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.CenterWisePerformance' | translate}}</h6>
+                        <h6>{{'Labels.CenterWisePerformance' | translate}} {{talukaLabel ?  '-'+ '  ' : ''}}</h6>
+                        <h6 class="mb-0 fw-bold">{{talukaLabel ? webStorage.languageFlag == 'EN'? talukaLabel?.taluka:talukaLabel?.m_Taluka:''}}</h6>
+
                     </mat-card-header>
                     <mat-card-header class="card-header border-0 mb-0 pb-0">
                         <form class="w-100">
@@ -248,41 +250,53 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-            <div class="col-sm-12" *ngIf="schoolChartOptionFlag">
+            <!-- [class.d-none]="!schoolChartOptionFlag" -->
+            <div class="col-sm-12"  [hidden]="!schoolChartOptionFlag">
                 <mat-card class="plain-card w-100 h-100">
                     <mat-card-header class="card-header">
-                        <h6 class="mb-0 fw-bold">{{'Labels.SchoolwisePerformance' | translate}} - {{selectedCenter}}</h6>
+                        <h6>{{'Labels.SchoolwisePerformance' | translate}}-</h6>
+                        <h6 class="mb-0 fw-bold">{{selectedCenter}}</h6>
                     </mat-card-header>
                     
                     <mat-card-content class="card-body">
-                        <div *ngIf="schoolChartOptionFlag">
-                            <ng-container>
-                                        <apx-chart  id="Schoolchart"
+                        <div>
+                            <ng-container id="Schoolchart">
+                                        <apx-chart 
                                         [series]="schoolChartOption?.series"
                                         [chart]="schoolChartOption?.chart"
                                         [dataLabels]="schoolChartOption?.dataLabels"
                                         [plotOptions]="schoolChartOption?.plotOptions"
                                         [xaxis]="schoolChartOption?.xaxis"
+                                        [subtitle]="schoolChartOption?.subtitle"
                                         [yaxis]="schoolChartOption?.yaxis"
                                         [colors]="schoolChartOption?.colors"
                                         [tooltip]="schoolChartOption?.tooltip"
                                       ></apx-chart>
                             </ng-container>
+                            <div *ngIf="schoolNamelabelArr" ></div>
+                            <span class="small fw-bold" *ngFor="let data of schoolNamelabelArr">
+                                {{ getKey(data) +' '}}:{{ data[getKey(data)] }}
+                            </span>
+
                         </div>
-                        <ng-container *ngIf="!schoolChartOption">
+                        <!-- <ng-container *ngIf="!schoolChartOption">
                             <div class="alert alert-danger text-center p-2" role="alert">
                                 {{'Labels.dataNotFound' | translate}}
                             </div>
-                        </ng-container>
+                        </ng-container> -->
                     </mat-card-content>
                 </mat-card>
             </div>
 
-            <div class="col-sm-12" >
-                <mat-card class="plain-card" [hidden]="!isTeacherTable">
+            <div class="col-sm-12" [hidden]="!isTeacherData" >
+                <mat-card class="plain-card">
+                    <mat-card-header class="card-header">
+                        <h6>{{'Labels.teacherList' | translate }} {{selectedSchool? '-':''}} </h6>
+                        <h6 class="mb-0 fw-bold"> {{selectedSchool}}</h6>
+
+                    </mat-card-header>
                     <mat-card-content class="card-body">
                         <div class="table-responsive">
-                            <h6 class="mb-0 fw-bold">{{'Labels.teacherList' | translate}} - {{selectedSchool}}</h6>
                             <app-table></app-table>
                         </div>
                     </mat-card-content>

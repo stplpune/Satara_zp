@@ -141,23 +141,23 @@ body {
 
 .dashboard-table th,
 .dashboard-table .mat-mdc-header-cell {
-  font-size: 0.85rem !important;
+  font-size: 0.85rem;
   font-weight: 600;
   font-family: 'Noto Sans Devanagari', sans-serif !important;
   vertical-align: middle;
   background-color: var(--main-light-color) !important;
   padding: 0 8px !important;
-  height: 42px !important;
+  height: 42px;
 }
 
 .dashboard-table td,
 .dashboard-table .mat-mdc-cell {
-  font-size: 0.85rem !important;
+  font-size: 0.85rem;
   font-family: 'Noto Sans Devanagari', sans-serif !important;
   vertical-align: middle !important;
   border-bottom-width: 0.01px !important;
   padding: 0 8px !important;
-  height: 42px !important;
+  height: 42px;
 }
 
 .dashboard-table .mat-mdc-icon-button.mat-mdc-button-base,
@@ -172,7 +172,7 @@ body {
 
 .dashboard-table .mat-mdc-icon-button.mat-mdc-button-base:disabled,
 .inner-table .mat-mdc-icon-button.mat-mdc-button-base:disabled {
-   opacity: 0.5 !important;
+  opacity: 0.5 !important;
 }
 
 .dashboard-table button mat-icon,
@@ -209,23 +209,30 @@ body {
 
 // inner-table-css 
 .inner-table {
-  border: solid 2px var(--main-light-color);
-  font-size: 0.85rem;
+  border: solid 1px var(--main-light-color) !important;
+  font-size: 0.80rem !important;
 }
 
-.inner-table thead th {
-  background-color: var(--main-light-color);
+.inner-table thead th,
+.inner-table .mat-mdc-header-cell {
+  background-color: var(--main-light-color) !important;
+  border: solid 1px var(--main-light-color) !important;
   width: 300px !important;
+  height: 30px !important;
+  font-weight: 600;
 }
 
 .inner-table thead th,
 .inner-table tbody td {
   vertical-align: top;
+  border-bottom-width: 0px !important;
+  font-size: 0.80rem !important;
+  border: solid 1px var(--main-light-color) !important;
 }
 
-.inner-table tbody td {
-  text-align: center;
-}
+// .inner-table tbody td {
+//   text-align: center;
+// }
 
 .inner-table thead tr th:first-child,
 .inner-table tbody tr td:first-child {
@@ -492,7 +499,7 @@ body {
 }
 
 #mapsvg,
-#mapsvg1{
+#mapsvg1 {
   width: 100%;
   padding-bottom: 20.6rem !important;
   margin-top: -5rem !important;
@@ -763,14 +770,13 @@ textarea {
   margin-top: 10px !important;
 }
 
-.video-display  video{
-    height: 410px !important;
-    width: 100% !important;
-    border: none !important;
+.video-display video {
+  height: 410px !important;
+  width: 100% !important;
+  border: none !important;
 }
 
 .talActive1 {
   pointer-events: auto;
   fill: rgb(13, 68, 135) !important;
 }
-

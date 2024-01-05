@@ -312,7 +312,7 @@ export class DownloadPdfExcelService {
     // 1:keyHeader,2:values,3:Data-heading time date ,4:column size width
     // Create workbook and worksheet
     const workbook = new Workbook();
-    const worksheet = workbook.addWorksheet('Sharing Data');
+    const worksheet = workbook.addWorksheet(objData.topHedingName);
 
     worksheet.addRow([]);
     worksheet.getCell('C4').value = objData.topHedingName
@@ -369,6 +369,7 @@ export class DownloadPdfExcelService {
     });
   }
 
+  // Officer Visit Report
   downloadExcelTable(keyData:any, apiKeys:any, tableData:any, subKeyData:any, subApiKeys:any, pageName?: any, headerSize?: any){
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(pageName);
@@ -399,7 +400,7 @@ export class DownloadPdfExcelService {
       if(element.officerVisitSchools?.length > 0){
         const headerRow = worksheet.addRow(subKeyData); 
         headerRow.eachCell((cell: any) => { 
-          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C0C0C0' }, bgColor: { argb: 'C0C0C0' } };
+          cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E8E8E8' }, bgColor: { argb: 'E8E8E8' } };
           cell.border = { top: { style: 'sol' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }, color: {argb:'000000'} };
           cell.font = { bold: true, color: {argb: '000000'}},
           cell.alignment = {horizontal: 'center'}

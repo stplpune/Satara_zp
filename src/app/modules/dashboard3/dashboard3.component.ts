@@ -272,7 +272,7 @@ export class Dashboard3Component {
 
       colors: ['#b51d31', '#E98754', '#50c77b'],
       subtitle: {
-        text: "(Click on bar to see details)",
+        text: this.selectedLang == 'English' ? "(Click on bar to see details)" : 'तपशील पाहण्यासाठी बारवर क्लिक करा',
         offsetY: 5
       },
       xaxis: {
@@ -364,7 +364,7 @@ export class Dashboard3Component {
           });
           const schoolsubArray = Object.values(subjectsObj);
           console.log("schoolsubArray", schoolsubArray);
-          const shortSchoolNameArray = longSchoolNameArr.map((_name, index) => `s${index + 1}`); // create array of school name s1,s2         
+          const shortSchoolNameArray = longSchoolNameArr.map((_name, index) => `S${index + 1}`); // create array of school name s1,s2         
           schoolsubArray.length > 0 ? this.schoolwiseBarChart(schoolsubArray, shortSchoolNameArray ,longSchoolNameArr) : '';
 
         }
@@ -386,7 +386,6 @@ export class Dashboard3Component {
 
 // create barchart For schoolwise Assement 
   schoolwiseBarChart(_schholSubArr?: any, _SchoolNameArray?: any,schoolArr?: any) {
-    this.spinner.hide();
     if (this.schoolChartOption) {
       this.schoolChartOption = ''
     }
@@ -430,6 +429,10 @@ export class Dashboard3Component {
           }
         }
       },
+      subtitle: {
+        text: this.selectedLang == 'English' ? "(Click on bar to see details)" : 'तपशील पाहण्यासाठी बारवर क्लिक करा',
+        offsetY: 1
+      },
       dataLabels: { //OnYBar Show Count
         enabled: true,
         formatter: function (val: any) {
@@ -449,7 +452,7 @@ export class Dashboard3Component {
           show: true
         },
         categories: _SchoolNameArray,
-        parameters: this.selectedLang == 'English' ? ['Subject', 'Student Assessed Count', 'Total Student'] : ['विषय', 'मूल्यमापन केलेली संख्या', 'एकूण विद्यार्थी'],
+        parameters: this.selectedLang == 'English' ? ['Subject', 'Student Assessed Count', 'Total Student'] : ['विषय',  'मूल्यमापन केलेली संख्या', 'एकूण विद्यार्थी'],
       },
       yaxis: {
         min: 0,
@@ -461,9 +464,13 @@ export class Dashboard3Component {
       },
       tooltip: {
         custom: function ({ seriesIndex, dataPointIndex, w }: any) {
+          console.log("dffd", w);
+          
+
           return (
             '<div class="arrow_box" style="padding:10px;">' +
             "<div>" + w.config.xaxis.parameters[0] + " : <b> " + w.globals.initialSeries[seriesIndex].name + '</b>' + "</div>" +
+            // "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].name + '</b>' + "</div>" +
             "<div>" + w.config.xaxis.parameters[1] + " : <b> " + w.globals.initialSeries[seriesIndex].data[dataPointIndex] + '</b>' + "</div>" +
             "<div>" + w.config.xaxis.parameters[2] + " : <b> " + w.globals.initialSeries[seriesIndex].totalStudent + '</b>' + "</div>" +
             "</div>"
@@ -479,7 +486,7 @@ export class Dashboard3Component {
     //for show schoolName s1:shcool1
     this.schoolNamelabelArr = _SchoolNameArray.map((value, index)=>({[value]:schoolArr[index]}));
     this.getKey(this.schoolNamelabelArr); 
-
+    this.spinner.hide();
   }
 
   // End barchart For schoolwise Assement 
@@ -550,7 +557,7 @@ export class Dashboard3Component {
   disEvent() {
     setTimeout(() => {
       document.dispatchEvent(new KeyboardEvent("keydown"));
-    },500);
+    },1000);
   }
 
 

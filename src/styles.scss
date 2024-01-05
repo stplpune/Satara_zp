@@ -209,13 +209,14 @@ body {
 
 // inner-table-css 
 .inner-table {
-  border: solid 2px var(--main-light-color);
+  border: solid 1px var(--main-light-color) !important;
   font-size: 0.80rem !important;
 }
 
 .inner-table thead th,
 .inner-table .mat-mdc-header-cell {
   background-color: var(--main-light-color) !important;
+  border: solid 1px var(--main-light-color) !important;
   width: 300px !important;
   height: 30px !important;
   font-weight: 600;
@@ -226,6 +227,7 @@ body {
   vertical-align: top;
   border-bottom-width: 0px !important;
   font-size: 0.80rem !important;
+  border: solid 1px var(--main-light-color) !important;
 }
 
 // .inner-table tbody td {

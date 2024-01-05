@@ -106,7 +106,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <!-- <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId"
@@ -124,7 +124,7 @@
                                 ?stan.standard:stan.m_Standard}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
                 <!-- <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
@@ -156,7 +156,7 @@
                 </div>
 
                 <div class="col-sm">
-                    <div class="d-flex gap-1 justify-content-end">
+                    <div class="d-flex gap-1 justify-content-start">
                         <button mat-flat-button class="btn-main" (click)="getTableData('filter')">
                             {{'Labels.filter' | translate}}
                         </button>
@@ -172,7 +172,7 @@
     <mat-card-content>
         <div class="row">
             <div class="col-sm-12">
-                <div >
+                <div class="table-responsive">
                     <table mat-table [dataSource]="tableDataArray" multiTemplateDataRows class="dashboard-table">
                         <ng-container matColumnDef="srNo">
                             <th mat-header-cell *matHeaderCellDef>{{languageFlag =='English' ? 'Sr.No.' :
@@ -284,9 +284,9 @@
                     [pageSizeOptions]="[10]" aria-label="Select page" class="m-0">
                 </mat-paginator>
                 <div *ngIf="tableDataArray.length == 0">
-                    <div class="alert alert-danger text-center py-2 ">
-                        <span *ngIf="languageFlag =='English'">Data not available</span>
-                        <span *ngIf="languageFlag =='Marathi'">डेटा उपलब्ध नाही</span>
+                    <div class="alert alert-danger text-center me-2 mt-1 py-2">
+                        <span class="small" *ngIf="languageFlag =='English'">Data not available</span>
+                        <span class="small" *ngIf="languageFlag =='Marathi'">डेटा उपलब्ध नाही</span>
                     </div>
                 </div>
             </div>

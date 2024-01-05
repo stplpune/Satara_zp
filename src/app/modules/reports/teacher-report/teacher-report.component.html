@@ -10,10 +10,20 @@
     </ol>
 </nav>
 <mat-card class="plain-card">
+    <mat-card-header class="card-header border-bottom-0 pb-0">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <p class="mb-0 fw-bold text-main">{{'Labels.teacherReport'| translate }}</p>
+            <button mat-flat-button class="bg-success btn-icon text-white ms-2"
+                matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below" matTooltipClass="tooltip"
+                (click)="getTableData('excel')">
+                <mat-icon class="material-symbols-outlined">table</mat-icon>
+            </button>
+        </div>
+    </mat-card-header>
     <mat-card-header class="card-header border-bottom-0">
         <form [formGroup]="teacherReportForm">
-            <div class="row">
-                <div class="col-sm">
+            <div class="row gx-2">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.academicYear'| translate}}</mat-label>
                         <mat-select formControlName="educationYearId">
@@ -23,7 +33,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.state'| translate}}</mat-label>
                         <mat-select formControlName="stateId"
@@ -34,7 +44,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.district'| translate}}</mat-label>
                         <mat-select formControlName="districtId"
@@ -45,7 +55,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.taluka'| translate}}</mat-label>
                         <mat-select formControlName="talukaId"
@@ -55,7 +65,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.kendra'| translate}}</mat-label>
                         <mat-select formControlName="centerId"
@@ -65,7 +75,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.village'| translate}}</mat-label>
                         <mat-select formControlName="villageId"
@@ -76,7 +86,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-3">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId"
@@ -86,7 +96,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-1">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.std'| translate}}</mat-label>
                         <mat-select formControlName="standardId">
@@ -95,7 +105,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.ExamType'| translate}}</mat-label>
                         <mat-select formControlName="examTypeId">
@@ -105,7 +115,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-auto">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label> {{'Labels.YearFromTo'| translate}}</mat-label>
                         <mat-date-range-input [rangePicker]="campaignOnePicker" [max]="maxDate">
@@ -116,7 +126,7 @@
                         <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.teacherName'| translate}}</mat-label>
                         <input matInput formControlName="textSearch" (keypress)="validation.noFirstSpaceAllow($event)"
@@ -124,23 +134,20 @@
                     </mat-form-field>
                 </div>
 
-                <div class="col-sm-1 mb-2 mb-lg-0 text-end">
-                    <div class="d-flex gap-1">
-                        <button mat-flat-button class="btn-main" (click)="getTableData('filter')">{{'Labels.filter' |
-                            translate}}</button>
-                        <button mat-flat-button class="btn-second ms-2" (click)="onClear()">{{'Labels.clear'
-                            |translate}}</button>
-                        <button mat-flat-button class="bg-success btn-icon text-white ms-2"
-                            matTooltip="{{'Labels.Downloadexcel' | translate}}" matTooltipPosition="below"
-                            matTooltipClass="tooltip" (click)="getTableData('excel')">
-                            <mat-icon class="material-symbols-outlined">table</mat-icon>
+                <div class="col-sm">
+                    <div class="d-flex justify-content-end gap-1">
+                        <button mat-flat-button class="btn-main" (click)="getTableData('filter')">
+                            {{'Labels.filter' | translate}}
+                        </button>
+                        <button mat-flat-button class="btn-second ms-2" (click)="onClear()">
+                            {{'Labels.clear' | translate}}
                         </button>
                     </div>
                 </div>
             </div>
         </form>
     </mat-card-header>
-    <mat-card-content class="card-body pt-0 mt-3">
+    <mat-card-content class="card-body">
         <app-table (recObjToChild)="childCompInfo($event)"></app-table>
     </mat-card-content>
 </mat-card>

@@ -1,3 +1,12 @@
-tr.example-detail-row {
+.dashboard-table.mat-mdc-table .mat-mdc-cell,
+.dashboard-table.mat-mdc-table .mdc-data-table__row{
   height: 0 !important;
+}
+
+.dashboard-table .example-element-row td {
+  border-bottom-width: 0 !important;
+}
+.inner-table.mdc-data-table__table .mdc-data-table__header-row,
+.inner-table.mdc-data-table__table .mdc-data-table__row  {
+  height: 30px !important;
 }

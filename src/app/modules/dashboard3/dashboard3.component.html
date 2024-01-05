@@ -223,9 +223,9 @@
                     </mat-card-header>
                     <!-- centerwise graph start from here  -->
                     <mat-card-content class="card-body pt-0">
+                        <div id="centerChart">
                         <div *ngIf="centerChartOption">
-                            <ng-container>
-                                <apx-chart
+                                <!-- <apx-chart
                                 [series]="centerChartOption?.series"
                                 [chart]="centerChartOption?.chart"
                                 [dataLabels]="centerChartOption?.dataLabels"
@@ -237,8 +237,8 @@
                                 [states]="centerChartOption?.states"
                                 [title]="centerChartOption?.title"
                                 [tooltip]="centerChartOption?.tooltip"
-                              ></apx-chart>
-                            </ng-container>
+                              ></apx-chart> -->
+                            </div>
                         </div>
 
                         <ng-container *ngIf="!centerChartOption">
@@ -260,8 +260,8 @@
                     
                     <mat-card-content class="card-body">
                         <div>
-                            <ng-container id="Schoolchart">
-                                        <apx-chart 
+                            <div id="Schoolchart">
+                                        <!-- <apx-chart 
                                         [series]="schoolChartOption?.series"
                                         [chart]="schoolChartOption?.chart"
                                         [dataLabels]="schoolChartOption?.dataLabels"
@@ -271,8 +271,8 @@
                                         [yaxis]="schoolChartOption?.yaxis"
                                         [colors]="schoolChartOption?.colors"
                                         [tooltip]="schoolChartOption?.tooltip"
-                                      ></apx-chart>
-                            </ng-container>
+                                      ></apx-chart> -->
+                                        </div>
                             <div *ngIf="schoolNamelabelArr" ></div>
                             <span class="small fw-bold" *ngFor="let data of schoolNamelabelArr">
                                 {{ getKey(data) +' '}}:{{ data[getKey(data)] }}
@@ -287,20 +287,21 @@
                     </mat-card-content>
                 </mat-card>
             </div>
-
-            <div class="col-sm-12" [hidden]="!isTeacherData" >
-                <mat-card class="plain-card">
-                    <mat-card-header class="card-header">
-                        <h6>{{'Labels.teacherList' | translate }} {{selectedSchool? '-':''}} </h6>
-                        <h6 class="mb-0 fw-bold"> {{selectedSchool}}</h6>
-
-                    </mat-card-header>
-                    <mat-card-content class="card-body">
-                        <div class="table-responsive">
-                            <app-table></app-table>
-                        </div>
-                    </mat-card-content>
-                </mat-card>
+            <div class="col-sm-12" [hidden]="!isTeacherData">
+                <div id="teacherChart">
+                    <mat-card class="plain-card">
+                        <mat-card-header class="card-header">
+                            <h6>{{'Labels.teacherList' | translate }} {{selectedSchool? '-':''}} </h6>
+                            <h6 class="mb-0 fw-bold"> {{selectedSchool}}</h6>
+    
+                        </mat-card-header>
+                        <mat-card-content class="card-body" >
+                            <div class="table-responsive">
+                                <app-table></app-table>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
             </div>
         </div>
     </mat-drawer-content>

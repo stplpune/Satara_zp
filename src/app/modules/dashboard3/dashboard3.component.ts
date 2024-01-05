@@ -44,8 +44,9 @@ export class Dashboard3Component {
   chartBind:any;
   schoolChartOptionFlag: boolean = false;
   isTeacherData: boolean = false;
-
-
+  chartBindcenterDiv:any;
+  centerChartDiv:any;
+  innerHeight: any;
   get f() { return this.mainFilterForm.controls }
 
   constructor(private masterService: MasterService,
@@ -57,7 +58,9 @@ export class Dashboard3Component {
     ,) { }
 
   ngOnInit() {
-
+    this.innerHeight = window.screen.height; //window.screen.height  window.innerHeight
+    console.log("this.innerWidth", this.innerHeight);
+    
     this.mainFillterDefaultFormat();
     this.allmainDropdownApi();
     this.webStorage.langNameOnChange.subscribe((lang) => {
@@ -161,6 +164,11 @@ export class Dashboard3Component {
   chngeLevel() {
     this.schoolChartOptionFlag = false;
     this.isTeacherData = false;
+    if (this.centerChartDiv?.hasChildNodes()) {
+      this.centerChartDiv.innerHTML = '';
+    } else if (this.schoolchartDiv?.hasChildNodes()) {
+      this.schoolchartDiv.innerHTML = '';
+    }
     this.getCenterwiseBarDetails();
   }
   // centerwise assesment API start here 
@@ -227,9 +235,6 @@ export class Dashboard3Component {
         },
         events: {
           click: (_config: any, _event: any, chartContext: any) => {
-            console.log("centerclick");
-            
-            this.disEvent();
             this.schoolChartOptionFlag = true;
             this.isTeacherData = false;
             // let selCenter:any  =  document.getElementById('selectedCenter');
@@ -301,8 +306,11 @@ export class Dashboard3Component {
           );
         },
       }
-
     }
+ 
+    this.centerChartDiv = document.querySelector('#centerChart');
+    this.chartBindcenterDiv = new ApexCharts(this.centerChartDiv,  this.centerChartOption);
+    this.chartBindcenterDiv.render();
   }
 
       // Ends centerwise graph Apexcharts 
@@ -403,15 +411,11 @@ export class Dashboard3Component {
             //   this.schoolchartDiv.innerHTML = '';
             //   // selCenter.innerHTML='';
             // }
-            console.log("this.schoolchartDiv", this.schoolchartDiv);
-            
             if (chartContext?.seriesIndex >= 0) {
               console.log("onclick school", chartContext, _config);
               let schoolId = chartContext?.config.series[chartContext?.seriesIndex].school[chartContext?.dataPointIndex];
               let school = chartContext?.config.xaxis.categories[chartContext?.dataPointIndex]              
               this.selectedSchool = this.schoolNamelabelArr?.[chartContext?.dataPointIndex][school]
-              console.log("this.selectedSchool", this.selectedSchool);
-              
               // let schoolId = chartContext?.config.series[chartContext?.seriesIndex].schoolId;
               this.getSchoolWiseTeachdata(schoolId);
             }
@@ -479,14 +483,16 @@ export class Dashboard3Component {
       }
 
     }
-    this.schoolchartDiv = document.querySelector('#Schoolchart');
+    this.schoolchartDiv= document.querySelector('#Schoolchart');
     this.chartBind = new ApexCharts(this.schoolchartDiv, this.schoolChartOption);
     this.chartBind.render();
 
     //for show schoolName s1:shcool1
     this.schoolNamelabelArr = _SchoolNameArray.map((value, index)=>({[value]:schoolArr[index]}));
     this.getKey(this.schoolNamelabelArr); 
+    this.scrollto(this.schoolchartDiv);
     this.spinner.hide();
+  
   }
 
   // End barchart For schoolwise Assement 
@@ -537,10 +543,11 @@ export class Dashboard3Component {
       tableHeaders: this.selectedLang == 'English' ? displayedheaders : marathiDisplayedheaders
     };
     this.apiService.tableData.next(tableData);
-    flag == 'data' ? this.isTeacherData = true : '';
-    this.disEvent();
-
+    let tablEle:any= document.querySelector('#teacherChart');
+    flag == 'data' ? (this.isTeacherData = true, this.scrollto(tablEle)) : '';
     this.spinner.hide();
+
+
 
   }
 
@@ -554,14 +561,7 @@ export class Dashboard3Component {
     return Object.keys(obj)[0];
   }
 
-  disEvent() {
-    setTimeout(() => {
-      document.dispatchEvent(new KeyboardEvent("keydown"));
-    },1000);
+  scrollto(el: HTMLElement){
+    el.scrollIntoView()
   }
-
-
-
-
-
 }

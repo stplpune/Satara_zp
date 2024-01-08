@@ -223,7 +223,9 @@ export class DashboardStudentDetailsComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           if (res.statusCode == 200 && res.responseData.responseData1.length) {
             this.ngxSpinner.hide();
-            this.tableDataArray = res.responseData.responseData1;         
+            this.tableDataArray = res.responseData.responseData1;   
+            console.log("student details tableArray: ", this.tableDataArray);
+                  
             const uniqueStudentList = [...new Set(this.tableDataArray.map(item => item.studentId))]; // [ 'A', 'B']    
             this.uniqueStudentCount =(uniqueStudentList?.length);    //  for Unique count of Schooldata       
             this.totalCount = res.responseData?.responseData2?.pageCount || 0;

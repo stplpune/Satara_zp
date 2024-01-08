@@ -57,6 +57,8 @@ export class Dashboard2DashboardDetailComponent {
   ExamTypeArray= new Array();
   selectedLevel: any;
   isStudentCardShow: boolean = false;
+  selectedObj:any;
+  data: any;
   get mf() { return this.mainFilterForm.controls }
   @ViewChild("questionwiseChart") schoolwiseChart!: ChartComponent;
   public questionwiseChartOptions!: Partial<ChartOptions> | any;
@@ -377,6 +379,8 @@ export class Dashboard2DashboardDetailComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.tableDataArray = res.responseData?.responseData1;
+          console.log("tableDataArray", this.tableDataArray);
+          
           this.viewDetailsObj = res.responseData?.responseData1[0];
           this.ngxSpinner.hide();
           this.GetAllStandard();
@@ -392,9 +396,9 @@ export class Dashboard2DashboardDetailComponent {
           this.ngxSpinner.hide();
           this.tableDataArray = [];
           this.tableDatasize = 0;
-          this.viewDetailsObj = null
-          this.StudentData = null
-
+          this.viewDetailsObj = null;
+          this.StudentData = null;
+          // this.data = '';
         }
         this.setTableData('data');
       },
@@ -405,6 +409,7 @@ export class Dashboard2DashboardDetailComponent {
 
 
   setTableData(flag?: string) {
+    this.setViewData();
    // this.highLightFlag = true;
     let displayedColumns = ['srNo', this.selectedLang == 'English' ? 'fullName' :'m_FullName', this.selectedLang == 'English' ? 'standard' : 'm_Standard', this.selectedLang == 'English' ? 'gender' : 'm_Gender']
   //  let marathiDisplayedColumns = ['docPath', 'srNo', 'm_FullName', 'm_Standard', 'mobileNo', 'm_Gender'];
@@ -428,6 +433,22 @@ export class Dashboard2DashboardDetailComponent {
       // flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
       flag == 'data' ? this.isStudentCardShow = true : this.isStudentCardShow = false ;
       flag == 'data' ? this.isStudentCardShow = true : '' ;      
+  }
+
+  setViewData() {
+    let obj = this.selectedObj ? this.selectedObj : this.tableDataArray[0];
+    if (obj) {
+      this.data = {
+        headerImage: obj?.profilePhoto,
+        header: this.selectedLang == 'Marathi' ? obj.m_FullName : obj.fullName,
+        subheader: this.selectedLang == 'Marathi' ? obj.m_Gender : obj.gender,
+        labelHeader: this.selectedLang == 'Marathi' ? ['पालकाचे नाव', 'पालक मोबाईल क्र.', 'सरल क्र.', 'इयत्ता', 'केंद्र','शाळेचे नाव'] : ['Guardian Name', 'Parent Mobile No.', 'Saral No.', 'Standard', 'Center', 'School Name'],
+        labelKey: this.selectedLang == 'Marathi' ? ['m_GaurdianName', 'mobileNo', 'saralId', 'standard','m_Center', 'm_SchoolName'] : ['gaurdianName', 'mobileNo', 'saralId',  'standard', 'center','schoolName'],
+        Obj: obj,
+        chart: false
+      }
+      this.webStorage.studentDetails = this.data;
+    }
   }
 
 
@@ -528,6 +549,7 @@ export class Dashboard2DashboardDetailComponent {
             
       };      
       this.chartArray.push(this.questionwiseChartOptions);
+      this.webStorage.piDetails = this.chartArray;
     }    
   
   }

@@ -14,6 +14,7 @@ export class WebStorageService {
   studentDetailsforChart = new Array();
   classWiseDataStudentAssList: any;
   piDetails: any;
+  questionArray: any;
   studentDetails: any; //
   numFormat: any;
   baseWiseDataStudentAssList: any;

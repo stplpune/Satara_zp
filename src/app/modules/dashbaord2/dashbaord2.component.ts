@@ -798,7 +798,9 @@ export class Dashbaord2Component {
             console.log("selectedF", selectedFilter);
             
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
+            if(this.f['schoolId'].value > 0){                
               this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              }
           }
         }
         }
@@ -933,7 +935,10 @@ export class Dashbaord2Component {
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Standard');
 
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data']);     //{ queryParams: obj }       
+            if(this.f['schoolId'].value > 0){                
+              this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              }
+            // this.router.navigate(['/dashboard-student-data']);     //{ queryParams: obj }       
           }
         }
         }
@@ -1042,7 +1047,9 @@ export class Dashbaord2Component {
             selectedFilter.subjectId = this.subjectResp.find(res => lable == (this.selectedLang == 'English' ? res.subject : res.m_Subject)).id;
             let obj = this.returnObjectOfChart(mainFilter, selectedFilter, 'Subject');
             localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj))
-            this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+            if(this.f['schoolId'].value > 0){                
+              this.router.navigate(['/dashboard-student-data']); //{ queryParams: obj }
+              }
           }
         }
         }

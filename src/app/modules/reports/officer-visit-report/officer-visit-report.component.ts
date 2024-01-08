@@ -335,6 +335,9 @@ export class OfficerVisitReportComponent {
 
   onClickSchoolList(officerId?: number, schoolData?: any) {
     let filterValue = this.officerVisitReportForm.value;
+    let fromDate = this.datepipe.transform(filterValue?.fromDate || new Date(), 'yyyy-MM-dd');
+    let toDate = this.datepipe.transform(filterValue?.toDate || new Date(), 'yyyy-MM-dd');
+
     let obj = {
         StateId: schoolData?.stateId,
         DistrictId: schoolData?.districtId,
@@ -346,9 +349,11 @@ export class OfficerVisitReportComponent {
         ExamTypeId: filterValue?.examTypeId,
         EducationYearId: filterValue?.educationYearId,
         GraphLevelId: 0,
-        graphName: 'Report',
+        graphName: 'Officer',
         TeacherId_OfficerId: officerId,  
-        EvaluatorId: 0,           
+        EvaluatorId: 0,     
+        FromDate:   fromDate,
+        ToDate: toDate,         
         IsInspection: true,
     }
     localStorage.setItem('selectedChartObjDashboard2', JSON.stringify(obj));

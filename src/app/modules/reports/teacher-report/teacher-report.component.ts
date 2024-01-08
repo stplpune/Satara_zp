@@ -354,6 +354,9 @@ export class TeacherReportComponent {
 
   onClickStudentCount(data?: any){
     let filterValue = this.teacherReportForm.value;
+    let fromDate = this.datepipe.transform(filterValue?.fromDate || new Date(), 'yyyy-MM-dd');
+    let toDate = this.datepipe.transform(filterValue?.toDate || new Date(), 'yyyy-MM-dd');
+
     let obj = {
         StateId: data?.stateId,
         DistrictId: data?.districtId,
@@ -365,9 +368,11 @@ export class TeacherReportComponent {
         ExamTypeId: filterValue?.examTypeId,
         EducationYearId: filterValue?.educationYearId,
         GraphLevelId: 0,
-        graphName: 'ReportCard',
+        graphName: 'Teacher',
         TeacherId_OfficerId: data?.id,  
-        EvaluatorId: 0,           
+        EvaluatorId: 0,
+        FromDate:   fromDate,
+        ToDate: toDate,   
         IsInspection: false,
     }
     console.log("obj:", obj);

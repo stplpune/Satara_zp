@@ -6,6 +6,7 @@ import { PrintPiDetailsComponent } from './print-pi-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
     MatCardModule,
     MatButtonModule,
     TranslateModule,
+    NgApexchartsModule
   ]
 })
 export class PrintPiDetailsModule { }

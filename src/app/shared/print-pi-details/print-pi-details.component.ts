@@ -10,30 +10,27 @@ export class PrintPiDetailsComponent {
   dashboardObj: any;
   studentDetailsData: any;
   barChartDetails: any;
-  languageFlag!:string;
-  
+  questionArr: any;
+  languageFlag!: string;
   @ViewChild('myDiv') myDiv!: ElementRef;
 
-  constructor(private webStorage: WebStorageService){}
+  constructor(private webStorage: WebStorageService) { }
 
-  ngOnInit(){
-
+  ngOnInit() {
+    this.languageFlag = this.webStorage.getLangauge();
     this.dashboardObj = JSON.parse(localStorage.getItem('selectedBarchartObjData') || '');
-    console.log("dashboardObj pi details", this.dashboardObj);
-    this.languageFlag=this.webStorage.getLangauge();
-
     this.studentDetailsData = this.webStorage.studentDetails;
-    console.log("studentDetailsData", this.studentDetailsData);
-
     this.barChartDetails = this.webStorage.piDetails;
-    console.log("barChartDetails", this.barChartDetails);
-
+    this.questionArr = this.webStorage.questionArray;
+    this.barChartDetails.map((x: any) => {
+      x.grid = { show: true }
+    });
   }
 
-  onPrint(){
-    let details=this.myDiv.nativeElement.innerHTML;
-    var printHtml:any = window.open('', 'PRINT' );
-    
+  onPrint() {
+    let details = this.myDiv.nativeElement.innerHTML;
+    var printHtml: any = window.open('', 'PRINT');
+
     printHtml.document.write('<html><head>');
     printHtml.document.write(details);
     printHtml.document.write('</body></html>');
@@ -41,5 +38,4 @@ export class PrintPiDetailsComponent {
     printHtml.print();
     printHtml.close();
   }
-
 }

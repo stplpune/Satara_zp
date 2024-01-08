@@ -544,11 +544,8 @@ export class Dashboard3Component {
     };
     this.apiService.tableData.next(tableData);
     let tablEle:any= document.querySelector('#teacherChart');
-    flag == 'data' ? (this.isTeacherData = true, this.scrollto(tablEle)) : '';
+    flag == 'data' ? (this.isTeacherData = true, setTimeout(() => {this.scrollto(tablEle)}, 1000)) : '';
     this.spinner.hide();
-
-
-
   }
 
   resetMainFilter() {
@@ -562,6 +559,8 @@ export class Dashboard3Component {
   }
 
   scrollto(el: HTMLElement){
-    el.scrollIntoView()
+    el.scrollIntoView();
+    this.spinner.hide();
+
   }
 }

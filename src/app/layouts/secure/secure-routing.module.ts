@@ -12,6 +12,7 @@ import { Dashboard2DashboardDetailComponent } from 'src/app/modules/dashbaord2/d
 const routes: Routes = [
   { path: '', component: SecureComponent },
   { path: 'print-student-details', loadChildren: () => import('../../shared/printStudentDetails/printStudentDetails.module').then(m => m.PrintStudentDetailsModule)},
+  { path: 'print-pi-details', loadChildren: () => import('../../shared/print-pi-details/print-pi-details.module').then(m => m.PrintPiDetailsModule) },
   { path: 'dashboard', loadChildren: () => import('../../modules/dashboard/dashboard.module').then(m => m.DashboardModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Dashboard', m_title: 'डॅशबोर्ड', active: true }] } },
   { path: 'designation-registration', loadChildren: () => import('../../modules/masters/designation-master/designation-master.module').then(m => m.DesignationMasterModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Designation Registration', m_title: 'पदनाम नोंदणी', active: true }] } },
   { path: 'other-registration', loadChildren: () => import('../../modules/masters/agency-registration/agency-registration.module').then(m => m.AgencyRegistrationModule), canActivate: [ExpenseGuard], data: { breadcrumb: [{ title: 'Other Registration', m_title: 'इतर नोंदणी ', active: true }] } },

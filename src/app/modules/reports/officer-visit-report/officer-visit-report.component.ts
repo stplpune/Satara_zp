@@ -87,7 +87,7 @@ export class OfficerVisitReportComponent {
       schoolId: [this.loginData ? this.loginData?.schoolId : ''],
       standardId: [''],
       examTypeId: [''],
-      educationYearId: [this.loginData ? this.loginData?.educationYearId : ''],
+      educationYearId: [this.loginData ? this.loginData.educationYearId : ''],
       fromDate: [''],
       toDate: [''],
       textSearch: ['']
@@ -278,7 +278,7 @@ export class OfficerVisitReportComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.academicYearArr.push({ "id": 0, "eductionYear": "All", "eductionYear_M": "सर्व" }, ...res.responseData);
-          this.f['educationYearId'].setValue(0);
+          this.loginData ? (this.f['educationYearId'].setValue(this.loginData?.educationYearId)) : this.f['educationYearId'].setValue(0);
         }
       }
     })

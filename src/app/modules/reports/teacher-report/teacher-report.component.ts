@@ -78,8 +78,8 @@ export class TeacherReportComponent {
       centerId: [this.loginData ? this.loginData?.centerId : ''],
       villageId: [this.loginData ? this.loginData?.villageId : ''],
       schoolId: [this.loginData ? this.loginData?.schoolId : ''],
-      standardId: [''],
-      examTypeId: [''],
+      standardId: [0],
+      examTypeId: [0],
       educationYearId: [this.loginData ? this.loginData?.educationYearId : ''],
       fromDate: [''],
       toDate: [''],
@@ -188,7 +188,7 @@ export class TeacherReportComponent {
         next: (res: any) => {
           if (res.statusCode == "200") {
             this.schoolArr.push({ "id": 0, "schoolName": "All", "m_SchoolName": "सर्व" }, ...res.responseData);
-            (this.loginData && flag == true) ? (this.f['schoolId'].setValue(this.loginData?.schoolId), this.getStandard()) : this.f['schoolId'].setValue(0);
+            (this.loginData && flag == true) ? (this.f['schoolId'].setValue(this.loginData?.schoolId)) : this.f['schoolId'].setValue(0);    //, this.getStandard()
           } else {
             this.schoolArr = [];
           }
@@ -199,24 +199,24 @@ export class TeacherReportComponent {
     }
   }
 
-  getStandard() {
-    this.standardArr = [];
-    let schoolId = this.teacherReportForm.value.schoolId;
-    if (schoolId > 0) {
-      this.masterService.GetStandardBySchool(schoolId, '').subscribe({
-        next: (res: any) => {
-          if (res.statusCode == "200") {
-            this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
-            this.f['standardId'].setValue(0);
-          } else {
-            this.standardArr = [];
-          }
-        },
-      });
-    } else {
-      this.standardArr = [];
-    }
-  }
+  // getStandard() {
+  //   this.standardArr = [];
+  //   let schoolId = this.teacherReportForm.value.schoolId;
+  //   if (schoolId > 0) {
+  //     this.masterService.GetStandardBySchool(schoolId, '').subscribe({
+  //       next: (res: any) => {
+  //         if (res.statusCode == "200") {
+  //           this.standardArr.push({ "id": 0, "standard": "All", "m_Standard": "सर्व" }, ...res.responseData);
+  //           this.f['standardId'].setValue(0);
+  //         } else {
+  //           this.standardArr = [];
+  //         }
+  //       },
+  //     });
+  //   } else {
+  //     this.standardArr = [];
+  //   }
+  // }
 
   getExamType() {
     this.examTypeArr = [];
@@ -238,7 +238,7 @@ export class TeacherReportComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.academicYearArr.push({ "id": 0, "eductionYear": "All", "eductionYear_M": "सर्व" }, ...res.responseData);
-          this.f['educationYearId'].setValue(0);
+          this.loginData ? (this.f['educationYearId'].setValue(this.loginData?.educationYearId)) : this.f['educationYearId'].setValue(0); 
         }
       }
     })
@@ -253,8 +253,8 @@ export class TeacherReportComponent {
     let fromDate = this.datepipe.transform(formValue?.fromDate || new Date(), 'yyyy-MM-dd');
     let toDate = this.datepipe.transform(formValue?.toDate || new Date(), 'yyyy-MM-dd');
     this.pageNumber = flag == 'filter' ? 1 : this.pageNumber;
-    let str = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=${this.pageNumber}&PageSize=10&lan=` + this.languageFlag;
-    let reportStr = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&StandardId=${formValue?.standardId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=1&PageSize=${0}&lan=` + this.languageFlag;
+    let str = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=${this.pageNumber}&PageSize=10&lan=` + this.languageFlag;
+    let reportStr = `DesignationId=${this.loginData.subUserTypeId == 15 ? 15 : 0}&StateId=${formValue?.stateId || 0}&DistrictId=${formValue?.districtId || 0}&TalukaId=${formValue?.talukaId || 0}&CenterId=${formValue?.centerId || 0}&VillageId=${formValue?.villageId || 0}&SchoolId=${formValue?.schoolId || 0}&ExamTypeId=${formValue?.examTypeId || 0}&FromDate=${fromDate}&ToDate=${toDate}&EducationYearId=${formValue?.educationYearId || 0}&TextSearch=${formValue?.textSearch.trim() || ''}&TeacherId=${this.loginData.subUserTypeId == 15 ? this.loginData.refId : 0}&PageNo=1&PageSize=${0}&lan=` + this.languageFlag;
 
     this.apiService.setHttp('get', 'zp-satara/assessment-report/Download_TeacherAssessedReport?' + (flag == 'excel' ? reportStr : str), false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({

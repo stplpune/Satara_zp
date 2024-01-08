@@ -90,13 +90,13 @@
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.schoolList'| translate}}</mat-label>
                         <mat-select formControlName="schoolId"
-                            (selectionChange)="onClearDropDown('school'); getStandard();">
+                            (selectionChange)="onClearDropDown('school');">
                             <mat-option *ngFor="let sch of schoolArr" [value]="sch.id">{{languageFlag == 'English' ?
                                 sch.schoolName:sch.m_SchoolName}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-sm-1">
+                <!-- <div class="col-sm-1">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.std'| translate}}</mat-label>
                         <mat-select formControlName="standardId">
@@ -104,7 +104,7 @@
                                 ?stan.standard:stan.m_Standard}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-sm-2">
                     <mat-form-field appearance="outline" class="w-100 ">
                         <mat-label>{{'Labels.ExamType'| translate}}</mat-label>

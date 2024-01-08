@@ -364,11 +364,17 @@
                                             viewDetailsObj?.m_Gender}} )
                                         </small>
                                     </div>
-                                    <small class="badge text-bg-danger shadow small rounded-pill px-3 py-2"
-                                        [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-bg-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-bg-primary' : 'text-bg-success'">
-                                        {{selectedLang == 'English' ? viewDetailsObj?.graphLevel :
-                                        viewDetailsObj?.m_GraphLevel}}
-                                    </small>
+                                    <div class="d-flex align-items-start gap-2">
+                                        <small class="badge text-bg-danger rounded-pill border-0 px-3 py-2"
+                                            [ngClass]="viewDetailsObj?.graphLevelId == 1 ? 'text-bg-danger' : viewDetailsObj?.graphLevelId == 2 ? 'text-bg-primary' : 'text-bg-success'">
+                                            {{selectedLang == 'English' ? viewDetailsObj?.graphLevel :
+                                            viewDetailsObj?.m_GraphLevel}}
+                                        </small>
+                                        <button mat-flat-button class="btn-main-light btn-icon border" title="Download"
+                                            [routerLink]="['/print-pi-details']">
+                                            <mat-icon class="text-main">download</mat-icon>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

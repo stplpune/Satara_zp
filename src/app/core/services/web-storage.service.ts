@@ -13,6 +13,7 @@ export class WebStorageService {
   private theme = new BehaviorSubject('');
   studentDetailsforChart = new Array();
   classWiseDataStudentAssList: any;
+  piDetails: any;
   studentDetails: any; //
   numFormat: any;
   baseWiseDataStudentAssList: any;

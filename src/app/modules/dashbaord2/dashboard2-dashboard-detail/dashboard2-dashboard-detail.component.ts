@@ -129,6 +129,7 @@ export class Dashboard2DashboardDetailComponent {
      this.chartObj?.StateId ? (this.mf['stateId'].setValue(this.chartObj?.StateId),this.getDistrict())  : (this.mf['stateId'].setValue(this.webStorage.getState()), this.getDistrict()) 
     })
   }
+
   getDistrict() {
     this.districtData = [];
     this.masterService.getAllDistrict('', this.mainFilterForm.controls['stateId'].value).subscribe((res: any) => {
@@ -370,6 +371,7 @@ export class Dashboard2DashboardDetailComponent {
     let str = `StateId=${this.chartObj?.StateId || 0}&DistrictId=${this.chartObj?.DistrictId || 0}&TalukaId=${this.chartObj?.TalukaId || 0}&CenterId=${this.chartObj?.CenterId || 0}&VillageId=${this.chartObj?.VillageId || 0}&SchoolId=${this.chartObj?.SchoolId || 0}&StandardId=${this.chartObj?.StandardId || 0}&SubjectId=${this.chartObj?.SubjectId || 0}&TeacherId_OfficerId=${this.chartObj?.TeacherId_OfficerId || 0}&IsInspection=${this.chartObj?.IsInspection || false}&EvaluatorId=${this.chartObj?.EvaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${this.chartObj?.EducationYearId || 0}&GraphType=${this.chartObj?.graphName || ''}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
     let mainFilterstr = `StateId=${formData.stateId || 0}&DistrictId=${formData.districtId || 0}&TalukaId=${formData.talukaId || 0}&CenterId=${formData.centerId || 0}&VillageId=${formData.villageId || 0}&SchoolId=${formData.schoolId || 0}&StandardId=${formData?.standardId || 0}&SubjectId=${formData?.subjectId || 0}&TeacherId_OfficerId=${this.chartObj?.TeacherId_OfficerId || 0}&IsInspection=${this.chartObj?.IsInspection || false}&EvaluatorId=${formData?.evaluatorId || 0}&GraphLevelId=${this.chartObj?.GraphLevelId || 0}&ExamTypeId=${this.chartObj?.ExamTypeId || 0}&EducationYearId=${formData.acYearId || 0}&GraphType=${this.chartObj? this.chartObj?.graphName : 'ReportCard'}&PageNo=${this.pageNumber}&PageSize=10&lan=${this.selectedLang}`;
     let URL = ((flag == undefined && this.chartObj) ? str : mainFilterstr)
+    // let api =  this.pageUrl == '/dashboard-student-data' ? 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' : 'zp-satara/assessment-report/GetStudentListForPI_Report?' 
     this.apiService.setHttp('GET', 'zp-satara/Dashboard/GetStudentListForProgressIndicatorWeb?' + URL, false, false, false, 'baseUrl');
     this.apiService.getHttp().subscribe({
       next: (res: any) => {

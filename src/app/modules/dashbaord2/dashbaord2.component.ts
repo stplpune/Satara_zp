@@ -712,7 +712,7 @@ export class Dashbaord2Component {
         max: 100,
         labels: {
           formatter: function (val: any) {
-            return val < 0 ? '' : val.toFixed(0) +'%'; // y axis  values 0 1 2
+            return val < 0 ? '' : val.toFixed(0); // y axis  values 0 1 2
           }
         },
       },

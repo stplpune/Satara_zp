@@ -34,17 +34,13 @@ export class PrintStudentDetailsComponent {
 
   ngOnInit() {    
     this.dashboardObj = JSON.parse(localStorage.getItem('selectedBarchartObjData') || '');
-    console.log("dashboardObj student details", this.dashboardObj);
     
     this.languageFlag=this.webStorage.getLangauge();
     this.studentDetailsData=this.webStorage.studentDetails;    
-    console.log("studentDetailsData student details", this.studentDetailsData);
-    
     
     this.studentDetailsArray=this.webStorage.studentDetailsforChart;
     this.getSubjectData();
     this.classAsseResp = this.webStorage.classWiseDataStudentAssList;
-    console.log("classAsseResp", this.classAsseResp);
     
 
     this.displayedheadersClass=[{'label':"Sr. No.","m_label":"अ.क्र."}, {'label':"Criteria","m_label":"निकष"},{'label':"Expected","m_label":"अपेक्षित"},{'label':"Achieved","m_label":"साध्य"},{'label':"Performance","m_label":"कामगिरी"},{'label':"ExamType","m_label":"परीक्षेचा प्रकार"}]

@@ -100,10 +100,6 @@ export class Dashboard2DashboardDetailComponent {
      this.webStorage.langNameOnChange.subscribe((lang) => {
       this.selectedLang = lang;
       this.setTableData();
-
-      console.log("chartObj", this.chartObj);
-      
-      
     });
   }
 
@@ -351,6 +347,7 @@ export class Dashboard2DashboardDetailComponent {
       //   break;
       case 'View':
         this.viewDetailsObj = obj;
+        this.setViewData();
         this.chartArray = [];
         this.GetAllStandard();
         setTimeout(() => {
@@ -379,7 +376,6 @@ export class Dashboard2DashboardDetailComponent {
       next: (res: any) => {
         if (res.statusCode == "200") {
           this.tableDataArray = res.responseData?.responseData1;
-          console.log("tableDataArray", this.tableDataArray);
           
           this.viewDetailsObj = res.responseData?.responseData1[0];
           this.ngxSpinner.hide();
@@ -436,7 +432,7 @@ export class Dashboard2DashboardDetailComponent {
   }
 
   setViewData() {
-    let obj = this.selectedObj ? this.selectedObj : this.tableDataArray[0];
+    let obj = this.viewDetailsObj ? this.viewDetailsObj : this.tableDataArray[0];
     if (obj) {
       this.data = {
         headerImage: obj?.profilePhoto,
@@ -450,7 +446,6 @@ export class Dashboard2DashboardDetailComponent {
       this.webStorage.studentDetails = this.data;
     }
   }
-
 
   schoolwiseBarChart(critearr?: any, _maxgrade?:any, categoryArr?: any) { 
    let yAxisMaxValue = critearr?.parameterArr[critearr.parameterArr.length - 1].optionGrade;   
@@ -531,8 +526,6 @@ export class Dashboard2DashboardDetailComponent {
             grid: {
               show: false,
           },
-          
-            
             tooltip: {
               custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
                 console.log(series);
@@ -550,6 +543,7 @@ export class Dashboard2DashboardDetailComponent {
       };      
       this.chartArray.push(this.questionwiseChartOptions);
       this.webStorage.piDetails = this.chartArray;
+      this.webStorage.questionArray = this.questionArr;
     }    
   
   }

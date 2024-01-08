@@ -277,7 +277,7 @@ export class Dashboard3Component {
 
       colors: ['#b51d31', '#E98754', '#50c77b'],
       subtitle: {
-        text: this.selectedLang == 'English' ? "(Click on bar to see details)" : 'तपशील पाहण्यासाठी बारवर क्लिक करा',
+        text: this.selectedLang == 'English' ? "(Click on the bar to view details)" : 'तपशील पाहण्यासाठी बारवर क्लिक करा',
         offsetY: 5
       },
       xaxis: {
@@ -434,7 +434,7 @@ export class Dashboard3Component {
         }
       },
       subtitle: {
-        text: this.selectedLang == 'English' ? "(Click on bar to see details)" : 'तपशील पाहण्यासाठी बारवर क्लिक करा',
+        text: this.selectedLang == 'English' ? "(Click on the bar to view details)" : 'तपशील पाहण्यासाठी बारवर क्लिक करा',
         offsetY: 1
       },
       dataLabels: { //OnYBar Show Count

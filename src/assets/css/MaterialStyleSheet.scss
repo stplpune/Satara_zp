@@ -299,3 +299,17 @@ input:-webkit-autofill:active {
     height: 71px;
     top: calc(50% - 70px) !important;
 }
+
+.mat-mdc-tab.mdc-tab {
+    height: 36px !important;
+}
+
+.mdc-tab.mdc-tab.mdc-tab--active {
+    background-color: var(--main-color) !important;
+    color: #fff !important;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.mat-mdc-tab:not(.mat-mdc-tab-disabled).mdc-tab--active .mdc-tab__text-label {
+    color: #fff !important;
+}

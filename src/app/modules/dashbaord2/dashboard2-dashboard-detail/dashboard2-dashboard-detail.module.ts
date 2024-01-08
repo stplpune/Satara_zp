@@ -19,6 +19,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DashboardRoutingModule } from '../../dashboard/dashboard-routing.module';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatRadioModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTabsModule
   ]
 })
 export class Dashboard2DashboardDetailModule { }
